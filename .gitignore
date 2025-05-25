@@ -13,3 +13,15 @@ Doc/~$Structure.xlsx
 *.sln
 *.i64
 *.lnk
+*.log
+*.lastbuildstate
+*.tlog
+*.user
+*.cmake
+*.bin
+/CMakeFiles
+/ms
+*.recipe
+CMakeCache.txt
+/Debug
+CMakeCache.txt
