@@ -1,0 +1,49 @@
+cmake_minimum_required(VERSION 3.0)
+project(GTA2 LANGUAGES CXX)
+
+
+#стандарт
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# оснавная игра 
+file(GLOB GTA2_SOURCE "GTA2/*.cpp")
+file(GLOB GTA2_HEADERS "GTA2/*.h")
+
+#библиотеки 3DFX
+#set(3DFX_SOURCE "3dfx/*.cpp")
+#set(3DFX_HEADERS "3dfx/*.h")
+
+# библиотеки BINKW32
+
+file(GLOB BINKW32_SOURCE "binkw32/*.cpp")
+file(GLOB BINKW32_HEADERS "binkw32/*.h")
+
+# библиотеки D3DDLL
+#set(D3DDLL_SOURCE  "D3DDLL/*.cpp")
+#set(D3DDLL_HEADERS  "D3DDLL/*.h")
+
+# библиотеки D3DPOLY
+#set(D3DPOLY_SOURCE "D3DPOLY/*.cpp")
+#set(D3DPOLY_HEADERS "D3DPOLY/*.h")
+# библиотеки DMAGLIDE
+#set(DMAGLIDE_SOURCE "DMAGLIDE/*.cpp")
+#set(DMAGLIDE_HEADERS "DMAGLIDE/*.h")
+# библиотеки DMAVIDEO
+#set(DMAVIDEO_SOURCE "DMAVIDEO/*.cpp")
+#set(DMAVIDEO_HEADERS "DMAVIDEO/*.h")
+
+include_directories(DIRETX 6.0)
+
+#add_library(3DFX STATIC ${3DFX_SOURCE} ${3DFX_HEADERS})
+add_library(BINKW32 STATIC ${BINKW32_SOURCE} ${BINKW32_HEADERS})
+#add_library(D3DDLL STATIC ${D3DDLL_SOURCE} ${D3DDLL_HEADERS})
+#add_library(D3DPOLY STATIC ${D3DPOLY_SOURCE} ${D3DPOLY_HEADERS})
+#add_library(DMAGLIDE STATIC ${DMAGLIDE_SOURCE} ${D3DPOLY_HEADERS})
+#add_library(DMAVIDEO STATIC ${DMAVIDEO_SOURCE} ${DMAVIDEO_HEADERS})
+add_executable(GTA2 ${GTA2_SOURCE} ${GTA2_HEADERS})
+
+
+
+#сборка GTA 2
+#target_link_libraries(GTA2 3DFX BINKW32 D3DDLL D3DPOLY DMAGLIDE DMAVIDEO)

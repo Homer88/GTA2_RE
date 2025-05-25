@@ -1,0 +1,15 @@
+
+
+Doc/~$Structure.xlsx
+*.vsidx
+*.db
+*.json
+/.vs
+*.vcxproj
+*.filters
+*.obj
+*.exe
+/build
+*.sln
+*.i64
+*.lnk
