@@ -5,18 +5,19 @@
 Registry gRegistry;
 
 bool Registry::GetPlayReplay(LPCSTR lpValueName){
-	bool v2= false; // bl
+	
   HKEY hKey; // [esp-8h] [ebp-18h] BYREF
-  BYTE Data; // [esp+0h] [ebp-10h] BYREF
+  BYTE Data[4]; // [esp+0h] [ebp-10h] BYREF
   DWORD cbData=4; // [esp+8h] [ebp-8h]
 
 	if (this->GetDebugMode(&hKey)){
      
-		v2 = RegQueryValueExA(hKey, lpValueName, 0, 0, &Data, &cbData) == 0;
+		RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData);
+		return Data[0] == 0 ? true : false;
 		}
 	if ( RegCloseKey(hKey) )
 		 DebugLog(0x2Au, "registry.cpp", 424);
-	return v2;
+	return false;
 }
 
 bool Registry::GetDebugMode(PHKEY phkResult){
@@ -54,12 +55,13 @@ LSTATUS Registry::SetDebugByteValue(LPCSTR lpValueName, BYTE value){
 
 bool Registry::GetParamDebug(LPCSTR lpValueName){
     HKEY hKey; // [esp-8h] [ebp-18h] BYREF
-    BYTE Data; // [esp+0h] [ebp-10h] BYREF
+    BYTE Data[4]; // [esp+0h] [ebp-10h] BYREF
     DWORD cbData = 4; // [esp+8h] [ebp-8h]
 
     if (this->GetDebugMode(&hKey)) {
 
-        return  RegQueryValueExA(hKey, lpValueName, 0, 0, &Data, &cbData) == 0;
+          RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData);
+		  return Data[0] == 0 ? true : false;
     }
     if (RegCloseKey(hKey))
         DebugLog(0x2Au, "registry.cpp", 424);
