@@ -1,5 +1,6 @@
-#ifndef __ENGINESTRUCT_H_
-#define __ENGINESTRUCT_H_
+#pragma once
+
+#include "Global.h"
 
 class EngineStruct{
     public:

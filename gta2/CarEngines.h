@@ -1,12 +1,11 @@
-#ifndef __CARENGINES_H_
-#define __CarEngines_H
+#pragma once
 
+#include "global.h"
 
 class CarEngines{
-public:
-CarEngines();
-~CarEngines;
-int sub_4327E0(int CarType);
+	
+	public:
+		CarEngines();
+		~CarEngines();
+		int sub_4327E0(int CarType);
 };
-
-#endif

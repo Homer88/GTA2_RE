@@ -1,5 +1,7 @@
-#ifndef __GameObject_H
-#define __GameObject_H_
+#pragma once
+
+#include "Global.h"
+
 
 class GameObject{
     public:
@@ -8,4 +10,3 @@ class GameObject{
         ~GameObject();
 };
 
-#endif

@@ -1,0 +1,30 @@
+#include <windows.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     11,22,0,0      // Версия файла (мажор.минор.сборка.ревизия)
+PRODUCTVERSION  1,0,0,0      // Версия продукта
+FILEFLAGSMASK 0x3fL
+FILEFLAGS 0x0L
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP             // Для DLL используйте VFT_DLL
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"     // Английский (США), UTF-16
+        BEGIN
+            VALUE "CompanyName", "Your Company"
+            VALUE "FileDescription", "Your Application Description"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "YourApp.exe"
+            VALUE "LegalCopyright", "Copyright © 2024"
+            VALUE "OriginalFilename", "YourApp.exe"
+            VALUE "ProductName", "Your Application"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200  // Английский (США)
+    END
+END

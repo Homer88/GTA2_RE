@@ -1,13 +1,12 @@
-#ifndef __SPRITE_S1_H_
-#define __SPRITE_S1_H_
+#pragma once
 
+#include "Global.h"
 
 class SpriteS1{
-private:
+	private:
 
-public:
-    SpriteS1();
-    ~SpriteS1();
-    void SetPosition(int X, int Y, int Z);
+	public:
+		SpriteS1();
+		~SpriteS1();
+		void SetPosition(int X, int Y, int Z);
 };
-#endif

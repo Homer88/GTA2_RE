@@ -1,10 +1,7 @@
-#ifndef __CARSYSTEMMANAGER_H_
-#define __CARSYSTEMMANAGER_H_
+#pragma once
 
 class CarSystemManager{
     public:
     CarSystemManager();
     ~CarSystemManager();
 };
-
-#endif

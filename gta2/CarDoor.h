@@ -1,5 +1,5 @@
-#ifndef __CARDOOR_H
-#define __CARDOOR_H
+#ifndef __CARDOOR_H_
+#define __CARDOOR_H_
 
 
 
@@ -9,10 +9,6 @@ private:
 public:
      CarDoor();
     ~CarDoor();
-
-
-
-
 };
 
 

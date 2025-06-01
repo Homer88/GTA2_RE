@@ -25,3 +25,10 @@ Doc/~$Structure.xlsx
 CMakeCache.txt
 /Debug
 CMakeCache.txt
+*.vcproj
+/gta2/Debug
+/gta2/DEBUG_GTA2
+gta2/gta2.vcproj.7.10.old
+copyfile.bat
+gta2.ncb
+gta2.suo

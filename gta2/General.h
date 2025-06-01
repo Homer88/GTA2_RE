@@ -1,5 +1,6 @@
-#ifndef __General_H_
-#define __General_H_
+#pragma once
+
+#include "Global.h"
 
 class General
 {
@@ -14,4 +15,3 @@ class General
 
 
 
-#endif

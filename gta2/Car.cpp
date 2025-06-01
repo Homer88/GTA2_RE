@@ -1,9 +1,6 @@
 //реализация классов с машинами
 
 #include "Car.h"
-#include "CarDoor.h"
-#include "Object.h"
-#include "Global.h"
 
 Car::Car(){
 

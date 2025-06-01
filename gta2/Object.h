@@ -1,13 +1,17 @@
 #ifndef ___OBJECT_H_
-#define ___
+#define ___OBJECT_H_
+
+#include "Global.h"
 
 class Object{
-private:
 
-public:
-    Object();
-    ~Object(); 
-    void * SpawnObject(int,int,int,short);
+	private:
+
+	public:
+
+		Object();
+		~Object(); 
+		void * SpawnObject(int,int,int,short);
 };
 
 

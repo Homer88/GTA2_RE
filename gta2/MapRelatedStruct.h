@@ -1,5 +1,6 @@
-#ifndef ___MAPRELATEDSTRUCT_H_
-#define ___MAPRELATEDSTRUCT_H_
+#pragma once
+
+#include "Global.h"
 
 class MapRelatedStruct{
     public:
@@ -7,4 +8,3 @@ class MapRelatedStruct{
         ~MapRelatedStruct();
 };
 
-#endif

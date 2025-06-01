@@ -1,12 +1,13 @@
-#ifndef __PED_H_
-#define __PED_H_
+#pragma once
+
+#include "Global.h"
 
 class Ped{
     private:
 
     public:
         S200 S200_50[50];
-        __unaligned __declspec(align(1)) int Counter;
+        int Counter;
         char field_9A;
         char field_9B;
         char field_9C;
@@ -132,7 +133,7 @@ class Ped{
         char field_114;
         char field_115;
         char field_116;
-        __unaligned __declspec(align(1)) __int16 field_117;
+        short field_117;
         char field_119;
         char field_11A;
         char field_11B;
@@ -284,4 +285,3 @@ class Ped{
         ~Ped();
 };
 
-#endif

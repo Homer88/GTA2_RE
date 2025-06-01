@@ -1,5 +1,7 @@
-#ifndef __CAR_H
-#define __CAR_H
+#pragma once
+
+#include "global.h"
+
 
 enum CarModel
 {
@@ -224,5 +226,3 @@ class Car{
 
 
 
-
-#endif
