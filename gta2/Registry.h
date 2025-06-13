@@ -19,6 +19,11 @@ public:
 	BYTE* ConfigVideo(LPCSTR lpValueName, BYTE value);
 	BYTE ConfigSetScreen(LPCSTR lpValueName, BYTE value);
 	LSTATUS SetVideoName(LPCSTR lpValueName, LPBYTE lpData, DWORD dataSize);
+	BYTE GetSound3DConfigure(LPCSTR lpValueName);
+	LSTATUS SetSound3DConfigure(LPCSTR lpValueName, BYTE value);
+	LSTATUS SetConfigureWindowSize(LPCSTR lpValueName, BYTE Data);
+
+
 	
 	
 };

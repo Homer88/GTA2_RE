@@ -33,3 +33,15 @@ copyfile.bat
 gta2.ncb
 gta2.suo
 UpgradeLog.htm
+*.PTR
+*.0
+*.1
+*.2
+*.3
+*.lock~
+*.lock
+re_file/IDA/gta2.exe.id0
+re_file/IDA/gta2.exe.id1
+re_file/IDA/gta2.exe.id2
+re_file/IDA/gta2.exe.nam
+re_file/IDA/gta2.exe.til

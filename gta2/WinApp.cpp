@@ -7,6 +7,10 @@
 
 #pragma comment(lib, "version.lib")
 
+
+///Switch 
+#define  RunPlayVideo   7
+
 //Плобальные переменные 
 bool	gDoTest;
 bool	gSkipMission;
@@ -107,27 +111,118 @@ bool	gGiveBasikWeapon;
 bool	gElvis;
 bool	gBunt;
 bool	gNEKKID;
+void*    gBinkBufferClose;
+bool    gNetworkGame=false;
+byte    gControl;
+int gData_6735A5;
 
 // Обработчик сообщений
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            return 0;
+    HWND pHWND;
+    if (uMsg <= 70) {
+
+        if (uMsg == 70) {
+            if (gMenu.Status) {
+                pHWND = HWND(lParam + 12);
+                uMsg = (lParam + 8);
+                BinkClose(uMsg,hwnd);
+
+            }
+      }
+    }
+    else {
+        switch (uMsg) {
+            case WM_DESTROY:
+                if (gNetworkGame) {
+                    gNetwork.CloseConnect();
+                    ReleaseMutex(gHANDLE);
+                    CloseHandle(gHANDLE);
+                    gHANDLE = 0;
+                    Destructor();
+                    DestructorMovie();
+                    PostQuitMessage(0);
+                    break;
+                }
+            case 5:
+                switch (wParam) 
+             
+                {
+                case 1:
+                    gControl = 2;
+                    gDMAudio.InitAudioManager();
+                    break;
+                case 0:
+                case 2:
+                    gControl = 0;
+                    gDMAudio.InitAudioManager3D();
+                    break;
+                default:
+                    break;
+                }
+                break;
+            case 6:
+                if (wParam) {
+                    if (wParam <= 2){
+                        lParam = 1;
+                        Deff(1);
+
+                    }
+                    else
+                    {
+                        Deff(0);
+
+                    }
+                }
+                break;
+            case RunPlayVideo:
+                gDMAudio.InitAudioManager3D();
+                char  CDVol = gRegistry.ConfigureSoundSetting("CDVol", 127);
+                gDMAudio.SetCDVol(CDVol);
+                char SFXVol = gRegistry.ConfigureSoundSetting("SFXVol", 127);
+                gDMAudio.SetSFXVol(SFXVol);
+                if (gSkipFrontend1) {
+                    gDMAudio.Init3DSound(0);
+                }
+                else{
+
+                    char Sound3DConfigure = gRegistry.GetSound3DConfigure("do_3d_sound");
+                    gDMAudio.Init3DSound(Sound3DConfigure);
+                    bool v11=gDMAudio.Get3DSound();
+                    gRegistry.SetSound3DConfigure("do_3d_sound", v11);
+                }
+
+                if (true) {
+                    Deff(1);
+                    if (!gSkipFrontend1) {
+                        InitInput();
+                    }
+                    if (gMovie.Status && !IsVideoPlaying) {
+                        SetVideoPlayer();
+                        //FixME
+                        // sub_4CB880();
+                        gData_6735A5 = 0;
+                }
+                    //if (gGame)
+
+
+                }
+                break;
+                return 0;
 
         case WM_PAINT: {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            
+
             // Рисуем текст
             TextOut(hdc, 50, 50, "Hello, C++98!", 12);
-            
+
             EndPaint(hwnd, &ps);
             return 0;
         }
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
+        }
     }
 }
 
@@ -415,8 +510,6 @@ void  CopyWideString(wchar_t* dest, const wchar_t* src){
 }
 
 
-
-
 int gRenderdevice;
 int gVideodevice;
 char gData[256] = { 0 };
@@ -444,4 +537,302 @@ void FindGraphiDevace() {
         gTrippleBufferCheck=(strcmp(gData, "3dfx.dll")==0)+1;
    
 
+}
+
+
+int BinkClose(UINT uMSG, HWND hWND) {
+
+    /*if (gBinkBufferClose) {
+        BinkBufferCheckWinPos(gBinkBufferClose, MSG, hWND);
+    }*/
+    return 0;
+}
+
+void Destructor() {
+    //FixMe
+    //Аудио и клавиатура 
+}
+void DestructorMovie() {
+    //FixMe
+    //Аудио и клавиатура 
+}
+
+void Deff(byte a) {
+
+    if (gSkipFrontend1) {
+        if (true) {
+            gMenu.SetFrontendKeysEnabled(a);
+        }
+        else
+            gReplay.SetField_75344(a);
+    }
+}
+
+void InitInput() {
+    ///FIXME
+    //if (gInput)
+    //return InitDirectXInput();
+
+}
+
+int gVideoPlay = 0;
+// Проверяет, активно ли видео (воспроизведение или пауза)
+bool IsVideoPlaying()
+{
+    return gVideoPlay == 1 || gVideoPlay == 2;
+}
+
+
+bool gMaxFrameRate;
+bool gMinFrameRate;
+int  gLighting;
+int  gTimeDayAndNight;
+bool  gExploding_on;
+enum TimeDay {
+    day = 32768,
+    night = 0,
+};
+
+void ConfigureVideoDevice() {
+
+    if (gNetworkGame){
+        gMaxFrameRate = true;
+        gMinFrameRate = true;
+    }
+    else {
+        gMaxFrameRate = gRegistry.ConfigSetScreen("max_frame_rate", 1) != 0;
+        gMinFrameRate = gRegistry.ConfigSetScreen("min_frame_rate", 0) != 0;
+    }
+    if (gRegistry.ConfigSetScreen("lighting", 1)) {
+        gLighting = 1;
+        gTimeDayAndNight = day;
+    }
+    else {
+        gLighting = 0;
+        gTimeDayAndNight = night;
+    }
+    //if (gSpriteS3) FixMe
+    ///S39
+    gRegistry.ConfigSetScreen("exploding_on", 1);
+    gExploding_on = gRegistry.ConfigSetScreen("exploding_on", 1) != 1;
+}
+
+
+
+int gWindowWidth;
+int gWindowHeight;
+
+int gFullWidth;
+int gFullHeight;
+
+int gStartMode;
+int gTrippleBuffer;
+
+enum ModeSize {
+    FullScreen=1,
+    WindowScreen=0,
+};
+
+
+bool ConfigureVideoWindow() {
+    int pStartModeDefaut = gStartMode;
+    int pTrippleBufferDefaut = gTrippleBuffer;
+    int pFullWidth = gFullWidth;
+    int pWindowWidth = gWindowWidth;
+    int pFullHeight = gFullHeight;
+    
+    int pWindowHeight = gWindowHeight;
+
+    gWindowWidth = gRegistry.ConfigSetScreen("window_width", 128);
+    gWindowHeight = gRegistry.ConfigSetScreen("window_height", 224);
+    gFullWidth = gRegistry.ConfigSetScreen("full_width", 224);
+    gFullHeight = gRegistry.ConfigSetScreen("full_height", 224);
+    gStartMode = gRegistry.ConfigSetScreen( "start_mode", 1);
+    if (gTrippleBufferCheck) {
+        gTrippleBuffer = gRegistry.ConfigSetScreen("tripple_buffer", 0);
+
+    }
+    else {
+        gTrippleBuffer = 1;
+    }
+
+    if (gStartMode != pStartModeDefaut || gTrippleBuffer != pTrippleBufferDefaut) {
+        return true;
+    }
+    if (gStartMode != pStartModeDefaut || gTrippleBuffer != pTrippleBufferDefaut) {
+        return true;
+    }
+    if (gStartMode == FullScreen) {
+        if (gFullWidth != pFullWidth) {
+            return true;
+        }
+        if (pFullHeight == gFullHeight) {
+            return false;
+        }
+
+    }
+    else {
+        return false;
+    }
+    return true;
+
+}
+
+void Dint() {
+//FixMe
+    //Надо хорошо диассемблировать.
+
+}
+void SetShowCursor() {
+    int result;
+    
+    do
+        result = ShowCursor(0);
+    while (result >= 0);
+
+}
+
+void DirectInput2() {
+  /*  if (!gDirectInput1
+        || S219
+        || ((int(__stdcall*)(DirectInput*, void*, s219**, _DWORD))gDirectInput1->s209->field_C)(
+            gDirectInput1,
+            &unk_576C14,
+            &S219,
+            0)
+        || (*(int(__stdcall**)(s219*, void*))S219->S209->gap2C)(S219, &unk_5782C4)
+        || (*(int(__stdcall**)(s219*, HWND, int)) & S219->S209->gap2C[8])(S219, gHWND, 5))
+    {
+        return 0;
+    }
+    (*(void(__stdcall**)(s219*)) & S219->S209->field_1C)(S219);
+    return 1;*/
+}
+void VideoCheck() {
+    int v0=0;
+    int v1 = gMovie.CheckMode(gFullWidth, gFullWidth, 16);
+    if (!v1 ) {
+        if (gFullHeight == 640 ||
+            (gFullWidth == 640, v0 = 1, gFullHeight = 480, (v1= gMovie.CheckMode(640, 480, 16)) == 0)) {
+            DebugLog(0xBBBu, "video.cpp", 1358);
+        }
+    }
+    if (gMovie.Status) {
+        int v3 = gMovie.field4;
+        v3 |= 1;
+        gMovie.field4 = v3;
+
+    }
+    if (gMovie.SetMode(gHWND, v1)) {
+        DebugLog(0x40Du, "video.cpp", 1365);
+    }
+    SetShowCursor();
+    SetWindowLongA(gHWND, -16, 268435456);
+    SetWindowPos(gHWND, 0, 0, 0, 0, 0, 1595);
+    UpdateWindow(gHWND);
+    ShowWindow(gHWND, true);
+    DirectInput2();
+    if (v0) {
+        gRegistry.SetConfigureWindowSize("full_width", gFullWidth);
+        gRegistry.SetConfigureWindowSize("full_height", gFullHeight);
+    }
+}
+
+int gData_byte = 1;
+int gX, gY;
+char VideoCheck1() {
+    char result; // al
+    Movie* v1; // eax
+    int v2; // ecx
+    struct tagRECT v3; // [esp+0h] [ebp-20h] BYREF
+    struct tagRECT Rect; // [esp+10h] [ebp-10h] BYREF
+
+    result = gData_byte;
+    if (result)
+    {
+        //DirectX();
+        SetWindowLongA(gHWND, -16, 282001408);
+        SetWindowPos(gHWND, 0, 0, 0, 0, 0, 0x63Bu);
+        UpdateWindow(gHWND);
+        ShowWindow(gHWND, 5);
+        GetWindowRect(gHWND, &Rect);
+        GetClientRect(gHWND, &v3);
+        if (!SetWindowPos(
+            gHWND,
+            0,
+            gX,
+            gY,
+            Rect.right + v3.left + gWindowWidth - v3.right - Rect.left,
+            Rect.bottom + v3.top + gWindowHeight - v3.bottom - Rect.top,
+            0x316u))
+            return 0;
+        UpdateWindow(gHWND);
+        ShowWindow(gHWND, 5);
+        // v1 = gMovie;
+         //if (gMovie)
+         /*{
+             v2 = gMovie->field_4;
+             BYTE1(v2) |= 1u;
+             gMovie->field_4 = v2;
+             v1 = gMovie;
+         }
+         if (Vid_SetMode(v1, gHWND, -2) == 1)
+         {
+             return 0;
+         }
+         else
+         {
+             SetCursor_ShowTrue();
+             return 1;
+         }
+     }
+     return result;*/
+    }
+}
+
+bool SetVideoGamma(int Gamma) {
+    return true;
+}
+int gGamma;
+void SetGamma() {
+    if (SetVideoGamma(gRegistry.ConfigSetScreen("gamma", 0xAu))) {
+        gGamma = 30;
+    }
+
+}
+
+int SetVideoPlayer() {
+
+        ConfigureVideoDevice();
+        ConfigureVideoWindow();
+        Dint();
+        gMovie.CloseScreen();
+        int v1;
+        int v0 = gMovie.field4;
+        if (gTrippleBuffer) {
+            v1 = v0 | 16;
+        }
+        else {
+            v1 = v0 & 0xffffffff;
+        }
+        gMovie.field4 = v1;
+        if (gStartMode) {
+            VideoCheck();
+        }
+        else {
+            if (!VideoCheck1()) {
+                if (gWindowWidth == 640 ||
+                    (gWindowWidth == 640, gWindowHeight == 480, !VideoCheck1())) {
+                    VideoCheck();
+                    gStartMode = FullScreen;
+                    gRegistry.SetConfigureWindowSize("start_mode", 1);
+                }
+                else {
+                    gRegistry.SetConfigureWindowSize("window_width", gWindowWidth);
+                    gRegistry.SetConfigureWindowSize("window_height", gWindowHeight);
+                }
+
+            }
+        }
+        SetGamma();
 }

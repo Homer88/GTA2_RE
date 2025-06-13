@@ -13,7 +13,7 @@ bool Registry::GetPlayReplay(LPCSTR lpValueName){
 	if (this->GetDebugMode(&hKey)){
      
 		RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData);
-		return Data[0] == 0 ? true : false;
+		return Data[0] != 0 ? true : false;
 		}
 	if ( RegCloseKey(hKey) )
 		 DebugLog(0x2Au, "registry.cpp", 424);
@@ -61,7 +61,7 @@ bool Registry::GetParamDebug(LPCSTR lpValueName){
     if (this->GetDebugMode(&hKey)) {
 
           RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData);
-		  return Data[0] == 0 ? true : false;
+		  return Data[0] != 0 ? true : false;
     }
     if (RegCloseKey(hKey))
         DebugLog(0x2Au, "registry.cpp", 424);
@@ -255,3 +255,52 @@ LSTATUS Registry::SetVideoName(LPCSTR lpValueName, LPBYTE lpData, DWORD dataSize
 }
 
 
+
+
+
+BYTE Registry::GetSound3DConfigure(LPCSTR lpValueName) {
+	HKEY hKey;
+	BYTE Data[4];
+	BYTE v2;
+	if (this->OpenOrCreateSoundKey(&hKey))
+	{
+		DWORD cdData = 4;
+		v2=RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cdData)==0;
+
+	}
+	if (RegCloseKey(hKey))
+		DebugLog(0x2Au, "registry.cpp", 109);
+	return v2;
+
+}
+
+
+LSTATUS Registry::SetSound3DConfigure(LPCSTR lpValueName, BYTE value) {
+	HKEY hKey;
+	BYTE DATA[4] = {0};
+
+	if (this->OpenOrCreateSoundKey(&hKey)) {
+		if (value) {
+			RegSetValueExA(hKey, lpValueName, 0, 4, DATA, 4);
+			return RegCloseKey(hKey);
+		}
+		RegDeleteValueA(hKey, lpValueName);
+	}
+	return RegCloseKey(hKey);
+
+
+
+}
+
+LSTATUS Registry::SetConfigureWindowSize(LPCSTR lpValueName, BYTE Data) {
+	HKEY hKey;
+	this->OpenOrCreateScreenKey(&hKey);
+	if (RegSetValueExA(hKey, lpValueName, 0, 4, &Data, 4)) {
+		DebugLog(0x2Eu, "registry.cpp", 743);
+	}
+	LSTATUS resul = RegCloseKey(hKey);
+	if (resul) {
+		DebugLog(0x2Au, "registry.cpp", 745);
+	}
+	return resul;
+}

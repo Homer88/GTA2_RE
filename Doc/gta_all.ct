@@ -27,6 +27,252 @@
       <Address/>
     </CheatEntry>
     <CheatEntry>
+      <ID>637</ID>
+      <Description>"Car"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>0x005e5bbc+8</Address>
+      <Offsets>
+        <Offset>0x20</Offset>
+        <Offset>0x16c</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>639</ID>
+          <Description>"0x0"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x0</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>640</ID>
+          <Description>"0x4"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x4</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>641</ID>
+          <Description>"0x8"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x8</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>642</ID>
+          <Description>"0xC"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0xC</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>643</ID>
+          <Description>"0x4C"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x4C</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>644</ID>
+          <Description>"0x50"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x50</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>645</ID>
+          <Description>"Driver"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x54</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>646</ID>
+          <Description>"0X58"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x58</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>647</ID>
+          <Description>"0X5C"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x5C</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>648</ID>
+          <Description>"0X60"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x60</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>649</ID>
+          <Description>"0X64"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x64</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>650</ID>
+          <Description>"0X68"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x68</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>651</ID>
+          <Description>"0X6C"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x6C</Offset>
+            <Offset>0x16C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>652</ID>
+          <Description>"0X70"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x70</Offset>
+            <Offset>0x16C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>653</ID>
+          <Description>"0X74"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x74</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>654</ID>
+          <Description>"0X76"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x76</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>656</ID>
+          <Description>"0X78"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x78</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>655</ID>
+          <Description>"0X7C"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x7C</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>657</ID>
+          <Description>"CarType"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x84</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>658</ID>
+          <Description>"0x88"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e5bbc+8</Address>
+          <Offsets>
+            <Offset>0x88</Offset>
+            <Offset>0x16c</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
       <ID>4</ID>
       <Description>"CarsPrefabs"</Description>
       <Options moManualExpandCollapse="1"/>
@@ -40,6 +286,20 @@
           <ShowAsSigned>0</ShowAsSigned>
           <GroupHeader>1</GroupHeader>
           <Address>0x005e4ca0</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>638</ID>
+              <Description>"Car"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005eb4fc</Address>
+              <Offsets>
+                <Offset>0x16C</Offset>
+                <Offset>0x38</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
         </CheatEntry>
         <CheatEntry>
           <ID>160</ID>
@@ -113,28 +373,189 @@
     <CheatEntry>
       <ID>7</ID>
       <Description>"S8"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>005e4ca8</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>8</ID>
-      <Description>"S9"</Description>
-      <GroupHeader>1</GroupHeader>
-      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>569</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0x0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>570</ID>
+          <Description>"S9"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>24</ByteLength>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0x4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>571</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0x8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>572</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0x9</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>573</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0xA</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>574</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0xB</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>575</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0xC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>576</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>005e4ca8</Address>
+          <Offsets>
+            <Offset>0x10</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>9</ID>
       <Description>"S10"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x005e508c</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>10</ID>
-      <Description>"EngineStruct"</Description>
-      <GroupHeader>1</GroupHeader>
-      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>577</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005e508c</Address>
+          <Offsets>
+            <Offset>0x0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>10</ID>
+          <Description>"EngineStruct"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e508c</Address>
+          <Offsets>
+            <Offset>0x4</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>578</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e508c</Address>
+              <Offsets>
+                <Offset>0x4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>580</ID>
+              <Description>"0x74"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e508c</Address>
+              <Offsets>
+                <Offset>0x78</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>579</ID>
+          <Description>"EngineStruct"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e508c</Address>
+          <Offsets>
+            <Offset>0x7C</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>581</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e508c</Address>
+              <Offsets>
+                <Offset>0x7C</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>582</ID>
+          <Description>"EngineStruct"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e508c</Address>
+          <Offsets>
+            <Offset>0xF4</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>583</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e508c</Address>
+              <Offsets>
+                <Offset>0xF0</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>11</ID>
@@ -145,6 +566,7 @@
     <CheatEntry>
       <ID>12</ID>
       <Description>"General"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x005e8108</Address>
@@ -171,6 +593,7 @@
     <CheatEntry>
       <ID>15</ID>
       <Description>"Text"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x00671550</Address>
@@ -218,15 +641,278 @@
     <CheatEntry>
       <ID>21</ID>
       <Description>"Display"</Description>
+      <Options moAlwaysHideChildren="1" moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x005e8b80</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>22</ID>
-      <Description>"S19"</Description>
-      <GroupHeader>1</GroupHeader>
-      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>22</ID>
+          <Description>"S19"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e8b80</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>592</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>595</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x1</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>594</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x2</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>593</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x3</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>596</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x0</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>584</ID>
+          <Description>"S19"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e8b80</Address>
+          <Offsets>
+            <Offset>4</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>597</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>598</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x5</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>599</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x6</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>600</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x7</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>601</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x4</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>591</ID>
+          <Description>"S19"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e8b80</Address>
+          <Offsets>
+            <Offset>8</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>602</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>603</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x9</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>604</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xA</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>605</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xB</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>606</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0x8</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>590</ID>
+          <Description>"S19"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <GroupHeader>1</GroupHeader>
+          <Address>0x005e8b80</Address>
+          <Offsets>
+            <Offset>C</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>607</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xC</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>608</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xD</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>609</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xE</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>610</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xF</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>611</ID>
+              <Description>"0"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005e8b80</Address>
+              <Offsets>
+                <Offset>0xC</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>589</ID>
+          <Description>"S19"</Description>
+          <GroupHeader>1</GroupHeader>
+          <Address/>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>588</ID>
+          <Description>"S19"</Description>
+          <GroupHeader>1</GroupHeader>
+          <Address/>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>587</ID>
+          <Description>"S19"</Description>
+          <GroupHeader>1</GroupHeader>
+          <Address/>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>23</ID>
@@ -331,15 +1017,164 @@
     <CheatEntry>
       <ID>38</ID>
       <Description>"Timing"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>00671e9c</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>39</ID>
-      <Description>"S36"</Description>
-      <GroupHeader>1</GroupHeader>
-      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>555</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>556</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>557</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>558</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0xC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>559</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x10</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>560</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x14</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>561</ID>
+          <Description>"S36"</Description>
+          <Options moManualExpandCollapse="1"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x18</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>563</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00671e9c</Address>
+              <Offsets>
+                <Offset>0x18</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>564</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00671e9c</Address>
+              <Offsets>
+                <Offset>0x1C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>565</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00671e9c</Address>
+              <Offsets>
+                <Offset>0x20</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>562</ID>
+          <Description>"S36_1"</Description>
+          <Options moManualExpandCollapse="1"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00671e9c</Address>
+          <Offsets>
+            <Offset>0x18</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>566</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00671e9c</Address>
+              <Offsets>
+                <Offset>0x24</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>567</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00671e9c</Address>
+              <Offsets>
+                <Offset>0x28</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>568</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00671e9c</Address>
+              <Offsets>
+                <Offset>0x2C</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>39</ID>
+          <Description>"S36_2"</Description>
+          <GroupHeader>1</GroupHeader>
+          <Address/>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>40</ID>
@@ -397,13 +1232,98 @@
     <CheatEntry>
       <ID>48</ID>
       <Description>"Char"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>005e5bc0</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>612</ID>
+          <Description>"X0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>613</ID>
+          <Description>"X0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x2</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>614</ID>
+          <Description>"X0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x3</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>615</ID>
+          <Description>"X0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>616</ID>
+          <Description>"X0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x5</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>617</ID>
+          <Description>"X0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x6</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>618</ID>
+          <Description>"Bunt"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x7</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>619</ID>
+          <Description>"Sprite"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>005e5bc0</Address>
+          <Offsets>
+            <Offset>0x8</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>49</ID>
       <Description>"PedManager"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x005e5bbc</Address>
@@ -517,20 +1437,17 @@
           <Description>"Ped"</Description>
           <ShowAsSigned>0</ShowAsSigned>
           <GroupHeader>1</GroupHeader>
-          <Address>0x005e5bbc</Address>
-          <Offsets>
-            <Offset>8</Offset>
-          </Offsets>
+          <Address>0x005e5bbc+8</Address>
           <CheatEntries>
             <CheatEntry>
               <ID>165</ID>
               <Description>"CarCurrent"</Description>
+              <ShowAsHex>1</ShowAsHex>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
-              <Address>0x005e5bbc</Address>
+              <Address>0x005e5bbc+8</Address>
               <Offsets>
                 <Offset>0x16c</Offset>
-                <Offset>0x8</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
@@ -637,9 +1554,22 @@
     <CheatEntry>
       <ID>52</ID>
       <Description>"GameObject"</Description>
+      <Options moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x0066a3bc</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>624</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x0066a3bc</Address>
+          <Offsets>
+            <Offset>0x14</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>54</ID>
@@ -672,6 +1602,7 @@
     <CheatEntry>
       <ID>59</ID>
       <Description>"S56"</Description>
+      <Options moManualExpandCollapse="1"/>
       <GroupHeader>1</GroupHeader>
       <Address/>
       <CheatEntries>
@@ -847,9 +1778,205 @@
     <CheatEntry>
       <ID>83</ID>
       <Description>"Ambulance"</Description>
+      <Options moAlwaysHideChildren="1" moManualExpandCollapse="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x00663de4</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>536</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>537</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>1</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>538</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>2</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>539</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>3</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>540</ID>
+          <Description>"Passenger"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>541</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>542</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x9</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>543</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0xA</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>544</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0xB</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>545</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>100</ByteLength>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0xC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>546</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x70</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>547</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x71</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>548</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x72</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>549</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x73</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>550</ID>
+          <Description>"74"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x74</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>551</ID>
+          <Description>"75"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x75</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>552</ID>
+          <Description>"76"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x76</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>553</ID>
+          <Description>"S80"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0xD0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>554</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x00663de4</Address>
+          <Offsets>
+            <Offset>0x76</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>84</ID>
@@ -1070,6 +2197,15 @@
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
       <Address>0x0066b7a0</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>662</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x0066b7a0</Address>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>116</ID>
@@ -1772,7 +2908,7 @@
           <GroupHeader>1</GroupHeader>
           <Address>0x005EB898</Address>
           <Offsets>
-            <Offset>3CD</Offset>
+            <Offset>0x3CD</Offset>
           </Offsets>
           <CheatEntries>
             <CheatEntry>
@@ -2006,13 +3142,9 @@
         <CheatEntry>
           <ID>326</ID>
           <Description>"KeyboardAcquired"</Description>
-          <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x10C</Offset>
-          </Offsets>
+          <Address>0x005eb160+0x10c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>327</ID>
@@ -2020,10 +3152,7 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x10D</Offset>
-          </Offsets>
+          <Address>0x005eb160+10D</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>328</ID>
@@ -2031,10 +3160,7 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x10E</Offset>
-          </Offsets>
+          <Address>0x005eb160+10E</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>329</ID>
@@ -2042,10 +3168,7 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x10F</Offset>
-          </Offsets>
+          <Address>0x005eb160+10F</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>330</ID>
@@ -2053,10 +3176,7 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>4 Bytes</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x114</Offset>
-          </Offsets>
+          <Address>0x005eb160+0x114</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>331</ID>
@@ -2064,10 +3184,7 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>4 Bytes</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x118</Offset>
-          </Offsets>
+          <Address>0x005eb160+0x118</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>332</ID>
@@ -2075,10 +3192,7 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x11C</Offset>
-          </Offsets>
+          <Address>0x005eb160+0x11c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>333</ID>
@@ -2086,21 +3200,14 @@
           <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x11E</Offset>
-          </Offsets>
+          <Address>0x005eb160+0x11E</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>334</ID>
           <Description>"120"</Description>
-          <ShowAsHex>1</ShowAsHex>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
-          <Address>0x005eb160</Address>
-          <Offsets>
-            <Offset>0x120</Offset>
-          </Offsets>
+          <Address>0x005eb160+0x120</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>136</ID>
@@ -3069,8 +4176,38 @@
     <CheatEntry>
       <ID>149</ID>
       <Description>"Player"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
-      <Address/>
+      <Address>0x005eb4fc</Address>
+      <Offsets>
+        <Offset>0x38</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>636</ID>
+          <Description>"REVS"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005eb4fc</Address>
+          <Offsets>
+            <Offset>0x60</Offset>
+            <Offset>0x38</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>659</ID>
+          <Description>"Car"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005eb4fc</Address>
+          <Offsets>
+            <Offset>0x16C</Offset>
+            <Offset>0x38</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
     <CheatEntry>
       <ID>150</ID>
@@ -3854,6 +4991,18 @@
               <Address>0x005eb4fc</Address>
               <Offsets>
                 <Offset>0x50</Offset>
+                <Offset>0x4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>635</ID>
+              <Description>"16C"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>0x005eb4fc</Address>
+              <Offsets>
+                <Offset>0x16C</Offset>
                 <Offset>0x4</Offset>
               </Offsets>
             </CheatEntry>
@@ -4968,7 +6117,7 @@
         </CheatEntry>
         <CheatEntry>
           <ID>186</ID>
-          <Description>"CurentPlayer"</Description>
+          <Description>"CurentPlayerInt"</Description>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x005eb4fc</Address>
@@ -4984,6 +6133,16 @@
           <Address>0x005eb4fc</Address>
           <Offsets>
             <Offset>0x21</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>535</ID>
+          <Description>"PlayerCurentStructure"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005eb4fc</Address>
+          <Offsets>
+            <Offset>0x38</Offset>
           </Offsets>
         </CheatEntry>
         <CheatEntry>
@@ -5019,6 +6178,48 @@
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
+      <ID>620</ID>
+      <Description>"Global Adress"</Description>
+      <Options moManualExpandCollapse="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>621</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>005e5d28</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>622</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>005e5d28</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>623</ID>
+              <Description>"Car_Player"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>005E5E58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>630</ID>
+              <Description>"Нет описания"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>00664cd4</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
       <ID>155</ID>
       <Description>"Passenger"</Description>
       <Options moManualExpandCollapse="1"/>
@@ -5042,6 +6243,105 @@
           <Offsets>
             <Offset>0x4</Offset>
           </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>626</ID>
+      <Description>"MapGm"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <GroupHeader>1</GroupHeader>
+      <Address>005ec070</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>627</ID>
+          <Description>"0x0"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x5ec070</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>629</ID>
+          <Description>"0x402"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x5ec070+402</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>632</ID>
+          <Description>"0x430"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x5ec070+430</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>633</ID>
+          <Description>"0x434"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x5ec070+434</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>634</ID>
+          <Description>"0x438"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x5ec070+438</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>631</ID>
+          <Description>"0x404"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x5ec070+404</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>628</ID>
+          <Description>"Collection"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x005ec070+574</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>660</ID>
+      <Description>"Нет описания"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>0066ab70</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>661</ID>
+          <Description>"Нет описания"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0066ab70</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>663</ID>
+      <Description>"673F50"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>673F50</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>664</ID>
+      <Description>"Replay"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>005ECAC8</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>665</ID>
+          <Description>"0x75344"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>005ECAC8+0x75344</Address>
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
@@ -5606,6 +6906,141 @@
         <Element Offset="1674" Vartype="Byte" Bytesize="1" RLECount="2" OffsetHex="0000068A" DisplayMethod="unsigned integer"/>
         <Element Offset="1676" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000068C" DisplayMethod="hexadecimal"/>
         <Element Offset="1684" Vartype="String" Bytesize="456" OffsetHex="00000694" DisplayMethod="unsigned integer"/>
+      </Elements>
+    </Structure>
+    <Structure Name="безымянная структура" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="324">
+      <Elements>
+        <Element Offset="0" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="00000000" DisplayMethod="hexadecimal"/>
+        <Element Offset="12" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="0000000C" DisplayMethod="unsigned integer"/>
+        <Element Offset="24" Vartype="Pointer" Bytesize="4" OffsetHex="00000018" DisplayMethod="unsigned integer"/>
+        <Element Offset="28" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="0000001C" DisplayMethod="unsigned integer"/>
+        <Element Offset="44" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000002C" DisplayMethod="hexadecimal"/>
+        <Element Offset="48" Vartype="Pointer" Bytesize="4" OffsetHex="00000030" DisplayMethod="unsigned integer"/>
+        <Element Offset="52" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000034" DisplayMethod="unsigned integer"/>
+        <Element Offset="60" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000003C" DisplayMethod="hexadecimal"/>
+        <Element Offset="64" Vartype="Pointer" Bytesize="4" OffsetHex="00000040" DisplayMethod="unsigned integer"/>
+        <Element Offset="68" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000044" DisplayMethod="hexadecimal"/>
+        <Element Offset="76" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000004C" DisplayMethod="unsigned integer"/>
+        <Element Offset="84" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000054" DisplayMethod="hexadecimal"/>
+        <Element Offset="88" Vartype="4 Bytes" Bytesize="4" RLECount="8" OffsetHex="00000058" DisplayMethod="unsigned integer"/>
+        <Element Offset="120" Vartype="Pointer" Bytesize="4" OffsetHex="00000078" DisplayMethod="unsigned integer"/>
+        <Element Offset="124" Vartype="4 Bytes" Bytesize="4" RLECount="5" OffsetHex="0000007C" DisplayMethod="unsigned integer"/>
+        <Element Offset="144" Vartype="Pointer" Bytesize="4" OffsetHex="00000090" DisplayMethod="unsigned integer"/>
+        <Element Offset="148" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000094" DisplayMethod="unsigned integer"/>
+        <Element Offset="164" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000A4" DisplayMethod="hexadecimal"/>
+        <Element Offset="168" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000000A8" DisplayMethod="unsigned integer"/>
+        <Element Offset="180" Vartype="Pointer" Bytesize="4" OffsetHex="000000B4" DisplayMethod="unsigned integer"/>
+        <Element Offset="184" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000B8" DisplayMethod="unsigned integer"/>
+        <Element Offset="188" Vartype="Pointer" Bytesize="4" OffsetHex="000000BC" DisplayMethod="unsigned integer"/>
+        <Element Offset="192" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000000C0" DisplayMethod="unsigned integer"/>
+        <Element Offset="208" Vartype="Pointer" Bytesize="4" OffsetHex="000000D0" DisplayMethod="unsigned integer"/>
+        <Element Offset="212" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000D4" DisplayMethod="hexadecimal"/>
+        <Element Offset="216" Vartype="4 Bytes" Bytesize="4" RLECount="5" OffsetHex="000000D8" DisplayMethod="unsigned integer"/>
+        <Element Offset="236" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000EC" DisplayMethod="hexadecimal"/>
+        <Element Offset="240" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000000F0" DisplayMethod="unsigned integer"/>
+        <Element Offset="252" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000000FC" DisplayMethod="hexadecimal"/>
+        <Element Offset="260" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000104" DisplayMethod="unsigned integer"/>
+        <Element Offset="268" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000010C" DisplayMethod="hexadecimal"/>
+        <Element Offset="276" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000114" DisplayMethod="unsigned integer"/>
+        <Element Offset="292" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000124" DisplayMethod="hexadecimal"/>
+        <Element Offset="300" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000012C" DisplayMethod="unsigned integer"/>
+        <Element Offset="308" Vartype="Pointer" Bytesize="4" OffsetHex="00000134" DisplayMethod="unsigned integer"/>
+        <Element Offset="312" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="00000138" DisplayMethod="hexadecimal"/>
+        <Element Offset="324" Vartype="Pointer" Bytesize="4" OffsetHex="00000144" DisplayMethod="unsigned integer"/>
+        <Element Offset="328" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000148" DisplayMethod="unsigned integer"/>
+        <Element Offset="332" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000014C" DisplayMethod="hexadecimal"/>
+        <Element Offset="336" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000150" DisplayMethod="unsigned integer"/>
+        <Element Offset="340" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000154" DisplayMethod="hexadecimal"/>
+        <Element Offset="344" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000158" DisplayMethod="unsigned integer"/>
+        <Element Offset="348" Vartype="Pointer" Bytesize="4" OffsetHex="0000015C" DisplayMethod="unsigned integer"/>
+        <Element Offset="352" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000160" DisplayMethod="unsigned integer"/>
+        <Element Offset="356" Vartype="Pointer" Bytesize="4" OffsetHex="00000164" DisplayMethod="unsigned integer"/>
+        <Element Offset="360" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000168" DisplayMethod="unsigned integer"/>
+        <Element Offset="368" Vartype="Pointer" Bytesize="4" OffsetHex="00000170" DisplayMethod="unsigned integer"/>
+        <Element Offset="372" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="00000174" DisplayMethod="unsigned integer"/>
+        <Element Offset="384" Vartype="Pointer" Bytesize="4" OffsetHex="00000180" DisplayMethod="unsigned integer"/>
+        <Element Offset="388" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000184" DisplayMethod="unsigned integer"/>
+        <Element Offset="396" Vartype="Pointer" Bytesize="4" RLECount="2" OffsetHex="0000018C" DisplayMethod="unsigned integer"/>
+        <Element Offset="404" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000194" DisplayMethod="unsigned integer"/>
+        <Element Offset="408" Vartype="Pointer" Bytesize="4" OffsetHex="00000198" DisplayMethod="unsigned integer"/>
+        <Element Offset="412" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="0000019C" DisplayMethod="unsigned integer"/>
+        <Element Offset="428" Vartype="Pointer" Bytesize="4" OffsetHex="000001AC" DisplayMethod="unsigned integer"/>
+        <Element Offset="432" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000001B0" DisplayMethod="unsigned integer"/>
+        <Element Offset="444" Vartype="Pointer" Bytesize="4" OffsetHex="000001BC" DisplayMethod="unsigned integer"/>
+        <Element Offset="448" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000001C0" DisplayMethod="unsigned integer"/>
+        <Element Offset="456" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001C8" DisplayMethod="hexadecimal"/>
+        <Element Offset="460" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001CC" DisplayMethod="unsigned integer"/>
+        <Element Offset="464" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001D0" DisplayMethod="hexadecimal"/>
+        <Element Offset="468" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000001D4" DisplayMethod="unsigned integer"/>
+        <Element Offset="484" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001E4" DisplayMethod="hexadecimal"/>
+        <Element Offset="488" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000001E8" DisplayMethod="unsigned integer"/>
+        <Element Offset="496" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000001F0" DisplayMethod="hexadecimal"/>
+        <Element Offset="504" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001F8" DisplayMethod="unsigned integer"/>
+        <Element Offset="508" Vartype="Pointer" Bytesize="4" OffsetHex="000001FC" DisplayMethod="unsigned integer"/>
+        <Element Offset="512" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000200" DisplayMethod="hexadecimal"/>
+        <Element Offset="520" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000208" DisplayMethod="unsigned integer"/>
+        <Element Offset="528" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000210" DisplayMethod="hexadecimal"/>
+        <Element Offset="532" Vartype="4 Bytes" Bytesize="4" RLECount="5" OffsetHex="00000214" DisplayMethod="unsigned integer"/>
+        <Element Offset="552" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000228" DisplayMethod="hexadecimal"/>
+        <Element Offset="556" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000022C" DisplayMethod="unsigned integer"/>
+        <Element Offset="564" Vartype="Pointer" Bytesize="4" OffsetHex="00000234" DisplayMethod="unsigned integer"/>
+        <Element Offset="568" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="00000238" DisplayMethod="unsigned integer"/>
+        <Element Offset="580" Vartype="Pointer" Bytesize="4" OffsetHex="00000244" DisplayMethod="unsigned integer"/>
+        <Element Offset="584" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000248" DisplayMethod="hexadecimal"/>
+        <Element Offset="588" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000024C" DisplayMethod="unsigned integer"/>
+        <Element Offset="596" Vartype="Pointer" Bytesize="4" OffsetHex="00000254" DisplayMethod="unsigned integer"/>
+        <Element Offset="600" Vartype="4 Bytes" Bytesize="4" RLECount="5" OffsetHex="00000258" DisplayMethod="unsigned integer"/>
+        <Element Offset="620" Vartype="Pointer" Bytesize="4" OffsetHex="0000026C" DisplayMethod="unsigned integer"/>
+        <Element Offset="624" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000270" DisplayMethod="unsigned integer"/>
+        <Element Offset="628" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000274" DisplayMethod="hexadecimal"/>
+        <Element Offset="632" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000278" DisplayMethod="unsigned integer"/>
+        <Element Offset="636" Vartype="Pointer" Bytesize="4" OffsetHex="0000027C" DisplayMethod="unsigned integer"/>
+        <Element Offset="640" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000280" DisplayMethod="unsigned integer"/>
+        <Element Offset="644" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000284" DisplayMethod="hexadecimal"/>
+        <Element Offset="648" Vartype="4 Bytes" Bytesize="4" RLECount="10" OffsetHex="00000288" DisplayMethod="unsigned integer"/>
+        <Element Offset="688" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002B0" DisplayMethod="hexadecimal"/>
+        <Element Offset="692" Vartype="Pointer" Bytesize="4" OffsetHex="000002B4" DisplayMethod="unsigned integer"/>
+        <Element Offset="696" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000002B8" DisplayMethod="unsigned integer"/>
+        <Element Offset="712" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002C8" DisplayMethod="hexadecimal"/>
+        <Element Offset="716" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000002CC" DisplayMethod="unsigned integer"/>
+        <Element Offset="728" Vartype="Pointer" Bytesize="4" RLECount="2" OffsetHex="000002D8" DisplayMethod="unsigned integer"/>
+        <Element Offset="736" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000002E0" DisplayMethod="unsigned integer"/>
+        <Element Offset="748" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002EC" DisplayMethod="hexadecimal"/>
+        <Element Offset="752" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002F0" DisplayMethod="unsigned integer"/>
+        <Element Offset="756" Vartype="Pointer" Bytesize="4" OffsetHex="000002F4" DisplayMethod="unsigned integer"/>
+        <Element Offset="760" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002F8" DisplayMethod="hexadecimal"/>
+        <Element Offset="764" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000002FC" DisplayMethod="unsigned integer"/>
+        <Element Offset="780" Vartype="Pointer" Bytesize="4" OffsetHex="0000030C" DisplayMethod="unsigned integer"/>
+        <Element Offset="784" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000310" DisplayMethod="unsigned integer"/>
+        <Element Offset="788" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000314" DisplayMethod="hexadecimal"/>
+        <Element Offset="792" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000318" DisplayMethod="unsigned integer"/>
+        <Element Offset="796" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000031C" DisplayMethod="hexadecimal"/>
+        <Element Offset="800" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000320" DisplayMethod="unsigned integer"/>
+        <Element Offset="808" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000328" DisplayMethod="hexadecimal"/>
+        <Element Offset="816" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000330" DisplayMethod="unsigned integer"/>
+        <Element Offset="824" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000338" DisplayMethod="hexadecimal"/>
+        <Element Offset="828" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="0000033C" DisplayMethod="unsigned integer"/>
+        <Element Offset="836" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000344" DisplayMethod="hexadecimal"/>
+        <Element Offset="840" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000348" DisplayMethod="unsigned integer"/>
+        <Element Offset="856" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000358" DisplayMethod="hexadecimal"/>
+        <Element Offset="864" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000360" DisplayMethod="unsigned integer"/>
+        <Element Offset="872" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000368" DisplayMethod="hexadecimal"/>
+        <Element Offset="876" Vartype="4 Bytes" Bytesize="4" RLECount="8" OffsetHex="0000036C" DisplayMethod="unsigned integer"/>
+        <Element Offset="908" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000038C" DisplayMethod="hexadecimal"/>
+        <Element Offset="912" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000390" DisplayMethod="unsigned integer"/>
+        <Element Offset="928" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000003A0" DisplayMethod="hexadecimal"/>
+        <Element Offset="940" Vartype="4 Bytes" Bytesize="4" RLECount="3" OffsetHex="000003AC" DisplayMethod="unsigned integer"/>
+        <Element Offset="952" Vartype="Pointer" Bytesize="4" OffsetHex="000003B8" DisplayMethod="unsigned integer"/>
+        <Element Offset="956" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000003BC" DisplayMethod="unsigned integer"/>
+        <Element Offset="972" Vartype="4 Bytes" Bytesize="4" OffsetHex="000003CC" DisplayMethod="hexadecimal"/>
+        <Element Offset="976" Vartype="Pointer" Bytesize="4" OffsetHex="000003D0" DisplayMethod="unsigned integer"/>
+        <Element Offset="980" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000003D4" DisplayMethod="unsigned integer"/>
+        <Element Offset="988" Vartype="4 Bytes" Bytesize="4" OffsetHex="000003DC" DisplayMethod="hexadecimal"/>
+        <Element Offset="992" Vartype="Pointer" Bytesize="4" OffsetHex="000003E0" DisplayMethod="unsigned integer"/>
+        <Element Offset="996" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000003E4" DisplayMethod="hexadecimal"/>
+        <Element Offset="1004" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000003EC" DisplayMethod="unsigned integer"/>
+        <Element Offset="1012" Vartype="4 Bytes" Bytesize="4" OffsetHex="000003F4" DisplayMethod="hexadecimal"/>
+        <Element Offset="1016" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000003F8" DisplayMethod="unsigned integer"/>
       </Elements>
     </Structure>
   </Structures>

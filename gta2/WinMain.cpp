@@ -11,6 +11,7 @@ HANDLE gHANDLE;
 
 DWORD	gMajor;
 DWORD	gMinor;
+HWND    gHWND;
 
 
 bool gSkipFrontend1;
@@ -80,7 +81,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         MessageBox(NULL, "Ошибка создания окна!", "Ошибка", MB_ICONERROR);
         return 1;
     }
-
+    gHWND = hwnd;
     // 3. Показать окно
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);

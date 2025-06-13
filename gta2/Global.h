@@ -1,9 +1,16 @@
 #ifndef __GLOBAL_H_
 #define	__GLOBAL_H_
 #include <windows.h>
+#include "AudioManager.h"
 #include "DebugLogFile.h"
+#include "DMAudio.h"
+
 #include "MapGm.h"
+#include "Movie.h"
+#include "Menu.h"
+#include "Network.h"
 #include "Registry.h"
+#include "Replay.h"
 
 //#include "Car.h"
 //#include "CarDoor.h"
@@ -129,18 +136,29 @@ extern	bool	gBunt;
 extern	bool	gNEKKID;
 extern	HANDLE  gHANDLE;
 
-
+extern  HWND	gHWND;
 extern	int		gRenderdevice;
 extern	int		gVideodevice;
+extern	int		gVideoPlay;
 extern	char	gData[256];
 extern	char	gVideo[255];
+extern	int		gGamma;
 
 extern const char gD3ddll[11];
 extern const char gDmavideo[13];
 
+extern	AudioManager gAudioManager;
+extern	DMAudio		gDMAudio;
 
-extern	Registry	gRegistry;
 extern 	MapGm 		gMapGm;
+extern	Menu		gMenu;
+extern	Network		gNetwork;
+extern	Registry	gRegistry;
+extern	Replay		gReplay;
+extern	Movie		gMovie;
+
+
+
 
 
 //Car *gCar =new Car();
