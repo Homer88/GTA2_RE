@@ -1,16 +1,25 @@
 #ifndef __GLOBAL_H_
 #define	__GLOBAL_H_
 #include <windows.h>
+#include <direct.h>
+#include <memory.h>
 #include "AudioManager.h"
 #include "DebugLogFile.h"
 #include "DMAudio.h"
-
+#include "diutil.h"
+#include "Game.h"
+#include "HUD.h"
+#include "Keybrd.h"
 #include "MapGm.h"
 #include "Movie.h"
 #include "Menu.h"
 #include "Network.h"
+#include "plydat.h"
 #include "Registry.h"
 #include "Replay.h"
+#include "Text.h"
+#include "video.h"
+
 
 //#include "Car.h"
 //#include "CarDoor.h"
@@ -18,7 +27,7 @@
 //#include "CarSystemManager.h"
 //#include "CarsPrefabs.h"
 //#include "EngineStruct.h"
-//#include "Game.h"
+
 //#include "GameObject.h"
 //#include "General.h"
 //#include "Object.h"
@@ -135,6 +144,8 @@ extern	bool	gElvis;
 extern	bool	gBunt;
 extern	bool	gNEKKID;
 extern	HANDLE  gHANDLE;
+extern	LPVOID* gDirectInput8;
+extern	REFIID  gREFIID;
 
 extern  HWND	gHWND;
 extern	int		gRenderdevice;
@@ -143,20 +154,24 @@ extern	int		gVideoPlay;
 extern	char	gData[256];
 extern	char	gVideo[255];
 extern	int		gGamma;
+extern	int		gTimer, gTime;
 
 extern const char gD3ddll[11];
 extern const char gDmavideo[13];
 
 extern	AudioManager gAudioManager;
 extern	DMAudio		gDMAudio;
-
+extern	Game		gGame;
+extern	Keyboard	gKeyboard;
 extern 	MapGm 		gMapGm;
 extern	Menu		gMenu;
 extern	Network		gNetwork;
 extern	Registry	gRegistry;
 extern	Replay		gReplay;
 extern	Movie		gMovie;
-
+extern	HUD			gHUD;
+extern	Text		gText;
+extern  PlayerData* gPlayerData;
 
 
 
@@ -176,4 +191,6 @@ void GetDebugParam();
 bool AllGtxFile();
 bool DefautInitParam();
 void CopyWideString(wchar_t* dest, const wchar_t* src);
+void InitTimer();
+
 #endif

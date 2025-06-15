@@ -22,6 +22,8 @@ public:
 	BYTE GetSound3DConfigure(LPCSTR lpValueName);
 	LSTATUS SetSound3DConfigure(LPCSTR lpValueName, BYTE value);
 	LSTATUS SetConfigureWindowSize(LPCSTR lpValueName, BYTE Data);
+	bool OpenOrCreateTextKey(PHKEY phkResult);
+	int SetTextConfig(LPCSTR lpValueName, BYTE value);
 
 
 	

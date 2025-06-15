@@ -202,13 +202,25 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                         // sub_4CB880();
                         gData_6735A5 = 0;
                 }
-                    //if (gGame)
+                    if (gGame.Status) {
+
+                        SetGamma();
+                    }
 
 
                 }
                 break;
                 return 0;
+            case 8: {
+                Deff(0);
+                //DirectX();
+                gDMAudio.Init3DSound(0);
+                gDMAudio.InitAudioManager();
+                if (gMenu.Status && (gVideoPlay == 2)) {
+                    //gMenu.~Menu(); Файл и буфер не доступен.
 
+                }
+            }
         case WM_PAINT: {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
@@ -226,8 +238,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     }
 }
 
+int gTimer, gTime;
+void InitTimer() {
 
-
+    gTimer = timeGetTime();
+    gTime = 0;
+}
 
 // Получаем версию EXE
 void GetVersion(DWORD *pMajorVersion, DWORD *pMinorVersion){
@@ -408,7 +424,9 @@ bool AllGtxFile() {
     for (int i = 0; i < fileCount; ++i) {
         FILE* file = fopen(gxtFiles[i], "rb");
         if (file) {
+            
             fclose(file);
+            return true;
         }
 		else{
             return false;
@@ -835,4 +853,56 @@ int SetVideoPlayer() {
             }
         }
         SetGamma();
+}
+
+
+void * ConfigureVideoSystem() {
+    return 0;
+}
+
+
+
+char LoadConfig() {
+
+
+    if (!gKeyboard.Status ) {
+        DebugLog(0x20u, "keybrd.cpp", 229);
+
+    }
+    gKeyboard.LoadKeyboard();
+    return 0;
+}
+
+
+#include <stdlib.h> 
+void InitializePlayerData()
+{
+    // 1. Выделение сырой памяти
+    void* pMemory = operator new(0x2BC0u);
+
+    if (!pMemory)
+    {
+        DebugLog(0x20u, "plydat.cpp", 1269);
+        return;
+    }
+
+    // 2. Вызов конструктора через placement new
+    try {
+        gPlayerData = new (pMemory) PlayerData; // Вызов конструктора без аргументов
+    }
+    catch (...) {
+        // Обработка исключения конструктора
+        operator delete(pMemory);
+        gPlayerData = 0;
+        DebugLog(0x20u, "plydat.cpp", 1269);
+        return;
+    }
+}
+
+}
+
+
+
+void PlayerData() {
+
 }

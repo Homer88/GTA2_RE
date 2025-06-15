@@ -29,15 +29,8 @@ public:
 	     char field_C99F;
 	     short Key;
 	     short field_C9A2;
-	     int field_C9A4;
-	     int field_C9A8;
-	     int field_C9AC;
-	     short field_C9B0;
-	     char field_C9B2;
-	     char field_C9B3;
-	     char field_C9B4;
-	     char field_C9B5;
-	     char field_C9B6;
+	     unsigned short MenuItems[9];
+	     char CurentArrayIndex;
 	     char field_C9B7;
 	     //KeyState NewKeyState;
 	     //KeyState OldKeyState;
@@ -9302,7 +9295,17 @@ public:
 	     short field_1EB3D;
 	     char field_1eb3f;
 
+
+		 Menu() {};
+		 ~Menu() {};
+
 		 void SetFrontendKeysEnabled(byte param);
+		 wchar_t* getPlayerProfileName();
+		 void SetPlayerProfileName(wchar_t* NamePlayer);
+		 void SetPlayerProfileName(wchar_t* NamePlayer, int Count);
+		 unsigned short clearArrayTail();
+		 void InitializeState(int Pages);
+		 
 
 	
 };

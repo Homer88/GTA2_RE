@@ -12,5 +12,8 @@ void Deff(byte a);
 void DestructorMovie(); //FixMe
 void Destructor();//FixMe
 int BinkClose(UINT uMSG, HWND hWND);//FixMe
-
+int SetVideoPlayer();
+void SetGamma();
+void* ConfigureVideoSystem();
+char  LoadConfig();
 

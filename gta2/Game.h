@@ -6,13 +6,14 @@ class Game{
 	private:
 
 	public:
-		 GameStatus *Status;
-		 Player *pPlayer[6];
-		 Player *CurentPlayer;
-		 char CurentPlayer__;
-		 byte ID;
-		 char field_22;
-  unsigned __int8 NumPlayers;
+		bool Status;
+		 //GameStatus *Status;
+	//	 Player *pPlayer[6];
+		// Player *CurentPlayer;
+		// char CurentPlayer__;
+		// byte ID;
+		// char field_22;
+  BYTE NumPlayers;
   char PlayerInFocus;
   char field_25;
   char field_26;
@@ -24,7 +25,7 @@ class Game{
   char field_32;
   char field_33;
   int SkipPolice;
-  Player *Player;
+  //Player *Player;
   char gSkilPolice;
   char field_3D;
   char field_3E;
@@ -32,6 +33,7 @@ class Game{
 
 		Game();
 		~Game();
+		void* InitPlayerOrTimer();
 
 };
 

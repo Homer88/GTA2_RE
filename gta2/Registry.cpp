@@ -304,3 +304,36 @@ LSTATUS Registry::SetConfigureWindowSize(LPCSTR lpValueName, BYTE Data) {
 	}
 	return resul;
 }
+
+bool Registry::OpenOrCreateTextKey(PHKEY phkResult) {
+	if (!phkResult) return false;
+
+	const char* TEXT_KEY = "SOFTWARE\\DMA Design Ltd\\GTA2\\Option";
+
+	if (!RegOpenKeyExA(HKEY_CURRENT_USER, TEXT_KEY, 0, 983103, phkResult))
+		return true;
+	if (RegCreateKeyExA(HKEY_CURRENT_USER, TEXT_KEY, 0, NULL, 0,
+		983103, 0, phkResult, (LPDWORD)&phkResult))
+	{
+		DebugLog(0x2Bu, "registry.cpp", 265);
+		return false;
+	}
+}
+int Registry::SetTextConfig(LPCSTR lpValueName, BYTE value) {
+	HKEY hKey;
+	BYTE Data[4] = { 0 };
+	DWORD cdData = 4;
+
+	this->OpenOrCreateTextKey(&hKey);
+	if (RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cdData)) {
+		if (RegSetValueExA(hKey, lpValueName, 0, 4, &value, 4)) {
+			DebugLog(0x2Eu, "registry.cpp", 622);
+
+		}
+		Data[0] = value;
+	}
+	if (RegCloseKey(hKey)) {
+		DebugLog(0x2Au, "registry.cpp", 629);
+	}
+	return Data[0];
+}

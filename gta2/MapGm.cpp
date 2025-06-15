@@ -124,7 +124,7 @@ int MapGm::LoadFileResurce(){
 	this->SetBonusStage(0);
 	this->Set_FUN_0045E4B0(0);
 	this->SetPlayerSlotSave(0);
-	this->Set_FUN_0045E4D0(0);
+	this->SetBonus(0);
 	memset(this->Arr10i,0,sizeof(this->Arr10i));
 	this->field_430=0;
 	this->field_434=0;
@@ -174,6 +174,9 @@ void MapGm::SetSaveFile(char* NameFile){
 void MapGm::SetPlayerArena(int PlayerArena){
 	this->playerArena=PlayerArena;
 }
+char MapGm::GetPlayerArena() {
+	return this->playerArena;
+}
 void MapGm::SetBonusStage(int BonusStage){
 	this->bonusStage=BonusStage;
 }
@@ -183,9 +186,36 @@ void MapGm::Set_FUN_0045E4B0(int Param){
 void MapGm::SetPlayerSlotSave(int PlayerSlot){
 	this->PlayerSlotSave=PlayerSlot;
 }
-void MapGm::Set_FUN_0045E4D0(int Param){
-	this->field_404=Param;
+void MapGm::SetBonus(int Param){
+	this->Bonus=Param;
+}
+char MapGm::GetBonus() {
+	return this->Bonus;
 }
 void MapGm::Set_FUN_0045E630(){
 	
+}
+
+
+int  MapGm::GetSpecialTokens() {
+	return this->SpecialTokens;
+}
+void MapGm::SetSpecialTokens(int pSpecialTokens) {
+	this->SpecialTokens=pSpecialTokens;
+}
+
+
+void MapGm::IncrementSpecialTokens() {
+
+	++this->SpecialTokens;
+}
+
+
+int MapGm::ShowLimitFrame() {
+	return this->FragLimit;
+}
+
+void MapGm::DefauntSpecialTokens()
+{
+	this->SpecialTokens = 0;
 }

@@ -13,7 +13,7 @@ public:
 	char bonusStage;
 	char field_0x402;
 	unsigned char  PlayerSlotSave;
-	char field_404;
+	char Bonus;
 	char field_405;
 	char field_406;
 	char field_407;
@@ -152,7 +152,7 @@ public:
 	char field_571;
 	char field_572;
 	char field_573;
-	int field_574;
+	int SpecialTokens;
 	int field_578;
 	
 	//MapGm();
@@ -168,10 +168,17 @@ public:
 	char* GetSaveFile();
 	void SetSaveFile(char* NameFile);
 	void SetPlayerArena(int PlayerArena);
+	char GetPlayerArena();
+	char GetBonus();
+	int ShowLimitFrame();
 	void SetBonusStage(int BonusStage);
+	void DefauntSpecialTokens();
+	int  GetSpecialTokens();
+	void SetSpecialTokens(int pSpecialTokens);
+	void IncrementSpecialTokens();
 	void Set_FUN_0045E4B0(int Param);
 	void SetPlayerSlotSave(int PlayerSlot);
-	void Set_FUN_0045E4D0(int Param);
+	void SetBonus(int Param);
 	void Set_FUN_0045E630();
 	
 	
