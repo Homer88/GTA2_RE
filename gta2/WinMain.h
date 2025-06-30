@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___WIN_MAIN_H_
+#define ___WIN_MAIN_H_
 
 
 
@@ -17,3 +18,4 @@ void SetGamma();
 void* ConfigureVideoSystem();
 char  LoadConfig();
 
+#endif

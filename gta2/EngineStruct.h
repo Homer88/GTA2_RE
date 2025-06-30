@@ -1,6 +1,7 @@
-#pragma once
+#ifndef __ENGINESTRUCT__H__
+#define __ENGINESTRUCT__H__
 
-#include "Global.h"
+class CarSystemManager;
 
 class EngineStruct{
     public:

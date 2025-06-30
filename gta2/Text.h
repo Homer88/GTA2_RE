@@ -11,7 +11,4 @@ public:
 	void* Bsearch(const void* pKey);
 };
 
-
-
-
 #endif

@@ -1,12 +1,16 @@
 //Structure S117 0x005EB898
 #ifndef __GANGS_H_
 #define __GANGS_H_
+#include "Gang.h"
+
+
+class Gang;
 
 class  Gangs{
-	public 
+public: 
 	Gang gang[10];
 	Gangs();
-	~Gangs{};
+	~Gangs();
 	
 };
 

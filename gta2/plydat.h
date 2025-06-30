@@ -1,6 +1,8 @@
 #ifndef __PLAYDAT_H_
 #define __PLAYDAT_H_
+
 #include <new> 
+
 class PlayerData {
 public:
 	int field;

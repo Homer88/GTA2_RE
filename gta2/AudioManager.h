@@ -9,12 +9,9 @@ public:
 	bool	Sound3D;
 	unsigned int count;
 
-
-
-
-
 	int InitArray();
 	void DefauntParam();
 };
+
 #endif // !____AudioManager_H_
 

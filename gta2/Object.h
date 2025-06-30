@@ -1,7 +1,6 @@
 #ifndef ___OBJECT_H_
 #define ___OBJECT_H_
 
-#include "Global.h"
 
 class Object{
 

@@ -1,15 +1,18 @@
 //реализация классов с машинами
-
+#include "Global.h"
 #include "Car.h"
 
+Car			gCar;
+
 Car::Car(){
+    this->Mask = 0;
 
 }
 
 Car::~Car(){
 this->LastCar=0;
-this->SpriteS1=0;
-this->EngineStruct=0;
+//this->SpriteS1=0;
+//this->EngineStruct=0;
 }
 
 void Car::sub_4BF000(){
@@ -70,7 +73,7 @@ bool Car::GetFullDamage(){
 }
 
 void * Car::sub_41F730(int pararm){
-    return (void*)(gCarEngines.sub_4327E0(this->CarType)+44);
+    return 0;//(void*)(gCarEngines.sub_4327E0(this->CarType)+44);
 
 
 }

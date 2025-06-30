@@ -1,9 +1,13 @@
-#pragma once
+#ifndef __WEAPON_H_
+#define __WEAPON_H_
 
-#include "global.h"
+#include "Ped.h"
+#include "Car.h"
 
-enum  WeaponType  
-{
+class Ped;
+class Car;
+
+enum  WeaponType {
   Pistolet = 0u,
   SMG = 1u,
   ROCKET = 2u,
@@ -25,7 +29,7 @@ enum  WeaponType
 
 class Weapon{
     public:
-		__int16 Ammo;
+	short  Ammo;
   char TimeToReload;
   char field_3;
   int SMG;
@@ -35,7 +39,7 @@ class Weapon{
   char field_12;
   char field_13;
   Car *Car;
-  Weapon *NextWeapon;
+  //Weapon *NextWeapon;
   WeaponType TypeWeapon;
   char field_20;
   char field_21;
@@ -50,3 +54,5 @@ class Weapon{
         Weapon();
         ~Weapon(); 
 };
+
+#endif // !__WEAPON_H_

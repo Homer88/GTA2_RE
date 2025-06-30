@@ -1,6 +1,8 @@
-#include <dinput.h>
 #ifndef ___MENU_H_
 #define ___MENU_H_
+#include <dinput.h>
+
+
 
 class Menu {
 public:

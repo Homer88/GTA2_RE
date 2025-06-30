@@ -1,6 +1,7 @@
-#pragma once
+#ifndef ___CARENGINES___H_
+#define ___CARENGINES___H_
 
-#include "global.h"
+
 
 class CarEngines{
 	
@@ -9,3 +10,4 @@ class CarEngines{
 		~CarEngines();
 		int sub_4327E0(int CarType);
 };
+#endif // !___CarEngines___H_

@@ -13,5 +13,6 @@ public:
 	bool Get3DSound();
 
 };
+
 #endif // !__DMAudio_H_
 

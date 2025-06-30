@@ -1,45 +1,40 @@
 #ifndef __GLOBAL_H_
 #define	__GLOBAL_H_
+
 #include <windows.h>
 #include <direct.h>
 #include <memory.h>
 #include "AudioManager.h"
+#include "Car.h"
+#include "CarDoor.h"
+#include "CarEngines.h"
+#include "CarsPrefabs.h"
+#include "CarSystemManager.h"
+#include "EngineStruct.h"
 #include "DebugLogFile.h"
 #include "DMAudio.h"
 #include "diutil.h"
 #include "Game.h"
+#include "GameObject.h"
+#include "General.h"
 #include "HUD.h"
 #include "Keybrd.h"
+#include "Object.h"
 #include "MapGm.h"
 #include "Movie.h"
 #include "Menu.h"
 #include "Network.h"
+#include "Passenger.h"
+#include "Ped.h"
+#include "Player.h"
 #include "plydat.h"
+#include "SpriteS1.h"
 #include "Registry.h"
 #include "Replay.h"
 #include "Text.h"
+#include "Turrel.h"
+#include "Weapon.h"
 #include "video.h"
-
-
-//#include "Car.h"
-//#include "CarDoor.h"
-//#include "CarEngines.h"
-//#include "CarSystemManager.h"
-//#include "CarsPrefabs.h"
-//#include "EngineStruct.h"
-
-//#include "GameObject.h"
-//#include "General.h"
-//#include "Object.h"
-//#include "Passenger.h"
-//#include "Player.h"
-//#include "Ped.h"
-//#include "SpriteS1.h"
-//#include "Turrel.h"
-//#include "Weapon.h"
-
-
-
 
 
 extern	HINSTANCE ghInstance;
@@ -160,6 +155,9 @@ extern const char gD3ddll[11];
 extern const char gDmavideo[13];
 
 extern	AudioManager gAudioManager;
+extern	Car			gCar;
+extern	CarEngines	gCarEngines;
+
 extern	DMAudio		gDMAudio;
 extern	Game		gGame;
 extern	Keyboard	gKeyboard;
@@ -171,21 +169,16 @@ extern	Replay		gReplay;
 extern	Movie		gMovie;
 extern	HUD			gHUD;
 extern	Text		gText;
-extern  PlayerData* gPlayerData;
+extern  PlayerData	*gPlayerData;
+extern	CarsPrefabs gCarsPrefabs;
+extern	GameObject  gGameObject;
 
-
-
-
-//Car *gCar =new Car();
-//CarEngines *gCarEngines;
-//CarsPrefabs gCarsPrefabs;
-//GameObject gGameObject;
-//Game gGame;
-//General gGeneral;
-//Object gObject;
-//Ped gPed;
-//SpriteS1 gSpriteS1;
-//Weapon gWeapon;
+extern	Game gGame;
+extern	General gGeneral;
+extern	Object gObject;
+extern	Ped gPed;
+extern	SpriteS1 gSpriteS1;
+extern	Weapon gWeapon;
 
 void GetDebugParam();
 bool AllGtxFile();

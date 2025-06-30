@@ -1,5 +1,6 @@
 #ifndef __KEYBRD__H_
 #define __KEYBRD__H_
+
 #include <windows.h>
 #include <winuser.h>
 #include <stdio.h>
@@ -15,9 +16,6 @@ public:
 	bool Status;
 	Keyboard();
 	int LoadKeyboard();
-
-
-
 };
 
 

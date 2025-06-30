@@ -2,6 +2,9 @@
 
 
 Turrel::Turrel(){
+	this->a = 0;
+
+
 }
 
 

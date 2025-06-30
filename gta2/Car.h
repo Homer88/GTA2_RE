@@ -1,7 +1,13 @@
-#pragma once
+#ifndef ___CAR__H__
+#define ___CAR__H__
+
+
+
 
 #include "global.h"
 
+class Ped;
+class SpriteS1;
 
 enum CarModel
 {
@@ -123,101 +129,94 @@ enum  DamageType
 };
 
 
-class Car{
-   public:
-        Turrel *Turrel;
-        Passenger *Passenger;
-        CAR_LIGHTS_AND_DOORS_BITSTATE carLights;
-        CarDoor CarDoor[4];
-        Car *LastCar;
-        SpriteS1 *SpriteS1;
-        Ped *Driver;
-        Player *Physics;
-        EngineStruct* EngineStruct;
-        Model *Model;
-        int TrailerCtrl;
-        int field_68;
-        int ID;
-        Ped *lastDamagingPed;                 /// наносит урон
-        short Damage;
-        __int16 field_76;
-        __int16 PhysicsBitmask;
-        char field_7A;
-        char field_7B;
-        int field_7C;
-        char field_80;
-        char field_81;
-        char field_82;
-        char field_83;
-        CarModel CarType;
-        int Mask;
-        char FireState;
-        char field_8D;
-        char AlarmTime;
-        char field_8F;
-        DamageType DamageType;
-        char DamageShotTimer;
-        char PlayerId;
-        char field_96;
-        char field_97;
-        int locksDoor;
-        CAR_ENGINE_STATE engineState;
-        TRAFFIC_CAR_TYPE trafficCarType;
-        char sirenState;
-        char sirenPhase;
-        char field_A6;
-        char horn;
-        char field_A8;
-        char FireTimer;
-        char field_AA;
-        char field_AB;
-        char field_AC;
-        char field_AD;
-        char field_AE;
-        char field_AF;
-        int field_B0;
-        byte currentUpgradeSound;
-        bool isTurretBeingRotated;
-        __declspec(align(4)) char field_B8;
-        char field_B9;
-        char field_BA;
-        char field_0;
+class Car {
+public:
+    //Turrel *Turrel;
+   /// Passenger *Passenger;
+    //CAR_LIGHTS_AND_DOORS_BITSTATE carLights;
+   // CarDoor CarDoor[4];
+    Car* LastCar;
+    SpriteS1 *SpriteS1;
+    Ped *Driver;
+    //Player *Physics;
+    //EngineStruct* EngineStruct;
+    //Model *Model;
+    int TrailerCtrl;
+    int field_68;
+    int ID;
+    Ped *lastDamagingPed;                 /// наносит урон
+    short Damage;
+    __int16 field_76;
+    __int16 PhysicsBitmask;
+    char field_7A;
+    char field_7B;
+    int field_7C;
+    char field_80;
+    char field_81;
+    char field_82;
+    char field_83;
+    CarModel CarType;
+    int Mask;
+    char FireState;
+    char field_8D;
+    char AlarmTime;
+    char field_8F;
+    DamageType DamageType;
+    char DamageShotTimer;
+    char PlayerId;
+    char field_96;
+    char field_97;
+    int locksDoor;
+    //CAR_ENGINE_STATE engineState;
+    //TRAFFIC_CAR_TYPE trafficCarType;
+    char sirenState;
+    char sirenPhase;
+    char field_A6;
+    char horn;
+    char field_A8;
+    char FireTimer;
+    char field_AA;
+    char field_AB;
+    char field_AC;
+    char field_AD;
+    char field_AE;
+    char field_AF;
+    int field_B0;
+    byte currentUpgradeSound;
+    bool isTurretBeingRotated;
+    char field_B8;
+    char field_B9;
+    char field_BA;
+    char field_0;
 
-    
+
     // конструктор 
-        Car();
-        ~Car();
+    Car();
+    ~Car();
 
-        void AddRoofAntenna(); 
-        void AddRoofGun();
-        void AddRoofTankTurret();
-        void AddRoofWaterGun();   
-        short CollisionOnCar(int Damage);
-        bool GetFullDamage();
-        void ExplodeCar(int a);
-        void sub_4BF000();
-        void sub_421460();
-        void sub_424620();
-        int sub_424630(void *);
-        void sub_420840(void *);
-        void* sub_41F730(int param);
-        bool IsDriverPlayer();
-        bool isFileTruck();
-        bool isGunJeep();
-        bool isTank();
-        bool IsTrainOrTrainCarriage();
-        void SetPosition(int X, int Y, int Z);
-        char UpdateDamageCooldown();
-        
-
-
-
-
-
-
+    void AddRoofAntenna();
+    void AddRoofGun();
+    void AddRoofTankTurret();
+    void AddRoofWaterGun();
+    short CollisionOnCar(int Damage);
+    bool GetFullDamage();
+    void ExplodeCar(int a);
+    void sub_4BF000();
+    void sub_421460();
+    void sub_424620();
+    int sub_424630(void*);
+    void sub_420840(void*);
+    void* sub_41F730(int param);
+    bool IsDriverPlayer();
+    bool isFileTruck();
+    bool isGunJeep();
+    bool isTank();
+    bool IsTrainOrTrainCarriage();
+    void SetPosition(int X, int Y, int Z);
+    char UpdateDamageCooldown();
 };
 
-
+#endif // !___CAR__H__
 
 
 

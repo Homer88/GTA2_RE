@@ -181,12 +181,6 @@ public:
 	void SetBonus(int Param);
 	void Set_FUN_0045E630();
 	
-	
-	
-	
-	
-	
-	
 	};
 
 #endif

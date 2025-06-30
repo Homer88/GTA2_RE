@@ -1,13 +1,18 @@
-#pragma once
+#ifndef __CARSPREFABS_H_
+#define __CARSPREFABS_H_
 
-#include "Global.h"
+
+
+//#include "Global.h"
 #include "Car.h"
+class Car;
 
 class CarsPrefabs{
     private:
-		extern Car *Car2;
-		extern Car *Car3;
-		Car CarArr306[306];
+		Car *Car2;
+		Car *Car3;
+      
+        int CarArr[306];
         unsigned short CarsCount;
         unsigned short field_E0C2;
     public:
@@ -17,3 +22,5 @@ class CarsPrefabs{
     Car* GetCar();
     Car* InsertCarAtFront(Car *pCar);
 };
+
+#endif // !__CARSPREFABS_H_

@@ -1,10 +1,18 @@
-#pragma once
+#ifndef  __MAP_RELATED_STRUCT__H__
+#define  __MAP_RELATED_STRUCT__H__
 
-#include "Global.h"
 
-class MapRelatedStruct{
-    public:
-        MapRelatedStruct();
-        ~MapRelatedStruct();
+
+class MapRelatedStruct {
+public:
+    MapRelatedStruct();
+    ~MapRelatedStruct();
 };
+
+#endif // !__MAP_RELATED_STRUCT__H__
+
+
+
+
+
 

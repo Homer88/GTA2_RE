@@ -1,7 +1,7 @@
-#pragma once
+#ifndef __REGISTRY__H__
+#define __REGISTRY__H__
 
-
-class Registry{
+class Registry {
 
 public:
 
@@ -26,6 +26,11 @@ public:
 	int SetTextConfig(LPCSTR lpValueName, BYTE value);
 
 
-	
-	
+
+
 };
+
+#endif // !__REGISTRY__H__
+
+
+

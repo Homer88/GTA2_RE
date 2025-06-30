@@ -1,6 +1,9 @@
 #ifndef __GANG_H_
 #define __GANG_H_
 
+#include "Car.h"
+
+
 enum GANG{
 			Yakuza               = 0u,
 			Zaibatsu_Corporation = 1u,
@@ -17,7 +20,7 @@ enum GANG{
 
 
 class  Gang{
-	public 
+public: 
 	
 	char field;
   GANG CurrentGang;
@@ -135,7 +138,7 @@ class  Gang{
   char field_7A;
   char field_7B;
   char field_7C;
-  __unaligned __declspec(align(1)) __int16 field_7D;
+  unsigned short	field_7D;
   char field_7F;
   char field_80;
   char field_81;
@@ -285,7 +288,7 @@ class  Gang{
   char field_11A;
   char Reting;
   char Prestige;
-  __declspec(align(4)) __int16 field_120;
+  unsigned short field_120;
   char WarMaskGang[10];
   char field_12C;
   char field_12D;
@@ -300,10 +303,10 @@ class  Gang{
   char field_136;
   char field_137;
   GANG NextGang;
-  byte Field139;
+  char Field139;
   char field_13A;
   char field_13B;
-  CarModel CarType;
+  //CarModel CarType;
   char field_140;
   char field_141;
   char field_142;

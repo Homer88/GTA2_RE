@@ -1,12 +1,19 @@
-#pragma once
+#ifndef __GAME_OBJGECT__H__
+#define __GAME_OBJGECT__H__
 
-#include "Global.h"
+class GameObject {
+public:
 
-
-class GameObject{
-    public:
-
-        GameObject();
-        ~GameObject();
+    GameObject();
+    ~GameObject();
 };
+
+
+#endif // !__GAME_OBJGECT__H__
+
+
+
+
+
+
 

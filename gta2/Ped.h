@@ -1,12 +1,20 @@
-#pragma once
+#ifndef __PED__H__
+#define __PED__H__
 
-#include "Global.h"
+
+
+#include "Car.h"
+#include "Player.h"
+
+class Car;
+class Player;
+
 
 class Ped{
     private:
 
     public:
-        S200 S200_50[50];
+       // S200 S200_50[50];
         int Counter;
         char field_9A;
         char field_9B;
@@ -165,17 +173,17 @@ class Ped{
         Ped *sPed1;
         Ped *Driver;
         Ped *sPed;
-        Car *Car;
+        Car *pCar;
         Car *ObjectiveTargetCar;
         Car *TargetCarForEnter;
         Player *Player;
-        Ped *NextPed;
-        Ped *sPed2;
-        GameObject *GameObject;
-        Car *CurrentCar;
-        Weapon *SelectedWeapon;
-        Weapon *Weapon_;
-        Weapon *Weapon;
+        //Ped *NextPed;
+        //Ped *sPed2;
+        //GameObject *GameObject;
+        //Car *CurrentCar;
+        //Weapon *SelectedWeapon;
+        //Weapon *Weapon_;
+        //Weapon *Weapon;
         int field_17C;
         Ped *DriverPed;
         int field_184;
@@ -213,7 +221,7 @@ class Ped{
         int field_204;
         __int16 field_208;
         __int16 PoliceStar;
-        _BYTE gap20C[2];
+      //  _BYTE gap20C[2];
         __int16 field_20E;
         __int16 field_210;
         __int16 field_212;
@@ -237,13 +245,13 @@ class Ped{
         char field_235;
         char field_236;
         char field_237;
-        SearchType SearchType;
+        //SearchType SearchType;
         char field_23C;
         char field_23D;
         char field_23E;
         char field_23F;
-        OCUPATION Occupation;
-        Remap Remap;
+        //OCUPATION Occupation;
+        //Remap Remap;
         char field_245;
         char field_246;
         char field_247;
@@ -271,10 +279,10 @@ class Ped{
         char field_269;
         char field_26A;
         char field_26B;
-        GraphicType GraphicType;
+        ///GraphicType GraphicType;
         int field_270;
         int GangCarModel;
-        PedState PedState;
+        //PedState PedState;
         int field_27C;
         int field_280;
         int field_284;
@@ -285,3 +293,4 @@ class Ped{
         ~Ped();
 };
 
+#endif // !__PED__H__

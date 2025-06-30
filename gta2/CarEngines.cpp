@@ -1,4 +1,8 @@
 #include "CarEngines.h"
+#include "Global.h"
+
+CarEngines	gCarEngines;
+
 
 CarEngines::CarEngines(){
 
