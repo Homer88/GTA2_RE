@@ -46,3 +46,6 @@ re_file/IDA/gta2.exe.id2
 re_file/IDA/gta2.exe.nam
 re_file/IDA/gta2.exe.til
 /bin
+/d3ddll/Release
+/dmavideo/Debug
+/dmavideo/Release
