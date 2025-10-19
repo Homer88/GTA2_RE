@@ -528,7 +528,6 @@ static decltype(&Vid_SetMode) pOldSetMode = nullptr;
 
 void CC gbh_CloseDLL()
 {
-   // TRACE_ENTRYEXIT;
 
 
     if (gProxyOnly)
