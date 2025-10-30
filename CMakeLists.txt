@@ -39,6 +39,9 @@ include_directories(DIRETX 6.0)
 include_directories(WIN_INCLUDE PUBLIC  "ms/win/include")
 #target_link_libraries(WIN_LIB STATIC "ms/win/lib")
 
+# библиотеки DLL_LOAD Для инжекта 
+file(GLOB DLL_LOAD_SOURCE "dll_load/*.cpp")
+file(GLOB DLL_LOAD_HEADERS "dll_load/*.h")
 
 add_library(3DFX STATIC ${3DFX_SOURCE} ${3DFX_HEADERS})
 add_library(BINKW32 STATIC ${BINKW32_SOURCE} ${BINKW32_HEADERS})
