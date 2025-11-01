@@ -3,11 +3,12 @@
 #include <Windows.h>
 #include "cMapGm.h"
 #include "Registry.h"
+#include "DebugLogFile.h"
 
 extern Registry gRegistry;
 
 
-int  LoadFileResurce(MapGm* pMapGm) {
+int __thiscall LoadFileResurce(MapGm* pMapGm){
 
 	const int BUFFER_SIZE = 256;
 	char buffer[BUFFER_SIZE] = { 0 };
@@ -15,7 +16,11 @@ int  LoadFileResurce(MapGm* pMapGm) {
 
 	char basePath[] = "data\\";
 
-
+	char fileName[] = "MapGm.log";
+	char func[] = "LoadFileResurce";
+	char log[] = "info";
+	
+	writeFileLog(fileName,func , log, basePath);
 
 
 	//Path mapname
@@ -79,12 +84,6 @@ int  LoadFileResurce(MapGm* pMapGm) {
 
 	SetStyleName(gMapGm, buffer);
 
-
-
-
-
-
-
 	strncpy(buffer, basePath, BUFFER_SIZE - 1);
 	buffer[BUFFER_SIZE - 1] = '\0';
 	Data[0] = '\0';
@@ -134,69 +133,69 @@ int  LoadFileResurce(MapGm* pMapGm) {
 }
 
 
-char* GetMapName(MapGm* pMapGm) {
+char* __thiscall GetMapName(MapGm* pMapGm) {
 	
 	return pMapGm->gmpFile;
 }
-void SetMapName(MapGm* pMapGm,char* NameFile) {
+void __thiscall SetMapName(MapGm* pMapGm,char* NameFile) {
 
 	strncpy(pMapGm->gmpFile, NameFile, 255);
 };
-char* GetStyleName(MapGm* pMapGm) {
+char* __thiscall GetStyleName(MapGm* pMapGm) {
 	
 	return pMapGm->styFile;
 };
-void SetStyleName(MapGm* pMapGm, char* NameFile) {
+void __thiscall SetStyleName(MapGm* pMapGm, char* NameFile) {
 
 	strncpy(pMapGm->styFile, NameFile, 255);
 };
-char* GetScriptName(MapGm* pMapGm) {
+char* __thiscall GetScriptName(MapGm* pMapGm) {
 	return pMapGm->sctiptFile;
 };
-void SetScriptName(MapGm* pMapGm, char* NameFile) {
+void __thiscall SetScriptName(MapGm* pMapGm, char* NameFile) {
 	strncpy(pMapGm->sctiptFile, NameFile, 255);
 };
-char* GetSaveFile(MapGm* pMapGm) {
+char* __thiscall GetSaveFile(MapGm* pMapGm) {
 	return pMapGm->SaveFile;
 };
-void SetSaveFile(MapGm* pMapGm, char* NameFile) {
+void __thiscall SetSaveFile(MapGm* pMapGm, char* NameFile) {
 	strncpy(pMapGm->SaveFile, NameFile, 255);
 };
-void SetPlayerArena(MapGm* pMapGm, int PlayerArena) {
+void __thiscall SetPlayerArena(MapGm* pMapGm, int PlayerArena) {
 	pMapGm->playerArena = PlayerArena;
 };
-char GetPlayerArena(MapGm* pMapGm) {
+char __thiscall GetPlayerArena(MapGm* pMapGm) {
 	return pMapGm->playerArena;
 };
-char GetBonus(MapGm* pMapGm) {
+char __thiscall GetBonus(MapGm* pMapGm) {
 	return pMapGm->Bonus;
 };
-int ShowLimitFrame(MapGm* pMapGm) {
+int __thiscall ShowLimitFrame(MapGm* pMapGm) {
 	return pMapGm->FragLimit;
 };
-void SetBonusStage(MapGm* pMapGm, int BonusStage) {
+void __thiscall SetBonusStage(MapGm* pMapGm, int BonusStage) {
 	pMapGm->bonusStage = BonusStage;
 };
-void DefauntSpecialTokens(MapGm* pMapGm) {
+void __thiscall (MapGm* pMapGm) {
 	pMapGm->SpecialTokens = 0;
 };
-int  GetSpecialTokens(MapGm* pMapGm) {
+int  __thiscall GetSpecialTokens(MapGm* pMapGm) {
 	return pMapGm->SpecialTokens;
 };
-void SetSpecialTokens(MapGm* pMapGm, int pSpecialTokens){
+void __thiscall SetSpecialTokens(MapGm* pMapGm, int pSpecialTokens){
 	pMapGm->SpecialTokens = pSpecialTokens;
 };
-void IncrementSpecialTokens(MapGm* pMapGm) {
+void __thiscall IncrementSpecialTokens(MapGm* pMapGm) {
 	++pMapGm->SpecialTokens;
 };
-void Set_FUN_0045E4B0(MapGm* pMapGm, int Param) {
+void __thiscall Set_FUN_0045E4B0(MapGm* pMapGm, int Param) {
 	pMapGm->field_0x402 = Param;
 };
-void SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot) {
+void __thiscall SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot) {
 	pMapGm->PlayerSlotSave = PlayerSlot;
 };
-void SetBonus(MapGm* pMapGm, int Param) {
+void __thiscallSetBonus (MapGm* pMapGm, int Param) {
 	pMapGm->Bonus = Param;
 };
-void Set_FUN_0045E630(MapGm* pMapGm) {
+void __thiscall Set_FUN_0045E630(MapGm* pMapGm) {
 };

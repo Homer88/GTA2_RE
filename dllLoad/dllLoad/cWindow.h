@@ -3,8 +3,9 @@
 typedef  unsigned int uint;
 typedef  unsigned short ushort;
 
-void GetVersionLaunch(DWORD* pMajorVersion, DWORD* pMinorVersion);
-
+void __stdcall GetVersionLaunch(int* pMajorVersion, int* pMinorVersion);
+void __stdcall GetDebugParam();
+bool __stdcall  AllGtxFile();
 
 #endif // !__WINDOWS_H___MY_FILE___
 

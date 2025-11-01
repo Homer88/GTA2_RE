@@ -9,7 +9,7 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"ddraw.lib")
 
-BOOL  InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
+BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
     OSVERSIONINFO osInfo;
     HMODULE ddrawLib, dinputLib;
     LPVOID lpDDSurfaceDesc = NULL;
@@ -39,7 +39,7 @@ BOOL  InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
     }
 
     // Получение адреса функции DirectDrawCreate
-    FARPROC procAddr = GetProcAddress(ddrawLib, TEXT("DirectDrawCreate"));
+    FARPROC procAddr = GetProcAddress(ddrawLib, ("DirectDrawCreate"));
     if (!procAddr)
     {
         OutputDebugString(TEXT("Failed to find DirectDrawCreate in DDRAW.DLL"));
@@ -74,7 +74,7 @@ BOOL  InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
     }
 
     // Получаем адрес функции DirectInputCreateA
-    procAddr = GetProcAddress(dinputLib, TEXT("DirectInputCreateA"));
+    procAddr = GetProcAddress(dinputLib, "DirectInputCreateA");
     if (!procAddr)
     {
         OutputDebugString(TEXT("Failed to find DirectInputCreateA in DINPUT.DLL"));

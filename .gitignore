@@ -73,3 +73,5 @@ dllLoad/.vs/dllLoad/v17/.suo
 /dllLoad/X64
 /dllLoad/dllLoad/Debug
 /dllLoad/dllLoad/x64
+*.ipch
+/dllLoad/dllLoad/Release

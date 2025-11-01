@@ -2,7 +2,7 @@
 #define __DIRECTX__H_
 
 
-BOOL InitDiretX(HINSTANCE phInstance, DWORD* pFlags);
+BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags);
 
 
 #endif // !__DIRECTX__H_

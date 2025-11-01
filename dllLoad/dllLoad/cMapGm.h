@@ -157,31 +157,31 @@ struct MapGm
 
 };
 
-static_assert(sizeof(MapGm), "Error Size MapGm");
+static_assert(sizeof (MapGm), "Error Size MapGm");
 static MapGm* gMapGm = (MapGm*)0x005ec070;
 
-int  LoadFileResurce(MapGm* pMapGm);
-char* GetMapName(MapGm* pMapGm);
-void SetMapName(MapGm* pMapGm, char* NameFile);
-char* GetStyleName(MapGm* pMapGm);
-void SetStyleName(MapGm* pMapGm, char* NameFile);
-char* GetScriptName(MapGm* pMapGm);
-void SetScriptName(MapGm* pMapGm, char* NameFile);
-char* GetSaveFile(MapGm* pMapGm);
-void SetSaveFile(MapGm* pMapGm, char* NameFile);
-void SetPlayerArena(MapGm* pMapGm, int PlayerArena);
-char GetPlayerArena(MapGm* pMapGm);
-char GetBonus(MapGm* pMapGm);
-int ShowLimitFrame(MapGm* pMapGm);
-void SetBonusStage(MapGm* pMapGm, int BonusStage);
-void DefauntSpecialTokens(MapGm* pMapGm);
-int  GetSpecialTokens(MapGm* pMapGm);
-void SetSpecialTokens(MapGm* pMapGm, int pSpecialTokens);
-void IncrementSpecialTokens(MapGm* pMapGm);
-void Set_FUN_0045E4B0(MapGm* pMapGm, int Param);
-void SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot);
-void SetBonus(MapGm* pMapGm, int Param);
-void Set_FUN_0045E630(MapGm* pMapGm);
+int  __thiscall LoadFileResurce(MapGm* pMapGm);
+char* __thiscall GetMapName(MapGm* pMapGm);
+void __thiscall SetMapName(MapGm* pMapGm, char* NameFile);
+char* __thiscall GetStyleName(MapGm* pMapGm);
+void __thiscall SetStyleName(MapGm* pMapGm, char* NameFile);
+char* __thiscall GetScriptName(MapGm* pMapGm);
+void __thiscall SetScriptName(MapGm* pMapGm, char* NameFile);
+char* __thiscall GetSaveFile(MapGm* pMapGm);
+void __thiscall SetSaveFile(MapGm* pMapGm, char* NameFile);
+void __thiscall SetPlayerArena(MapGm* pMapGm, int PlayerArena);
+char __thiscall GetPlayerArena(MapGm* pMapGm);
+char __thiscall GetBonus(MapGm* pMapGm);
+int __thiscall ShowLimitFrame(MapGm* pMapGm);
+void __thiscall SetBonusStage(MapGm* pMapGm, int BonusStage);
+void __thiscall DefauntSpecialTokens(MapGm* pMapGm);
+int __thiscall  GetSpecialTokens(MapGm* pMapGm);
+void __thiscall SetSpecialTokens(MapGm* pMapGm, int pSpecialTokens);
+void __thiscall IncrementSpecialTokens(MapGm* pMapGm);
+void __thiscall Set_FUN_0045E4B0(MapGm* pMapGm, int Param);
+void __thiscall SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot);
+void __thiscall SetBonus(MapGm* pMapGm, int Param);
+void __thiscall Set_FUN_0045E630(MapGm* pMapGm);
 
 #endif // !1
 

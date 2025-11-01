@@ -9,34 +9,76 @@ bool Registry::GetPlayReplay(LPCSTR lpValueName){
   HKEY hKey; // [esp-8h] [ebp-18h] BYREF
   BYTE Data[4]; // [esp+0h] [ebp-10h] BYREF
   DWORD cbData=4; // [esp+8h] [ebp-8h]
+  bool resuzl=false;
 
 	if (this->GetDebugMode(&hKey)){
      
-		RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData);
-		return Data[0] != 0 ? true : false;
+		resuzl=RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData) ==  ERROR_SUCCESS;
+		/**switch (Data[0]) {
+		case 1:
+			return  true;
+			break;
+		case 0:
+			return  false;
+			break;
+		default:
+			return false;
+			break;
+		};*/
 		}
 	if ( RegCloseKey(hKey) )
 		 //DebugLog(0x2Au, "registry.cpp", 424);
-	return false;
+	return resuzl;
 }
 
 bool Registry::GetDebugMode(PHKEY phkResult){
 
-	if (!phkResult) return false;
-	
-	const char* DEBUG_KEY="SOFTWARE\\DMA Design Ltd\\GTA2\\Debug";
+	HKEY v3; // дескриптор ключа
+	DWORD dwDisposition;
+	char DEBUG_MODE[] = "SOFTWARE\\DMA Design Ltd\\GTA2\\Debug";
+	// Открываем ключ
+	LONG result = RegOpenKeyExA(
+		HKEY_CURRENT_USER,
+		DEBUG_MODE,
+		0,
+		KEY_ALL_ACCESS, // или подходящие права доступа
+		&v3 // передаете указатель на переменную
+	);
 
-  if ( !RegOpenKeyExA(HKEY_CURRENT_USER, DEBUG_KEY, 0, 983103, phkResult) )
-    return true;
-  if ( RegCreateKeyExA(HKEY_CURRENT_USER,DEBUG_KEY, 0, NULL, 0, 983103, 0, phkResult,
-         (LPDWORD)&phkResult) )
-  {  
-   // DebugLog(0x2Bu, "registry.cpp", 232);
-    return false;
+	if (result == ERROR_SUCCESS) {
+		// Уже открыли, копируем в выходной параметр
+		if (phkResult) {
+			*phkResult = v3;
+		}
+		return true;
+	}
+
+	// Не удалось открыть, создаем ключ
+	result = RegCreateKeyExA(
+		HKEY_CURRENT_USER,
+		DEBUG_MODE,
+		0,
+		NULL, // class
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL, // security attributes
+		&v3,   // возвращаемый дескриптор
+		&dwDisposition
+	);
+
+	if (result == ERROR_SUCCESS) {
+		// Создали успешно, возвращаем через параметр
+		if (phkResult) {
+			*phkResult = v3;
+		}
+		else {
+			RegCloseKey(v3); // закроем, если не нужно
+		}
+		return true;
+	}
+
+	return false;
   }
-
-
-}
 
 LSTATUS Registry::SetDebugByteValue(LPCSTR lpValueName, BYTE value){
 
@@ -57,15 +99,28 @@ bool Registry::GetParamDebug(LPCSTR lpValueName){
     HKEY hKey; // [esp-8h] [ebp-18h] BYREF
     BYTE Data[4]; // [esp+0h] [ebp-10h] BYREF
     DWORD cbData = 4; // [esp+8h] [ebp-8h]
+	bool resuzl = false;
+	if (this->GetDebugMode(&hKey)) {
 
-    if (this->GetDebugMode(&hKey)) {
+		resuzl= RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData) == ERROR_SUCCESS;
+		//writeFileLog((char*)"Registry.txt", lpValueName, (char*)"->GetParamDebug", (char*)"Error", resuzl);
+		/*switch (Data[0]) {
+		case 1:
+			return  true;
+			break;
+		case 0:
+			return  false;
+			break;
+		default:
+			return false;
+			break;
+		};*/
 
-          RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cbData);
-		  return Data[0] != 0 ? true : false;
-    }
+
+	};
     if (RegCloseKey(hKey))
         //DebugLog(0x2Au, "registry.cpp", 424);
-    return false;
+    return resuzl;
 }
 
 

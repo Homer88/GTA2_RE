@@ -11,7 +11,7 @@
 ///Switch 
 #define  RunPlayVideo   7
 
-//Плобальные переменные 
+//Глобальные переменные 
 bool	gDoTest;
 bool	gSkipMission;
 bool	gShowCycle;

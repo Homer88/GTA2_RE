@@ -22,18 +22,51 @@ bool Registry::GetPlayReplay(LPCSTR lpValueName){
 
 bool Registry::GetDebugMode(PHKEY phkResult){
 
-	if (!phkResult) return false;
-	
-	const char* DEBUG_KEY="SOFTWARE\\DMA Design Ltd\\GTA2\\Debug";
+	HKEY v3; // дескриптор ключа
+	DWORD dwDisposition;
+	char DEBUG_KEY[] = "SOFTWARE\\DMA Design Ltd\\GTA2\\Debug";
+// Открываем ключ
+LONG result = RegOpenKeyExA(
+	HKEY_CURRENT_USER,
+	DEBUG_KEY,
+	0,
+	KEY_ALL_ACCESS, // или подходящие права доступа
+	&v3 // передаете указатель на переменную
+);
 
-  if ( !RegOpenKeyExA(HKEY_CURRENT_USER, DEBUG_KEY, 0, 983103, phkResult) )
-    return true;
-  if ( RegCreateKeyExA(HKEY_CURRENT_USER,DEBUG_KEY, 0, NULL, 0, 983103, 0, phkResult,
-         (LPDWORD)&phkResult) )
-  {  
-    DebugLog(0x2Bu, "registry.cpp", 232);
-    return false;
-  }
+if (result == ERROR_SUCCESS) {
+	// Уже открыли, копируем в выходной параметр
+	if (phkResult) {
+		*phkResult = v3;
+	}
+	return true;
+}
+
+// Не удалось открыть, создаем ключ
+result = RegCreateKeyExA(
+	HKEY_CURRENT_USER,
+	DEBUG_KEY,
+	0,
+	NULL, // class
+	REG_OPTION_NON_VOLATILE,
+	KEY_ALL_ACCESS,
+	NULL, // security attributes
+	&v3,   // возвращаемый дескриптор
+	&dwDisposition
+);
+
+if (result == ERROR_SUCCESS) {
+	// Создали успешно, возвращаем через параметр
+	if (phkResult) {
+		*phkResult = v3;
+	}
+	else {
+		RegCloseKey(v3); // закроем, если не нужно
+	}
+	return true;
+}
+
+return false;
 
 
 }
