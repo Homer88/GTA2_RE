@@ -4,9 +4,9 @@
 #include "DebugLogFile.h"
 
 #include "Registry.h" 
+
 extern Registry gRegistry;
 
-HWND hwnd;
 
 #pragma comment(lib, "version.lib")
 
@@ -114,6 +114,7 @@ void*   *gBinkBufferClose = (bool*);
 bool    *gNetworkGame = (bool*);
 byte    *gControl = (bool*);
 int gData_6735A5;*/
+
 char *aTestReplay0Rep = (char*)0x00595FF0; // 11 масcив
 
 

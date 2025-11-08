@@ -10,14 +10,14 @@
 #include "detours.h"
 //#include "pch.h"
 //  файлы конфигурации 
-//#include "InitMapGM.h"
+#include "InitMapGM.h"
 //#include "InitS20Fun.h"
 #include "DebugLogFile.h"
 
 #include "cDirectX.h"
 //#include "cGang.h"
 //#include "cGangs.h"
-//#include "cMapGm.h"
+#include "cMapGm.h"
 //#include "cPed.h"
 //
 //#include "cS8.h"
@@ -30,7 +30,7 @@
 
 #pragma comment(lib, "detours.lib")
 
-//int FunMapGM();
+int FunMapGM();
 ///void  FunS20();
 void printError(LONG Error, PVOID address);
 
@@ -108,7 +108,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         printError(Error, _AllGtxFile);
         //*/
         //FunS20();
-        //FunMapGM();
+        FunMapGM();
         if (DetourTransactionCommit() != NO_ERROR)
         {
             printf("error DetourTransactionCommit");
@@ -155,26 +155,26 @@ void printError(LONG Error, PVOID address) {
 
 
 int FunMapGM()
-{/*
-    Error=  DetourAttach(&_LoadFileResurce     ,  (PVOID)LoadFileResurce);
-    printError(Error, _LoadFileResurce);
-    Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
-    printError(Error, _SetSaveFile);
-    Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
-    printError(Error, _SetPlayerArena);
-    Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
-    printError(Error, _SetSaveFile);
-    Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
-    printError(Error, _SetPlayerArena);
-    Error = DetourAttach(&_SetBonusStage       ,  (PVOID)SetBonusStage);
-    printError(Error, _SetBonusStage);
-    Error = DetourAttach(&_Set_FUN_0045E4B0    ,  (PVOID)Set_FUN_0045E4B0);
-    printError(Error, _Set_FUN_0045E4B0);
-    Error = DetourAttach(&_SetPlayerSlotSave   ,  (PVOID)SetPlayerSlotSave);
-    printError(Error, _SetPlayerSlotSave);
-    Error = DetourAttach(&_SetBonus            ,  (PVOID)SetBonus);
-    printError(Error, _SetBonus);
-    return 0;*/
+{
+    //Error=  DetourAttach(&_LoadFileResurce     ,  (PVOID)LoadFileResurce);
+   // printError(Error, _LoadFileResurce);
+    //Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
+    //printError(Error, _SetSaveFile);
+    //Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
+    //printError(Error, _SetPlayerArena);
+   // Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
+   // printError(Error, _SetSaveFile);
+    //Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
+    //printError(Error, _SetPlayerArena);
+    //Error = DetourAttach(&_SetBonusStage       ,  (PVOID)SetBonusStage);
+    //printError(Error, _SetBonusStage);
+   // Error = DetourAttach(&_Set_FUN_0045E4B0    ,  (PVOID)Set_FUN_0045E4B0);
+    //printError(Error, _Set_FUN_0045E4B0);
+    //Error = DetourAttach(&_SetPlayerSlotSave   ,  (PVOID)SetPlayerSlotSave);
+    //printError(Error, _SetPlayerSlotSave);
+    //Error = DetourAttach(&_SetBonus            ,  (PVOID)SetBonus);
+    //printError(Error, _SetBonus);
+    return 0;
 };
 
 /*void FunS20() {

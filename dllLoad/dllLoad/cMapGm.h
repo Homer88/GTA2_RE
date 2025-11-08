@@ -3,13 +3,12 @@
 
 #include <assert.h>
 
-struct MapGm
-{
+struct MapGm{
 	char gmpFile[256];
 	char styFile[256];
 	char sctiptFile[256];
 	char SaveFile[256];
-	char playerArena;
+	unsigned char playerArena;
 	char bonusStage;
 	char field_0x402;
 	unsigned char  PlayerSlotSave;
@@ -17,7 +16,8 @@ struct MapGm
 	char field_405;
 	char field_406;
 	char field_407;
-	int Arr10i[10];
+	int Arr10i[9];
+	int field_42C;
 	int field_430;
 	int field_434;
 	short field_438;
@@ -154,34 +154,34 @@ struct MapGm
 	char field_573;
 	int SpecialTokens;
 	int field_578;
-
 };
 
-static_assert(sizeof (MapGm), "Error Size MapGm");
+static_assert(sizeof(MapGm), "Error Size MapGm");
+
 static MapGm* gMapGm = (MapGm*)0x005ec070;
 
-int  __thiscall LoadFileResurce(MapGm* pMapGm);
-char* __thiscall GetMapName(MapGm* pMapGm);
-void __thiscall SetMapName(MapGm* pMapGm, char* NameFile);
-char* __thiscall GetStyleName(MapGm* pMapGm);
-void __thiscall SetStyleName(MapGm* pMapGm, char* NameFile);
-char* __thiscall GetScriptName(MapGm* pMapGm);
-void __thiscall SetScriptName(MapGm* pMapGm, char* NameFile);
-char* __thiscall GetSaveFile(MapGm* pMapGm);
-void __thiscall SetSaveFile(MapGm* pMapGm, char* NameFile);
-void __thiscall SetPlayerArena(MapGm* pMapGm, int PlayerArena);
-char __thiscall GetPlayerArena(MapGm* pMapGm);
-char __thiscall GetBonus(MapGm* pMapGm);
-int __thiscall ShowLimitFrame(MapGm* pMapGm);
-void __thiscall SetBonusStage(MapGm* pMapGm, int BonusStage);
-void __thiscall DefauntSpecialTokens(MapGm* pMapGm);
-int __thiscall  GetSpecialTokens(MapGm* pMapGm);
-void __thiscall SetSpecialTokens(MapGm* pMapGm, int pSpecialTokens);
-void __thiscall IncrementSpecialTokens(MapGm* pMapGm);
-void __thiscall Set_FUN_0045E4B0(MapGm* pMapGm, int Param);
-void __thiscall SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot);
-void __thiscall SetBonus(MapGm* pMapGm, int Param);
-void __thiscall Set_FUN_0045E630(MapGm* pMapGm);
+int  __stdcall LoadFileResurce(MapGm* pMapGm);
+char* __stdcall GetMapName(MapGm* pMapGm);
+void __stdcall SetMapName(MapGm* pMapGm, char* NameFile);
+char* __stdcall GetStyleName(MapGm* pMapGm);
+void __stdcall SetStyleName(MapGm* pMapGm, char* NameFile);
+char* __stdcall GetScriptName(MapGm* pMapGm);
+void __stdcall SetScriptName(MapGm* pMapGm, char* NameFile);
+char* __stdcall GetSaveFile(MapGm* pMapGm);
+void __stdcall SetSaveFile(MapGm* pMapGm, char* NameFile);
+void __stdcall SetPlayerArena(MapGm* pMapGm, unsigned char* PlayerArena);
+char __stdcall GetPlayerArena(MapGm* pMapGm);
+char __stdcall GetBonus(MapGm* pMapGm);
+int __stdcall  ShowLimitFrame(MapGm* pMapGm);
+void __stdcall SetBonusStage(MapGm* pMapGm, int *BonusStage);
+void __stdcall DefauntSpecialTokens(MapGm* pMapGm);
+int __stdcall  GetSpecialTokens(MapGm* pMapGm);
+void __stdcall SetSpecialTokens(MapGm* pMapGm, int pSpecialTokens);
+void __stdcall IncrementSpecialTokens(MapGm* pMapGm);
+void __stdcall Set_FUN_0045E4B0(MapGm* pMapGm, int Param);
+void __stdcall SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot);
+void __stdcall SetBonus(MapGm* pMapGm, int Param);
+void __stdcall Set_FUN_0045E630(MapGm* pMapGm);
 
 #endif // !1
 
