@@ -3,6 +3,7 @@
 Doc/~$Structure.xlsx
 *.vsidx
 *.db
+
 *.json
 /.vs
 *.vcxproj
@@ -40,7 +41,7 @@ UpgradeLog.htm
 *.3
 *.lock~
 *.lock
-re_file/IDA/
+re_file/IDA/ida_backups/
 re_file/IDA/gta2.exe.id0
 re_file/IDA/gta2.exe.id1
 re_file/IDA/gta2.exe.id2
