@@ -18,8 +18,9 @@
 //#include "cGang.h"
 //#include "cGangs.h"
 #include "cMapGm.h"
+#include "cMenu.h"
 //#include "cPed.h"
-//
+
 //#include "cS8.h"
 //#include "cS19.h"
 //#include "cS20.h"
@@ -27,6 +28,7 @@
 //
 //#include "cWeapon.h"
 #include "cWindow.h"
+
 
 #pragma comment(lib, "detours.lib")
 
@@ -55,7 +57,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     LPVOID _GetDebugParam = (LPVOID)0x00451930;
 
     LPVOID  _AllGtxFile = (LPVOID)0x00451800;
-    
+    LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
+   // LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
+    //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
+    LPVOID _PlayerCheat = (LPVOID)0x004590F0;
     //LPVOID _CopyNameGang= (LPVOID)0x0045DB40;
     
     
@@ -90,7 +95,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
         Error = DetourAttach(&_InfoVersion, (PVOID)GetVersionLaunch);
         printError(Error, _InfoVersion);
-
+        DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
+        //DetourAttach(&_CleanupDirectInput, (PVOID)CleanupDirectInput);
+        //DetourAttach(&_CreateInputDevice, (PVOID)CreateInputDevice);
+        DetourAttach(&_PlayerCheat, (PVOID)PlayerCheat);
         /*DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
         DetourAttach(&_CopyNameGang, (PVOID)CopyNameGang);
         DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);

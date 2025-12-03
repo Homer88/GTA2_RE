@@ -89,31 +89,31 @@ bool	*gTestFileGxt = (bool*)0x005EAD73;
 bool	*gShowPlayerNames = (bool*)0x005EAD76;
 bool    *gByte1 = (bool*)0x005EADA3;
 bool    *gByte2 = (bool*)0x005EAD92;
-bool* gPlayReplay = (bool*)0x005EADAA;
-/*bool* gSmallCar = (bool*);
-bool	*gNopCheat = (bool*);
-bool	*gGiveMoney20 = (bool*);
-bool	*gFireGun = (bool*);
-bool	*gJailKey = (bool*);
-bool	*gDoubleDamage = (bool*);
-bool	*gSUPZZZ0 = (bool*);
-bool	*gInvisibility = (bool*);
-bool	*gJailFreeCard = (bool*);
-bool	*gHealth99 = (bool*);
-bool	*gElectroGun = (bool*);
-bool	*gIAMDAVEJ = (bool*);
-bool	*gMADEMAN = (bool*);
-bool	*gAllTower = (bool*);
-bool	*gPontMultiplaerX10 = (bool*);
-bool	*gBonusAll = (bool*);
-bool	*gGiveBasikWeapon = (bool*);
-bool	*gElvis = (bool*);
-bool	*gBunt = (bool*);
-bool	*gNEKKID = (bool*);
-void*   *gBinkBufferClose = (bool*);
-bool    *gNetworkGame = (bool*);
-byte    *gControl = (bool*);
-int gData_6735A5;*/
+bool    *gPlayReplay = (bool*)0x005EADAA;
+bool    *gSmallCar = (bool*)0x005EAD6D;
+bool	*gNopCheat = (bool*)0x005EAD62;
+bool	*gGiveMoney20 = (bool*)0x005EAD97;
+bool	*gFireGun = (bool*)0x005EAD9B;
+bool	*gJailKey = (bool*)0x005EADA2;
+bool	*gDoubleDamage = (bool*)0x005EAD65;
+bool	*gSUPZZZ0 = (bool*)0x005EAD98;
+bool	*gInvisibility = (bool*)0x005EAD8E;
+bool	*gJailFreeCard = (bool*)0x005EAD83;
+bool	*gHealth99 = (bool*)0x005EAD8F;
+bool	*gElectroGun = (bool*)0x005EAD70;
+bool	*gIAMDAVEJ = (bool*)0x005EADA6;
+bool	*gMADEMAN = (bool*)0x005EAD8A;
+bool	*gAllTower = (bool*)0x005EAD5C;
+bool	*gPontMultiplaerX10 = (bool*)0x005EAD7B;
+bool	*gBonusAll = (bool*)0x005EAD6A;
+bool	*gGiveBasikWeapon = (bool*)0x005EAD6E;
+bool	*gElvis = (bool*)0x005EAD9F;
+bool	*gBunt = (bool*)0x005EAD93;
+bool	*gNEKKID = (bool*)0x005EADA0;
+//void   *gBinkBufferClose = (bool*);
+//bool    *gNetworkGame = (bool*);
+//byte    *gControl = (bool*);
+int gData_6735A5;
 
 char *aTestReplay0Rep = (char*)0x00595FF0; // 11 масcив
 
@@ -325,4 +325,85 @@ bool __stdcall  AllGtxFile() {
         SpanishFile = 0;
     }
     return !EnglishFile && !FranceFile && !GermanFile && !ItaliaFile && !JapaneseFile && !SpanishFile;
+}
+
+
+
+
+void  __stdcall  InitDefautValue() {
+
+
+    MessageBox(0, L"InitDefautValue!", 0, 0);
+    *gShowAllArrows = true;
+    *gGoKillPhonesOnAnswer = false;
+    *gSkipDummies = false;
+    *gSkipTiles = false;
+    *gDoTest = false;
+    *gSkipMission = false;
+    *gDoBrianTest = false;
+    *gDoIainTest = false;
+    *gSkipUser = false;
+    *gSkipTrafficLights = false;
+    *gSkipRecycling = false;
+    *gLogCollisions = false;
+    *gDoShowTrafficLightsInfo = false;
+    *gLimitRecycling = false;
+    *gNoAnnoyingChars = false;
+    *gSkipSlopes = false;
+    *gSkipLeft = false;
+    *gSkipRight = false;
+    *gSkipTop = false;
+    *gSkipBottom = false;
+    *gSkipLid = false;
+    *gLogRoutefinder = false;
+    *gDoMike = false;
+    *gSkipParticles = false;
+    *gShowHiddenFaces = false;
+    *gGetAllWeapons = false;
+    *gDoExitAfterReplay = false;
+    *gDontGetCarBack = false;
+    *gSkipAmbulance = false;
+    *gSkipFrontend = false;
+    *gDoInvulnerable = false;
+    *gKeepWeaponsAfterDeath = false;
+    *gSkipSkidMarks = false;
+    *gDoInfiniteLives = false;
+    *gDoLoadSaveGame = false;
+    *gSkipAudio = false;
+    *gDoDebugKeys = false;
+    *gLogInput = false;
+    *gLogDirectInput = false;
+    *gIgnoreReplayHeader = false;
+    *gSkipTrains = false;
+    *gSkipBuses = false;
+    *gSkipQuitConfirm = false;
+    *gSkipFireEngines = false;
+    *gSkipWindowCheck = false;
+    *gDoMissLogging = false;
+    *gNopCheat = false;
+    *gDoPolice1 = false;
+    *gDoPolice2 = false;
+    *gDoPolice3 = false;
+    *gSkipDraw = false;
+    *gDoFreeShopping = false;
+    *gSmallCar = false;
+    *gGiveMoney20 = true;
+    *gIAMDAVEJ = false;
+    *gElectroGun = false;
+    *gMADEMAN = false;
+    *gHealth99 = false;
+    *gPontMultiplaerX10 = false;
+    *gAllTower = false;
+    *gSUPZZZ0 = false;
+    *gBonusAll = false;
+    *gGiveBasikWeapon = true;
+    *gElvis = false;
+    *gBunt = false;
+    *gNEKKID = false;
+    *gJailFreeCard =false;
+    *gInvisibility = false;
+    *gDoubleDamage = false;
+    *gJailKey = false;
+    *gFireGun = false;
+    *gDoShowCounters = false;
 }

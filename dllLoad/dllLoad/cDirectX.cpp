@@ -1,13 +1,19 @@
 #include <Windows.h>
 #include <iostream>
 #include <ddraw.h>
+#include <direct.h>
+#include <dinput.h>
 
 #include "cDirectX.h"
+
+LPDIRECTINPUT8 gDirectInput8 = (LPDIRECTINPUT8) 0x005E8FA4;
 
 #pragma warning(disable : 4996)
 
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"ddraw.lib")
+#pragma comment(lib, "dinput8.lib")
+
 
 BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
     OSVERSIONINFO osInfo;
@@ -86,4 +92,39 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
     // Успешная загрузка всех компонентов
     *pFlags |= 1 << 1 | 1 << 2 | 1 << 3; // Установлены флаги для DirectDraw и DirectInput
     return TRUE;
+}
+
+
+void __stdcall CleanupDirectInput() {
+   
+   
+   // не понятная ошибка 
+   /* if (gDirectInput8) {
+        // Вызываем Release() и приводим результат обратно к указателю
+        gDirectInput8->Release();
+        gDirectInput8 = NULL; // Защита от повторного использования
+    }*/
+
+
+}
+
+///bool byte_5E8F54 = (bool*)0x5E8F54;
+bool __stdcall directInputUtils(void* a, void* b) {
+
+    /// переписать данную функцию
+
+   /// byte_5E8F54 = 0;
+   /// if (DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&gDirectInput8, NULL) < 0)
+    return true;
+}
+
+HRESULT __stdcall CreateInputDevice(HINSTANCE hinst)
+{
+    HRESULT result; // eax
+  
+    result = DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&gDirectInput8, NULL);
+    if (result < 0)
+        return NULL;
+       
+    return result;
 }
