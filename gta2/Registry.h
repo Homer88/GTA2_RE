@@ -24,6 +24,10 @@ public:
 	LSTATUS SetConfigureWindowSize(LPCSTR lpValueName, BYTE Data);
 	bool OpenOrCreateTextKey(PHKEY phkResult);
 	int SetTextConfig(LPCSTR lpValueName, BYTE value);
+	bool OpenOrCreateLanguageKey(PHKEY phkResult);
+	LSTATUS SetLanguage(LPCSTR lpValueName, BYTE Data);
+	LSTATUS GetLanguage(LPCSTR lpValueName, char* Data, int size);
+	
 
 
 

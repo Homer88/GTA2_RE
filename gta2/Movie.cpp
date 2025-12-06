@@ -2,7 +2,6 @@
 #include "Movie.h"
 
 
-Movie gMovie;
 
 
 void Movie::CloseScreen() {

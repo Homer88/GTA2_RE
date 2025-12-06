@@ -89,11 +89,53 @@ void DebugLog( char* ErrorFile) {
 		MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
 	}
+void DebugLog(const char* ErrorFile) {
 
+	char buf[100];
+	sprintf(buf, "%s", ErrorFile);
+	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+
+}
+void DebugLog(wchar_t* ErrorFile) {
+
+	wchar_t buffer[50];
+	swprintf(buffer, 50, L"Строка %ls", ErrorFile);
+	MessageBoxW(NULL, buffer, L"GTA2 Error", MB_OK);
+
+}
+void DebugLog(void* Structure, void* offsetPole, char *text) {
+	
+	char buf[100];
+	sprintf(buf, "Данное поле строчки %s offcet = 0x%x", text, offsetPole);
+	MessageBoxA(NULL, buf, "GTA2 Offset", MB_OK);
+}
+void DebugLog(bool* ErrorFile) {
+
+	//char buf[100];
+	if (ErrorFile){ 
+		MessageBoxA(NULL, "True", "GTA2 Error", MB_OK); }
+	else
+		MessageBoxA(NULL, "False", "GTA2 Error", MB_OK);
+
+}
+void DebugLog(unsigned char* ErrorFile) {
+
+	char buf[100];
+	sprintf(buf, "%s", ErrorFile);
+	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+
+}
 void DebugLog(int ErrorFile) {
 
 	char buf[100];
 	sprintf(buf, "%d", ErrorFile);
+	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+
+}
+void DebugLog(char *text,int ErrorFile) {
+
+	char buf[100];
+	sprintf(buf, "%c=%d", text, ErrorFile);
 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
 }

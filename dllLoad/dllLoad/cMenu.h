@@ -35,6 +35,7 @@ enum MenuPic :char {
 	MenuPic_19 = 19u,
 };
 
+#pragma pack(push, 1) // устанавливает выравнивание по 1 байту (максимально упакованная структура)
 struct Menu{
 	
 	LPDIRECTINPUTA DirectInput;
@@ -50,19 +51,20 @@ struct Menu{
 	int field_118;
 	unsigned short FontStyle;
 	unsigned short Page;
-	__int16 Filderer0x120;
-	MenuPage MenuPage[17];
-	PlayerName * PlayerName;
-	int field_C990;
-	int field_C994;
-	int field_C998;
+	short Filderer0x120;
+	MenuPage pMenuPage[17];
+	//wchar_t ppPlayerName[9]; //0xC98C
+	wchar_t* pPlayerName;
+	void* field_C990;
+	void* field_C994;
+	void* field_C998;
 	__int16 field_C99C;
 	char Length;
 	char field_C99F;
 	__int16 Key;
 	__int16 field_C9A2;
 	wchar_t MenuItems[9];
-	char CurrentMenuItemsIndex;
+	unsigned char CurrentMenuItemsIndex;
 	char field_C9B7;
 	KeyState NewKeyState;
 	KeyState OldKeyState;
@@ -147,7 +149,12 @@ struct Menu{
 	char field_1EB3F;
 };
 
-///static_assert(sizeof(Menu) == 125760, "ERROR MENU STRUCT");
+#pragma pack(pop) // возвращает предыдущие настройки
+//48932
+//51 596-48 932
+//51 972					 //125755
+//FIXME
+//static_assert(sizeof(Menu) == 125760, "ERROR MENU STRUCT");
 
 
 
@@ -158,9 +165,10 @@ extern  Menu* gMenu;
 
 //функции 
 //char* __thiscall Menu::WCHARToChar(Menu* this, char* PlayerName)
-unsigned char* __stdcall WCHARToChar(Menu* pthis, wchar_t* PlayerName);
-char __stdcall PlayerCheat(Menu* pthis, wchar_t* edx, wchar_t* PlayerName);
-
+//unsigned char* __stdcall WCHARToChar(Menu* pthis, wchar_t* PlayerName);
+char  PlayerCheat(Menu* pthis, wchar_t* PlayerName);
+//void  __stdcall sub_459540(Menu* pthis);
+void  __stdcall sub_459540();
 
 
 

@@ -10,27 +10,31 @@ enum MenuActions: unsigned char
      MENUACTION_SETPLAYERNAME = 2u,
 };
 
+#pragma pack(push, 1) // устанавливает выравнивание по 1 байту (максимально упакованная структура)
 
 struct MenuEntry
 {
-	MenuActions MenuActions;
-	char field1;
-	short X;
-	short Y;
-	wchar_t str[50];
-	short field_6A;
-	short field_6C;
-	unsigned short PlayerSlot;
-	short PlayerSlot1;
-	int field_72;
-	int field_76;
-	int field_7A;
-	unsigned short  field_7E;
-	unsigned short  field_80;
+	MenuActions MenuActions;  //0x0
+	char field1;			  //0x1
+	short X;				  //0x2
+	short Y;				//0x4
+	wchar_t str[50];		//0x6
+	short field_6A;			//6a
+	short field_6C;			//6c
+	unsigned short PlayerSlot; //6e
+	short PlayerSlot1;			// 70
+	int field_72;				//72
+	int field_76;				//76
+	int field_7A;				//80
+	unsigned short  field_7E;	//7E
+	unsigned short  field_80;   //0x80
 
 };
 
-static_assert(sizeof(MenuEntry) == 132, "ERROR MENU STRUCT");
+#pragma pack(pop) // возвращает предыдущие настройки
+
+
+static_assert(sizeof(MenuEntry) == 130, "ERROR MENU STRUCT");
 
 
 #endif // !__MenuEntry__H_

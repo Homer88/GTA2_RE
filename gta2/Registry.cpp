@@ -2,7 +2,7 @@
 #include "Registry.h"
 #include "DebugLogFile.h"
 
-Registry gRegistry;
+
 
 bool Registry::GetPlayReplay(LPCSTR lpValueName){
 	
@@ -369,4 +369,58 @@ int Registry::SetTextConfig(LPCSTR lpValueName, BYTE value) {
 		DebugLog(0x2Au, "registry.cpp", 629);
 	}
 	return Data[0];
+}
+
+
+
+
+bool Registry::OpenOrCreateLanguageKey(PHKEY phkResult) {
+	if (!phkResult) return false;
+
+	const char* TEXT_KEY = "SOFTWARE\\DMA Design Ltd\\GTA2\\Option";
+
+	if (!RegOpenKeyExA(HKEY_CURRENT_USER, TEXT_KEY, 0, 983103, phkResult))
+		return true;
+	if (RegCreateKeyExA(HKEY_CURRENT_USER, TEXT_KEY, 0, NULL, 0,
+		983103, 0, phkResult, (LPDWORD)&phkResult))
+		return false;
+	
+}
+LSTATUS  Registry::SetLanguage(LPCSTR lpValueName, BYTE Data) {
+	HKEY hKey;
+	BYTE Data1[4];
+	DWORD cdData = 4;
+
+/*	this->OpenOrCreateLanguageKey(&hKey);
+	if (RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cdData)) {
+		if (RegSetValueExA(hKey, lpValueName, 0, 4, &value, 4)) {
+			DebugLog(0x2Eu, "registry.cpp", 622);
+
+		}
+		Data[0] = value;
+	}
+	if (RegCloseKey(hKey)) {
+		DebugLog(0x2Au, "registry.cpp", 629);
+	}
+	return Data[0];*/
+	return 0;
+}
+LSTATUS Registry::GetLanguage(LPCSTR lpValueName, char* Data,int size) {
+	HKEY hKey;
+	BYTE Data1[4] = { 0 };
+	DWORD cdData = 4;
+
+	this->OpenOrCreateLanguageKey(&hKey);
+	//if (RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cdData)) {
+		//if (RegSetValueExA(hKey, lpValueName, 0, 4, &value, 4)) {
+			//DebugLog(0x2Eu, "registry.cpp", 622);
+
+//		}
+	//	Data[0] = value;
+	//}
+//	if (RegCloseKey(hKey)) {
+	//	DebugLog(0x2Au, "registry.cpp", 629);
+	//}
+	//return Data[0];
+	return 0;
 }

@@ -11,110 +11,7 @@
 ///Switch 
 #define  RunPlayVideo   7
 
-//Глобальные переменные 
-bool	gDoTest;
-bool	gSkipMission;
-bool	gShowCycle;
-bool	gDoBrianTest;
-bool	gDoIainTest;
-bool	gSkipTiles;
-bool	gDoShowCounters;
-bool	gDoShowCamera;
-bool	gDoShowInput;
-bool	gDoShowTiming;
-bool	gDoShowCollisionBox;
-bool	gDoShowPhysics;
-bool	gDoShowImaginary;
-bool	gSkipUser;
-bool	gSkipTrafficLights;
-bool	gSkipRecycling;
-bool	gLogCollisions;
-bool	gDoShowTrafficLightsInfo;
-bool	gDoShowIds;
-bool	gLimitRecycling;
-bool	gNoAnnoyingChars;
-bool	gSkipSlopes;
-bool	gSkipLeft;
-bool	gSkipRight;
-bool	gSkipTop;
-bool	gSkipBottom;
-bool	gSkipLid;
-bool	gLogRoutefinder;
-bool	gDoMike;
-bool	gSkipParticles;
-bool	gShowHiddenFaces;
-bool	gGetAllWeapons;
-bool	gDoExitAfterReplay;
-bool	gDontGetCarBack;
-bool	gDoShowInstruments;
-bool	gSkipAmbulance;
-bool	gSkilPolice;
-bool	gSkipFrontend;
-bool	gDoInvulnerable;
-bool	gShowAllArrows;
-bool	gDoShowHorn;
-bool	gKeepWeaponsAfterDeath;
-bool	gSkipSkidMarks;
-bool	gDoShowJuncIds;
-bool	gDoCornerWindow;
-bool	gDoInfiniteLives;
-bool	gDoLoadSaveGame;
-bool	gSkipAudio;
-bool	gDoDebugKeys;
-bool	gLogRandom;
-bool	gLogRandomExtra;
-bool	gLogInput;
-bool	gLogDirectInput;
-bool	gIgnoreReplayHeader;
-bool	gSkipTrains;
-bool	gSkipBuses;
-bool	gSkipQuitConfirm;
-bool	gDoSyncCheck;
-bool	gSkipFireEngines;
-bool	gShowBriefNumber;
-bool    gSkipWindowCheck;
-bool	gSkipReplaySyncCheck;
-bool	gDoShowObjectIds;
-bool	gGoKillPhonesOnAnswer;
-bool	gDoMissLogging;
-bool	gDoTextIdTest;
-bool	gDoPolice1;
-bool	gDoPolice2;
-bool	gDoPolice3;
-bool	gSkipDraw;
-bool	gDoFreeShopping;
-bool	gSkipDummies;
-bool	gDoBlood;
-bool	gDo3dSound;
-bool	gTestFileGxt;
-bool	gShowPlayerNames;
-bool    gByte1;
-bool    gByte2;
-bool    gPlayReplay;
-bool    gSmallCar;
-bool	gNopCheat;
-bool	gGiveMoney20;
-bool	gFireGun;
-bool	gJailKey;
-bool	gDoubleDamage;
-bool	gSUPZZZ0;
-bool	gInvisibility;
-bool	gJailFreeCard;
-bool	gHealth99;
-bool	gElectroGun;
-bool	gIAMDAVEJ;
-bool	gMADEMAN;
-bool	gAllTower;
-bool	gPontMultiplaerX10;
-bool	gBonusAll;
-bool	gGiveBasikWeapon;
-bool	gElvis;
-bool	gBunt;
-bool	gNEKKID;
-void*    gBinkBufferClose;
-bool    gNetworkGame=false;
-byte    gControl;
-int gData_6735A5;
+
 
 // Обработчик сообщений
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -122,7 +19,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     if (uMsg <= 70) {
 
         if (uMsg == 70) {
-            if (gMenu.Status) {
+            if (gMenu.State) {
                 pHWND = HWND(lParam + 12);
                 uMsg = (lParam + 8);
                 BinkClose(uMsg,hwnd);
@@ -200,7 +97,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                         SetVideoPlayer();
                         //FixME
                         // sub_4CB880();
-                        gData_6735A5 = 0;
+                        //gData_6735A5 = 0;
                 }
                     if (gGame.Status) {
 
@@ -216,7 +113,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 //DirectX();
                 gDMAudio.Init3DSound(0);
                 gDMAudio.InitAudioManager();
-                if (gMenu.Status && (gVideoPlay == 2)) {
+                if (gMenu.State && (gVideoPlay == 2)) {
                     //gMenu.~Menu(); Файл и буфер не доступен.
 
                 }
@@ -436,8 +333,8 @@ bool AllGtxFile() {
 }
 
 
-bool DefautInitParam(){
-
+void DefautInitParam(){
+    //Данная функция для сетевой игры 
     gShowAllArrows = false;
     gGoKillPhonesOnAnswer = false;
     gSkipDummies = false;
@@ -510,9 +407,8 @@ bool DefautInitParam(){
     gJailKey = false;
     gFireGun = false;
     gDoShowCounters = false;
-	return false;
-
 	}
+
 
 
 void  CopyWideString(wchar_t* dest, const wchar_t* src){
@@ -527,6 +423,32 @@ void  CopyWideString(wchar_t* dest, const wchar_t* src){
 	} while (*(current - 1));  // Проверяем последний скопированный символ
 }
 
+
+unsigned char* ConvertWCharToChar(wchar_t* wsc)
+{
+    if (!wsc) {
+        gNamePlayerASCII[0] = '\0';
+        return gNamePlayerASCII;
+    }
+
+    int i = 0;
+    const wchar_t* src = wsc;
+    constexpr int MAX_LENGTH = 79; // Один символ для нуль-терминатора
+
+    // Преобразуем до 79 символов (последний остаётся для '\0')
+    while (*src != L'\0' && i < MAX_LENGTH) {
+        if (*src < 0x80) { // ASCII символ
+            gNamePlayerASCII[i] = static_cast<char>(*src);
+        }
+        else { // Не-ASCII символ - заменяем на '#'
+            gNamePlayerASCII[i] = '#';
+        }
+        ++src;
+        ++i;
+    }
+    gNamePlayerASCII[i] = '\0';
+    return gNamePlayerASCII;
+}
 
 int gRenderdevice;
 int gVideodevice;
@@ -711,20 +633,6 @@ void SetShowCursor() {
 }
 
 void DirectInput2() {
-  /*  if (!gDirectInput1
-        || S219
-        || ((int(__stdcall*)(DirectInput*, void*, s219**, _DWORD))gDirectInput1->s209->field_C)(
-            gDirectInput1,
-            &unk_576C14,
-            &S219,
-            0)
-        || (*(int(__stdcall**)(s219*, void*))S219->S209->gap2C)(S219, &unk_5782C4)
-        || (*(int(__stdcall**)(s219*, HWND, int)) & S219->S209->gap2C[8])(S219, gHWND, 5))
-    {
-        return 0;
-    }
-    (*(void(__stdcall**)(s219*)) & S219->S209->field_1C)(S219);
-    return 1;*/
 }
 void VideoCheck() {
     int v0=0;
@@ -759,11 +667,11 @@ void VideoCheck() {
 int gData_byte = 1;
 int gX, gY;
 char VideoCheck1() {
-    char result; // al
-    Movie* v1; // eax
-    int v2; // ecx
-    struct tagRECT v3; // [esp+0h] [ebp-20h] BYREF
-    struct tagRECT Rect; // [esp+10h] [ebp-10h] BYREF
+    char result; 
+    Movie* v1; 
+    int v2; 
+    struct tagRECT v3; 
+    struct tagRECT Rect; 
 
     result = gData_byte;
     if (result)
@@ -877,26 +785,7 @@ char LoadConfig() {
 #include <stdlib.h> 
 void InitializePlayerData()
 {
-    // 1. Выделение сырой памяти
-    void* pMemory = operator new(0x2BC0u);
-
-    if (!pMemory)
-    {
-        DebugLog(0x20u, "plydat.cpp", 1269);
-        return;
-    }
-
-    // 2. Вызов конструктора через placement new
-    try {
-        gPlayerData = new (pMemory) PlayerData; // Вызов конструктора без аргументов
-    }
-    catch (...) {
-        // Обработка исключения конструктора
-        operator delete(pMemory);
-        gPlayerData = 0;
-        DebugLog(0x20u, "plydat.cpp", 1269);
-        return;
-    }
+   
 }
 
 

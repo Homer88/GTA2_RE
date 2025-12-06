@@ -3,7 +3,7 @@
 
 
 
-MapGm gMapGm;
+
 
 /*MapGm::MapGm(){
 	///FIXME

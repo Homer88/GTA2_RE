@@ -12,6 +12,9 @@ public:
 	void Init3DSound(int Vol3D);
 	bool Get3DSound();
 
+	DMAudio() {};
+	~DMAudio() {};
+
 };
 
 #endif // !__DMAudio_H_

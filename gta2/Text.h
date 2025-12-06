@@ -7,7 +7,8 @@ public:
 	char Language = 'e';
 	char *Base;
 	int NumberOfElements;
-
+	Text();
+	~Text();
 	void* Bsearch(const void* pKey);
 };
 

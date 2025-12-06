@@ -7,7 +7,7 @@ class Object{
 	private:
 
 	public:
-
+		bool Status;
 		Object();
 		~Object(); 
 		void * SpawnObject(int,int,int,short);

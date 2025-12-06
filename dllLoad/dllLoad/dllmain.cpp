@@ -60,7 +60,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
    // LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
     //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
-    LPVOID _PlayerCheat = (LPVOID)0x004590F0;
+    LPVOID _sub_459540 = (LPVOID)0x00459540;
     //LPVOID _CopyNameGang= (LPVOID)0x0045DB40;
     
     
@@ -98,7 +98,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
         //DetourAttach(&_CleanupDirectInput, (PVOID)CleanupDirectInput);
         //DetourAttach(&_CreateInputDevice, (PVOID)CreateInputDevice);
-        DetourAttach(&_PlayerCheat, (PVOID)PlayerCheat);
+        DetourAttach(&_sub_459540, (PVOID)sub_459540);
         /*DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
         DetourAttach(&_CopyNameGang, (PVOID)CopyNameGang);
         DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);

@@ -3,6 +3,7 @@
 class Turrel {
 	int a;
 public:
+	bool Status;
 	Turrel();
 	~Turrel();
 

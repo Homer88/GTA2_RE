@@ -6,6 +6,7 @@
 class CarEngines{
 	
 	public:
+		bool Status;
 		CarEngines();
 		~CarEngines();
 		int sub_4327E0(int CarType);

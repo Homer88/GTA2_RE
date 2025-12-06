@@ -2,8 +2,6 @@
 #include "DMAudio.h"
 
 
-DMAudio	gDMAudio;
-
 void DMAudio::InitAudioManager() {
 
 	// надо дебужить файл звуковой библиотеки

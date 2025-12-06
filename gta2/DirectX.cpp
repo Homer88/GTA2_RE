@@ -2,9 +2,13 @@
 #include <ddraw.h>
 #include <dinput.h>
 #include "DirectX.h"
+#include "Global.h"
+
+#pragma warning(disable : 4996)
 
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"ddraw.lib")
+#pragma comment(lib, "dinput8.lib")
 
 // Функция инициализации графического движка и ввода
 BOOL InitGraphicsAndInput(HINSTANCE hInst, DWORD* pFlags)
@@ -85,4 +89,24 @@ BOOL InitGraphicsAndInput(HINSTANCE hInst, DWORD* pFlags)
     // Успешная загрузка всех компонентов
     *pFlags |= 1 << 1 | 1 << 2 | 1 << 3; // Установлены флаги для DirectDraw и DirectInput
     return TRUE;
+}
+
+
+HRESULT CreateInputDevice(HINSTANCE hinst) {
+    HRESULT result; // eax
+
+    result = DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&gDirectInput, NULL);
+    if (result < 0)
+        return NULL;
+
+    return result;
+}
+
+void CleanupDirectInput() {
+  if (gDirectInput) {
+        // Вызываем Release() и приводим результат обратно к указателю
+        gDirectInput->Release();
+        gDirectInput = NULL; // Защита от повторного использования
+    }
+
 }

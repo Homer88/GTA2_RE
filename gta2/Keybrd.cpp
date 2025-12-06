@@ -4,7 +4,6 @@
 
 #include "Keybrd.h"
 
-Keyboard gKeyboard;
 
 enum  Layout {
 	ENGLISH_LAYOUT = 0u,

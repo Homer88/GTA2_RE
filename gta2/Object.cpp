@@ -1,6 +1,6 @@
 #include "Object.h"
 
-Object gObject;
+
 
 Object::Object(){
 

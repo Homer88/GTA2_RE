@@ -3,6 +3,7 @@
 
 class CarSystemManager {
 public:
+    bool Status;
     CarSystemManager();
     ~CarSystemManager();
 };

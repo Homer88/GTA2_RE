@@ -32,6 +32,7 @@ class Player {
 private:
 	int a;
 public:
+	bool Status;
 	Player();
 	~Player();
 };

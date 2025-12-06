@@ -6,6 +6,8 @@ public:
 	bool Status;
 	int SpeedText;
 	void LoadSpeedText();
+	HUD() {};
+	~HUD() {};
 };
 #endif // !__HUD_H
 

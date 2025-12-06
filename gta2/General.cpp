@@ -1,6 +1,6 @@
 #include "General.h"
 
-General gGeneral;
+
 
 General::General(){
 	this->Cycle = 0;

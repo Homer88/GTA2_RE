@@ -2,7 +2,6 @@
 #include "EngineStruct.h"
 
 
-EngineStruct gEngineStruct;
 
 EngineStruct::EngineStruct(){
 

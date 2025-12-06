@@ -77,3 +77,9 @@ dllLoad/.vs/dllLoad/v17/.suo
 /dllLoad/dllLoad/x64
 *.ipch
 /dllLoad/dllLoad/Release
+/re_file/IDA/data
+/re_file/IDA/player
+/re_file/IDA/test
+*.dll
+re_file/IDA/mssds3dh.m3d
+re_file/IDA/Param.txt

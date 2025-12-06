@@ -110,10 +110,12 @@ bool	*gGiveBasikWeapon = (bool*)0x005EAD6E;
 bool	*gElvis = (bool*)0x005EAD9F;
 bool	*gBunt = (bool*)0x005EAD93;
 bool	*gNEKKID = (bool*)0x005EADA0;
+bool* gExploding_on = (bool*)0x005EAD5D;
 //void   *gBinkBufferClose = (bool*);
 //bool    *gNetworkGame = (bool*);
 //byte    *gControl = (bool*);
 int gData_6735A5;
+
 
 char *aTestReplay0Rep = (char*)0x00595FF0; // 11 масcив
 

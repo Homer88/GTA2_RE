@@ -18,4 +18,5 @@ void SetGamma();
 void* ConfigureVideoSystem();
 char  LoadConfig();
 
+
 #endif
