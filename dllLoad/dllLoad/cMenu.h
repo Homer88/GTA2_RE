@@ -171,6 +171,10 @@ char  PlayerCheat(Menu* pthis, wchar_t* PlayerName);
 void  __stdcall sub_459540();
 
 
+//typedef short(__fastcall* LoadTextMenu)(Menu*);
+short  __stdcall   LoadTextMenu();
+
+
 
 #endif // !__MENU_GAMES_H_
 

@@ -23,7 +23,8 @@ public:
 	     char FrontendKeysEnabled;
 	     int State;
 	     unsigned short FontStyle;
-		 unsigned short Page;
+		 unsigned short PageNumber;
+		 unsigned short CountPages;
 	     MenuPage pMenuPage[17];
 	     wchar_t* PlayerName;
 	     char Length;
@@ -46,6 +47,15 @@ public:
 
 		 Menu();
 		 ~Menu() {};
+		 void MainMenuCreate();
+		 void PlayMenuCreate();
+		 void BonusAMenuCreate();
+		 void CompliteLevelMenuCreate();
+		 // мои исправление 
+		 void OptionsMenuCreate();
+		 void NetworkGameMenuCreate();
+		 void NetworkServerMenuCreate();
+		 void NetworkClientMenuCreate();
 
 		 void SetFrontendKeysEnabled(byte param);
 		 wchar_t* getPlayerProfileName();
@@ -55,6 +65,9 @@ public:
 		 void InitializeState(int Pages);
 		 void PlayerCheat(wchar_t* PlayerName);
 		 void SetPlayerNameFromMenu();
+		 PlayerSlotSave* getPlayerProfileNamePlayerData();
+		 short  LoadTextMenu();
+
 		 
 
 	

@@ -1,4 +1,10 @@
-#pragma once
+#ifndef __TAXI__H__
+#define __TAXI__H__
+
+
+
+
+
 
 class Taxi {
 public:
@@ -6,3 +12,5 @@ public:
 	Taxi() {};
 	~Taxi() {};
 };
+
+#endif // !__TAXI__H__

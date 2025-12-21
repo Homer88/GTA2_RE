@@ -1,6 +1,6 @@
 #ifndef __CGLOBAL__H__
 #define __CGLOBAL__H__
-
+#include "cText.h"
 
 // переменные глобальные 
 extern unsigned char* gNamePlayerASCII;
@@ -109,6 +109,7 @@ extern bool* gNEKKID;
 //extern byte    *gControl;
 extern int gData_6735A5;
 extern bool *gExploding_on;
+extern Text* gText;
 
 extern char* aTestReplay0Rep; // 11 масcив
 

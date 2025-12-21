@@ -2,6 +2,12 @@
 #include "Menu.h"
 #include "WinMain.h"
 
+enum EnumMainMenuElement {
+    play = 0,
+    options = 1,
+    quit = 3,
+};
+
 enum  MenuScreens {
     MENUSCREEN_OPTIONS = 0u,
     MENUSCREEN_PLAY = 1u,
@@ -33,7 +39,7 @@ enum  MenuPages // 4 bytes
     MENUPAGE_GAME_COMPLETE = 4,
     MENUPAGE_VIEW_HIGH_SCORE = 5,
     MENUPAGE_BONUS_AREA = 6,
-    MENUPAGE_UNK_KILLS = 7,
+    MENUPAGE_UNK_KILLS = 7,         // Страница доступна только при мультеплаере
     MENUPAGE_PLAY_INTRO = 8,
     MENUPAGE_CREDITS = 9,
     MENUPAGE_NICE_TRY = 10,
@@ -46,6 +52,17 @@ enum  MenuPages // 4 bytes
     MENUPAGE_GTA2MANAGER = 257,
     MENUPAGE_QUIT = 258,
     MENUPAGE_259 = 259,
+    MENUPAGE_CONFIGURE = 357,
+    MENUPAGE_CONFIGURE_VIDEO = 358,
+    MENUPAGE_CONFIGURE_CONTROL = 359,
+    MENUPAGE_CONFIGURE_SOUND = 360,
+    MENUPAGE_CONFIGURE_LANGUAGE = 361,
+    MENUPAGE_CONFIGURE_DEBUG1 = 362,
+    MENUPAGE_CONFIGURE_DEBUG2 = 363,
+    MENUPAGE_CONFIGURE_PHISIC = 370,
+    MENUPAGE_NETWORK = 400,
+    MENUPAGE_NETWORK_SERVER = 401,
+    MENUPAGE_NETWORK_CLIENT = 402,
 
 };
 enum  MenuPicture {
@@ -104,6 +121,7 @@ enum  Cheat {
 
 Menu::Menu() {
     this->SetFrontendKeysEnabled(1);
+    this->LoadTextMenu();
 }
 
 void Menu::SetFrontendKeysEnabled(byte param) {
@@ -157,7 +175,7 @@ unsigned short Menu::clearArrayTail() {
 
 
 void Menu::InitializeState(int Pages) {
-	this->Page = Pages;
+	this->PageNumber = Pages;
 	  
 	if (Pages == MENUPAGE_PARENTAL_CONTROL) {
 		this->State = 5;
@@ -337,11 +355,195 @@ void Menu::PlayerCheat(wchar_t* PlayerName)
 
 void Menu::SetPlayerNameFromMenu() {
     
-    unsigned short PlayerSlot = this->pMenuPage[1].pMenuEntry[0].PlayerSlot;
+    unsigned short PlayerSlot = this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].PlayerSlot;
     wchar_t* PlayerName = gPlayerData.pPlayerSlotSave[PlayerSlot].PlayerName;
     wcsncpy(PlayerName, this->PlayerName, 9);
     PlayerCheat(PlayerName);
     gPlayerData.WriteFileNamePlayer(PlayerSlot);
 
+
+}
+
+
+PlayerSlotSave* Menu::getPlayerProfileNamePlayerData() {
+
+    return &gPlayerData.pPlayerSlotSave[gMapGm.GetPlayerSlotSave()];
+}
+
+enum EnumMenuPage {
+    MainMenu = 0,
+    PlayMenu=1,
+};
+
+enum EnumPlayMenuElement {
+    NamePlayer = 0,
+    ResumeSaveStatus = 1,
+    ViewHighScores = 2,
+    StartPlayInArena = 3,
+    BonusIcon=4,
+};
+void Menu::MainMenuCreate() {
+
+    this->pMenuPage[MainMenu].numMenuItems = 3; // число элементов на странице
+    //Пункт Меню Play
+    this->pMenuPage[MainMenu].pMenuEntry[play].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[MainMenu].pMenuEntry[play].X = 300;
+    this->pMenuPage[MainMenu].pMenuEntry[play].Y = 250;
+    wchar_t* Play = (wchar_t*)gText.Bsearch("play");
+    wcsncpy(this->pMenuPage[MainMenu].pMenuEntry[play].TextMenuElement, Play, 50);
+    this->pMenuPage[MainMenu].pMenuEntry[play].SelectMenu = MENUPAGE_PLAY; //Это какие дествие будут выполняться
+    //Пункт Меню Options
+    this->pMenuPage[MainMenu].pMenuEntry[options].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[MainMenu].pMenuEntry[options].X = 300;
+    this->pMenuPage[MainMenu].pMenuEntry[options].Y = 250;
+    wchar_t* Options = (wchar_t*)gText.Bsearch("Options");
+    wcsncpy(this->pMenuPage[MainMenu].pMenuEntry[options].TextMenuElement, Options, 50);
+    this->pMenuPage[MainMenu].pMenuEntry[options].SelectMenu = MENUPAGE_GTA2MANAGER; //Это какие дествие будут выполняться
+    //Пункт Меню Options
+
+    this->pMenuPage[MainMenu].pMenuEntry[quit].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[MainMenu].pMenuEntry[quit].X = 300;
+    this->pMenuPage[MainMenu].pMenuEntry[quit].Y = 290;
+    wchar_t* Quit = (wchar_t*)gText.Bsearch("quit");
+    wcsncpy(this->pMenuPage[MainMenu].pMenuEntry[quit].TextMenuElement, Quit, 50);
+    this->pMenuPage[MainMenu].pMenuEntry[quit].SelectMenu = MENUPAGE_CREDITS;
+
+
+    //FixMe
+    if (false)
+    {
+        wchar_t* No_cd1 = (wchar_t*)gText.Bsearch("no_cd1");
+        wcsncpy(this->pMenuPage[MainMenu].pMenuEntry[play].TextMenuElement, No_cd1, 50u);
+        this->pMenuPage[MainMenu].pMenuEntry[play].SelectMenu = MENUPAGE_CREDITS;
+
+        wchar_t* No_cd2 = (wchar_t*)gText.Bsearch("no_cd2");
+        wcsncpy(this->pMenuPage[MainMenu].pMenuEntry[options].TextMenuElement, No_cd2, 50u);
+        this->pMenuPage[MainMenu].pMenuEntry[options].SelectMenu = MENUPAGE_CREDITS;
+
+        wchar_t* No_cd3 = (wchar_t*)gText.Bsearch("no_cd3");
+        wcsncpy(this->pMenuPage[MainMenu].pMenuEntry[quit].TextMenuElement, No_cd3, 50u);
+        this->pMenuPage[MainMenu].pMenuEntry[quit].SelectMenu = MENUPAGE_CREDITS;
+    }
+
+    this->pMenuPage[MainMenu].pMenuItem[play].X = 280;
+    this->pMenuPage[MainMenu].pMenuItem[play].Y = 258;
+    this->pMenuPage[MainMenu].pMenuItem[options].X = 280;
+    this->pMenuPage[MainMenu].pMenuItem[options].Y = 278;
+    this->pMenuPage[MainMenu].pMenuItem[quit].X = 280;
+    this->pMenuPage[MainMenu].pMenuItem[quit].Y = 298;
+    this->pMenuPage[MainMenu].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[MainMenu].SelectActiveElementDefault = play;
+}
+
+void Menu::PlayMenuCreate() {
+
+    //PlayMenu
+    this->pMenuPage[PlayMenu].numMenuItems = 5;
+
+    this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].eMenuActions = 2;
+    this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].X = 300;
+    this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].Y = 210;
+    wchar_t* charcrt = (wchar_t*)gText.Bsearch("charctr");
+    wcsncpy(this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].TextMenuElement, charcrt, 50);
+    this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].PlayerSlot = 0;
+    this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].PlayerSlot1 = 0;
+    this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].index = 7;
+    unsigned short countPlayer = 0;
+    do {
+        countPlayer++;
+        this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].FLAG[countPlayer] = 1;
+    } while (countPlayer <= this->pMenuPage[PlayMenu].pMenuEntry[NamePlayer].index);
+
+    this->pMenuPage[PlayMenu].pMenuEntry[ResumeSaveStatus].eMenuActions = 1;
+    this->pMenuPage[PlayMenu].pMenuEntry[ResumeSaveStatus].X = 300;
+    this->pMenuPage[PlayMenu].pMenuEntry[ResumeSaveStatus].Y = 230;
+    wchar_t* resumeSaveStatus = (wchar_t*)gText.Bsearch("savepos");
+    wcsncpy(this->pMenuPage[PlayMenu].pMenuEntry[ResumeSaveStatus].TextMenuElement, resumeSaveStatus, 50);
+    this->pMenuPage[PlayMenu].pMenuEntry[ResumeSaveStatus].SelectMenu = 260;
+
+    this->pMenuPage[PlayMenu].pMenuEntry[ViewHighScores].eMenuActions = 1;
+    this->pMenuPage[PlayMenu].pMenuEntry[ViewHighScores].X = 300;
+    this->pMenuPage[PlayMenu].pMenuEntry[ViewHighScores].Y = 250;
+    wchar_t* viewHighScores = (wchar_t*)gText.Bsearch("hi_scre");
+    wcsncpy(this->pMenuPage[PlayMenu].pMenuEntry[ViewHighScores].TextMenuElement, viewHighScores, 50);
+    this->pMenuPage[PlayMenu].pMenuEntry[ViewHighScores].SelectMenu = MENUPAGE_VIEW_HIGH_SCORE;
+
+    this->pMenuPage[PlayMenu].pMenuEntry[StartPlayInArena].eMenuActions = 1;
+    this->pMenuPage[PlayMenu].pMenuEntry[StartPlayInArena].X = 300;
+    this->pMenuPage[PlayMenu].pMenuEntry[StartPlayInArena].Y = 270;
+    wchar_t* startPlayInArena = (wchar_t*)gText.Bsearch("strlev");
+    wcsncpy(this->pMenuPage[PlayMenu].pMenuEntry[StartPlayInArena].TextMenuElement, startPlayInArena, 50);
+    this->pMenuPage[PlayMenu].pMenuEntry[StartPlayInArena].SelectMenu = 264;
+
+    this->pMenuPage[PlayMenu].pMenuEntry[BonusIcon].eMenuActions = 1;
+    this->pMenuPage[PlayMenu].pMenuEntry[BonusIcon].X = 300;
+    this->pMenuPage[PlayMenu].pMenuEntry[BonusIcon].Y = 270;
+    wchar_t* bonusIcon = (wchar_t*)gText.Bsearch("bonslev");
+    wcsncpy(this->pMenuPage[PlayMenu].pMenuEntry[BonusIcon].TextMenuElement, bonusIcon, 50);
+    this->pMenuPage[PlayMenu].pMenuEntry[BonusIcon].SelectMenu = 265;
+
+
+    this->pMenuPage[PlayMenu].pMenuItem[NamePlayer].X = 280;
+    this->pMenuPage[PlayMenu].pMenuItem[NamePlayer].Y = 228;
+
+    this->pMenuPage[PlayMenu].pMenuItem[ResumeSaveStatus].X = 280;
+    this->pMenuPage[PlayMenu].pMenuItem[ResumeSaveStatus].Y = 238;
+
+    this->pMenuPage[PlayMenu].pMenuItem[ViewHighScores].X = 280;
+    this->pMenuPage[PlayMenu].pMenuItem[ViewHighScores].Y = 258;
+
+    this->pMenuPage[PlayMenu].pMenuItem[StartPlayInArena].X = 280;
+    this->pMenuPage[PlayMenu].pMenuItem[StartPlayInArena].Y = 278;
+
+    this->pMenuPage[PlayMenu].pMenuItem[BonusIcon].X = 280;
+    this->pMenuPage[PlayMenu].pMenuItem[BonusIcon].Y = 358;
+
+
+    this->pMenuPage[PlayMenu].IndexMenuActions = 3;
+    this->pMenuPage[PlayMenu].SelectActiveElementDefault = StartPlayInArena;
+
+    this->pMenuPage[1].pGUI[0].Element = 3;// Иконка бонуса
+    this->pMenuPage[1].pGUI[0].X = 420;
+    this->pMenuPage[1].pGUI[0].Y = 310;
+
+}
+void Menu::CompliteLevelMenuCreate(){
+
+}
+
+void Menu::BonusAMenuCreate() {
+
+}
+// это мое меню уже 
+void Menu::NetworkGameMenuCreate() {
+
+}
+void Menu::OptionsMenuCreate() {
+  
+
+}
+void Menu::NetworkServerMenuCreate() {
+
+}
+void Menu::NetworkClientMenuCreate() {
+
+}
+short  Menu::LoadTextMenu() {
+    this->CountPages = 16;
+    this->MainMenuCreate();
+    this->PlayMenuCreate();
+    this->BonusAMenuCreate();
+
+
+    //мои Фиксы 
+    this->NetworkGameMenuCreate();
+    this->OptionsMenuCreate();
+    
+
+
+
+
+
+    return 0;
 
 }

@@ -10,12 +10,12 @@
 #pragma pack(push, 1) // устанавливает выравнивание по 1 байту (максимально упакованная структура)
 struct MenuPage{
 
-	short field; //0x0
+	short numMenuItems; //0x0
 	short field1;//0x2
 	MenuEntry pMenuEntry[10]; //0x4
 	S136    pS136[15];//0x518
 	S137    pS137[10];
-	unsigned short IndexMenuActins;
+	unsigned short IndexMenuActions;
 	short field_BC8;
 
 };

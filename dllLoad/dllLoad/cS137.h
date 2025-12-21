@@ -6,8 +6,8 @@
 struct S137
 {
 	short field_0;
-	short field_1;
-	short field_3;
+	short X;
+	short Y;
 };
 
 static_assert(sizeof(S137) == 6, "ERROR MENU STRUCT");

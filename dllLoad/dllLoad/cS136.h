@@ -6,7 +6,7 @@
 
 struct S136
 {
-	char field;
+	char Visible;
 	char PlayerArena;
 	short field_2;
 	short field_4;

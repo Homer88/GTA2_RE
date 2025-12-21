@@ -9,8 +9,12 @@ public:
 	// кординаты 
 	short X;
 	short Y;
-	wchar_t str[50];
+	wchar_t TextMenuElement[50];
 	unsigned short PlayerSlot;
+	unsigned short PlayerSlot1;
+	char FLAG[7];
+	short index;
+	unsigned short SelectMenu;
 
 
 };

@@ -3,7 +3,7 @@
 #include "cMenu.h"
 #include "cGlobal.h"
 #include "cPlayerData.h"
-
+#include "cText.h"
 #include "DebugLogFile.h" 
 
 extern PlayerData* gPlayerData;
@@ -254,4 +254,90 @@ void  __stdcall sub_459540(void) {
      // wcsncpy(PlayerName, gMenu->PlayerName, 9u);
     PlayerCheat(gMenu, gMenu->pPlayerName);
     //S150::sub_4A89E0(gPlayerData, PlayerSlot);
+}
+
+enum  MenuPages // 4 bytes
+     {
+         MENUPAGE_NONE = -1,
+         MENUPAGE_START_MENU = 0,
+         MENUPAGE_PLAY = 1,
+         MENUPAGE_DEAD = 2,
+         MENUPAGE_AREA_COMPLETE = 3,
+         MENUPAGE_GAME_COMPLETE = 4,
+         MENUPAGE_VIEW_HIGH_SCORE = 5,
+         MENUPAGE_BONUS_AREA = 6,
+         MENUPAGE_UNK_KILLS = 7,
+         MENUPAGE_PLAY_INTRO = 8,
+         MENUPAGE_CREDITS = 9,
+         MENUPAGE_NICE_TRY = 10,
+         MENUPAGE_RESULTS_PLAYER_QUIT = 11,
+         MENUPAGE_12 = 12,
+         MENUPAGE_13 = 13,
+         MENUPAGE_PARENTAL_CONTROL = 14,
+         MENUPAGE_15 = 15,
+         NUM_MENUPAGES = 16,
+         MENUPAGE_GTA2MANAGER = 257,
+         MENUPAGE_QUIT = 258,
+         MENUPAGE_259 = 259,
+         MENUPAGE_264 = 264,
+         MENUPAGE_265 = 265,
+         MENUPAGE_260 = 260,
+         MENUPAGE_261 = 261,
+         MENUPAGE_266 = 266,
+    
+};
+
+extern Text* gText;
+short  __stdcall  LoadTextMenu() {
+    gMenu->Filderer0x120 = 16;
+    gMenu->pMenuPage[0].numMenuItems = 3;
+    gMenu->pMenuPage[0].pMenuEntry[0].pMenuActions = MENUPAGE_PLAY;
+    gMenu->pMenuPage[0].pMenuEntry[0].X = 300;
+    gMenu->pMenuPage[0].pMenuEntry[0].Y = 250;
+    //const wchar_t **play= Bsearch(gText, L"play");
+    wcsncpy(gMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement, L"Play", 50u);
+    DebugLog(gMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement);
+    gMenu->pMenuPage[0].pMenuEntry[0].SelectMenu = MENUPAGE_PLAY;
+    gMenu->pMenuPage[0].pS137[0].Y = 258;
+    gMenu->pMenuPage[0].pS137[0].X = 280;
+    gMenu->pMenuPage[0].pS137[1].X = 280;
+    gMenu->pMenuPage[0].pS137[1].Y = 278;
+    gMenu->pMenuPage[0].pS137[2].X = 280;
+    gMenu->pMenuPage[0].pS137[2].Y = 298;
+    gMenu->pMenuPage[0].IndexMenuActions = MENUPAGE_START_MENU;
+    gMenu->pMenuPage[0].field_BC8 = MENUPAGE_START_MENU;
+
+
+    gMenu->pMenuPage[7].pS136[7].field_2 = 40;
+    gMenu->pMenuPage[7].pS136[8].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pS136[8].field_2 = 100;
+    gMenu->pMenuPage[7].pS136[8].field_4 = 320;
+    gMenu->pMenuPage[7].pS136[9].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pS136[9].field_2 = 100;
+    gMenu->pMenuPage[7].pS136[9].field_4 = 340;
+    gMenu->pMenuPage[7].pS136[10].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pS136[10].field_2 = 100;
+    gMenu->pMenuPage[7].pS136[10].field_4 = 360;
+    gMenu->pMenuPage[7].pS136[11].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pS136[11].field_2 = 100;
+    gMenu->pMenuPage[7].pS136[11].field_4 = 380;
+    gMenu->pMenuPage[7].pS136[12].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pS136[12].field_2 = 100;
+    gMenu->pMenuPage[7].pS136[12].field_4 = 400;
+    gMenu->pMenuPage[7].pS136[13].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pS136[13].field_2 = 30;
+    gMenu->pMenuPage[7].pS136[13].field_4 = 150;
+    gMenu->pMenuPage[7].pMenuEntry[0].pMenuActions = MENUPAGE_PLAY;
+    gMenu->pMenuPage[7].pMenuEntry[0].Y = 430;
+   
+    wcsncpy(gMenu->pMenuPage[7].pMenuEntry[0].TextMenuElement, L"quit", 0x32u);
+
+    gMenu->pMenuPage[14].pS136[2].Visible = MENUPAGE_PLAY;
+    gMenu->pMenuPage[14].pS136[2].field_2 = 20;
+    gMenu->pMenuPage[14].pS136[2].field_4 = 200;
+
+
+    gMenu->pMenuPage[14].IndexMenuActions = MENUPAGE_START_MENU;
+    gMenu->pMenuPage[14].field_BC8 = MENUPAGE_START_MENU;
+    return 0;
 }

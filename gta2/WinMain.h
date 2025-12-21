@@ -17,6 +17,9 @@ int SetVideoPlayer();
 void SetGamma();
 void* ConfigureVideoSystem();
 char  LoadConfig();
+unsigned char*  ConvertUppercaseToLower(unsigned char* str);
+
+
 
 
 #endif

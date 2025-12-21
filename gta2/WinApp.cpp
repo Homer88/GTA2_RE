@@ -795,3 +795,17 @@ void InitializePlayerData()
 void PlayerData() {
 
 }
+
+unsigned char*  ConvertUppercaseToLower(unsigned char * str)
+{
+    unsigned char* result; // eax
+
+    result = str;
+    do
+    {
+        if (*result >= 'A' && *result <= 'Z')
+            *result += 32;
+        ++result;
+    } while (*result);
+    return result;
+}

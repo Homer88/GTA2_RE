@@ -219,3 +219,7 @@ void MapGm::DefauntSpecialTokens()
 {
 	this->SpecialTokens = 0;
 }
+int MapGm::GetPlayerSlotSave() {
+
+	return this->PlayerSlotSave;
+}

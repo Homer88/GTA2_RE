@@ -25,7 +25,7 @@
 //#include "cS19.h"
 //#include "cS20.h"
 //#include "cText.h"
-//
+#include "cStyle.h"
 //#include "cWeapon.h"
 #include "cWindow.h"
 
@@ -52,15 +52,16 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         ShowWindow(consoleWindow, SW_HIDE);
     }
 
-    LPVOID _InfoVersion = (LPVOID)0x004D0920;
-    LPVOID _InitDiretX =  (LPVOID)0x004031c0;
-    LPVOID _GetDebugParam = (LPVOID)0x00451930;
-
-    LPVOID  _AllGtxFile = (LPVOID)0x00451800;
-    LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
+    //LPVOID _InfoVersion = (LPVOID)0x004D0920;
+   // LPVOID _InitDiretX =  (LPVOID)0x004031c0;
+    //LPVOID _GetDebugParam = (LPVOID)0x00451930;
+    //LPVOID _GetNumberOfCars = (LPVOID)0x00432850;
+    LPVOID _LoadTextMenu = (LPVOID)0x00453E20;
+   // LPVOID  _AllGtxFile = (LPVOID)0x00451800;
+   // LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
    // LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
     //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
-    LPVOID _sub_459540 = (LPVOID)0x00459540;
+    //LPVOID _sub_459540 = (LPVOID)0x00459540;
     //LPVOID _CopyNameGang= (LPVOID)0x0045DB40;
     
     
@@ -93,12 +94,13 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             return FALSE;
         }
 
-        Error = DetourAttach(&_InfoVersion, (PVOID)GetVersionLaunch);
+       /* Error = DetourAttach(&_InfoVersion, (PVOID)GetVersionLaunch);
         printError(Error, _InfoVersion);
         DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
         //DetourAttach(&_CleanupDirectInput, (PVOID)CleanupDirectInput);
         //DetourAttach(&_CreateInputDevice, (PVOID)CreateInputDevice);
-        DetourAttach(&_sub_459540, (PVOID)sub_459540);
+        ///DetourAttach(&_sub_459540, (PVOID)sub_459540);
+        DetourAttach(&_GetNumberOfCars, (PVOID)GetNumberOfCars);
         /*DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
         DetourAttach(&_CopyNameGang, (PVOID)CopyNameGang);
         DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
@@ -106,17 +108,18 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         DetourAttach(&_FUN_00433810, (PVOID)SetTypeWeapons);
         DetourAttach(&_Weapon_FUN_004cca10, (PVOID)Weapon_FUN_004cca10);
         */
-        Error =  DetourAttach(&_InitDiretX, (PVOID)InitDiretX);
-        printError(Error, _InitDiretX);
+        //Error =  DetourAttach(&_InitDiretX, (PVOID)InitDiretX);
+        //printError(Error, _InitDiretX);
 
-        Error = DetourAttach(&_GetDebugParam, (PVOID)GetDebugParam);
-        printError(Error, _GetDebugParam);
+        //Error = DetourAttach(&_GetDebugParam, (PVOID)GetDebugParam);
+        //printError(Error, _GetDebugParam);
 
-        Error = DetourAttach(&_AllGtxFile, (PVOID)AllGtxFile);
-        printError(Error, _AllGtxFile);
+       /// Error = DetourAttach(&_AllGtxFile, (PVOID)AllGtxFile);
+        //printError(Error, _AllGtxFile);
         //*/
         //FunS20();
-        FunMapGM();
+        //FunMapGM();
+        DetourAttach(&_LoadTextMenu, (PVOID)LoadTextMenu);
         if (DetourTransactionCommit() != NO_ERROR)
         {
             printf("error DetourTransactionCommit");

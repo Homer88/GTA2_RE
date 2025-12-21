@@ -2,17 +2,18 @@
 #define __MENUPAGE__H_
 
 #include "MenuEntry.h"
-#include "S136.h"
-#include "S137.h"
+#include "GUI.h"
+#include "MenuItem.h"
 
 class MenuPage {
 	
 public:
 	unsigned short numMenuItems;
 	MenuEntry  pMenuEntry[10];
-	S137   pS137[10];
-	S136   pS136[15];
+	MenuItem   pMenuItem[10];
+	GUI   pGUI[15];
 	unsigned short IndexMenuActions;
+	unsigned  short SelectActiveElementDefault;
 	MenuPage() {};
 	~MenuPage() {};
 };
