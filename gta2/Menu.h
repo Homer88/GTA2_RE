@@ -51,8 +51,14 @@ public:
 		 //методы  inline
 		 void MainMenuCreate();
 		 void PlayMenuCreate();
-		 void BonusAMenuCreate();
-		 void CompliteLevelMenuCreate();
+		 
+		 void BonusStageAMenuCreate();
+		 void BonusStageBMenuCreate();
+		 void BonusStageCMenuCreate();
+
+		 void CompliteGameMenuCreate();
+		 void AreaCompliteMenuCreate();
+		 void HighScoresForAreaCreate();
 		 void ResumeLoadSaveCreate();
 		 void YouAreDead_RIP();
 		 // мои исправление 
