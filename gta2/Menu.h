@@ -54,6 +54,7 @@ public:
 		 void BonusAMenuCreate();
 		 void CompliteLevelMenuCreate();
 		 void ResumeLoadSaveCreate();
+		 void YouAreDead_RIP();
 		 // мои исправление 
 		 void OptionsMenuCreate();
 		 void NetworkGameMenuCreate();

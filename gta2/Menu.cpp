@@ -657,7 +657,49 @@ inline void Menu::ResumeLoadSaveCreate() {
 }
 
 inline  void Menu::YouAreDead_RIP() {
+    this->pMenuPage[RIP].numMenuItems = 3;
+    this->pMenuPage[RIP].numMenuItems1 = 1;
 
+    this->pMenuPage[RIP].pGUI[0].Element = 1;
+    this->pMenuPage[RIP].pGUI[0].X = 35;
+    this->pMenuPage[RIP].pGUI[0].Y = 11;
+
+    wchar_t* PlayerDead = (wchar_t*)gText.Bsearch("plr_ded");
+    wcsncat(this->pMenuPage[RIP].pGUI[0].TextMenuElement, PlayerDead, 50);
+    this->pMenuPage[RIP].pGUI[0].dX = 13;
+    this->pMenuPage[RIP].pGUI[0].dY = 0;
+
+    this->pMenuPage[RIP].pMenuEntry[0].eMenuActions = 1;
+    this->pMenuPage[RIP].pMenuEntry[0].Y = 392;
+    wchar_t* ResumeSavedStatus = (wchar_t*)gText.Bsearch("savepos");
+    wcsncat(this->pMenuPage[RIP].pMenuEntry[0].TextMenuElement, ResumeSavedStatus, 50);
+    this->pMenuPage[RIP].pMenuEntry[0].X = this->PrintCentr(this->pMenuPage[RIP].pMenuEntry[0].TextMenuElement, this->pMenuPage[RIP].pMenuEntry[0].StringLength, 320);
+    this->pMenuPage[RIP].pMenuEntry[0].SelectMenu = 260;
+    this->pMenuPage[RIP].pMenuEntry[0].eMenuActions = 1;
+
+    this->pMenuPage[RIP].pMenuEntry[1].Y = 412;
+    wchar_t* ReplayPreviousArea = (wchar_t*)gText.Bsearch("replay");
+    wcsncat(this->pMenuPage[RIP].pMenuEntry[1].TextMenuElement, ReplayPreviousArea, 50);
+    this->pMenuPage[RIP].pMenuEntry[1].X = this->PrintCentr(this->pMenuPage[RIP].pMenuEntry[1].TextMenuElement, this->pMenuPage[RIP].pMenuEntry[1].StringLength, 320);
+
+    this->pMenuPage[RIP].pMenuEntry[1].SelectMenu = 259;
+
+    this->pMenuPage[RIP].pMenuEntry[2].eMenuActions = 1;
+    this->pMenuPage[RIP].pMenuEntry[2].Y = 432;
+    wchar_t* BackToMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wcsncpy(this->pMenuPage[RIP].pMenuEntry[2].TextMenuElement, BackToMainMenu, 50);
+    this->pMenuPage[RIP].pMenuEntry[2].X = this->PrintCentr(this->pMenuPage[RIP].pMenuEntry[2].TextMenuElement, this->pMenuPage[RIP].pMenuEntry[2].StringLength, 320);
+    this->pMenuPage[RIP].pMenuEntry[2].SelectMenu = 0;
+
+    this->pMenuPage[RIP].pMenuItem[0].X = 150;
+    this->pMenuPage[RIP].pMenuItem[0].Y = 400;
+
+    this->pMenuPage[RIP].pMenuItem[1].X = 150;
+    this->pMenuPage[RIP].pMenuItem[1].Y = 420;
+
+    this->pMenuPage[RIP].pMenuItem[2].X = 150;
+    this->pMenuPage[RIP].pMenuItem[2].Y = 440;
+    this->pMenuPage[RIP].SelectActiveElementDefault = 0;
 }
 
 inline void Menu::BonusAMenuCreate() {
