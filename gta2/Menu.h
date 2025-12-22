@@ -56,6 +56,12 @@ public:
 		 void BonusStageBMenuCreate();
 		 void BonusStageCMenuCreate();
 
+		 void PlayVideoMovieIntroMenuCreate();
+		 void PlayVideoMovieMenuCreate();
+
+		 void NiceTryMenuCreate();
+		 void CodeDebugMenuCreate();
+
 		 void CompliteGameMenuCreate();
 		 void AreaCompliteMenuCreate();
 		 void HighScoresForAreaCreate();

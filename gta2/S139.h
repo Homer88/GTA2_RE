@@ -6,8 +6,10 @@
 
 
 class S139 {
+public:
 	short  Index;
 	S140 pS140[600];
+	short ScrollingText();
 };
 
 #endif // !__S138__H__

@@ -377,6 +377,7 @@ enum EnumMenuPage {
     AreaCompliteMenu=3,
     CompliteGame = 4,
     HighScoresForArea=5,
+    BonusStageC=6,
     ResumeLoadSaveMenu=11,
 
 };
@@ -859,18 +860,228 @@ inline void Menu::HighScoresForAreaCreate() {
 inline void Menu::BonusStageAMenuCreate() {
 
 }
+inline void Menu::PlayVideoMovieMenuCreate() {
+    this->pMenuPage[15].numMenuItems = MENUPAGE_PLAY;
+    this->pMenuPage[15].numMenuItems1 = MENUPAGE_START_MENU;
+    this->pMenuPage[15].pMenuEntry[0].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[15].pMenuEntry[0].X = 200;
+    this->pMenuPage[15].pMenuEntry[0].Y= 280;
+    wchar_t* pmainmen =(wchar_t*) gText.Bsearch( "mainmen");
+    wcsncpy(this->pMenuPage[15].pMenuEntry[0].TextMenuElement, pmainmen, 0x32u);
+    this->pMenuPage[15].pMenuEntry[0].SelectMenu = MENUPAGE_START_MENU;
+    this->pMenuPage[15].pMenuItem[0].X = 180;
+    this->pMenuPage[15].pMenuItem[0].Y = 288;
+    this->pMenuPage[15].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[15].SelectActiveElementDefault = MENUPAGE_START_MENU;
+}
+inline void Menu::PlayVideoMovieIntroMenuCreate() {
+
+    this->pMenuPage[8].numMenuItems = MENUPAGE_PLAY;
+    this->pMenuPage[8].numMenuItems1 = MENUPAGE_START_MENU;
+    this->pMenuPage[8].pMenuEntry[0].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[8].pMenuEntry[0].X = 200;
+    this->pMenuPage[8].pMenuEntry[0].Y = 280;
+    wchar_t* v46 =(wchar_t*) gText.Bsearch("mainmen");
+    wcsncpy(this->pMenuPage[8].pMenuEntry[0].TextMenuElement, v46, 50);
+    this->pMenuPage[8].pMenuEntry[0].SelectMenu = MENUPAGE_START_MENU;
+    this->pMenuPage[8].pMenuItem[0].X = 180;
+    this->pMenuPage[8].pMenuItem[0].Y = 288;
+    this->pMenuPage[8].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[8].SelectActiveElementDefault = MENUPAGE_START_MENU;
+}
+inline void Menu::BonusStageBMenuCreate() {}
 
 inline void Menu::BonusStageCMenuCreate() {
-
+    this->pMenuPage[BonusStageC].numMenuItems = 3;
+    this->pMenuPage[BonusStageC].numMenuItems1 = 3;
+    this->pMenuPage[BonusStageC].pGUI[0].Element = MENUPAGE_PLAY;
+    this->pMenuPage[BonusStageC].pGUI[0].X = 35;
+    this->pMenuPage[BonusStageC].pGUI[0].Y = 11;
+    wchar_t* BonusStageCText =(wchar_t*) gText.Bsearch("bonslev");
+    wcsncpy(this->pMenuPage[6].pGUI[0].TextMenuElement, BonusStageCText, 50);
+    this->pMenuPage[6].pGUI[0].dX = 13;
+    this->pMenuPage[6].pGUI[0].dY = 5;
+    this->pMenuPage[6].pGUI[1].Element = MENUPAGE_PLAY;
+    this->pMenuPage[6].pGUI[1].X = 170;
+    this->pMenuPage[6].pGUI[1].Y = 250;
+    wchar_t* v39 = (wchar_t*) gText.Bsearch("score");
+    wcsncpy(this->pMenuPage[6].pGUI[1].TextMenuElement, v39, 0x32u);
+    this->pMenuPage[6].pGUI[2].Element = MENUPAGE_PLAY;
+    this->pMenuPage[6].pGUI[2].X = 400;
+    this->pMenuPage[6].pGUI[2].Y = 250;
+    
+    this->pMenuPage[6].pMenuEntry[0].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[6].pGUI[2].dX = 5;
+    this->pMenuPage[6].pMenuEntry[0].Y = 340;
+    wchar_t* v41 = (wchar_t*)gText.Bsearch("repbons");
+    wcsncpy(this->pMenuPage[6].pMenuEntry[0].TextMenuElement, v41, 0x32u);
+    this->pMenuPage[6].pMenuEntry[0].X = this->PrintCentr(
+        this->pMenuPage[6].pMenuEntry[0].TextMenuElement,
+        this->pMenuPage[6].pMenuEntry[0].StringLength,
+        320);
+    this->pMenuPage[6].pMenuEntry[0].SelectMenu = 259;
+    this->pMenuPage[6].pMenuEntry[1].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[6].pMenuEntry[1].Y = 360;
+    wchar_t* v42 = (wchar_t*)gText.Bsearch("nxt_lvl");
+    wcsncpy(this->pMenuPage[6].pMenuEntry[1].TextMenuElement, v42, 0x32u);
+    this->pMenuPage[6].pMenuEntry[1].X = this->PrintCentr(
+        this->pMenuPage[6].pMenuEntry[1].TextMenuElement,
+        this->pMenuPage[6].pMenuEntry[1].StringLength,
+        320);
+    this->pMenuPage[6].pMenuEntry[1].SelectMenu = 6;
+    this->pMenuPage[6].pMenuEntry[2].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[6].pMenuEntry[2].Y = 380;
+    wchar_t* v43 = (wchar_t*)gText.Bsearch("mainmen");
+    wcsncpy(this->pMenuPage[6].pMenuEntry[2].TextMenuElement, v43, 0x32u);
+    this->pMenuPage[6].pMenuEntry[2].X = Menu::PrintCentr(
+        this->pMenuPage[6].pMenuEntry[2].TextMenuElement,
+        this->pMenuPage[6].pMenuEntry[2].StringLength,
+        320);
+    this->pMenuPage[6].pMenuEntry[2].SelectMenu = MENUPAGE_START_MENU;
+    this->pMenuPage[6].pMenuItem[0].X = 150;
+    this->pMenuPage[6].pMenuItem[0].Y = 348;
+    this->pMenuPage[6].pMenuItem[1].X = 150;
+    this->pMenuPage[6].pMenuItem[1].Y = 368;
+    this->pMenuPage[6].pMenuItem[2].X = 150;
+    this->pMenuPage[6].pMenuItem[2].Y = 388;
+    this->pMenuPage[6].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[6].SelectActiveElementDefault = MENUPAGE_START_MENU;
 }
 // это мое меню уже 
 inline void Menu::NetworkGameMenuCreate() {
-    
+    this->pMenuPage[7].numMenuItems = MENUPAGE_PLAY;
+    this->pMenuPage[7].numMenuItems1 = 14;
+    this->pMenuPage[7].pGUI[0].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[0].X = 35;
+    this->pMenuPage[7].pGUI[0].Y = 11;
+    this->pMenuPage[7].pGUI[0].dX = 13;
+    this->pMenuPage[7].pGUI[0].dY = 5;
+    this->pMenuPage[7].pGUI[1].Element= MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[1].X = 100;
+    this->pMenuPage[7].pGUI[1].Y = 170;
+    wcsncpy(this->pMenuPage[7].pGUI[1].TextMenuElement, L"gText_Menu", 0x32u);
+    this->pMenuPage[7].pGUI[2].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[2].X = 100;
+    this->pMenuPage[7].pGUI[2].Y = 190;
+    wcsncpy(this->pMenuPage[7].pGUI[2].TextMenuElement, L"gText_Menu", 0x32u);
+    this->pMenuPage[7].pGUI[3].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[3].X = 100;
+    this->pMenuPage[7].pGUI[3].Y = 210;
+    wcsncpy(this->pMenuPage[7].pGUI[3].TextMenuElement, L"gText_Menu", 0x32u);
+    this->pMenuPage[7].pGUI[4].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[4].X = 100;
+    this->pMenuPage[7].pGUI[4].Y = 230;
+    wcsncpy(this->pMenuPage[7].pGUI[4].TextMenuElement, L"gText_Menu", 0x32u);
+    this->pMenuPage[7].pGUI[5].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[5].X = 100;
+    this->pMenuPage[7].pGUI[5].Y = 250;
+    wcsncpy(this->pMenuPage[7].pGUI[5].TextMenuElement, L"gText_Menu", 0x32u);
+    this->pMenuPage[7].pGUI[6].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[6].X = 100;
+    this->pMenuPage[7].pGUI[6].Y = 270;
+    wcsncpy(this->pMenuPage[7].pGUI[6].TextMenuElement, L"gText_Menu", 0x32u);
+    this->pMenuPage[7].pGUI[7].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[7].Y = 300;
+    wchar_t* v44 = (wchar_t*)gText.Bsearch("kills_h");
+    wcsncpy(this->pMenuPage[7].pGUI[7].TextMenuElement, v44, 0x32u);
+    this->pMenuPage[7].pGUI[7].X = this->PrintCentr(this->pMenuPage[7].pGUI[7].TextMenuElement, this->pMenuPage[7].pGUI[7].dX, 320);
+    this->pMenuPage[7].pGUI[8].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[8].X = 100;
+    this->pMenuPage[7].pGUI[8].Y = 320;
+    this->pMenuPage[7].pGUI[9].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[9].X = 100;
+    this->pMenuPage[7].pGUI[9].Y = 340;
+    this->pMenuPage[7].pGUI[10].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[10].X = 100;
+    this->pMenuPage[7].pGUI[10].Y = 360;
+    this->pMenuPage[7].pGUI[11].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[11].X = 100;
+    this->pMenuPage[7].pGUI[11].Y = 380;
+    this->pMenuPage[7].pGUI[12].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[12].X = 100;
+    this->pMenuPage[7].pGUI[12].Y = 400;
+    this->pMenuPage[7].pGUI[13].Element = MENUPAGE_PLAY;
+    this->pMenuPage[7].pGUI[13].X = 30;
+    this->pMenuPage[7].pGUI[13].Y = 150;
+    this->pMenuPage[7].pMenuEntry[0].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[7].pMenuEntry[0].Y = 430;
+    wchar_t* v45 = (wchar_t*)gText.Bsearch( "quit");
+    wcsncpy(this->pMenuPage[7].pMenuEntry[0].TextMenuElement, v45, 0x32u);
+    this->pMenuPage[7].pMenuEntry[0].X = this->PrintCentr(
+       this->pMenuPage[7].pMenuEntry[0].TextMenuElement,
+        this->pMenuPage[7].pMenuEntry[0].StringLength,
+        320);
+    this->pMenuPage[7].pMenuEntry[0].SelectMenu = MENUPAGE_QUIT;
+    this->pMenuPage[7].pMenuItem[0].X = 180;
+    this->pMenuPage[7].pMenuItem[0].Y = 438;
+    this->pMenuPage[7].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[7].SelectActiveElementDefault = MENUPAGE_START_MENU;
    
 }
 inline void Menu::OptionsMenuCreate() {
   
 
+}
+
+inline void Menu::NiceTryMenuCreate() {
+    this->pMenuPage[10].numMenuItems = MENUPAGE_PLAY;
+    this->pMenuPage[10].numMenuItems1 = MENUPAGE_PLAY;
+    this->pMenuPage[10].pGUI[0].Element = MENUPAGE_PLAY;
+    this->pMenuPage[10].pGUI[0].Y = 230;
+    wchar_t* v48 = (wchar_t*)gText.Bsearch("nicetry");
+    wcsncpy(this->pMenuPage[10].pGUI[0].TextMenuElement, v48, 0x32u);
+    
+    this->pMenuPage[10].pGUI[0].dX = 13;
+    this->pMenuPage[10].pGUI[0].X = 
+        this->PrintCentr(this->pMenuPage[10].pGUI[0].TextMenuElement, 13, 320);
+    this->pMenuPage[10].pGUI[0].dY = 4;
+    this->pMenuPage[10].pMenuEntry[0].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[10].pMenuEntry[0].X = 180;
+    this->pMenuPage[10].pMenuEntry[0].Y = 410;
+    wchar_t*  pMainmen = (wchar_t*)gText.Bsearch( "mainmen");
+    wcsncpy(this->pMenuPage[10].pMenuEntry[0].TextMenuElement, pMainmen, 0x32u);
+    this->pMenuPage[10].pMenuEntry[0].SelectMenu = MENUPAGE_START_MENU;
+    this->pMenuPage[10].pMenuItem[0].X = 160;
+    this->pMenuPage[10].pMenuItem[0].Y = 418;
+    this->pMenuPage[10].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[10].SelectActiveElementDefault = MENUPAGE_START_MENU;
+}
+
+inline void Menu::CodeDebugMenuCreate() {
+    this->pMenuPage[14].numMenuItems = MENUPAGE_PLAY;
+    this->pMenuPage[14].numMenuItems1 = 5;
+    this->pMenuPage[14].pMenuEntry[0].eMenuActions = MENUPAGE_PLAY;
+    this->pMenuPage[14].pMenuEntry[0].X = 170;
+    this->pMenuPage[14].pMenuEntry[0].Y = 340;
+    this->pMenuPage[14].pMenuEntry[0].SelectMenu = 268;
+    this->pMenuPage[14].pGUI[0].Element = MENUPAGE_PLAY;
+    this->pMenuPage[14].pGUI[0].X = 20;
+    this->pMenuPage[14].pGUI[0].Y = 160;
+    wchar_t* v50 = (wchar_t*) gText.Bsearch( "fr_ent1");
+    wcsncpy(this->pMenuPage[14].pGUI[0].TextMenuElement, v50, 0x32u);
+    this->pMenuPage[14].pGUI[1].Element = MENUPAGE_PLAY;
+    this->pMenuPage[14].pGUI[1].X = 20;
+    this->pMenuPage[14].pGUI[1].Y = 180;
+    wchar_t* v51 = (wchar_t*) gText.Bsearch( "fr_ent2");
+    wcsncpy(this->pMenuPage[14].pGUI[1].TextMenuElement, v51, 0x32u);
+    this->pMenuPage[14].pGUI[2].Element = MENUPAGE_PLAY;
+    this->pMenuPage[14].pGUI[2].X = 20;
+    this->pMenuPage[14].pGUI[2].Y = 200;
+    wcsncpy(this->pMenuPage[14].pGUI[2].TextMenuElement, L"gText_Menu:", 0x32u);
+    this->pMenuPage[14].pGUI[3].Element = MENUPAGE_PLAY;
+    this->pMenuPage[14].pGUI[3].X = 20;
+    this->pMenuPage[14].pGUI[3].Y = 300;
+    wchar_t* v52 = (wchar_t*) gText.Bsearch( "fr_pmpt");
+    wcsncpy(this->pMenuPage[14].pGUI[3].TextMenuElement, v52, 0x32u);
+    this->pMenuPage[14].pGUI[4].Element = MENUPAGE_PLAY;
+    this->pMenuPage[14].pGUI[4].X = 20;
+    this->pMenuPage[14].pGUI[4].Y = 320;
+    wchar_t* v53 = (wchar_t*) gText.Bsearch( "score");
+    wcsncpy(this->pMenuPage[14].pGUI[4].TextMenuElement, v53, 0x32u);
+    this->pMenuPage[14].pMenuItem[0].X = 150;
+    this->pMenuPage[14].pMenuItem[0].Y = 348;
+    this->pMenuPage[14].IndexMenuActions = MENUPAGE_START_MENU;
+    this->pMenuPage[14].SelectActiveElementDefault = MENUPAGE_START_MENU;
 }
 inline void Menu::NetworkServerMenuCreate() {
 
@@ -893,7 +1104,9 @@ short  Menu::LoadTextMenu() {
     //4
     this->CompliteGameMenuCreate();
 
-    this->BonusAMenuCreate();
+    this->BonusStageAMenuCreate();
+    this->BonusStageBMenuCreate();
+    this->BonusStageCMenuCreate();
 
     //11
     this->ResumeLoadSaveCreate();
@@ -902,7 +1115,7 @@ short  Menu::LoadTextMenu() {
     this->OptionsMenuCreate();
     
 
-
+    this->pS139.ScrollingText();
 
 
 
