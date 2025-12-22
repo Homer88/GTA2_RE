@@ -27,6 +27,7 @@
 #include "EngineStruct.h"
 
 #include "FileMgr.h"
+#include "Font.h"
 
 #include "Game.h"
 #include "GameObject.h"
@@ -219,6 +220,7 @@ extern  Door		gDoor;
 extern  Display		gDisplay;
 extern	DMAudio		gDMAudio;
 extern  FileMgr		gFileMgr;
+extern  Font		gFont;
 extern	Game		gGame;
 extern	Gangs		gGangs;
 extern	GameObject  gGameObject;

@@ -139,6 +139,7 @@ Door						gDoor;
 Display						gDisplay;
 DMAudio						gDMAudio;
 FileMgr						gFileMgr;
+Font						gFont;
 Game						gGame;
 GameObject					gGameObject;
 Gangs						gGangs;

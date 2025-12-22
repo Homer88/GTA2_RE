@@ -47,15 +47,20 @@ public:
 
 		 Menu();
 		 ~Menu() {};
+
+		 //методы  inline
 		 void MainMenuCreate();
 		 void PlayMenuCreate();
 		 void BonusAMenuCreate();
 		 void CompliteLevelMenuCreate();
+		 void ResumeLoadSaveCreate();
 		 // мои исправление 
 		 void OptionsMenuCreate();
 		 void NetworkGameMenuCreate();
 		 void NetworkServerMenuCreate();
 		 void NetworkClientMenuCreate();
+		 
+		 //обычные 
 
 		 void SetFrontendKeysEnabled(byte param);
 		 wchar_t* getPlayerProfileName();
@@ -67,6 +72,7 @@ public:
 		 void SetPlayerNameFromMenu();
 		 PlayerSlotSave* getPlayerProfileNamePlayerData();
 		 short  LoadTextMenu();
+		 short PrintCentr(wchar_t* TextElement, unsigned short stringLength, unsigned short centrScreen);
 
 		 
 

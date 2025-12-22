@@ -372,7 +372,10 @@ PlayerSlotSave* Menu::getPlayerProfileNamePlayerData() {
 
 enum EnumMenuPage {
     MainMenu = 0,
-    PlayMenu=1,
+    PlayMenu = 1,
+    RIP = 2,
+    ResumeLoadSaveMenu=11,
+
 };
 
 enum EnumPlayMenuElement {
@@ -382,7 +385,31 @@ enum EnumPlayMenuElement {
     StartPlayInArena = 3,
     BonusIcon=4,
 };
-void Menu::MainMenuCreate() {
+
+
+enum  SpriteTable{
+     CircleSprite = 0u,
+     LeftArrowRedSprite = 1u,
+     RightArrowRedSprite = 2u,
+     LeftArrowWhiteSprite = 3u,
+     RightArrowWhiteSprite = 4u,
+     UpArrowYelowSprite = 5u,
+ 
+};
+enum ElementGUI {
+    PlayArenaCircle = 0,
+    BonusCircle = 1,
+    PlayArenaLeftArrowRed = 2,
+    BonusLeftArrowRed = 3,
+    PlayArenaLeftArrowRed1 = 4,
+    PlayArenaRightArrowRed1 = 5,
+    BonusLeftArrowRed1 = 6,
+    BonusRightArrowRed1 = 7,
+    PlayNameLeftArrowRed = 8,
+    PlayNameRightArrowRed = 9,
+};
+
+inline void Menu::MainMenuCreate() {
 
     this->pMenuPage[MainMenu].numMenuItems = 3; // число элементов на странице
     //Пункт Меню Play
@@ -435,7 +462,7 @@ void Menu::MainMenuCreate() {
     this->pMenuPage[MainMenu].SelectActiveElementDefault = play;
 }
 
-void Menu::PlayMenuCreate() {
+inline void Menu::PlayMenuCreate() {
 
     //PlayMenu
     this->pMenuPage[PlayMenu].numMenuItems = 5;
@@ -502,36 +529,161 @@ void Menu::PlayMenuCreate() {
     this->pMenuPage[PlayMenu].IndexMenuActions = 3;
     this->pMenuPage[PlayMenu].SelectActiveElementDefault = StartPlayInArena;
 
-    this->pMenuPage[1].pGUI[0].Element = 3;// Иконка бонуса
-    this->pMenuPage[1].pGUI[0].X = 420;
-    this->pMenuPage[1].pGUI[0].Y = 310;
+    this->pMenuPage[PlayMenu].numMenuItems1 = 10;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaCircle].Element = 3;// Иконка бонуса
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaCircle].X = 420;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaCircle].Y = 310;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaCircle].SpriteInterface = CircleSprite;
+    
+    this->pMenuPage[PlayMenu].pGUI[BonusCircle].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[BonusCircle].X = 420;
+    this->pMenuPage[PlayMenu].pGUI[BonusCircle].Y = 390;
+    this->pMenuPage[PlayMenu].pGUI[BonusCircle].SpriteInterface = CircleSprite;
+
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed].Element = 1;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed].X = 410;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed].Y = 298;
+    wchar_t* CarDamage = (wchar_t*)gText.Bsearch("car_dam");
+    wcsncpy(this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed].TextMenuElement, CarDamage, 50);
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed].dX = 8; //Переменная должна быть
+
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed].Element = 1;
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed].X = 410;
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed].Y = 378;
+    wchar_t* CarDamage1 = (wchar_t*)gText.Bsearch("car_dam");
+    wcsncpy(this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed].TextMenuElement, CarDamage1, 50);
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed].dX = 8; //Переменная должна быть
+
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed1].X = 380;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed1].Y = 310;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed1].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaLeftArrowRed1].SpriteInterface = LeftArrowRedSprite;
+
+
+
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaRightArrowRed1].X = 460;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaRightArrowRed1].Y = 310;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaRightArrowRed1].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[PlayArenaRightArrowRed1].SpriteInterface = RightArrowRedSprite;
+
+
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed1].X = 380;
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed1].Y = 390;
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed1].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[BonusLeftArrowRed1].SpriteInterface = LeftArrowRedSprite;
+
+
+    this->pMenuPage[PlayMenu].pGUI[BonusRightArrowRed1].X = 460;
+    this->pMenuPage[PlayMenu].pGUI[BonusRightArrowRed1].Y = 390;
+    this->pMenuPage[PlayMenu].pGUI[BonusRightArrowRed1].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[BonusRightArrowRed1].SpriteInterface = RightArrowRedSprite;
+
+    this->pMenuPage[PlayMenu].pGUI[PlayNameLeftArrowRed].X = 290;
+    this->pMenuPage[PlayMenu].pGUI[PlayNameLeftArrowRed].Y = 222;
+    this->pMenuPage[PlayMenu].pGUI[PlayNameLeftArrowRed].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[PlayNameLeftArrowRed].SpriteInterface = LeftArrowRedSprite;
+
+    this->pMenuPage[PlayMenu].pGUI[PlayNameRightArrowRed].X = 580;
+    this->pMenuPage[PlayMenu].pGUI[PlayNameRightArrowRed].Y = 222;
+    this->pMenuPage[PlayMenu].pGUI[PlayNameRightArrowRed].Element = 3;
+    this->pMenuPage[PlayMenu].pGUI[PlayNameRightArrowRed].SpriteInterface = RightArrowRedSprite;
+
 
 }
-void Menu::CompliteLevelMenuCreate(){
+
+inline void Menu::CompliteLevelMenuCreate(){
 
 }
 
-void Menu::BonusAMenuCreate() {
+inline void Menu::ResumeLoadSaveCreate() {
+
+    this->pMenuPage[ResumeLoadSaveMenu].numMenuItems = 3;
+    this->pMenuPage[ResumeLoadSaveMenu].numMenuItems1 = 1;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pGUI[0].Element = 1;
+    this->pMenuPage[ResumeLoadSaveMenu].pGUI[0].X = 35;
+    this->pMenuPage[ResumeLoadSaveMenu].pGUI[0].Y = 11;
+    wchar_t* TextPlayerQuit = (wchar_t*) gText.Bsearch("plr_qut");
+    CopyWideString(this->pMenuPage[ResumeLoadSaveMenu].pGUI[0].TextMenuElement, TextPlayerQuit);
+
+    this->pMenuPage[ResumeLoadSaveMenu].pGUI[0].dX = 13; 
+    this->pMenuPage[ResumeLoadSaveMenu].pGUI[0].dY = 5;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].eMenuActions = 1;
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].Y = 392;
+    wchar_t* ResumeSavedStatus = (wchar_t*)gText.Bsearch("savepos");
+    wcsncpy(this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].TextMenuElement, ResumeSavedStatus, 50);
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].X = this->PrintCentr(this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].TextMenuElement,
+        this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].StringLength, 320);
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[0].SelectMenu = 260;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].eMenuActions = 1;
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].Y = 412;
+
+    wchar_t* ReplayPreviousArea = (wchar_t*)gText.Bsearch("replay");
+    wcsncpy(this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].TextMenuElement, ReplayPreviousArea, 50);
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].X = this->PrintCentr(this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].TextMenuElement,
+        this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].StringLength, 320);
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[1].SelectMenu = 259;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].eMenuActions = 1;
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].Y = 432;
+
+    wchar_t* BackToMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wcsncpy(this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].TextMenuElement, BackToMainMenu, 50);
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].X = this->PrintCentr(this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].TextMenuElement,
+        this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].StringLength, 320);
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuEntry[2].SelectMenu = 0;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuItem[0].X = 150;
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuItem[0].Y = 400;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuItem[1].X = 150;
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuItem[1].Y = 420;
+
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuItem[2].X = 150;
+    this->pMenuPage[ResumeLoadSaveMenu].pMenuItem[2].Y = 440;
+
+    this->pMenuPage[ResumeLoadSaveMenu].IndexMenuActions = 0;
+    this->pMenuPage[ResumeLoadSaveMenu].SelectActiveElementDefault = 0;
+
+
+
+
+
+    
+}
+
+inline  void Menu::YouAreDead_RIP() {
+
+}
+
+inline void Menu::BonusAMenuCreate() {
 
 }
 // это мое меню уже 
-void Menu::NetworkGameMenuCreate() {
+inline void Menu::NetworkGameMenuCreate() {
 
 }
-void Menu::OptionsMenuCreate() {
+inline void Menu::OptionsMenuCreate() {
   
 
 }
-void Menu::NetworkServerMenuCreate() {
+inline void Menu::NetworkServerMenuCreate() {
 
 }
-void Menu::NetworkClientMenuCreate() {
+inline void Menu::NetworkClientMenuCreate() {
 
 }
 short  Menu::LoadTextMenu() {
+
     this->CountPages = 16;
     this->MainMenuCreate();
     this->PlayMenuCreate();
+    this->ResumeLoadSaveCreate();
+
     this->BonusAMenuCreate();
 
 
@@ -546,4 +698,12 @@ short  Menu::LoadTextMenu() {
 
     return 0;
 
+}
+
+short Menu::PrintCentr(wchar_t* TextElement, unsigned short stringLength, unsigned short centrScreen) {
+
+    if (stringLength == 0xFFFF)
+        return centrScreen - (gFont.GetStringWidth(TextElement, &this->FontStyle) >> 1);
+    else
+        return centrScreen - (gFont.GetStringWidth(TextElement, &stringLength) >> 1);
 }

@@ -10,6 +10,7 @@ public:
 	short X;
 	short Y;
 	wchar_t TextMenuElement[50];
+	short StringLength;
 	unsigned short PlayerSlot;
 	unsigned short PlayerSlot1;
 	char FLAG[7];

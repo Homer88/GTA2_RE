@@ -9,6 +9,7 @@ class MenuPage {
 	
 public:
 	unsigned short numMenuItems;
+	unsigned short numMenuItems1;
 	MenuEntry  pMenuEntry[10];
 	MenuItem   pMenuItem[10];
 	GUI   pGUI[15];

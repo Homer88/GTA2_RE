@@ -11,7 +11,7 @@ public:
 	short Y;
 	int SpriteInterface;
 	wchar_t TextMenuElement[50];
-	short dx;
-	short dy;
+	short dX;
+	short dY;
 };
 #endif
