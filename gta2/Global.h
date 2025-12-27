@@ -1,10 +1,10 @@
 #ifndef __GLOBAL_H_
 #define	__GLOBAL_H_
 
-#include <windows.h>
 #include <direct.h>
 #include <memory.h>
 #include <wchar.h> 
+#include <windows.h>
 
 #include "Ambulance.h"
 #include "AudioManager.h"
@@ -15,14 +15,14 @@
 #include "CarEngines.h"
 #include "CarsPrefabs.h"
 #include "CarSystemManager.h"
-#include "Collide.h"
 #include "Character.h"
+#include "Collide.h"
 
-#include "Door.h"
 #include "DebugLogFile.h"
 #include "Display.h"
-#include "DMAudio.h"
 #include "diutil.h"
+#include "DMAudio.h"
+#include "Door.h"
 
 #include "EngineStruct.h"
 
@@ -31,6 +31,7 @@
 
 #include "Game.h"
 #include "GameObject.h"
+#include "Gang.h"
 #include "Gangs.h"
 #include "General.h"
 
@@ -42,19 +43,19 @@
 
 #include "MapGm.h"
 #include "MapRelatedStruct.h"
+#include "Menu.h"
 #include "MissionManager.h"
 #include "Movie.h"
-#include "Menu.h"
 
 #include "Network.h"
 
+#include "Particles.h"
 #include "Passenger.h"
 #include "Ped.h"
 #include "PedManager.h"
-#include "Police.h"
 #include "Player.h"
 #include "plydat.h"
-#include "Particles.h"
+#include "Police.h"
 #include "PublicTransport.h"
 
 #include "SpriteEntry.h"
@@ -201,55 +202,57 @@ extern	int			gTimer, gTime;
 extern  byte		gControl;
 extern const char	gD3ddll[11];
 extern const char	gDmavideo[13];
+extern char			gKeyBuffer[255];
 
 extern char			 gLanguage[256];
 extern unsigned char gNamePlayerASCII[80];
 extern bool			 gNetworkGame;
 
-extern  Ambulance	 gAmbulance;
-extern	AudioManager gAudioManager;
+extern  Ambulance					gAmbulance;
+extern	AudioManager				gAudioManager;
 
-extern  CameraOrPhysics gCameraOrPhysics;
-extern	Car			gCar;
-extern	CarEngines	gCarEngines;
-extern	CarsPrefabs gCarsPrefabs;
-extern  CarSystemManager gCarSystemManager;
-extern  Collide		gCollide;
-extern  Character	gCharacter;
-extern  Door		gDoor;
-extern  Display		gDisplay;
-extern	DMAudio		gDMAudio;
-extern  FileMgr		gFileMgr;
-extern  Font		gFont;
-extern	Game		gGame;
-extern	Gangs		gGangs;
-extern	GameObject  gGameObject;
-
-
-extern	General		gGeneral;
-
-extern	Object		gObject;
-extern	Keyboard	gKeyboard;
-extern 	MapGm 		gMapGm;
-extern	MapRelatedStruct	gMapRelatedStruct;
-extern  MissionManager gMissionManager;
-extern	Menu		gMenu;
-extern	Movie		gMovie;
-extern	Network		gNetwork;
+extern  CameraOrPhysics				gCameraOrPhysics;
+extern	Car							gCar;
+extern	CarEngines					gCarEngines;
+extern	CarsPrefabs					gCarsPrefabs;
+extern  CarSystemManager			gCarSystemManager;
+extern  Collide						gCollide;
+extern  Character					gCharacter;
+extern  Door						gDoor;
+extern  Display						gDisplay;
+extern	DMAudio						gDMAudio;
+extern  FileMgr						gFileMgr;
+extern  Font						gFont;
+extern	Game						gGame;
+extern	GameObject					gGameObject;
+extern	Gangs						gGangs;
 
 
-extern	HUD			gHUD;
 
-extern  PlayerData	gPlayerData;
+extern	General						gGeneral;
 
-extern	Ped			gPed;
-extern  PedManager	gPedManager;
-extern  Police		gPolice;
-extern  Particles	gParticles;
-extern  PublicTransport gPublicTransport;
-extern	Registry	gRegistry;
-extern	Replay		gReplay;
-extern  SpriteEntry	gSpriteEntry;
+extern	Object						gObject;
+extern	Keyboard					gKeyboard;
+extern 	MapGm 						gMapGm;
+extern	MapRelatedStruct			gMapRelatedStruct;
+extern  MissionManager				gMissionManager;
+extern	Menu						gMenu;
+extern	Movie						gMovie;
+extern	Network						gNetwork;
+
+
+extern	HUD							gHUD;
+
+extern  PlayerData					gPlayerData;
+
+extern	Ped							gPed;
+extern  PedManager					gPedManager;
+extern  Police						gPolice;
+extern  Particles					gParticles;
+extern  PublicTransport				gPublicTransport;
+extern	Registry					gRegistry;
+extern	Replay						gReplay;
+extern  SpriteEntry					gSpriteEntry;
 extern	SpriteS1	gSpriteS1;
 extern	Style		gStyle;
 extern  Taxi		gTaxi;

@@ -11,7 +11,7 @@ Game::~Game() {
     gDMAudio.~DMAudio();
     int index = 0;
     if (this->MaxIdx) {
-        Player1 = this->pPlayer1;
+       /* Player1 = this->pPlayer1;
         do {
             if (Player1.Status) {
                 Player1.~Player();
@@ -19,7 +19,7 @@ Game::~Game() {
             *Player1 = NULL;
             ++index;
             ++Player1;
-        } while (index < this->MaxIdx);
+        } while (index < this->MaxIdx);*/
     }
 
     gGeneral.~General();
@@ -114,8 +114,8 @@ Game::~Game() {
         gPolice.~Police();
     //if (gS115)
       //  S115::S115_des(gS115, 1);
-    if (gGangs.Status)
-        gGangs.~Gangs();
+   // if (gGangs.Status)
+     //   gGangs.~Gangs();
    
     //if (gS119)
       //  S119::S119_des(gS119, 1);

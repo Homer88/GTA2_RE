@@ -83,10 +83,10 @@ public:
 		 void InitializeState(int Pages);
 		 void PlayerCheat(wchar_t* PlayerName);
 		 void SetPlayerNameFromMenu();
-		 PlayerSlotSave* getPlayerProfileNamePlayerData();
+		 void* getPlayerProfileNamePlayerData();
 		 short  LoadTextMenu();
 		 short PrintCentr(wchar_t* TextElement, unsigned short stringLength, unsigned short centrScreen);
-
+		 void FindBackground(int  pMenuPic, unsigned __int8* Left, unsigned __int8* Right);
 		 
 
 	

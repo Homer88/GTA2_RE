@@ -4,7 +4,7 @@
 
 
 Ped::Ped(){
-    this->field_100 = 0;
+    ///this->field_100 = 0;
 }
 
 Ped::~Ped(){

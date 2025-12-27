@@ -278,7 +278,7 @@ bool Car::isTVVAN(){
 }
 
 
-Player* Car::GetPlayer(){
+class Player* Car::GetPlayer(){
 
     return this->Driver->Player;
 }
@@ -292,9 +292,9 @@ char Car::HandleMaskTransition()
     switch (this->Mask)
     {
     case 2:
-        if (!Car::sub_424010(this))
-            return 0;
-        goto LABEL_5;
+       // if (!this->sub_424010(this))
+        ///    return 0;
+        //goto LABEL_5;
     case 3:
     LABEL_5:
         this->Mask = 5;
@@ -353,6 +353,6 @@ bool  Car::isTaxi()
 
 void*  Car::GetInfoByTypeCar()
 {
-    strcpy(gKeyBuffer, "car%d%c%c", this->CarType, 0, 0);
-    return Text::Bsearch(gText, gKeyBuffer);
+    strcpy(gKeyBuffer, ("car%d%c%c", this->CarType, 0, 0));
+    return gText.Bsearch((wchar_t*)gKeyBuffer);
 }

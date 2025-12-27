@@ -137,7 +137,7 @@ public:
     char UpdateDamageCooldown();
     void SetMask();
     void SetHornDefault();
-    Player* GetPlayer();
+    class Player* GetPlayer();
     int  GetCarModel();
     void SetSound(int a2);
     char HandleMaskTransition();

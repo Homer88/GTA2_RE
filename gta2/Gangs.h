@@ -5,12 +5,13 @@
 #include "Gang.h"
 
 
-class Gang;
 
 class  Gangs{
+
 public: 
+
 	bool Status;
-	class Gang pGang[10];
+	class Gang *pGang;
 
 	Gangs();
 	~Gangs();

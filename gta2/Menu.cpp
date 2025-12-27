@@ -65,29 +65,7 @@ enum  MenuPages // 4 bytes
     MENUPAGE_NETWORK_CLIENT = 402,
 
 };
-enum  MenuPicture {
-    Options = 0u,
-    Play = 1u,
-    Quit = 2u,
-    MenuPic_3 = 3u,
-    MenuPic_4 = 4u,
-    MenuPic_5 = 5u,
-    VievHigh = 6u,
-    StartLevel1 = 7u,
-    LoadSave = 8u,
-    StartLevel3 = 9u,
-    PlayerName = 10u,
-    Restart = 11u,
-    HighScores = 12u,
-    RIP = 13u,
-    MenuPic_14 = 14u,
-    MenuPic_15 = 15u,
-    ResumSave = 16u,
-    Title = 17u,
-    MenuPic_18 = 18u,
-    MenuPic_19 = 19u,
 
-};
 enum  Cheat {
     CUTIE1 = 0x33A69,                 // Дает 99 жизней
     NEKKID = 0x36F62,                 // Нудисты
@@ -116,6 +94,49 @@ enum  Cheat {
     SCHURULZ = 0x4D5C4,                 // Двойной урон
     VOLTFEST = 0x4DA77,                 // Бecкoнeчнaя Electrical Gun
     TUMYFROG = 0x5073D,                 // Вce бoнyc-ypoвни
+};
+
+enum EnumMenuPage {
+    MainMenu = 0,
+    PlayMenu = 1,
+    RIP = 2,
+    AreaCompliteMenu = 3,
+    CompliteGame = 4,
+    HighScoresForArea = 5,
+    BonusStageC = 6,
+    ResumeLoadSaveMenu = 11,
+
+};
+
+enum EnumPlayMenuElement {
+    NamePlayer = 0,
+    ResumeSaveStatus = 1,
+    ViewHighScores = 2,
+    StartPlayInArena = 3,
+    BonusIcon = 4,
+};
+
+
+enum  SpriteTable {
+    CircleSprite = 0u,
+    LeftArrowRedSprite = 1u,
+    RightArrowRedSprite = 2u,
+    LeftArrowWhiteSprite = 3u,
+    RightArrowWhiteSprite = 4u,
+    UpArrowYelowSprite = 5u,
+
+};
+enum ElementGUI {
+    PlayArenaCircle = 0,
+    BonusCircle = 1,
+    PlayArenaLeftArrowRed = 2,
+    BonusLeftArrowRed = 3,
+    PlayArenaLeftArrowRed1 = 4,
+    PlayArenaRightArrowRed1 = 5,
+    BonusLeftArrowRed1 = 6,
+    BonusRightArrowRed1 = 7,
+    PlayNameLeftArrowRed = 8,
+    PlayNameRightArrowRed = 9,
 };
 
 
@@ -168,7 +189,130 @@ unsigned short Menu::clearArrayTail() {
 }
 
 
+enum PicBackground {
+    OptionsPicBackground = 0,
+    PlayPicBackground = 1,
+    QuitPicBackground = 2,
+    MenuPicBackground_3 = 3,
+    MenuPicBackground_4 = 4,
+    MenuPicBackground_5 = 5,
+    VievHighPicBackground=6,
+    StartLevel_1_PicBackground=7,
+    LoadSavePicBackground=8,
+    StartLevel_3_PicBackground=9,
+    PlayerNamePicBackground=10,
+    RestartPicBackground=11,
+    HighScoresPicBackground=12,
+    RIPPicBackground=13,
+    MenuPicPicBackground_14=14,
+    MenuPicPicBackground_15=15,
+    ResumSavePicBackground=16,
+    TitlePicBackground = 17
 
+};
+
+enum FileBackground {
+    GTA2FileBackground = 0,
+    OptionsFileBackground = 1,
+    PlayFileBackground=2,
+    QuitFileBackground=3,
+    GTA2FileBackground_2=4,
+    PicMenuFiles_5=5,
+    PicMenuFiles_6=6,
+    PicMenuFiles_7=7,
+    VievHighFileBackground=8,
+    level_1_FileBackground=9,
+    LoadSaveFileBackground=10,
+    Level_3_FileBackground=11,
+    PlayerNameFileBackground=12,
+    RestartFileBackground=13,
+    HighScoresFileBackground=15,
+    PicMenuFiles_16=16,
+    ResumSaveFileBackground=17,
+    PicMenuFiles_18=18,
+    TitleFileBackground=22,
+    RIPFileBackground = 19,
+};
+void Menu::FindBackground( int  pMenuPic, unsigned __int8* Left, unsigned __int8* Right){
+    switch (pMenuPic)
+    {
+    case OptionsPicBackground:
+        *Left = OptionsFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    case PlayPicBackground:
+        *Left = PlayFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    case QuitPicBackground:
+        *Left = QuitFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    case MenuPicBackground_3:
+        *Left = PicMenuFiles_5;
+        *Right = GTA2FileBackground_2;
+        break;
+    case MenuPicBackground_4:
+        *Left = PicMenuFiles_6;
+        *Right = GTA2FileBackground_2;
+        break;
+    case MenuPicBackground_5:
+        *Left = PicMenuFiles_7;
+        *Right = GTA2FileBackground_2;
+        break;
+    case VievHighPicBackground:
+        *Left = VievHighFileBackground;
+        *Right = GTA2FileBackground_2;
+        break;
+    case StartLevel_1_PicBackground:
+        *Left = level_1_FileBackground;
+        *Right = GTA2FileBackground_2;
+        break;
+    case LoadSavePicBackground:
+        *Left = LoadSaveFileBackground;
+        *Right = GTA2FileBackground_2;
+        break;
+    case StartLevel_3_PicBackground:
+        *Left = Level_3_FileBackground;
+        *Right = GTA2FileBackground_2;
+        break;
+    case PlayerNamePicBackground:
+        *Left = PlayerNameFileBackground;
+        *Right = GTA2FileBackground_2;
+        break;
+    case RestartPicBackground:
+        *Left = RestartFileBackground;
+        *Right = GTA2FileBackground_2;
+        break;
+    case HighScoresPicBackground:
+        *Left = HighScoresFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    case RIPPicBackground:
+        *Left = RIPFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    case MenuPicPicBackground_14:
+        *Left = PicMenuFiles_18;
+        *Right = GTA2FileBackground;
+        break;
+    case MenuPicPicBackground_15:
+        *Left = PicMenuFiles_16;
+        *Right = GTA2FileBackground;
+        break;
+    case ResumSavePicBackground:
+        *Left = ResumSaveFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    case TitlePicBackground:
+        *Left = TitleFileBackground;
+        *Right = GTA2FileBackground;
+        break;
+    default:
+        break;
+        return;
+    }
+}
 
 
 
@@ -365,53 +509,13 @@ void Menu::SetPlayerNameFromMenu() {
 }
 
 
-PlayerSlotSave* Menu::getPlayerProfileNamePlayerData() {
+void* Menu::getPlayerProfileNamePlayerData() {
 
     return &gPlayerData.pPlayerSlotSave[gMapGm.GetPlayerSlotSave()];
 }
 
-enum EnumMenuPage {
-    MainMenu = 0,
-    PlayMenu = 1,
-    RIP = 2,
-    AreaCompliteMenu=3,
-    CompliteGame = 4,
-    HighScoresForArea=5,
-    BonusStageC=6,
-    ResumeLoadSaveMenu=11,
-
-};
-
-enum EnumPlayMenuElement {
-    NamePlayer = 0,
-    ResumeSaveStatus = 1,
-    ViewHighScores = 2,
-    StartPlayInArena = 3,
-    BonusIcon=4,
-};
 
 
-enum  SpriteTable{
-     CircleSprite = 0u,
-     LeftArrowRedSprite = 1u,
-     RightArrowRedSprite = 2u,
-     LeftArrowWhiteSprite = 3u,
-     RightArrowWhiteSprite = 4u,
-     UpArrowYelowSprite = 5u,
- 
-};
-enum ElementGUI {
-    PlayArenaCircle = 0,
-    BonusCircle = 1,
-    PlayArenaLeftArrowRed = 2,
-    BonusLeftArrowRed = 3,
-    PlayArenaLeftArrowRed1 = 4,
-    PlayArenaRightArrowRed1 = 5,
-    BonusLeftArrowRed1 = 6,
-    BonusRightArrowRed1 = 7,
-    PlayNameLeftArrowRed = 8,
-    PlayNameRightArrowRed = 9,
-};
 
 inline void Menu::MainMenuCreate() {
 

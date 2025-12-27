@@ -6,6 +6,7 @@
 #include "Global.h"
 
 #pragma comment(lib, "version.lib")
+#pragma comment(lib, "winmm.lib")
 
 
 ///Switch 
@@ -16,6 +17,8 @@
 // Обработчик сообщений
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     HWND pHWND;
+    char  CDVol = 0;
+    char SFXVol = 0;
     if (uMsg <= 70) {
 
         if (uMsg == 70) {
@@ -73,9 +76,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 break;
             case RunPlayVideo:
                 gDMAudio.InitAudioManager3D();
-                char  CDVol = gRegistry.ConfigureSoundSetting("CDVol", 127);
+                CDVol = gRegistry.ConfigureSoundSetting("CDVol", 127);
                 gDMAudio.SetCDVol(CDVol);
-                char SFXVol = gRegistry.ConfigureSoundSetting("SFXVol", 127);
+                SFXVol = gRegistry.ConfigureSoundSetting("SFXVol", 127);
                 gDMAudio.SetSFXVol(SFXVol);
                 if (gSkipFrontend1) {
                     gDMAudio.Init3DSound(0);
@@ -107,7 +110,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
                 }
                 break;
-                return 0;
             case 8: {
                 Deff(0);
                 //DirectX();
@@ -117,6 +119,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     //gMenu.~Menu(); Файл и буфер не доступен.
 
                 }
+                break;
+
             }
         case WM_PAINT: {
             PAINTSTRUCT ps;
@@ -135,7 +139,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     }
 }
 
-int gTimer, gTime;
+//int gTimer, gTime;
 void InitTimer() {
 
     gTimer = timeGetTime();
@@ -450,13 +454,13 @@ unsigned char* ConvertWCharToChar(wchar_t* wsc)
     return gNamePlayerASCII;
 }
 
-int gRenderdevice;
-int gVideodevice;
-char gData[256] = { 0 };
-char gVideo[255] = { 0 };
+//int gRenderdevice;
+//int gVideodevice;
+//char gData[256] = { 0 };
+//char gVideo[255] = { 0 };
 
-const char gD3ddll[11] = "d3ddll.dll";
-const char gDmavideo[13] = "dmavideo.dll";
+//const char gD3ddll[11] = "d3ddll.dll";
+//const char gDmavideo[13] = "dmavideo.dll";
 int gTrippleBufferCheck;
 //BYTE gbD3ddll = "d3ddll.dll";
 
@@ -515,7 +519,6 @@ void InitInput() {
 
 }
 
-int gVideoPlay = 0;
 // Проверяет, активно ли видео (воспроизведение или пауза)
 bool IsVideoPlaying()
 {
@@ -719,7 +722,7 @@ char VideoCheck1() {
 bool SetVideoGamma(int Gamma) {
     return true;
 }
-int gGamma;
+
 void SetGamma() {
     if (SetVideoGamma(gRegistry.ConfigSetScreen("gamma", 0xAu))) {
         gGamma = 30;
@@ -761,6 +764,7 @@ int SetVideoPlayer() {
             }
         }
         SetGamma();
+        return 0;
 }
 
 
@@ -782,19 +786,13 @@ char LoadConfig() {
 }
 
 
-#include <stdlib.h> 
-void InitializePlayerData()
-{
-   
-}
 
 
 
 
 
-void PlayerData() {
 
-}
+
 
 unsigned char*  ConvertUppercaseToLower(unsigned char * str)
 {

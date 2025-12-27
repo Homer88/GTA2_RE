@@ -2,18 +2,15 @@
 #define __GAME__H_
 
 #include "Player.h"
-class Player;
-
-
 
 class Game {
 private:
-
+	int a;
 public:
 	bool Status;
 	//GameStatus *Status;
-	 Player  *pPlayer[6];
-	 Player *CurentPlayer;
+	 class Player  *pPlayer[6];
+	 class Player *CurentPlayer;
 	 char CurentPlayer__;
 	 byte ID;
 	
@@ -21,7 +18,7 @@ public:
 	char PlayerInFocus;
 	int State;
 	int SkipPolice;
-	Player *pPlayer1;
+	class Player *pPlayer1;
 	bool pSkipPolice;
 	int MaxIdx;
 

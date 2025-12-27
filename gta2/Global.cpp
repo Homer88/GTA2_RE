@@ -113,7 +113,7 @@ LPDIRECTINPUT				gDirectInput;
 
 unsigned short				gCodeInit[8] = { 829, 761, 23, 641, 43, 809, 677, 191 };
 
-
+char						gKeyBuffer[255];
 HWND						gHWND;
 int							gRenderdevice;
 int							gVideodevice;

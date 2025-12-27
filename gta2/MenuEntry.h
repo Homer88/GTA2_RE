@@ -19,5 +19,6 @@ public:
 
 
 };
+
 #endif // ! ___MenuEntry__H_
 

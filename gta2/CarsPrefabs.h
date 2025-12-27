@@ -9,8 +9,8 @@ class Car;
 
 class CarsPrefabs{
     private:
-		Car *Car2;
-		Car *Car3;
+		class Car *Car2;
+		class Car *Car3;
       
         int CarArr[306];
         unsigned short CarsCount;

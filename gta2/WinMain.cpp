@@ -11,7 +11,6 @@ HANDLE gHANDLE;
 
 DWORD	gMajor;
 DWORD	gMinor;
-HWND    gHWND;
 char    gPath[255];
 
 bool gSkipFrontend1;

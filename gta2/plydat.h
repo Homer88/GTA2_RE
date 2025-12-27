@@ -6,7 +6,7 @@
 
 class PlayerData {
 public:
-	PlayerSlotSave pPlayerSlotSave[8];
+	class PlayerSlotSave pPlayerSlotSave[8];
 
 	PlayerData();
 	void WriteFileNamePlayer(int PlayerSlot);

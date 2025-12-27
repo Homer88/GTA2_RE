@@ -1,7 +1,6 @@
 #include "Global.h"
 #include "AudioManager.h"
 
-AudioManager gAudioManager;
 
 
 int AudioManager::InitArray() {
