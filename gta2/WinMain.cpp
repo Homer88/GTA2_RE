@@ -12,6 +12,7 @@ HANDLE gHANDLE;
 DWORD	gMajor;
 DWORD	gMinor;
 char    gPath[255];
+LPRECT  lpRect;
 
 bool gSkipFrontend1;
 
@@ -59,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     FindGraphiDevace();
-    _getcwd(gPath,256);
+    getcwd(gPath,256);
 
     // 2. Создание окна
     HWND hwnd = CreateWindowEx(
@@ -86,6 +87,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // 3. Показать окно
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
+    GetClientRect(hwnd, lpRect);
+    GetWindowRect(hwnd, lpRect);
+
+
+
 
     //конфигурация видео окна
     initDirectInput(ghInstance);

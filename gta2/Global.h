@@ -225,7 +225,7 @@ extern  FileMgr						gFileMgr;
 extern  Font						gFont;
 extern	Game						gGame;
 extern	GameObject					gGameObject;
-extern	Gangs						gGangs;
+//extern	Gangs						gGangs;
 
 
 

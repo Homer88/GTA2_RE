@@ -11,7 +11,7 @@ class  Gangs{
 public: 
 
 	bool Status;
-	class Gang *pGang;
+	//class Gang *pGang;
 
 	Gangs();
 	~Gangs();
