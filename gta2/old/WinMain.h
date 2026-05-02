@@ -1,0 +1,25 @@
+#ifndef ___WIN_MAIN_H_
+#define ___WIN_MAIN_H_
+
+
+
+// Прототип функции обработки сообщений
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+void GetVersion(DWORD *pMajorVersion, DWORD *pMinorVersion);
+void FindGraphiDevace();
+bool IsVideoPlaying();
+void InitInput();
+void Deff(byte a);
+void DestructorMovie(); //FixMe
+void Destructor();//FixMe
+int BinkClose(UINT uMSG, HWND hWND);//FixMe
+int SetVideoPlayer();
+void SetGamma();
+void* ConfigureVideoSystem();
+char  LoadConfig();
+unsigned char*  ConvertUppercaseToLower(unsigned char* str);
+
+
+
+
+#endif
