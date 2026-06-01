@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0)
+project(D3DPOLY LANGUAGES CXX)
+
+
+#стандарт
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+
+#библиотеки D3DPOLY
+file(GLOB D3DPOLY_SOURCE "*.cpp")
+file(GLOB D3DPOLY_HEADERS "*.h")
+
+#lib
+add_library(D3DPOLY STATIC ${D3DPOLY_SOURCE} ${D3DPOLY_HEADERS})
+#dll
+add_library(D3DPOLY SHARED ${D3DPOLY_SOURCE} ${D3DPOLY_HEADERS})

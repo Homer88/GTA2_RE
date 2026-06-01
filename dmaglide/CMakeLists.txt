@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0)
+project(DMAGLIDE LANGUAGES CXX)
+
+
+#стандарт
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+
+#библиотеки DMAGLIDE
+file(GLOB DMAGLIDE_SOURCE "*.cpp")
+file(GLOB DMAGLIDE_HEADERS "*.h")
+
+#lib
+add_library(DMAGLIDE STATIC ${DMAGLIDE_SOURCE} ${DMAGLIDE_HEADERS})
+#dll
+add_library(DMAGLIDE SHARED ${DMAGLIDE_SOURCE} ${DMAGLIDE_HEADERS})

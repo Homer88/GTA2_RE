@@ -134,6 +134,11 @@ enum EnumPlayMenuElement {
     StartPlayInArena = 3,
     BonusIcon = 4,
 };
+enum eMenuEntry {
+    EntryPlay = 0,
+    EntryOptions = 1,
+	EntryQuit=2,
+};
 
 
 enum  SpriteTable {

@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0)
+project(PILYGON LANGUAGES CXX)
+
+
+#стандарт
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+
+#библиотеки PILYGON
+file(GLOB PILYGON_SOURCE "*.cpp")
+file(GLOB PILYGON_HEADERS "*.h")
+
+#lib
+add_library(PILYGON STATIC ${PILYGON_SOURCE} ${PILYGON_HEADERS})
+#dll
+add_library(PILYGON SHARED ${PILYGON_SOURCE} ${PILYGON_HEADERS})
