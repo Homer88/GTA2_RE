@@ -1,11 +1,27 @@
 #ifndef ___BINKW_32_H_
 #define ___BINKW_32_H_
 
+#include <windows.h>
+
 #define BINKMAJORVERSION 0
 #define BINKMINORVERSION 0
 #define BINKSUBVERSION 11
 #define BINKVERSION "0.0"
 #define BINKDATE    "2025-06-08"
+
+#define RADLINK __stdcall
+#define PTR4
+#define RADEXPFUNC
+#define RADEXPLINK __stdcall
+
+typedef unsigned int   U32;
+typedef signed int     S32;
+typedef unsigned char  U8;
+typedef unsigned short U16;
+typedef signed short   S16;
+
+struct BINK;
+typedef struct BINK* HBINK;
 
 struct BINKIO;
 typedef S32  (RADLINK PTR4* BINKIOOPEN)         (struct BINKIO PTR4* Bnkio, const char PTR4 *name, U32 flags);
@@ -421,18 +437,18 @@ void __stdcall BinkSetSoundSystem(void*, void*);
 void __stdcall BinkSetIOSize(void*);
 void __stdcall BinkOpen(void*, void*);
 void __stdcall BinkBufferSetDDPrimary(void*);
-int __stdcall BinkWait(_DWORD);
+int __stdcall BinkWait(U32);
 int __stdcall BinkDoFrame(HBINK bnk);
-int __stdcall BinkCopyToBuffer(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
-int __stdcall BinkBufferLock(_DWORD);
-int __cdecl BinkBufferBlit(_DWORD, _DWORD, _DWORD);
-int __stdcall BinkBufferUnlock(_DWORD);
+int __stdcall BinkCopyToBuffer(U32, U32, U32, U32, U32, U32, U32);
+int __stdcall BinkBufferLock(U32);
+int __cdecl BinkBufferBlit(U32, U32, U32);
+int __stdcall BinkBufferUnlock(U32);
 void __stdcall BinkBufferOpen(void*, void*,void*, void*);
-int __stdcall BinkNextFrame(_DWORD);
+int __stdcall BinkNextFrame(U32);
 int __stdcall BinkClose(HBINK bnk);
-int __stdcall BinkBufferSetOffset(_DWORD, _DWORD, _DWORD);
-int __stdcall BinkBufferCheckWinPos(_DWORD, _DWORD, _DWORD);
-int __stdcall BinkBufferClose(_DWORD);
-int __stdcall BinkGetSummary(_DWORD, _DWORD);
+int __stdcall BinkBufferSetOffset(U32, U32, U32);
+int __stdcall BinkBufferCheckWinPos(U32, U32, U32);
+int __stdcall BinkBufferClose(U32);
+int __stdcall BinkGetSummary(U32, U32);
 
 #endif

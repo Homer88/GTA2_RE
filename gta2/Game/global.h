@@ -1,24 +1,25 @@
 #ifndef ___GLOBAL__H_
 #define ___GLOBAL__H_
-//  библиотеки 
-#include "Menu/Menu.h"
-#include "Registry/Registry.h"
-#include "TextureManager/TextureManager.h"
-
-#include "ultil/WinApi.h" 
-#include "Text/Text.h"
+//  С„Р°Р№Р»С‹ РїРѕРґРєР»СЋС‡Р°Р№РјС‹Рµ  
+#include "Engine/ultil/WinApi.h"
+#include "Engine/System/System.h"
+#include "Game/Menu/Menu.h"
+#include "Engine/Registry/Registry.h"
+#include "Engine/TextureManager/TextureManager.h"
+ 
+#include "Engine/Text/Text.h"
 
 extern int gCheatIs;
 extern bool gSkipAudio;
 extern unsigned char gGamma;
 extern char TextArrayChar;
-//классы 
+//РіР»РѕР±Р°Р»СЊРЅС‹Рµ РєР»Р°СЃСЃС‹ 
 extern Menu gMenu;
 extern Registry gRegistry;
 extern TextureManager gTextureManager;
 extern Text gText;
 extern WinApi gWinApi;
-// методы 
 
+//РїРµСЂРµРјРµРЅРЅС‹Рµ 
 
 #endif //___GLOBAL__H_

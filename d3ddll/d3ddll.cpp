@@ -1,10 +1,6 @@
 #include "d3ddll.h"
-#include <cmath>
+#include <math.h>
 #include <d3d.h>
-#include <vector>
-#include <iostream>
-#include <set>
-#include <algorithm>
 #include <assert.h>
 
 #define BYTEn(x, n)   (*((BYTE*)&(x)+n))
@@ -12,11 +8,10 @@
 
 #pragma comment(lib, "dxguid.lib")
 
-static bool gProxyOnly = false;      // Pass through all functions to real DLL
-static bool gDetours = false;       // Used in combination with gProxyOnly=true to hook some internal functions to test them in isolation
-static bool gRealPtrs = false;
+static int gProxyOnly = 0;
+static int gDetours = 0;
+static int gRealPtrs = 0;
 
-// Other
 static D3DFunctions gFuncs;
 
 struct D3DDevice
@@ -39,8 +34,8 @@ struct D3DDevice
     DWORD field_238;
 };
 
-static_assert(sizeof(D3DDEVICEDESC) == 0xfc, "Wrong size D3DDEVICEDESC");
-static_assert(sizeof(D3DDevice) == 0x23C, "Wrong size D3DDevice");
+STATIC_ASSERT(sizeof(D3DDEVICEDESC) == 0xfc, "Wrong size D3DDEVICEDESC");
+STATIC_ASSERT(sizeof(D3DDevice) == 0x23C, "Wrong size D3DDevice");
 
 struct D3dStruct
 {
@@ -57,100 +52,45 @@ struct D3dStruct
     IDirect3DDevice3* pIDirect3DDevice3;
     IDirect3DViewport3* pIDirect3DViewPort3;
     D3DVIEWPORT2 D3DVIEWPORT2;
-    DWORD pitchQ;// проверять
+    DWORD pitchQ;
     IDirectDrawSurface4* IUnknown;
 };
-static_assert(sizeof(D3dStruct) == 0x64, "Wrong size D3dStruct");
+STATIC_ASSERT(sizeof(D3dStruct) == 0x64, "Wrong size D3dStruct");
 
-// From dll
-static bool gbSurfaceIsFreed = false;
+static int gbSurfaceIsFreed = 0;
 
-static struct HardwareTexture* hack2 = nullptr;
+static struct HardwareTexture* hack2 = 0;
 static struct HardwareTexture** gActiveTextureId = &hack2;
 static double qword_2B60848 = 0;
 static DWORD FrameNumber = 0;
 
-// Texture cache related
 static WORD TextureSizes[12] = { 8, 16, 32, 64, 128, 256, 1032, 1040, 1056, 1088, 1152, 1280 };
 
 struct Globals
 {
-    DWORD mNumPolysDrawn; // gNumPolysDrawn_dword_E43EA0
-    DWORD mNumTextureSwaps; // gGlobals.mNumTextureSwaps
+    DWORD mNumPolysDrawn;
+    DWORD mNumTextureSwaps;
     DWORD mNumBatchFlushes;
-    DWORD mSceneTime; // gSceneTime_2B93EAC
-
+    DWORD mSceneTime;
 
     DWORD gCacheSizes[12];
     DWORD gCacheSizes1[12];
-
-    // TODO: This is displayed 1 column before where expected, some other 12 DWORD array
-    // must be read for that one ??
-    DWORD gCacheHitRates[12]; // Cache hit counters
-
-
-    // TODO: Not really part of this
-    DWORD gCacheUnknown[12] = { 10, 62, 62, 88, 1, 0, 110, 126, 126, 40, 10, 0 };
-    Cache* CacheArray [12] = {};
-
+    DWORD gCacheHitRates[12];
+    DWORD gCacheUnknown[12];
+    Cache* CacheArray [12];
 };
 static Globals gGlobals = {};
-
 
 static DWORD bPointFilteringOn = 0;
 
 DWORD hack3 = 0;
 static DWORD* renderStateCache = &hack3;
 
-static Video* gVideoDriver = nullptr;
+static Video* gVideoDriver = 0;
 
-D3dStruct* hack = nullptr;
+D3dStruct* hack = 0;
 static struct D3dStruct** gD3dPtr = &hack;
 static VideoFunctions gVideoDriverFuncs;
-
-
-static float gWindowLeft;
-static float gWindowRight;
-static float gWindowTop;
-static float gWindowBottom;
-static DWORD gWindow_d5;
-
-static float k1_2B638A0;
-
-static DWORD gGpuSpecificHack = 0;
-static DWORD gbIsAtiRagePro = 0;
-
-
-
-
-static int gScreenTableSize = 0;
-static int gScreenTable[1700];
-float gfAmbient = 1.0f;
-
-struct ImageTableEntry
-{
-    BOOL Loaded;
-    DWORD W;
-    DWORD H;
-    IDirectDrawSurface4* pSurface;
-};
-static_assert(sizeof(ImageTableEntry) == 0x10, "Wrong size ImageTableEntry");
-
-static ImageTableEntry* gImageTable = nullptr;
-static DWORD gImageTableCount = 0;
-
-static u32 gTextureId = 0;
-
-struct PalData
-{
-    DWORD* mPOriginalData;
-    WORD* mPData;
-    DWORD mbLoaded;
-};
-static_assert(sizeof(PalData) == 0xC, "Wrong size SPalData");
-
-static PalData pals[16384];
-
 
 struct Cache
 {
@@ -170,7 +110,46 @@ struct Cache
     struct HardwareTexture* TextureId;
     DWORD field_28;
 };
-static_assert(sizeof(Cache) == 0x2C, "Wrong size Cache");
+STATIC_ASSERT(sizeof(Cache) == 0x2C, "Wrong size Cache");
+
+static float gWindowLeft;
+static float gWindowRight;
+static float gWindowTop;
+static float gWindowBottom;
+static DWORD gWindow_d5;
+
+static float k1_2B638A0;
+
+static DWORD gGpuSpecificHack = 0;
+static DWORD gbIsAtiRagePro = 0;
+
+static int gScreenTableSize = 0;
+static int gScreenTable[1700];
+float gfAmbient = 1.0f;
+
+struct ImageTableEntry
+{
+    BOOL Loaded;
+    DWORD W;
+    DWORD H;
+    IDirectDrawSurface4* pSurface;
+};
+STATIC_ASSERT(sizeof(ImageTableEntry) == 0x10, "Wrong size ImageTableEntry");
+
+static ImageTableEntry* gImageTable = 0;
+static DWORD gImageTableCount = 0;
+
+static u32 gTextureId = 0;
+
+struct PalData
+{
+    DWORD* mPOriginalData;
+    WORD* mPData;
+    DWORD mbLoaded;
+};
+STATIC_ASSERT(sizeof(PalData) == 0xC, "Wrong size SPalData");
+
+static PalData pals[16384];
 
 Texture* __stdcall TextureCache(Texture* pTexture)
 {
@@ -178,35 +157,28 @@ Texture* __stdcall TextureCache(Texture* pTexture)
     if (pCache)
     {
         pCache->Flags |= 0x80u;
-        
-        // Remove the active texture
-        pCache->pTexture = nullptr;
 
-        // Set the active frame to the current frame
+        pCache->pTexture = 0;
+
         pCache->UsedFrameNum = FrameNumber - 1;
 
-        // Remove the active cache
         pTexture->NextCache = 0;
 
-        auto p20Cache = pCache->pCache;
+        Cache* p20Cache = pCache->pCache;
         if (p20Cache)
         {
-            // Set next free item to the no longer in use cache ?
             p20Cache->pNextCache = pCache->pNextCache;
-            
-            // If there is a next item point to root?
-            auto pNext = pCache->pNextCache;
+
+            Cache* pNext = pCache->pNextCache;
             if (pNext)
             {
                 pNext->pCache = pCache->pCache;
             }
             else
             {
-                // Otherwise this item is the root
                 gGlobals.CacheArray [pCache->CacheIdx] = pCache->pCache;
             }
 
-            // Set the first item to the root of the cache list ?
             pCache->pNextCache = gGlobals.CacheArray [pCache->CacheIdx];
 
             gGlobals.CacheArray [pCache->CacheIdx]->pCache = pCache;
@@ -217,36 +189,29 @@ Texture* __stdcall TextureCache(Texture* pTexture)
     return pTexture;
 }
 
-
 struct LightInternal{
     DWORD Flags;
     float Brightness;
     float Radius;
     float RadiusSquared;
-    float RadiusNormalized; // A byte of Light field_10
+    float RadiusNormalized;
 
-                                      // x from Light?
     float X;
 
-    // y from Light?
-    float Y; // Light verts takes pointer to here
+    float Y;
 
-                      // z from Light?
     float Z;
 
-    // Light field_10 bytes
     float Red;
     float Green;
     float Blue;
 };
-static_assert(sizeof(LightInternal) == 0x2c, "Wrong size LightInternal");
+STATIC_ASSERT(sizeof(LightInternal) == 0x2c, "Wrong size LightInternal");
 
 static LightInternal Lights[256] = {};
 
-
 void CC ConvertColourBank(s32 unknown)
 {
-    // Empty/NOP in real game
 }
 
 const char *__stdcall D3dErr2String(int err)
@@ -311,7 +276,8 @@ const char *__stdcall D3dErr2String(int err)
 
 int CC DrawLine(int a1, int a2, int a3, int a4, int a5)
 {
-    return std::abs(a4 - a2);
+    int diff = a4 - a2;
+    return diff >= 0 ? diff : -diff;
 }
 
 void CC SetShadeTableA(int a1, int a2, int a3, int a4, int a5)
@@ -321,7 +287,6 @@ void CC SetShadeTableA(int a1, int a2, int a3, int a4, int a5)
 
 int* CC MakeScreenTable(int value, int elementSize, unsigned int size)
 {
-    // TODO
     if (gProxyOnly)
     {
         return gFuncs.pMakeScreenTable(value, elementSize, size);
@@ -343,30 +308,29 @@ int* CC MakeScreenTable(int value, int elementSize, unsigned int size)
     return result;
 }
 
-
 char CC gbh_AssignPalette(Texture* pTexture, int palId)
 {
     if (gProxyOnly)
     {
         return gFuncs.pgbh_AssignPalette(pTexture, palId);
     }
-    
-    bool needUnlock = false;
+
+    int needUnlock = 0;
     if (!(pTexture->Flags & 1))
     {
         gbh_LockTexture(pTexture);
-        needUnlock = true;
+        needUnlock = 1;
     }
 
     pTexture->pPaltData = pals[palId].mPData;
-    const auto result = pals[palId].mbLoaded;
-    pTexture->PalIsValid = result;
+    const DWORD result = pals[palId].mbLoaded;
+    pTexture->PalIsValid = (u8)result;
 
     if (needUnlock)
     {
         gbh_UnlockTexture(pTexture);
     }
-    return result;
+    return (char)result;
 }
 
 void CC gbh_BeginLevel()
@@ -388,12 +352,12 @@ int gbh_BeginScene()
 
     if (gVideoDriver->Flags & 1)
     {
-        gbSurfaceIsFreed= true;
+        gbSurfaceIsFreed= 1;
         (*gVideoDriver->initDLL->pVid_FreeSurface)(gVideoDriver);
     }
     else
     {
-        gbSurfaceIsFreed = false;
+        gbSurfaceIsFreed = 0;
     }
     memset(gGlobals.gCacheHitRates, 0, sizeof(gGlobals.gCacheHitRates));
     gGlobals.mNumBatchFlushes = 0;
@@ -451,7 +415,7 @@ char CC gbh_BlitImage(int imageIndex, int srcLeft, int srcTop, int srcRight, int
     if (gImageTable[imageIndex].pSurface->IsLost())
     {
         gImageTable[imageIndex].pSurface->Release();
-        gImageTable[imageIndex].pSurface = nullptr;
+        gImageTable[imageIndex].pSurface = 0;
         return  -10;
     }
 
@@ -489,12 +453,13 @@ static int __stdcall FreeD3dDThings(D3dStruct* pD3d);
 
 static void CleanUpD3d()
 {
-    for (int idx = 0; idx < 12; idx++)
+    int idx;
+    for (idx = 0; idx < 12; idx++)
     {
-        auto pCache = gGlobals.CacheArray[idx];
+        Cache* pCache = gGlobals.CacheArray[idx];
         if (pCache)
         {
-            Cache* pCurrentCache = nullptr;
+            Cache* pCurrentCache = 0;
             do
             {
                 pCurrentCache = pCache->pNextCache;
@@ -503,7 +468,7 @@ static void CleanUpD3d()
                     TextureCache(pCache->pTexture);
                 }
 
-                auto nextPtr = pCache->pNextCache;
+                Cache* nextPtr = pCache->pNextCache;
                 if (nextPtr)
                 {
                     nextPtr->pCache = 0;
@@ -523,44 +488,30 @@ static void CleanUpD3d()
     (*gD3dPtr) = 0;
 }
 
-static decltype(&Vid_CloseScreen) pOldCloseScreen = nullptr;
-static decltype(&Vid_SetMode) pOldSetMode = nullptr;
+static void (CC *pOldCloseScreen)(Video*) = 0;
+static s32 (CC *pOldSetMode)(Video*, HWND, s32) = 0;
 
 void CC gbh_CloseDLL()
 {
-
-
     if (gProxyOnly)
     {
         return gFuncs.pgbh_CloseDLL();
     }
 
-    auto pVideoDriver = (*gD3dPtr)->VideoDriver;
+    Video* pVideoDriver = (*gD3dPtr)->VideoDriver;
 
     CleanUpD3d();
 
     pOldCloseScreen(pVideoDriver);
 
     *pVideoDriver->initDLL->pVid_CloseScreen = pOldCloseScreen;
-    //*pVideoDriver->initDLL->pVid_GetSurface = gVideoDriverFuncs.pVid_GetSurface;
-    //*pVideoDriver->initDLL->pVid_FreeSurface = gVideoDriverFuncs.pVid_FreeSurface;
     *pVideoDriver->initDLL->pVid_SetMode = pOldSetMode;
-
-    /*
-    free(gPtr_dword_E13864); // TODO: Lighting table
-    gPtr_dword_E13864 = 0;
-    free(gPtr_dword_E43E20); // TODO: Allocated but never used
-    gPtr_dword_E43E20 = 0;*/
-
 }
 
 void CC gbh_CloseScreen(Video* pVideo)
 {
-    ///TRACE_ENTRYEXIT;
-
     CleanUpD3d();
     pOldCloseScreen(pVideo);
-    //(*pVideo->initDLL->pVid_CloseScreen)(pVideo);
 }
 
 unsigned int CC gbh_Convert16BitGraphic(int a1, unsigned int a2, WORD *a3, signed int a4)
@@ -584,30 +535,31 @@ int CC gbh_DrawFlatRect(int a1, int a2)
 #undef max
 #undef min
 
-static bool Clipped(Vert* pVerts, int count)
+static int Clipped(Vert* pVerts, int count)
 {
+    int i;
     float maxX = pVerts[0].x;
-    for (auto i = 1; i < count; i++)
+    for (i = 1; i < count; i++)
     {
-        maxX = std::max(maxX, pVerts[i].x);
+        if (pVerts[i].x > maxX) maxX = pVerts[i].x;
     }
 
     float minX = pVerts[0].x;
-    for (auto i = 1; i < count; i++)
+    for (i = 1; i < count; i++)
     {
-        minX = std::min(minX, pVerts[i].x);
+        if (pVerts[i].x < minX) minX = pVerts[i].x;
     }
 
     float maxY = pVerts[0].y;
-    for (auto i = 1; i < count; i++)
+    for (i = 1; i < count; i++)
     {
-        maxY = std::max(maxY, pVerts[i].y);
+        if (pVerts[i].y > maxY) maxY = pVerts[i].y;
     }
 
     float minY = pVerts[0].y;
-    for (auto i = 1; i < count; i++)
+    for (i = 1; i < count; i++)
     {
-        minY = std::min(minY, pVerts[i].y);
+        if (pVerts[i].y < minY) minY = pVerts[i].y;
     }
 
     return (maxX < gWindowLeft
@@ -617,15 +569,15 @@ static bool Clipped(Vert* pVerts, int count)
 }
 
 static void  __stdcall SetRenderStates(int states);
-decltype(&SetRenderStates) pSetRenderStates = 0x0;
+void (__stdcall *pSetRenderStates)(int) = 0x0;
 
 static void  __stdcall SetRenderStates(int states)
 {
     if (states & 0x380)
     {
-        if (states & 0x200) 
+        if (states & 0x200)
         {
-            auto result = (*renderStateCache);
+            DWORD result = (*renderStateCache);
             if ((*renderStateCache) == 1)
             {
                 result = 0;
@@ -635,14 +587,14 @@ static void  __stdcall SetRenderStates(int states)
             if (!result)
             {
                 (*renderStateCache) = 2;
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, 1); // 27, 1
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE); // 19, 1
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_ONE); // 20, 1
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, 1);
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE);
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_ONE);
             }
         }
         else if (states & 0x180)
         {
-            auto result = (*renderStateCache);
+            DWORD result = (*renderStateCache);
             if ((*renderStateCache) == 2)
             {
                 result = 0;
@@ -652,10 +604,10 @@ static void  __stdcall SetRenderStates(int states)
             {
                 (*renderStateCache) = 1;
 
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_MODULATEALPHA); // 21, 4
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, 1); // 27, 1
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA); // 19, 5
-                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA); // 20, 6
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_TEXTUREMAPBLEND, D3DTBLEND_MODULATEALPHA);
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, 1);
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA);
+                (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA);
             }
         }
     }
@@ -663,20 +615,20 @@ static void  __stdcall SetRenderStates(int states)
     {
         if ((*renderStateCache))
         {
-            (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, 0); // 27, 0
+            (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, 0);
             (*renderStateCache) = 0;
         }
     }
 }
 
-static Texture* pLast = nullptr;
+static Texture* pLast = 0;
 
 #define HIBYTE(x)   (*((BYTE*)&(x)+1))
 
 static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture, BYTE* pixelData, WORD* pPalData, int textureW, int textureH, int palSize, int renderFlags, char textureFlags);
 
 static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int renderFlags);
-decltype(&CacheFlushBatchRelated) pCacheFlushBatchRelated_2B52810 = 0x0;
+unsigned __int16 (__stdcall *pCacheFlushBatchRelated_2B52810)(Texture*, int) = 0x0;
 
 static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int renderFlags)
 {
@@ -686,15 +638,14 @@ static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int 
         biggestSide = pTexture->Height;
     }
 
-    auto flagsCopy = renderFlags;
+    int flagsCopy = renderFlags;
     if (renderFlags & 0x380)
     {
         HIBYTE(biggestSide) |= 4u;
         flagsCopy = renderFlags | 0x80;
     }
 
-
-    auto cache_index = 0;
+    int cache_index = 0;
     while (biggestSide > TextureSizes[cache_index])
     {
         if (++cache_index >= 12)
@@ -703,8 +654,7 @@ static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int 
         }
     }
 
-
-    auto pCache = gGlobals.CacheArray [cache_index];
+    Cache* pCache = gGlobals.CacheArray [cache_index];
     if (pCache-> UsedFrameNum == FrameNumber)
     {
         ++gGlobals.mNumBatchFlushes;
@@ -712,7 +662,7 @@ static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int 
         ++FrameNumber;
     }
 
-    auto pCachedTexture = pCache->pTexture;
+    Texture* pCachedTexture = pCache->pTexture;
     if (pCachedTexture)
     {
         pCachedTexture->NextCache = 0;
@@ -722,15 +672,14 @@ static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int 
 
     pCache->field_0 &= 0x7FFFu;
     pCache->pTexture = pTexture;
-    auto pPal = pTexture->pPaltData;
-    
-    // Pointer to texture pixel data TODO Why are field_C and D used? Some header data ?
-    auto v8 = pTexture->field_C + (pTexture->field_D << 8) + pTexture->pOriginalPixelData;
+    WORD* pPal = pTexture->pPaltData;
+
+    BYTE* v8 = pTexture->field_C + (pTexture->field_D << 8) + pTexture->pOriginalPixelData;
 
     pCache->field_10 = 0.00390625 / (double)pTexture->PalIsValid;
     pCache->field_14 = 0.00390625 / (double)pTexture->PalIsValid * 255.0;
-    
-    auto textureFlags = pTexture->Flags;
+
+    BYTE textureFlags = pTexture->Flags;
 
     D3dTextureUnknown(
         pCache->TextureId,
@@ -742,7 +691,7 @@ static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int 
         flagsCopy,
         textureFlags);
 
-    auto result = pCache->CacheIdx;
+    BYTE result = pCache->CacheIdx;
 
     ++gGlobals.gCacheHitRates[result];
 
@@ -750,33 +699,24 @@ static unsigned __int16 __stdcall CacheFlushBatchRelated(Texture *pTexture, int 
 
 }
 
-static DWORD NumLights = 0; // 43E38
+static DWORD NumLights = 0;
 
 int __stdcall LightVerts_new(int vertCount, Vert* pVerts, int alwaysZero, unsigned __int8 colourRelated)
 {
-    for (int vertIdx = 0; vertIdx < vertCount; vertIdx++)
+    int vertIdx;
+    for (vertIdx = 0; vertIdx < vertCount; vertIdx++)
     {
         float light_r = 0.0f;
         float light_g = 0.0f;
         float light_b = 0.0f;
-        for (int j = 0; j < NumLights; j++)
+        int j;
+        for (j = 0; j < NumLights; j++)
         {
-            if ((Lights[j].Flags & 0x30000) == 0x10000) // Light type ?
+            if ((Lights[j].Flags & 0x30000) == 0x10000)
             {
-                // Check if vertex point is within light radius
-
-                // TODO: This has caused me no end of trouble, it appears no matter if quad or tri the 5th index
-                // is used to check the position, this means we always have:
-                // vert0
-                // vert1
-                // vert2
-                // vert3 - optional, if tri then nothing
-                // ?? 0-4 for lighting, perhaps actually normals ?
-
                 const float dx = pVerts[vertIdx + 4].x - Lights[j].X ;
                 const float dy = pVerts[vertIdx + 4].y - Lights[j].Y;
                 const float dz = pVerts[vertIdx + 4].z - Lights[j].Z;
-
 
                 const float distanceSquared = (dx * dx) + (dy * dy) + (dz * dz);
 
@@ -786,7 +726,7 @@ int __stdcall LightVerts_new(int vertCount, Vert* pVerts, int alwaysZero, unsign
                     const float normalizedDistance = (Lights[j].Radius - distance) * Lights[j].RadiusNormalized;
                     if (normalizedDistance > 0.0f)
                     {
-                        auto lightWithBrightness = normalizedDistance * Lights[j].Brightness;
+                        float lightWithBrightness = normalizedDistance * Lights[j].Brightness;
                         light_r = light_r + Lights[j].Red * lightWithBrightness;
                         light_g = light_g + Lights[j].Green * lightWithBrightness;
                         light_b = light_b + Lights[j].Blue * lightWithBrightness;
@@ -797,22 +737,22 @@ int __stdcall LightVerts_new(int vertCount, Vert* pVerts, int alwaysZero, unsign
 
         const float colourConverted = colourRelated * 0.0039215689f;
 
-        const auto diffB2 = (double)(((unsigned int)pVerts[vertIdx].diff >> 16) & 0xFF);
-        auto b1 = colourConverted * diffB2 * light_r + gfAmbient;
+        const double diffB2 = (double)(((unsigned int)pVerts[vertIdx].diff >> 16) & 0xFF);
+        float b1 = (float)(colourConverted * diffB2 * light_r + gfAmbient);
         if (b1 > 255.0f)
         {
             b1 = 255.0f;
         }
 
-        const auto diffB1 = (double)((unsigned __int16)pVerts[vertIdx].diff >> 8);
-        auto b2 = colourConverted * diffB1 * light_g + gfAmbient;
+        const double diffB1 = (double)((unsigned __int16)pVerts[vertIdx].diff >> 8);
+        float b2 = (float)(colourConverted * diffB1 * light_g + gfAmbient);
         if (b2 > 255.0f)
         {
             b2 = 255.0f;
         }
 
-        auto diffB0 = (double)(unsigned __int8)pVerts[vertIdx].diff;
-        auto b3 = colourConverted * diffB0 * light_b + gfAmbient;
+        double diffB0 = (double)(unsigned __int8)pVerts[vertIdx].diff;
+        float b3 = (float)(colourConverted * diffB0 * light_b + gfAmbient);
         if (b3 > 255.0f)
         {
             b3 = 255.0f;
@@ -845,7 +785,6 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
 
     SetRenderStates(triFlags);
 
-    // TODO: All duplicated in quad rendering func
     if (triFlags & 0x20000)
     {
         if (!bPointFilteringOn)
@@ -865,8 +804,6 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
         }
     }
 
-    // TODO: Refactor with quad drawing
-
     pTexture->Flags &= 0xBF;
     pTexture->Flags |= 0x40;
     if (pTexture->NextCache)
@@ -881,7 +818,6 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
             }
             else if (pTexture->Flags & 0x40 || triFlags & 0x300)
             {
-                // Skip
             }
             else
             {
@@ -895,11 +831,10 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
     else
     {
         CacheFlushBatchRelated(pTexture, triFlags);
-        auto v9 = pTexture->Flags;
+        BYTE v9 = pTexture->Flags;
         if (triFlags & 0x300)
         {
             pTexture->Flags &= 0xBF;
-
         }
         else
         {
@@ -907,39 +842,38 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
         }
     }
 
-    const auto pTextureCache = pTexture->NextCache;
-    const auto pHardwareTexture = pTextureCache->TextureId;
+    Cache* pTextureCache = pTexture->NextCache;
+    const HardwareTexture* pHardwareTexture = pTextureCache->TextureId;
     if ((*gActiveTextureId) != pHardwareTexture)
     {
         D3dTextureSetCurrent(pTextureCache->TextureId);
-        (*gActiveTextureId) = pHardwareTexture;
+        (*gActiveTextureId) = (HardwareTexture*)pHardwareTexture;
         ++gGlobals.mNumTextureSwaps;
-        const auto v15 = pTextureCache->pNextCache ;
+        const Cache* v15 = pTextureCache->pNextCache;
         pTextureCache->UsedFrameNum = FrameNumber;
         if (v15)
         {
-            auto pCache = pTextureCache->pCache;
+            Cache* pCache = pTextureCache->pCache;
 
             if (pCache)
             {
-                pCache->pNextCache = v15;
+                pCache->pNextCache = (Cache*)v15;
             }
             else
             {
-                gGlobals.CacheArray [pTextureCache->CacheIdx] = v15;
+                gGlobals.CacheArray [pTextureCache->CacheIdx] = (Cache*)v15;
             }
 
-            pTextureCache->pNextCache->pCache = pTextureCache->pCache;
-            const auto cacheIdx = pTextureCache->CacheIdx;
-            pTextureCache->pNextCache = 0;
-            pTextureCache->pCache = gGlobals.CacheArray [cacheIdx];
-            gGlobals.CacheArray [cacheIdx]->pNextCache = pTextureCache;
-            gGlobals.CacheArray [pTextureCache->CacheIdx] = pTextureCache;
+            v15->pNextCache->pCache = (Cache*)pTextureCache->pCache;
+            const BYTE cacheIdx = pTextureCache->CacheIdx;
+            ((Cache*)v15)->pNextCache = 0;
+            ((Cache*)v15)->pCache = gGlobals.CacheArray [cacheIdx];
+            gGlobals.CacheArray [cacheIdx]->pNextCache = (Cache*)v15;
+            gGlobals.CacheArray [pTextureCache->CacheIdx] = (Cache*)v15;
         }
     }
 
     const float uvScale = pTexture->NextCache->field_C;
-
 
     pVerts[0].w = pVerts[0].z;
     pVerts[1].w = pVerts[1].z;
@@ -952,10 +886,9 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
     pVerts[2].u *= uvScale;
     pVerts[2].v *= uvScale;
 
-
     if (!(BYTE1(triFlags) & 0x20))
     {
-        const auto finalDiffuseColour = (unsigned __int8)diffuseColour | (((unsigned __int8)diffuseColour | ((diffuseColour | 0xFFFFFF00) << 8)) << 8);
+        const DWORD finalDiffuseColour = (unsigned __int8)diffuseColour | (((unsigned __int8)diffuseColour | ((diffuseColour | 0xFFFFFF00) << 8)) << 8);
         pVerts[0].diff = finalDiffuseColour;
         pVerts[1].diff = finalDiffuseColour;
         pVerts[2].diff = finalDiffuseColour;
@@ -964,7 +897,6 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
     pVerts[0].spec = 0;
     pVerts[1].spec = 0;
     pVerts[2].spec = 0;
-
 
     if (BYTE1(triFlags) & 0x80 && gfAmbient != 255.0)
     {
@@ -980,34 +912,24 @@ void CC gbh_DrawTriangle(int triFlags, Texture* pTexture, Vert* pVerts, int diff
     return;
 }
 
-
 void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseColour)
 {
-
     if (gProxyOnly)
     {
-
          return gFuncs.pgbh_DrawQuad(quadFlags, pTexture, pVerts, baseColour);
     }
 
-    // Flags meanings:
-    // 0x10000 = fit quad and texture coords to texture size
-    // 0x20000 = texture filtering, force enabled by 0x10000
-    // 0x300 = alpha blending, 0x80 picks sub blending mode
-    // 0x8000 lighting? or shadow
-    // 0x2000 = use alpha in diffuse colour
     if (pVerts[0].z <= 0.0f)
     {
         return;
     }
 
-    
     if (Clipped(pVerts, 4))
     {
         return;
     }
 
-    if (quadFlags & 0x10000) // whatever this flag is turns point filtering on
+    if (quadFlags & 0x10000)
     {
         quadFlags |= 0x20000;
     }
@@ -1031,14 +953,13 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
             (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_TEXTUREMAG, D3DTFG_LINEAR);
             (*gD3dPtr)->pIDirect3DDevice3->SetRenderState(D3DRENDERSTATE_TEXTUREMIN, D3DTFG_LINEAR);
         }
-    } 
+    }
 
     pTexture->Flags &= 0xBF;
     pTexture->Flags |= 0x40;
 
     if (pTexture->NextCache)
     {
-        
         if (pTexture->Flags & 0x80)
         {
             if (pTexture->Flags & 0x40 && quadFlags & 0x300)
@@ -1049,7 +970,6 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
             }
             else if (pTexture->Flags & 0x40 || quadFlags & 0x300)
             {
-                // Skip
             }
             else
             {
@@ -1063,11 +983,10 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
     else
     {
         CacheFlushBatchRelated(pTexture, quadFlags);
-        auto v9 = pTexture->Flags;
+        BYTE v9 = pTexture->Flags;
         if (quadFlags & 0x300)
         {
             pTexture->Flags &= 0xBF;
-
         }
         else
         {
@@ -1075,34 +994,34 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
         }
     }
 
-    const auto pTextureCache = pTexture->NextCache;
-    const auto pHardwareTexture = pTextureCache->TextureId;
+    Cache* pTextureCache = pTexture->NextCache;
+    const HardwareTexture* pHardwareTexture = pTextureCache->TextureId;
     if ((*gActiveTextureId) != pHardwareTexture)
     {
         D3dTextureSetCurrent(pTextureCache->TextureId);
-        (*gActiveTextureId) = pHardwareTexture;
+        (*gActiveTextureId) = (HardwareTexture*)pHardwareTexture;
         ++gGlobals.mNumTextureSwaps;
-        const auto v15 = pTextureCache->pNextCache;
+        const Cache* v15 = pTextureCache->pNextCache;
         pTextureCache->UsedFrameNum = FrameNumber;
         if (v15)
         {
-            auto pCache = pTextureCache->pCache;
+            Cache* pCache = pTextureCache->pCache;
 
             if (pCache)
             {
-                pCache->pNextCache = v15;
+                pCache->pNextCache = (Cache*)v15;
             }
             else
             {
-                gGlobals.CacheArray [pTextureCache->CacheIdx] = v15;
+                gGlobals.CacheArray [pTextureCache->CacheIdx] = (Cache*)v15;
             }
 
-            pTextureCache->pNextCache->pCache = pTextureCache->pCache;
-            const auto cacheIdx = pTextureCache->CacheIdx;
-            pTextureCache->pNextCache = 0;
-            pTextureCache->pCache = gGlobals.CacheArray [cacheIdx];
-            gGlobals.CacheArray [cacheIdx]->pNextCache = pTextureCache;
-            gGlobals.CacheArray [pTextureCache->CacheIdx] = pTextureCache;
+            v15->pNextCache->pCache = (Cache*)pTextureCache->pCache;
+            const BYTE cacheIdx = pTextureCache->CacheIdx;
+            ((Cache*)v15)->pNextCache = 0;
+            ((Cache*)v15)->pCache = gGlobals.CacheArray [cacheIdx];
+            gGlobals.CacheArray [cacheIdx]->pNextCache = (Cache*)v15;
+            gGlobals.CacheArray [pTextureCache->CacheIdx] = (Cache*)v15;
         }
     }
 
@@ -1112,22 +1031,10 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
         const float textureW = (float)pTexture->Width;
         const float textureH = (float)pTexture->Height;
 
-        if (gGpuSpecificHack)
-        {
-            //v19 = pVerts->mVerts[0].x;
-            //floor(v19);
-            //pVerts->mVerts[0].x = v19;
-            //v20 = pVerts->mVerts[0].y;
-            //floor(v20);
-            //pVerts->mVerts[0].y = v20;
-        }
-
-
         const float flt_E10830 = 0.001f;
-        const auto v21 = pVerts[0].x + textureW;
-        const auto v23 = pVerts[0].x + textureW - flt_E10830;
-        const auto v24 = pVerts[0].y + textureH;
-
+        const float v21 = pVerts[0].x + textureW;
+        const float v23 = pVerts[0].x + textureW - flt_E10830;
+        const float v24 = pVerts[0].y + textureH;
 
         pVerts[1].z = pVerts[0].z;
         pVerts[2].z = pVerts[0].z;
@@ -1145,7 +1052,7 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
         pVerts[0].u = 0;
         pVerts[0].v = 0;
 
-        float flt_E1082C = 0.0f; // 0.25 or 0, TODO: Set me in init
+        float flt_E1082C = 0.0f;
 
         pVerts[1].u = textureW - flt_E1082C;
         pVerts[1].v = 0;
@@ -1176,11 +1083,7 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
 
     if (!(quadFlags & 0x2000))
     {
-        // Force RGBA to be 255, 255, 255, A
-        auto finalDiffuse = (unsigned __int8)baseColour | (((unsigned __int8)baseColour | ((baseColour | 0xFFFFFF00) << 8)) << 8);
-        int f = finalDiffuse;
-        // f++;
-         //finalDiffuse = f;
+        DWORD finalDiffuse = (unsigned __int8)baseColour | (((unsigned __int8)baseColour | ((baseColour | 0xFFFFFF00) << 8)) << 8);
 
         pVerts[0].diff = finalDiffuse;
         pVerts[1].diff = finalDiffuse;
@@ -1201,9 +1104,9 @@ void CC gbh_DrawQuad(int quadFlags, Texture* pTexture, Vert* pVerts, int baseCol
         }
     }
 
-
     Vert myCopy[4];
-    for (int i = 0; i < 4; i++)
+    int i;
+    for (i = 0; i < 4; i++)
     {
         myCopy[i] = pVerts[i];
     }
@@ -1217,8 +1120,6 @@ void CC gbh_DrawQuadClipped(int a1, int a2, int a3, int a4, int a5)
     __debugbreak();
 }
 
-// TODO: Refactor/clean up this func
-// Same as gbh_DrawTile
 s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int diffuseColour)
 {
     if (gProxyOnly)
@@ -1226,7 +1127,7 @@ s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int 
          return gFuncs.pgbh_DrawTilePart(flags, pTexture, pData, diffuseColour);
     }
 
-    auto oldFlags = flags;
+    unsigned int oldFlags = flags;
 
     if (!(flags & 0x4000))
     {
@@ -1242,15 +1143,14 @@ s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int 
 
     struct uv { float u; float v; };
     uv uvs[4];
-    for (int i = 0; i < 4; i++)
+    int i;
+    for (i = 0; i < 4; i++)
     {
         uvs[i].u = pData[i].u;
         uvs[i].v = pData[i].v;
     }
 
-
-    // Rotate around the texture
-    bool updated = false;
+    int updated = 0;
     switch (flags & 0x60)
     {
     case 0x20:
@@ -1265,7 +1165,7 @@ s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int 
 
         pData[3].u = uvs[2].u;
         pData[3].v = uvs[2].v;
-        updated = true;
+        updated = 1;
         break;
 
     case 0x40:
@@ -1284,20 +1184,19 @@ s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int 
 
         pData[3].u = uvs[0].u;
         pData[3].v = uvs[0].v;
-        updated = true;
+        updated = 1;
         break;
     }
 
     if (updated)
     {
-        for (int i = 0; i < 4; i++)
+        for (i = 0; i < 4; i++)
         {
             uvs[i].u = pData[i].u;
             uvs[i].v = pData[i].v;
         }
     }
 
-    // Flip up/down?
     if (oldFlags & 8)
     {
         pData[0].u = uvs[1].u;
@@ -1313,7 +1212,7 @@ s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int 
         pData[3].v = uvs[2].v;
         if (oldFlags & 0x10)
         {
-            for (int i = 0; i < 4; i++)
+            for (i = 0; i < 4; i++)
             {
                 uvs[i].u = pData[i].u;
                 uvs[i].v = pData[i].v;
@@ -1321,7 +1220,6 @@ s32 CC gbh_DrawTilePart(unsigned int flags, Texture* pTexture, Vert* pData, int 
         }
     }
 
-    // Flip left/right?
     if (oldFlags & 0x10)
     {
         pData[0].u = uvs[3].u;
@@ -1364,7 +1262,7 @@ double CC gbh_EndScene()
         (*gVideoDriver->initDLL->pVid_GetSurface)(gVideoDriver);
     }
     double result = qword_2B60848 / k1_2B638A0;
-    gGlobals.mSceneTime = qword_2B60848 / k1_2B638A0;// always 0 / 1 ?
+    gGlobals.mSceneTime = qword_2B60848 / k1_2B638A0;
     return result;
 }
 
@@ -1381,7 +1279,8 @@ int CC gbh_FreeImageTable()
     }
     else
     {
-        for (int idx = 0; idx < gImageTableCount; idx++)
+        int idx;
+        for (idx = 0; idx < gImageTableCount; idx++)
         {
             if (gImageTable[idx].Loaded)
             {
@@ -1427,7 +1326,6 @@ u32* CC gbh_GetGlobals()
     return (u32*)&gGlobals;
 }
 
-// Only called with do_mike / profiling debugging opt enabled
 int CC gbh_GetUsedCache(int cacheIdx)
 {
     if (gProxyOnly)
@@ -1449,15 +1347,15 @@ int CC gbh_GetUsedCache(int cacheIdx)
 }
 
 static HRESULT WINAPI EnumD3DDevicesCallBack(
-    GUID FAR* lpGuid, 
-    LPSTR lpDeviceDescription, 
-    LPSTR lpDeviceName, 
-    LPD3DDEVICEDESC pDeviceDesc1, 
-    LPD3DDEVICEDESC pDeviceDesc2, 
+    GUID FAR* lpGuid,
+    LPSTR lpDeviceDescription,
+    LPSTR lpDeviceName,
+    LPD3DDEVICEDESC pDeviceDesc1,
+    LPD3DDEVICEDESC pDeviceDesc2,
     LPVOID pContext)
 {
     LPD3DDEVICEDESC pDeviceDesc = pDeviceDesc1;
-    auto dcmColorModel = pDeviceDesc->dcmColorModel;
+    DWORD dcmColorModel = pDeviceDesc->dcmColorModel;
     if (dcmColorModel == 0)
     {
         pDeviceDesc = pDeviceDesc2;
@@ -1469,7 +1367,7 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
         return 1;
     }
 
-    const auto shadeCaps = pDeviceDesc->dpcTriCaps.dwShadeCaps;
+    const DWORD shadeCaps = pDeviceDesc->dpcTriCaps.dwShadeCaps;
     if (pDeviceDesc->dcmColorModel == 1 || shadeCaps & 8)
     {
         if (!(shadeCaps & 8))
@@ -1478,7 +1376,6 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
             {
                 return 1;
             }
-
         }
 
         int deviceDescrptionIndex = lpDeviceDescription ? strlen(lpDeviceDescription) : 0;
@@ -1501,7 +1398,7 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
         pDevice->IDirect3dTexture2List  = 0;
         pDevice->ID  = pCtx->DeviceIDGen++;
 
-        auto pFirstDevice = pCtx->FirstDevice;
+        D3DDevice* pFirstDevice = pCtx->FirstDevice;
         if (pFirstDevice)
         {
             pFirstDevice->NextD3DDevice = pDevice;
@@ -1513,10 +1410,7 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
             pCtx->NextDevice  = pDevice;
         }
 
-        
         pDevice->DeviceGuid = *lpGuid;
-       
-       // pDevice->field_124.wMaxTextureBlendStages = pDeviceDesc->wMaxTextureBlendStages; //  TODO: (char *)v13 + 544; ???
 
         pDevice->DeviceName   = (char *)&pDevice->BackingBuffer ;
 
@@ -1527,18 +1421,15 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
         strcpy(pDevice->DeviceName , lpDeviceName);
 
         memcpy(&pDevice->DeviceDescription, pDeviceDesc1, sizeof(D3DDEVICEDESC));
-        
-        // can't see how this would work 
-        //memcpy(&pDevice->field_120_context, pContext, 0xFCu); // TODO: Actually copies to offset 0x120 the field before ??
-        memcpy(&pDevice->field_124, pDeviceDesc2, sizeof(D3DDEVICEDESC));
 
+        memcpy(&pDevice->field_124, pDeviceDesc2, sizeof(D3DDEVICEDESC));
 
         if (dcmColorModel != 0)
         {
             pDevice->Flags |= 1u;
         }
 
-        auto v21 = pDeviceDesc->dwDeviceZBufferBitDepth;
+        DWORD v21 = pDeviceDesc->dwDeviceZBufferBitDepth;
 
         if (BYTE1(v21) & 4)
         {
@@ -1552,7 +1443,6 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
         {
             if (!(BYTE1(v21) & 1))
             {
-                
             }
             else
             {
@@ -1591,7 +1481,7 @@ static HRESULT WINAPI EnumD3DDevicesCallBack(
         }
         return 1;
     }
-    
+
     return 1;
 }
 
@@ -1638,7 +1528,7 @@ struct TextureFormat
     DWORD field_98;
     DDPIXELFORMAT DDTextureFormat;
 };
-static_assert(sizeof(TextureFormat) == 0xBC, "Wrong size TextureFormat");
+STATIC_ASSERT(sizeof(TextureFormat) == 0xBC, "Wrong size TextureFormat");
 
 struct HardwareTexture
 {
@@ -1667,12 +1557,11 @@ struct HardwareTexture
     IDirect3DTexture2* IDirect3dTexture2;
     IDirectDrawSurface4* OtherSurface;
     IDirectDrawSurface4* pSurfaceForTexture;
-//    DWORD field_60; 
 };
-static_assert(sizeof(HardwareTexture) == 0x60, "Wrong size HardwareTexture");
+STATIC_ASSERT(sizeof(HardwareTexture) == 0x60, "Wrong size HardwareTexture");
 
 static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DDPIXELFORMAT* pDDFormat);
-decltype(&ConvertPixelFormat) pConvertPixelFormat = (decltype(&ConvertPixelFormat))0x4A10;
+void (__stdcall *pConvertPixelFormat)(TextureFormat*, const DDPIXELFORMAT*) = (void (__stdcall *)(TextureFormat*, const DDPIXELFORMAT*))0x4A10;
 
 static unsigned int countSetBits(unsigned int value)
 {
@@ -1702,12 +1591,8 @@ static unsigned int firstUnSetBitIndex(DWORD& value)
     return i;
 }
 
-// TODO: Test VS real
 static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DDPIXELFORMAT* pDDFormat)
 {
-    //TextureFormat old = *pTextureFormat;
-    //pConvertPixelFormat_2B55A10(&old, pDDFormat);
-
     pTextureFormat->dwRGBBitCount  = pDDFormat->dwRGBBitCount;
 
     DWORD r = pDDFormat->dwRBitMask;
@@ -1721,7 +1606,7 @@ static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DD
         rBitIndex = firstUnSetBitIndex(r);
     }
 
-    const bool bHaveNoRedBits = rBitIndex == 32;
+    const int bHaveNoRedBits = rBitIndex == 32;
 
     if (bHaveNoRedBits)
     {
@@ -1735,7 +1620,6 @@ static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DD
     }
     pTextureFormat->RedBitIndex = rBitIndex;
 
-    // TODO: This actually counted set bits up to the first non set bit, and the real function counted unset to set bits and returned the resulting value
     pTextureFormat->RedBitCount = countSetBits(r);
 
     DWORD g = pDDFormat->dwGBitMask;
@@ -1751,9 +1635,8 @@ static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DD
 
     if (pDDFormat->dwFlags & DDPF_ALPHAPIXELS)
     {
-        auto rgbMask = (pDDFormat->dwBBitMask | pDDFormat->dwRBitMask | pDDFormat->dwGBitMask);
+        DWORD rgbMask = (pDDFormat->dwBBitMask | pDDFormat->dwRBitMask | pDDFormat->dwGBitMask);
 
-        // Get the alpha bits ??
         switch (pDDFormat->dwRGBBitCount)
         {
         case 8:
@@ -1772,7 +1655,7 @@ static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DD
 
         if (rgbMask)
         {
-            auto idx = firstUnSetBitIndex(rgbMask);
+            DWORD idx = firstUnSetBitIndex(rgbMask);
             pTextureFormat->AlphaBitIndex = idx;
             pTextureFormat->AlphaBitCount = countSetBits(rgbMask);
 
@@ -1792,27 +1675,14 @@ static void __stdcall ConvertPixelFormat(TextureFormat* pTextureFormat, const DD
         pTextureFormat->AlphaBitCount,
         pTextureFormat->AlphaBitIndex);
     OutputDebugStringA(buffer);
-
-    /*
-    assert(old.dwRGBBitCount == pTextureFormat->dwRGBBitCount);
-    assert(old.AlphaBitCount == pTextureFormat->AlphaBitCount);
-    assert(old.AlphaBitIndex == pTextureFormat->AlphaBitIndex);
-    assert(old.RedBitCount == pTextureFormat->RedBitCount);
-    assert(old.RedBitIndex == pTextureFormat->RedBitIndex);
-    assert(old.field_18_gBitCount == pTextureFormat->field_18_gBitCount);
-    assert(old.field_1C_gBitIndex == pTextureFormat->field_1C_gBitIndex);
-    assert(old.BlueBitCount == pTextureFormat->BlueBitCount);
-    assert(old.BlueBitIndex == pTextureFormat->BlueBitIndex);
-    assert(old.Flags == pTextureFormat->Flags);
-    */
 }
 
-static TextureFormat* FindTextureFormatHelper(D3dStruct* pD3d, DWORD sizeToFind, DWORD flagsToMatch, bool flagsAndSizeValid, bool storeInFirstField)
+static TextureFormat* FindTextureFormatHelper(D3dStruct* pD3d, DWORD sizeToFind, DWORD flagsToMatch, int flagsAndSizeValid, int storeInFirstField)
 {
-    D3DDevice* device = pD3d->ActiveDevice ;
-    for (TextureFormat* result = device->FirstTextureFormat; result; result = result->NextTextureFormat )
+    D3DDevice* device = pD3d->ActiveDevice;
+    TextureFormat* result;
+    for (result = device->FirstTextureFormat; result; result = result->NextTextureFormat)
     {
-        // If flagsAndSizeValid is false then look at this format, otherwise only look at it if the size and flags match the search criteria
         if (!flagsAndSizeValid || (flagsAndSizeValid && (result->Flags & flagsToMatch) && result->AlphaBitCount == sizeToFind))
         {
             if (result->dwRGBBitCount == 16 || result->dwRGBBitCount == 15)
@@ -1829,68 +1699,62 @@ static TextureFormat* FindTextureFormatHelper(D3dStruct* pD3d, DWORD sizeToFind,
             }
         }
     }
-    return nullptr;
+    return 0;
 }
 
 static TextureFormat *__stdcall FindTextureFormat(D3dStruct* pD3d, unsigned int flags);
-decltype(&FindTextureFormat) pFindTextureFormat = 0x0;
-
+TextureFormat* (__stdcall *pFindTextureFormat)(D3dStruct*, unsigned int) = 0;
 
 static TextureFormat *__stdcall FindTextureFormat(D3dStruct* pD3d, unsigned int flags)
 {
-    TextureFormat* result = nullptr;
+    TextureFormat* result = 0;
     D3DDevice* device = pD3d->ActiveDevice;
-
-    // 0x80000000 = reverse flag, or smallest/largest first ?
-    // 0x40000000 = skip 4 sized, only valid when 0x80000000 is enabled
 
     if (flags & 0x80000000)
     {
         if (!(flags & 0x40000000))
         {
-            result = FindTextureFormatHelper(pD3d, 4, 0x8000, true, true);
+            result = FindTextureFormatHelper(pD3d, 4, 0x8000, 1, 1);
             if (result)
             {
                 return result;
             }
         }
 
-        result = FindTextureFormatHelper(pD3d, 1, 0x8000, true, true);
+        result = FindTextureFormatHelper(pD3d, 1, 0x8000, 1, 1);
         if (result)
         {
             return result;
         }
 
-
-        return FindTextureFormatHelper(pD3d, 0, 0, false, true);
+        return FindTextureFormatHelper(pD3d, 0, 0, 0, 1);
     }
-    
 
-    result = FindTextureFormatHelper(pD3d, 0, 0, false, false);
+    result = FindTextureFormatHelper(pD3d, 0, 0, 0, 0);
     if (result)
     {
         return result;
     }
 
-    result = FindTextureFormatHelper(pD3d, 1, 0x8000, true, false);
+    result = FindTextureFormatHelper(pD3d, 1, 0x8000, 1, 0);
     if (result)
     {
         return result;
     }
 
-    return FindTextureFormatHelper(pD3d, 4, 0x8000, true, false);
+    return FindTextureFormatHelper(pD3d, 4, 0x8000, 1, 0);
 }
 
 static HRESULT CALLBACK EnumTextureFormatsCallBack(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext);
-decltype(&EnumTextureFormatsCallBack) pEnumTextureFormatsCallBack = 0x0;
+HRESULT (CALLBACK *pEnumTextureFormatsCallBack)(LPDDPIXELFORMAT, LPVOID) = 0;
 
 static HRESULT CALLBACK EnumTextureFormatsCallBack(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext)
 {
     D3DDevice* pDevice = (D3DDevice*)lpContext;
-    const auto flags = lpDDPixFmt->dwFlags;
+    const DWORD flags = lpDDPixFmt->dwFlags;
     if (!(flags & 0xC0000) && !(flags & 0x20002) && !(flags & 0x204) && flags & 0x40)
     {
-        auto pTextureFormat = (TextureFormat *)malloc(sizeof(TextureFormat));
+        TextureFormat* pTextureFormat = (TextureFormat *)malloc(sizeof(TextureFormat));
         if (!pTextureFormat)
         {
             return 0;
@@ -1902,7 +1766,7 @@ static HRESULT CALLBACK EnumTextureFormatsCallBack(LPDDPIXELFORMAT lpDDPixFmt, L
         pTextureFormat->Flags  = 0;
         pTextureFormat->NextTextureFormat = 0;
         pTextureFormat->EnumIndex = pDevice->NumTextureEnums;
-        auto pFirst = pDevice->pFirstTextureFormat;
+        TextureFormat* pFirst = pDevice->pFirstTextureFormat;
         if (pFirst)
         {
             pFirst->NextTextureFormat = pTextureFormat;
@@ -1913,7 +1777,7 @@ static HRESULT CALLBACK EnumTextureFormatsCallBack(LPDDPIXELFORMAT lpDDPixFmt, L
             pDevice->pFirstTextureFormat = pTextureFormat;
             pDevice->FirstTextureFormat = pTextureFormat;
         }
-        
+
         memcpy(&pTextureFormat->DDTextureFormat, lpDDPixFmt, sizeof(DDPIXELFORMAT));
 
         if (lpDDPixFmt->dwFlags & 1)
@@ -1929,8 +1793,6 @@ static HRESULT CALLBACK EnumTextureFormatsCallBack(LPDDPIXELFORMAT lpDDPixFmt, L
 
 static int CleanUpHelper(D3dStruct* pRenderer)
 {
-    // TODO: Also attempts to free memory that can't be seen being assigned to anywhere
-
     if (pRenderer->IUnknown )
     {
         pRenderer->VideoDriver->Surface->DeleteAttachedSurface(0, pRenderer->IUnknown);
@@ -1965,11 +1827,10 @@ static HardwareTexture *__stdcall TextureAlloc(D3dStruct* pD3d, int width, int h
             memcpy(&surfaceDesc.ddpfPixelFormat, &pTextureFormat->DDTextureFormat, sizeof(DDPIXELFORMAT));
             surfaceDesc.dwWidth = width;
             surfaceDesc.dwFlags |= 0x1007u;
-            surfaceDesc.dwSize = sizeof(DDSURFACEDESC2);// 124;
+            surfaceDesc.dwSize = sizeof(DDSURFACEDESC2);
             surfaceDesc.dwHeight = height;
 
-            // v21 == ?
-            if (/*v21 &&*/ flags & 2)
+            if (flags & 2)
             {
                 surfaceDesc.ddsCaps.dwCaps = 0x4005000;
             }
@@ -1978,7 +1839,6 @@ static HardwareTexture *__stdcall TextureAlloc(D3dStruct* pD3d, int width, int h
                 surfaceDesc.ddsCaps.dwCaps = 6144;
                 pMem->Flags  |= 1;
             }
-
 
             surfaceDesc.ddsCaps.dwCaps2 = 4;
             surfaceDesc.ddsCaps.dwCaps |= 0x1000;
@@ -2002,48 +1862,32 @@ static HardwareTexture *__stdcall TextureAlloc(D3dStruct* pD3d, int width, int h
                 pMem->Flags |= 4;
             }
 
-            pMem->Width = width;
-            pMem->Height = height;
-            
+            pMem->Width = (WORD)width;
+            pMem->Height = (WORD)height;
+
             pMem->BitCount = pTextureFormat->dwRGBBitCount;
 
-            /*
-             nothing before this even though its usually 0x76 ?? Seems to be random value which you'd expect!
-            .text:00005DBA mov byte ptr [esp+18h], 1
-            .text:00005DBF mov byte ptr [esp+19h], 3
-            .text:00005DC4 mov byte ptr [esp+1Ah], 7
-            .text:00005DC9 mov byte ptr [esp+1Bh], 15
-            .text:00005DCE mov byte ptr [esp+1Ch], 31
-            .text:00005DD3 mov byte ptr [esp+1Dh], 63
-            .text:00005DD8 mov byte ptr [esp+1Eh], 127
-            */
+            const BYTE unknown[] = { 0, 1,3,7,15,31,64,127 };
 
-            const BYTE unknown[] = { 0 /*not inited in real func??*/, 1,3,7,15,31,64,127 };
-
-            // Blue
             pMem->BlueBitCount= unknown[pTextureFormat->BlueBitCount];
             pMem->BlueBitIndex  = pTextureFormat->BlueBitIndex;
             pMem->BlueUnknown  = 8 - pTextureFormat->BlueBitCount;
 
-            // Green
-            pMem->GreenBitCount  = unknown[pTextureFormat->GreenBitCount]; 
+            pMem->GreenBitCount  = unknown[pTextureFormat->GreenBitCount];
             pMem->GreenBitIndex = pTextureFormat->GreenBitIndex;
             pMem->GreenUnknown = 16 - pTextureFormat->GreenBitCount;
 
-            // Red
-            pMem->RedBitCount  = unknown[pTextureFormat->RedBitCount]; 
+            pMem->RedBitCount  = unknown[pTextureFormat->RedBitCount];
             pMem->RedBitIndex  = pTextureFormat->RedBitIndex;
             pMem->RedUnknown  = 24 - pTextureFormat->RedBitCount;
 
-            // Alpha
             pMem->AlphaBitCount  = unknown[pTextureFormat->AlphaBitCount];
             pMem->AlphaBitIndex  = pTextureFormat->AlphaBitIndex;
             pMem->AlphaUnknown = 32 - pTextureFormat->AlphaBitCount;
 
-
             pMem->Flags |= pTextureFormat->Flags & 0x8000;
 
-            auto pDevice = pD3d->ActiveDevice;
+            D3DDevice* pDevice = pD3d->ActiveDevice;
             if (pDevice->pHead)
             {
                 pDevice->IDirect3dTexture2List->pNextHardwareTexture  = pMem;
@@ -2065,7 +1909,7 @@ static signed int __stdcall D3dTextureSetCurrent(HardwareTexture *pHardwareTextu
     HardwareTexture* pOther = pHardwareTexture->pther;
     if (pHardwareTexture->Flags & 1
         && pHardwareTexture->D3dStr->ActiveDevice->Flags & 1
-        && pOther == 0) // TODO: Check last conditional
+        && pOther == 0)
     {
         return 1;
     }
@@ -2076,7 +1920,7 @@ static signed int __stdcall D3dTextureSetCurrent(HardwareTexture *pHardwareTextu
         {
             pHardwareTexture->pSurfaceForTexture->Restore();
             pHardwareTexture->OtherSurface->PageLock(0);
-            const auto ret = pHardwareTexture->IDirect3dTexture2->Load(pHardwareTexture->pther->IDirect3dTexture2) == 1;
+            const HRESULT ret = pHardwareTexture->IDirect3dTexture2->Load(pHardwareTexture->pther->IDirect3dTexture2) == 1;
             if (ret)
             {
                 pHardwareTexture->OtherSurface->Unlock(0);
@@ -2112,11 +1956,10 @@ static int __stdcall FreeD3dDThings(D3dStruct* pD3d)
 {
     if (pD3d->CurrentID )
     {
-        // Free texture formats
         TextureFormat* pCurrentTextureFormat = pD3d->ActiveDevice->FirstTextureFormat;
         if (pCurrentTextureFormat)
         {
-            struct TextureFormat* pTextureFormat = nullptr;
+            struct TextureFormat* pTextureFormat = 0;
             do
             {
                 pTextureFormat = pCurrentTextureFormat->NextTextureFormat;
@@ -2128,12 +1971,10 @@ static int __stdcall FreeD3dDThings(D3dStruct* pD3d)
         pD3d->ActiveDevice->FirstTextureFormat = 0;
         pD3d->ActiveDevice->pFirstTextureFormat = 0;
 
-        
-        // Free hardware textures
         HardwareTexture* pCurrentHardwareTexture = pD3d->ActiveDevice->pHead;
         if (pCurrentHardwareTexture)
         {
-            HardwareTexture* pHardwareTexture = nullptr;
+            HardwareTexture* pHardwareTexture = 0;
             do
             {
                 pCurrentHardwareTexture->IDirect3dTexture2->Release();
@@ -2166,25 +2007,22 @@ static int __stdcall FreeD3dDThings(D3dStruct* pD3d)
 }
 
 signed int __stdcall CreateD3DDevice(D3dStruct* pRenderer);
-decltype(&CreateD3DDevice) pCreateD3DDevice = 0x0;
+signed int (__stdcall *pCreateD3DDevice)(D3dStruct*) = 0;
 
 signed int __stdcall CreateD3DDevice(D3dStruct* pRenderer)
 {
     hack = pRenderer;
-  
-    //return pCreateD3DDevice_E01840(pRenderer);
-
 
     if (FAILED(pRenderer->pIDirect3D3->CreateDevice(
         pRenderer->ActiveDevice->DeviceGuid ,
         pRenderer->VideoDriver->Surface,
         &pRenderer->pIDirect3DDevice3,
-        nullptr)))
+        0)))
     {
         return CleanUpHelper(pRenderer);
     }
 
-    if (FAILED(pRenderer->pIDirect3D3->CreateViewport(&pRenderer->pIDirect3DViewPort3, nullptr)))
+    if (FAILED(pRenderer->pIDirect3D3->CreateViewport(&pRenderer->pIDirect3DViewPort3, 0)))
     {
         return CleanUpHelper(pRenderer);
     }
@@ -2239,7 +2077,7 @@ D3dStruct* D3DCreate(Video* pVideoDriver)
 
         DDSURFACEDESC2 surfaceDesc = {};
         surfaceDesc.dwSize = sizeof(DDSURFACEDESC2);
-        
+
         DWORD pitch = 0;
         if (pVideoDriver->Surface->GetSurfaceDesc(&surfaceDesc) >= 0)
         {
@@ -2300,7 +2138,7 @@ static signed int __stdcall Set3dDevice(D3dStruct* pContext, int id)
         FreeD3dDThings(pContext);
     }
 
-    auto pDevice = pContext->NextDevice;
+    D3DDevice* pDevice = pContext->NextDevice;
     if (!pDevice)
     {
         return 1;
@@ -2321,7 +2159,7 @@ static signed int __stdcall Set3dDevice(D3dStruct* pContext, int id)
     {
         return 1;
     }
-    
+
     SetDeviceDefaultRenderStates(pContext);
     return 0;
 }
@@ -2358,58 +2196,11 @@ static int CheckIfSpecialFindGfxEnabled()
 }
 
 static HardwareTexture *__stdcall D3DTextureAllocate(D3dStruct* pd3d, int width, int height, int flags);
-
-decltype(&D3DTextureAllocate) pD3DTextureAllocate = 0x0;
-
-struct WidthFlags
-{
-    int width;
-    int flags;
-};
-std::vector<WidthFlags> debugData;
+HardwareTexture* (__stdcall *pD3DTextureAllocate)(D3dStruct*, int, int, int) = 0;
 
 static HardwareTexture *__stdcall D3DTextureAllocate(D3dStruct* pd3d, int width, int height, int flags)
 {
-    debugData.emplace_back(WidthFlags{ width, flags });
-
-   // TextureFormat* pTextureFormat = FindTextureFormat(pd3d, flags);
-   // pTextureFormat->BlueBitCount = 0;
-
-//    auto real = pD3DTextureAllocate_2B560A0(pd3d, width, height, flags);
-    auto re = TextureAlloc(pd3d, width, height, flags  | 2);
-    /*
-    assert(real->field_0_texture_id == re->field_0_texture_id);
-    assert(real->Flags == re->Flags);
-    assert(real->BitCount == re->BitCount);
-    
-    assert(real->BlueBitIndex == re->BlueBitIndex);
-    assert(real->BlueUnknown == re->BlueUnknown);
-    assert(real->BlueBitCount == re->BlueBitCount);
-
-    assert(real->GreenBitIndex == re->GreenBitIndex);
-    assert(real->GreenUnknown == re->GreenUnknown);
-    assert(real->GreenBitCount == re->GreenBitCount);
-
-    assert(real->RedBitIndex == re->RedBitIndex);
-    assert(real->RedUnknown == re->RedUnknown);
-    assert(real->RedBitCount == re->RedBitCount);
-
-    
-    assert(real->AlphaBitIndex == re->AlphaBitIndex);
-    assert(real->AlphaUnknown == re->AlphaUnknown);
-    if (real->AlphaBitIndex)
-    {
-        assert(real->AlphaBitCount == re->AlphaBitCount); // Possibly not inited sometimes? 0 seems to be random mem
-    }
-
-    assert(real->LockedPixelData == re->LockedPixelData);
-
-    assert(real->pitch == re->pitch);
-
-    assert(real->Width == re->Width);
-    assert(real->Height == re->Height);
-    */
-
+    HardwareTexture* re = TextureAlloc(pd3d, width, height, flags  | 2);
     return re;
 }
 
@@ -2418,9 +2209,9 @@ static HardwareTexture *__stdcall TextureAllocLocked(D3dStruct* pD3d, int width,
     return TextureAlloc(pD3d, width, height, flags | 1);
 }
 
-
 static int Init2();
-decltype(&Init2) pInit2 = 0x0;
+
+int (*pInit2)() = 0;
 
 static DWORD bShift2 = 0;
 static DWORD bMask_2B93E30 = 0;
@@ -2442,12 +2233,11 @@ static DWORD gShift2_2B93E2C = 0;
 static DWORD rMask_2B959D4 = 0;
 static DWORD rShift2_2B63DD0 = 0;
 
-
-// TODO
 static int Init2()
 {
     int flags = 0;
-    for (int i=12; --i >= 0;  )
+    int i;
+    for (i=12; --i >= 0;  )
     {
         WORD width = TextureSizes[i];
         if (width & 0x400)
@@ -2461,19 +2251,18 @@ static int Init2()
         }
         gGlobals.CacheArray [i] = 0;
 
-        for (int j = 0; j < gGlobals.gCacheSizes[i]; j++)
+        int j;
+        for (j = 0; j < gGlobals.gCacheSizes[i]; j++)
         {
             Cache* pCache = (Cache *)malloc(sizeof(Cache));
             memset(pCache, 0, sizeof(Cache));
 
-            // Correct num calls + args
             HardwareTexture* pTexture = D3DTextureAllocate((*gD3dPtr), width, width, flags);
             if (!pTexture)
             {
                 break;
             }
 
-            // probably correct, TODO CHECK ME
             HardwareTexture* pTexture2 = TextureAllocLocked((*gD3dPtr), width, width, flags);
             if (!pTexture2)
             {
@@ -2483,12 +2272,12 @@ static int Init2()
             D3dTextureCopy(pTexture, pTexture2);
 
             pCache->field_0 = 0x8000u;
-            pCache->field_2 = width;  // TODO: Check me
-            pCache->field_4 = width; // TODO: Check me
+            pCache->field_2 = width;
+            pCache->field_4 = width;
             pCache->field_C = 1.0f / static_cast<float>(width);
             pCache->pTexture = 0;
             pCache->UsedFrameNum = FrameNumber;
-            pCache->CacheIdx = i;
+            pCache->CacheIdx = (BYTE)i;
             pCache->TextureId = pTexture2;
             pCache->pCache = 0;
             pCache->pNextCache = 0;
@@ -2511,58 +2300,40 @@ static int Init2()
     (*renderStateCache) = 0;
     bPointFilteringOn = 0;
 
-    // Same code as texture alloc func.. TODO: Merge into a helper
-    const BYTE unknown[] = { 0 /*not inited in real func??*/, 1,3,7,15,31,64,127 };
+    const BYTE unknown[] = { 0, 1,3,7,15,31,64,127 };
 
     {
         TextureFormat format = {};
         ConvertPixelFormat(&format, &(*gD3dPtr)->TextureFormat->DDTextureFormat);
 
+        rShift2_2B93E8C = format.BlueBitIndex;
+        rMask_2B63DF0 = unknown[format.BlueBitCount];
+        rShift_2B63DB0 = 8 - format.BlueBitCount;
 
+        gShift2_2B985EC = format.GreenBitCount;
+        gMask_2B985FC = unknown[format.GreenBitIndex];
+        gShift_2B93E34 = 16 - format.GreenBitIndex;
 
-        rShift2_2B93E8C = format.BlueBitIndex;            // 0        // 43E8C
-        rMask_2B63DF0 = unknown[format.BlueBitCount];     // 1f       // 13DF0
-        rShift_2B63DB0 = 8 - format.BlueBitCount;         // 5        // 13DB0
-
-        gShift2_2B985EC = format.GreenBitCount;            // 5        //
-        gMask_2B985FC = unknown[format.GreenBitIndex];     // 1f       //
-        gShift_2B93E34 = 16 - format.GreenBitIndex;        // b        //
-
-        bShift_2B63D58 = format.RedBitIndex;             // a        //
-        bMask_2B93E30 = unknown[format.RedBitCount];     // 1f       //
-        bShift2 = 24 - format.RedBitCount;       // 13       //
+        bShift_2B63D58 = format.RedBitIndex;
+        bMask_2B93E30 = unknown[format.RedBitCount];
+        bShift2 = 24 - format.RedBitCount;
     }
-
 
     {
         TextureFormat format = {};
         ConvertPixelFormat(&format, &(*gD3dPtr)->TextureFormat1->DDTextureFormat);
 
-        rShift2_2B63DD0 = format.BlueBitIndex;            // 0 | 0
-        rMask_2B959D4 = unknown[format.BlueBitCount];     // f | 5
-        rShift_2B63DD4 = 8 - format.BlueBitCount;         // 4 | 5
+        rShift2_2B63DD0 = format.BlueBitIndex;
+        rMask_2B959D4 = unknown[format.BlueBitCount];
+        rShift_2B63DD4 = 8 - format.BlueBitCount;
 
-        gShift2_2B93E2C = format.GreenBitCount;            // 4 | 5
-        gMask_2B93E94 = unknown[format.GreenBitIndex];     // f | 5
-        gShift_2B63DC0 = 16 - format.GreenBitIndex;        // c | 5
+        gShift2_2B93E2C = format.GreenBitCount;
+        gMask_2B93E94 = unknown[format.GreenBitIndex];
+        gShift_2B63DC0 = 16 - format.GreenBitIndex;
 
-        bShift_2B93E1C = format.RedBitIndex;             // 8 | a
-        bMask_2B959D0 = unknown[format.RedBitCount];     // f | 5
-        bShift2_2B63DEC = 24 - format.RedBitCount;       // 14 | 5
-
-        /*
-        rShift2_2B63DD0 = 0x0;
-        rMask_2B959D4 = 0xf;
-        rShift_2B63DD4 = 0x4;
-
-        gShift2_2B93E2C = 0x4;
-        gMask_2B93E94 = 0xf;
-        gShift_2B63DC0 = 0xc;
-
-        bShift_2B93E1C = 0x8;
-        bMask_2B959D0 = 0xf;
-        bShift2_2B63DEC = 0x14;
-        */
+        bShift_2B93E1C = format.RedBitIndex;
+        bMask_2B959D0 = unknown[format.RedBitCount];
+        bShift2_2B63DEC = 24 - format.RedBitCount;
     }
 
     return 1;
@@ -2572,13 +2343,13 @@ static signed int Init()
 {
     D3dStruct* pD3d = D3DCreate(gVideoDriver);
     (*gD3dPtr) = pD3d;
-    if (Set3dDevice(pD3d, 2) != 1) // If it worked
+    if (Set3dDevice(pD3d, 2) != 1)
     {
         memset(&gVideoDriver->DeviceCaps , 0, sizeof(DDCAPS));
         memset(&gVideoDriver->HelCaps, 0, sizeof(DDCAPS));
         gVideoDriver->DeviceCaps.dwSize = 0x17C;
         gVideoDriver->HelCaps.dwSize = 0x17C;
-        auto err = gVideoDriver->IDDraw4->GetCaps(&gVideoDriver->DeviceCaps, &gVideoDriver->HelCaps);
+        HRESULT err = gVideoDriver->IDDraw4->GetCaps(&gVideoDriver->DeviceCaps, &gVideoDriver->HelCaps);
         if (err)
         {
             D3dErr2String(err);
@@ -2590,7 +2361,7 @@ static signed int Init()
         DWORD totalMem = 0;
         DWORD freeMem = 0;
         gVideoDriver->IDDraw4->GetAvailableVidMem(&ddcaps2, &totalMem, &freeMem);
-        auto cacheSize = totalMem >> 21;
+        int cacheSize = totalMem >> 21;
 
         char buffer[120] = {};
         wsprintfA(buffer, "CacheMul = %d/VideMul %d", totalMem >> 21, totalMem);
@@ -2617,23 +2388,22 @@ static signed int Init()
         softwareCaps.dwSize = 0xFC;
         (*gD3dPtr)->pIDirect3DDevice3->GetCaps(&hardwareCaps, &softwareCaps);
 
-        for (int i = 0; i < 12; i++)
+        int i;
+        for (i = 0; i < 12; i++)
         {
             gGlobals.gCacheSizes[i] = gGlobals.gCacheUnknown[i] * cacheSize;
             gGlobals.gCacheSizes[i] = gGlobals.gCacheUnknown[i] * cacheSize;
         }
-        
+
         Init2();
-  
-        for (int i = 0; i < 12; i++)
+
+        for (i = 0; i < 12; i++)
         {
             if (gGlobals.gCacheUnknown[i] && !gGlobals.gCacheSizes[i])
             {
                 return 1;
             }
         }
-
-        
 
         (*gActiveTextureId) = (HardwareTexture*)-1;
 
@@ -2645,10 +2415,6 @@ static signed int Init()
             {
                 if (deviceId.dwDeviceId == 24 || deviceId.dwDeviceId == 25)
                 {
-                    // TODO
-                    //flt_2B60830 = 0;
-                    //flt_2B6082C = 0x3E800000;
-
                     gGpuSpecificHack = 1;
                     OutputDebugStringA("THIS IS A RIVA");
                     return 0;
@@ -2677,15 +2443,12 @@ static signed int Init()
 
 s32 CC gbh_Init(int a1)
 {
-    
-
     if (gProxyOnly)
     {
-        auto r = gFuncs.pgbh_Init(a1);
+        int r = gFuncs.pgbh_Init(a1);
         return r;
     }
 
-    
     int result = Init();
     if (!result)
     {
@@ -2707,10 +2470,7 @@ static int CC gbh_SetMode(Video* pVideoDriver, HWND hwnd, int modeId)
     return result;
 }
 
-
-
-decltype(&D3dTextureUnknown) pD3dTextureUnknown_2B561D0 = 0;
-
+void (__stdcall *pD3dTextureUnknown_2B561D0)(void) = 0;
 
 static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture, BYTE* pixelData, WORD* pPalData, int textureW, int textureH, int palSize, int renderFlags, char textureFlags)
 {
@@ -2726,14 +2486,12 @@ static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture,
     DWORD local_dword_2B63CF0 = 0;
     if (renderFlags & 0x80)
     {
-        // Transparent
         local_dword_2B63CF0 = 0xFFFFFFFF >> pHardwareTexture->AlphaUnknown;
         local_dword_2B63CF0 &= pHardwareTexture->AlphaBitCount;
         local_dword_2B63CF0 <<= pHardwareTexture->AlphaBitIndex;
     }
     else if (renderFlags & 0x380)
     {
-        // Semi transparent
         local_dword_2B63CF0 = 0x88FFFFFF >> pHardwareTexture->AlphaUnknown;
         local_dword_2B63CF0 &= pHardwareTexture->AlphaBitCount;
         local_dword_2B63CF0 <<= pHardwareTexture->AlphaBitIndex;
@@ -2742,16 +2500,17 @@ static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture,
     BYTE* pPixels = (BYTE*)pVideoDriver->DDSurfaceDesc7.lpSurface;
     DWORD pitch = pVideoDriver->DDSurfaceDesc7.lPitch;
 
-
     DWORD sourcePixelIndex = 0;
-    for (int y = 0; y < textureH; y++)
+    int y;
+    for (y = 0; y < textureH; y++)
     {
-        for (int x = 0; x < textureW; x++)
+        int x;
+        for (x = 0; x < textureW; x++)
         {
             const DWORD surfaceIndex = (x * 2 + (y*(pitch)));
             const BYTE palIndex = pixelData[sourcePixelIndex++];
             WORD palValue = pPalData[palIndex];
-            
+
             if (palIndex != 0)
             {
                 palValue |= local_dword_2B63CF0;
@@ -2760,20 +2519,17 @@ static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture,
             WORD* p = (WORD*)(&pPixels[surfaceIndex]);
             *p = palValue;
         }
-        
+
         const DWORD val =  palSize - textureW;
         sourcePixelIndex += val;
     }
-  
 
     if (textureW < pHardwareTexture->Width)
     {
-        // TODO: Clear remaining? Hardware texture is pre-cleared so probably don't need to?
     }
-  
+
     if (textureH < pHardwareTexture->Height)
     {
-        // TODO: Clear remaining? Hardware texture is pre-cleared so probably don't need to?
     }
 
     if (!pHardwareTexture->pSurfaceForTexture->Unlock(0))
@@ -2781,14 +2537,14 @@ static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture,
         pHardwareTexture->LockedPixelData  = 0;
         pHardwareTexture->pitch = 0;
     }
-    
-    auto pther = pHardwareTexture->pther;
+
+    HardwareTexture* pther = pHardwareTexture->pther;
     if (pther)
     {
         pther->pSurfaceForTexture->Restore();
         pther->OtherSurface->PageLock(0);
-        auto hr = pther->IDirect3dTexture2->Load(pther->pther->IDirect3dTexture2);
-        auto pSurface = pther->OtherSurface;
+        HRESULT hr = pther->IDirect3dTexture2->Load(pther->pther->IDirect3dTexture2);
+        IDirectDrawSurface4* pSurface = pther->OtherSurface;
         if (hr == 1)
         {
             pSurface->Unlock(0);
@@ -2800,39 +2556,14 @@ static signed int __stdcall D3dTextureUnknown(HardwareTexture* pHardwareTexture,
     return 0;
 }
 
-
-decltype(&gbh_DrawQuad) pgbh_DrawQuad = 0x0;
-decltype(&TextureAlloc) pTextureAlloc_2B55DA0 = 0x0;
-decltype(&TextureCache) pTextureCache_E01EC0 = 0x0;
-decltype(&D3dTextureSetCurrent) pD3dTextureSetCurrent_2B56110 = 0x0;
-
+void (CC *pgbh_DrawQuad)(int, Texture*, Vert*, int) = 0x0;
+HardwareTexture* (__stdcall *pTextureAlloc_2B55DA0)(D3dStruct*, int, int, int) = 0x0;
+Texture* (__stdcall *pTextureCache_E01EC0)(Texture*) = 0x0;
+signed int (__stdcall *pD3dTextureSetCurrent_2B56110)(HardwareTexture*) = 0x0;
 
 static void InstallHooks()
 {
-   // DetourAttach((PVOID*)(&pConvertPixelFormat_2B55A10), (PVOID)ConvertPixelFormat);
-    //DetourAttach((PVOID*)(&pD3DTextureAllocate_2B560A0), (PVOID)D3DTextureAllocate_2B560A0);
-   // DetourAttach((PVOID*)(&pFindTextureFormat_2B55C60), (PVOID)FindTextureFormat);
-
-    
-   
-    //DetourAttach((PVOID*)(&pCreateD3DDevice_E01840), (PVOID)CreateD3DDevice);
-    /*
-    DetourAttach((PVOID*)(&pCacheFlushBatchRelated_2B52810), (PVOID)CacheFlushBatchRelated);
-    DetourAttach((PVOID*)(&pD3dTextureUnknown_2B561D0), (PVOID)D3dTextureUnknown);
-   // DetourAttach((PVOID*)(&pgbh_DrawQuad), (PVOID)gbh_DrawQuad);
-   
-    DetourAttach((PVOID*)(&pTextureCache_E01EC0), (PVOID)TextureCache);
-    DetourAttach((PVOID*)(&pD3dTextureSetCurrent_2B56110), (PVOID)D3dTextureSetCurrent);
-    DetourAttach((PVOID*)(&pSetRenderStates_E02960), (PVOID)SetRenderStates);
-    */
-   //DetourAttach((PVOID*)(&pInit2_2B51F40), (PVOID)Init2_2B51F40);
-
-   //DetourAttach((PVOID*)(&pEnumTextureFormatsCallBack_E05BA0), (PVOID)EnumTextureFormatsCallBack);
-
 }
-
-
-//LightInternal Lights[256]; // 459E0
 
 void CC gbh_ResetLights()
 {
@@ -2847,27 +2578,27 @@ int CC gbh_AddLight(Light* pLight)
 {
     if (gProxyOnly)
     {
-        auto ret = gFuncs.pgbh_AddLight(pLight);
+        int ret = gFuncs.pgbh_AddLight(pLight);
         return ret;
     }
 
     DWORD idx = NumLights;
 
     Lights[idx].Flags = pLight->field_0;
-    Lights[idx].Brightness = (float)((pLight->field_0 & 0xFF)) * 0.0039215689;
+    Lights[idx].Brightness = (float)((pLight->field_0 & 0xFF)) * 0.0039215689f;
     Lights[idx].X = pLight->X;
     Lights[idx].Y = pLight->Y;
     Lights[idx].Z = pLight->Z;
 
-    Lights[idx].Red = (float)(((unsigned int)pLight->Colour >> 16) & 0xFF) * 0.0039215689;
-    Lights[idx].Green = (float)(((unsigned int)pLight->Colour >> 8) & 0xFF) * 0.0039215689;
-    Lights[idx].Blue = (float)(pLight->Colour & 0xFF) * 0.0039215689;
+    Lights[idx].Red = (float)(((unsigned int)pLight->Colour >> 16) & 0xFF) * 0.0039215689f;
+    Lights[idx].Green = (float)(((unsigned int)pLight->Colour >> 8) & 0xFF) * 0.0039215689f;
+    Lights[idx].Blue = (float)(pLight->Colour & 0xFF) * 0.0039215689f;
 
-    Lights[idx].Radius  =  ((pLight->field_0 >> 8) & 0xFF) * 0.0039215689 * 8.0;
+    Lights[idx].Radius  =  (float)((pLight->field_0 >> 8) & 0xFF) * 0.0039215689f * 8.0f;
 
     Lights[idx].RadiusSquared  = Lights[idx].Radius * Lights[idx].Radius;
 
-    Lights[idx].RadiusNormalized = 1.0 / Lights[idx].Radius;
+    Lights[idx].RadiusNormalized = 1.0f / Lights[idx].Radius;
 
     NumLights++;
 
@@ -2876,101 +2607,60 @@ int CC gbh_AddLight(Light* pLight)
 
 static void RebasePtrs(DWORD baseAddr)
 {
-    // Funcs
-    pConvertPixelFormat = (decltype(&ConvertPixelFormat))(baseAddr + 0x5A10);
-    pD3DTextureAllocate = (decltype(&D3DTextureAllocate))(baseAddr + 0x60A0);
-    pFindTextureFormat = (decltype(&FindTextureFormat))(baseAddr + 0x5C60);
-    pInit2 = (decltype(&Init2))(baseAddr + 0x1F40);
-    pCreateD3DDevice = (decltype(&CreateD3DDevice))(baseAddr + 0x01840);
-    pEnumTextureFormatsCallBack = (decltype(&EnumTextureFormatsCallBack))(baseAddr + 0x5BA0);
+    pConvertPixelFormat = (void (__stdcall *)(TextureFormat*, const DDPIXELFORMAT*))(baseAddr + 0x5A10);
+    pD3DTextureAllocate = (HardwareTexture* (__stdcall *)(D3dStruct*, int, int, int))(baseAddr + 0x60A0);
+    pFindTextureFormat = (TextureFormat* (__stdcall *)(D3dStruct*, unsigned int))(baseAddr + 0x5C60);
+    pInit2 = (int (*)())(baseAddr + 0x1F40);
+    pCreateD3DDevice = (signed int (__stdcall *)(D3dStruct*))(baseAddr + 0x01840);
+    pEnumTextureFormatsCallBack = (HRESULT (CALLBACK *)(LPDDPIXELFORMAT, LPVOID))(baseAddr + 0x5BA0);
 
-    /*
-  
-    pD3dTextureUnknown_2B561D0 = (decltype(&D3dTextureUnknown))(baseAddr + 0x61D0);
-    pCacheFlushBatchRelated_2B52810 = (decltype(&CacheFlushBatchRelated))(baseAddr + 0x2810);
-
-    pTextureCache_E01EC0 = (decltype(&TextureCache))(baseAddr + 0x01EC0);
-    pD3dTextureSetCurrent_2B56110 = (decltype(&D3dTextureSetCurrent))(baseAddr + 0x6110);
-    pSetRenderStates_E02960 = (decltype(&SetRenderStates))(baseAddr + 0x2960);
-    */
-
-    // Vars
-    //gGlobals.CacheArray  = (decltype(gGlobals.CacheArray ))(baseAddr + 0x13D4C);
-    gActiveTextureId = (decltype(gActiveTextureId))(baseAddr + 0x13DF4);
-
-
-    //real_texture_sizes_word_107E0 = (WORD*)(baseAddr + 0x107E0);
-    //real_CacheSizes_word_10810 = (WORD*)(baseAddr + 0x10810);
-    //real_CacheSizes_dword_43EB0 = (DWORD*)(baseAddr + 0x43EB0);
-
-
-    //renderStateCache = (decltype(renderStateCache))(baseAddr + 0x43E24);
-
-    //DWORD off = baseAddr + 0x485E0;
-    //hack = (D3dStruct*)(off);
-    //gD3dPtr = &hack;
-
+    gActiveTextureId = (HardwareTexture**)(baseAddr + 0x13DF4);
 }
-
 
 u32 CC gbh_InitDLL(Video* pVideoDriver)
 {
-    
-
-    
     HMODULE hOld = LoadLibrary("C:\\Program Files (x86)\\Rockstar Games\\GTA2\\_d3ddll.dll");
 
-   // if (gProxyOnly)
     {
         PopulateS3DFunctions(hOld, gFuncs);
     }
 
     if (gDetours || gRealPtrs)
     {
-        pgbh_DrawQuad = (decltype(pgbh_DrawQuad))GetProcAddress(hOld, "gbh_DrawQuad");
+        pgbh_DrawQuad = (void (CC *)(int, Texture*, Vert*, int))GetProcAddress(hOld, "gbh_DrawQuad");
         RebasePtrs((DWORD)hOld);
     }
 
     if (gDetours)
     {
-      
         InstallHooks();
-       
     }
 
     gVideoDriver = pVideoDriver;
 
     if (gProxyOnly)
     {
-        auto r = gFuncs.pgbh_InitDLL(pVideoDriver);
+        u32 r = gFuncs.pgbh_InitDLL(pVideoDriver);
         return r;
     }
-    
 
-
-   
-   /// PopulateVideoFunctions(pVideoDriver->SelfDllHandle, gVideoDriverFuncs);
-    
     pOldCloseScreen = (*pVideoDriver->initDLL->pVid_CloseScreen);
     pOldSetMode = (*pVideoDriver->initDLL->pVid_SetMode);
 
     *pVideoDriver->initDLL->pVid_CloseScreen = gbh_CloseScreen;
-    //*pVideoDriver->initDLL->pVid_GetSurface = gVideoDriverFuncs.pVid_GetSurface;
-    //*pVideoDriver->initDLL->pVid_FreeSurface = gVideoDriverFuncs.pVid_FreeSurface;
     *pVideoDriver->initDLL->pVid_SetMode = gbh_SetMode;
-    
+
     return 1;
 }
-
 
 signed int CC gbh_InitImageTable(int tableSize)
 {
     if (gProxyOnly)
     {
-        auto ret = gFuncs.pgbh_InitImageTable(tableSize);
+        int ret = gFuncs.pgbh_InitImageTable(tableSize);
         return ret;
     }
-   
+
     gImageTable = reinterpret_cast<ImageTableEntry*>(malloc(sizeof(ImageTableEntry) * tableSize));
     if (!gImageTable)
     {
@@ -3003,7 +2693,7 @@ signed int CC gbh_LoadImage(Image* pToLoad)
 {
     if (gProxyOnly)
     {
-        auto ret = gFuncs.pgbh_LoadImage(pToLoad);
+        int ret = gFuncs.pgbh_LoadImage(pToLoad);
         return ret;
     }
 
@@ -3044,13 +2734,11 @@ signed int CC gbh_LoadImage(Image* pToLoad)
     surfaceDesc.dwWidth = pToLoad->Width;
     surfaceDesc.dwHeight = pToLoad->Height;
 
-    
     if (FAILED(gVideoDriver->IDDraw4->CreateSurface(&surfaceDesc,
         &gImageTable[freeImageIndex].pSurface, 0)))
     {
         return -3;
     }
-    
 
     if (FAILED(gImageTable[freeImageIndex].pSurface->Lock(0,
         &surfaceDesc,
@@ -3067,18 +2755,19 @@ signed int CC gbh_LoadImage(Image* pToLoad)
     const DWORD shiftG = format.GreenBitCount + format.GreenBitIndex - 5;
     const DWORD shiftB = format.BlueBitIndex + format.BlueBitCount - 5;
 
-
     BYTE* pPixels = (BYTE*)surfaceDesc.lpSurface;
 
     DWORD sourcePixelIndex = 0;
-    for (int y = surfaceDesc.dwHeight-1; y >=0 ; y--)
+    int y;
+    for (y = surfaceDesc.dwHeight-1; y >=0 ; y--)
     {
-        for (int x = 0; x < surfaceDesc.dwWidth; x++)
+        int x;
+        for (x = 0; x < surfaceDesc.dwWidth; x++)
         {
             const DWORD surfaceIndex = (x * 2 + (y*(surfaceDesc.lPitch)));
-     
+
             BYTE* p = (BYTE*)(&pPixels[surfaceIndex]);
-           
+
             BYTE* pSrc = (BYTE*)&pToLoad->field_12;
             pSrc += pToLoad->field_0;
 
@@ -3089,14 +2778,13 @@ signed int CC gbh_LoadImage(Image* pToLoad)
             WORD rgb = (r << shiftR) | (g << shiftG) | (b << shiftB);
 
             *(WORD*)p = rgb;
-            
+
             sourcePixelIndex++;
         }
     }
 
     if (FAILED(gImageTable[freeImageIndex].pSurface->Unlock(NULL)))
     {
-        // TODO: Real game bug, should be free'ing surface here?
         return -3;
     }
 
@@ -3135,37 +2823,34 @@ unsigned int CC gbh_RegisterPalette(int paltId, DWORD* pData)
 {
     if (gProxyOnly)
     {
-        auto ret = gFuncs.pgbh_RegisterPalette(paltId, pData);
+        unsigned int ret = gFuncs.pgbh_RegisterPalette(paltId, pData);
         return ret;
     }
 
     DWORD* pOriginal = pData;
 
-    // A pass to fix up the source data
-    for (int i = 0; i < 256; i++)
+    int i;
+    for (i = 0; i < 256; i++)
     {
         if (i == 0)
         {
-            *pData = 0; // colour 0 of each palette is always transparent
+            *pData = 0;
         }
         else
         {
             if (*pData == 0)
             {
-                *pData = 0x10000; // Flag to mark other would be transparent stuff as not transparent?
+                *pData = 0x10000;
             }
         }
-        pData += 64; // Pal data is stored in columns not rows
+        pData += 64;
     }
 
-    
-    WORD* pAllocatedData = (WORD *)malloc(1024u); // Space for 2 16bit pals
+    WORD* pAllocatedData = (WORD *)malloc(1024u);
 
     pals[paltId].mPOriginalData = pOriginal;
     pals[paltId].mbLoaded = 1;
     pals[paltId].mPData = pAllocatedData;
-
-
 
     DWORD local_Shift2_2B985F0 = bShift2;
     DWORD local_bMask_2B60828 = bMask_2B93E30;
@@ -3177,16 +2862,15 @@ unsigned int CC gbh_RegisterPalette(int paltId, DWORD* pData)
     DWORD local_rMask_2B63DB8 = rMask_2B63DF0;
     DWORD local_rShift2_2B63D60 = rShift2_2B93E8C;
 
-    // Set the first pal to be a 16bit converted copy of the original
     pData = pOriginal;
-    for (int i = 0; i < 256; i++)
+    for (i = 0; i < 256; i++)
     {
         pAllocatedData[i] = ConvertPixel(*pData,
             bMask_2B93E30, bShift_2B63D58, bShift2,
             gMask_2B985FC, gShift_2B93E34, gShift2_2B985EC,
             rMask_2B63DF0, rShift2_2B93E8C, rShift_2B63DB0);
 
-        pData += 64; // Pal data is stored in columns not rows
+        pData += 64;
     }
 
     local_Shift2_2B985F0 = bShift2_2B63DEC;
@@ -3199,31 +2883,29 @@ unsigned int CC gbh_RegisterPalette(int paltId, DWORD* pData)
     local_rMask_2B63DB8 = rMask_2B959D4;
     local_rShift2_2B63D60 = rShift2_2B63DD0;
 
-    // Set the 2nd pal to be a 16bit texture format converted copy of the original
     WORD* pSecond = pAllocatedData + 256;
     pData = pOriginal;
-    for (int i = 0; i < 256; i++)
+    for (i = 0; i < 256; i++)
     {
         pSecond[i] = ConvertPixel(*pData,
             bMask_2B959D0, bShift_2B93E1C, bShift2_2B63DEC,
             gMask_2B93E94, gShift_2B63DC0, gShift2_2B93E2C,
             rMask_2B959D4, rShift2_2B63DD0, rShift_2B63DD4);
 
-        pData += 64; // Pal data is stored in columns not rows
+        pData += 64;
     }
 
-    return paltId; // TODO: Func probably doesn't really return anything?
+    return paltId;
 }
 
 Texture* CC gbh_RegisterTexture(__int16 width, __int16 height, BYTE* pData, int pal_idx, char a5)
 {
     if (gProxyOnly)
     {
-        auto r = gFuncs.pgbh_RegisterTexture(width, height, pData, pal_idx, a5);
+        Texture* r = gFuncs.pgbh_RegisterTexture(width, height, pData, pal_idx, a5);
         return r;
     }
 
-    
     Texture* result = reinterpret_cast<Texture*>(malloc(sizeof(Texture)));
     if (!result)
     {
@@ -3232,18 +2914,17 @@ Texture* CC gbh_RegisterTexture(__int16 width, __int16 height, BYTE* pData, int 
 
     memset(result, 0, sizeof(Texture));
 
-    result->ID = gTextureId++;
+    result->ID = (unsigned short)gTextureId++;
     result->field_2 = 0;
 
-    // TODO: What does this mean, should it have a de-ref to check if contains transparent colour ??
     result->PalIsTrans  = LOBYTE(pals[pal_idx].mPData);
 
-    result->Width = width;
+    result->Width = (unsigned short)width;
     result->PalSize = 0;
     result->pLockedPixels = 0;
     result->field_C = 0;
     result->field_D = 0;
-    result->Height = height;
+    result->Height = (unsigned short)height;
     result->PalIsValid =  pals[pal_idx].mbLoaded;
 
     if (a5 && gbIsAtiRagePro)
@@ -3270,18 +2951,13 @@ void CC gbh_SetAmbient(float ambient)
     gfAmbient = ambient * 255.0f;
 }
 
-
 int CC gbh_SetCamera(float a1, float a2, float a3, float a4)
 {
-    // This function seems to do nothing
     return 0;
 }
 
 int CC gbh_SetColourDepth()
 {
-    // TODO
-    //__debugbreak();
-   // return 1;
     if (gProxyOnly)
     {
         return gFuncs.pgbh_SetColourDepth();
@@ -3301,7 +2977,6 @@ float CC gbh_SetWindow(float left, float top, float right, float bottom)
     gWindowRight = right;
     gWindowTop = top;
     gWindowBottom = bottom;
-   // gWindow_d5_dword_E13DC4 = gVideoDriver->Flags & 1; // TODO: Never used?
 
     if (gProxyOnly)
     {

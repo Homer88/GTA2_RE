@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(MENU LANGUAGES CXX)
+project(ULTIL LANGUAGES CXX)
 
 
 # стандарт

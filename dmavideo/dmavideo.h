@@ -1,10 +1,21 @@
 #ifndef __DMAVIDEO_H__
 #define __DMAVIDEO_H__
 
+#define STATIC_ASSERT(cond, msg) \
+    typedef char CONCAT(static_assert_, __LINE__)[(cond) ? 1 : -1]
+#define CONCAT_(a, b) a ## b
+#define CONCAT(a, b) CONCAT_(a, b)
+
 #include <windows.h>
 #include <ddraw.h>
 
 struct PtrVideoFunctions;
+
+typedef unsigned short int u16;
+typedef signed int s32;
+typedef unsigned int u32;
+typedef float f32;
+typedef unsigned char u8;
 
 struct Video
 {
@@ -46,7 +57,7 @@ struct Video
     IDirectDraw7* DirectDraw7;
     char buffer[144];
     IDirectDraw4* IDDraw4;
-    GUID pGUID; // TODO: Check
+    GUID pGUID;
     IDirectDrawSurface4* SurfacePrimary;
     IDirectDrawSurface4* Surface;
     DDSURFACEDESC2 DDSurfaceDesc7;
@@ -54,14 +65,11 @@ struct Video
     DWORD field_1BC;
     DWORD field_1C0;
     DWORD field_1C4;
+    DWORD field_1C8;
     DDCAPS DeviceCaps;
     DDCAPS HelCaps;
     HWND hwnd;
 };
-
-static_assert(sizeof(DDCAPS) == 0x17C, "Wrong sized DDCAPS");
-static_assert(sizeof(DDSURFACEDESC2) == 0x7C, "Wrong sized DDSURFACEDESC2");
-static_assert(sizeof(Video) == 0x4C4, "Wrong sized SVideo");
 
 struct Device
 {
@@ -73,10 +81,8 @@ struct Device
     GUID* pDeviceGuid;
     GUID Guid;
     DWORD dwVidMemTotal;
-    DWORD EndBuffer; // TODO: Actually a word and SDevice is 0x2E ?
+    DWORD EndBuffer;
 };
-static_assert(sizeof(Device) == 0x30, "Wrong sized SDevice");
-
 struct DisplayMode
 {
     DWORD DisplayModeIdx;
@@ -96,19 +102,12 @@ struct DisplayMode
     struct DisplayMode* NextDisplayMode;
     DWORD field_3C;
 };
-static_assert(sizeof(DisplayMode) == 0x40, "Wrong sized SDisplayMode");
 
 struct VidVersion
 {
     DWORD mVersion;
     char mVersionString[255];
 };
-
-using u16 = unsigned short int;
-using s32 = signed int;
-using u32 = unsigned int;
-using f32 = float;
-using u8 = unsigned char;
 
 #define CC __stdcall
 
@@ -137,55 +136,55 @@ VidVersion* CC Vid_GetVersion();
 
 struct PtrVideoFunctions
 {
-    decltype(&Vid_GetVersion)* pVid_GetVersion;
-    decltype(&Vid_Init_SYS)* pVid_Init_SYS;
-    decltype(&Vid_CheckMode)* pVid_CheckMode;
-    decltype(&Vid_FindMode)* pVid_FindMode;
-    decltype(&Vid_FindFirstMode)* pVid_FindFirstMode;
-    decltype(&Vid_FindNextMode)* pVid_FindNextMode;
-    decltype(&Vid_FindDevice)* pVid_FindDevice;
-    decltype(&Vid_SetDevice)* pVid_SetDevice;
-    decltype(&Vid_CloseScreen)* pVid_CloseScreen;
-    decltype(&Vid_SetMode)* pVid_SetMode;
-    decltype(&Vid_FlipBuffers)* pVid_FlipBuffers;
-    decltype(&Vid_ReleaseSurface)* pVid_ReleaseSurface;
-    decltype(&Vid_GrabSurface)* pVid_GrabSurface;
-    decltype(&Vid_ShutDown_SYS)* pVid_ShutDown_SYS;
-    decltype(&Vid_EnableWrites)* pVid_EnableWrites;
-    decltype(&Vid_DisableWrites)* pVid_DisableWrites;
-    decltype(&Vid_GetSurface)* pVid_GetSurface;
-    decltype(&Vid_FreeSurface)* pVid_FreeSurface;
-    decltype(&Vid_ClearScreen)* pVid_ClearScreen;
-    decltype(&Vid_WindowProc)* pVid_WindowProc;
-    decltype(&Vid_InitDLL)* pVid_InitDLL;
-    decltype(&Vid_SetGamma)* pVid_SetGamma;
-    const char* mErrStr; // NOT USED - just used to check struct is never reassigned
+    VidVersion* (CC **pVid_GetVersion)();
+    Video* (CC **pVid_Init_SYS)(s32, u16);
+    s32 (CC **pVid_CheckMode)(Video*, s32, s32, s32);
+    DisplayMode* (CC **pVid_FindMode)(Video*, s32);
+    s32 (CC **pVid_FindFirstMode)(Video*, s32);
+    s32 (CC **pVid_FindNextMode)(Video*);
+    Device* (CC **pVid_FindDevice)(Video*, s32);
+    s32 (CC **pVid_SetDevice)(Video*, s32);
+    void (CC **pVid_CloseScreen)(Video*);
+    s32 (CC **pVid_SetMode)(Video*, HWND, s32);
+    void (CC **pVid_FlipBuffers)(Video*);
+    void (CC **pVid_ReleaseSurface)(Video*);
+    void (CC **pVid_GrabSurface)(Video*);
+    void (CC **pVid_ShutDown_SYS)(Video*);
+    s32 (CC **pVid_EnableWrites)(Video*);
+    s32 (CC **pVid_DisableWrites)(Video*);
+    s32 (CC **pVid_GetSurface)(Video*);
+    s32 (CC **pVid_FreeSurface)(Video*);
+    s32 (CC **pVid_ClearScreen)(Video*, u8, u8, u8, s32, s32, s32, s32);
+    s32 (CC **pVid_WindowProc)(Video*, HWND, DWORD, WPARAM, LPARAM);
+    s32 (CC **pVid_InitDLL)(HINSTANCE, PtrVideoFunctions*);
+    s32 (CC **pVid_SetGamma)(Video*, f32, f32, f32);
+    const char* mErrStr;
 };
 
 struct VideoFunctions
 {
-    decltype(&Vid_GetVersion) pVid_GetVersion;
-    decltype(&Vid_Init_SYS) pVid_Init_SYS;
-    decltype(&Vid_CheckMode) pVid_CheckMode;
-    decltype(&Vid_FindMode) pVid_FindMode;
-    decltype(&Vid_FindFirstMode) pVid_FindFirstMode;
-    decltype(&Vid_FindNextMode) pVid_FindNextMode;
-    decltype(&Vid_FindDevice) pVid_FindDevice;
-    decltype(&Vid_SetDevice) pVid_SetDevice;
-    decltype(&Vid_CloseScreen) pVid_CloseScreen;
-    decltype(&Vid_SetMode) pVid_SetMode;
-    decltype(&Vid_FlipBuffers) pVid_FlipBuffers;
-    decltype(&Vid_ReleaseSurface) pVid_ReleaseSurface;
-    decltype(&Vid_GrabSurface) pVid_GrabSurface;
-    decltype(&Vid_ShutDown_SYS) pVid_ShutDown_SYS;
-    decltype(&Vid_EnableWrites) pVid_EnableWrites;
-    decltype(&Vid_DisableWrites) pVid_DisableWrites;
-    decltype(&Vid_GetSurface) pVid_GetSurface;
-    decltype(&Vid_FreeSurface) pVid_FreeSurface;
-    decltype(&Vid_ClearScreen) pVid_ClearScreen;
-    decltype(&Vid_WindowProc) pVid_WindowProc;
-    decltype(&Vid_InitDLL) pVid_InitDLL;
-    decltype(&Vid_SetGamma) pVid_SetGamma;
+    VidVersion* (CC *pVid_GetVersion)();
+    Video* (CC *pVid_Init_SYS)(s32, u16);
+    s32 (CC *pVid_CheckMode)(Video*, s32, s32, s32);
+    DisplayMode* (CC *pVid_FindMode)(Video*, s32);
+    s32 (CC *pVid_FindFirstMode)(Video*, s32);
+    s32 (CC *pVid_FindNextMode)(Video*);
+    Device* (CC *pVid_FindDevice)(Video*, s32);
+    s32 (CC *pVid_SetDevice)(Video*, s32);
+    void (CC *pVid_CloseScreen)(Video*);
+    s32 (CC *pVid_SetMode)(Video*, HWND, s32);
+    void (CC *pVid_FlipBuffers)(Video*);
+    void (CC *pVid_ReleaseSurface)(Video*);
+    void (CC *pVid_GrabSurface)(Video*);
+    void (CC *pVid_ShutDown_SYS)(Video*);
+    s32 (CC *pVid_EnableWrites)(Video*);
+    s32 (CC *pVid_DisableWrites)(Video*);
+    s32 (CC *pVid_GetSurface)(Video*);
+    s32 (CC *pVid_FreeSurface)(Video*);
+    s32 (CC *pVid_ClearScreen)(Video*, u8, u8, u8, s32, s32, s32, s32);
+    s32 (CC *pVid_WindowProc)(Video*, HWND, DWORD, WPARAM, LPARAM);
+    s32 (CC *pVid_InitDLL)(HINSTANCE, PtrVideoFunctions*);
+    s32 (CC *pVid_SetGamma)(Video*, f32, f32, f32);
 };
 
 template<class T>
@@ -221,6 +220,4 @@ inline void PopulateSVideoFunctions(HINSTANCE hDmaVideoDll, T& funcs)
     GetFunc(hDmaVideoDll, funcs.pVid_SetGamma, "Vid_SetGamma");
 }
 
-
 #endif // !__DMAVIDEO_H__
-

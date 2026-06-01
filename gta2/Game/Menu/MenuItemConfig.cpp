@@ -36,7 +36,7 @@ void MenuItem::Initialize(bool  isActive,  short X, int Y, bool  IndexMenuAction
     this->Y = Y;
     this->IndexMenuActions = IndexMenuActions;
     
-    if (description != nullptr)
+    if (description != 0)
     {
         SetDescription(description);
     }
@@ -44,7 +44,7 @@ void MenuItem::Initialize(bool  isActive,  short X, int Y, bool  IndexMenuAction
 
 void MenuItem::SetDescription(const wchar_t* text, size_t maxLength)
 {
-    if (text == nullptr)
+    if (text == 0)
     {
         Description[0] = L'\0';
         return;

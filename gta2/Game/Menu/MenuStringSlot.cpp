@@ -62,6 +62,6 @@ void MenuStringSlot::setText(const wchar_t* text) {
 }
 
 
-constexpr size_t MenuStringSlot::expectedSize() {
+size_t MenuStringSlot::expectedSize() {
     return 108;
 }

@@ -12,6 +12,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 add_subdirectory(Menu)
 # Основная библиотека Player
 #add_subdirectory(Player)
-#Ультитилы 
-add_subdirectory(ultil)
 

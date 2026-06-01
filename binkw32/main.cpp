@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <cstdlib>   // Для malloc
 #include <climits>   // Для INT_MAX
-#include <cstdint>   // Для uintptr_t (если доступен)
 #include "global.h"
 #include "binkw32.h"
 
@@ -17,7 +16,8 @@ BOOL  __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		return TRUE;
 }
 BOOL __stdcall DllEntryPoint(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved){
-
+    (void)hinstDLL; (void)fdwReason; (void)lpReserved;
+    return TRUE;
 }
 
 
@@ -81,7 +81,7 @@ void* __stdcall radmalloc(size_t size)
 
     // Вычисляем смещение для выравнивания
     const size_t offset = ALIGNMENT - (
-        (reinterpret_cast<uintptr_t>(raw_ptr)) & ALIGN_MASK
+        (reinterpret_cast<ULONG_PTR>(raw_ptr)) & ALIGN_MASK
         );
 
     // Получаем выровненный указатель
@@ -97,13 +97,13 @@ void* __stdcall radmalloc(size_t size)
 void __stdcall radfree(void* aligned_ptr)
 {
     // Проверка на нулевой указатель
-    if (aligned_ptr == nullptr)
+    if (aligned_ptr == 0)
     {
         return;
     }
 
     // 1. Получаем смещение, сохраненное перед выровненным блоком
-    const auto offset = *(
+    const unsigned char offset = *(
         static_cast<const unsigned char*>(aligned_ptr) - 1
         );
 

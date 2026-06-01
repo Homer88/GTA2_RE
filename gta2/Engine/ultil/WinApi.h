@@ -1,5 +1,5 @@
 /*
-Данный файл содержит стандартные функции для работы с текстом и так далее
+РСЃС‚СЂСѓРјРµРЅС‚С‹ РґР»СЏ СЂР°Р±РѕС‚С‹ РџРћ.
 */
 #ifndef ___WIN_API___H__
 #define ___WIN_API___H__
@@ -9,6 +9,8 @@ class WinApi{
 		WinApi();
 		char* Convertor_wchar_t_ToChar(wchar_t* Text);
 		wchar_t* CopyWideString(wchar_t* dest, wchar_t* source);
+		
+		void GetVersion(DWORD *pMajorVersion, DWORD *pMinorVersion);
 		~WinApi();
 };
 

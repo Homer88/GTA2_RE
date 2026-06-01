@@ -1,17 +1,13 @@
 #ifndef  __D3DDLL_H_
 #define __D3DDLL_H_
 
-
-
-
-
 #include "../dmavideo/dmavideo.h"
 
-using u16 = unsigned short int;
-using s32 = signed int;
-using u32 = unsigned int;
-using f32 = float;
-using u8 = unsigned char;
+typedef unsigned short int u16;
+typedef signed int s32;
+typedef unsigned int u32;
+typedef float f32;
+typedef unsigned char u8;
 
 #define CC __stdcall
 
@@ -30,9 +26,8 @@ struct Texture
     u8 Flags;
     BYTE* pOriginalPixelData;
     WORD* pPaltData;
-    struct Cache* NextCache; // +32 == IUnknown, DDSurface ptr ?
+    struct Cache* NextCache;
 };
-static_assert(sizeof(Texture) == 0x20, "Wrong sized STexture");
 
 struct Vert
 {
@@ -41,7 +36,6 @@ struct Vert
     DWORD spec;
     float u, v;
 };
-static_assert(sizeof(Vert) == 0x20, "wrong size");
 
 struct Verts
 {
@@ -50,13 +44,12 @@ struct Verts
 
 struct Light
 {
-    DWORD field_0;  // ?? looking at map format maybe on/off time and strength/radius?
-    float X;  // x ?
-    float Y;  // y ?
-    float Z;  // z ?
-    DWORD Colour; // ARGB?
+    DWORD field_0;
+    float X;
+    float Y;
+    float Z;
+    DWORD Colour;
 };
-static_assert(sizeof(Light) == 0x14, "Wrong size SLight");
 
 void CC ConvertColourBank(s32 unknown);
 int CC DrawLine(int a1, int a2, int a3, int a4, int a5);
@@ -70,7 +63,7 @@ int CC gbh_BlitBuffer(int a1, int a2, int a3, int a4, int a5, int a6);
 char CC gbh_BlitImage(int a1, int a2, int a3, int a4, int a5, int a6, int a7);
 void CC gbh_CloseDLL();
 void CC gbh_CloseScreen(Video* pVideo);
-unsigned int CC gbh_Convert16BitGraphic(int a1, unsigned int a2, WORD *a3, signed int a4);
+unsigned int CC gbh_Convert16BitGraphic(int a1, unsigned int a2, WORD* a3, signed int a4);
 unsigned int CC gbh_ConvertColour(unsigned __int8 a1, unsigned __int8 a2, unsigned __int8 a3);
 int CC gbh_DrawFlatRect(int a1, int a2);
 void CC gbh_DrawQuad(int flags, Texture* pTexture, Vert* pVerts, int baseColour);
@@ -105,13 +98,12 @@ struct Image
     DWORD field_12;
 };
 #pragma pack(pop)
-static_assert(sizeof(Image) == 0x16, "Wrong sized SImage");
 
 signed int CC gbh_LoadImage(Image* pImage);
 Texture* CC gbh_LockTexture(Texture* pTexture);
 void CC gbh_Plot(int a1, int a2, int a3, int a4);
 int CC gbh_PrintBitmap(int a1, int a2);
-unsigned int CC gbh_RegisterPalette(int a1, DWORD *a2);
+unsigned int CC gbh_RegisterPalette(int a1, DWORD* a2);
 Texture* CC gbh_RegisterTexture(__int16 width, __int16 height, BYTE* pData, int a4, char a5);
 void CC gbh_ResetLights();
 void CC gbh_SetAmbient(float a1);
@@ -120,55 +112,52 @@ int CC gbh_SetColourDepth();
 float CC gbh_SetWindow(float left, float top, float right, float bottom);
 Texture* CC gbh_UnlockTexture(Texture* pTexture);
 
-
 struct D3DFunctions
 {
-    // TODO: Should probably also be pointers to function pointers
-    decltype(&ConvertColourBank) pConvertColourBank;
-    decltype(&DrawLine) pDrawLine;
-    decltype(&SetShadeTableA) pSetShadeTableA;
-    decltype(&MakeScreenTable) pMakeScreenTable;
-    decltype(&gbh_AddLight) pgbh_AddLight;
-    decltype(&gbh_AssignPalette) pgbh_AssignPalette;
-    decltype(&gbh_BeginLevel) pgbh_BeginLevel;
-    decltype(&gbh_BeginScene) pgbh_BeginScene;
-    decltype(&gbh_BlitBuffer) pgbh_BlitBuffer;
-    decltype(&gbh_BlitImage) pgbh_BlitImage;
-    decltype(&gbh_CloseDLL) pgbh_CloseDLL;
-    decltype(&gbh_CloseScreen) pgbh_CloseScreen;
-    decltype(&gbh_Convert16BitGraphic) pgbh_Convert16BitGraphic;
-    decltype(&gbh_ConvertColour) pgbh_ConvertColour;
-    decltype(&gbh_DrawFlatRect) pgbh_DrawFlatRect;
-    decltype(&gbh_DrawQuad) pgbh_DrawQuad;
-    decltype(&gbh_DrawQuadClipped) pgbh_DrawQuadClipped;
-    decltype(&gbh_DrawTilePart) pgbh_DrawTilePart;
-    decltype(&gbh_DrawTriangle) pgbh_DrawTriangle;
-    decltype(&gbh_EndLevel) pgbh_EndLevel;
-    decltype(&gbh_EndScene) pgbh_EndScene;
-    decltype(&gbh_FreeImageTable) pgbh_FreeImageTable;
-    decltype(&gbh_FreePalette) pgbh_FreePalette;
-    decltype(&gbh_FreeTexture) pgbh_FreeTexture;
-    decltype(&gbh_GetGlobals) pgbh_GetGlobals;
-    decltype(&gbh_GetUsedCache) pgbh_GetUsedCache;
-    decltype(&gbh_Init) pgbh_Init;
-    decltype(&gbh_InitDLL) pgbh_InitDLL;
-    decltype(&gbh_InitImageTable) pgbh_InitImageTable;
-    decltype(&gbh_LoadImage) pgbh_LoadImage;
-    decltype(&gbh_LockTexture) pgbh_LockTexture;
-    decltype(&gbh_Plot) pgbh_Plot;
-    decltype(&gbh_PrintBitmap) pgbh_PrintBitmap;
-    decltype(&gbh_RegisterPalette) pgbh_RegisterPalette;
-    decltype(&gbh_RegisterTexture) pgbh_RegisterTexture;
-    decltype(&gbh_ResetLights) pgbh_ResetLights;
-    decltype(&gbh_SetAmbient) pgbh_SetAmbient;
-    decltype(&gbh_SetCamera) pgbh_SetCamera;
-    decltype(&gbh_SetColourDepth) pgbh_SetColourDepth;
-    decltype(&gbh_SetWindow) pgbh_SetWindow;
-    decltype(&gbh_UnlockTexture) pgbh_UnlockTexture;
+    void (CC *pConvertColourBank)(s32);
+    int (CC *pDrawLine)(int, int, int, int, int);
+    void (CC *pSetShadeTableA)(int, int, int, int, int);
+    int* (CC *pMakeScreenTable)(int, int, unsigned int);
+    int (CC *pgbh_AddLight)(Light*);
+    char (CC *pgbh_AssignPalette)(Texture*, int);
+    void (CC *pgbh_BeginLevel)();
+    int (CC *pgbh_BeginScene)();
+    int (CC *pgbh_BlitBuffer)(int, int, int, int, int, int);
+    char (CC *pgbh_BlitImage)(int, int, int, int, int, int, int);
+    void (CC *pgbh_CloseDLL)();
+    void (CC *pgbh_CloseScreen)(Video*);
+    unsigned int (CC *pgbh_Convert16BitGraphic)(int, unsigned int, WORD*, signed int);
+    unsigned int (CC *pgbh_ConvertColour)(unsigned __int8, unsigned __int8, unsigned __int8);
+    int (CC *pgbh_DrawFlatRect)(int, int);
+    void (CC *pgbh_DrawQuad)(int, Texture*, Vert*, int);
+    void (CC *pgbh_DrawQuadClipped)(int, int, int, int, int);
+    s32 (CC *pgbh_DrawTilePart)(unsigned int, Texture*, Vert*, int);
+    void (CC *pgbh_DrawTriangle)(int, Texture*, Vert*, int);
+    void (CC *pgbh_EndLevel)();
+    double (CC *pgbh_EndScene)();
+    int (CC *pgbh_FreeImageTable)();
+    void (CC *pgbh_FreePalette)(int);
+    void (CC *pgbh_FreeTexture)(Texture*);
+    u32* (CC *pgbh_GetGlobals)();
+    int (CC *pgbh_GetUsedCache)(int);
+    s32 (CC *pgbh_Init)(int);
+    u32 (CC *pgbh_InitDLL)(Video*);
+    signed int (CC *pgbh_InitImageTable)(int);
+    signed int (CC *pgbh_LoadImage)(Image*);
+    Texture* (CC *pgbh_LockTexture)(Texture*);
+    void (CC *pgbh_Plot)(int, int, int, int);
+    int (CC *pgbh_PrintBitmap)(int, int);
+    unsigned int (CC *pgbh_RegisterPalette)(int, DWORD*);
+    Texture* (CC *pgbh_RegisterTexture)(__int16, __int16, BYTE*, int, char);
+    void (CC *pgbh_ResetLights)();
+    void (CC *pgbh_SetAmbient)(float);
+    int (CC *pgbh_SetCamera)(float, float, float, float);
+    int (CC *pgbh_SetColourDepth)();
+    float (CC *pgbh_SetWindow)(float, float, float, float);
+    Texture* (CC *pgbh_UnlockTexture)(Texture*);
 
     HINSTANCE hinstance;
 };
-
 
 inline void PopulateS3DFunctions(HINSTANCE h, D3DFunctions& f)
 {

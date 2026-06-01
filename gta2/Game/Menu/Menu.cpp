@@ -71,6 +71,32 @@ enum eMenuEntry {
     EntryQuit=2,
 };
 
+enum EntryPlay {
+    NamePlayer = 0,
+    ResumeSaveStatus = 1,
+    ViewHighScores=2,
+    StartPlayInArena=3,
+    BonusIcon=4
+};
+
+enum eSpritePlayerMenu {
+    CircleSprite = 0,
+    LeftArrowRedSprite = 3,
+    RightArrowRedSprite = 4,
+
+};
+enum eGUIPlayerMenu {
+    PlayArenaCircle = 0,
+    BonusCircle = 1,
+    PlayArenaLeftArrowRed = 2,
+    BonusLeftArrowRed = 3,
+    PlayArenaLeftArrowRed1 = 4,
+    PlayArenaRightArrowRed1 = 5,
+    BonusLeftArrowRed1 = 6,
+    BonusRightArrowRed1 = 7,
+    PlayNameLeftArrowRed = 8,
+    PlayNameRightArrowRed = 9,
+};
 
 enum MenuBackground {
     Options = 0,
@@ -99,6 +125,173 @@ enum MenuBackground {
     OptionsDebug = 153,
     OptionsLanguage = 154,
 };
+
+enum eGUI {
+    MenyPlayPlayerName=0,
+    MenyPlayRestart=1,
+    MenyPlayVievHigh=2,
+    MenyPlayLevel=3,
+    MenyPlayBonus=4,
+    MenuHighScores=5,
+};
+
+enum eMenuPicture {
+    ePlayerName = 10,
+    eRestart = 11,
+    eVievHigh = 6,
+    eStartLevel1 = 7,
+    eHighScores = 12,
+    eRip = 13,
+    eMenuPic_15 = 15,
+    eResumSave = 16,
+    eTitle = 17,
+    eQuit = 2,
+    eOptions = 0,
+    ePlay = 1,
+};
+
+enum MenuPicture
+{
+    TGA_1 = 0,
+    TGA_2 = 1,
+    PicMenuFiles_16=16,
+    Levelcomplete_tga=17,
+    PicMenuFiles_18=18,
+    Credits_tga=22,
+
+};
+
+enum eGUIAreaComplite {
+    AreaComplite = 0
+};
+
+enum Entry_Arena {
+    PlayNextArea = 0,
+    //ResumeSaveStatus = 1,
+    ReplayPreviousArea = 2,
+    Contnue = 3,
+    BackToMainMenu=4,
+};
+enum Items_Arena {
+    Items_PlayNextArea = 0,
+    Items_ResumeSaveStatus = 1,
+    Items_ReplayPreviousArea = 2,
+    Items_Contnue = 3,
+    Items_BackToMainMenu = 4,
+};
+enum GUI_ResumeLoadSave {
+    TextPlayerQuit =0,
+};
+
+enum Entry_ResumeLoadSave {
+    ResumeSavedStatus = 0,
+    Entry_ReplayPreviousArea = 1,
+    Entry_BackToMainMenu_ResumeLoadSave = 2,
+};
+enum Items_ResumeLoadSave {
+    ResumeLoadSave_ResumeSavedStatus = 0,
+    ResumeLoadSave_ReplayPreviousArea = 1,
+    ResumeLoadSave_BackToMainMenu = 2,
+};
+enum GUI_RIP {
+    PlayerDead = 0,
+};
+enum Entry_RIP {
+    RIP_ResumeSavedStatus = 0,
+    RIP_ReplayPreviousArea = 1,
+    RIP_BackToMainMenu = 2,
+};
+
+enum GUI_VIEW_HS {
+    VIEW_HIGH_SCORE_0,
+    VIEW_HIGH_SCORE_1,
+    VIEW_HIGH_SCORE_2,
+    VIEW_HIGH_SCORE_3,
+    VIEW_HIGH_SCORE_4,
+};
+enum eEntryViewHigh{
+    EntryViewHigh,
+};
+
+enum eGUICompliteGame {
+    GUI_GameComplire=0,
+
+};
+enum Entry_Complire {
+    Entry_BackToMainMenu = 0,
+};
+enum Item_Complire {
+    Item_BackToMainMenu = 0,
+};
+
+
+enum cheat {
+    CUTIE1 		= 0x33A69,                 // Дает 99 жизней
+    NEKKID 		= 0x36F62,                 // Нудисты
+    MADEMAN 	= 0x41611,                 // Дает авторитет
+    DANISGOD 	= 0x44D2F,                 // дает 20000
+    FYOHZZ0 	= 0x45118,
+    FISHFLAP 	= 0x45AEF,                 // Small Cars
+    UKGAMER 	= 0x45B2C,                 // all towns unlocked
+    FLAMEON 	= 0x45EC2,                 // Бecкoнeчнaя Flame Gun
+    DAVEMOON 	= 0x4639F,                 // Базовое оружие и бесконечные патроны
+    EATSOUP 	= 0x4657B,                 // Бесплатные магазины
+    IAMDAVEJ 	= 0x4672D,                 // дает 999999
+    LASVEGAS 	= 0x46BE8,                 // Фaнаты Элвисa
+    NAVARONE 	= 0x47178,                 // All Weapons
+    COCKTART 	= 0x478A9,                 // За взрывы не будут выдаваться очки.
+    PSJABBER 	= 0x478FB,                 // на бессмертие
+    ARSESTAR 	= 0x47AF1,                 // Пocлe apecтa y вac coxpaняютcя вce имeвшиecя в нaличии пyшки
+    GOREFEST 	= 0x484DF,                 // Количество крови в игре заметно увеличится.
+    BUCKFAST 	= 0x4878D,                 // Режим «Бунт»
+    GOURANGA 	= 0x49362,                 // Активация читов
+    GODOFGTA 	= 0x49771,                 // Все оружие
+    SUPZZZ0 	= 0x49C76,
+    SEGARULZ 	= 0x4A98B,                 // 10x Point Multiplier
+    ITSALLUP 	= 0x4A9B8,                 // Выбop ypoвня
+    HUNSRUS 	= 0x4B28C,                 // Нeвидимocть
+    SCHURULZ 	= 0x4D5C4,                 // Двойной урон
+    VOLTFEST 	= 0x4DA77,                 // Бecкoнeчнaя Electrical Gun
+    TUMYFROG 	= 0x5073D,
+};
+
+
+//  это глобальные параметры использование паролей 
+bool gDo_Blood					= false;
+bool gBunt 						= false;
+bool gVoltfest 					= false;
+bool gMademan 					= false;
+bool gLasvegas 					= false;
+bool gNEKKID 					= false;
+bool gDoFreeShopping 			= false;
+bool gHeats99 					= false;
+bool gKeepWeaponsAfterDeath 	= false;
+bool gGetAllWeapons 			= false;
+bool gDoInvulnerable 			= false;
+bool gDANISGOD 					= false;
+bool gFYOHZZ0 					= false;
+bool gIAMDAVEJ 					= false;
+bool gSEGARULZ 					= false;
+bool gDAVEMOON 					= false;
+bool gExplodingOn 				= false;
+bool gFLAMEON 					= false;
+bool gUKGAMER 					= false;
+bool gSUPZZZ0 					= false;
+bool gTUMYFROG 					= false;
+bool gSCHURULZ 					= false;
+bool gHUNSRUS 					= false;
+bool gFISHFLAP 					= false;
+
+enum MENUSCREEN {
+    MENUSCREEN_PLAY = 1,
+    MENUSCREEN_QUIT = 2,
+    MENUSCREEN_BONUSAC=3,
+    MENUSCREEN_BONUSDF=4,
+    MENUSCREEN_BONUSGI=5,
+    
+};
+                    
+int gCodeCash[8] = { 0x33D, 0x2F9, 0x17, 0x281, 0x2B, 0x329, 0x2A5, 0x0BF };
 
 // ============================================================================
 // РЕАЛИЗАЦИЯ МЕТОДОВ (ЗАГЛУШКИ)
@@ -208,19 +401,99 @@ void Menu::ReleaseInputDevice() {
     }
 }
 
-void Menu::ReadDeviceState() {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x4E bytes
+char Menu::ReadDeviceState() {
+    char *Keys; // edi
+    int v3; // eax
+
+    Keys = this->Keys;
+    v3 = this->InputDevice->GetDeviceState(this->InputDevice, 256, this->Keys);
+    if ( v3 >= 0 )
+        return 1;
+    if ( (v3 == -2147024866 || v3 == -2147024884) && this->InputDevice->Acquire(this->InputDevice) >= 0 )
+        this->InputDevice->GetDeviceState(this->InputDevice, 256, Keys);
+    return 0;
 }
 
 void Menu::ProcessInput() {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x152 bytes
+    unsigned char v2; // cl
+    bool v3; // zf
+    unsigned char v4; // al
+    unsigned char v5; // cl
+    unsigned char KeyOldLeft; // al
+    unsigned char KeyNewLeft; // cl
+    unsigned char KeyOldRight; // al
+    unsigned char v9; // cl
+    unsigned char v10; // al
+    unsigned char v11; // cl
+    unsigned char v12; // al
+    unsigned char v13; // cl
+    unsigned char v14; // al
+
+    if ( this->FrontendKeysEnabled && this->ReadDeviceState() )
+    {
+        v2 = this->Keys[200] < 0 && !this->OldKeyState.up;
+        this->OldKeyState.up = this->Keys[200] & 128;
+        v4 = this->Keys[208] & 0x80;
+        v3 = this->Keys[208] >= 0;
+        this->NewKeyState.up = v2;
+        v5 = !v3 && !this->OldKeyState.down;
+        this->OldKeyState.down = v4;
+        KeyOldLeft = this->Keys[203] & 128;
+        this->NewKeyState.down = v5;
+        KeyNewLeft = KeyOldLeft && !this->OldKeyState.left;
+        this->OldKeyState.left = KeyOldLeft;
+        KeyOldRight = this->Keys[205] & 128;
+        this->NewKeyState.left = KeyNewLeft;
+        v9 = KeyOldRight && !this->OldKeyState.Right;
+        this->OldKeyState.Right = KeyOldRight;
+        v10 = this->Keys[28] & 0x80;
+        v3 = this->Keys[28] >= 0;
+        this->NewKeyState.Right = v9;
+        v11 = !v3 && !this->OldKeyState.enter;
+        this->OldKeyState.enter = v10;
+        v12 = this->Keys[1] & 0x80;
+        v3 = this->Keys[1] >= 0;
+        this->NewKeyState.enter = v11;
+        v13 = !v3 && !this->OldKeyState.esc;
+        this->OldKeyState.esc = v12;
+        v14 = this->Keys[211] & 0x80;
+        v3 = this->Keys[211] >= 0;
+        this->NewKeyState.esc = v13;
+        if ( v3 || this->OldKeyState.del )
+        {
+            this->OldKeyState.del = v14;
+            this->NewKeyState.del = 0;
+        }
+        else
+        {
+            this->OldKeyState.del = v14;
+            this->NewKeyState.del = 1;
+        }
+    }
+    else
+    {
+        this->NewKeyState.up = 0;
+        this->NewKeyState.down = 0;
+        this->NewKeyState.left = 0;
+        this->NewKeyState.Right = 0;
+        this->NewKeyState.enter = 0;
+        this->NewKeyState.esc = 0;
+        this->NewKeyState.del = 0;
+    }
 }
 
-void Menu::HandleKeyPress(int key) {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x2A bytes
+bool Menu::HandleKeyPress() {
+    unsigned char a2; // [esp+8h] [ebp-4h]
+
+    a2 = gMapGm.GetPlayerArena();
+    return this->DrawMenuElements(a2) != a2;
+}
+
+bool Menu::SwitchPage() {
+    unsigned char PlayerArena; // [esp+8h] [ebp-4h]
+
+    PlayerArena = gMapGm.GetPlayerArena();
+    return this->UpdateGUI(PlayerArena) != PlayerArena;
 }
 
 void Menu::SetFrontendKeysEnabled(bool enabled) {
@@ -230,11 +503,11 @@ void Menu::SetFrontendKeysEnabled(bool enabled) {
 }
 
 // Работа с игроком
-void Menu::SetPlayerName(const char* name) {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x2F bytes
-
-    wcsncpy(this->PlayerName, gPlayerData.PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
+void Menu::SetPlayerName() {
+    wcsncpy(
+        this->PlayerName,
+        gPlayerData.PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName,
+        9);
 }
 
 
@@ -278,10 +551,15 @@ void Menu::SelectPlayerSlot() {
 
 }
 
-int Menu::FindLastActiveArenaSlot(PlayerSlotSlave * PlayerSlotSave) {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x4B bytes
-    return this->CurrentPlayerSlot;
+unsigned char Menu::FindLastActiveArenaSlot(PlayerSlotSlave *PlayName) {
+    unsigned char result; // al
+
+    for ( result = this->CountArena - 1; !PlayName->ArenaSlots[result].SubSlot[0].BonusStage[0][0]; --result )
+    {
+        if ( !result )
+            break;
+    }
+    return result;
 }
 
 // Сохранение/загрузка
@@ -295,29 +573,7 @@ void Menu::LoadGame() {
     // Адрес: TBD, Размер: 0x6B bytes
 }
 
-enum eGUI {
-    MenyPlayPlayerName=0,
-    MenyPlayRestart=1,
-    MenyPlayVievHigh=2,
-    MenyPlayLevel=3,
-    MenyPlayBonus=4,
-    MenuHighScores=5,
-};
-enum eMenuPicture {
-    ePlayerName = 10,
-    eRestart = 11,
-    eVievHigh = 6,
-    eStartLevel1 = 7,
-    eHighScores = 12,
-    eRip = 13,
-    eMenuPic_15 = 15,
-    eResumSave = 16,
-    eTitle = 17,
-    eQuit = 2,
-    eOptions = 0,
-    ePlay = 1,
 
-};
 int Menu::NewGame() {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: TBD, Размер: 0x169 bytes
@@ -404,23 +660,27 @@ bool Menu::CheckSaveFile(const char* filename) {
     return false; // Заглушка
 }
 
-const char* Menu::GettingSaveFile(byte index, char *savePath) {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x9E bytes
+char Menu::GettingSaveFile(byte a2, char *a3) {
     char Buffer[8];
-    
-    itoa(index,Buffer,10);
-    strcpy(savePath, "player\\plyslot");
-    strcat(savePath, Buffer);
-    strcat(savePath, ".svg");
 
-    return savePath;
+    _itoa(a2, Buffer, 10);
+    strcpy(a3, "player\\plyslot");
+    strcat(a3, Buffer);
+    strcat(a3, ".svg");
+    return 0;
 }
 
-const char* Menu::GetSaveFile( int slot) {
-    // TODO: Реализовать на основе ассемблерного кода
-    // Адрес: TBD, Размер: 0x4E bytes
-    return this->SaveFilePath;
+char Menu::GetSaveFile(unsigned char SlotSave) {
+    void *v2; // eax
+    FILETIME FileName[32];
+    CHAR v5[280];
+
+    this->GettingSaveFile(SlotSave, (char *)FileName);
+    v2 = (void *)sub_4D75CC(FileName, v5, (DWORD)FileName[0].dwLowDateTime);
+    if ( v2 == (void *)-1 )
+        return 0;
+    sub_4D7549(v2);
+    return 1;
 }
 
 void Menu::SaveSettings() {
@@ -438,7 +698,7 @@ int  Menu::PrintCentr(const wchar_t* text, float x, float y) {
 void* Menu::LoadTexture(unsigned short ID) {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: TBD, Размер: 0xCC bytes
-    return nullptr;
+    return 0;
 }
 
 void Menu::LoadTexturesFromTable(void* table) {
@@ -447,16 +707,7 @@ void Menu::LoadTexturesFromTable(void* table) {
     this->pTextureTable = table;
 }
 
-enum MenuPicture
-{
-    TGA_1 = 0,
-    TGA_2=1,
-    PicMenuFiles_16=16,
-    Levelcomplete_tga=17,
-    PicMenuFiles_18=18,
-    Credits_tga=22,
 
-};
 
 
 
@@ -614,32 +865,7 @@ void Menu::LoadTextMenu() {
     this->MenuPageArray[MENUPAGE_START_MENU].SelectActiveElementDefault = EntryPlay;
 }
 
-enum EntryPlay {
-    NamePlayer = 0,
-    ResumeSaveStatus = 1,
-    ViewHighScores=2,
-    StartPlayInArena=3,
-    BonusIcon=4
-};
 
-enum eSpritePlayerMenu {
-    CircleSprite = 0,
-    LeftArrowRedSprite = 3,
-    RightArrowRedSprite = 4,
-
-};
-enum eGUIPlayerMenu {
-    PlayArenaCircle = 0,
-    BonusCircle = 1,
-    PlayArenaLeftArrowRed = 2,
-    BonusLeftArrowRed = 3,
-    PlayArenaLeftArrowRed1 = 4,
-    PlayArenaRightArrowRed1 = 5,
-    BonusLeftArrowRed1 = 6,
-    BonusRightArrowRed1 = 7,
-    PlayNameLeftArrowRed = 8,
-    PlayNameRightArrowRed = 9,
-};
 inline void Menu::PlayMenuCreate() {
 
     //PlayMenu
@@ -768,16 +994,7 @@ inline void Menu::PlayMenuCreate() {
 
 
 }
-enum eGUICompliteGame {
-    GUI_GameComplire=0,
 
-};
-enum Entry_Complire {
-    Entry_BackToMainMenu = 0,
-};
-enum Item_Complire {
-    Item_BackToMainMenu = 0,
-};
 inline void Menu::CompliteGameMenuCreate() {
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].NextMenuPage = 1;
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].NextMenuPage = 1;
@@ -805,30 +1022,9 @@ inline void Menu::CompliteGameMenuCreate() {
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].MenuItemArray[Item_BackToMainMenu].Y = 410;
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].IndexMenuActions = Item_BackToMainMenu;
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].SelectActiveElementDefault = Item_BackToMainMenu;
-
-
-
-
 }
 
-enum eGUIAreaComplite {
-    AreaComplite = 0
-};
 
-enum Entry_Arena {
-    PlayNextArea = 0,
-    //ResumeSaveStatus = 1,
-    ReplayPreviousArea = 2,
-    Contnue = 3,
-    BackToMainMenu=4,
-};
-enum Items_Arena {
-    Items_PlayNextArea = 0,
-    Items_ResumeSaveStatus = 1,
-    Items_ReplayPreviousArea = 2,
-    Items_Contnue = 3,
-    Items_BackToMainMenu = 4,
-};
 
 inline void Menu::AreaCompliteMenuCreate() {
 
@@ -913,20 +1109,7 @@ inline void Menu::AreaCompliteMenuCreate() {
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].SelectActiveElementDefault = Items_PlayNextArea;
 }
 
-enum GUI_ResumeLoadSave {
-    TextPlayerQuit =0,
-};
 
-enum Entry_ResumeLoadSave {
-    ResumeSavedStatus = 0,
-    Entry_ReplayPreviousArea = 1,
-    Entry_BackToMainMenu_ResumeLoadSave = 2,
-};
-enum Items_ResumeLoadSave {
-    ResumeLoadSave_ResumeSavedStatus = 0,
-    ResumeLoadSave_ReplayPreviousArea = 1,
-    ResumeLoadSave_BackToMainMenu = 2,
-};
 inline void Menu::ResumeLoadSaveCreate() {
 
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].CurentMenuPage = 3;
@@ -991,14 +1174,7 @@ inline void Menu::ResumeLoadSaveCreate() {
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].IndexMenuActions = ResumeLoadSave_ResumeSavedStatus;
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].SelectActiveElementDefault = ResumeLoadSave_ResumeSavedStatus;
 }
-enum GUI_RIP {
-    PlayerDead = 0,
-};
-enum Entry_RIP {
-    RIP_ResumeSavedStatus = 0,
-    RIP_ReplayPreviousArea = 1,
-    RIP_BackToMainMenu = 2,
-};
+
 inline  void Menu::YouAreDead_RIP() {
     this->MenuPageArray[MENUPAGE_DEAD].CurentMenuPage = 3;
     this->MenuPageArray[MENUPAGE_DEAD].NextMenuPage = 1;
@@ -1058,16 +1234,7 @@ inline  void Menu::YouAreDead_RIP() {
     this->MenuPageArray[MENUPAGE_DEAD].SelectActiveElementDefault = RIP_ResumeSavedStatus;
 }
 
-enum GUI_VIEW_HS {
-    VIEW_HIGH_SCORE_0,
-    VIEW_HIGH_SCORE_1,
-    VIEW_HIGH_SCORE_2,
-    VIEW_HIGH_SCORE_3,
-    VIEW_HIGH_SCORE_4,
-};
-enum eEntryViewHigh{
-    EntryViewHigh,
-};
+
 inline void Menu::HighScoresForAreaCreate() {
     this->MenuPageArray[MENUPAGE_VIEW_HIGH_SCORE].CurentMenuPage = 1;
     this->MenuPageArray[MENUPAGE_VIEW_HIGH_SCORE].NextMenuPage = 5;
@@ -1533,63 +1700,8 @@ void Menu::MenuShowJapanText() {
 }
 
 
-enum cheat {
-    CUTIE1 = 0x33A69,                 // Дает 99 жизней
-    NEKKID = 0x36F62,                 // Нудисты
-    MADEMAN = 0x41611,                 // Дает авторитет
-    DANISGOD = 0x44D2F,                 // дает 20000
-    FYOHZZ0 = 0x45118,
-    FISHFLAP = 0x45AEF,                 // Small Cars
-    UKGAMER = 0x45B2C,                 // all towns unlocked
-    FLAMEON = 0x45EC2,                 // Бecкoнeчнaя Flame Gun
-    DAVEMOON = 0x4639F,                 // Базовое оружие и бесконечные патроны
-    EATSOUP = 0x4657B,                 // Бесплатные магазины
-    IAMDAVEJ = 0x4672D,                 // дает 999999
-    LASVEGAS = 0x46BE8,                 // Фaнаты Элвисa
-    NAVARONE = 0x47178,                 // All Weapons
-    COCKTART = 0x478A9,                 // За взрывы не будут выдаваться очки.
-    PSJABBER = 0x478FB,                 // на бессмертие
-    ARSESTAR = 0x47AF1,                 // Пocлe apecтa y вac coxpaняютcя вce имeвшиecя в нaличии пyшки
-    GOREFEST = 0x484DF,                 // Количество крови в игре заметно увеличится.
-    BUCKFAST = 0x4878D,                 // Режим «Бунт»
-    GOURANGA = 0x49362,                 // Активация читов
-    GODOFGTA = 0x49771,                 // Все оружие
-    SUPZZZ0 = 0x49C76,
-    SEGARULZ = 0x4A98B,                 // 10x Point Multiplier
-    ITSALLUP = 0x4A9B8,                 // Выбop ypoвня
-    HUNSRUS = 0x4B28C,                 // Нeвидимocть
-    SCHURULZ = 0x4D5C4,                 // Двойной урон
-    VOLTFEST = 0x4DA77,                 // Бecкoнeчнaя Electrical Gun
-    TUMYFROG = 0x5073D,
-};
 
-bool gDo_Blood=false;
-bool gBunt = false;
-bool gVoltfest = false;
-bool gMademan = false;
-bool gLasvegas = false;
-bool gNEKKID = false;
-bool gDoFreeShopping = false;
-bool gHeats99 = false;
-bool gKeepWeaponsAfterDeath = false;
-bool gGetAllWeapons = false;
-bool gDoInvulnerable = false;
-bool gDANISGOD = false;
-bool gFYOHZZ0 = false;
-bool gIAMDAVEJ = false;
-bool gSEGARULZ = false;
-bool gDAVEMOON = false;
-bool gExplodingOn = false;
-bool gFLAMEON = false;
-bool gUKGAMER = false;
-bool gSUPZZZ0 = false;
-bool gTUMYFROG = false;
-bool gSCHURULZ = false;
-bool gHUNSRUS = false;
-bool gFISHFLAP = false;
 
-                    //1    2     3   4     5     6     7     8       9
-int gCodeCash[8] = { 0x33D, 0x2F9, 0x17, 0x281, 0x2B, 0x329, 0x2A5, 0x0BF };
 // Читы и специальные функции
 void Menu::PlayerCheat(wchar_t *PlayerName) {
     // TODO: Реализовать на основе ассемблерного кода
@@ -1747,14 +1859,7 @@ void Menu::SpecialFunction5() {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: TBD, Размер: 0x231 bytes
 }
-enum MENUSCREEN {
-    MENUSCREEN_PLAY = 1,
-    MENUSCREEN_QUIT = 2,
-    MENUSCREEN_BONUSAC=3,
-    MENUSCREEN_BONUSDF=4,
-    MENUSCREEN_BONUSGI=5,
-    
-};
+
 
 void Menu::SpecialFunction6() {
     // TODO: Реализовать на основе ассемблерного кода

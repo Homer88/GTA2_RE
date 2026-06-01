@@ -1,6 +1,5 @@
 #include <math.h>
 #include "dmavideo.h"
-///#include "logger.hpp"
 
 #pragma comment(lib, "ddraw.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -13,20 +12,18 @@ static PtrVideoFunctions* gVideoFuncs_100FFF8;
 
 static VideoFunctions gRealFuncs;
 
-using TDirectDrawEnumerateEx = decltype(&DirectDrawEnumerateExA);
+typedef HRESULT (WINAPI *TDirectDrawEnumerateEx)(LPVOID, LPVOID, DWORD);
 
 #define FLAG_HARDWARE_RENDERING 0x40
 #define FLAG_TRIPPLE_BUFFERING 0x10
 
 BOOL WINAPI DirectDrawEnumerateCallBack(
-    _In_ GUID FAR *lpGUID,
-    _In_ LPSTR    lpDriverDescription,
-    _In_ LPSTR    lpDriverName,
-    _In_ LPVOID   lpContext
+    GUID FAR *lpGUID,
+    LPSTR    lpDriverDescription,
+    LPSTR    lpDriverName,
+    LPVOID   lpContext
 )
 {
-    //TRACE_ENTRYEXIT;
-
     Video* pVideoDriver = reinterpret_cast<Video*>(lpContext);
     pVideoDriver->NumEnums++;
 
@@ -69,30 +66,22 @@ BOOL WINAPI DirectDrawEnumerateCallBack(
 }
 
 BOOL WINAPI DirectDrawEnumerateExCallBack(
-    _In_ GUID FAR *lpGUID,
-    _In_ LPSTR    lpDriverDescription,
-    _In_ LPSTR    lpDriverName,
-    _In_ LPVOID   lpContext,
-    _In_ HMONITOR hm
+    GUID FAR *lpGUID,
+    LPSTR    lpDriverDescription,
+    LPSTR    lpDriverName,
+    LPVOID   lpContext,
+    HMONITOR hm
 )
 {
-    // Pass to other call back
-    //TRACE_ENTRYEXIT;
     return DirectDrawEnumerateCallBack(lpGUID, lpDriverDescription, lpDriverName, lpContext);
 }
 
 Device*  __stdcall InitDisplayMode(DisplayMode* pDisplayMode, DDSURFACEDESC2* ddsurface, Video* pVideoDriver);
 
-decltype(&InitDisplayMode) pInitDisplayMode = nullptr;
+void (__stdcall *pInitDisplayMode)(void) = 0;
 
-// TODO: This function is wrong as some stuff isn't set correctly in pDisplayMode, still seems to work however!
 Device*  __stdcall InitDisplayMode(DisplayMode* pDisplayMode, DDSURFACEDESC2* ddsurface, Video* pVideoDriver)
 {
-  ///  TRACE_ENTRYEXIT;
-
-    //return pInit_DisplayMode_1001010(pDisplayMode, ddsurface, pVideoDriver);
-    
-
     pDisplayMode->Width = ddsurface->dwWidth;
     pDisplayMode->Height = ddsurface->dwHeight;
     pDisplayMode->RGBbitCount = ddsurface->ddpfPixelFormat.dwRGBBitCount;
@@ -100,10 +89,9 @@ Device*  __stdcall InitDisplayMode(DisplayMode* pDisplayMode, DDSURFACEDESC2* dd
     pDisplayMode->NextDisplayMode = 0;
 
     int bitNum = 0;
-    bool bIs32 = false;
-    auto result = ddsurface->ddpfPixelFormat.dwRBitMask;
-    
-    // Count number of bits
+    int bIs32 = 0;
+    DWORD result = ddsurface->ddpfPixelFormat.dwRBitMask;
+
     if (result & 1)
     {
         bIs32 = bitNum == 32;
@@ -139,23 +127,19 @@ Device*  __stdcall InitDisplayMode(DisplayMode* pDisplayMode, DDSURFACEDESC2* dd
     }
     else
     {
-        // TODO
         abort();
     }
-    return nullptr;
+    return 0;
 }
 
 HRESULT WINAPI EnumDisplayModesCallBack_1001340(
-    _In_ LPDDSURFACEDESC2 lpDDSurfaceDesc,
-    _In_ LPVOID           lpContext
+    LPDDSURFACEDESC2 lpDDSurfaceDesc,
+    LPVOID           lpContext
 )
 {
-   /// TRACE_ENTRYEXIT;
-
     Video* pVideoDriver = reinterpret_cast<Video*>(lpContext);
     if (pVideoDriver->Flags & FLAG_HARDWARE_RENDERING)
     {
-        // TODO: Debug/test code skipped
     }
 
     pVideoDriver->NumDisplayModes++;
@@ -186,14 +170,12 @@ static void FreeDDrawInstances(Video* pVideoDriver)
 {
     if (pVideoDriver->IDDraw4)
     {
-        //--gDD4Refs_dword_100FFF4;
         pVideoDriver->IDDraw4->Release();
         pVideoDriver->IDDraw4 = 0;
     }
 
     if (pVideoDriver->DirectDraw7)
     {
-        //--gDD7Refs_dword_100FFF0;
         pVideoDriver->DirectDraw7->Release();
         pVideoDriver->DirectDraw7 = 0;
     }
@@ -201,15 +183,10 @@ static void FreeDDrawInstances(Video* pVideoDriver)
 
 Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 {
-   /// TRACE_ENTRYEXIT;
-
-    //Video* ret = gRealFuncs.pVid_Init_SYS(param1, param2_flags);
-    //return ret;
-
-    HMODULE hDirectDraw = ::LoadLibraryA("ddraw.dll");
+    HMODULE hDirectDraw = LoadLibraryA("ddraw.dll");
     if (hDirectDraw)
     {
-        ::FreeLibrary(hDirectDraw);
+        FreeLibrary(hDirectDraw);
         Video* pVideoDriver = new Video();
         memset(pVideoDriver, 0, sizeof(Video));
         pVideoDriver->SelfDllHandle = gHinstance;
@@ -219,17 +196,16 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
         pVideoDriver->DisplayModeCount_2_q = 1;
         pVideoDriver->NumGuids = 2;
         pVideoDriver->Flags = param2_flags & FLAG_HARDWARE_RENDERING | 0x200;
-        
-        TDirectDrawEnumerateEx pDirectDrawEnumerateEx = nullptr;
-        
+
+        TDirectDrawEnumerateEx pDirectDrawEnumerateEx = 0;
+
         if (param2_flags & 4)
         {
-            // Yes - using a freed HMODULE is correct here! Mainly because this dll linked to ddraw so its not actually unloaded
-            pDirectDrawEnumerateEx = reinterpret_cast<TDirectDrawEnumerateEx>(::GetProcAddress(hDirectDraw, "DirectDrawEnumerateEx"));
+            pDirectDrawEnumerateEx = reinterpret_cast<TDirectDrawEnumerateEx>(GetProcAddress(hDirectDraw, "DirectDrawEnumerateEx"));
         }
         if (pDirectDrawEnumerateEx)
         {
-            pVideoDriver->LastError = pDirectDrawEnumerateEx(DirectDrawEnumerateExCallBack, pVideoDriver, 7); // TODO: Constant
+            pVideoDriver->LastError = pDirectDrawEnumerateEx(DirectDrawEnumerateExCallBack, pVideoDriver, 7);
         }
         else
         {
@@ -239,19 +215,17 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
         if (pVideoDriver->LastError)
         {
             delete pVideoDriver;
-            pVideoDriver = nullptr;
+            pVideoDriver = 0;
         }
 
-      
         if (param2_flags & 8 || (pVideoDriver && !pVideoDriver->pDeviceInfoHead))
         {
-            // TODO: Might be wrong conditional
             return pVideoDriver;
         }
         else
         {
-            auto pDeviceInfo = pVideoDriver->pDeviceInfoHead;
-            auto pNextDevice = pVideoDriver->pDeviceInfoHead;
+            Device* pDeviceInfo = pVideoDriver->pDeviceInfoHead;
+            Device* pNextDevice = pVideoDriver->pDeviceInfoHead;
 
             for (;;)
             {
@@ -259,18 +233,14 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 
                 FreeDDrawInstances(pVideoDriver);
 
-                // Create DDraw7 Instance
                 pVideoDriver->LastError = DirectDrawCreate(pDeviceInfo->pDeviceGuid, (LPDIRECTDRAW *)&pVideoDriver->DirectDraw7, 0);
-                //++gDD7Refs_dword_100FFF0;
                 if (pVideoDriver->LastError)
                 {
                     break;
                 }
 
-                // Query DDraw4 instance from 7
                 pVideoDriver->LastError = pVideoDriver->DirectDraw7->QueryInterface(
                     IID_IDirectDraw4, (LPVOID *)&pVideoDriver->IDDraw4);
-                //++gDD4Refs_dword_100FFF4;
 
                 if (pVideoDriver->LastError)
                 {
@@ -287,7 +257,7 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 
                 pVideoDriver->LastError = pVideoDriver->IDDraw4->GetCaps(
                     &pVideoDriver->DeviceCaps, &pVideoDriver->HelCaps);
-      
+
                 if (pVideoDriver->DeviceCaps.dwCaps2 & 0x80000)
                 {
                     pNextDevice->Flags |= 1;
@@ -312,23 +282,20 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 
                 pNextDevice = pNextDevice->NextDevice;
                 pDeviceInfo = pNextDevice;
-                
+
                 if (!pNextDevice)
                 {
-                    // TODO: Check correct
                     return pVideoDriver;
                 }
             }
         }
 
     }
-    return nullptr;
+    return 0;
 }
 
 s32 CC Vid_CheckMode(Video* pVideoDriver, s32 width, s32 height, s32 rgbBitCount)
 {
-    ///TRACE_ENTRYEXIT;
-
     if (!pVideoDriver)
     {
         return 0;
@@ -366,9 +333,6 @@ s32 CC Vid_CheckMode(Video* pVideoDriver, s32 width, s32 height, s32 rgbBitCount
 
 Device* CC Vid_FindDevice(Video* pVideoDriver, s32 deviceId)
 {
-    //TRACE_ENTRYEXIT;
-
-
     Device* result = pVideoDriver->pDeviceInfoHead;
     if (pVideoDriver && result)
     {
@@ -377,19 +341,16 @@ Device* CC Vid_FindDevice(Video* pVideoDriver, s32 deviceId)
             result = result->NextDevice;
             if (!result)
             {
-                return nullptr;
+                return 0;
             }
         }
         return result;
     }
-    return nullptr;
-
+    return 0;
 }
 
 DisplayMode* CC Vid_FindMode(Video* pVideoDriver, s32 modeId)
 {
-    ///TRACE_ENTRYEXIT;
-
     if (!pVideoDriver || modeId == -2 && pVideoDriver->ActiveDeviceId > 1)
     {
         return 0;
@@ -424,8 +385,6 @@ DisplayMode* CC Vid_FindMode(Video* pVideoDriver, s32 modeId)
 
 s32 CC Vid_FindFirstMode(Video* pVideoDriver, s32 rgbBitCountFilter)
 {
-    ///TRACE_ENTRYEXIT;
-
     if (!pVideoDriver)
     {
         return 0;
@@ -463,8 +422,6 @@ s32 CC Vid_FindFirstMode(Video* pVideoDriver, s32 rgbBitCountFilter)
 
 s32 CC Vid_FindNextMode(Video* pVideoDriver)
 {
-    //TRACE_ENTRYEXIT;
-
     if (!pVideoDriver)
     {
         return 0;
@@ -496,12 +453,10 @@ s32 CC Vid_FindNextMode(Video* pVideoDriver)
     return pMode->DisplayModeIdx;
 }
 
-static DWORD gCoopResult_dword_100FFE4; // TODO: Not required to be global?
+static DWORD gCoopResult_dword_100FFE4;
 
 void CC Vid_CloseScreen(Video* pVideo)
 {
-    //TRACE_ENTRYEXIT;
-
     if (pVideo)
     {
         if (pVideo->FullScreen)
@@ -528,8 +483,6 @@ void CC Vid_CloseScreen(Video* pVideo)
 
 s32 CC Vid_SetDevice(Video* pVideoDriver, s32 deviceId)
 {
-    ///TRACE_ENTRYEXIT;
-
     const DWORD currentDeviceId = pVideoDriver->ActiveDeviceId;
     if (currentDeviceId != deviceId)
     {
@@ -539,7 +492,7 @@ s32 CC Vid_SetDevice(Video* pVideoDriver, s32 deviceId)
             {
                 if (pVideoDriver->FullScreen)
                 {
-                    auto pDDraw = pVideoDriver->DirectDraw7;
+                    IDirectDraw7* pDDraw = pVideoDriver->DirectDraw7;
                     if (pDDraw)
                     {
                         if (pVideoDriver->SurfacePrimary)
@@ -566,7 +519,7 @@ s32 CC Vid_SetDevice(Video* pVideoDriver, s32 deviceId)
         }
         if (deviceId)
         {
-            auto pDevice = pVideoDriver->pDeviceInfoHead;
+            Device* pDevice = pVideoDriver->pDeviceInfoHead;
             if (pVideoDriver && pDevice != 0)
             {
                 while (pDevice->Id != deviceId)
@@ -587,7 +540,6 @@ s32 CC Vid_SetDevice(Video* pVideoDriver, s32 deviceId)
 
             pVideoDriver->LastError = DirectDrawCreate(pDevice->pDeviceGuid,
                 (LPDIRECTDRAW *)&pVideoDriver->DirectDraw7, 0);
-            //++gDD7Refs_dword_100FFF0;
             if (pVideoDriver->LastError)
             {
                 return 1;
@@ -595,7 +547,6 @@ s32 CC Vid_SetDevice(Video* pVideoDriver, s32 deviceId)
 
             pVideoDriver->LastError = pVideoDriver->DirectDraw7->QueryInterface(
                 IID_IDirectDraw4, (LPVOID*)&pVideoDriver->IDDraw4);
-            //++gDD4Refs_dword_100FFF4;
 
             if (pVideoDriver->LastError)
             {
@@ -611,15 +562,13 @@ s32 CC Vid_SetDevice(Video* pVideoDriver, s32 deviceId)
 
 static s32 SetDisplayModeFromSurface(Video* pVideoDriver,  DisplayMode* pDisplayMode_1, DWORD modeId)
 {
-    ///TRACE_ENTRYEXIT;
-
     DDSCAPS2 caps = {};
     caps.dwCaps = DDSCAPS_BACKBUFFER;
     if (pVideoDriver->SurfacePrimary->GetAttachedSurface(&caps, &pVideoDriver->Surface))
     {
         return 1;
     }
-    
+
     DDSURFACEDESC2 ddsurface = {};
     ddsurface.dwSize = sizeof(LPDDSURFACEDESC2);
     pVideoDriver->Surface->GetSurfaceDesc(&ddsurface);
@@ -635,8 +584,8 @@ static s32 SetDisplayModeFromSurface(Video* pVideoDriver,  DisplayMode* pDisplay
     pVideoDriver->RectBottom  = pDisplayMode_1-> Height;
     pVideoDriver->field_5C = pDisplayMode.field_1C;
 
-    pVideoDriver->Red = pDisplayMode.field_24;// RED
-    pVideoDriver-> Green = pDisplayMode.field_20;
+    pVideoDriver->Red = pDisplayMode.field_24;
+    pVideoDriver->Green = pDisplayMode.field_20;
     pVideoDriver->Blue = pDisplayMode.field_28;
 
     pVideoDriver->field_70 = pDisplayMode.field_30;
@@ -647,10 +596,6 @@ static s32 SetDisplayModeFromSurface(Video* pVideoDriver,  DisplayMode* pDisplay
 
 s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
 {
-   // TRACE_ENTRYEXIT;
-
-    //return gRealFuncs.pVid_SetMode(pVideoDriver, hWnd, modeId);
-
     if (!pVideoDriver)
     {
         return 1;
@@ -686,7 +631,7 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
     {
         if (!activeDeviceId)
         {
-            auto pDevice = pVideoDriver->pDeviceInfoHead;
+            Device* pDevice = pVideoDriver->pDeviceInfoHead;
             if (pDevice)
             {
                 while (pDevice->Id != 1)
@@ -703,14 +648,12 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
             FreeDDrawInstances(pVideoDriver);
 
             pVideoDriver->LastError = DirectDrawCreate(pDevice->pDeviceGuid, (LPDIRECTDRAW *)&pVideoDriver->DirectDraw7, 0);
-            //++gDD7Refs_dword_100FFF0;
             if (pVideoDriver->LastError)
             {
                 return 1;
             }
 
             pVideoDriver->LastError = pVideoDriver->DirectDraw7->QueryInterface(IID_IDirectDraw4, (LPVOID*)&pVideoDriver->IDDraw4);
-            //++gDD4Refs_dword_100FFF4;
             if (pVideoDriver->LastError)
             {
                 pVideoDriver->DirectDraw7->Release();
@@ -724,7 +667,6 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
         {
             return 1;
         }
-
 
         memset(&pVideoDriver->DDSurfaceDesc7, 0, sizeof(pVideoDriver->DDSurfaceDesc7));
         pVideoDriver->DDSurfaceDesc7.dwSize = sizeof(DDSURFACEDESC2);
@@ -753,9 +695,9 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
 
         RECT Rect = {};
         GetClientRect(hWnd, &Rect);
-        const auto rectTop = Rect.top;
+        const LONG rectTop = Rect.top;
         memset(&pVideoDriver->DDSurfaceDesc7, 0, sizeof(DDSURFACEDESC2));
-        const auto rectBottom_1 = Rect.bottom;
+        const LONG rectBottom_1 = Rect.bottom;
         pVideoDriver->DDSurfaceDesc7.dwWidth = Rect.right - Rect.left;
         pVideoDriver->DDSurfaceDesc7.dwSize = sizeof(DDSURFACEDESC2);
         pVideoDriver->DDSurfaceDesc7.dwFlags = 7;
@@ -784,7 +726,6 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
 
         if (!pVideoDriver->IDDraw4->CreateSurface(&pVideoDriver->DDSurfaceDesc7, &pVideoDriver->Surface, 0))
         {
-            // TODO: Refactor with SetDisplayModeFromSurface
             DDSURFACEDESC2 ddsurface = {};
             ddsurface.dwSize = sizeof(DDSURFACEDESC2);
             pVideoDriver->Surface->GetSurfaceDesc(&ddsurface);
@@ -843,7 +784,7 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
         return 1;
     }
 
-    auto pDisplayMode_1 = pVideoDriver->pHead ;
+    DisplayMode* pDisplayMode_1 = pVideoDriver->pHead;
     if (!pDisplayMode_1)
     {
         pVideoDriver->FoundRGBbitCount = 0;
@@ -869,8 +810,7 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
     pVideoDriver->FoundWidth = pDisplayMode_1->Width;
     pVideoDriver->FoundHeight = pDisplayMode_1->Height;
 
-
-    const auto deviceId = pDisplayMode_1->DeviceId;
+    const DWORD deviceId = pDisplayMode_1->DeviceId;
     if (pVideoDriver->ActiveDeviceId != deviceId)
     {
         if (pVideoDriver->ActiveDeviceId)
@@ -894,14 +834,14 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
                     }
                 }
             }
-            
+
             FreeDDrawInstances(pVideoDriver);
 
             pVideoDriver->ActiveDeviceId = 0;
         }
         if (deviceId)
         {
-            auto pDevice_1 = pVideoDriver->pDeviceInfoHead;
+            Device* pDevice_1 = pVideoDriver->pDeviceInfoHead;
             if (pDevice_1)
             {
                 while (pDevice_1->Id != deviceId)
@@ -919,14 +859,12 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
             pVideoDriver->LastError = DirectDrawCreate(pDevice_1->pDeviceGuid,
                 (LPDIRECTDRAW *)&pVideoDriver->DirectDraw7, 0);
 
-            //++gDD7Refs_dword_100FFF0;
             if (pVideoDriver->LastError)
             {
                 return 1;
             }
 
             pVideoDriver->LastError = pVideoDriver->DirectDraw7->QueryInterface(IID_IDirectDraw4, (LPVOID *)&pVideoDriver->IDDraw4);
-            //++gDD4Refs_dword_100FFF4;
 
             if (pVideoDriver->LastError)
             {
@@ -943,18 +881,6 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
     {
         return 1;
     }
-
-    /*
-    // HACK: Typecast to get to older SetDisplayMode, else stack will be smashed
-    IDirectDraw* pOld = (IDirectDraw*)pVideoDriver->DirectDraw7;
-    if (pOld->SetDisplayMode(
-        pDisplayMode_1->Width, 
-        pDisplayMode_1->Height, 
-        pDisplayMode_1->RGBbitCount))
-    {
-        return 1;
-    }
-    */
 
     pVideoDriver->Flags |= 0xA0000000;
     memset(&pVideoDriver->DDSurfaceDesc7, 0, sizeof(DDSURFACEDESC2));
@@ -978,7 +904,7 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
 
     pVideoDriver->DDSurfaceDesc7.dwBackBufferCount = 1;
 
-    auto flags = pVideoDriver->Flags & 0x3FFFFFFF;
+    DWORD flags = pVideoDriver->Flags & 0x3FFFFFFF;
     flags |= 0x40000000u;
     pVideoDriver->Flags = flags;
 
@@ -1001,14 +927,12 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
     {
         return 1;
     }
-    
+
     return SetDisplayModeFromSurface(pVideoDriver, pDisplayMode_1, modeId);
 }
 
 void CC Vid_GrabSurface(Video* pVideoDriver)
 {
-    ///TRACE_ENTRYEXIT;
-
     if (pVideoDriver && !(pVideoDriver->Flags & 1))
     {
         if (pVideoDriver->SurfacePrimary->IsLost() == DDERR_SURFACELOST)
@@ -1022,13 +946,10 @@ void CC Vid_GrabSurface(Video* pVideoDriver)
             pVideoDriver->Flags |= 1;
         }
     }
-
 }
 
 void CC Vid_ReleaseSurface(Video* pVideoDriver)
 {
-    //TRACE_ENTRYEXIT;
-
     if (pVideoDriver && pVideoDriver->Flags & 1)
     {
         pVideoDriver->Surface->Unlock(0);
@@ -1040,27 +961,25 @@ void CC Vid_ReleaseSurface(Video* pVideoDriver)
     }
 }
 
-static bool SurfaceRestored(Video* pVideo, IDirectDrawSurface4* pSurface)
+static int SurfaceRestored(Video* pVideo, IDirectDrawSurface4* pSurface)
 {
     if (pSurface->IsLost() == DDERR_SURFACELOST)
     {
         pVideo->Flags |= 0x10000000u;
         if (pSurface->Restore())
         {
-            return true;
+            return 1;
         }
     }
     else
     {
         pVideo->Flags &= 0xEFFFFFFF;
     }
-    return false;
+    return 0;
 }
 
 void CC Vid_FlipBuffers(Video* pVideo)
 {
-    //TRACE_ENTRYEXIT;
-
     if (pVideo && pVideo->SurfacePrimary && pVideo->Surface)
     {
         if (SurfaceRestored(pVideo, pVideo->SurfacePrimary))
@@ -1077,11 +996,11 @@ void CC Vid_FlipBuffers(Video* pVideo)
         {
             if (pVideo->Flags & 2)
             {
-                pVideo->SurfacePrimary->Flip(nullptr, DDFLIP_NOVSYNC | DDFLIP_WAIT);
+                pVideo->SurfacePrimary->Flip(0, DDFLIP_NOVSYNC | DDFLIP_WAIT);
             }
             else
             {
-                pVideo->SurfacePrimary->Flip(nullptr, DDFLIP_WAIT);
+                pVideo->SurfacePrimary->Flip(0, DDFLIP_WAIT);
             }
         }
         else
@@ -1092,28 +1011,24 @@ void CC Vid_FlipBuffers(Video* pVideo)
             r.bottom = pVideo->RectBottom;
             r.right = pVideo->RectRight;
 
-            // Can't use GetWindowRect as it includes the window borders
             RECT r2 = {};
             GetClientRect(pVideo->hwnd, &r2);
-            
+
             ClientToScreen(pVideo->hwnd, (LPPOINT)&r2.left);
             ClientToScreen(pVideo->hwnd, (LPPOINT)&r2.right);
 
             pVideo->SurfacePrimary->Blt(
                 &r2,
-                pVideo->Surface, // Source
-                &r,                        // Source rect size
+                pVideo->Surface,
+                &r,
                 DDBLT_WAIT,
-                0); 
-            
+                0);
         }
     }
 }
 
 void CC Vid_ShutDown_SYS(Video* pVideoDriver)
 {
-    //TRACE_ENTRYEXIT;
-    
     if (pVideoDriver)
     {
         if (pVideoDriver->FullScreen)
@@ -1125,7 +1040,7 @@ void CC Vid_ShutDown_SYS(Video* pVideoDriver)
                     pVideoDriver->DirectDraw7->RestoreDisplayMode();
                     gCoopResult_dword_100FFE4 = pVideoDriver->DirectDraw7->SetCooperativeLevel(pVideoDriver->hwnd, DDSCL_NORMAL);
                     pVideoDriver->SurfacePrimary->Release();
-                    if (pVideoDriver->FullScreen == -2) // -2 == windowed mode ?
+                    if (pVideoDriver->FullScreen == -2)
                     {
                         pVideoDriver->Surface->Release();
                     }
@@ -1138,39 +1053,33 @@ void CC Vid_ShutDown_SYS(Video* pVideoDriver)
 
         FreeDDrawInstances(pVideoDriver);
 
-        // Free display modes
-        auto pCurrent = pVideoDriver->pHead;
+        DisplayMode* pCurrent = pVideoDriver->pHead;
         if (pCurrent)
         {
             do
             {
-                auto tmp = pCurrent->NextDisplayMode;
+                DisplayMode* tmp = pCurrent->NextDisplayMode;
                 free(pCurrent);
                 pCurrent = tmp;
             } while (pCurrent);
         }
-        
-        // Free devices
-        auto pCurrent2 = pVideoDriver->pDeviceInfoHead;
+
+        Device* pCurrent2 = pVideoDriver->pDeviceInfoHead;
         if (pCurrent2)
         {
             do
             {
-                auto tmp = pCurrent2->NextDevice;
+                Device* tmp = pCurrent2->NextDevice;
                 free(pCurrent2);
                 pCurrent2 = tmp;
             } while (pCurrent2);
         }
         free(pVideoDriver);
     }
-    //return gRealFuncs.pVid_ShutDown_SYS(pVideoDriver);
 }
 
 s32 CC Vid_EnableWrites(Video* pVideoDriver)
 {
-   /// TRACE_ENTRYEXIT;
-
-
     if (pVideoDriver && (pVideoDriver->Flags & 1) && !(pVideoDriver->Flags & 2))
     {
         pVideoDriver->Flags |= 2;
@@ -1191,8 +1100,6 @@ s32 CC Vid_EnableWrites(Video* pVideoDriver)
 
 s32 CC Vid_DisableWrites(Video* pVideoDriver)
 {
-    ///TRACE_ENTRYEXIT;
-    
     if (pVideoDriver && (pVideoDriver->Flags & 1) && pVideoDriver->Flags & 2)
     {
         pVideoDriver->pSurfacePixels = 0;
@@ -1204,8 +1111,6 @@ s32 CC Vid_DisableWrites(Video* pVideoDriver)
 
 s32 CC Vid_GetSurface(Video* pVideoDriver)
 {
-    //TRACE_ENTRYEXIT;
-
     if (!pVideoDriver)
     {
         return 1;
@@ -1244,13 +1149,10 @@ s32 CC Vid_GetSurface(Video* pVideoDriver)
     }
 
     return 1;
-
 }
 
 s32 CC Vid_FreeSurface(Video* pVideoDriver)
 {
-    //TRACE_ENTRYEXIT;
-
     s32 ret = 0;
     if (pVideoDriver && (pVideoDriver->Flags & 1) && pVideoDriver->Flags & 2)
     {
@@ -1277,44 +1179,15 @@ s32 CC Vid_FreeSurface(Video* pVideoDriver)
 
 s32 CC Vid_ClearScreen(Video* pVideoDriver, u8 aR, u8 aG, u8 aB, s32 aLeft, s32 aTop, s32 aRight, s32 aBottom)
 {
-   // TRACE_ENTRYEXIT;
-
-    auto v8 = pVideoDriver->field_5C;
-    auto v9 = 8 - pVideoDriver->Red;
-
     RECT dstRect = {};
     dstRect.left = aLeft;
     dstRect.top = aTop;
     dstRect.right = aRight;
     dstRect.bottom = aBottom;
 
-    // TODO: This is like what happens in TextureAllocate/Init2 in D3DDll
-
-    /*
-    v16.field_0 = 0;
-    v16.field_1 = 1;
-    v16.field_2 = 3;
-    v16.field_3 = 7;
-    v16.field_4 = 15;
-    v16.field_5 = 31;
-    v16.field_6 = 63;
-    v16.field_7 = 127;
-    LOBYTE(v16.field_8) = -1;
-    v10 = *(&v16.field_0 + v8);
-    */
-    auto v11 = pVideoDriver->field_6C;
-    auto v12 = pVideoDriver->field_58;
-
     DDBLTFX bltFx = {};
     bltFx.dwSize = 0x64;
     bltFx.dwFillColor = 0;
-
-    /*
-    bltFx.dwFillColor =
-        ((((unsigned int)aG >> v9) & *(&v16.field_0 + pVideoDriver->Red)) << pVideoDriver->Green) 
-      | ((((unsigned int)aB >> (8 - v11)) & *(&v16.field_0 + v11)) << pVideoDriver->Blue) 
-      | ((((unsigned int)aR >> (8 - v8)) & v10) << v12);
-      */
 
     HRESULT result = S_FALSE;
     do
@@ -1327,9 +1200,9 @@ s32 CC Vid_ClearScreen(Video* pVideoDriver, u8 aR, u8 aG, u8 aB, s32 aLeft, s32 
         if (result == DDERR_SURFACELOST)
         {
             result = pVideoDriver->Surface->Restore();
-            auto bottom = pVideoDriver->RectBottom;
+            LONG bottom = pVideoDriver->RectBottom;
             pVideoDriver->Flags |= 0x10000000u;
-            auto right = pVideoDriver->RectRight;
+            LONG right = pVideoDriver->RectRight;
             dstRect.left = 0;
             dstRect.top = 0;
             dstRect.right = right;
@@ -1348,7 +1221,8 @@ static void ApplyGamma(WORD* gammaArray, float gamma)
 {
     float rAcc = 0.0f;
     float rNormalized = 1.0f / gamma;
-    for (int i=0; i<256; i++)
+    int i;
+    for (i=0; i<256; i++)
     {
         *gammaArray = static_cast<WORD>(pow(rAcc, rNormalized) * 65535.0f);
         ++gammaArray;
@@ -1358,18 +1232,16 @@ static void ApplyGamma(WORD* gammaArray, float gamma)
 
 s32 CC Vid_SetGamma(Video* pVideoDriver, f32 gR, f32 gG, f32 gB)
 {
-   /// TRACE_ENTRYEXIT;
-
-    auto pPrimarySurface = pVideoDriver->SurfacePrimary;
+    IDirectDrawSurface4* pPrimarySurface = pVideoDriver->SurfacePrimary;
     if (!pPrimarySurface)
     {
         return 1;
     }
 
-    IDirectDrawGammaControl* pIDirectDrawGammaControl = nullptr;
+    IDirectDrawGammaControl* pIDirectDrawGammaControl = 0;
     pVideoDriver->LastError = pPrimarySurface->QueryInterface(IID_IDirectDrawGammaControl, (LPVOID*)&pIDirectDrawGammaControl);
 
-    if (gCoopResult_dword_100FFE4) // Original bug, should be checking pVideoDriver->LastError  ?
+    if (gCoopResult_dword_100FFE4)
     {
         return 1;
     }
@@ -1377,7 +1249,7 @@ s32 CC Vid_SetGamma(Video* pVideoDriver, f32 gR, f32 gG, f32 gB)
     DDGAMMARAMP gammaRamp = {};
     pVideoDriver->LastError = pIDirectDrawGammaControl->GetGammaRamp(0, &gammaRamp);
 
-    if (gCoopResult_dword_100FFE4) // TODO: Ditto?
+    if (gCoopResult_dword_100FFE4)
     {
         return 1;
     }
@@ -1399,38 +1271,24 @@ s32 CC Vid_SetGamma(Video* pVideoDriver, f32 gR, f32 gG, f32 gB)
 
 s32 CC Vid_WindowProc(Video* pVideoDriver, HWND hwnd, DWORD uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Nothing to do
     return 0;
 }
 
-
 s32 CC Vid_InitDLL(HINSTANCE hInstance, PtrVideoFunctions* a2)
 {
-    ///TRACE_ENTRYEXIT;
-
-    //HMODULE hReal = LoadLibrary(L"C:\\Program Files (x86)\\Rockstar Games\\GTA2\\_Dmavideo.dll");
-
-   // DWORD addr = (DWORD)hReal + 0x1010;
-    //pInit_DisplayMode_1001010 = (decltype(&Init_DisplayMode_1001010))addr;
-
-
-    //PopulateVideoFunctions(hReal, gRealFuncs);
-
     gHinstance = hInstance;
     gVideoFuncs_100FFF8 = a2;
 
     return 0;
-    //return gRealFuncs.pVid_InitDLL(hInstance, a2);
 }
 
 static VidVersion gVersionInfo =
 {
-    0x3FE7AE14, // TODO: Reverse
+    0x3FE7AE14,
     "Reimplementation of DMA Video (Direct Draw implementation). Version 1.8.1"
 };
 
 VidVersion* CC Vid_GetVersion()
 {
-   /// TRACE_ENTRYEXIT;
     return &gVersionInfo;
 }

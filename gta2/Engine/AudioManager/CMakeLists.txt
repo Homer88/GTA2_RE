@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.0)
+project(AudioManager LANGUAGES CXX)
+
+
+# стандарт
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+ # Основная библиотека SYSTEM 
+file(GLOB AUDIOMANAGER_SOURCE "*.cpp")
+file(GLOB AUDIOMANAGER_HEADERS "*.h")
+
+
+
+
+
+
+# Сборка  AUDIOMANAGER
+add_library(${PROJECT_NAME} STATIC ${AUDIOMANAGER_SOURCE} ${AUDIOMANAGER_HEADERS})

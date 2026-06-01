@@ -1,8 +1,10 @@
 #ifndef ___MENU_H__
 #define ___MENU_H__
 #include <dinput.h>
+#include "../../Engine/input/KeyState.h"
 #include "MenuPage.h"
 // Forward declarations
+#include "../Player/PlayerSlotSlave.h"
 //struct DirectInput;
 //struct InputDevice;
 //struct TextMenuElement;
@@ -86,9 +88,11 @@ public:
     
     // Состояние клавиш (0x0100 - 0x0200)
     unsigned char Keys[256];                   // +0x0008 - состояние клавиш (256 байт)
+    KeyState OldKeyState;                      // +0x0108
+    KeyState NewKeyState;                      // +0x010F
     
     // Состояние фронтенда (0x0200 - 0x0210)
-    int FrontendState;         // +0x0108 - текущее состояние
+    int FrontendState;         // +0x0116 - текущее состояние
     int PreviousState;         // +0x010C - предыдущее состояние
     bool FrontendKeysEnabled;            // +0x0110 - включены ли клавиши фронтенда ??
     int State;                          // +0x0110
@@ -177,29 +181,29 @@ void InitDevice();
 // Адрес: 0x00451FB0 - Размер: 0x22 байт
 void ReleaseInputDevice();
 // Адрес: 0x00456AB3 - Размер: 0x4E байт
-void ReadDeviceState();
+char ReadDeviceState();
 // Адрес: 0x00456B01 - Размер: 0x152 байт
 void ProcessInput();
-// Адрес: 0x00456C53 - Размер: 0x2A байт
-void HandleKeyPress(int  key);
-// Адрес: 0x00456C7D - Размер: 0xF байт
-void SetFrontendKeysEnabled(bool enabled);
+    // Адрес: 0x00456C53 - Размер: 0x2A байт
+    bool HandleKeyPress();
+    // Адрес: 0x00456C7D - Размер: 0xF байт
+    void SetFrontendKeysEnabled(unsigned char enabled);
 
-// Работа с игроком
-// Адрес: 0x00452490 - Размер: 0x2F байт
-void SetPlayerName(const char* name);
-// Адрес: 0x0045862F - Размер: 0x4F байт
-void SetPlayerNameFromMenu();
-// Адрес: 0x0045867E - Размер: 0x38 байт
-bool ValidatePlayerName(const char* name);
-// Адрес: 0x004586B6 - Размер: 0x26 байт
-PlayerSlotSlave* getPlayerProfileName();
-// Адрес: 0x004586DC - Размер: 0x25B байт
-void LoadPlayerProfile( int slot);
-// Адрес: 0x00458937 - Размер: 0x10C байт
-void SelectPlayerSlot();
-// Адрес: 0x00458A43 - Размер: 0x4B байт
-int FindLastActiveArenaSlot(PlayerSlotSlave* PlayerSlotSave);
+    // Работа с игроком
+    // Адрес: 0x00452490 - Размер: 0x2F байт
+    void SetPlayerName();
+    // Адрес: 0x0045862F - Размер: 0x4F байт
+    void SetPlayerNameFromMenu();
+    // Адрес: 0x0045867E - Размер: 0x38 байт
+    bool ValidatePlayerName(const char* name);
+    // Адрес: 0x004586B6 - Размер: 0x26 байт
+    PlayerSlotSlave* getPlayerProfileName();
+    // Адрес: 0x004586DC - Размер: 0x25B байт
+    void LoadPlayerProfile( int slot);
+    // Адрес: 0x00458937 - Размер: 0x10C байт
+    unsigned short SelectPlayerSlot();
+    // Адрес: 0x00458A43 - Размер: 0x4B байт
+    unsigned char FindLastActiveArenaSlot(PlayerSlotSlave* PlayerSlotSave);
 
 // Сохранение/загрузка
 // Адрес: 0x00452940 - Размер: 0x1B3 байт
@@ -208,12 +212,12 @@ void SaveGame();
 void LoadGame();
 // Адрес: 0x00455F90 - Размер: 0x169 байт
 int NewGame();
-// Адрес: 0x00458E15 - Размер: 0x86 байт
-bool CheckSaveFile( const char* filename);
-// Адрес: 0x004528A0 - Размер: 0x9E байт
-const char* GettingSaveFile(byte index, char* savePath);
-// Адрес: 0x00458F39 - Размер: 0x4E байт
-const char* GetSaveFile(int slot);
+    // Адрес: 0x00458E15 - Размер: 0x86 байт
+    bool CheckSaveFile( const char* filename);
+    // Адрес: 0x004528A0 - Размер: 0x9E байт
+    char GettingSaveFile(byte index, char* savePath);
+    // Адрес: 0x00458F39 - Размер: 0x4E байт
+    char GetSaveFile(unsigned char SlotSave);
 // Адрес: 0x00458F87 - Размер: 0x6A байт
 void SaveSettings();
 
@@ -228,11 +232,11 @@ void LoadTexturesFromTable( void* table);
 void FindBackground(int iMenuBackground, byte* LeftPicture, byte* RightPicture);
 // Адрес: 0x004575B8 - Размер: 0x1B5 байт
 void DrawMenuBackground();
-// Адрес: 0x0045776D - Размер: 0x46 байт
-void DrawMenuElements();
-// Адрес: 0x004577B3 - Размер: 0x7D байт
-void UpdateGUI();
-// Адрес: 0x00453E20 - Размер: 0x1512 байт
+    // Адрес: 0x0045776D - Размер: 0x46 байт
+    unsigned char DrawMenuElements(unsigned char PlayerArena);
+    // Адрес: 0x004577B3 - Размер: 0x7D байт
+    unsigned char UpdateGUI(unsigned char PlayerArena);
+    // Адрес: 0x00453E20 - Размер: 0x1512 байт
 void LoadTextMenu();
 inline void PlayMenuCreate();
 inline void CompliteGameMenuCreate();
@@ -255,7 +259,7 @@ inline void NetworkClientMenuCreate();
 
 // Обработка событий и навигация
 // Адрес: 0x00456D00 - Размер: 0x2A байт
-void SwitchPage( int pageIndex);
+bool SwitchPage();
 // Адрес: 0x00456D2A - Размер: 0xBC байт
 void ActivateElement();
 void ActivateElement( int elementIndex);

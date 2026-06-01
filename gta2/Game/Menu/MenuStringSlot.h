@@ -22,7 +22,7 @@ public:
     wchar_t  str[50];       // 0x08 - Текстовое содержимое (Unicode, макс 49 симв + \0)
 
     // Статическая константа размера строки
-    static constexpr size_t MAX_STRING_LENGTH = 50;
+    enum { MAX_STRING_LENGTH = 50 };
 
     // Конструктор по умолчанию (инициализация нулями)
     MenuStringSlot();
@@ -46,7 +46,7 @@ public:
     void setText(const wchar_t* text);
 
     // Проверка размера структуры (для отладки)
-    static constexpr size_t expectedSize();
+    static size_t expectedSize();
 };
 
 
