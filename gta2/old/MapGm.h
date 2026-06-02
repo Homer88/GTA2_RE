@@ -168,7 +168,7 @@ public:
 	char* GetSaveFile();
 	void SetSaveFile(char* NameFile);
 	void SetPlayerArena(int PlayerArena);
-	char GetPlayerArena();
+	//char GetPlayerArena();
 	char GetBonus();
 	int ShowLimitFrame();
 	void SetBonusStage(int BonusStage);

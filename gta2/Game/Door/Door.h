@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ___DOOR_H_
+#define ___DOOR_H_
 
 class Door {
 public:
@@ -6,3 +7,6 @@ public:
 	Door() {};
 	~Door() {};
 };
+
+
+#endif

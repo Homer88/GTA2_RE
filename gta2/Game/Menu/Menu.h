@@ -97,6 +97,15 @@ public:
     bool FrontendKeysEnabled;            // +0x0110 - включены ли клавиши фронтенда ??
     int State;                          // +0x0110
     int PageNumber;
+    unsigned short CountPages;
+    unsigned short FontStyle;
+    short Key;
+    char Index;
+    char CurentArrayIndex;
+    unsigned short MenuItems[9];
+    int TimeToWaitDemoStart;
+    int TimeToWaitBeforeDemoStart;
+    char FrameCounter;
     // Массив страниц меню (0x0210 - 0x3000)
     MenuPage MenuPageArray[17];          // +0x0114 - 17 страниц меню
     
@@ -222,6 +231,7 @@ int NewGame();
 void SaveSettings();
 
 // Отрисовка и ресурсы
+unsigned short clearArrayTail();
 // Адрес: 0x00457324 - Размер: 0x43 байт
 int PrintCentr( const wchar_t* text, float x, float y);
 // Адрес: 0x00457367 - Размер: 0xCC байт

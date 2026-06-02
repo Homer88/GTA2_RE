@@ -23,6 +23,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 #file 
 #add_subdirectory(FileManager)
+# Bink
+add_subdirectory(bink)
 # Debug
 add_subdirectory(Debug)
 add_subdirectory(System)
