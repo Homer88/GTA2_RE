@@ -11,5 +11,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 # Основная библиотека MENU 
 add_subdirectory(Menu)
 # Основная библиотека Player
-#add_subdirectory(Player)
+add_subdirectory(Player)
+add_subdirectory(Car)
+add_subdirectory(Ambulance)
+add_subdirectory(Door)
+add_subdirectory(Gangs)
+add_subdirectory(MapGm)
+add_subdirectory(PublicTransport)
+add_subdirectory(MissionManager)
 
