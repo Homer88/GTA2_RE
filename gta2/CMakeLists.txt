@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 add_subdirectory(Engine)
-#add_subdirectory(Game)
+add_subdirectory(Game)
 
 file(GLOB MAIN_SOURCE "Game/main/main.cpp")
 

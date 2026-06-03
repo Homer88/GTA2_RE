@@ -1,6 +1,7 @@
 #ifndef __REGISTRY__H__
 #define __REGISTRY__H__
 
+
 class Registry {
 
 public:
@@ -27,12 +28,13 @@ public:
 	bool OpenOrCreateLanguageKey(PHKEY phkResult);
 	LSTATUS SetLanguage(LPCSTR lpValueName, BYTE Data);
 	LSTATUS GetLanguage(LPCSTR lpValueName, char* Data, int size);
+
+	bool OpenOrCreatePlayerName(PHKEY phkResult);
+	LSTATUS SetPlayerName(LPCSTR lpValueName, BYTE Data);
+	LSTATUS GetPlayerName(LPCSTR lpValueName, char* Data, int size);
 	
-
-
-
-
 };
+extern Registry gRegistry;
 
 #endif // !__REGISTRY__H__
 

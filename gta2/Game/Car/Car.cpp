@@ -1,5 +1,5 @@
 //реализация классов с машинами
-#include "Global.h"
+#include "../global.h"
 #include "Car.h"
 
 enum CarModel

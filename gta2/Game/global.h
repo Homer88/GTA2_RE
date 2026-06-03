@@ -14,6 +14,7 @@
 #include "../Engine/FileMgr/FileMgr.h"
 #include "../Engine/Input/Keybrd.h"
 #include "../Game/MissionManager/MissionManager.h"
+#include "../Game/MapRelatedStruct/MapRelatedStruct.h"
 
 //глобальные классы 
 extern Menu           gMenu;
@@ -29,6 +30,7 @@ extern FileMgr        gFileMgr;
 extern Keyboard		  gKeyboard;
 extern Registry		  gRegistry;
 extern MissionManager gMissionManager;
+extern MapRelatedStruct* gMapRelatedStruct;
 
 
 

@@ -3,10 +3,12 @@
 
 #include <windows.h>
 
+
 struct BINKSUMMARY;
 
 class Bink {
 public:
+    bool Status = NULL;
     Bink();
     ~Bink();
 
@@ -45,10 +47,7 @@ private:
     int   m_offsetY;
 };
 
-extern Bink gBink;
 
-extern void* gBinkBuffer;
-extern int   gBinkBufferOffset;
-extern int   gBinkSummary;
+
 
 #endif // __BINK_H__

@@ -1,5 +1,6 @@
 #include "Text.h"
-#include "Game/global.h"
+#include "../Registry/Registry.h"
+
 Text gText;
 wchar_t gFontJapan[256] = { 0x80,  0x81,  0x82,  0x83,  0x84,  0x85,  0x86,  0x87,  0x88, 0x89, 0x8A,
                             0x8B,  0x8C,  0x8D,  0x8E,  0x8F,  0x90,  0x91,  0x92,  0x93, 0x94, 0x95,
@@ -105,4 +106,9 @@ wchar_t Text::ConvertToUpper(wchar_t str) {
         return str;
     }
     return str;
+}
+
+
+bool  Text::LanguageJapan() {
+    return false;
 }

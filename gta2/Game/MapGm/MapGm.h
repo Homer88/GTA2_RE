@@ -153,7 +153,8 @@ class MapGm{
 		char field_573;
 		int SpecialTokens;
 		int field_578;
-		
+		MapGm();
+		~MapGm();
 		int   GetPlayerSlotSave();
 		int   GetPlayerArena();
 		void  SetPlayerArena(int Slot);

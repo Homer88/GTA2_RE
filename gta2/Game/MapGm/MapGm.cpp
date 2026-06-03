@@ -1,17 +1,17 @@
-#include"Global.h"
+#include"../global.h"
 //#include "MapGm.h"
 
 
 
 
 
-/*MapGm::MapGm(){
+MapGm::MapGm(){
 	///FIXME
 	}
 
 MapGm::~MapGm(){
 	
-}*/
+}
 
 
 
@@ -166,9 +166,9 @@ void MapGm::SetSaveFile(char* NameFile){
 
 
 void MapGm::SetPlayerArena(int slot){
-	this->playerArena=PlayerArena;
+	this->playerArena=slot;
 }
-char MapGm::GetPlayerArena() {
+int MapGm::GetPlayerArena() {
 	return this->playerArena;
 }
 void MapGm::SetBonusStage(int BonusStage){
@@ -183,7 +183,7 @@ void MapGm::SetPlayerSlotSave(int PlayerSlot){
 void MapGm::SetBonus(int Param){
 	this->Bonus=Param;
 }
-char MapGm::GetBonusStage() {
+int MapGm::GetBonusStage() {
 	return this->Bonus;
 }
 void MapGm::Set_FUN_0045E630(){

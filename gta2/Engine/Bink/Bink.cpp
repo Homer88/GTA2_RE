@@ -1,6 +1,13 @@
 #include "Bink.h"
 #include "..\..\..\binkw32\binkw32.h"
 
+
+void* gBinkBuffer;
+int   gBinkBufferOffset;
+BINKSUMMARY* gBinkSummary;
+
+Bink gBink;
+
 typedef HBINK (__stdcall *BinkOpenProc)(const char*, U32);
 typedef void (__stdcall *BinkBufferOpenProc)(HBINK, HWND, void*, void*);
 typedef int (__stdcall *BinkBufferCloseProc)(U32);
@@ -157,8 +164,4 @@ void Bink::SetIOSize(unsigned int ioSize)
     realBinkSetIOSize((void*)ioSize);
 }
 
-void* gBinkBuffer;
-int   gBinkBufferOffset;
-int   gBinkSummary;
 
-Bink gBink;

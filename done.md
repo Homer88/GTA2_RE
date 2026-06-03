@@ -17,7 +17,7 @@
 |13.|S13|General|0x8|0x005e8108|
 |14.|S14|Text|0x14|0x00671550|
 |15.|S15|Style|0x106c|0x00670684
-|16.|S16|MapRelatedStruct|0x370|0x00662c08
+|16.|S16|MapRelatedStruct|0x370|0x00662c08|~110 functions filled from IDA dump (stubs)|-|MapRelatedStruct.h, MapRelatedStruct.cpp|CMakeLists.txt|да|globals unk_662B*, требует доопределения CarSystemManager, SpriteS1, S202, AudioSourceParams, S16_01; Map вынесен в отдельный класс
 |17.|S17|EntityManager|0x0x2f04|0x006633c8
 |18.|S18|Display|0x1c|0x005e8b80
 |19.|S19|DisplayMode|0x4|
@@ -27,7 +27,7 @@
 |23.|S23|CarSystemManager|0x6c|0x005e4ca4|
 |24.|S24|WeatherManager|
 |25.|S25|MissionObjective|0x214|0x0067280c|
-|26.|S26|MissionManager|0xC1EA8|0x006644bc
+|26.|S26|MissionManager|0xC1EA8|0x006644bc|41 functions filled from IDA dump|-|MissionManager.h, MissionManager.cpp|CMakeLists.txt|да|нужны доопределения структур: Game, Object, MapRelatedStruct, CarSystemManager, FileMgr. Поля-плейсхолдеры с TODO. struct layout приблизительный.
 |27.|S27|MissionScriptObjects|0x8ec|0x006644c0
 |28.|S28|MissionScriptObjectData|0x11c|
 |29.|S29||0x8|
@@ -2004,3 +2004,4 @@
 |1998.|S1998|||||||||||
 |1999.|S1999|||||||||||
 |2000.|S2000|||||||||||
+|2001.|вспом.|Map (tile grid)|0x40010|-|2 functions (ctor, sub_42A830)|-|Map/Map.h, Map/Map.cpp|CMakeLists.txt|да|-|

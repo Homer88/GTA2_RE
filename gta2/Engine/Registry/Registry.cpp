@@ -1,8 +1,8 @@
 #include <windows.h>
 #include "Registry.h"
-#include "DebugLogFile.h"
+#include "../Debug/DebugLogFile.h"
 
-
+Registry gRegistry;
 
 bool Registry::GetPlayReplay(LPCSTR lpValueName){
 	
@@ -411,6 +411,56 @@ LSTATUS Registry::GetLanguage(LPCSTR lpValueName, char* Data,int size) {
 	DWORD cdData = 4;
 
 	this->OpenOrCreateLanguageKey(&hKey);
+	//if (RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cdData)) {
+		//if (RegSetValueExA(hKey, lpValueName, 0, 4, &value, 4)) {
+			//DebugLog(0x2Eu, "registry.cpp", 622);
+
+//		}
+	//	Data[0] = value;
+	//}
+//	if (RegCloseKey(hKey)) {
+	//	DebugLog(0x2Au, "registry.cpp", 629);
+	//}
+	//return Data[0];
+	return 0;
+}
+
+
+bool Registry::OpenOrCreatePlayerName(PHKEY phkResult) {
+	if (!phkResult) return false;
+
+	const char* TEXT_KEY = "SOFTWARE\\DMA Design Ltd\\GTA2\\Player";
+
+	if (!RegOpenKeyExA(HKEY_CURRENT_USER, TEXT_KEY, 0, 983103, phkResult))
+		return true;
+	if (RegCreateKeyExA(HKEY_CURRENT_USER, TEXT_KEY, 0, NULL, 0,
+		983103, 0, phkResult, (LPDWORD)&phkResult))
+		return false;
+}
+
+LSTATUS Registry::SetPlayerName(LPCSTR lpValueName, BYTE Data) {
+	HKEY hKey;
+	BYTE Data1[4] = { 0 };
+	DWORD cdData = 4;
+	LSTATUS resul;
+
+	if ((this->OpenOrCreatePlayerName(&hKey)) && (
+		RegSetValueExA(hKey, 0, 0, 0, Data1, cdData))){
+	}
+	 return RegCloseKey(hKey);
+	 
+
+	
+
+	return 0;
+}
+LSTATUS Registry::GetPlayerName(LPCSTR lpValueName, char* Data, int size) {
+	HKEY hKey;
+	BYTE Data1[4] = { 0 };
+	DWORD cdData = 4;
+
+	this->OpenOrCreatePlayerName(&hKey);
+	RegSetValueExA(hKey, 0, 0, 0, Data1, cdData);
 	//if (RegQueryValueExA(hKey, lpValueName, 0, 0, Data, &cdData)) {
 		//if (RegSetValueExA(hKey, lpValueName, 0, 4, &value, 4)) {
 			//DebugLog(0x2Eu, "registry.cpp", 622);

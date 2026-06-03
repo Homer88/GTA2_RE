@@ -4,7 +4,7 @@
 
 
 
-#include "global.h"
+#include "..\global.h"
 
 class Ped;
 class SpriteS1;

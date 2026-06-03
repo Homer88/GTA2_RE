@@ -8,22 +8,19 @@
 
 #include <string.h>
 
-#include "Game/global.h"
-#include "Game/Player/PlayerData.h"
-#include "Game/Player/PlayerSlotSlave.h"
-#include "Game/MapGm/MapGm.h"
-
+#include "../global.h"
+#include "../Player/PlayerData.h"
+#include "../Player/PlayerSlotSlave.h"
+#include "../MapGm/MapGm.h"
+#include "../../Engine/Bink/BinkBuffer.h"
+#include "../../Engine/Movie/Movie.h"
+#include "../../Engine/DMAudio/DMAudio.h"
 #include "Menu.h"
 
 Menu gMenu;
 
  
 
-// Bink video player
-
-void __stdcall BinkBufferClose(void*);
-void __stdcall BinkClose(void*);
-void __stdcall BinkGetSummary(void*, void*);
 
 
 // Globals from dump
@@ -47,8 +44,6 @@ extern unsigned __int8 gPageFileMenu[];
 int gbh_BlitImage(int, int, int, int, int, int, int);
 void ShowTextDisplay(wchar_t*, char*, ...);
 void wcsncpy(wchar_t*, wchar_t*, unsigned int);
-unsigned __int16 Font::GetStringWidth(wchar_t*, unsigned __int16);
-unsigned __int16 Font::GetCharHeight(unsigned __int16);
 void sub_41F990(int*, unsigned __int16);
 void bitShiftLeft1(int*, int);
 void DrawGTATextRawMain(wchar_t*, int, int, int, int);
@@ -61,15 +56,10 @@ int DeviceGuid;
 LPCDIDATAFORMA pLPCDIDATAFORMAT;
 void debug_log(unsigned int, const char*, int);
 unsigned __int8 gAllGxtFile;
-int gMovie;
 void WindowsClientCreate();
 void gbh_BeginScene();
 void gbh_EndScene();
 void FreeSurface();
-int Movie::Vid_FlipBuffers(int*);
-int Movie::Vid_ClearScreen(int*, int, int, int, int, int, int, int);
-void FileMgr::SetFilePath(char*);
-FILE* WriteReadFile(const char*, const char*);
 void free_0(void*);
 int gbh_LoadImage[1];
 char gDataMoviePrein[256];
@@ -88,17 +78,14 @@ int gbh_InitImageTable(int);
 int DMAudio::sub_410540(int*, int);
 int DMAudio::sub_410520(int*);
 int gGamma;
-int Registry::ConfigSetScreen(int*, char*, unsigned int);
 bool SetGamma(int);
 bool UpdateVideoFrame();
 void MapGm::sub_45E610(int*, int);
-unsigned char Keybord::Keydown(void*, int);
+
 int sub_4539D0(unsigned short, unsigned char);
 int dword_662128;
 int MenuEntry::UpdateToPreviousActive(void*);
 bool MenuEntry::InitializeEntry(void*);
-int Registry::sub_4B5D10(char*, unsigned short);
-int ValidatePlayerName();
 
 // Примечание: Все методы реализуются как заглушки, пока не будет найден соответствующий код в ассемблере.
 // Реальные адреса и реализации будут добавлены после анализа gta2.asm
@@ -406,17 +393,17 @@ void Menu::CleanupResources() {
 }
 
 void Menu::CloseBinkResources() {
-    if ( gBinkBuffer )
+    if ( gBinkBuffer.Status)
     {
-        BinkBufferClose(gBinkBuffer);
-        gBinkBuffer = 0;
+        gBinkBuffer.Close();
+        gBinkBuffer.Status = NULL;
         gBinkBufferOffset = 0;
     }
-    if ( gBink )
+    if ( gBink.Status )
     {
-        gBink.BinkGetSummary( &gBinkSummary);
-        gBink.BinkClose(gBink);
-        gBink = NULL;
+        gBink.GetSummary(gBinkSummary);
+        gBink.Close();
+        gBink.Status = NULL;
     }
 }
 
@@ -489,31 +476,30 @@ void Menu::RenderMenu() {
 
 // Ввод
 void Menu::InitDevice() {
-    LPDIRECTINPUTDEVICEA pDirectInput8;
+    LPDIRECTINPUTDEVICEA pDirectInput6;
     LPDIRECTINPUTDEVICEA *p_InputDevice;
 
-    pDirectInput8 = gDirectInput8;
+    pDirectInput6 = gDirectInput6;
     p_InputDevice = &this->InputDevice;
-    this->DirectInput = gDirectInput8;
+    this->DirectInput = gDirectInput6;
     this->InputDevice = 0;
-    if ( ((int (__cdecl *)(LPDIRECTINPUTA, int *, LPDIRECTINPUTDEVICEA *, _DWORD))pDirectInput8->lpVtbl->CreateDevice)(
-             pDirectInput8,
+    if ( pDirectInput6->CreateDevice(
+             pDirectInput6,
              &DeviceGuid,
              &this->InputDevice,
              0) < 0 )
         debug_log(0x1Fu, "frontend2.cpp", 2229);
-    if ( ((int (__cdecl *)(LPDIRECTINPUTDEVICEA, LPCDIDATAFORMAT *))(*p_InputDevice)->lpVtbl->SetDataFormat)(
+    if ( *p_InputDevice->lpVtbl->SetDataFormat(
              *p_InputDevice,
              &pLPCDIDATAFORMAT) < 0 )
         debug_log(9u, "frontend2.cpp", 2240);
-    if ( ((int (__cdecl *)(LPDIRECTINPUTDEVICEA, HWND, int))(*p_InputDevice)->lpVtbl->SetCooperativeLevel)(
+    if ( *p_InputDevice->SetCooperativeLevel(
              *p_InputDevice,
              gWindows,
              6) < 0 )
         debug_log(0xAu, "frontend2.cpp", 2247);
-    if ( !this->InputDevice
-        || ((int (__cdecl *)(LPDIRECTINPUTDEVICEA))this->InputDevice->lpVtbl->Acquire)(this->InputDevice) < 0 )
-    {
+    if ( (!this->InputDevice)
+        || (this->InputDevice->Acquire(this->InputDevice) < 0 )){
         this->KeyboardAcquired = 1;
     }
 }
@@ -672,7 +658,7 @@ void Menu::LoadPlayerProfile(int slot) {
     this->CurrentPlayerSlot = slot;
 }
 
-void Menu::SelectPlayerSlot() {
+unsigned short Menu::SelectPlayerSlot() {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: TBD, Размер: 0x10C bytes
     timeGetTime();
@@ -815,23 +801,24 @@ bool Menu::CheckSaveFile(const char* filename) {
     return false; // Заглушка
 }
 
-char Menu::GettingSaveFile(byte a2, char *a3) {
+char Menu::GettingSaveFile(byte Index, char * FileNameSave) {
+
     char Buffer[8];
 
-    _itoa(a2, Buffer, 10);
-    strcpy(a3, "player\\plyslot");
-    strcat(a3, Buffer);
-    strcat(a3, ".svg");
+    _itoa(Index, Buffer, 10);
+    strcpy(FileNameSave, "player\\plyslot");
+    strcat(FileNameSave, Buffer);
+    strcat(FileNameSave, ".svg");
     return 0;
 }
 
 char Menu::GetSaveFile(unsigned char SlotSave) {
     void *v2; // eax
-    FILETIME FileName[32];
+    FILETIME FileNameSave[32];
     CHAR v5[280];
 
-    this->GettingSaveFile(SlotSave, (char *)FileName);
-    v2 = (void *)sub_4D75CC(FileName, v5, (DWORD)FileName[0].dwLowDateTime);
+    this->GettingSaveFile(SlotSave, (char *)FileNameSave);
+    v2 = (void *)sub_4D75CC(FileNameSave, v5, (DWORD)FileNameSave[0].dwLowDateTime);
     if ( v2 == (void *)-1 )
         return 0;
     sub_4D7549(v2);
@@ -861,14 +848,14 @@ int Menu::PrintCentr(const wchar_t* text, float x, float y) {
     unsigned short centrScreen = (unsigned short)y;
 
     if (stringLength == 0xFFFF)
-        return centrScreen - (Font::GetStringWidth((wchar_t*)text, this->FontStyle) >> 1);
+        return centrScreen - (gFont.GetStringWidth((wchar_t*)text, this->FontStyle) >> 1);
     else
-        return centrScreen - (Font::GetStringWidth((wchar_t*)text, stringLength) >> 1);
+        return centrScreen - (gFont.GetStringWidth((wchar_t*)text, stringLength) >> 1);
 }
 
 void* Menu::LoadTexture(unsigned short ID) {
-    FileMgr::SetFilePath(gPageFileMenu[ID].NameFiles);
-    FILE *v3 = WriteReadFile(gPageFileMenu[ID].NameFiles, "rb");
+    gFileMgr.SetFilePath(gPageFileMenu[ID].NameFiles);
+    FILE *v3 = gFileMgr.WriteReadFile(gPageFileMenu[ID].NameFiles, "rb");
     if ( !v3 )
         debug_log(0x10u, "frontend2.cpp", 6230);
     void *v4 = malloc(gPageFileMenu[ID].SizeFile);
@@ -989,27 +976,27 @@ void Menu::DrawMenuBackground() {
         || pMenuPic == HighScores
         || pMenuPic == Title )
     {
-        Menu::FindBackground(this, pMenuPic, &PicMenuFilesLeft, PicMenuFilesRight);
+        this->FindBackground( pMenuPic, &PicMenuFilesLeft, PicMenuFilesRight);
         pPicMenuFilesLeft = PicMenuFilesLeft;
         if ( gbh_BlitImage(gPageFileMenu[PicMenuFilesLeft], 0, 0, 640, 480, 0, 0) == -10 )
         {
-            Menu::LoadTexture(this, pPicMenuFilesLeft);
+            this->LoadTexture(pPicMenuFilesLeft);
             gbh_BlitImage(gPageFileMenu[pPicMenuFilesLeft], 0, 0, 640, 480, 0, 0);
         }
     }
     else
     {
-        Menu::FindBackground(this, pMenuPic, &PicMenuFilesLeft, PicMenuFilesRight);
+        this->FindBackground( pMenuPic, &PicMenuFilesLeft, PicMenuFilesRight);
         v3 = PicMenuFilesLeft;
         v5 = gbh_BlitImage(gPageFileMenu[PicMenuFilesLeft], 0, 0, 278, 480, 0, 0);
         if ( v5 == -10 )
         {
-            Menu::LoadTexture(this, v3);
+            this->LoadTexture(v3);
             v5 = gbh_BlitImage(gPageFileMenu[v3], 0, 0, 278, 480, 0, 0);
         }
         if ( !v5 && gbh_BlitImage(gPageFileMenu[v8], 0, 0, 362, 480, 278, 0) == -10 )
         {
-            Menu::LoadTexture(this, v8);
+            this->LoadTexture(v8);
             gbh_BlitImage(gPageFileMenu[v8], 0, 0, 362, 480, 278, 0);
         }
     }
@@ -1100,6 +1087,27 @@ void Menu::LoadTextMenu() {
     this->MenuPageArray[MENUPAGE_START_MENU].MenuItemArray[EntryQuit].Y = 298;
     this->MenuPageArray[MENUPAGE_START_MENU].IndexMenuActions = MENUPAGE_START_MENU;
     this->MenuPageArray[MENUPAGE_START_MENU].SelectActiveElementDefault = EntryPlay;
+    this->PlayMenuCreate();
+    this->CompliteGameMenuCreate();
+    this->AreaCompliteMenuCreate();
+    this->ResumeLoadSaveCreate();
+    this->YouAreDead_RIP();
+    this->HighScoresForAreaCreate();
+    this->BonusStageAMenuCreate();
+    this->PlayVideoMovieMenuCreate();
+    this->PlayVideoMovieIntroMenuCreate();
+    this->BonusStageBMenuCreate();
+    this->BonusStageCMenuCreate();
+    this->NetworkGameMenuCreate();
+    this->OptionsMenuCreate();
+    this->NiceTryMenuCreate();
+    this->CodeDebugMenuCreate();
+    this->NetworkServerMenuCreate();
+    this->NetworkClientMenuCreate();
+
+
+
+
 }
 
 
@@ -1839,6 +1847,7 @@ void Menu::GoBack() {
     this->ConfirmExit();
 }
 
+
 // Логика меню
 void Menu::MainMenuLogic() {
     char v26[24];
@@ -1853,7 +1862,7 @@ void Menu::MainMenuLogic() {
     unsigned __int16 v16;
     FileSave v27;
 
-    void *v3 = (void *)sub_4D75CC(&stru_573510, (LPCSTR)&v27, 0);
+    void *v3 = (void *)sub_4D75CC(&gFileTimes, (LPCSTR)&v27, 0);
     void *v4 = v3;
     if ( v3 == (void *)-1 )
         debug_log(0x98u, "frontend2.cpp", 4614);
@@ -1872,7 +1881,7 @@ void Menu::MainMenuLogic() {
     v13 = 0;
     this->field_1EB3F = 0;
     v14 = 0;
-    FILE *v8 = WriteReadFile(v26, "rt");
+    FILE *v8 = gFileMgr.WriteReadFile(v26, "rt");
     if ( !v8 )
     {
         debug_log(0x9Au, "frontend2.cpp", 4644);
@@ -1938,7 +1947,7 @@ void Menu::PauseMenu() {
     unsigned int v9 = strlen(a6) + 1;
     char *v10 = &Source[strlen(Source)];
     memcpy(v10, a6, v9);
-    gMapGm.SetScripName(Source);
+    gMapGm.SetScriptName(Source);
 
     unsigned __int8 PlayerArena = gMapGm.GetPlayerArena();
     gMapGm.SetPlayerArena(PlayerArena);
@@ -1949,12 +1958,12 @@ void Menu::OptionsMenu() {
     byte PlayerSlotSave = gMapGm.GetPlayerSlotSave();
     char v28[36];
     this->GettingSaveFile(PlayerSlotSave, v28);
-    FileMgr::FileOpen(0, v28);
+    gFileMgr.FileOpen(0, v28);
     SIZE_T v17 = 82;
     char v24[2], v25[7];
     FILE v19[5];
-    FileMgr::Read(v19, &v17);
-    FileMgr::CloseFile(0);
+    gFileMgr.Read(v19, &v17);
+    gFileMgr.CloseFile(0);
     char v18[12];
     v18[0] = v24[1];
     v18[4] = v25[1];
@@ -2060,13 +2069,13 @@ void Menu::ServerSettings() {
 
     a4[0] = word_67066C[0];
     v2 = *(int *)a4;
-    Font::GetCharHeight(word_67066C[0]);
+    gFont.GetCharHeight(word_67066C[0]);
     v3 = gMapGm.sub_45E600();
     char a1[12];
     _itoa(v3, a1, 10);
     if ( v3 )
     {
-        v4 = gText.Bsearch(a1);
+        v4 =(wchar_t*) gText.Bsearch(a1);
         pHudBrief->sub_4C2450((wchar_t *)&pHudBrief, (int)v4, 560);
         v11 = v5;
         bitShiftLeft1(&v11, 1);
@@ -2300,8 +2309,8 @@ void Menu::ApplySettings() {
     this->CheckConditions();
     gbh_EndScene();
     FreeSurface();
-    Movie::Vid_FlipBuffers(gMovie);
-    Movie::Vid_ClearScreen(gMovie, 0, 0, 0, 0, 0, gMovie->WindowWidth, gMovie->WindowHeight);
+    gMovie.Vid_FlipBuffers();
+    gMovie.Vid_ClearScreen(0, 0, 0, 0, 0, gMovie.WindowWidth, gMovie.WindowHeight);
 }
 
 void Menu::ResetSettings() {
@@ -2622,15 +2631,15 @@ void Menu::CheckConditions() {
             break;
         case 1:
         {
-            wchar_t ploading = (unsigned __int16)gText.Bsearch("loading");
+            wchar_t* ploading = (wchar_t*)gText.Bsearch("loading");
             unsigned short v3 = this->PrintCentr(ploading, 65535u, 320);
-            wchar_t *pLoading = gText.Bsearch("loading");
+            wchar_t *pLoading = (wchar_t*)gText.Bsearch("loading");
             break;
         }
         case 4:
             if ( this->field_EDF8 == 1 )
             {
-                wchar_t *pClrchar = gText.Bsearch("clrchar");
+                wchar_t *pClrchar = (wchar_t* )gText.Bsearch("clrchar");
             }
             break;
         default:
@@ -2640,10 +2649,9 @@ void Menu::CheckConditions() {
 }
 
 void Menu::MenuShowJapanText() {
-    char result;
-
-    result = Text::LanguageJapan(gText);
-    if ( result )
+    
+    if( gText.LanguageJapan())
+     
     {
         this->FontStyle = word_67065C;
     }
@@ -2873,7 +2881,7 @@ void Menu::SpecialFunction3() {
                         this->OptionsMenu();
                     else
 LABEL_17:
-                        MapGm::SetSaveFile(gSource);
+                        gMapGm.SetSaveFile(gSource);
                     goto LABEL_24;
                 case 15:
                     if ( gMapGm.GetGang() )
@@ -2934,7 +2942,7 @@ LABEL_24:
             this->State = 2;
             this->SetPlayerName();
             this->Length = _wcslen((const wchar_t *)&this->PlayerName);
-            // ValidatePlayerName
+           // this->ValidatePlayerName();
             this->field_C99F = 1;
             this->Key = 28;
             this->field_C9A2 = 5;
@@ -2981,7 +2989,7 @@ LABEL_24:
             {
                 gMapGm.SetPlayerSlotSave(pMenuEntry1->PlayerSlot);
                 this->UpdateMenuFrame();
-                Registry::sub_4B5D10("plyrslot", pMenuEntry1->PlayerSlot);
+                gRegistry.SetPlayerName("plyrslot", pMenuEntry1->PlayerSlot);
                 if ( pPreviousActive )
                     gCheatIs = 3;
             }
@@ -3016,7 +3024,7 @@ LABEL_24:
             {
                 gMapGm.SetPlayerSlotSave(pMenuEntry->PlayerSlot);
                 this->UpdateMenuFrame();
-                Registry::sub_4B5D10("plyrslot", pMenuEntry->PlayerSlot);
+                gRegistry.SetPlayerName("plyrslot", pMenuEntry->PlayerSlot);
                 if ( v16 )
                     gCheatIs = 4;
             }
@@ -3116,7 +3124,7 @@ void Menu::SpecialFunction4() {
     if ( pKey == 57 )
         v5 = 32;
     else
-        v5 = Keybord::Keydown(dword_662128, pKey);
+        v5 = gKeybord.Keydown(dword_662128, pKey);
     if ( sub_4539D0(this->FontStyle, v5) >= 3 || v5 == 0 )
     {
         this->field_C99F = 1;
@@ -3187,7 +3195,7 @@ void Menu::SpecialFunction5() {
     if ( v2 == 57 )
         v5 = 32;
     else
-        v5 = Keybord::Keydown(dword_662128, v2);
+        v5 = gKeybord.Keydown(dword_662128, v2);
     if ( sub_4539D0(this->FontStyle, v5) >= 3 || v5 == 0 )
     {
         this->field_C99F = 1;
@@ -3254,7 +3262,7 @@ void Menu::SpecialFunction6() {
         DMAudio::sub_410520(&gDMAudio);
     if ( gGamma )
     {
-        int pGamma = Registry::ConfigSetScreen(&Registry, "gamma", 10u);
+        int pGamma = gRegistry.ConfigureSetScreen("gamma", 10u);
         if ( gGamma )
         {
             if ( SetGamma(pGamma) )
@@ -3332,8 +3340,8 @@ Menu::Menu() {
     pMenu = this;
     Construct(this->MenuPageArray, 3018, 17, MenuPage::MenuPage, MenuPage::MenuPage_Des);
     v15 = 2;
-    Construct(this->MenuDataBlock, 4, 8, S138::S138, MenuDataBlock::MenuDataBlockDEC);
-    MenuSlotConfig::MenuSlotConfig(&this->MenuSlotConfig);
+    Construct(this->MenuDataBlock, 4, 8, MenuDataBlock::MenuDataBlock MenuDataBlock::MenuDataBlockDEC);
+    gMenuSlotConfig.MenuSlotConfig(&this->MenuSlotConfig);
     v12 = 1;
     this->SetFrontendKeysEnabled(v12);
     Text *pText_1 = (Text *)operator_new(0x14u);

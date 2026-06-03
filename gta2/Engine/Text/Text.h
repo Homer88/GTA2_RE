@@ -12,8 +12,7 @@ public:
 	void* Bsearch(const void* pKey);
 	wchar_t* ConvertWordsToBig(wchar_t* str);
 	wchar_t ConvertToUpper(wchar_t str);
-	unsigned __int16 Font::GetStringWidth(wchar_t*, unsigned __int16);
-    unsigned __int16 Font::GetCharHeight(unsigned __int16);    
+    bool  LanguageJapan();	
 };
 
 #endif

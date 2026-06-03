@@ -196,7 +196,7 @@ void ProcessInput();
     // Адрес: 0x00456C53 - Размер: 0x2A байт
     bool HandleKeyPress();
     // Адрес: 0x00456C7D - Размер: 0xF байт
-    void SetFrontendKeysEnabled(unsigned char enabled);
+    void SetFrontendKeysEnabled(bool enabled);
 
     // Работа с игроком
     // Адрес: 0x00452490 - Размер: 0x2F байт
@@ -224,7 +224,7 @@ int NewGame();
     // Адрес: 0x00458E15 - Размер: 0x86 байт
     bool CheckSaveFile( const char* filename);
     // Адрес: 0x004528A0 - Размер: 0x9E байт
-    char GettingSaveFile(byte index, char* savePath);
+    char GettingSaveFile(byte Index, char* FileNameSave);
     // Адрес: 0x00458F39 - Размер: 0x4E байт
     char GetSaveFile(unsigned char SlotSave);
 // Адрес: 0x00458F87 - Размер: 0x6A байт
@@ -270,6 +270,7 @@ inline void NetworkClientMenuCreate();
 // Обработка событий и навигация
 // Адрес: 0x00456D00 - Размер: 0x2A байт
 bool SwitchPage();
+void SwitchPage(int pageIndex);
 // Адрес: 0x00456D2A - Размер: 0xBC байт
 void ActivateElement();
 void ActivateElement( int elementIndex);

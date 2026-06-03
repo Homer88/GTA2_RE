@@ -16,10 +16,16 @@ file(GLOB MENU_HEADERS "*.h")
 file(GLOB PLAYER_HEADERS "../Player/*.h")
 file(GLOB MAPGM_HEADERS "../MapGm/*.h")
 set(GLOBAL_HEADERS "../global.h")
-set(REGISTRY_HEADERS "../Registry/Registry.h")
-set(TEXTURE_MANAGER_HEADERS "../TextureManager/TextureManager.h")
-set(UITILIT_HEADERS "../ultil/WinApi.h")
-set(TEXT_HEADERS "../Text/Text.h")
+set(REGISTRY_HEADERS "../../Engine/Registry/Registry.h")
+set(TEXTURE_MANAGER_HEADERS "../../Engine/TextureManager/TextureManager.h")
+set(UITILIT_HEADERS "../../Engine/ultil/WinApi.h")
+set(TEXT_HEADERS "../../Engine/Text/Text.h")
+set(FONT_HEADERS "../../Engine/Font/Font.h")
+set(FILEMGR_HEADERS "../../Engine/FileMgr/FileMgr.h")
+set(KEYBRD_HEADERS "../../Engine/Input/Keybrd.h")
+set(KEYSTATUS_HEADERS "../../Engine/Input/KeyState.h")
+set(BINK_HEADERS "../../Engine/Bink/Bink.h")
+set(BINKBUFFER_HEADERS "../../Engine/Bink/BinkBuffer.h")
 # библиотека BINKW32
 
 file(GLOB BINKW32_HEADERS "binkw32/*.h")
@@ -33,4 +39,12 @@ include_directories(WIN_INCLUDE PUBLIC  "ms/win/include")
 
 
 # Сборка  Menu
-add_library(${PROJECT_NAME} STATIC ${MENU_SOURCE} ${MENU_HEADERS} ${PLAYER_HEADERS} ${MAPGM_HEADERS} ${GLOBAL_HEADERS} ${REGISTRY_HEADERS} ${TEXTURE_MANAGER_HEADERS} ${UITILIT_HEADERS} ${TEXT_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${MENU_SOURCE} ${MENU_HEADERS} 
+				${PLAYER_HEADERS} ${MAPGM_HEADERS} ${GLOBAL_HEADERS} 
+				${REGISTRY_HEADERS} ${TEXTURE_MANAGER_HEADERS} 
+				${UITILIT_HEADERS} ${TEXT_HEADERS} ${FONT_HEADERS}
+			    ${FILEMGR_HEADERS} ${KEYBRD_HEADERS} ${KEYSTATUS_HEADERS}
+				${BINK_HEADERS}	${BINKBUFFER_HEADERS}
+
+
+)

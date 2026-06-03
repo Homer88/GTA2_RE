@@ -17,5 +17,6 @@ public:
 
 };
 
+extern DMAudio gDMAudio;
 #endif // !__DMAudio_H_
 

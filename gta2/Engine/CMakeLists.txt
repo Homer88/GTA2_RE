@@ -28,12 +28,15 @@ add_subdirectory(bink)
 # Debug
 add_subdirectory(Debug)
 add_subdirectory(System)
-
- 
+add_subdirectory(Registry)
+add_subdirectory(Input)
+add_subdirectory(Font)
+add_subdirectory(Text)
 #Ультитилы 
 add_subdirectory(ultil)
 # ресурсы
 add_subdirectory(Res)
+add_subdirectory(FileMgr)
 
 #lib
 #target_include_directories(ENGINE PRIVATE  System)
