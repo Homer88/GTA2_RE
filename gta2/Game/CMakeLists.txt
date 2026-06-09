@@ -20,5 +20,6 @@ add_subdirectory(MapGm)
 add_subdirectory(PublicTransport)
 add_subdirectory(MissionManager)
 add_subdirectory(Map)
+add_subdirectory(AudioSourceParams)
 add_subdirectory(MapRelatedStruct)
 

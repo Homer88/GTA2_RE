@@ -30,12 +30,14 @@ typedef __int64 _QWORD;
 
 struct S16_01;
 struct S202;
-struct AudioSourceParams;
+#include "../AudioSourceParams/AudioSourceParams.h"
 struct GameEntity;
 class Player;
-class SpriteS1;
+struct SpriteS1 {
+    SpriteS1* FirstElement;
+};
 class Gang;
-class CarSystemManager;
+#include "../Car/CarSystemManager.h"
 class FileMgr;
 
 #pragma pack(push, 1)
@@ -45,14 +47,42 @@ struct S16_01 {
     int field_320;
 };
 
+struct S16_02 {
+    __int16 field;    // 0x00
+    __int16 field_2;  // 0x02
+    __int16 field_4;  // 0x04
+    __int16 field_6;  // 0x06
+    __int16 field_8;  // 0x08
+    char field_A;     // 0x0A
+    char field_B;     // 0x0B
+
+    static void sub_44C840(S16_02* p);
+};
+
+struct S202 {
+    int field_0;                    // 0x00
+    S202* self;                     // 0x04
+    CarSystemManager* carMgr;       // 0x08
+    int field_C;                    // 0x0C
+    void* field_10;                 // 0x10
+    class Player* pPlayer;          // 0x14
+    int field_18;                   // 0x18
+    unsigned char field_1C;         // 0x1C
+    char field_1D;                  // 0x1D
+    char field_1E;                  // 0x1E
+    char field_1F;                  // 0x1F
+
+    static void sub_41F980(S202* p, int value);
+    static void* sub_401B20(S202*, SpriteS1*, PublicTransport*);
+};
+
 class MapRelatedStruct {
 public:
     // 0x000: S16_01 (804 bytes), Map* overlaps at offset 0
-    S16_01 S16_01;
+    S16_01 s16_01;
 
     // Map* accessors (shares offset 0 with S16_01.gap0[0..3])
-    Map*& getMap() { return *(Map**)&S16_01.gap0[0]; }
-    const Map* getMap() const { return *(const Map**)&S16_01.gap0[0]; }
+    Map*& getMap() { return *(Map**)&s16_01.gap0[0]; }
 
     // 0x324
     void* Buffer_ZONE;
@@ -157,7 +187,7 @@ public:
     char sub_464160(int a2, int a3);
     int sub_464210(int a2, int a3, int a4, int a5);
     unsigned int sub_464250(unsigned int a2, unsigned int a3, unsigned int a4);
-    int sub_4642A0(void** a1, int* a2, void** a3, void* a4, void** a5, int* a6);
+    int sub_4642A0(_DWORD* a2, _DWORD* a3, _DWORD* a4, _DWORD* a5, _DWORD* a6, int* a7);
 
     // File chunk loaders
     int sub_4644E0(unsigned int a2);
@@ -185,13 +215,13 @@ public:
     char* sub_465130(unsigned char a2, unsigned char a3);
     char* sub_4651C0();
     int sub_465250(unsigned char a2, unsigned char a3);
-    _WORD* sub_465280(int a2, int a3, int a4, int a5);
+    _WORD* sub_465280(int a2, __int16 a3, __int16 a4, __int16 a5, __int16 a6, __int16 a7, __int16 a8, __int16 a9, __int16 a10, __int16 a11, __int16 a12, __int16 a13);
 
     // Gang / entity tile queries
     Gang* sub_465350(int a2, int a3);
     char* sub_465390();
     int sub_4653C0(int a2, int a3, int a4);
-    _WORD** sub_465410(int a2, int a3, int a4);
+    S16_02** sub_465410(int a2, int a3, int a4);
     int sub_465490(int a2, int a3, int a4);
     int sub_465510(GameEntity* a2);
     int sub_4655B0(int a2, GameEntity* a3);

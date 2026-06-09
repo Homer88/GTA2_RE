@@ -29,7 +29,7 @@ struct S107;
 struct S202;
 struct SpriteS1;
 struct PublicTransport;
-struct AudioSourceParams;
+#include "../AudioSourceParams/AudioSourceParams.h"
 struct EventHandler;
 struct CarSystemManager;
 
@@ -101,8 +101,8 @@ public:
     int Health;
     char pathToScriptFile[260];
 
-    // Audio params (S9 placeholder)
-    char S9[4];
+    // Audio params (S9)
+    AudioSourceParams S9;
 
     MissionManager();
     ~MissionManager();

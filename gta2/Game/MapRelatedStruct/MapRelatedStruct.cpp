@@ -1,11 +1,97 @@
 #include "MapRelatedStruct.h"
+#include <cstring>
+#include <new>
 
 // Forward declarations for external functions
 void* operator_new(size_t size);
+
+// S16_02::sub_44C840 - init/zero the struct
+void S16_02::sub_44C840(S16_02* p)
+{
+    memset(p, 0, sizeof(S16_02));
+}
+
+// S202::sub_41F980 - write value into field_0
+void S202::sub_41F980(S202* p, int value)
+{
+    p->field_0 = value;
+}
 void free_0(void* ptr);
 void* createBuffer(size_t size);
 int debug_log(unsigned int a1, const char* a2, int a3);
 void* malloc_0(size_t size);
+
+// Additional missing struct/class forward declarations
+class Car;
+class Data16 { public: static int sub_40CE90(void*); unsigned short field_0; unsigned short field_2; int field_4; };
+class FileMgr { public: static void* FileOpen(void*, LPCSTR); static int CloseFile(void*); static int Read(void*, void*); static int ReadLine(void*, char*, int); static int SeekPosition(void*, int); };
+class Gangs { public: static int FindByName(int, const char*); static int AddNewGang(int, int); };
+class JuncIds {
+public:
+    static int sub_40C6D0(void*, int, int, int);
+    int Arr_0x884[128];
+    int arr_0x884[128];
+    int field_4;
+    int field_CC62;
+    int field_CC64;
+    int Count;
+    int Arr_316_Data16[32];
+};
+class Player { public: static int CheckCondition(void*, void*); static int IsCurrentPlayer(void*); static void* sub_401B40(void*, void*, int); static int sub_40CE70(void*); static int sub_41E260(void*); };
+class PublicTransport;
+class Radar { public: static void AddBlip(int, int, int, int); };
+class S103 { public: static int sub_401D20(void*, int); };
+class S115 { public: static int sub_469010(void*, int, int, int, int); static int sub_469070(void*, int, int, int, int); };
+class Tango;
+class TileAnim { public: static int sub_4C3470(void*, int); };
+class Weapon { public: static int sub_41C1E0(void*); static int sub_432860(void*, int, void**); static int UseAmmo(void*, int); };
+
+// Forward declarations for missing types/functions
+struct Object;
+struct Ped;
+
+extern void* gObject;
+void SpawnObject(Object* obj, unsigned char a2, int a3, int a4, int a5, int a6);
+int sub_4BB860(void* a1, int a2, int a3, int a4);
+int sub_4BB910(void* a1, int a2, int a3, int a4);
+unsigned int sub_463940(Map* a1, int a2);
+int bitShiftLeft1(int value, int shift);
+int _strnicmp(const char*, const char*, size_t);
+SpriteS1* sub_462ED0(SpriteS1* a1, __int16* a2);
+int sub_40CE30(void* a1, int a2);
+struct S200 { int A; };
+struct WithS200 { S200 S200[1]; };
+WithS200* sub_462EF0(Ped* a1, SpriteS1* a2);
+struct Style { static int sub_49E540(void*, int); static int sub_49E570(void*, int); static int sub_462FB0(void*, int); static int sub_462FD0(void*, int); };
+extern void* gStyle;
+
+// Additional missing function forward declarations
+int sub_4037E0(void*);
+void* sub_42A630(void*, void*);
+int sub_42A660(void*, int);
+struct CarHolder { int Car; };
+CarHolder* sub_42A6B0(void*, void*);
+void* sub_462EA0(void*, void*);
+int sub_463020(void*, unsigned char, unsigned char);
+int sub_4630D0(int, int, int);
+int sub_463150(int, int, int);
+int sub_463210(int, int, int);
+int sub_463480(int);
+int sub_4634B0(int);
+int sub_4634E0(void*);
+int sub_463690(void*, int, int);
+int sub_4637B0(int, int);
+int sub_4690B0(void*, int, int, int, int);
+int sub_4693A0(void*, int, int, int, int);
+int sub_4725B0(unsigned short*, void*);
+int sub_4828F0(void*, int);
+int sub_4BB9C0(void*, int, int);
+int sub_40E5A0(void*, void*, void*);
+int sub_40E8D0(void*, void*, void*);
+int sub_40FEE0(int, void*);
+int sub_401B90(void*, int, void*);
+int sub_41FC20(int, int, void*);
+unsigned char CopyBuffer(unsigned char dest, const char* src);
 
 // Global variable extern declarations
 extern _WORD* dword_662B84;
@@ -23,24 +109,23 @@ extern CarSystemManager* dword_662BAC;
 extern CarSystemManager* dword_662BF8;
 extern int arg0;  // global tile coord, used as ::arg0 in sub_465FE0/466170
 extern unsigned char unk_662B88;
-extern unsigned char unk_662B94;
-extern unsigned char unk_662B96;
-extern unsigned char unk_662B98;
-extern unsigned char unk_662B9A;
-extern unsigned char unk_662B9C;
-extern unsigned char unk_662B9F;
+extern S16_02 unk_662B94;
+
 extern unsigned char unk_662BA8;
 extern unsigned char unk_662BB0;
 extern unsigned char unk_662BBE;
 extern unsigned char unk_662BBC;
-extern unsigned char unk_662BC0;
+extern S16_02 unk_662BC0;
 extern unsigned char unk_662BD0;
+extern int unk_662BF4;
 extern unsigned char unk_662BD2;
 extern unsigned char unk_662BE4;
 extern unsigned char unk_662C00;
 extern unsigned char unk_662C04;
 extern unsigned char unk_662C98;
 extern unsigned char unk_662CFC;
+extern unsigned char byte_5EA6B8;
+extern __int16 word_663290;
 extern unsigned char unk_662DB0;
 extern unsigned char unk_662DB1;
 extern unsigned char unk_6630B0;
@@ -48,6 +133,24 @@ extern unsigned char unk_663108;
 extern int glob_a8;  // was ::a8 in dump
 extern CarSystemManager* glob_a5;  // was ::a5 in dump
 extern int a5;  // global tile coordinate used as boundary in sub_465FE0/466170
+
+// Additional missing extern globals
+extern void* gJuncIds;
+extern void* gTileAnim;
+extern void* gGangs;
+extern void* gS115;
+extern unsigned char unk_662B80;
+extern unsigned char unk_662BB4;
+extern unsigned char unk_662BB8;
+extern unsigned char unk_662C3C;
+extern void* unk_662C50;
+extern void* unk_662CF8;
+extern int dword_5E6874;
+extern void* unk_6630B8;
+extern void* unk_663164;
+extern void* unk_6631EC;
+extern int log_routefinder;
+extern char gStr[256];
 
 // S16_01 helper - searches gap0 for entry matching coordinates a2,a3
 static S16_01* S16_01_sub_463990(S16_01* s, char a2, char a3, int a4) {
@@ -71,7 +174,7 @@ static S16_01* S16_01_sub_463990(S16_01* s, char a2, char a3, int a4) {
 //=============================================================================
 MapRelatedStruct::MapRelatedStruct()
 {
-  S16_01.field_320 = 0;
+  s16_01.field_320 = 0;
   Len = -1;
   field_369 = -1;
   Buffer_ZONE = 0;
@@ -100,12 +203,12 @@ MapRelatedStruct::MapRelatedStruct()
   field_36F = 0;
   S16_02::sub_44C840(&unk_662BC0);
   S16_02::sub_44C840(&unk_662B94);
-  unk_662B9C = 1;
   unk_662B94.field = 3073;
-  unk_662B96 = 3073;
-  unk_662B98 = 3073;
-  unk_662B9A = 3073;
-  unk_662B9F = 3;
+  unk_662B94.field_2 = 3073;
+  unk_662B94.field_4 = 3073;
+  unk_662B94.field_6 = 3073;
+  unk_662B94.field_8 = 1;
+  unk_662B94.field_B = 3;
 }
 
 //=============================================================================
@@ -187,30 +290,30 @@ __int16 MapRelatedStruct::sub_466D30(AudioSourceParams a2)
   int v13;
   int v14;
 
-  v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams1);
-  v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams);
+  v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.z);
+  v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.y);
   v3 = AudioSourceParams::sub_41F9D0(&a2);
-  if ( !MapRelatedStruct::sub_466CF0(this, v3, v11, v13) )
+  if ( !sub_466CF0( v3, v11, v13) )
     return 1;
-  v14 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams1);
-  v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams);
+  v14 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.z);
+  v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.y);
   v5 = AudioSourceParams::sub_41F9D0(&a2);
-  dword_662B90 = (_WORD *)MapRelatedStruct::sub_4653C0(this, v5, v12, v14);
+  dword_662B90 = (_WORD *)sub_4653C0( v5, v12, v14);
   v6 = *((unsigned __int8 *)&unk_662DB0 + 12 * (*((unsigned __int8 *)dword_662B90 + 11) >> 2));
   dword_662BE0 = (_BYTE *)(12 * (*((unsigned __int8 *)dword_662B90 + 11) >> 2) + 6696368);
   switch ( v6 )
   {
     case 1:
-      v8 = a2.AudioSourceParams2 - 1;
-      v7 = a2.AudioSourceParams2 == 1;
+      v8 = a2.type - 1;
+      v7 = a2.type == 1;
       goto LABEL_5;
     case 2:
-      v10 = a2.AudioSourceParams2 - 1;
-      v9 = a2.AudioSourceParams2 == 1;
+      v10 = a2.type - 1;
+      v9 = a2.type == 1;
       goto LABEL_9;
     case 3:
-      v10 = a2.AudioSourceParams2 - 3;
-      v9 = a2.AudioSourceParams2 == 3;
+      v10 = a2.type - 3;
+      v9 = a2.type == 3;
 LABEL_9:
       if ( v9 )
         goto LABEL_7;
@@ -220,8 +323,8 @@ LABEL_11:
       result = 3 - (LOBYTE(a2.field_10) != 0);
       break;
     case 4:
-      v8 = a2.AudioSourceParams2 - 3;
-      v7 = a2.AudioSourceParams2 == 3;
+      v8 = a2.type - 3;
+      v7 = a2.type == 3;
 LABEL_5:
       if ( v7 )
         goto LABEL_11;
@@ -262,14 +365,14 @@ char MapRelatedStruct::sub_463850(AudioSourceParams a2)
   unsigned __int8 v20;
   int v21;
 
-  v3 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams1);
+  v3 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.z);
   Map = getMap();
   v5 = v3;
   v21 = AudioSourceParams::sub_41F9D0(&a2);
-  v6 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams);
-  v7 = (unsigned __int8 *)(Map->field_40008 + 4 * *(_DWORD *)Map::sub_42A830(Map, v6, v21));
+  v6 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.y);
+  v7 = (unsigned __int8 *)(Map->field_40008 + 4 * *(_DWORD *)Map->sub_42A830(v6, v21));
   v8 = *v7;
-  a2.AudioSourceParams1 = v8;
+  a2.z = v8;
   if ( v5 >= v8 )
     return 0;
   v10 = v7[1];
@@ -289,8 +392,8 @@ char MapRelatedStruct::sub_463850(AudioSourceParams a2)
     }
   }
   v16 = v12 + 1;
-  v17 = a2.AudioSourceParams1 - v10;
-  if ( v12 + 1 < a2.AudioSourceParams1 - v10 )
+  v17 = a2.z - v10;
+  if ( v12 + 1 < a2.z - v10 )
   {
     for ( i = &v7[4 * v16 + 4]; ; i += 4 )
     {
@@ -327,7 +430,7 @@ int *MapRelatedStruct::FindMaxZForLocation(int *arg0, int *a2, S202 *pS202)
 
   v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)pS202);
   v5 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)a2);
-  MaxZForTile = MapRelatedStruct::FindMaxZForTile(this, v5, v11, &a4);
+  MaxZForTile = FindMaxZForTile( v5, v11, &a4);
   dword_662B90 = MaxZForTile;
   if ( MaxZForTile )
   {
@@ -336,7 +439,7 @@ int *MapRelatedStruct::FindMaxZForLocation(int *arg0, int *a2, S202 *pS202)
     {
       S202::sub_41F980((S202 *)&a4, a4);
       a4 = *v9;
-      MapRelatedStruct::sub_466B70(this, a2, pS202);
+      sub_466B70( a2, pS202);
       *arg0 = a4;
       return arg0;
     }
@@ -349,7 +452,7 @@ int *MapRelatedStruct::FindMaxZForLocation(int *arg0, int *a2, S202 *pS202)
   }
   else
   {
-    bitShiftLeft1(arg0, 0);
+    bitShiftLeft1((int)arg0, 0);
     return arg0;
   }
 }
@@ -381,9 +484,9 @@ int MapRelatedStruct::sub_46A4D0()
     {
       FirstElement = (int *)sub_462ED0((SpriteS1 *)v11, (__int16 *)Buffer_MOBJ)->FirstElement;
       v5 = sub_462ED0((SpriteS1 *)v12, (__int16 *)&Buffer_MOBJ->_Placeholder + 1)->FirstElement;
-      LOWORD(a5) = *(_WORD *)&sub_462EF0((Ped *)v8, (SpriteS1 *)v8)->S200[0].A;
-      MaxZForLocation = MapRelatedStruct::FindMaxZForLocation(this, (int *)v13, FirstElement, (S202 *)v5);
-      Object::SpawnObject(gObject, BYTE1(Buffer_MOBJ[1]._Placeholder), (int)FirstElement, (int)v5, *MaxZForLocation, a5);
+      *(_WORD *)&a5 = *(_WORD *)&sub_462EF0((Ped *)v8, (SpriteS1 *)v8)->S200[0].A;
+      MaxZForLocation = FindMaxZForLocation( (int *)v13, FirstElement, (S202 *)v5);
+      SpawnObject((Object*)gObject, BYTE1(Buffer_MOBJ[1]._Placeholder), (int)FirstElement, (int)v5, *MaxZForLocation, a5);
       v7 = field_344;
       result = v9 + 1;
       Buffer_MOBJ = (FILE *)((char *)Buffer_MOBJ + 6);
@@ -517,34 +620,33 @@ char MapRelatedStruct::sub_46A570(
   char a8a;
 
   v8 = dword_662BF0;
-  *(_DWORD *)&v118.field_1C = this;
+  *(_DWORD *)&v118.field_1C = (_DWORD)this;
   unk_662BF4 = a8;
   glob_a8 = a8;
   unk_662BD0 = a8;
   unk_662BBC = a8;
   if ( dword_662BF0 )
   {
-    v11 = MapRelatedStruct::sub_469B00(
-            this,
+    v11 = sub_469B00(
             (int *)dword_662BF0[5],
             (SpriteS1 *)dword_662BF0[6],
             (Player *)dword_662BF0[7]);
     v8 = dword_662BF0;
     if ( !v11 )
     {
-      v118.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)(dword_662BF0 + 7));
-      v118.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v8 + 1);
+      v118.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)(dword_662BF0 + 7));
+      v118.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v8 + 1);
       v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)(v8 + 5));
-      if ( !MapRelatedStruct::sub_466CF0(this, v12, (int)v118.S202, (int)v118.CarSystemManager) )
-        return MapRelatedStruct::sub_466430(this, (int)arg0, (int)a3, (int)a4, (int)a5, a8);
+      if ( !sub_466CF0( v12, (int)v118.self, (int)v118.carMgr) )
+        return sub_466430( (int)arg0, (int)a3, (int)a4, (int)a5, a8);
     }
   }
-  v14 = MapRelatedStruct::sub_465410(this, (int)a6, (int)a2, a8);
+  v14 = (_WORD*)sub_465410( (int)a6, (int)a2, a8);
   dword_662B90 = v14;
   if ( !v14 )
   {
-    v14 = &unk_662BC0;
-    dword_662B90 = &unk_662BC0;
+    v14 = (_WORD *)&unk_662BC0;
+    dword_662B90 = (_WORD *)&unk_662BC0;
   }
   v15 = *((unsigned __int8 *)v14 + 11) >> 2;
   v16 = 3 * v15;
@@ -576,10 +678,10 @@ char MapRelatedStruct::sub_46A570(
       default:
         break;
     }
-    v19 = (_WORD *)MapRelatedStruct::sub_4653C0(this, (int)a6, (int)a2, a8 + 1);
+    v19 = (_WORD *)sub_4653C0( (int)a6, (int)a2, a8 + 1);
     dword_662BE8 = v19;
   }
-  HIWORD(v20) = HIWORD(a2);
+  *((_WORD *)&v20 + 1) = *((_WORD *)&a2 + 1);
   v21 = *(_DWORD *)&word_662BEC;
   if ( (int)a4 >= (int)a2 )
     goto LABEL_36;
@@ -589,50 +691,50 @@ char MapRelatedStruct::sub_46A570(
       goto LABEL_29;
     if ( !v8 )
       return 1;
-    v118.CarSystemManager = a2;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-    v118.S202 = v22;
-    S202::sub_41F980((S202 *)&v118.S202, (int)&a6->Index + 1);
+    v118.carMgr = a2;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+    v118.self = v22;
+    S202::sub_41F980((S202 *)&v118.self, (int)&a6->Index + 1);
     v118.field_0 = v23;
     S202::sub_41F980(&v118, (int)a6);
-    if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
   }
   else
   {
-    LOWORD(v20) = dword_662B90[2];
+    *(_WORD *)&v20 = dword_662B90[2];
     v24 = (CarSystemManager *)(*(_DWORD *)&word_662BEC & v20);
     if ( !(_WORD)v24 || *dword_662BE0 == 3 || *dword_662BE0 == 4 )
       goto LABEL_29;
     if ( !v8 )
       return 1;
-    v118.CarSystemManager = v24;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-    v118.S202 = v25;
-    S202::sub_41F980((S202 *)&v118.S202, (int)&a6->Index + 1);
+    v118.carMgr = v24;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+    v118.self = v25;
+    S202::sub_41F980((S202 *)&v118.self, (int)&a6->Index + 1);
     v118.field_0 = v26;
     S202::sub_41F980(&v118, (int)a6);
-    if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
   }
   v8 = dword_662BF0;
   v21 = *(_DWORD *)&word_662BEC;
 LABEL_29:
-  v27 = MapRelatedStruct::sub_465410(*(MapRelatedStruct **)&v118.field_1C, (int)a6, (int)&a2[-1].field_0, unk_662BF4);
-  dword_662B84 = v27;
+  v27 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410( (int)a6, (int)&a2[-1].field_0, unk_662BF4);
+  dword_662B84 = (_WORD*)v27;
   if ( v27 )
   {
     if ( ((unsigned __int16)v21 & *((_WORD *)v27 + 3)) != 0 )
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = v28;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-      v118.S202 = v29;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->Index + 1);
+      v118.carMgr = v28;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+      v118.self = v29;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->Index + 1);
       v118.field_0 = v30;
       S202::sub_41F980(&v118, (int)a6);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v27 = (S16_02 **)dword_662B84;
@@ -642,26 +744,26 @@ LABEL_29:
   }
   v19 = dword_662BE8;
 LABEL_36:
-  HIWORD(v31) = HIWORD(a5);
+  *((_WORD *)&v31 + 1) = HIWORD(a5);
   if ( (int)a5 <= (int)a2 )
     goto LABEL_55;
   if ( a8a == 2 )
   {
     if ( v19 )
     {
-      LOWORD(v31) = v19[3];
+      *(_WORD *)&v31 = v19[3];
       v32 = (CarSystemManager *)(v21 & (unsigned int)v31);
       if ( (_WORD)v32 )
       {
         if ( !v8 )
           return 1;
-        v118.CarSystemManager = v32;
-        S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a2->Index + 1);
-        v118.S202 = v33;
-        S202::sub_41F980((S202 *)&v118.S202, (int)&a6->Index + 1);
+        v118.carMgr = v32;
+        S202::sub_41F980((S202 *)&v118.carMgr, (int)&a2->Index + 1);
+        v118.self = v33;
+        S202::sub_41F980((S202 *)&v118.self, (int)&a6->Index + 1);
         v118.field_0 = v34;
         S202::sub_41F980(&v118, (int)a6);
-        if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+        if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
           return 1;
 LABEL_48:
         v8 = dword_662BF0;
@@ -671,38 +773,38 @@ LABEL_48:
   }
   else
   {
-    LOWORD(v31) = dword_662B90[3];
+    *(_WORD *)&v31 = dword_662B90[3];
     v35 = (CarSystemManager *)(v21 & (unsigned int)v31);
     if ( (_WORD)v35 && *dword_662BE0 != 3 && *dword_662BE0 != 4 )
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = v35;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a2->Index + 1);
-      v118.S202 = v36;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->Index + 1);
+      v118.carMgr = v35;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)&a2->Index + 1);
+      v118.self = v36;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->Index + 1);
       v118.field_0 = v37;
       S202::sub_41F980(&v118, (int)a6);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       goto LABEL_48;
     }
   }
-  v38 = MapRelatedStruct::sub_465410(*(MapRelatedStruct **)&v118.field_1C, (int)a6, (int)&a2->Index + 1, glob_a8);
-  dword_662B8C = v38;
+  v38 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410( (int)a6, (int)&a2->Index + 1, glob_a8);
+  dword_662B8C = (_WORD*)v38;
   if ( v38 )
   {
     if ( ((unsigned __int16)v21 & (_WORD)v38[1]) != 0 )
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = v31;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a2->Index + 1);
-      v118.S202 = v39;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->Index + 1);
+      v118.carMgr = v31;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)&a2->Index + 1);
+      v118.self = v39;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->Index + 1);
       v118.field_0 = v40;
       S202::sub_41F980(&v118, (int)a6);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v38 = (S16_02 **)dword_662B8C;
@@ -718,19 +820,19 @@ LABEL_55:
   {
     if ( dword_662BE8 )
     {
-      LOWORD(v31) = *dword_662BE8;
+      *(_WORD *)&v31 = *dword_662BE8;
       v41 = (CarSystemManager *)(v21 & (unsigned int)v31);
       if ( (_WORD)v41 )
       {
         if ( !v8 )
           return 1;
-        v118.CarSystemManager = v41;
-        S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-        v118.S202 = v42;
-        S202::sub_41F980((S202 *)&v118.S202, (int)&a2->Index + 1);
+        v118.carMgr = v41;
+        S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+        v118.self = v42;
+        S202::sub_41F980((S202 *)&v118.self, (int)&a2->Index + 1);
         v118.field_0 = v43;
         S202::sub_41F980(&v118, (int)a2);
-        if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+        if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
           return 1;
 LABEL_67:
         v8 = dword_662BF0;
@@ -742,17 +844,17 @@ LABEL_67:
   {
     if ( !v8 )
       return 1;
-    v118.CarSystemManager = (CarSystemManager *)dword_662B90;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-    v118.S202 = v44;
-    S202::sub_41F980((S202 *)&v118.S202, (int)&a2->Index + 1);
+    v118.carMgr = (CarSystemManager *)dword_662B90;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+    v118.self = v44;
+    S202::sub_41F980((S202 *)&v118.self, (int)&a2->Index + 1);
     v118.field_0 = v45;
     S202::sub_41F980(&v118, (int)a2);
-    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
     goto LABEL_67;
   }
-  v46 = MapRelatedStruct::sub_465410(*(MapRelatedStruct **)&v118.field_1C, (int)&a6[-1].field_0, (int)a2, unk_662BBC);
+  v46 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410( (int)&a6[-1].field_0, (int)a2, unk_662BBC);
   v48 = v46;
   unk_662B88 = (unsigned char)v46;
   if ( v46 )
@@ -761,13 +863,13 @@ LABEL_67:
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = v47;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-      v118.S202 = v49;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a2->Index + 1);
+      v118.carMgr = v47;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+      v118.self = v49;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a2->Index + 1);
       v118.field_0 = v50;
       S202::sub_41F980(&v118, (int)a2);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v48 = (S16_02 **)unk_662B88;
@@ -785,13 +887,13 @@ LABEL_67:
   {
     if ( !v8 )
       return 1;
-    v118.CarSystemManager = (CarSystemManager *)dword_662BA4;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-    v118.S202 = v51;
-    S202::sub_41F980((S202 *)&v118.S202, (int)a2);
+    v118.carMgr = (CarSystemManager *)dword_662BA4;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+    v118.self = v51;
+    S202::sub_41F980((S202 *)&v118.self, (int)a2);
     v118.field_0 = v52;
     S202::sub_41F980(&v118, (int)&a2[-1].field_0);
-    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
     v8 = dword_662BF0;
     v48 = (S16_02 **)unk_662B88;
@@ -806,13 +908,13 @@ LABEL_67:
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = (CarSystemManager *)dword_662BCC;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-      v118.S202 = v54;
-      S202::sub_41F980((S202 *)&v118.S202, (int)a6);
+      v118.carMgr = (CarSystemManager *)dword_662BCC;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+      v118.self = v54;
+      S202::sub_41F980((S202 *)&v118.self, (int)a6);
       v118.field_0 = v55;
       S202::sub_41F980(&v118, (int)&a6[-1].field_0);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v48 = (S16_02 **)unk_662B88;
@@ -823,27 +925,26 @@ LABEL_91:
     if ( unk_662BF4 <= unk_662BBC )
       v53 = unk_662BBC;
   }
-  v56 = MapRelatedStruct::sub_465410(
-          *(MapRelatedStruct **)&v118.field_1C,
+  v56 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410(
           (int)&a6[-1].field_0,
           (int)&a2[-1].field_0,
           v53);
   unk_662C00 = (unsigned char)v56;
   if ( v56 )
   {
-    LOWORD(v57) = *((_WORD *)v56 + 1);
+    *(_WORD *)&v57 = *((_WORD *)v56 + 1);
     v58 = v21 & v57;
     if ( (_WORD)v58 )
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = (CarSystemManager *)v58;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-      v118.S202 = v59;
-      S202::sub_41F980((S202 *)&v118.S202, (int)a2);
+      v118.carMgr = (CarSystemManager *)v58;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+      v118.self = v59;
+      S202::sub_41F980((S202 *)&v118.self, (int)a2);
       v118.field_0 = v60;
       S202::sub_41F980(&v118, (int)&a2[-1].field_0);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v48 = (S16_02 **)unk_662B88;
@@ -852,19 +953,19 @@ LABEL_91:
     }
     if ( v56 )
     {
-      LOWORD(v58) = *((_WORD *)v56 + 3);
+      *(_WORD *)&v58 = *((_WORD *)v56 + 3);
       v61 = (CarSystemManager *)(v21 & v58);
       if ( (_WORD)v61 )
       {
         if ( !v8 )
           return 1;
-        v118.CarSystemManager = v61;
-        S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-        v118.S202 = v62;
-        S202::sub_41F980((S202 *)&v118.S202, (int)a6);
+        v118.carMgr = v61;
+        S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+        v118.self = v62;
+        S202::sub_41F980((S202 *)&v118.self, (int)a6);
         v118.field_0 = v63;
         S202::sub_41F980(&v118, (int)&a6[-1].field_0);
-        if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+        if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
           return 1;
         v8 = dword_662BF0;
         v48 = (S16_02 **)unk_662B88;
@@ -883,13 +984,13 @@ LABEL_103:
   {
     if ( !v8 )
       return 1;
-    v118.CarSystemManager = (CarSystemManager *)unk_662BBC;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-    v118.S202 = v64;
-    S202::sub_41F980((S202 *)&v118.S202, (int)&a2->field_2);
+    v118.carMgr = (CarSystemManager *)unk_662BBC;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+    v118.self = v64;
+    S202::sub_41F980((S202 *)&v118.self, (int)&a2->field_2);
     v118.field_0 = v65;
     S202::sub_41F980(&v118, (int)&a2->Index + 1);
-    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
     v8 = dword_662BF0;
     v48 = (S16_02 **)unk_662B88;
@@ -898,22 +999,22 @@ LABEL_103:
   if ( !v48 )
     goto LABEL_120;
   v66 = glob_a8;
-  HIWORD(v67) = unk_662BBE;
+  *((_WORD *)&v67 + 1) = unk_662BBE;
   if ( glob_a8 <= unk_662BBC )
   {
-    LOWORD(v67) = *((_WORD *)v48 + 3);
+    *(_WORD *)&v67 = *((_WORD *)v48 + 3);
     v68 = (CarSystemManager *)(v21 & v67);
     if ( (_WORD)v68 && *dword_662BCC != 3 && *dword_662BCC != 4 )
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = v68;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a2->Index + 1);
-      v118.S202 = v69;
-      S202::sub_41F980((S202 *)&v118.S202, (int)a6);
+      v118.carMgr = v68;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)&a2->Index + 1);
+      v118.self = v69;
+      S202::sub_41F980((S202 *)&v118.self, (int)a6);
       v118.field_0 = v70;
       S202::sub_41F980(&v118, (int)&a6[-1].field_0);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v21 = *(_DWORD *)&word_662BEC;
@@ -924,27 +1025,26 @@ LABEL_120:
       v66 = unk_662BBC;
   }
   v71 = (char *)&a2->Index + 1;
-  v72 = MapRelatedStruct::sub_465410(
-          *(MapRelatedStruct **)&v118.field_1C,
+  v72 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410(
           (int)&a6[-1].field_0,
           (int)&a2->Index + 1,
           v66);
   unk_662BA8 = (unsigned char)v72;
   if ( v72 )
   {
-    LOWORD(v73) = *((_WORD *)v72 + 1);
+    *(_WORD *)&v73 = *((_WORD *)v72 + 1);
     v74 = v21 & v73;
     if ( (_WORD)v74 )
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = (CarSystemManager *)v74;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a6);
-      v118.S202 = v75;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a2->field_2);
+      v118.carMgr = (CarSystemManager *)v74;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a6);
+      v118.self = v75;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a2->field_2);
       v118.field_0 = v76;
       S202::sub_41F980(&v118, (int)v71);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v8 = dword_662BF0;
       v72 = (S16_02 **)unk_662BA8;
@@ -952,19 +1052,19 @@ LABEL_120:
     }
     if ( v72 )
     {
-      LOWORD(v74) = *((_WORD *)v72 + 2);
+      *(_WORD *)&v74 = *((_WORD *)v72 + 2);
       v77 = (CarSystemManager *)(v21 & v74);
       if ( (_WORD)v77 )
       {
         if ( !v8 )
           return 1;
-        v118.CarSystemManager = v77;
-        S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)v71);
-        v118.S202 = v78;
-        S202::sub_41F980((S202 *)&v118.S202, (int)a6);
+        v118.carMgr = v77;
+        S202::sub_41F980((S202 *)&v118.carMgr, (int)v71);
+        v118.self = v78;
+        S202::sub_41F980((S202 *)&v118.self, (int)a6);
         v118.field_0 = v79;
         S202::sub_41F980(&v118, (int)&a6[-1].field_0);
-        if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+        if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
           return 1;
         v8 = dword_662BF0;
         v21 = *(_DWORD *)&word_662BEC;
@@ -980,13 +1080,13 @@ LABEL_132:
     {
       if ( !v8 )
         return 1;
-      v118.CarSystemManager = a6;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a6->Index + 1);
-      v118.S202 = v80;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a2->Index + 1);
+      v118.carMgr = a6;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)&a6->Index + 1);
+      v118.self = v80;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a2->Index + 1);
       v118.field_0 = v81;
       S202::sub_41F980(&v118, (int)a2);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       goto LABEL_144;
     }
@@ -995,36 +1095,36 @@ LABEL_132:
   {
     if ( !v8 )
       return 1;
-    v118.CarSystemManager = a6;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a6->Index + 1);
-    v118.S202 = v82;
-    S202::sub_41F980((S202 *)&v118.S202, (int)&a2->Index + 1);
+    v118.carMgr = a6;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)&a6->Index + 1);
+    v118.self = v82;
+    S202::sub_41F980((S202 *)&v118.self, (int)&a2->Index + 1);
     v118.field_0 = v83;
     S202::sub_41F980(&v118, (int)a2);
-    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
 LABEL_144:
     v21 = *(_DWORD *)&word_662BEC;
   }
   v84 = (char *)&a6->Index + 1;
-  v85 = MapRelatedStruct::sub_465410(*(MapRelatedStruct **)&v118.field_1C, (int)&a6->Index + 1, (int)a2, unk_662BD0);
+  v85 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410( (int)&a6->Index + 1, (int)a2, unk_662BD0);
   v87 = v85;
   unk_662C04 = (unsigned char)v85;
   if ( v85 )
   {
-    LOWORD(v86) = *(_WORD *)v85;
+    *(_WORD *)&v86 = *(_WORD *)v85;
     v88 = (CarSystemManager *)(v21 & v86);
     if ( (_WORD)v88 )
     {
       if ( !dword_662BF0 )
         return 1;
-      v118.CarSystemManager = v88;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)v84);
-      v118.S202 = v89;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a2->Index + 1);
+      v118.carMgr = v88;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)v84);
+      v118.self = v89;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a2->Index + 1);
       v118.field_0 = v90;
       S202::sub_41F980(&v118, (int)a2);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v87 = (S16_02 **)unk_662C04;
       v21 = *(_DWORD *)&word_662BEC;
@@ -1041,13 +1141,13 @@ LABEL_144:
   {
     if ( !dword_662BF0 )
       return 1;
-    v118.CarSystemManager = (CarSystemManager *)dword_662BA4;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)v84);
-    v118.S202 = v91;
-    S202::sub_41F980((S202 *)&v118.S202, (int)a2);
+    v118.carMgr = (CarSystemManager *)dword_662BA4;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)v84);
+    v118.self = v91;
+    S202::sub_41F980((S202 *)&v118.self, (int)a2);
     v118.field_0 = v92;
     S202::sub_41F980(&v118, (int)&a2[-1].field_0);
-    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
     v87 = (S16_02 **)unk_662C04;
     v21 = *(_DWORD *)&word_662BEC;
@@ -1061,13 +1161,13 @@ LABEL_144:
     {
       if ( !dword_662BF0 )
         return 1;
-      v118.CarSystemManager = (CarSystemManager *)unk_662BD0;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-      v118.S202 = v94;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->field_2);
+      v118.carMgr = (CarSystemManager *)unk_662BD0;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+      v118.self = v94;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->field_2);
       v118.field_0 = v95;
       S202::sub_41F980(&v118, (int)v84);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v87 = (S16_02 **)unk_662C04;
       v21 = *(_DWORD *)&word_662BEC;
@@ -1077,23 +1177,23 @@ LABEL_168:
     if ( unk_662BF4 <= unk_662BD0 )
       v93 = unk_662BD0;
   }
-  v96 = MapRelatedStruct::sub_465410(*(MapRelatedStruct **)&v118.field_1C, (int)v84, (int)&a2[-1].field_0, v93);
+  v96 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410( (int)v84, (int)&a2[-1].field_0, v93);
   unk_662BE4 = (unsigned char)v96;
   if ( v96 )
   {
-    LOWORD(v97) = *(_WORD *)v96;
+    *(_WORD *)&v97 = *(_WORD *)v96;
     v98 = (CarSystemManager *)(v21 & v97);
     if ( (_WORD)v98 )
     {
       if ( !dword_662BF0 )
         return 1;
-      v118.CarSystemManager = v98;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)v84);
-      v118.S202 = v99;
-      S202::sub_41F980((S202 *)&v118.S202, (int)a2);
+      v118.carMgr = v98;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)v84);
+      v118.self = v99;
+      S202::sub_41F980((S202 *)&v118.self, (int)a2);
       v118.field_0 = v100;
       S202::sub_41F980(&v118, (int)&a2[-1].field_0);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v87 = (S16_02 **)unk_662C04;
       v96 = (S16_02 **)unk_662BE4;
@@ -1103,13 +1203,13 @@ LABEL_168:
     {
       if ( !dword_662BF0 )
         return 1;
-      v118.CarSystemManager = v98;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)a2);
-      v118.S202 = v101;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->field_2);
+      v118.carMgr = v98;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)a2);
+      v118.self = v101;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->field_2);
       v118.field_0 = v102;
       S202::sub_41F980(&v118, (int)v84);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v87 = (S16_02 **)unk_662C04;
       v21 = *(_DWORD *)&word_662BEC;
@@ -1126,13 +1226,13 @@ LABEL_180:
   {
     if ( !dword_662BF0 )
       return 1;
-    v118.CarSystemManager = (CarSystemManager *)unk_662BD0;
-    S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)v84);
-    v118.S202 = v103;
-    S202::sub_41F980((S202 *)&v118.S202, (int)&a2->field_2);
+    v118.carMgr = (CarSystemManager *)unk_662BD0;
+    S202::sub_41F980((S202 *)&v118.carMgr, (int)v84);
+    v118.self = v103;
+    S202::sub_41F980((S202 *)&v118.self, (int)&a2->field_2);
     v118.field_0 = v104;
     S202::sub_41F980(&v118, (int)&a2->Index + 1);
-    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+    if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
       return 1;
     v87 = (S16_02 **)unk_662C04;
     v21 = *(_DWORD *)&word_662BEC;
@@ -1140,22 +1240,22 @@ LABEL_180:
   if ( v87 )
   {
     v105 = glob_a8;
-    HIWORD(v106) = unk_662BD2;
+    *((_WORD *)&v106 + 1) = unk_662BD2;
     if ( glob_a8 > unk_662BD0 )
       goto LABEL_199;
-    LOWORD(v106) = *((_WORD *)v87 + 3);
+    *(_WORD *)&v106 = *((_WORD *)v87 + 3);
     v107 = (CarSystemManager *)(v21 & v106);
     if ( (_WORD)v107 && *dword_662BDC != 3 && *dword_662BDC != 4 )
     {
       if ( !dword_662BF0 )
         return 1;
-      v118.CarSystemManager = v107;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)&a2->Index + 1);
-      v118.S202 = v108;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->field_2);
+      v118.carMgr = v107;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)&a2->Index + 1);
+      v118.self = v108;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->field_2);
       v118.field_0 = v109;
       S202::sub_41F980(&v118, (int)v84);
-      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v21 = *(_DWORD *)&word_662BEC;
     }
@@ -1165,26 +1265,26 @@ LABEL_180:
     v105 = unk_662BD0;
 LABEL_199:
   v110 = (char *)&a2->Index + 1;
-  v111 = MapRelatedStruct::sub_465410(*(MapRelatedStruct **)&v118.field_1C, (int)v84, (int)&a2->Index + 1, v105);
+  v111 = (*(MapRelatedStruct **)&v118.field_1C)->sub_465410( (int)v84, (int)&a2->Index + 1, v105);
   unk_662BB0 = (unsigned char)v111;
   if ( v111 )
   {
-    LOWORD(v112) = *(_WORD *)v111;
+    *(_WORD *)&v112 = *(_WORD *)v111;
     v113 = (CarSystemManager *)(v21 & v112);
     if ( (_WORD)v113 )
     {
       if ( !dword_662BF0 )
         return 1;
-      v118.CarSystemManager = v113;
-      S202::sub_41F980((S402 *)&v118.CarSystemManager, (int)v84);
-      v118.S202 = v114;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a2->field_2);
+      v118.carMgr = v113;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)v84);
+      v118.self = v114;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a2->field_2);
       v118.field_0 = v115;
       S202::sub_41F980(&v118, (int)v110);
-      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( sub_4BB910(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 1;
       v111 = (S16_02 **)unk_662BB0;
-      LOWORD(v21) = word_662BEC;
+      *(_WORD *)&v21 = word_662BEC;
     }
     if ( !v111 )
       return 0;
@@ -1192,13 +1292,13 @@ LABEL_199:
       return 0;
     if ( dword_662BF0 )
     {
-      v118.CarSystemManager = v113;
-      S202::sub_41F980((S202 *)&v118.CarSystemManager, (int)v110);
-      v118.S202 = v116;
-      S202::sub_41F980((S202 *)&v118.S202, (int)&a6->field_2);
+      v118.carMgr = v113;
+      S202::sub_41F980((S202 *)&v118.carMgr, (int)v110);
+      v118.self = v116;
+      S202::sub_41F980((S202 *)&v118.self, (int)&a6->field_2);
       v118.field_0 = v117;
       S202::sub_41F980(&v118, (int)v84);
-      if ( !sub_4BB860(dword_662BF0, v118.field_0, (int)v118.S202, (int)v118.CarSystemManager) )
+      if ( !sub_4BB860(dword_662BF0, v118.field_0, (int)v118.self, (int)v118.carMgr) )
         return 0;
     }
     return 1;
@@ -1216,14 +1316,14 @@ char MapRelatedStruct::sub_46B440(
         _DWORD *a5,
         __int16 arg10)
 {
+  CarSystemManager* arg0_csm = (CarSystemManager*)arg0;
   dword_662BF0 = a5;
   word_662BEC = arg10;
-  if ( (char *)dword_662BF8 - (char *)arg0 >= 3
-    || (int)a6 > (int)((char *)&arg0->Index + 1)
+  if ( (char *)dword_662BF8 - (char *)arg0_csm >= 3
+    || (int)a6 > (int)((char *)&arg0_csm->Index + 1)
     || (int)a6 < (int)&dword_662BF8[-1].field_0 )
   {
-    if ( MapRelatedStruct::sub_46A570(
-           this,
+    if ( sub_46A570(
            (CarSystemManager *)((char *)a6 - 1),
            (CarSystemManager *)((char *)&a6->Index + 1),
            dword_662BAC,
@@ -1235,8 +1335,7 @@ char MapRelatedStruct::sub_46B440(
       return 1;
     }
     if ( dword_662BF8 == (CarSystemManager *)&a6->field_2 )
-      return MapRelatedStruct::sub_46A570(
-               this,
+      return sub_46A570(
                (CarSystemManager *)((char *)dword_662BF8 - 1),
                dword_662BF8,
                dword_662BAC,
@@ -1245,13 +1344,12 @@ char MapRelatedStruct::sub_46B440(
                a2,
                unk_662BD0);
     else
-      return MapRelatedStruct::sub_46A570(
-               this,
-               arg0,
-               (CarSystemManager *)((char *)&arg0->Index + 1),
+      return sub_46A570(
+               arg0_csm,
+               (CarSystemManager *)((char *)&arg0_csm->Index + 1),
                dword_662BAC,
                (CarSystemManager*)glob_a5,
-               (CarSystemManager *)((char *)&arg0->Index + 1),
+               (CarSystemManager *)((char *)&arg0_csm->Index + 1),
                a2,
                unk_662BBC);
   }
@@ -1261,11 +1359,10 @@ char MapRelatedStruct::sub_46B440(
       && (int)a2 <= (int)((char *)&dword_662BAC->Index + 1)
       && (int)a2 >= (int)&((CarSystemManager*)glob_a5)[-1].field_0 )
     {
-      return MapRelatedStruct::sub_46A570(this, arg0, dword_662BF8, dword_662BAC, (CarSystemManager*)glob_a5, a6, a2, a8);
+      return sub_46A570( arg0_csm, dword_662BF8, dword_662BAC, (CarSystemManager*)glob_a5, a6, a2, a8);
     }
-    if ( MapRelatedStruct::sub_46A570(
-           this,
-           arg0,
+    if ( sub_46A570(
+           arg0_csm,
            dword_662BF8,
            (CarSystemManager *)((char *)a2 - 1),
            (CarSystemManager *)((char *)&a2->Index + 1),
@@ -1276,9 +1373,8 @@ char MapRelatedStruct::sub_46B440(
       return 1;
     }
     if ( (CarSystemManager*)glob_a5 == (CarSystemManager *)&a2->field_2 )
-      return MapRelatedStruct::sub_46A570(
-               this,
-               arg0,
+      return sub_46A570(
+               arg0_csm,
                dword_662BF8,
                (CarSystemManager *)((char *)glob_a5 - 1),
                (CarSystemManager*)glob_a5,
@@ -1286,9 +1382,8 @@ char MapRelatedStruct::sub_46B440(
                (CarSystemManager *)((char *)glob_a5 - 1),
                a8);
     else
-      return MapRelatedStruct::sub_46A570(
-               this,
-               arg0,
+      return sub_46A570(
+               arg0_csm,
                dword_662BF8,
                dword_662BAC,
                (CarSystemManager *)((char *)&dword_662BAC->Index + 1),
@@ -1305,7 +1400,7 @@ bool MapRelatedStruct::sub_48A350(unsigned __int8 a2, unsigned __int8 a3, unsign
 {
   int v4;
 
-  v4 = MapRelatedStruct::sub_42A850(this, a2, a3, a4);
+  v4 = sub_42A850( a2, a3, a4);
   return v4 && (*(_BYTE *)(v4 + 11) & 3) != 0;
 }
 
@@ -1324,7 +1419,7 @@ bool MapRelatedStruct::sub_492140(int a2, int a3, int a4)
 {
   int v4;
 
-  v4 = MapRelatedStruct::sub_4653C0(this, a2, a3, a4);
+  v4 = sub_4653C0( a2, a3, a4);
   return v4 && *(_BYTE *)(v4 + 10);
 }
 
@@ -1337,7 +1432,7 @@ char MapRelatedStruct::sub_49EBE0(int a2, int a3, int a4, _BYTE *a5, _BYTE *a6)
   int v7;
   char *v9;
 
-  v6 = MapRelatedStruct::sub_4653C0(this, a2, a3, a4);
+  v6 = sub_4653C0( a2, a3, a4);
   v7 = v6;
   if ( !v6 )
     return 5;
@@ -1360,7 +1455,7 @@ bool MapRelatedStruct::sub_4B9F40(int a2, int a3, int a4)
 {
   int v4;
 
-  v4 = MapRelatedStruct::sub_4653C0(this, a2, a3, a4);
+  v4 = sub_4653C0( a2, a3, a4);
   return v4 && Style::sub_49E540(gStyle, *(_WORD *)(v4 + 8) & 0x3FF);
 }
 
@@ -1389,20 +1484,19 @@ char *MapRelatedStruct::sub_464EE0(unsigned __int8 arg0, unsigned __int8 a2, cha
   {
     while ( 1 )
     {
-      v7 = MapRelatedStruct::sub_462E40(this, v4);
+      v7 = sub_462E40( v4);
       if ( *v7 == a4 )
       {
-        S202::sub_40CE30((S202 *)&v10, a2);
-        S202::sub_40CE30((S202 *)&v11, arg0);
-        bitShiftLeft1(&v12, (unsigned __int8)v7[2] + ((unsigned __int8)v7[4] >> 1));
-        bitShiftLeft1(&v13, (unsigned __int8)v7[1] + ((unsigned __int8)v7[3] >> 1));
-        Car = sub_42A6B0(&v13, v15)->Car;
+        sub_40CE30((S202 *)&v10, a2);
+        sub_40CE30((S202 *)&v11, arg0);
+        bitShiftLeft1((int)&v12, (unsigned __int8)v7[2] + ((unsigned __int8)v7[4] >> 1));
+        bitShiftLeft1((int)&v13, (unsigned __int8)v7[1] + ((unsigned __int8)v7[3] >> 1));
+        Car = (void*)(unsigned int)sub_42A6B0(&v13, v15)->Car;
         if ( sub_4037E0(&Car) )
           v8 = v7;
       }
       if ( ++v4 >= v6 )
         break;
-      this = this;
     }
   }
   return v8;
@@ -1443,14 +1537,14 @@ void MapRelatedStruct::sub_464330()
   {
     v17 = 0;
   }
-  LOWORD(v3) = 0;
+  *(_WORD *)&v3 = 0;
   v16 = 0;
   if ( v17 )
   {
     v15 = 0;
     while ( 1 )
     {
-      v5 = MapRelatedStruct::sub_462E40(this, v3);
+      v5 = sub_462E40( v3);
       v6 = *v5;
       if ( *v5 != 10 && v6 != 1 && v6 != 15 )
       {
@@ -1469,10 +1563,10 @@ LABEL_17:
         v8 = *(_BYTE *)(v7 + (int)field_334);
         if ( !v8 )
           goto LABEL_16;
-        v9 = MapRelatedStruct::sub_462E40(this, v7);
+        v9 = sub_462E40( v7);
         if ( v5[5] != v9[5] )
           goto LABEL_16;
-        if ( !_strncmp(v5 + 6, v9 + 6, (unsigned __int8)v5[5]) )
+        if ( !strncmp(v5 + 6, v9 + 6, (unsigned __int8)v5[5]) )
           break;
         v4 = v16;
 LABEL_16:
@@ -1592,14 +1686,14 @@ bool MapRelatedStruct::sub_433530(unsigned __int8 a2, unsigned __int8 a3, unsign
 int MapRelatedStruct::sub_462C60() {
     unsigned __int8 v2;
     if (Buffer_ZONE && (v2 = *(_BYTE*)(field_364 + field_330)) != 0)
-        return field_334 + 22 * v2;
+        return (int)(field_334 + 22 * v2);
     else
         return 0;
 }
 
 // 0x00462CB0
 int MapRelatedStruct::sub_462CB0(unsigned __int16 a2) {
-    return field_334 + 22 * *(unsigned __int8*)(field_330 + a2);
+    return (int)(field_334 + 22 * *(unsigned __int8*)(field_330 + a2));
 }
 
 // 0x00462CE0
@@ -1771,9 +1865,10 @@ int MapRelatedStruct::sub_463570(int a2, int a3, _DWORD* a4) {
     int v10 = *v8 - v7 - 1;
     if (v10 < 0)
         return 0;
+    int result;
     int v11 = Map->field_4000C;
     for (unsigned __int8* i = &v8[4 * v10 + 4]; ; i -= 4) {
-        int result = v11 + 12 * *(_DWORD*)i;
+        result = v11 + 12 * *(_DWORD*)i;
         char v14 = *(_BYTE*)(result + 11) & 3;
         dword_662B90 = (_WORD*)result;
         if (v14 == 3 && (*(_BYTE*)(result + 10) & 0xF) != 0)
@@ -1804,9 +1899,10 @@ int MapRelatedStruct::sub_4635F0(int a2, int a3, int* a4) {
         v13 = v12 - v9 - 1;
     if (v13 < 0)
         return 0;
+    int result;
     int v14 = Map->field_4000C;
     for (unsigned __int8* i = &v8[4 * v13 + 4]; ; i -= 4) {
-        int result = v14 + 12 * *(_DWORD*)i;
+        result = v14 + 12 * *(_DWORD*)i;
         char v16 = *(_BYTE*)(result + 11) & 3;
         dword_662B90 = (_WORD*)result;
         if (v16 == 3 && (*(_BYTE*)(result + 10) & 0xF) != 0)
@@ -1853,7 +1949,7 @@ unsigned int MapRelatedStruct::sub_463A90(unsigned int a2) {
         result = field_360;
         int v6 = *v5 - v5[1] + 1;
         field_360 = result + v6;
-        qmemcpy((void*)(Map->field_40008 + 4 * result), v5, 4 * v6);
+        memcpy((void*)(Map->field_40008 + 4 * result), v5, 4 * v6);
     }
     return result;
 }
@@ -1891,7 +1987,7 @@ unsigned int MapRelatedStruct::sub_463AE0(unsigned int a2, int a3) {
         if (*v5 - v5[1] > 0) {
             _DWORD* v10 = (_DWORD*)(v8 + 4);
             do {
-                *v10 = *(_DWORD*)((char*)v10 + v5 - v8);
+                *v10 = *(_DWORD*)((char*)v10 + (v5 - v8));
                 ++v9;
                 ++v10;
             } while (v9 < *v5 - v5[1]);
@@ -2041,7 +2137,7 @@ char MapRelatedStruct::sub_463F60(int a2, int a3, int a4, int a5, __int16 a6) {
     unsigned int* v7 = (unsigned int*)getMap()->sub_42A830( a3, a2);
     unsigned int v8 = sub_463A90(*v7);
     *(_DWORD*)getMap()->sub_42A830( a3, a2) = v8;
-    S16_01_sub_463990(&S16_01, a2, a3, v8);
+    S16_01_sub_463990(&s16_01, a2, a3, v8);
     int v9 = getMap()->field_40008;
     int v10 = *(unsigned __int8*)(v9 + 4 * v8 + 1);
     unsigned int v11 = v9 + 4 * v8;
@@ -2086,7 +2182,7 @@ int MapRelatedStruct::sub_464060(int a2, int a3, int a4, _DWORD* a5) {
     unsigned int* v6 = (unsigned int*)getMap()->sub_42A830( a3, a2);
     unsigned int v7 = sub_463AE0(*v6, a4);
     *(_DWORD*)getMap()->sub_42A830( a3, a2) = v7;
-    S16_01_sub_463990(&S16_01, a2, a3, v7);
+    S16_01_sub_463990(&s16_01, a2, a3, v7);
     int v8 = getMap()->field_40008;
     int v9 = *(unsigned __int8*)(v8 + 4 * v7 + 1);
     unsigned int v10 = v8 + 4 * v7;
@@ -2111,8 +2207,8 @@ S16_01* MapRelatedStruct::sub_464110(int a2, int a3, int a4, char a5) {
     S16_01* result = (S16_01*)sub_463C30(*v6, a4, a5);
     S16_01* v8 = result;
     if (result != (S16_01*)-1) {
-        *(_DWORD*)getMap()->sub_42A830( a3, a2) = result;
-        return S16_01_sub_463990(&S16_01, a2, a3, (int)v8);
+        *(_DWORD*)getMap()->sub_42A830( a3, a2) = (_DWORD)result;
+        return S16_01_sub_463990(&s16_01, a2, a3, (int)v8);
     }
     return result;
 }
@@ -2129,7 +2225,7 @@ char MapRelatedStruct::sub_464160(int a2, int a3) {
     if (v9 == v8 - 1 && v9) {
         char v10 = v9 - 1;
         if (v6 >= field_358) {
-            LOBYTE(v14) = v8 - 1;
+            v14 = (char)(v8 - 1);
             *(_BYTE*)(v7 + 4 * v6 + 1) = v10;
             *(_BYTE*)(v7 + 4 * v6) = v14;
         } else {
@@ -2143,7 +2239,7 @@ char MapRelatedStruct::sub_464160(int a2, int a3) {
             field_360 = v14;
         }
     } else {
-        LOBYTE(v14) = (unsigned __int8)sub_464110(a2, a3, v9, 1);
+        v14 = (char)sub_464110(a2, a3, v9, 1);
     }
     return v14;
 }
@@ -2185,8 +2281,8 @@ int MapRelatedStruct::sub_4642A0(_DWORD *a2, _DWORD *a3, _DWORD *a4, _DWORD *a5,
     *a3 = 4 * (field_360 - (unsigned int)getMap()->File);
     *a4 = getMap()->field_4000C + 12 * getMap()->field_40004;
     *a5 = 12 * (field_354 - getMap()->field_40004);
-    *a6 = &S16_01;
-    int result = 8 * S16_01.field_320;
+    *a6 = (_DWORD)&s16_01;
+    int result = 8 * s16_01.field_320;
     *a7 = result;
     return result;
 }
@@ -2199,7 +2295,7 @@ int MapRelatedStruct::sub_4644E0(unsigned int a2)
     unsigned int v3 = 0;
     int v4 = 0;
     FILE *i;
-    for (i = Buffer_ZONE; v3 < a2; ++v4)
+    for (i = (FILE *)Buffer_ZONE; v3 < a2; ++v4)
     {
         int v6 = BYTE1(i[1]._Placeholder) + 6;
         v3 += v6;
@@ -2209,7 +2305,7 @@ int MapRelatedStruct::sub_4644E0(unsigned int a2)
     count = (int *)result;
     v3 = 0;
     *(_WORD *)result = v4;
-    FILE *Buffer_ZONE_copy = Buffer_ZONE;
+    FILE *Buffer_ZONE_copy = (FILE *)Buffer_ZONE;
     if (a2)
     {
         int v10 = 0;
@@ -2231,7 +2327,7 @@ int MapRelatedStruct::sub_4644E0(unsigned int a2)
 //=============================================================================
 int MapRelatedStruct::sub_464550(int a2)
 {
-    FILE *Buffer_ANIM_copy = Buffer_ANIM;
+    FILE *Buffer_ANIM_copy = (FILE *)Buffer_ANIM;
     int result = (int)Buffer_ANIM_copy + a2;
     if (Buffer_ANIM_copy != (FILE *)((char *)Buffer_ANIM_copy + a2))
     {
@@ -2312,7 +2408,7 @@ int MapRelatedStruct::sub_4646A0(int a2)
     Map *pMap = (Map *)operator_new(0x40010u);
     Map *pMap1;
     if (pMap)
-        pMap1 = Map::Map(pMap);
+        pMap1 = ::new (pMap) Map();
     else
         pMap1 = 0;
     getMap() = pMap1;
@@ -2321,21 +2417,21 @@ int MapRelatedStruct::sub_4646A0(int a2)
     FILE *Map_file = (FILE *)getMap();
     SIZE_T v18 = 0x40000;
     FileMgr::Read(Map_file, &v18);
-    FILE **p_File = &getMap()->File;
+    FILE **p_File = (FILE**)&getMap()->File;
     v18 = 4;
     FileMgr::Read((FILE *)p_File, &v18);
-    if ((unsigned int)&getMap()->File[256] > 0x20000)
+    if ((unsigned int)((int*)&getMap()->File + 256) > 0x20000)
         debug_log(0x467u, "map.cpp", 6150);
     Map *pMap2 = getMap();
-    int v6 = (int)&getMap()->File[256];
+    int v6 = (int)((int*)&getMap()->File + 256);
     field_35C = v6;
     int v19 = 4 * (int)pMap2->File;
     getMap()->field_40008 = (int)createBuffer(4 * v6);
     FileMgr::Read((FILE *)getMap()->field_40008, (SIZE_T *)&v19);
-    FILE *v7 = (FILE *)getMap();
+    int *v7 = (int *)getMap();
     SIZE_T v21[2];
     v21[0] = 4;
-    int Placeholder = (int)v7[0x10000]._Placeholder;
+    int Placeholder = v7[0x10000];
     field_358 = Placeholder;
     field_360 = Placeholder;
     FileMgr::Read(v7 + 65537, v21);
@@ -2368,9 +2464,9 @@ int MapRelatedStruct::sub_4646A0(int a2)
 //=============================================================================
 unsigned char MapRelatedStruct::sub_464880()
 {
-    JuncIds *pJuncIds = gJuncIds;
+    JuncIds *pJuncIds = (JuncIds *)gJuncIds;
     SIZE_T v12 = 8720;
-    FileMgr::Read((FILE *)gJuncIds->Arr_316_Data16, &v12);
+    FileMgr::Read((FILE *)pJuncIds->Arr_316_Data16, &v12);
     v12 = 4360;
     FileMgr::Read((FILE *)pJuncIds->Arr_0x884, &v12);
     v12 = 4360;
@@ -2386,7 +2482,7 @@ unsigned char MapRelatedStruct::sub_464880()
     if (log_routefinder)
     {
         int v3 = 0;
-        Data16 *v4 = (Data16 *)((char *)&pJuncIds->Arr_316_Data16[0].field_4 + 2);
+        Data16 *v4 = (Data16 *)((char *)&((Data16 *)pJuncIds->Arr_316_Data16)->field_4 + 2);
         do
         {
             int v11, v10, v9;
@@ -2397,7 +2493,7 @@ unsigned char MapRelatedStruct::sub_464880()
             unsigned __int16 v7 = Data16::sub_40CE90((Data16 *)((char *)v4 - 4));
             v9 = v7;
             unsigned __int16 v8 = Data16::sub_40CE90((Data16 *)((char *)v4 - 6));
-            strcpy(
+            sprintf(
                 gStr,
                 "Junc: %d (%d, %d) n %d s %d w %d e %d",
                 v3,
@@ -2424,17 +2520,17 @@ unsigned char MapRelatedStruct::sub_464880()
 //=============================================================================
 unsigned char MapRelatedStruct::sub_464890(_BYTE *a2, FileMgr *dwBytes)
 {
-    if (!_strncmp(a2, "DMAP", 4))
+    if (!strncmp((const char*)a2, "DMAP", 4))
         return sub_4646A0((int)dwBytes);
-    if (!_strncmp(a2, "ZONE", 4))
+    if (!strncmp((const char*)a2, "ZONE", 4))
         return sub_464640(dwBytes);
-    if (!_strncmp(a2, "MOBJ", 4))
+    if (!strncmp((const char*)a2, "MOBJ", 4))
         return sub_464590((SIZE_T)dwBytes);
-    if (!_strncmp(a2, "ANIM", 4))
+    if (!strncmp((const char*)a2, "ANIM", 4))
         return sub_464670(dwBytes);
-    if (!_strncmp(a2, "LGHT", 4))
+    if (!strncmp((const char*)a2, "LGHT", 4))
         return sub_4645F0((SIZE_T)dwBytes);
-    if (!_strncmp(a2, "RGEN", 4))
+    if (!strncmp((const char*)a2, "RGEN", 4))
         return sub_464880();
     FileMgr *v5;
     return FileMgr::SeekPosition(v5, (int)&dwBytes);
@@ -2465,58 +2561,13 @@ _WORD *MapRelatedStruct::sub_464990(LPCSTR lpFileName)
     for (size = 8; FileMgr::ReadLine((FileMgr *)a1, a1, (SIZE_T)&size); size = 8)
     {
         if (dwBytes)
-            sub_464890(a1, (FileMgr *)dwBytes);
+            sub_464890((_BYTE*)a1, (FileMgr *)dwBytes);
     }
     FileMgr::CloseFile(v3);
     _WORD *result = sub_464980();
     if (!getMap())
         return (_WORD *)debug_log(0x84u, "map.cpp", 6329);
     return result;
-}
-
-//=============================================================================
-// sub_464B30: Destructor helper — free all member buffers
-//=============================================================================
-void MapRelatedStruct::sub_464B30()
-{
-    if (Buffer_LGHT)
-        free_0(Buffer_LGHT);
-    void *v2 = (void *)(int)count;
-    Buffer_LGHT = 0;
-    if (v2)
-        free_0(v2);
-    void *v3 = (void *)(int)field_330;
-    count = 0;
-    if (v3)
-        free_0(v3);
-    void *v4 = (void *)(int)Buffer_ANIM;
-    field_330 = 0;
-    if (v4)
-        free_0(v4);
-    int v5 = (int)getMap();
-    Buffer_ANIM = 0;
-    if (v5)
-    {
-        void *v6 = *(void **)(v5 + 262152);
-        if (v6)
-            free_0(v6);
-        *(_DWORD *)((int)getMap() + 262152) = 0;
-        if (*(_DWORD *)((int)getMap() + 262156))
-            free_0(*(void **)((int)getMap() + 262156));
-        *(_DWORD *)((int)getMap() + 262156) = 0;
-        free((LPVOID)getMap());
-    }
-    if (field_334)
-        free_0(field_334);
-    void *v7 = (void *)(int)Buffer_MOBJ;
-    field_334 = 0;
-    if (v7)
-        free_0(v7);
-    void *v8 = (void *)(int)field_344;
-    Buffer_MOBJ = 0;
-    if (v8)
-        free_0(v8);
-    field_344 = 0;
 }
 
 //=============================================================================
@@ -2532,6 +2583,7 @@ int MapRelatedStruct::sub_464C70(const char *a2)
     field_364 = 0;
     if (*count_ptr)
     {
+        unsigned short v7;
         do
         {
             unsigned __int16 v6 = field_364;
@@ -2542,7 +2594,7 @@ int MapRelatedStruct::sub_464C70(const char *a2)
                     return result;
                 v3 = v8;
             }
-            unsigned short v7 = v6 + 1;
+            v7 = v6 + 1;
             field_364 = v7;
         }
         while (v7 < *(_WORD *)count);
@@ -2587,6 +2639,7 @@ char *MapRelatedStruct::sub_464DA0(char a2)
     if (!*count_ptr)
         return 0;
     unsigned __int16 a2a[40];
+    unsigned short v8;
     do
     {
         unsigned __int16 v6 = field_364;
@@ -2597,17 +2650,17 @@ char *MapRelatedStruct::sub_464DA0(char a2)
             if (v5 >= 0x28u)
                 break;
         }
-        unsigned short v8 = v6 + 1;
+        v8 = v6 + 1;
         field_364 = v8;
     }
     while (v8 < *(_WORD *)count);
     if (!v5)
         return 0;
-    __int16 v9 = ++word_663290[0];
-    if (word_663290[0] >= (int)v5)
+    __int16 v9 = ++word_663290;
+    if (word_663290 >= (int)v5)
     {
         v9 = 0;
-        word_663290[0] = 0;
+        word_663290 = 0;
     }
     return sub_462E40(a2a[v9]);
 }
@@ -2762,7 +2815,7 @@ int MapRelatedStruct::sub_465250(unsigned char a2, unsigned char a3)
     if (sub_465090(a2, a3))
         return sub_462C60();
     else
-        return field_334;
+        return (int)field_334;
 }
 
 //=============================================================================
@@ -2770,7 +2823,7 @@ int MapRelatedStruct::sub_465250(unsigned char a2, unsigned char a3)
 //=============================================================================
 _WORD *MapRelatedStruct::sub_465280(int a2, __int16 a3, __int16 a4, __int16 a5, __int16 a6, __int16 a7, __int16 a8, __int16 a9, __int16 a10, __int16 a11, __int16 a12, __int16 a13)
 {
-    _WORD *result = (_WORD *)(field_334 + 22 * *(unsigned char *)(field_330 + a2));
+    _WORD *result = (_WORD *)(this->field_334 + 22 * *(unsigned char *)(this->field_330 + a2));
     if (a3 != -1)
         *result = (unsigned short)a3;
     if (a4 != -1)
@@ -2805,7 +2858,7 @@ Gang *MapRelatedStruct::sub_465350(int a2, int a3)
     unsigned char v4 = Weapon::sub_41C1E0((Weapon *)&a2);
     char *v5 = sub_464FE0(v4, v7, 14);
     if (v5)
-        return Gangs::FindByName(gGangs, v5 + 6);
+        return Gangs::FindByName(gGangs, (int)(v5 + 6));
     else
         return 0;
 }
@@ -2917,21 +2970,21 @@ int MapRelatedStruct::sub_465510(GameEntity* a2) {
   int v13; // [esp-4h] [ebp-Ch]
   int v14;
   AudioSourceParams v15;
-  v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v15.AudioSourceParams);
+  v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v15.y);
   v10 = AudioSourceParams::sub_41F9D0(&v15);
   v3 = Player::sub_401B40((Player *)&a2, (S202 *)&v14, (int)&unk_662C98);
   v4 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v3);
-  v5 = MapRelatedStruct::sub_4653C0(this, v4, v10, v12);
+  v5 = sub_4653C0( v4, v10, v12);
   if ( v5 )
   {
     v6 = *(_WORD *)(v5 + 2);
     if ( v6 )
       return Style::sub_462FD0(gStyle, v6 & 0x3FF);
   }
-  v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v15.AudioSourceParams);
+  v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v15.y);
   v11 = AudioSourceParams::sub_41F9D0(&v15);
   v7 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v8 = (__int16 *)MapRelatedStruct::sub_4653C0(this, v7, v11, v13);
+  v8 = (__int16 *)sub_4653C0( v7, v11, v13);
   if ( v8 && (v6 = *v8) != 0 )
     return Style::sub_462FD0(gStyle, v6 & 0x3FF);
   else
@@ -2956,7 +3009,7 @@ int MapRelatedStruct::sub_4655B0(int a2, GameEntity* a3) {
   v4 = Player::sub_401B40((Player *)&a3, (S202 *)v15, (int)&unk_662C98);
   v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v4);
   v5 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v6 = MapRelatedStruct::sub_4653C0(this, v5, v11, v13);
+  v6 = sub_4653C0( v5, v11, v13);
   if ( v6 )
   {
     v7 = *(_WORD *)(v6 + 6);
@@ -2966,7 +3019,7 @@ int MapRelatedStruct::sub_4655B0(int a2, GameEntity* a3) {
   v14 = AudioSourceParams::sub_41F9D0(&a3_4);
   v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
   v8 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v9 = MapRelatedStruct::sub_4653C0(this, v8, v12, v14);
+  v9 = sub_4653C0( v8, v12, v14);
   if ( v9 && (v7 = *(_WORD *)(v9 + 4)) != 0 )
     return Style::sub_462FD0(gStyle, v7 & 0x3FF);
   else
@@ -2985,7 +3038,7 @@ int MapRelatedStruct::sub_465650(int a2, int a3, Player* a4) {
     && (v9 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a4),
         v8 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3),
         v4 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2),
-        (v5 = MapRelatedStruct::sub_4653C0(gMapRelatedStruct, v4, v8, v9)) != 0)
+        (v5 = gMapRelatedStruct->sub_4653C0( v4, v8, v9)) != 0)
     && (index = *(_WORD *)(v5 + 8)) != 0 )
   {
     return Style::sub_462FD0(gStyle, index & 1023);
@@ -3057,7 +3110,7 @@ char MapRelatedStruct::sub_4656D0(int a2, int a3, int a4, int a5, _DWORD* a6, ch
   v62 = 0;
   v63 = 0;
   this->field_36E = 0;
-  v9 = MapRelatedStruct::sub_465410(this, a2, a3, a4);
+  v9 = sub_465410( a2, a3, a4);
   v64 = v9;
   if ( v9 )
   {
@@ -3065,7 +3118,7 @@ char MapRelatedStruct::sub_4656D0(int a2, int a3, int a4, int a5, _DWORD* a6, ch
   }
   else if ( a4 > 0 )
   {
-    v10 = MapRelatedStruct::sub_465410(this, a2, a3, a4 - 1);
+    v10 = sub_465410( a2, a3, a4 - 1);
     if ( v10 )
       v63 = (_BYTE *)(12 * (*((unsigned __int8 *)v10 + 11) >> 2) + 6696368);
   }
@@ -3085,7 +3138,7 @@ char MapRelatedStruct::sub_4656D0(int a2, int a3, int a4, int a5, _DWORD* a6, ch
         if ( !byte_662DB2[12 * (*((unsigned __int8 *)v64 + 11) >> 2)] )
         {
           v18 = a3 - 1;
-          v19 = MapRelatedStruct::sub_465410(this, a2, a3 - 1, a4 + 1);
+          v19 = sub_465410( a2, a3 - 1, a4 + 1);
           if ( !v19 )
             goto LABEL_63;
           v20 = (*((_BYTE *)v19 + 7) & 4) == 0;
@@ -3097,7 +3150,7 @@ char MapRelatedStruct::sub_4656D0(int a2, int a3, int a4, int a5, _DWORD* a6, ch
       {
         if ( a3 <= 0 )
           goto LABEL_42;
-        v12 = MapRelatedStruct::sub_465410(this, a2, a3 - 1, a4);
+        v12 = sub_465410( a2, a3 - 1, a4);
         if ( !v12 )
           goto LABEL_42;
         v13 = *((_BYTE *)v12 + 11);
@@ -3117,7 +3170,7 @@ LABEL_26:
           return 1;
 LABEL_27:
         v21 = a3 - 1;
-        v22 = MapRelatedStruct::sub_465410(this, a2, a3 - 1, a4);
+        v22 = sub_465410( a2, a3 - 1, a4);
         if ( !v22 )
           goto LABEL_33;
         if ( (*((_BYTE *)v22 + 7) & 4) == 0 )
@@ -3159,7 +3212,7 @@ LABEL_27:
         if ( !byte_662DB2[12 * (*((unsigned __int8 *)v64 + 11) >> 2)] )
         {
           v18 = a3 + 1;
-          v34 = MapRelatedStruct::sub_465410(this, a2, a3 + 1, a4 + 1);
+          v34 = sub_465410( a2, a3 + 1, a4 + 1);
           if ( v34 )
           {
             v20 = (*((_BYTE *)v34 + 5) & 4) == 0;
@@ -3168,14 +3221,14 @@ LABEL_62:
               return 1;
           }
 LABEL_63:
-          if ( MapRelatedStruct::sub_465410(this, a2, v18, a4 + 1) )
+          if ( sub_465410( a2, v18, a4 + 1) )
           {
             if ( !a7 )
               return 0;
             *a6 = 1;
             return 0;
           }
-          v35 = MapRelatedStruct::sub_465410(this, a2, v18, a4);
+          v35 = sub_465410( a2, v18, a4);
           if ( !v35 )
             goto LABEL_42;
           if ( (*((_BYTE *)v35 + 11) & 3) == 0 )
@@ -3194,7 +3247,7 @@ LABEL_63:
       }
       else
       {
-        v29 = MapRelatedStruct::sub_465410(this, a2, a3 + 1, a4);
+        v29 = sub_465410( a2, a3 + 1, a4);
         if ( !v29 )
           goto LABEL_42;
         v30 = *((_BYTE *)v29 + 11);
@@ -3215,7 +3268,7 @@ LABEL_69:
         return 1;
 LABEL_70:
       v21 = a3 + 1;
-      v36 = MapRelatedStruct::sub_465410(this, a2, a3 + 1, a4);
+      v36 = sub_465410( a2, a3 + 1, a4);
       if ( v36 )
       {
         if ( (*((_BYTE *)v36 + 5) & 4) != 0 )
@@ -3241,7 +3294,7 @@ LABEL_70:
 LABEL_33:
       if ( a4 <= 0 )
         goto LABEL_112;
-      v26 = MapRelatedStruct::sub_465410(this, a2, v21, a4 - 1);
+      v26 = sub_465410( a2, v21, a4 - 1);
       if ( !v26 )
         goto LABEL_113;
       v27 = *((_BYTE *)v26 + 11);
@@ -3266,7 +3319,7 @@ LABEL_33:
         goto LABEL_96;
       if ( v38 <= 2u )
       {
-        v42 = MapRelatedStruct::sub_465410(this, a2 + 1, a3, a4);
+        v42 = sub_465410( a2 + 1, a3, a4);
         if ( !v42 )
           goto LABEL_42;
         v43 = *((_BYTE *)v42 + 11);
@@ -3287,12 +3340,12 @@ LABEL_33:
         if ( !byte_662DB2[12 * (*((unsigned __int8 *)v64 + 11) >> 2)] )
         {
           v39 = a2 + 1;
-          v40 = MapRelatedStruct::sub_465410(this, a2 + 1, a3, a4 + 1);
+          v40 = sub_465410( a2 + 1, a3, a4 + 1);
           if ( v40 && (*((_BYTE *)v40 + 1) & 4) != 0 )
             return 1;
-          if ( MapRelatedStruct::sub_465410(this, v39, a3, a4 + 1) )
+          if ( sub_465410( v39, a3, a4 + 1) )
             goto LABEL_127;
-          v41 = MapRelatedStruct::sub_465410(this, v39, a3, a4);
+          v41 = sub_465410( v39, a3, a4);
           if ( v41 )
           {
             if ( (*((_BYTE *)v41 + 11) & 3) != 0 )
@@ -3312,7 +3365,7 @@ LABEL_96:
       if ( (*((_BYTE *)v64 + 3) & 4) != 0 )
         return 1;
 LABEL_98:
-      v47 = MapRelatedStruct::sub_465410(this, a2 + 1, a3, a4);
+      v47 = sub_465410( a2 + 1, a3, a4);
       if ( v47 )
       {
         if ( (*((_BYTE *)v47 + 1) & 4) != 0 )
@@ -3337,7 +3390,7 @@ LABEL_98:
       }
       if ( a4 <= 0 )
         goto LABEL_112;
-      v26 = MapRelatedStruct::sub_465410(this, a2 + 1, a3, a4 - 1);
+      v26 = sub_465410( a2 + 1, a3, a4 - 1);
       if ( !v26 )
         goto LABEL_113;
       v49 = *((_BYTE *)v26 + 11);
@@ -3365,7 +3418,7 @@ LABEL_98:
         goto LABEL_140;
       if ( v50 <= 2u )
       {
-        v54 = MapRelatedStruct::sub_465410(this, a2 - 1, a3, a4);
+        v54 = sub_465410( a2 - 1, a3, a4);
         if ( !v54 )
         {
 LABEL_42:
@@ -3388,7 +3441,7 @@ LABEL_141:
         if ( (*((_BYTE *)v64 + 1) & 4) != 0 )
           return 1;
 LABEL_142:
-        v59 = MapRelatedStruct::sub_465410(this, a2 - 1, a3, a4);
+        v59 = sub_465410( a2 - 1, a3, a4);
         if ( v59 )
         {
           if ( (*((_BYTE *)v59 + 3) & 4) != 0 )
@@ -3425,7 +3478,7 @@ LABEL_112:
         }
         else
         {
-          v26 = MapRelatedStruct::sub_465410(this, a2 - 1, a3, a4 - 1);
+          v26 = sub_465410( a2 - 1, a3, a4 - 1);
           if ( v26 )
           {
             v61 = *((_BYTE *)v26 + 11);
@@ -3467,10 +3520,10 @@ LABEL_140:
       if ( byte_662DB2[12 * (*((unsigned __int8 *)v64 + 11) >> 2)] )
         goto LABEL_141;
       v51 = a2 - 1;
-      v52 = MapRelatedStruct::sub_465410(this, a2 - 1, a3, a4 + 1);
+      v52 = sub_465410( a2 - 1, a3, a4 + 1);
       if ( v52 && (*((_BYTE *)v52 + 3) & 4) != 0 )
         return 1;
-      if ( MapRelatedStruct::sub_465410(this, v51, a3, a4 + 1) )
+      if ( sub_465410( v51, a3, a4 + 1) )
       {
 LABEL_127:
         if ( a7 )
@@ -3480,7 +3533,7 @@ LABEL_127:
         }
         return 0;
       }
-      v53 = MapRelatedStruct::sub_465410(this, v51, a3, a4);
+      v53 = sub_465410( v51, a3, a4);
       if ( !v53 || (*((_BYTE *)v53 + 11) & 3) == 0 )
         goto LABEL_42;
 LABEL_131:
@@ -3523,7 +3576,7 @@ LABEL_15:
   v5 = ::arg0 + 1;
   while ( 1 )
   {
-    v6 = MapRelatedStruct::sub_4653C0(this, v4, v3, v9);
+    v6 = sub_4653C0( v4, v3, v9);
     if ( v6 )
     {
       v7 = *(_BYTE *)(v6 + 11) & 0xFC;
@@ -3541,11 +3594,11 @@ LABEL_15:
         else
         {
           S202::sub_41F980(&a2, v3);
-          S202::sub_41F980((S202 *)&a2.S202, v4);
-          Weapon::sub_432860((Weapon *)v13, &a2.S202, &a2);
-          S202::sub_41F980((S202 *)&a2.CarSystemManager, v3 + 1);
+          S202::sub_41F980((S202 *)&a2.self, v4);
+          Weapon::sub_432860((Weapon *)v13, &a2.self, &a2);
+          S202::sub_41F980((S202 *)&a2.carMgr, v3 + 1);
           S202::sub_41F980((S202 *)&a2.field_C, v5);
-          Weapon::sub_432860((Weapon *)v12, &a2.field_C, &a2.CarSystemManager);
+          Weapon::sub_432860((Weapon *)v12, &a2.field_C, &a2.carMgr);
         }
         if ( sub_463690(arg0, (int)v13, (int)v12) )
           return 1;
@@ -3595,7 +3648,7 @@ LABEL_15:
   v17 = ::arg0 + 1;
   while ( 1 )
   {
-    v4 = MapRelatedStruct::sub_4653C0(pMapRelatedStruct, v3, v2, arg0);
+    v4 = pMapRelatedStruct->sub_4653C0( v3, v2, arg0);
     if ( v4 )
     {
       v5 = *(_BYTE *)(v4 + 11) & 0xFC;
@@ -3614,11 +3667,11 @@ LABEL_15:
         else
         {
           S202::sub_41F980(&a2, v2);
-          S202::sub_41F980((S202 *)&a2.S202, v3);
-          Weapon::sub_432860((Weapon *)v21, &a2.S202, &a2);
-          S202::sub_41F980((S202 *)&a2.CarSystemManager, v2 + 1);
+          S202::sub_41F980((S202 *)&a2.self, v3);
+          Weapon::sub_432860((Weapon *)v21, &a2.self, &a2);
+          S202::sub_41F980((S202 *)&a2.carMgr, v2 + 1);
           S202::sub_41F980((S202 *)&a2.field_C, v17);
-          p_CarSystemManager = &a2.CarSystemManager;
+          p_CarSystemManager = &a2.carMgr;
           v7 = &a2.field_C;
         }
         Weapon::sub_432860((Weapon *)v20, v7, p_CarSystemManager);
@@ -3672,13 +3725,13 @@ LABEL_14:
   {
     if ( v9 )
     {
-      v10 = MapRelatedStruct::sub_465410(this, v8, v6, a6);
+      v10 = sub_465410( v8, v6, a6);
       if ( v10 )
       {
         if ( (*((_BYTE *)v10 + 3) & 4) != 0 )
           return 1;
       }
-      v11 = MapRelatedStruct::sub_465410(this, v8 + 1, v6, a6);
+      v11 = sub_465410( v8 + 1, v6, a6);
       if ( v11 )
       {
         if ( (*((_BYTE *)v11 + 1) & 4) != 0 )
@@ -3687,13 +3740,13 @@ LABEL_14:
     }
     if ( v6 < a5 )
     {
-      v12 = MapRelatedStruct::sub_465410(this, v8, v6, a6);
+      v12 = sub_465410( v8, v6, a6);
       if ( v12 )
       {
         if ( (*((_BYTE *)v12 + 7) & 4) != 0 )
           return 1;
       }
-      v13 = MapRelatedStruct::sub_465410(this, v8, v6 + 1, a6);
+      v13 = sub_465410( v8, v6 + 1, a6);
       if ( v13 )
       {
         if ( (*((_BYTE *)v13 + 5) & 4) != 0 )
@@ -3745,7 +3798,7 @@ LABEL_22:
   {
     if ( v9 )
     {
-      v10 = MapRelatedStruct::sub_465410(this, v8, v6, a6);
+      v10 = sub_465410( v8, v6, a6);
       if ( v10 )
       {
         if ( ((unsigned __int16)word_662BEC & *((_WORD *)v10 + 1)) != 0 && !sub_4634B0((int)v10) )
@@ -3760,7 +3813,7 @@ LABEL_22:
             return 1;
         }
       }
-      v14 = MapRelatedStruct::sub_465410(this, v8 + 1, v6, a6);
+      v14 = sub_465410( v8 + 1, v6, a6);
       if ( v14 )
       {
         if ( ((unsigned __int16)word_662BEC & *(_WORD *)v14) != 0 && !sub_4634B0((int)v14) )
@@ -3778,7 +3831,7 @@ LABEL_22:
     }
     if ( v6 < a5 )
     {
-      v18 = MapRelatedStruct::sub_465410(this, v8, v6, a6);
+      v18 = sub_465410( v8, v6, a6);
       if ( v18 )
       {
         if ( ((unsigned __int16)word_662BEC & *((_WORD *)v18 + 3)) != 0 && !sub_463480((int)v18) )
@@ -3793,7 +3846,7 @@ LABEL_22:
             return 1;
         }
       }
-      v22 = MapRelatedStruct::sub_465410(this, v8, v6 + 1, a6);
+      v22 = sub_465410( v8, v6 + 1, a6);
       if ( v22 )
       {
         if ( ((unsigned __int16)word_662BEC & (_WORD)v22[1]) != 0 && !sub_463480((int)v22) )
@@ -3833,9 +3886,9 @@ char MapRelatedStruct::sub_466620(void* a2) {
   v3 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
   v15 = 0;
   v4 = sub_42A630((SpriteS1 *)&v16, (S202 *)&a2);
-  LOWORD(v5) = Car::sub_403820((Car *)v4, &unk_662CFC);
+  *(_WORD *)&v5 = Car::sub_403820((Car *)v4, &unk_662CFC);
   v6 = dword_662BAC;
-  LOBYTE(a2) = v5 != 0;
+  *(_BYTE *)&a2 = v5 != 0;
   if ( (int)dword_662BAC > a5 )
     return v15;
   while ( 1 )
@@ -3849,7 +3902,7 @@ LABEL_14:
   }
   while ( 1 )
   {
-    v8 = MapRelatedStruct::sub_4653C0(this, v7, v6, v3);
+    v8 = sub_4653C0( v7, v6, v3);
     dword_662B90 = (_WORD *)v8;
     if ( v8 )
       break;
@@ -3893,7 +3946,7 @@ char MapRelatedStruct::sub_466730(AudioSourceParams a2) {
   v3 = AudioSourceParams::sub_41F9D0(&a2);
   v4 = dword_662BAC;
   v5 = v3;
-  LOBYTE(a2.field) = 0;
+  *(_BYTE *)&a2.field = 0;
   v10 = 0;
   if ( (int)dword_662BAC > a5 )
     return 0;
@@ -3908,7 +3961,7 @@ LABEL_12:
   }
   while ( 1 )
   {
-    v7 = MapRelatedStruct::sub_4653C0(this, v6, v4, v5);
+    v7 = sub_4653C0( v6, v4, v5);
     dword_662B90 = (_WORD *)v7;
     if ( !v7 )
       break;
@@ -3917,7 +3970,7 @@ LABEL_12:
       break;
     if ( v10 )
       return 1;
-    LOBYTE(a2.field) = 1;
+    *(_BYTE *)&a2.field = 1;
 LABEL_11:
     if ( ++v6 > dword_662BF8 )
       goto LABEL_12;
@@ -4060,7 +4113,7 @@ char MapRelatedStruct::sub_466AF0(int a2, int a3, GameEntity* a4) {
   v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v5);
   v10 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
   v6 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v7 = (_WORD *)MapRelatedStruct::sub_4653C0(this, v6, v10, v11);
+  v7 = (_WORD *)sub_4653C0( v6, v10, v11);
   v8 = v7;
   dword_662B90 = v7;
   if ( !v7 )
@@ -4097,7 +4150,7 @@ char MapRelatedStruct::sub_466B70(int* a2, S202* pS202) {
   v19 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)pSpriteS1_4.FirstElement);
   v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&pS202);
   v5 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v6 = MapRelatedStruct::sub_4653C0(this, v5, v18, v19);
+  v6 = sub_4653C0( v5, v18, v19);
   dword_662B90 = v6;
   if ( !v6 )
     return 0;
@@ -4146,7 +4199,7 @@ bool MapRelatedStruct::sub_466CF0(int a2, int a3, int a4) {
   int v4; 
   char v5; // al
   bool result; // al
-  v4 = MapRelatedStruct::sub_4653C0(this, a2, a3, a4);
+  v4 = sub_4653C0( a2, a3, a4);
   result = 0;
   if ( v4 )
   {
@@ -4171,30 +4224,30 @@ __int16 MapRelatedStruct::sub_466D30(AudioSourceParams a2) {
   int v12; // [esp-8h] [ebp-Ch]
   int v13; // [esp-4h] [ebp-8h]
   int v14; // [esp-4h] [ebp-8h]
-  v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams1);
-  v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams);
+  v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.z);
+  v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.y);
   v3 = AudioSourceParams::sub_41F9D0(&a2);
-  if ( !MapRelatedStruct::sub_466CF0(this, v3, v11, v13) )
+  if ( !sub_466CF0( v3, v11, v13) )
     return 1;
-  v14 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams1);
-  v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.AudioSourceParams);
+  v14 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.z);
+  v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2.y);
   v5 = AudioSourceParams::sub_41F9D0(&a2);
-  dword_662B90 = (_WORD *)MapRelatedStruct::sub_4653C0(this, v5, v12, v14);
+  dword_662B90 = (_WORD *)sub_4653C0( v5, v12, v14);
   v6 = *((unsigned __int8 *)&unk_662DB0 + 12 * (*((unsigned __int8 *)dword_662B90 + 11) >> 2));
   dword_662BE0 = (_BYTE *)(12 * (*((unsigned __int8 *)dword_662B90 + 11) >> 2) + 6696368);
   switch ( v6 )
   {
     case 1:
-      v8 = a2.AudioSourceParams2 - 1;
-      v7 = a2.AudioSourceParams2 == 1;
+      v8 = a2.type - 1;
+      v7 = a2.type == 1;
       goto LABEL_5;
     case 2:
-      v10 = a2.AudioSourceParams2 - 1;
-      v9 = a2.AudioSourceParams2 == 1;
+      v10 = a2.type - 1;
+      v9 = a2.type == 1;
       goto LABEL_9;
     case 3:
-      v10 = a2.AudioSourceParams2 - 3;
-      v9 = a2.AudioSourceParams2 == 3;
+      v10 = a2.type - 3;
+      v9 = a2.type == 3;
 LABEL_9:
       if ( v9 )
         goto LABEL_7;
@@ -4204,8 +4257,8 @@ LABEL_11:
       result = 3 - (LOBYTE(a2.field_10) != 0);
       break;
     case 4:
-      v8 = a2.AudioSourceParams2 - 3;
-      v7 = a2.AudioSourceParams2 == 3;
+      v8 = a2.type - 3;
+      v7 = a2.type == 3;
 LABEL_5:
       if ( v7 )
         goto LABEL_11;
@@ -4241,17 +4294,17 @@ _DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
   int v20; // [esp-4h] [ebp-14h]
   SpriteS1 *FirstElement;
   v6 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&a2);
-  LOWORD(v7) = Car::sub_403820((Car *)v6, &unk_662CFC);
+  *(_WORD *)&v7 = Car::sub_403820((Car *)v6, &unk_662CFC);
   v8 = a3;
   v9 = arg4;
   if ( v7
     && (v20 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2),
         v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3),
         v10 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4),
-        MapRelatedStruct::sub_466CF0(this, v10, v18, v20))
+        sub_466CF0( v10, v18, v20))
     && (FirstElement = sub_462EA0((SpriteS1 *)&FirstElement, &a2)->FirstElement,
-        MapRelatedStruct::sub_466B70(this, v9, (S202 *)v8),
-        LOBYTE(v11) = Player::CheckCondition((Player *)&FirstElement, &a2),
+        sub_466B70( v9, (S202 *)v8),
+        *(_BYTE *)&v11 = Player::CheckCondition((Player *)&FirstElement, &a2),
         v11) )
   {
     result = arg0;
@@ -4262,7 +4315,7 @@ _DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
     a2 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2) - 1;
     v19 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-    v14 = MapRelatedStruct::sub_4635F0(this, v13, v19, &a2);
+    v14 = sub_4635F0( v13, v19, &a2);
     dword_662B90 = (_WORD *)v14;
     if ( v14 )
     {
@@ -4271,7 +4324,7 @@ _DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
       {
         S202::sub_41F980((S202 *)&a2, a2);
         FirstElement = *v16;
-        MapRelatedStruct::sub_466B70(this, v9, (S202 *)v8);
+        sub_466B70( v9, (S202 *)v8);
         *arg0 = FirstElement;
         return arg0;
       }
@@ -4284,7 +4337,7 @@ _DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
     }
     else
     {
-      bitShiftLeft1(arg0, 1);
+      bitShiftLeft1((int)arg0, 1);
       return arg0;
     }
   }
@@ -4303,7 +4356,7 @@ _DWORD* MapRelatedStruct::sub_466F70(_DWORD* arg0, S202* a2) {
   S202 a3;
   v10 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
   v4 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v5 = MapRelatedStruct::sub_463570(this, v4, v10, &v11);
+  v5 = sub_463570( v4, v10, &v11);
   dword_662B90 = (_WORD *)v5;
   if ( v5 )
   {
@@ -4312,7 +4365,7 @@ _DWORD* MapRelatedStruct::sub_466F70(_DWORD* arg0, S202* a2) {
     {
       S202::sub_41F980((S202 *)&v11, v11);
       v11 = *v8;
-      MapRelatedStruct::sub_466B70(this, &a2->field_0, (S202 *)a3.field_0);
+      sub_466B70( &a2->field_0, (S202 *)a3.field_0);
       *arg0 = v11;
       return arg0;
     }
@@ -4325,7 +4378,7 @@ _DWORD* MapRelatedStruct::sub_466F70(_DWORD* arg0, S202* a2) {
   }
   else
   {
-    bitShiftLeft1(arg0, 0);
+    bitShiftLeft1((int)arg0, 0);
     return arg0;
   }
 }
@@ -4430,31 +4483,31 @@ int MapRelatedStruct::sub_467110(int* arg0, SpriteS1* a3, int* a4, Player* pPlay
   v87.field_1D = 0;
   v90.field = *arg0;
   field = (int *)v90.field;
-  v90.AudioSourceParams = (int)FirstElement;
-  v90.AudioSourceParams1 = v7;
-  MapRelatedStruct::sub_467020(this, (int *)v90.field, FirstElement, &v90.AudioSourceParams1, (void *)1, 0);
-  v9 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-  v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v9);
-  v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+  v90.y = (int)FirstElement;
+  v90.z = v7;
+  sub_467020( (int *)v90.field, FirstElement, &v90.z, (void *)1, 0);
+  v9 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+  v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v9);
+  v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
   v10 = AudioSourceParams::sub_41F9D0(&v90);
-  v11 = MapRelatedStruct::sub_4653C0(this, v10, (int)v87.S202, (int)v87.CarSystemManager);
+  v11 = sub_4653C0( v10, (int)v87.self, (int)v87.carMgr);
   if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
   {
-    v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-    v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+    v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+    v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
     v12 = AudioSourceParams::sub_41F9D0(&v90);
-    v11 = MapRelatedStruct::sub_4653C0(this, v12, (int)v87.S202, (int)v87.CarSystemManager);
+    v11 = sub_4653C0( v12, (int)v87.self, (int)v87.carMgr);
   }
-  v90.AudioSourceParams2 = MapRelatedStruct::sub_4633A0(this, v11, 1);
-  v13 = (CarSystemManager *)sub_4725B0((unsigned __int16 *)&v87.field_1E, &v90.AudioSourceParams2);
-  LOWORD(v13) = v13->Index;
-  v87.CarSystemManager = v13;
-  v87.S202 = (S202 *)FirstElement;
+  v90.type = sub_4633A0( v11, 1);
+  v13 = (CarSystemManager *)sub_4725B0((unsigned __int16 *)&v87.field_1E, &v90.type);
+  *(_WORD *)&v13 = v13->Index;
+  v87.carMgr = v13;
+  v87.self = (S202 *)FirstElement;
   v87.field_0 = (int)field;
   v90.field_10 = (int)*sub_463150((SpriteS1 **)&pS202, v87);
   if ( Car::sub_403800((Car *)&v90.field_10, (int)&unk_6630B0) )
   {
-    switch ( v90.AudioSourceParams2 )
+    switch ( v90.type )
     {
       case 1:
         goto LABEL_5;
@@ -4470,40 +4523,40 @@ int MapRelatedStruct::sub_467110(int* arg0, SpriteS1* a3, int* a4, Player* pPlay
   }
   else
   {
-    v87.CarSystemManager = (CarSystemManager *)&unk_6630B0;
+    v87.carMgr = (CarSystemManager *)&unk_6630B0;
     if ( sub_4037E0(&v90.field_10) )
     {
-      switch ( v90.AudioSourceParams2 )
+      switch ( v90.type )
       {
         case 1:
 LABEL_9:
-          v90.AudioSourceParams2 = 3;
+          v90.type = 3;
           break;
         case 2:
 LABEL_5:
-          v90.AudioSourceParams2 = 4;
+          v90.type = 4;
           break;
         case 3:
 LABEL_10:
-          v90.AudioSourceParams2 = 2;
+          v90.type = 2;
           break;
         case 4:
 LABEL_6:
-          v90.AudioSourceParams2 = 1;
+          v90.type = 1;
           break;
         default:
           break;
       }
     }
   }
-  LOWORD(v14) = Car::sub_403820((Car *)&v90.field_10, &unk_6630B0);
-  v87.CarSystemManager = (CarSystemManager *)&v90.AudioSourceParams2;
-  v87.S202 = (S202 *)&v87.field_1E;
+  *(_WORD *)&v14 = Car::sub_403820((Car *)&v90.field_10, &unk_6630B0);
+  v87.carMgr = (CarSystemManager *)&v90.type;
+  v87.self = (S202 *)&v87.field_1E;
   if ( v14 )
   {
-    LOWORD(v15) = *sub_4725B0((unsigned __int16 *)v87.S202, &v87.CarSystemManager->Index);
-    v87.CarSystemManager = v15;
-    v87.S202 = (S202 *)FirstElement;
+    *(_WORD *)&v15 = *sub_4725B0((unsigned __int16 *)v87.self, &v87.carMgr->Index);
+    v87.carMgr = v15;
+    v87.self = (S202 *)FirstElement;
     v87.field_0 = (int)field;
     v90.field_10 = (int)*sub_463210((SpriteS1 **)&pS202, v87);
     v90.field_10 = (int)Player::sub_401B40((Player *)&v90.field_10, &pS202, (int)&unk_6630B0)->FirstElement;
@@ -4511,430 +4564,423 @@ LABEL_6:
       goto LABEL_46;
     if ( !Player::sub_40CE70((Player *)&pPlayer, &v90.field_10) )
     {
-      v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
-      v87.S202 = (S202 *)pPlayer;
-      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+      v87.carMgr = (CarSystemManager *)v90.type;
+      v87.self = (S202 *)pPlayer;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
       field = (int *)v90.field;
-      FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+      FirstElement = (SpriteS1 *)v90.y;
       pPlayer = (Player *)unk_662CFC;
       goto LABEL_46;
     }
-    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
     v16 = Player::sub_401B40((Player *)&pPlayer, &pS202, (int)&v90.field_10)->FirstElement;
     pPlayer = (Player *)v16;
-    v17 = (CarSystemManager *)MapRelatedStruct::sub_4633A0(this, v11, 1);
-    v90.AudioSourceParams2 = (int)v17;
+    v17 = (CarSystemManager *)sub_4633A0( v11, 1);
+    v90.type = (int)v17;
     if ( !Player::sub_40CE70((Player *)&pPlayer, &unk_6630B0) )
     {
-      v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
-      v87.S202 = (S202 *)v16;
-      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+      v87.carMgr = (CarSystemManager *)v90.type;
+      v87.self = (S202 *)v16;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
       field = (int *)v90.field;
-      FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+      FirstElement = (SpriteS1 *)v90.y;
       pPlayer = (Player *)unk_662CFC;
       goto LABEL_46;
     }
     v18 = v11;
-    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
     v19 = Player::sub_401B40((Player *)&pPlayer, &pS202, (int)&unk_6630B0)->FirstElement;
     pPlayer = (Player *)v19;
-    v20 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v20);
-    v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+    v20 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+    v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v20);
+    v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
     v21 = AudioSourceParams::sub_41F9D0(&v90);
-    v22 = MapRelatedStruct::sub_4653C0(this, v21, (int)v87.S202, (int)v87.CarSystemManager);
+    v22 = sub_4653C0( v21, (int)v87.self, (int)v87.carMgr);
     if ( (*(_BYTE *)(v22 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+      v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+      v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
       v23 = AudioSourceParams::sub_41F9D0(&v90);
-      v22 = MapRelatedStruct::sub_4653C0(this, v23, (int)v87.S202, (int)v87.CarSystemManager);
+      v22 = sub_4653C0( v23, (int)v87.self, (int)v87.carMgr);
     }
     if ( v22 )
     {
-      if ( MapRelatedStruct::sub_4632E0(this, v22, (int)v17, 1) )
+      if ( sub_4632E0( v22, (int)v17, 1) )
         goto LABEL_24;
-      v17 = (CarSystemManager *)v90.AudioSourceParams2;
+      v17 = (CarSystemManager *)v90.type;
     }
     v24 = Player::sub_40CE70((Player *)&pPlayer, &unk_662C98);
-    v87.CarSystemManager = v17;
+    v87.carMgr = v17;
     if ( v24 )
     {
-      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
       v25 = Player::sub_401B40((Player *)&pPlayer, &pS202, (int)&unk_662C98)->FirstElement;
     }
     else
     {
-      v87.S202 = (S202 *)v19;
-      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+      v87.self = (S202 *)v19;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
       v25 = (SpriteS1 *)unk_662CFC;
     }
     pPlayer = (Player *)v25;
 LABEL_24:
-    v26 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v26);
-    v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+    v26 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+    v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v26);
+    v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
     v27 = AudioSourceParams::sub_41F9D0(&v90);
-    v11 = MapRelatedStruct::sub_4653C0(this, v27, (int)v87.S202, (int)v87.CarSystemManager);
+    v11 = sub_4653C0( v27, (int)v87.self, (int)v87.carMgr);
     if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+      v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+      v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
       v28 = AudioSourceParams::sub_41F9D0(&v90);
-      v11 = MapRelatedStruct::sub_4653C0(this, v28, (int)v87.S202, (int)v87.CarSystemManager);
+      v11 = sub_4653C0( v28, (int)v87.self, (int)v87.carMgr);
     }
-    FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+    FirstElement = (SpriteS1 *)v90.y;
     v76 = v11 == v18;
     field = (int *)v90.field;
     if ( !v76 )
     {
-      MapRelatedStruct::sub_467020(
-        this,
+      sub_467020(
         (int *)v90.field,
-        (SpriteS1 *)v90.AudioSourceParams,
-        &v90.AudioSourceParams1,
+        (SpriteS1 *)v90.y,
+        &v90.z,
         (void *)1,
         0);
-      v29 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-      v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v29);
-      v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+      v29 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+      v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v29);
+      v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
       v30 = AudioSourceParams::sub_41F9D0(&v90);
-      v11 = MapRelatedStruct::sub_4653C0(this, v30, (int)v87.S202, (int)v87.CarSystemManager);
+      v11 = sub_4653C0( v30, (int)v87.self, (int)v87.carMgr);
       if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
         goto LABEL_28;
     }
     goto LABEL_46;
   }
-  LOWORD(v32) = *sub_4725B0((unsigned __int16 *)v87.S202, &v87.CarSystemManager->Index);
-  v87.CarSystemManager = v32;
-  v87.S202 = (S202 *)FirstElement;
+  *(_WORD *)&v32 = *sub_4725B0((unsigned __int16 *)v87.self, &v87.carMgr->Index);
+  v87.carMgr = v32;
+  v87.self = (S202 *)FirstElement;
   v87.field_0 = (int)field;
   v90.field_10 = (int)*sub_463210((SpriteS1 **)&pS202, v87);
   if ( Car::sub_403800((Car *)&v90.field_10, (int)&unk_662CFC) )
   {
-    MapRelatedStruct::sub_467020(this, field, FirstElement, &v90.AudioSourceParams1, (void *)1, (void *)1);
+    sub_467020( field, FirstElement, &v90.z, (void *)1, (void *)1);
     v33 = v11;
     Player::sub_401B40((Player *)&unk_662C98, &pS202, (int)&v90.field_10);
-    v34 = (CarSystemManager *)sub_4725B0(&v88, &v90.AudioSourceParams2);
+    v34 = (CarSystemManager *)sub_4725B0(&v88, &v90.type);
     v35 = (SpriteS1 *)sub_40E5A0(v34, (CarSystemManager *)&v87.field_1E, &unk_663108);
     SpriteS1::sub_472C00(v35);
-    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
     v36 = Player::sub_401B40((Player *)&unk_662C98, &pS202, (int)&v90.field_10);
     pPlayer = (Player *)S202::sub_401B20((S202 *)&pPlayer, (SpriteS1 *)&v90.field_14, (PublicTransport *)v36)->FirstElement;
-    v37 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v37);
-    v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+    v37 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+    v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v37);
+    v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
     v38 = AudioSourceParams::sub_41F9D0(&v90);
-    v39 = MapRelatedStruct::sub_4653C0(this, v38, (int)v87.S202, (int)v87.CarSystemManager);
+    v39 = sub_4653C0( v38, (int)v87.self, (int)v87.carMgr);
     if ( !v39 )
       goto LABEL_37;
     if ( (*(_BYTE *)(v39 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+      v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+      v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
       v40 = AudioSourceParams::sub_41F9D0(&v90);
-      v39 = MapRelatedStruct::sub_4653C0(this, v40, (int)v87.S202, (int)v87.CarSystemManager);
+      v39 = sub_4653C0( v40, (int)v87.self, (int)v87.carMgr);
     }
-    if ( !v39 || !MapRelatedStruct::sub_4632E0(this, v39, v90.AudioSourceParams2, 1) )
+    if ( !v39 || !sub_4632E0( v39, v90.type, 1) )
     {
 LABEL_37:
       v41 = Player::sub_40CE70((Player *)&pPlayer, &unk_662C98);
-      v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
+      v87.carMgr = (CarSystemManager *)v90.type;
       if ( v41 )
       {
-        sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+        sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
         pPlayer = (Player *)Player::sub_401B40((Player *)&pPlayer, &pS202, (int)&unk_662C98)->FirstElement;
       }
       else
       {
-        v87.S202 = (S202 *)pPlayer;
-        sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+        v87.self = (S202 *)pPlayer;
+        sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
         pPlayer = (Player *)unk_662CFC;
       }
     }
-    v42 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v42);
-    v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+    v42 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+    v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v42);
+    v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
     v43 = AudioSourceParams::sub_41F9D0(&v90);
-    v11 = MapRelatedStruct::sub_4653C0(this, v43, (int)v87.S202, (int)v87.CarSystemManager);
+    v11 = sub_4653C0( v43, (int)v87.self, (int)v87.carMgr);
     if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+      v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+      v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
       v44 = AudioSourceParams::sub_41F9D0(&v90);
-      v11 = MapRelatedStruct::sub_4653C0(this, v44, (int)v87.S202, (int)v87.CarSystemManager);
+      v11 = sub_4653C0( v44, (int)v87.self, (int)v87.carMgr);
     }
     field = (int *)v90.field;
-    v87.CarSystemManager = 0;
+    v87.carMgr = 0;
     v76 = v11 == v33;
-    FirstElement = (SpriteS1 *)v90.AudioSourceParams;
-    v87.S202 = (S202 *)1;
-    v87.field_0 = (int)&v90.AudioSourceParams1;
+    FirstElement = (SpriteS1 *)v90.y;
+    v87.self = (S202 *)1;
+    v87.field_0 = (int)&v90.z;
     if ( v76 )
     {
-      MapRelatedStruct::sub_467020(
-        this,
+      sub_467020(
         (int *)v90.field,
-        (SpriteS1 *)v90.AudioSourceParams,
+        (SpriteS1 *)v90.y,
         (void *)v87.field_0,
-        v87.S202,
-        v87.CarSystemManager);
+        v87.self,
+        v87.carMgr);
     }
     else
     {
-      MapRelatedStruct::sub_467020(
-        this,
+      sub_467020(
         (int *)v90.field,
-        (SpriteS1 *)v90.AudioSourceParams,
+        (SpriteS1 *)v90.y,
         (void *)v87.field_0,
-        v87.S202,
-        v87.CarSystemManager);
-      v45 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-      v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v45);
-      v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+        v87.self,
+        v87.carMgr);
+      v45 = Player::sub_401B40((Player *)&v90.z, &pS202, (int)&unk_662C98);
+      v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v45);
+      v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
       v46 = AudioSourceParams::sub_41F9D0(&v90);
-      v11 = MapRelatedStruct::sub_4653C0(this, v46, (int)v87.S202, (int)v87.CarSystemManager);
+      v11 = sub_4653C0( v46, (int)v87.self, (int)v87.carMgr);
       if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
       {
 LABEL_28:
-        v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-        v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+        v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+        v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
         v31 = AudioSourceParams::sub_41F9D0(&v90);
-        v11 = MapRelatedStruct::sub_4653C0(this, v31, (int)v87.S202, (int)v87.CarSystemManager);
+        v11 = sub_4653C0( v31, (int)v87.self, (int)v87.carMgr);
       }
     }
   }
 LABEL_46:
-  LOWORD(v47) = Car::sub_403820((Car *)&pPlayer, &unk_662CFC);
+  *(_WORD *)&v47 = Car::sub_403820((Car *)&pPlayer, &unk_662CFC);
   if ( v47 )
   {
     do
     {
-      if ( !MapRelatedStruct::sub_4632E0(this, v11, v90.AudioSourceParams2, 1) || v87.field_1D )
+      if ( !sub_4632E0( v11, v90.type, 1) || v87.field_1D )
       {
         v87.field_1D = 0;
         v66 = v11;
         if ( Player::sub_40CE70((Player *)&pPlayer, &unk_662C98) )
         {
-          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
-          v67 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.CarSystemManager, (int)&unk_662C98);
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v67);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
+          v67 = Player::sub_401B40((Player *)&v90.z, (S202 *)&v92.carMgr, (int)&unk_662C98);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v67);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v68 = AudioSourceParams::sub_41F9D0(&v90);
-          v69 = MapRelatedStruct::sub_4653C0(this, v68, (int)v87.S202, (int)v87.CarSystemManager);
+          v69 = sub_4653C0( v68, (int)v87.self, (int)v87.carMgr);
           if ( (*(_BYTE *)(v69 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+            v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+            v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
             v70 = AudioSourceParams::sub_41F9D0(&v90);
-            v69 = MapRelatedStruct::sub_4653C0(this, v70, (int)v87.S202, (int)v87.CarSystemManager);
+            v69 = sub_4653C0( v70, (int)v87.self, (int)v87.carMgr);
           }
-          v90.AudioSourceParams2 = MapRelatedStruct::sub_4633A0(this, v69, 1);
-          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          v90.type = sub_4633A0( v69, 1);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
           pPlayer = (Player *)Player::sub_401B40((Player *)&pPlayer, (S202 *)&v92.field_C, (int)&unk_662C98)->FirstElement;
-          v71 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.field_10, (int)&unk_662C98);
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v71);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v71 = Player::sub_401B40((Player *)&v90.z, (S202 *)&v92.field_10, (int)&unk_662C98);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v71);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v72 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v72, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v72, (int)v87.self, (int)v87.carMgr);
           if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+            v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+            v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
             v73 = AudioSourceParams::sub_41F9D0(&v90);
-            v11 = MapRelatedStruct::sub_4653C0(this, v73, (int)v87.S202, (int)v87.CarSystemManager);
+            v11 = sub_4653C0( v73, (int)v87.self, (int)v87.carMgr);
           }
           field = (int *)v90.field;
           v76 = v11 == v66;
-          FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+          FirstElement = (SpriteS1 *)v90.y;
           if ( v76 )
             goto LABEL_80;
-          MapRelatedStruct::sub_467020(
-            this,
+          sub_467020(
             (int *)v90.field,
-            (SpriteS1 *)v90.AudioSourceParams,
-            &v90.AudioSourceParams1,
+            (SpriteS1 *)v90.y,
+            &v90.z,
             (void *)1,
             0);
-          v74 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.pPlayer, (int)&unk_662C98);
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v74);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v74 = Player::sub_401B40((Player *)&v90.z, (S202 *)&v92.pPlayer, (int)&unk_662C98);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v74);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v75 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v75, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v75, (int)v87.self, (int)v87.carMgr);
           v76 = (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC;
         }
         else
         {
           if ( Car::sub_403800((Car *)&pPlayer, (int)&unk_6630B0) )
           {
-            sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
-            v77 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.field_18, (int)&unk_662C98);
-            v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v77);
-            v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+            sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
+            v77 = Player::sub_401B40((Player *)&v90.z, (S202 *)&v92.field_18, (int)&unk_662C98);
+            v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v77);
+            v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
             v78 = AudioSourceParams::sub_41F9D0(&v90);
-            v11 = MapRelatedStruct::sub_4653C0(this, v78, (int)v87.S202, (int)v87.CarSystemManager);
+            v11 = sub_4653C0( v78, (int)v87.self, (int)v87.carMgr);
             if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
             {
-              v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-              v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+              v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+              v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
               v79 = AudioSourceParams::sub_41F9D0(&v90);
-              v11 = MapRelatedStruct::sub_4653C0(this, v79, (int)v87.S202, (int)v87.CarSystemManager);
+              v11 = sub_4653C0( v79, (int)v87.self, (int)v87.carMgr);
             }
-            v90.AudioSourceParams2 = MapRelatedStruct::sub_4633A0(this, v11, 1);
+            v90.type = sub_4633A0( v11, 1);
             v80 = (S202 *)Player::sub_401B40((Player *)&pPlayer, (S202 *)&v92.field_1C, (int)&unk_6630B0)->FirstElement;
           }
           else
           {
             v80 = (S202 *)pPlayer;
           }
-          v87.S202 = v80;
-          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
-          bitShiftLeft1(&pS202, 0);
+          v87.self = v80;
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
+          bitShiftLeft1((int)&pS202, 0);
           field = (int *)v90.field;
           v76 = v11 == v66;
-          FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+          FirstElement = (SpriteS1 *)v90.y;
           pPlayer = (Player *)pS202.field_0;
           if ( v76 )
             goto LABEL_80;
-          MapRelatedStruct::sub_467020(
-            this,
+          sub_467020(
             (int *)v90.field,
-            (SpriteS1 *)v90.AudioSourceParams,
-            &v90.AudioSourceParams1,
+            (SpriteS1 *)v90.y,
+            &v90.z,
             (void *)1,
             0);
-          v81 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)v93, (int)&unk_662C98);
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v81);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v81 = Player::sub_401B40((Player *)&v90.z, (S202 *)v93, (int)&unk_662C98);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v81);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v82 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v82, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v82, (int)v87.self, (int)v87.carMgr);
           v76 = (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC;
         }
         if ( v76 )
         {
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v83 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v83, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v83, (int)v87.self, (int)v87.carMgr);
         }
       }
       else
       {
         v48 = v11;
         v49 = Player::sub_40CE70((Player *)&pPlayer, &unk_662C98);
-        v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
+        v87.carMgr = (CarSystemManager *)v90.type;
         if ( v49 )
         {
-          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
-          pPlayer = (Player *)Player::sub_401B40((Player *)&pPlayer, (S202 *)&pS202.S202, (int)&unk_662C98)->FirstElement;
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
+          pPlayer = (Player *)Player::sub_401B40((Player *)&pPlayer, (S202 *)&pS202.self, (int)&unk_662C98)->FirstElement;
         }
         else
         {
-          v87.S202 = (S202 *)pPlayer;
-          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          v87.self = (S202 *)pPlayer;
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
           pPlayer = (Player *)unk_662CFC;
         }
-        v50 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&pS202.CarSystemManager, (int)&unk_662C98);
-        v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v50);
-        v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+        v50 = Player::sub_401B40((Player *)&v90.z, (S202 *)&pS202.carMgr, (int)&unk_662C98);
+        v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v50);
+        v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
         v51 = AudioSourceParams::sub_41F9D0(&v90);
-        v11 = MapRelatedStruct::sub_4653C0(this, v51, (int)v87.S202, (int)v87.CarSystemManager);
+        v11 = sub_4653C0( v51, (int)v87.self, (int)v87.carMgr);
         if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
         {
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v52 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v52, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v52, (int)v87.self, (int)v87.carMgr);
         }
         field = (int *)v90.field;
         v76 = v11 == v48;
-        FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+        FirstElement = (SpriteS1 *)v90.y;
         if ( !v76 )
         {
-          MapRelatedStruct::sub_467020(
-            this,
+          sub_467020(
             (int *)v90.field,
-            (SpriteS1 *)v90.AudioSourceParams,
-            &v90.AudioSourceParams1,
+            (SpriteS1 *)v90.y,
+            &v90.z,
             (void *)1,
             0);
-          v53 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&pS202.field_C, (int)&unk_662C98);
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v53);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v53 = Player::sub_401B40((Player *)&v90.z, (S202 *)&pS202.field_C, (int)&unk_662C98);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v53);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v54 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v54, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v54, (int)v87.self, (int)v87.carMgr);
           if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+            v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+            v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
             v55 = AudioSourceParams::sub_41F9D0(&v90);
-            v11 = MapRelatedStruct::sub_4653C0(this, v55, (int)v87.S202, (int)v87.CarSystemManager);
+            v11 = sub_4653C0( v55, (int)v87.self, (int)v87.carMgr);
           }
         }
-        if ( !MapRelatedStruct::sub_4632E0(this, v11, v90.AudioSourceParams2, 1) )
+        if ( !sub_4632E0( v11, v90.type, 1) )
         {
           v90.field_14 = v11;
-          LOWORD(v56) = *sub_4725B0(&v88, &v90.AudioSourceParams2);
-          v87.CarSystemManager = v56;
-          v87.S202 = (S202 *)FirstElement;
+          *(_WORD *)&v56 = *sub_4725B0(&v88, &v90.type);
+          v87.carMgr = v56;
+          v87.self = (S202 *)FirstElement;
           v87.field_0 = (int)field;
           v90.field_10 = (int)*sub_463210((SpriteS1 **)&pS202.field_10, v87);
           Player::sub_401B40((Player *)&unk_662C98, (S202 *)&pS202.pPlayer, (int)&v90.field_10);
-          v57 = (CarSystemManager *)sub_4725B0(&v89, &v90.AudioSourceParams2);
+          v57 = (CarSystemManager *)sub_4725B0(&v89, &v90.type);
           v58 = (SpriteS1 *)sub_40E5A0(v57, (CarSystemManager *)&v87.field_1E, &unk_663108);
           SpriteS1::sub_472C00(v58);
-          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.y);
           v59 = Player::sub_401B40((Player *)&unk_662C98, (S202 *)&pS202.field_18, (int)&v90.field_10);
           pPlayer = (Player *)S202::sub_401B20((S202 *)&pPlayer, (SpriteS1 *)&pS202.field_1C, (PublicTransport *)v59)->FirstElement;
-          v60 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, &v92, (int)&unk_662C98);
-          v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v60);
-          v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+          v60 = Player::sub_401B40((Player *)&v90.z, &v92, (int)&unk_662C98);
+          v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v60);
+          v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
           v61 = AudioSourceParams::sub_41F9D0(&v90);
-          v11 = MapRelatedStruct::sub_4653C0(this, v61, (int)v87.S202, (int)v87.CarSystemManager);
+          v11 = sub_4653C0( v61, (int)v87.self, (int)v87.carMgr);
           if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+            v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+            v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
             v62 = AudioSourceParams::sub_41F9D0(&v90);
-            v11 = MapRelatedStruct::sub_4653C0(this, v62, (int)v87.S202, (int)v87.CarSystemManager);
+            v11 = sub_4653C0( v62, (int)v87.self, (int)v87.carMgr);
           }
           field = (int *)v90.field;
-          FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+          FirstElement = (SpriteS1 *)v90.y;
           if ( v11 != v90.field_14 )
           {
-            MapRelatedStruct::sub_467020(
-              this,
+            sub_467020(
               (int *)v90.field,
-              (SpriteS1 *)v90.AudioSourceParams,
-              &v90.AudioSourceParams1,
+              (SpriteS1 *)v90.y,
+              &v90.z,
               (void *)1,
               0);
-            v63 = Player::sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.S202, (int)&unk_662C98);
-            v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v63);
-            v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+            v63 = Player::sub_401B40((Player *)&v90.z, (S202 *)&v92.self, (int)&unk_662C98);
+            v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v63);
+            v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
             v64 = AudioSourceParams::sub_41F9D0(&v90);
-            v11 = MapRelatedStruct::sub_4653C0(this, v64, (int)v87.S202, (int)v87.CarSystemManager);
+            v11 = sub_4653C0( v64, (int)v87.self, (int)v87.carMgr);
             if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
             {
-              v87.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
-              v87.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
+              v87.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.z);
+              v87.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v90.y);
               v65 = AudioSourceParams::sub_41F9D0(&v90);
-              v11 = MapRelatedStruct::sub_4653C0(this, v65, (int)v87.S202, (int)v87.CarSystemManager);
+              v11 = sub_4653C0( v65, (int)v87.self, (int)v87.carMgr);
             }
           }
           v87.field_1D = 1;
         }
       }
 LABEL_80:
-      LOWORD(v84) = Car::sub_403820((Car *)&pPlayer, &unk_662CFC);
+      *(_WORD *)&v84 = Car::sub_403820((Car *)&pPlayer, &unk_662CFC);
     }
     while ( v84 );
   }
-  v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams1;
+  v87.carMgr = (CarSystemManager *)v90.z;
   *arg0 = (int)field;
   a3->FirstElement = FirstElement;
-  v85 = *MapRelatedStruct::sub_466E20(this, &pPlayer, field, FirstElement, (int)v87.CarSystemManager);
-  result = v90.AudioSourceParams2;
+  v85 = *sub_466E20( &pPlayer, field, FirstElement, (int)v87.carMgr);
+  result = v90.type;
   *a4 = v85;
   return result;
 }
@@ -5042,36 +5088,36 @@ int MapRelatedStruct::sub_467F80(int** arg0, SpriteS1** a3, int* a4, Player* a5)
   char v105;
   _BYTE v106[4];
   field = *arg0;
-  v100.AudioSourceParams = *a4;
-  *(_DWORD *)&pCarSystemManager.field_2 = v100.AudioSourceParams;
+  v100.y = *a4;
+  *(_DWORD *)&pCarSystemManager.field_2 = v100.y;
   v7 = *a3;
   HIBYTE(v100.field_10) = 0;
   v100.field = (int)field;
   *(Weapon **)((char *)&pCarSystemManager.Weapon + 2) = (Weapon *)field;
   *(_DWORD *)&v99.field_1C = v7;
   *(int *)((char *)&pCarSystemManager.field_4 + 2) = (int)v7;
-  MapRelatedStruct::sub_467020(this, field, v7, &v100.AudioSourceParams, 0, 0);
-  v8 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-  v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v8);
-  v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+  sub_467020( field, v7, &v100.y, 0, 0);
+  v8 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+  v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v8);
+  v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
   v9 = AudioSourceParams::sub_41F9D0(&v100);
-  v10 = MapRelatedStruct::sub_4653C0(this, v9, (int)v99.S202, (int)v99.CarSystemManager);
+  v10 = sub_4653C0( v9, (int)v99.self, (int)v99.carMgr);
   if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
   {
-    v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-    v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+    v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+    v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
     v11 = AudioSourceParams::sub_41F9D0(&v100);
-    v10 = MapRelatedStruct::sub_4653C0(this, v11, (int)v99.S202, (int)v99.CarSystemManager);
+    v10 = sub_4653C0( v11, (int)v99.self, (int)v99.carMgr);
   }
-  v100.AudioSourceParams1 = MapRelatedStruct::sub_4633A0(this, v10, 0);
-  LOWORD(v12) = *sub_4725B0(&pCarSystemManager.Index, &v100.AudioSourceParams1);
-  v99.CarSystemManager = v12;
-  v99.S202 = (S202 *)v7;
+  v100.z = sub_4633A0( v10, 0);
+  *(_WORD *)&v12 = *sub_4725B0(&pCarSystemManager.Index, &v100.z);
+  v99.carMgr = v12;
+  v99.self = (S202 *)v7;
   v99.field_0 = (int)field;
-  v101 = *sub_463150((SpriteS1 **)&v100.AudioSourceParams2, v99);
+  v101 = *sub_463150((SpriteS1 **)&v100.type, v99);
   if ( Car::sub_403800((Car *)&v101, (int)&unk_6630B0) )
   {
-    switch ( v100.AudioSourceParams1 )
+    switch ( v100.z )
     {
       case 1:
         goto LABEL_5;
@@ -5087,229 +5133,227 @@ int MapRelatedStruct::sub_467F80(int** arg0, SpriteS1** a3, int* a4, Player* a5)
   }
   else
   {
-    v99.CarSystemManager = (CarSystemManager *)&unk_6630B0;
+    v99.carMgr = (CarSystemManager *)&unk_6630B0;
     if ( sub_4037E0(&v101) )
     {
-      switch ( v100.AudioSourceParams1 )
+      switch ( v100.z )
       {
         case 1:
 LABEL_9:
-          v100.AudioSourceParams1 = 4;
+          v100.z = 4;
           break;
         case 2:
 LABEL_5:
-          v100.AudioSourceParams1 = 3;
+          v100.z = 3;
           break;
         case 3:
 LABEL_10:
-          v100.AudioSourceParams1 = 1;
+          v100.z = 1;
           break;
         case 4:
 LABEL_6:
-          v100.AudioSourceParams1 = 2;
+          v100.z = 2;
           break;
         default:
           break;
       }
     }
   }
-  LOWORD(v13) = Car::sub_403820((Car *)&v101, &unk_6630B0);
-  v99.CarSystemManager = (CarSystemManager *)&v100.AudioSourceParams1;
-  v99.S202 = (S202 *)&pCarSystemManager;
+  *(_WORD *)&v13 = Car::sub_403820((Car *)&v101, &unk_6630B0);
+  v99.carMgr = (CarSystemManager *)&v100.z;
+  v99.self = (S202 *)&pCarSystemManager;
   if ( v13 )
   {
     v101 = (SpriteS1 *)v10;
-    LOWORD(v14) = *sub_4725B0((unsigned __int16 *)v99.S202, &v99.CarSystemManager->Index);
-    v99.CarSystemManager = v14;
-    v99.S202 = (S202 *)v7;
+    *(_WORD *)&v14 = *sub_4725B0((unsigned __int16 *)v99.self, &v99.carMgr->Index);
+    v99.carMgr = v14;
+    v99.self = (S202 *)v7;
     v99.field_0 = (int)field;
-    v100.field_14 = (int)*sub_463210((SpriteS1 **)&v100.AudioSourceParams2, v99);
+    v100.field_14 = (int)*sub_463210((SpriteS1 **)&v100.type, v99);
     if ( Car::sub_403800((Car *)&v100.field_14, (int)&unk_662CFC) )
     {
       v15 = Player::sub_40CE70((Player *)&a5, &v100.field_14);
-      v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams1;
+      v99.carMgr = (CarSystemManager *)v100.z;
       if ( v15 )
       {
         sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-        a5 = (Player *)Player::sub_401B40((Player *)&a5, (S202 *)&v100.AudioSourceParams2, (int)&v100.field_14)->FirstElement;
+        a5 = (Player *)Player::sub_401B40((Player *)&a5, (S202 *)&v100.type, (int)&v100.field_14)->FirstElement;
       }
       else
       {
-        v99.S202 = (S202 *)a5;
+        v99.self = (S202 *)a5;
         sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
         a5 = (Player *)unk_662CFC;
       }
       field = (int *)v100.field;
       v7 = *(SpriteS1 **)&v99.field_1C;
     }
-    v16 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-    v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v16);
-    v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+    v16 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+    v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v16);
+    v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
     v17 = AudioSourceParams::sub_41F9D0(&v100);
-    v18 = MapRelatedStruct::sub_4653C0(this, v17, (int)v99.S202, (int)v99.CarSystemManager);
+    v18 = sub_4653C0( v17, (int)v99.self, (int)v99.carMgr);
     if ( (*(_BYTE *)(v18 + 11) & 0xFC) == 0xFC )
     {
-      v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-      v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+      v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+      v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v19 = AudioSourceParams::sub_41F9D0(&v100);
-      v18 = MapRelatedStruct::sub_4653C0(this, v19, (int)v99.S202, (int)v99.CarSystemManager);
+      v18 = sub_4653C0( v19, (int)v99.self, (int)v99.carMgr);
     }
-    v20 = MapRelatedStruct::sub_4632E0(this, v18, v100.AudioSourceParams1, 0);
-    v21 = (CarSystemManager *)v100.AudioSourceParams1;
+    v20 = sub_4632E0( v18, v100.z, 0);
+    v21 = (CarSystemManager *)v100.z;
     if ( !v20 )
     {
       v22 = Player::sub_40CE70((Player *)&a5, &unk_662C98);
-      v99.CarSystemManager = v21;
+      v99.carMgr = v21;
       if ( v22 )
       {
         sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-        a5 = (Player *)Player::sub_401B40((Player *)&a5, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98)->FirstElement;
+        a5 = (Player *)Player::sub_401B40((Player *)&a5, (S202 *)&v100.type, (int)&unk_662C98)->FirstElement;
       }
       else
       {
-        v99.S202 = (S202 *)a5;
+        v99.self = (S202 *)a5;
         sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
         a5 = (Player *)unk_662CFC;
       }
       field = (int *)v100.field;
       v7 = *(SpriteS1 **)&v99.field_1C;
     }
-    v23 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-    v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v23);
-    v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+    v23 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+    v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v23);
+    v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
     v24 = AudioSourceParams::sub_41F9D0(&v100);
-    v10 = MapRelatedStruct::sub_4653C0(this, v24, (int)v99.S202, (int)v99.CarSystemManager);
+    v10 = sub_4653C0( v24, (int)v99.self, (int)v99.carMgr);
     if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
     {
-      v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-      v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+      v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+      v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v25 = AudioSourceParams::sub_41F9D0(&v100);
-      v10 = MapRelatedStruct::sub_4653C0(this, v25, (int)v99.S202, (int)v99.CarSystemManager);
+      v10 = sub_4653C0( v25, (int)v99.self, (int)v99.carMgr);
     }
     if ( (SpriteS1 *)v10 != v101 )
     {
-      MapRelatedStruct::sub_467020(this, field, v7, &v100.AudioSourceParams, 0, 0);
-      v26 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-      v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v26);
-      v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+      sub_467020( field, v7, &v100.y, 0, 0);
+      v26 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+      v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v26);
+      v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v27 = AudioSourceParams::sub_41F9D0(&v100);
-      v10 = MapRelatedStruct::sub_4653C0(this, v27, (int)v99.S202, (int)v99.CarSystemManager);
+      v10 = sub_4653C0( v27, (int)v99.self, (int)v99.carMgr);
       if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
         goto LABEL_28;
     }
   }
   else
   {
-    LOWORD(v29) = *sub_4725B0((unsigned __int16 *)v99.S202, &v99.CarSystemManager->Index);
-    v99.CarSystemManager = v29;
-    v99.S202 = (S202 *)v7;
+    *(_WORD *)&v29 = *sub_4725B0((unsigned __int16 *)v99.self, &v99.carMgr->Index);
+    v99.carMgr = v29;
+    v99.self = (S202 *)v7;
     v99.field_0 = (int)field;
-    v100.field_14 = (int)*sub_463210((SpriteS1 **)&v100.AudioSourceParams2, v99);
+    v100.field_14 = (int)*sub_463210((SpriteS1 **)&v100.type, v99);
     if ( Car::sub_403800((Car *)&v100.field_14, (int)&unk_662CFC) )
     {
-      MapRelatedStruct::sub_467020(this, field, v7, &v100.AudioSourceParams, 0, (void *)1);
+      sub_467020( field, v7, &v100.y, 0, (void *)1);
       v30 = v10;
-      Player::sub_401B40((Player *)&unk_662C98, (S202 *)&v100.AudioSourceParams2, (int)&v100.field_14);
-      v31 = (CarSystemManager *)sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.AudioSourceParams1);
+      Player::sub_401B40((Player *)&unk_662C98, (S202 *)&v100.type, (int)&v100.field_14);
+      v31 = (CarSystemManager *)sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.z);
       v32 = (SpriteS1 *)sub_40E5A0(v31, &pCarSystemManager, &unk_663108);
       SpriteS1::sub_472C00(v32);
       sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-      v33 = Player::sub_401B40((Player *)&unk_662C98, (S202 *)&v100.AudioSourceParams2, (int)&v100.field_14);
+      v33 = Player::sub_401B40((Player *)&unk_662C98, (S202 *)&v100.type, (int)&v100.field_14);
       a5 = (Player *)S202::sub_401B20((S202 *)&a5, (SpriteS1 *)&v101, (PublicTransport *)v33)->FirstElement;
-      v34 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-      v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v34);
-      v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+      v34 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+      v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v34);
+      v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v35 = AudioSourceParams::sub_41F9D0(&v100);
-      v36 = MapRelatedStruct::sub_4653C0(this, v35, (int)v99.S202, (int)v99.CarSystemManager);
+      v36 = sub_4653C0( v35, (int)v99.self, (int)v99.carMgr);
       if ( !v36 )
         goto LABEL_35;
       if ( (*(_BYTE *)(v36 + 11) & 0xFC) == 0xFC )
       {
-        v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-        v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+        v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+        v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v37 = AudioSourceParams::sub_41F9D0(&v100);
-        v36 = MapRelatedStruct::sub_4653C0(this, v37, (int)v99.S202, (int)v99.CarSystemManager);
+        v36 = sub_4653C0( v37, (int)v99.self, (int)v99.carMgr);
       }
-      if ( !v36 || !MapRelatedStruct::sub_4632E0(this, v36, v100.AudioSourceParams1, 0) )
+      if ( !v36 || !sub_4632E0( v36, v100.z, 0) )
       {
 LABEL_35:
         v38 = Player::sub_40CE70((Player *)&a5, &unk_662C98);
-        v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams1;
+        v99.carMgr = (CarSystemManager *)v100.z;
         if ( v38 )
         {
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-          a5 = (Player *)Player::sub_401B40((Player *)&a5, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98)->FirstElement;
+          a5 = (Player *)Player::sub_401B40((Player *)&a5, (S202 *)&v100.type, (int)&unk_662C98)->FirstElement;
         }
         else
         {
-          v99.S202 = (S202 *)a5;
+          v99.self = (S202 *)a5;
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           a5 = (Player *)unk_662CFC;
         }
       }
-      v39 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-      v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v39);
-      v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+      v39 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+      v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v39);
+      v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v40 = AudioSourceParams::sub_41F9D0(&v100);
-      v10 = MapRelatedStruct::sub_4653C0(this, v40, (int)v99.S202, (int)v99.CarSystemManager);
+      v10 = sub_4653C0( v40, (int)v99.self, (int)v99.carMgr);
       if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
       {
-        v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-        v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+        v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+        v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v41 = AudioSourceParams::sub_41F9D0(&v100);
-        v10 = MapRelatedStruct::sub_4653C0(this, v41, (int)v99.S202, (int)v99.CarSystemManager);
+        v10 = sub_4653C0( v41, (int)v99.self, (int)v99.carMgr);
       }
       field = (int *)v100.field;
-      v99.CarSystemManager = 0;
+      v99.carMgr = 0;
       v89 = v10 == v30;
       v7 = *(SpriteS1 **)&v99.field_1C;
-      v99.S202 = 0;
-      v99.field_0 = (int)&v100.AudioSourceParams;
+      v99.self = 0;
+      v99.field_0 = (int)&v100.y;
       if ( v89 )
       {
-        MapRelatedStruct::sub_467020(
-          this,
+        sub_467020(
           (int *)v100.field,
           *(SpriteS1 **)&v99.field_1C,
           (void *)v99.field_0,
-          v99.S202,
-          v99.CarSystemManager);
+          v99.self,
+          v99.carMgr);
       }
       else
       {
-        MapRelatedStruct::sub_467020(
-          this,
+        sub_467020(
           (int *)v100.field,
           *(SpriteS1 **)&v99.field_1C,
           (void *)v99.field_0,
-          v99.S202,
-          v99.CarSystemManager);
-        v42 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-        v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v42);
-        v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.self,
+          v99.carMgr);
+        v42 = Player::sub_401B40((Player *)&v100.y, (S202 *)&v100.type, (int)&unk_662C98);
+        v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v42);
+        v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v43 = AudioSourceParams::sub_41F9D0(&v100);
-        v10 = MapRelatedStruct::sub_4653C0(this, v43, (int)v99.S202, (int)v99.CarSystemManager);
+        v10 = sub_4653C0( v43, (int)v99.self, (int)v99.carMgr);
         if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
         {
 LABEL_28:
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v28 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v28, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v28, (int)v99.self, (int)v99.carMgr);
         }
       }
     }
   }
-  LOWORD(v44) = Car::sub_403820((Car *)&a5, &unk_662CFC);
+  *(_WORD *)&v44 = Car::sub_403820((Car *)&a5, &unk_662CFC);
   if ( v44 )
   {
     do
     {
-      if ( !MapRelatedStruct::sub_4632E0(this, v10, v100.AudioSourceParams1, 0) || HIBYTE(v100.field_10) )
+      if ( !sub_4632E0( v10, v100.z, 0) || HIBYTE(v100.field_10) )
       {
         v66 = 0;
         HIBYTE(v100.field_10) = 0;
-        switch ( v100.AudioSourceParams1 )
+        switch ( v100.z )
         {
           case 1:
           case 2:
@@ -5317,24 +5361,24 @@ LABEL_28:
                     (Player *)&pCarSystemManager.field_2,
                     (S202 *)((char *)&pCarSystemManager.field_44 + 2),
                     (int)&unk_662C98);
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v67);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.field_4 + 2));
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v67);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.field_4 + 2));
             v68 = S202::sub_401B20(
                     (S202 *)((char *)&pCarSystemManager.Weapon + 2),
                     (SpriteS1 *)&v103,
                     (PublicTransport *)&unk_662C98);
             v69 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v68);
-            v70 = MapRelatedStruct::sub_4653C0(gMapRelatedStruct, v69, (int)v99.S202, (int)v99.CarSystemManager);
+            v70 = gMapRelatedStruct->sub_4653C0( v69, (int)v99.self, (int)v99.carMgr);
             v10 = v70;
             if ( !v70
-              || (v66 = (CarSystemManager *)MapRelatedStruct::sub_4633A0(this, v70, 0), v66 != (CarSystemManager *)3) )
+              || (v66 = (CarSystemManager *)sub_4633A0( v70, 0), v66 != (CarSystemManager *)3) )
             {
               v71 = Player::sub_401B40(
                       (Player *)&pCarSystemManager.field_2,
                       (S202 *)((char *)&pCarSystemManager.Player + 2),
                       (int)&unk_662C98);
-              v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v71);
-              v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.field_4
+              v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v71);
+              v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.field_4
                                                                                    + 2));
               v72 = Player::sub_401B40(
                       (Player *)((char *)&pCarSystemManager.Weapon + 2),
@@ -5349,33 +5393,33 @@ LABEL_28:
                     (Player *)&pCarSystemManager.field_2,
                     (S202 *)((char *)&pCarSystemManager.RecycledCars + 2),
                     (int)&unk_662C98);
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v73);
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v73);
             v74 = S202::sub_401B20(
                     (S202 *)((char *)&pCarSystemManager.field_4 + 2),
                     (SpriteS1 *)((char *)&pCarSystemManager.field_30 + 2),
                     (PublicTransport *)&unk_662C98);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v74);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v74);
             v75 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.Weapon + 2));
-            v76 = MapRelatedStruct::sub_4653C0(gMapRelatedStruct, v75, (int)v99.S202, (int)v99.CarSystemManager);
+            v76 = gMapRelatedStruct->sub_4653C0( v75, (int)v99.self, (int)v99.carMgr);
             v10 = v76;
             if ( !v76
-              || (v66 = (CarSystemManager *)MapRelatedStruct::sub_4633A0(this, v76, 0), v66 != (CarSystemManager *)2) )
+              || (v66 = (CarSystemManager *)sub_4633A0( v76, 0), v66 != (CarSystemManager *)2) )
             {
               v77 = Player::sub_401B40(
                       (Player *)&pCarSystemManager.field_2,
                       (S202 *)((char *)&pCarSystemManager.field_38 + 2),
                       (int)&unk_662C98);
-              v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v77);
+              v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v77);
               v78 = Player::sub_401B40(
                       (Player *)((char *)&pCarSystemManager.field_4 + 2),
                       (S202 *)((char *)&pCarSystemManager.RecycledCars_1 + 2),
                       (int)&unk_662C98);
-              v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v78);
+              v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v78);
               v72 = (SpriteS1 *)((char *)&pCarSystemManager.Weapon + 2);
 LABEL_72:
               v79 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v72);
-              v10 = MapRelatedStruct::sub_4653C0(gMapRelatedStruct, v79, (int)v99.S202, (int)v99.CarSystemManager);
-              v66 = (CarSystemManager *)MapRelatedStruct::sub_4633A0(this, v10, 0);
+              v10 = gMapRelatedStruct->sub_4653C0( v79, (int)v99.self, (int)v99.carMgr);
+              v66 = (CarSystemManager *)sub_4633A0( v10, 0);
             }
             break;
           default:
@@ -5385,7 +5429,7 @@ LABEL_72:
         if ( Player::sub_40CE70((Player *)&a5, &unk_662C98) )
         {
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-          v100.AudioSourceParams1 = (int)v66;
+          v100.z = (int)v66;
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           FirstElement = Player::sub_401B40(
                            (Player *)&a5,
@@ -5393,7 +5437,7 @@ LABEL_72:
                            (int)&unk_662C98)->FirstElement;
           a5 = (Player *)FirstElement;
           v82 = Player::sub_40CE70((Player *)&a5, &unk_662C98);
-          v99.CarSystemManager = v66;
+          v99.carMgr = v66;
           if ( v82 )
           {
             sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
@@ -5401,46 +5445,45 @@ LABEL_72:
           }
           else
           {
-            v99.S202 = (S202 *)FirstElement;
+            v99.self = (S202 *)FirstElement;
             sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
             v83 = (SpriteS1 *)unk_662CFC;
           }
           a5 = (Player *)v83;
           v84 = Player::sub_401B40(
-                  (Player *)&v100.AudioSourceParams,
+                  (Player *)&v100.y,
                   (S202 *)((char *)&pCarSystemManager.CarType + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v84);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v84);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v85 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v85, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v85, (int)v99.self, (int)v99.carMgr);
           if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
           {
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v86 = AudioSourceParams::sub_41F9D0(&v100);
-            v10 = MapRelatedStruct::sub_4653C0(this, v86, (int)v99.S202, (int)v99.CarSystemManager);
+            v10 = sub_4653C0( v86, (int)v99.self, (int)v99.carMgr);
           }
           field = (int *)v100.field;
           v89 = v10 == v80;
           v7 = *(SpriteS1 **)&v99.field_1C;
           if ( v89 )
             goto LABEL_90;
-          MapRelatedStruct::sub_467020(
-            this,
+          sub_467020(
             (int *)v100.field,
             *(SpriteS1 **)&v99.field_1C,
-            &v100.AudioSourceParams,
+            &v100.y,
             0,
             0);
           v87 = Player::sub_401B40(
-                  (Player *)&v100.AudioSourceParams,
+                  (Player *)&v100.y,
                   (S202 *)((char *)&pCarSystemManager.field_60 + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v87);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v87);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v88 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v88, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v88, (int)v99.self, (int)v99.carMgr);
           v89 = (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC;
         }
         else
@@ -5449,59 +5492,58 @@ LABEL_72:
           {
             sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
             v90 = Player::sub_401B40(
-                    (Player *)&v100.AudioSourceParams,
+                    (Player *)&v100.y,
                     (S202 *)&pCarSystemManager.field_6A,
                     (int)&unk_662C98);
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v90);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v90);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v91 = AudioSourceParams::sub_41F9D0(&v100);
-            v10 = MapRelatedStruct::sub_4653C0(this, v91, (int)v99.S202, (int)v99.CarSystemManager);
+            v10 = sub_4653C0( v91, (int)v99.self, (int)v99.carMgr);
             if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
             {
-              v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-              v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+              v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+              v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
               v92 = AudioSourceParams::sub_41F9D0(&v100);
-              v10 = MapRelatedStruct::sub_4653C0(this, v92, (int)v99.S202, (int)v99.CarSystemManager);
+              v10 = sub_4653C0( v92, (int)v99.self, (int)v99.carMgr);
             }
-            v100.AudioSourceParams1 = (int)v66;
+            v100.z = (int)v66;
             v93 = (S202 *)Player::sub_401B40((Player *)&a5, (S202 *)v104, (int)&unk_6630B0)->FirstElement;
           }
           else
           {
             v93 = (S202 *)a5;
           }
-          v99.S202 = v93;
+          v99.self = v93;
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-          bitShiftLeft1(&v100.AudioSourceParams2, 0);
+          bitShiftLeft1((int)&v100.type, 0);
           field = (int *)v100.field;
           v89 = v10 == v80;
           v7 = *(SpriteS1 **)&v99.field_1C;
-          a5 = (Player *)v100.AudioSourceParams2;
+          a5 = (Player *)v100.type;
           if ( v89 )
             goto LABEL_90;
-          MapRelatedStruct::sub_467020(
-            this,
+          sub_467020(
             (int *)v100.field,
             *(SpriteS1 **)&v99.field_1C,
-            &v100.AudioSourceParams,
+            &v100.y,
             0,
             0);
           v94 = Player::sub_401B40(
-                  (Player *)&v100.AudioSourceParams,
+                  (Player *)&v100.y,
                   (S202 *)((char *)&pCarSystemManager.ID + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v94);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v94);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v95 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v95, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v95, (int)v99.self, (int)v99.carMgr);
           v89 = (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC;
         }
         if ( v89 )
         {
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v96 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v96, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v96, (int)v99.self, (int)v99.carMgr);
         }
       }
       else
@@ -5509,9 +5551,9 @@ LABEL_72:
         v101 = (SpriteS1 *)v10;
         *(Weapon **)((char *)&pCarSystemManager.Weapon + 2) = (Weapon *)field;
         *(int *)((char *)&pCarSystemManager.field_4 + 2) = (int)v7;
-        *(_DWORD *)&pCarSystemManager.field_2 = v100.AudioSourceParams;
+        *(_DWORD *)&pCarSystemManager.field_2 = v100.y;
         v45 = Player::sub_40CE70((Player *)&a5, &unk_662C98);
-        v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams1;
+        v99.carMgr = (CarSystemManager *)v100.z;
         if ( v45 )
         {
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
@@ -5522,15 +5564,15 @@ LABEL_72:
         }
         else
         {
-          v99.S202 = (S202 *)a5;
+          v99.self = (S202 *)a5;
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           a5 = (Player *)unk_662CFC;
         }
-        v46 = Player::sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)v106, (int)&unk_662C98);
-        v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v46);
-        v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+        v46 = Player::sub_401B40((Player *)&v100.y, (S202 *)v106, (int)&unk_662C98);
+        v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v46);
+        v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v47 = AudioSourceParams::sub_41F9D0(&v100);
-        v48 = MapRelatedStruct::sub_4653C0(this, v47, (int)v99.S202, (int)v99.CarSystemManager);
+        v48 = sub_4653C0( v47, (int)v99.self, (int)v99.carMgr);
         field = (int *)v100.field;
         v7 = *(SpriteS1 **)&v99.field_1C;
         v10 = v48;
@@ -5538,45 +5580,45 @@ LABEL_72:
           goto LABEL_59;
         if ( (*(_BYTE *)(v48 + 11) & 0xFC) == 0xFC )
         {
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v49 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v49, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v49, (int)v99.self, (int)v99.carMgr);
         }
         if ( (SpriteS1 *)v10 != v101 )
         {
-          MapRelatedStruct::sub_467020(this, field, v7, &v100.AudioSourceParams, 0, 0);
+          sub_467020( field, v7, &v100.y, 0, 0);
           v50 = Player::sub_401B40(
-                  (Player *)&v100.AudioSourceParams,
+                  (Player *)&v100.y,
                   (S202 *)((char *)&pCarSystemManager.field_24 + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v50);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v50);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v51 = AudioSourceParams::sub_41F9D0(&v100);
-          v52 = MapRelatedStruct::sub_4653C0(this, v51, (int)v99.S202, (int)v99.CarSystemManager);
+          v52 = sub_4653C0( v51, (int)v99.self, (int)v99.carMgr);
           v10 = v52;
           if ( !v52 )
             goto LABEL_59;
           if ( (*(_BYTE *)(v52 + 11) & 0xFC) == 0xFC )
           {
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v53 = AudioSourceParams::sub_41F9D0(&v100);
-            v10 = MapRelatedStruct::sub_4653C0(this, v53, (int)v99.S202, (int)v99.CarSystemManager);
+            v10 = sub_4653C0( v53, (int)v99.self, (int)v99.carMgr);
           }
         }
-        if ( !v10 || !MapRelatedStruct::sub_4632E0(this, v10, v100.AudioSourceParams1, 0) )
+        if ( !v10 || !sub_4632E0( v10, v100.z, 0) )
         {
 LABEL_59:
           v101 = (SpriteS1 *)v10;
-          LOWORD(v54) = *sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.AudioSourceParams1);
-          v99.CarSystemManager = v54;
-          v99.S202 = (S202 *)v7;
+          *(_WORD *)&v54 = *sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.z);
+          v99.carMgr = v54;
+          v99.self = (S202 *)v7;
           v99.field_0 = (int)field;
           v100.field_14 = (int)*sub_463210((SpriteS1 **)((char *)&pCarSystemManager.SpriteS1_0 + 2), v99);
           v55 = (CarSystemManager *)sub_4725B0(
                                       (unsigned __int16 *)&pCarSystemManager.field_1C,
-                                      &v100.AudioSourceParams1);
+                                      &v100.z);
           v56 = (SpriteS1 *)sub_40E5A0(v55, &pCarSystemManager, &unk_663108);
           SpriteS1::sub_472C00(v56);
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
@@ -5584,11 +5626,11 @@ LABEL_59:
             (Player *)&unk_662C98,
             (S202 *)((char *)&pCarSystemManager.field_1C + 2),
             (int)&v100.field_14);
-          v57 = (CarSystemManager *)sub_4725B0((unsigned __int16 *)&pCarSystemManager.ID, &v100.AudioSourceParams1);
+          v57 = (CarSystemManager *)sub_4725B0((unsigned __int16 *)&pCarSystemManager.ID, &v100.z);
           v58 = (SpriteS1 *)sub_40E5A0(v57, (CarSystemManager *)&pCarSystemManager.field_12, &unk_663108);
           SpriteS1::sub_472C00(v58);
           sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
-          v99.CarSystemManager = (CarSystemManager *)Player::sub_401B40(
+          v99.carMgr = (CarSystemManager *)Player::sub_401B40(
                                                        (Player *)&unk_662C98,
                                                        (S202 *)&pCarSystemManager.field_56,
                                                        (int)&v100.field_14);
@@ -5596,68 +5638,66 @@ LABEL_59:
           a5 = (Player *)S202::sub_401B20(
                            (S202 *)v59,
                            (SpriteS1 *)((char *)&pCarSystemManager.UnitCars + 2),
-                           (PublicTransport *)v99.CarSystemManager)->FirstElement;
-          v100.AudioSourceParams = *(_DWORD *)&pCarSystemManager.field_2;
+                           (PublicTransport *)v99.carMgr)->FirstElement;
+          v100.y = *(_DWORD *)&pCarSystemManager.field_2;
           v60 = Player::sub_401B40(
-                  (Player *)&v100.AudioSourceParams,
+                  (Player *)&v100.y,
                   (S202 *)((char *)&pCarSystemManager.MissionCars + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v60);
-          v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+          v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v60);
+          v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v61 = AudioSourceParams::sub_41F9D0(&v100);
-          v10 = MapRelatedStruct::sub_4653C0(this, v61, (int)v99.S202, (int)v99.CarSystemManager);
+          v10 = sub_4653C0( v61, (int)v99.self, (int)v99.carMgr);
           if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
           {
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v62 = AudioSourceParams::sub_41F9D0(&v100);
-            v10 = MapRelatedStruct::sub_4653C0(this, v62, (int)v99.S202, (int)v99.CarSystemManager);
+            v10 = sub_4653C0( v62, (int)v99.self, (int)v99.carMgr);
           }
           field = (int *)v100.field;
           v7 = *(SpriteS1 **)&v99.field_1C;
           if ( (SpriteS1 *)v10 != v101 )
           {
-            MapRelatedStruct::sub_467020(
-              this,
+            sub_467020(
               (int *)v100.field,
               *(SpriteS1 **)&v99.field_1C,
-              &v100.AudioSourceParams,
+              &v100.y,
               0,
               0);
             v63 = Player::sub_401B40(
-                    (Player *)&v100.AudioSourceParams,
+                    (Player *)&v100.y,
                     (S202 *)&pCarSystemManager.field_5E,
                     (int)&unk_662C98);
-            v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v63);
-            v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+            v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)v63);
+            v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v64 = AudioSourceParams::sub_41F9D0(&v100);
-            v10 = MapRelatedStruct::sub_4653C0(this, v64, (int)v99.S202, (int)v99.CarSystemManager);
+            v10 = sub_4653C0( v64, (int)v99.self, (int)v99.carMgr);
             if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
             {
-              v99.CarSystemManager = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
-              v99.S202 = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
+              v99.carMgr = (CarSystemManager *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v100.y);
+              v99.self = (S202 *)AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v99.field_1C);
               v65 = AudioSourceParams::sub_41F9D0(&v100);
-              v10 = MapRelatedStruct::sub_4653C0(this, v65, (int)v99.S202, (int)v99.CarSystemManager);
+              v10 = sub_4653C0( v65, (int)v99.self, (int)v99.carMgr);
             }
           }
           HIBYTE(v100.field_10) = 1;
         }
       }
 LABEL_90:
-      LOWORD(v97) = Car::sub_403820((Car *)&a5, &unk_662CFC);
+      *(_WORD *)&v97 = Car::sub_403820((Car *)&a5, &unk_662CFC);
     }
     while ( v97 );
   }
-  v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams;
+  v99.carMgr = (CarSystemManager *)v100.y;
   *arg0 = field;
   *a3 = v7;
-  *a4 = *MapRelatedStruct::sub_466E20(
-           this,
+  *a4 = *sub_466E20(
            (int *)((char *)&pCarSystemManager.ID + 2),
            field,
            v7,
-           (int)v99.CarSystemManager);
-  return sub_42A660(&v100.AudioSourceParams1);
+           (int)v99.carMgr);
+  return sub_42A660(&v100.z);
 }
 
 // 0x469110
@@ -5685,13 +5725,13 @@ char MapRelatedStruct::sub_469110(int a2, int a3, char a4) {
   if ( !this->Buffer_ZONE )
     return 0;
   count = (_WORD *)this->count;
-  LOWORD(v8) = 0;
+  *(_WORD *)&v8 = 0;
   v18 = 0;
   if ( !*count )
     goto LABEL_17;
   do
   {
-    v9 = MapRelatedStruct::sub_462E40(this, v8);
+    v9 = sub_462E40( v8);
     v10 = v9;
     if ( *v9 == a4 && !sub_4690B0(v9) )
     {
@@ -5725,13 +5765,13 @@ char MapRelatedStruct::sub_469110(int a2, int a3, char a4) {
   if ( !v16 )
   {
 LABEL_17:
-    LOWORD(v12) = 0;
+    *(_WORD *)&v12 = 0;
     v13 = *(unsigned __int16 *)this->count;
     if ( (_WORD)v13 )
     {
       do
       {
-        v14 = MapRelatedStruct::sub_462E40(this, v12);
+        v14 = sub_462E40( v12);
         if ( *v14 == a4 )
           v16 = v14;
         v12 = v15 + 1;
@@ -5924,17 +5964,17 @@ _DWORD* MapRelatedStruct::sub_469570(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
   int v20; // [esp-4h] [ebp-14h]
   SpriteS1 *FirstElement;
   v6 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&a2);
-  LOWORD(v7) = Car::sub_403820((Car *)v6, &unk_662CFC);
+  *(_WORD *)&v7 = Car::sub_403820((Car *)v6, &unk_662CFC);
   v8 = a3;
   v9 = arg4;
   if ( v7
     && (v20 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2),
         v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3),
         v10 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4),
-        MapRelatedStruct::sub_466CF0(this, v10, v18, v20))
+        sub_466CF0( v10, v18, v20))
     && (FirstElement = sub_462EA0((SpriteS1 *)&FirstElement, &a2)->FirstElement,
-        MapRelatedStruct::sub_466B70(this, v9, (S202 *)v8),
-        LOBYTE(v11) = Player::CheckCondition((Player *)&FirstElement, &a2),
+        sub_466B70( v9, (S202 *)v8),
+        *(_BYTE *)&v11 = Player::CheckCondition((Player *)&FirstElement, &a2),
         v11) )
   {
     result = arg0;
@@ -5945,7 +5985,7 @@ _DWORD* MapRelatedStruct::sub_469570(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
     a2 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2) - 1;
     v19 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-    v14 = MapRelatedStruct::sub_466A00(this, v13, v19, &a2);
+    v14 = sub_466A00( v13, v19, &a2);
     dword_662B90 = v14;
     if ( v14 )
     {
@@ -5954,7 +5994,7 @@ _DWORD* MapRelatedStruct::sub_469570(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
       {
         S202::sub_41F980((S202 *)&a2, a2);
         FirstElement = *v16;
-        MapRelatedStruct::sub_466B70(this, v9, (S202 *)v8);
+        sub_466B70( v9, (S202 *)v8);
         *arg0 = FirstElement;
         return arg0;
       }
@@ -5997,14 +6037,14 @@ _DWORD* MapRelatedStruct::sub_4696C0(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
   AudioSourceParams a2;
   char v23;
   AudioSourceParams v24;
-  AudioSourceParams = v24.AudioSourceParams;
-  a2.field = (int)v24.AudioSourceParams;
-  S202::sub_401B20((S202 *)&v24.AudioSourceParams, (SpriteS1 *)&a2.AudioSourceParams1, (PublicTransport *)&unk_662C98);
+  AudioSourceParams = v24.y;
+  a2.field = (int)v24.y;
+  S202::sub_401B20((S202 *)&v24.y, (SpriteS1 *)&a2.z, (PublicTransport *)&unk_662C98);
   if ( !sub_4037E0(&a2) )
   {
 LABEL_14:
     result = arg0;
-    *arg0 = (int)v24.AudioSourceParams;
+    *arg0 = (int)v24.y;
     return result;
   }
   field = (S202 *)v24.field;
@@ -6014,7 +6054,7 @@ LABEL_14:
     v20 = AudioSourceParams::sub_41F9D0(&a2);
     v18 = AudioSourceParams::sub_41F9D0(&v24);
     v7 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-    v8 = MapRelatedStruct::sub_4653C0(this, v7, v18, v20);
+    v8 = sub_4653C0( v7, v18, v20);
     dword_662B90 = (_WORD *)v8;
     if ( !v8 )
       break;
@@ -6026,12 +6066,12 @@ LABEL_14:
     {
       if ( v10 < 0xB4u )
       {
-        a2.AudioSourceParams = (AudioSourceParams *)sub_462EA0((SpriteS1 *)&a2.AudioSourceParams2, &a2)->FirstElement;
-        MapRelatedStruct::sub_466B70(this, &v6->field, field);
-        if ( Player::sub_40CE70((Player *)&a2.AudioSourceParams, &a2) )
+        a2.y = (AudioSourceParams *)sub_462EA0((SpriteS1 *)&a2.type, &a2)->FirstElement;
+        sub_466B70( &v6->field, field);
+        if ( Player::sub_40CE70((Player *)&a2.y, &a2) )
         {
           result = arg0;
-          *arg0 = (int)a2.AudioSourceParams;
+          *arg0 = (int)a2.y;
           return result;
         }
       }
@@ -6040,7 +6080,7 @@ LABEL_13:
     v17 = sub_462EA0((SpriteS1 *)&v23, &a2);
     AudioSourceParams = S202::sub_401B20((S202 *)v17, (SpriteS1 *)&a2.field_14, (PublicTransport *)&unk_662C98)->FirstElement;
     a2.field = (int)AudioSourceParams;
-    S202::sub_401B20((S202 *)&v24.AudioSourceParams, (SpriteS1 *)&a2.AudioSourceParams1, (PublicTransport *)&unk_662C98);
+    S202::sub_401B20((S202 *)&v24.y, (SpriteS1 *)&a2.z, (PublicTransport *)&unk_662C98);
     if ( !sub_4037E0(&a2) )
       goto LABEL_14;
   }
@@ -6048,7 +6088,7 @@ LABEL_13:
   v21 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v12);
   v19 = AudioSourceParams::sub_41F9D0(&v24);
   v13 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-  v14 = MapRelatedStruct::sub_4653C0(this, v13, v19, v21);
+  v14 = sub_4653C0( v13, v19, v21);
   dword_662B90 = (_WORD *)v14;
   if ( !v14 )
     goto LABEL_13;
@@ -6085,18 +6125,18 @@ SpriteS1** MapRelatedStruct::sub_469850(SpriteS1* arg0, AudioSourceParams* arg4)
   int v18; // [esp-4h] [ebp-14h]
   SpriteS1 *FirstElement;
   AudioSourceParams v20;
-  v4 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&v20.AudioSourceParams);
-  LOWORD(v5) = Car::sub_403820((Car *)v4, &unk_662CFC);
+  v4 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&v20.y);
+  *(_WORD *)&v5 = Car::sub_403820((Car *)v4, &unk_662CFC);
   field = (S202 *)v20.field;
   v7 = arg4;
   if ( v5
-    && (v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v20.AudioSourceParams),
+    && (v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v20.y),
         v16 = AudioSourceParams::sub_41F9D0(&v20),
         v8 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4),
-        MapRelatedStruct::sub_466CF0(this, v8, v16, v18))
-    && (FirstElement = sub_462EA0((SpriteS1 *)&FirstElement, &v20.AudioSourceParams)->FirstElement,
-        MapRelatedStruct::sub_466B70(this, &v7->field, field),
-        LOBYTE(v9) = Player::CheckCondition((Player *)&FirstElement, &v20.AudioSourceParams),
+        sub_466CF0( v8, v16, v18))
+    && (FirstElement = sub_462EA0((SpriteS1 *)&FirstElement, &v20.y)->FirstElement,
+        sub_466B70( &v7->field, field),
+        *(_BYTE *)&v9 = Player::CheckCondition((Player *)&FirstElement, &v20.y),
         v9) )
   {
     result = &arg0->FirstElement;
@@ -6104,25 +6144,25 @@ SpriteS1** MapRelatedStruct::sub_469850(SpriteS1* arg0, AudioSourceParams* arg4)
   }
   else
   {
-    v20.AudioSourceParams = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v20.AudioSourceParams) - 1;
+    v20.y = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v20.y) - 1;
     v17 = AudioSourceParams::sub_41F9D0(&v20);
     v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-    v12 = MapRelatedStruct::sub_466A00(this, v11, v17, &v20.AudioSourceParams);
+    v12 = sub_466A00( v11, v17, &v20.y);
     dword_662B90 = v12;
     if ( v12 )
     {
       v13 = *((_BYTE *)v12 + 11);
       if ( (v13 & 0xFC) != 0 && (v13 & 0xFCu) < 0xB4 && (v13 & 3) != 0 )
       {
-        S202::sub_41F980((S202 *)&v20.AudioSourceParams, v20.AudioSourceParams);
+        S202::sub_41F980((S202 *)&v20.y, v20.y);
         FirstElement = *v14;
-        MapRelatedStruct::sub_466B70(this, &v7->field, field);
+        sub_466B70( &v7->field, field);
         arg0->FirstElement = FirstElement;
         return &arg0->FirstElement;
       }
       else
       {
-        S202::sub_41F980((S202 *)&v20.AudioSourceParams, v20.AudioSourceParams + 1);
+        S202::sub_41F980((S202 *)&v20.y, v20.y + 1);
         arg0->FirstElement = *v15;
         return &arg0->FirstElement;
       }
@@ -6155,9 +6195,9 @@ _DWORD* MapRelatedStruct::sub_4699A0(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
   int v21; // [esp-8h] [ebp-18h]
   int v22; // [esp-4h] [ebp-14h]
   v6 = FirstElement;
-  LOBYTE(FirstElement->FirstElement) = 0;
+  *(_BYTE *)&FirstElement->FirstElement = 0;
   v8 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&a2);
-  LOWORD(v9) = Car::sub_403820((Car *)v8, &unk_662CFC);
+  *(_WORD *)&v9 = Car::sub_403820((Car *)v8, &unk_662CFC);
   v10 = a3;
   v11 = arg4;
   if ( v9 )
@@ -6165,24 +6205,24 @@ _DWORD* MapRelatedStruct::sub_4699A0(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
     v22 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
     v20 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-    if ( MapRelatedStruct::sub_466CF0(this, v12, v20, v22) )
+    if ( sub_466CF0( v12, v20, v22) )
     {
       FirstElement = sub_462EA0((SpriteS1 *)&FirstElement, &a2)->FirstElement;
-      MapRelatedStruct::sub_466B70(this, v11, (S202 *)v10);
-      LOBYTE(v13) = Player::CheckCondition((Player *)&FirstElement, &a2);
+      sub_466B70( v11, (S202 *)v10);
+      *(_BYTE *)&v13 = Player::CheckCondition((Player *)&FirstElement, &a2);
       if ( v13 )
       {
         result = arg0;
         *arg0 = FirstElement;
         return result;
       }
-      LOBYTE(v6->FirstElement) = 1;
+      *(_BYTE *)&v6->FirstElement = 1;
     }
   }
   a2 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2) - 1;
   v21 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
   v15 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg4);
-  v16 = MapRelatedStruct::sub_466A00(this, v15, v21, &a2);
+  v16 = sub_466A00( v15, v21, &a2);
   dword_662B90 = v16;
   if ( v16 )
   {
@@ -6191,7 +6231,7 @@ _DWORD* MapRelatedStruct::sub_4699A0(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
     {
       S202::sub_41F980((S202 *)&a2, a2);
       FirstElement = *v18;
-      MapRelatedStruct::sub_466B70(this, v11, (S202 *)v10);
+      sub_466B70( v11, (S202 *)v10);
       *arg0 = FirstElement;
       return arg0;
     }
@@ -6226,13 +6266,13 @@ char MapRelatedStruct::sub_469B00(int* a2, SpriteS1* a3, Player* a4) {
   int v17; // [esp-4h] [ebp-Ch]
   SpriteS1 *FirstElement;
   v5 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&a4);
-  LOWORD(v6) = Car::sub_403820((Car *)v5, &unk_662CFC);
+  *(_WORD *)&v6 = Car::sub_403820((Car *)v5, &unk_662CFC);
   if ( v6 )
   {
     v16 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a4);
     v14 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v7 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-    v8 = MapRelatedStruct::sub_4653C0(this, v7, v14, v16);
+    v8 = sub_4653C0( v7, v14, v16);
     dword_662B90 = v8;
     if ( v8 )
     {
@@ -6240,7 +6280,7 @@ char MapRelatedStruct::sub_469B00(int* a2, SpriteS1* a3, Player* a4) {
       if ( (v9 & 0xFC) != 0 && (v9 & 0xFCu) < 0xB4 && (v9 & 3) != 0 )
       {
         FirstElement = sub_462EA0((SpriteS1 *)&FirstElement, &a4)->FirstElement;
-        MapRelatedStruct::sub_466B70(this, a2, (S202 *)a3);
+        sub_466B70( a2, (S202 *)a3);
         if ( Player::IsCurrentPlayer((Player *)&FirstElement, (Player *)&a4) )
           return 1;
       }
@@ -6254,7 +6294,7 @@ char MapRelatedStruct::sub_469B00(int* a2, SpriteS1* a3, Player* a4) {
     v17 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v11);
     v15 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v12 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-    v13 = MapRelatedStruct::sub_4653C0(this, v12, v15, v17);
+    v13 = sub_4653C0( v12, v15, v17);
     dword_662B90 = v13;
     if ( v13 )
     {
@@ -6298,7 +6338,7 @@ bool MapRelatedStruct::sub_469C20(int* arg0, SpriteS1* a3, Player* a4) {
     v24 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v28);
     v21 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v5 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg0);
-    v6 = MapRelatedStruct::sub_4653C0(this, v5, v21, v24);
+    v6 = sub_4653C0( v5, v21, v24);
     dword_662B90 = (_WORD *)v6;
     if ( !v6 )
       return 0;
@@ -6311,7 +6351,7 @@ bool MapRelatedStruct::sub_469C20(int* arg0, SpriteS1* a3, Player* a4) {
     if ( v8 >= 0xB4u )
       return 0;
     a2 = v28;
-    MapRelatedStruct::sub_466B70(this, arg0, (S202 *)a3);
+    sub_466B70( arg0, (S202 *)a3);
     if ( !Player::sub_40CE70(&v29, &a2) )
       return 0;
   }
@@ -6320,7 +6360,7 @@ bool MapRelatedStruct::sub_469C20(int* arg0, SpriteS1* a3, Player* a4) {
     v25 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
     v22 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v10 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg0);
-    v11 = MapRelatedStruct::sub_4653C0(this, v10, v22, v25);
+    v11 = sub_4653C0( v10, v22, v25);
     v12 = a3;
     v13 = arg0;
     dword_662B90 = (_WORD *)v11;
@@ -6334,7 +6374,7 @@ bool MapRelatedStruct::sub_469C20(int* arg0, SpriteS1* a3, Player* a4) {
         {
           if ( v15 < 0xB4u )
           {
-            MapRelatedStruct::sub_466B70(this, arg0, (S202 *)a3);
+            sub_466B70( arg0, (S202 *)a3);
             if ( Player::sub_40CE70(&v29, &a2) )
               return 1;
           }
@@ -6344,7 +6384,7 @@ bool MapRelatedStruct::sub_469C20(int* arg0, SpriteS1* a3, Player* a4) {
     v26 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v28);
     v23 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3);
     v16 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&arg0);
-    v17 = MapRelatedStruct::sub_4653C0(this, v16, v23, v26);
+    v17 = sub_4653C0( v16, v23, v26);
     dword_662B90 = (_WORD *)v17;
     if ( !v17 )
       return 0;
@@ -6355,9 +6395,9 @@ bool MapRelatedStruct::sub_469C20(int* arg0, SpriteS1* a3, Player* a4) {
     if ( !v19 || v19 >= 0xB4u )
       return 1;
     a2 = v28;
-    MapRelatedStruct::sub_466B70(this, v13, (S202 *)v12);
+    sub_466B70( v13, (S202 *)v12);
   }
-  LOBYTE(v20) = Player::CheckCondition((Player *)&a4, &a2);
+  *(_BYTE *)&v20 = Player::CheckCondition((Player *)&a4, &a2);
   return v20 != 0;
 }
 
@@ -6401,7 +6441,7 @@ char MapRelatedStruct::sub_469DC0(int* a2, SpriteS1* pSpriteS1) {
     v30 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&pPlayer);
     v25 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&pSpriteS1);
     v4 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-    v5 = MapRelatedStruct::sub_4653C0(this, v4, v25, v30);
+    v5 = sub_4653C0( v4, v25, v30);
     dword_662B90 = (_WORD *)v5;
     if ( v5 )
     {
@@ -6417,10 +6457,10 @@ char MapRelatedStruct::sub_469DC0(int* a2, SpriteS1* pSpriteS1) {
             v26 = pSpriteS1;
             v23 = a2;
             **(_DWORD **)&pSpriteS1_4.Rotate = pPlayer;
-            MapRelatedStruct::sub_466B70(this, v23, (S202 *)v26);
+            sub_466B70( v23, (S202 *)v26);
             if ( Player::sub_40CE70((Player *)&pSpriteS1_4.Player, v8) )
             {
-              LOBYTE(v9) = Player::CheckCondition(&pSpriteS1_4, v8);
+              *(_BYTE *)&v9 = Player::CheckCondition(&pSpriteS1_4, v8);
               if ( v9 )
                 return 1;
             }
@@ -6433,7 +6473,7 @@ char MapRelatedStruct::sub_469DC0(int* a2, SpriteS1* pSpriteS1) {
   v31 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&v34);
   v27 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&pSpriteS1);
   v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-  v12 = MapRelatedStruct::sub_4653C0(this, v11, v27, v31);
+  v12 = sub_4653C0( v11, v27, v31);
   v13 = *(int **)&pSpriteS1_4.Rotate;
   v14 = pSpriteS1;
   v15 = a2;
@@ -6445,13 +6485,13 @@ char MapRelatedStruct::sub_469DC0(int* a2, SpriteS1* pSpriteS1) {
     || (v28 = pSpriteS1,
         v24 = a2,
         **(_DWORD **)&pSpriteS1_4.Rotate = v34,
-        MapRelatedStruct::sub_466B70(this, v24, (S202 *)v28),
+        sub_466B70( v24, (S202 *)v28),
         !Player::sub_40CE70((Player *)&pSpriteS1_4.Player, v13)) )
   {
     v32 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&pPlayer);
     v29 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&pSpriteS1);
     v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a2);
-    v19 = MapRelatedStruct::sub_4653C0(this, v18, v29, v32);
+    v19 = sub_4653C0( v18, v29, v32);
     dword_662B90 = (_WORD *)v19;
     if ( !v19 )
       return 0;
@@ -6462,8 +6502,8 @@ char MapRelatedStruct::sub_469DC0(int* a2, SpriteS1* pSpriteS1) {
     if ( v21 && v21 < 0xB4u )
     {
       *v13 = (int)pPlayer;
-      MapRelatedStruct::sub_466B70(this, v15, (S202 *)v14);
-      LOBYTE(v22) = Player::CheckCondition(&pSpriteS1_4, v13);
+      sub_466B70( v15, (S202 *)v14);
+      *(_BYTE *)&v22 = Player::CheckCondition(&pSpriteS1_4, v13);
       if ( !v22 )
         return 0;
     }
@@ -6510,22 +6550,22 @@ char MapRelatedStruct::sub_469F90(SpriteS1* a2, SpriteS1* arg4, Player* a4) {
   char v35;
   _DWORD arg0a[2];
   PublicTransport a3;
-  S202 = gObject->S63[1].S202;
+  S202 = gObject->S63[1].self;
   Player::sub_401B40((Player *)&a3.BaseCar[0].Status, &pS202, (int)&a3.BaseCar[0].field_8);
   CarSystemManager::SetIndexDefautCarManager((CarSystemManager *)&a3.BaseCar[0].Status);
-  v28 = Player::sub_401B40((Player *)&a3.BaseCar[0].count, (S202 *)&pS202.S202, (int)&a3.BaseCar[0].field_4);
-  v5 = Player::sub_401B40((Player *)&a3.BaseCar[0].field_C, (S202 *)&pS202.CarSystemManager, (int)&a3);
+  v28 = Player::sub_401B40((Player *)&a3.BaseCar[0].count, (S202 *)&pS202.self, (int)&a3.BaseCar[0].field_4);
+  v5 = Player::sub_401B40((Player *)&a3.BaseCar[0].field_C, (S202 *)&pS202.carMgr, (int)&a3);
   S103::sub_401D20((S103 *)arg0a, v5, v28);
   sub_4637B0(&dword_5E6874);
-  Player::sub_401B40((Player *)&a3.BaseCar[0].field_C, (S202 *)&pS202.CarSystemManager, (int)&a3);
-  v6 = Player::sub_401B40((Player *)&a3.BaseCar[0].count, (S202 *)&pS202.S202, (int)&a3.BaseCar[0].field_4);
-  LOWORD(a3.BaseCar[0].Status) = *sub_40E8D0(v7, (Car *)&a3.BaseCar[0].field_C, v6);
+  Player::sub_401B40((Player *)&a3.BaseCar[0].field_C, (S202 *)&pS202.carMgr, (int)&a3);
+  v6 = Player::sub_401B40((Player *)&a3.BaseCar[0].count, (S202 *)&pS202.self, (int)&a3.BaseCar[0].field_4);
+  *(_WORD *)&a3.BaseCar[0].Status = *sub_40E8D0(v7, (Car *)&a3.BaseCar[0].field_C, v6);
   v8 = *(_DWORD *)Player::sub_41E260((Player *)arg0a, (int)&a3.BaseCar[0].field_C);
   a3.BaseCar[0].field_C = v8;
   SpriteS1::sub_420600((SpriteS1 *)S202, a3.BaseCar[0].field, a3.BaseCar[0].field_4, a3.BaseCar[0].field_8);
   SpriteS1::SetRotation((SpriteS1 *)S202, (CarSystemManager *)a3.BaseCar[0].Status);
   SpriteS1::sub_4BCB90((SpriteS1 *)S202, a2, (SpriteS3 *)arg4, (EventHandler *)a4);
-  LOWORD(v9) = Car::sub_403820((Car *)&a3.BaseCar[0].field_C, &unk_662CFC);
+  *(_WORD *)&v9 = Car::sub_403820((Car *)&a3.BaseCar[0].field_C, &unk_662CFC);
   if ( v9 )
   {
     a3.BaseCar[0].field_4 = *(_DWORD *)sub_401B90(&a3.BaseCar[0].field_C, &a3.BaseCar[0].field_4, &arg4);
@@ -6545,7 +6585,7 @@ char MapRelatedStruct::sub_469F90(SpriteS1* a2, SpriteS1* arg4, Player* a4) {
   }
   a3.BaseCar[0].field_C = v10;
   sub_41FC20(&a3.BaseCar[0].Status, &a3.BaseCar[0].Status);
-  LOBYTE(arg4) = 1;
+  *(_BYTE *)&arg4 = 1;
   if ( AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3.BaseCar[0].field_4) < 1 )
     return 1;
   v11 = (SpriteS1 **)&S202->field_18;
@@ -6553,13 +6593,13 @@ char MapRelatedStruct::sub_469F90(SpriteS1* a2, SpriteS1* arg4, Player* a4) {
   v13 = (int *)&S202->field_1C;
   while ( 1 )
   {
-    a3.BaseCar[0].field_C = *MapRelatedStruct::sub_469570(gMapRelatedStruct, &a2, *p_pPlayer, *v11, *v13);
+    a3.BaseCar[0].field_C = *gMapRelatedStruct->sub_469570( &a2, *p_pPlayer, *v11, *v13);
     if ( Player::IsCurrentPlayer((Player *)&a3, (Player *)&unk_662CFC) )
     {
-      a3.BaseCar[0].field_C = (int)S202::sub_401B20((S202 *)&S202->field_1C, (SpriteS1 *)&pS202.CarSystemManager, &a3);
+      a3.BaseCar[0].field_C = (int)S202::sub_401B20((S202 *)&S202->field_1C, (SpriteS1 *)&pS202.carMgr, &a3);
       a3.BaseCar[0].Status = (int)S202::sub_401B20(
                                     (S202 *)v11,
-                                    (SpriteS1 *)&pS202.S202,
+                                    (SpriteS1 *)&pS202.self,
                                     (PublicTransport *)&a3.BaseCar[0].count);
       v14 = (int *)S202::sub_401B20(
                      (S202 *)&S202->pPlayer,
@@ -6588,19 +6628,19 @@ char MapRelatedStruct::sub_469F90(SpriteS1* a2, SpriteS1* arg4, Player* a4) {
           v29 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v16),
           v24 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v11),
           v17 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->pPlayer),
-          MapRelatedStruct::sub_420420(gMapRelatedStruct, v17, v24, v29)) )
+          gMapRelatedStruct->sub_420420( v17, v24, v29)) )
     {
       v30 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->field_1C);
       v25 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v11);
       v18 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->pPlayer);
-      if ( !MapRelatedStruct::sub_466CF0(gMapRelatedStruct, v18, v25, v30) )
+      if ( !gMapRelatedStruct->sub_466CF0( v18, v25, v30) )
         return 0;
     }
     SpriteS1::sub_420600((SpriteS1 *)S202, (int)*p_pPlayer, (int)*v11, a3.BaseCar[0].field_C);
 LABEL_21:
     if ( SpriteS1::sub_4BD670((SpriteS1 *)S202) )
       return 0;
-    LOBYTE(arg4) = (_BYTE)arg4 + 1;
+    *(_BYTE *)&arg4 = (_BYTE)arg4 + 1;
     v22 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&a3.BaseCar[0].field_4);
     if ( (unsigned __int8)arg4 > v22 )
       return 1;
@@ -6612,14 +6652,14 @@ LABEL_21:
   v31 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->field_1C);
   v26 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v11);
   v20 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->pPlayer);
-  if ( MapRelatedStruct::sub_466CF0(gMapRelatedStruct, v20, v26, v31) )
+  if ( gMapRelatedStruct->sub_466CF0( v20, v26, v31) )
   {
     v32 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->field_1C);
     v27 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)v11);
     v21 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)&S202->pPlayer);
-    if ( MapRelatedStruct::sub_420420(gMapRelatedStruct, v21, v27, v32) )
+    if ( gMapRelatedStruct->sub_420420( v21, v27, v32) )
     {
-      a3.BaseCar[0].field_C = *MapRelatedStruct::sub_469570(gMapRelatedStruct, arg0a, *p_pPlayer, *v11, *v13);
+      a3.BaseCar[0].field_C = *gMapRelatedStruct->sub_469570( arg0a, *p_pPlayer, *v11, *v13);
       if ( Car::sub_403800((Car *)&a3.BaseCar[0].field_C, (int)&S202->field_1C) )
         return 0;
     }
