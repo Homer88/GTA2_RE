@@ -9,13 +9,6 @@
 #define _WORD WORD
 #define _DWORD DWORD
 #define _BYTE BYTE
-#define __int16 INT16
-#define __int64 INT64
-#define LOBYTE(x) (*(_BYTE*)&(x))
-#define LOWORD(x) (*(_WORD*)&(x))
-#define HIWORD(x) ((_WORD)(((_DWORD)(x) >> 16) & 0xFFFF))
-#define BYTE1(x) (*((_BYTE*)&(x) + 1))
-#define BYTE2(x) (*((_BYTE*)&(x) + 2))
 #endif
 
 class Player;

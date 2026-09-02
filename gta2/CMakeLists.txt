@@ -12,8 +12,9 @@ add_subdirectory(Engine)
 add_subdirectory(Game)
 
 file(GLOB MAIN_SOURCE "Game/main/main.cpp")
+file(GLOB MAIN_RESOURCES "Game/main/*.rc")
 
-add_executable(${PROJECT_NAME} WIN32 ${MAIN_SOURCE})
-target_link_libraries(${PROJECT_NAME} SYSTEM RES D3DDLL DMAVIDEO ULTIL BINK version.lib)
+add_executable(${PROJECT_NAME} WIN32 ${MAIN_SOURCE} ${MAIN_RESOURCES})
+target_link_libraries(${PROJECT_NAME} MATCH SYSTEM RES D3DDLL DMAVIDEO ULTIL BINK version.lib MENU Text Font Registry DMAudio SOUND)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/d3ddll ${CMAKE_SOURCE_DIR}/dmavideo)
 target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)

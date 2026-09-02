@@ -1,5 +1,7 @@
 #include "Text.h"
 #include "../Registry/Registry.h"
+#include <cstring>
+#include <search.h>
 
 Text gText;
 wchar_t gFontJapan[256] = { 0x80,  0x81,  0x82,  0x83,  0x84,  0x85,  0x86,  0x87,  0x88, 0x89, 0x8A,
@@ -45,6 +47,7 @@ void* Text::Bsearch(const void* pKey) {
 }
 
 Text::Text() {
+    char gLanguage[256];
     gRegistry.GetLanguage("language", gLanguage, 256);
     if (gLanguage[0] == 'e' ||
         gLanguage[0] == 'f' ||

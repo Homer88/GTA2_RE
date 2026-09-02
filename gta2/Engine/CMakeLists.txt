@@ -21,6 +21,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 #add_subdirectory(text)
 #add_subdirectory(TextureManager)
 
+#Match
+add_subdirectory(match)
 #file 
 #add_subdirectory(FileManager)
 # Bink
@@ -37,6 +39,9 @@ add_subdirectory(ultil)
 # ресурсы
 add_subdirectory(Res)
 add_subdirectory(FileMgr)
+# Звук: движок + публичный интерфейс (аналог MSS)
+add_subdirectory(Sound)
+add_subdirectory(DMAudio)
 
 #lib
 #target_include_directories(ENGINE PRIVATE  System)

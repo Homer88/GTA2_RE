@@ -5,10 +5,18 @@
 #include <cstdio>
 #include <cstdlib>
 
+#ifndef _DWORD
 typedef signed int _DWORD;
+#endif
+#ifndef _WORD
 typedef unsigned short _WORD;
+#endif
+#ifndef _BYTE
 typedef unsigned char _BYTE;
+#endif
+#ifndef _QWORD
 typedef __int64 _QWORD;
+#endif
 
 #ifndef LOBYTE
 #define LOBYTE(w) ((unsigned char)((w) & 0xFF))

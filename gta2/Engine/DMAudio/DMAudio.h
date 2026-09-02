@@ -11,6 +11,10 @@ public:
 	void SetSFXVol(char SFXVol);
 	void Init3DSound(int Vol3D);
 	bool Get3DSound();
+	int sub_410660();
+	int sub_410530(int* pAudioObject);
+	int sub_410540(int SampleRate);
+	int sub_410520();
 
 	DMAudio() {};
 	~DMAudio() {};

@@ -2,6 +2,7 @@
 #define __KeyState_H__
 
 class KeyState {
+public:
 	unsigned char left;
 	unsigned char Right;
 	unsigned char up;

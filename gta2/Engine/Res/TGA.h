@@ -43,6 +43,7 @@ class cTGA
     DWORD  m_DataSize;
 
     BOOL LoadUncompressed(FILE *fp, long bytes_per_pixel);
+    BOOL Load16(FILE *fp);
     BOOL LoadRLE(FILE *fp, long bytes_per_pixel);
     BOOL LoadColormap(FILE *fp, WORD color_map_start, WORD color_map_length, BYTE color_map_bpp, BOOL rle);
 

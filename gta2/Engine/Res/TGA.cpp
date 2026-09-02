@@ -86,9 +86,14 @@ BOOL cTGA::Load(char *Filename)
   if (header.id_length > 0)
     fseek(fp, header.id_length, SEEK_CUR);
 
-  switch (header.image_type) {
+    switch (header.image_type) {
     case TGA_TRUECOLOR:
-      if (!LoadUncompressed(fp, header.bpp / 8)) {
+      if (header.bpp == 16) {
+        if (!Load16(fp)) {
+          fclose(fp);
+          return FALSE;
+        }
+      } else if (!LoadUncompressed(fp, header.bpp / 8)) {
         fclose(fp);
         return FALSE;
       }
@@ -166,6 +171,42 @@ BOOL cTGA::Load(char *Filename)
 
   if (!(header.descriptor & 0x20))
     FlipVertical();
+
+  return TRUE;
+}
+
+BOOL cTGA::Load16(FILE *fp)
+{
+  long pixels = m_Width * m_Height;
+
+  m_BPP = 32;
+  m_DataSize = pixels * 4;
+  m_Data = new BYTE[m_DataSize];
+  if (m_Data == NULL)
+    return FALSE;
+
+  for (long i = 0; i < pixels; i++) {
+    WORD pixel;
+    if (fread(&pixel, sizeof(WORD), 1, fp) != 1)
+      return FALSE;
+
+    // RGB555 (descriptor bit 0 = alpha in MSB)
+    int r = (pixel >> 10) & 0x1F;
+    int g = (pixel >>  5) & 0x1F;
+    int b = (pixel >>  0) & 0x1F;
+    int a = (pixel >> 15) & 0x01;
+
+    // expand 5-bit to 8-bit
+    r = (r << 3) | (r >> 2);
+    g = (g << 3) | (g >> 2);
+    b = (b << 3) | (b >> 2);
+    a = a ? 255 : 255;
+
+    m_Data[i * 4 + 0] = (BYTE)b;
+    m_Data[i * 4 + 1] = (BYTE)g;
+    m_Data[i * 4 + 2] = (BYTE)r;
+    m_Data[i * 4 + 3] = (BYTE)a;
+  }
 
   return TRUE;
 }

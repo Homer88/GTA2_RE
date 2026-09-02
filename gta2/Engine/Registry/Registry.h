@@ -1,6 +1,8 @@
 #ifndef __REGISTRY__H__
 #define __REGISTRY__H__
 
+#include <windows.h>
+
 
 class Registry {
 
@@ -8,7 +10,7 @@ public:
 
 	bool GetPlayReplay(LPCSTR lpValueName);
 	bool GetDebugMode(PHKEY phkResult);
-	BYTE GetReplaynum(LPCSTR lpValueName);
+	BYTE GetReplayNum(LPCSTR lpValueName);
 	LSTATUS SetDebugByteValue(LPCSTR lpValueName, BYTE value);
 	bool GetParamDebug(LPCSTR lpValueName);
 	bool SetShowPlayerName(LPCSTR lpValueName, BYTE value);

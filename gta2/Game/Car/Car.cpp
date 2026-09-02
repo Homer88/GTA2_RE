@@ -337,7 +337,7 @@ bool  Car::isJeep()
     return this->CarType == JEEP;
 }
 
-bool Car::isAPC()
+bool Car::IsAPC()
 {
     return this->CarType == APC;
 }

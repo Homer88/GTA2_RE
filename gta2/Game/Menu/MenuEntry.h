@@ -19,6 +19,8 @@ public:
     // Возможно есть выравнивание до 0x50
     MenuEntry();
     void Init();
+    bool UpdateToPreviousActive();
+    bool InitializeEntry();
 } ;
 
 

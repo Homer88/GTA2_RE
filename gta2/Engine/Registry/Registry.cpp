@@ -22,27 +22,27 @@ bool Registry::GetPlayReplay(LPCSTR lpValueName){
 
 bool Registry::GetDebugMode(PHKEY phkResult){
 
-	HKEY v3; // дескриптор ключа
+	HKEY v3; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	DWORD dwDisposition;
 	char DEBUG_KEY[] = "SOFTWARE\\DMA Design Ltd\\GTA2\\Debug";
-// Открываем ключ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 LONG result = RegOpenKeyExA(
 	HKEY_CURRENT_USER,
 	DEBUG_KEY,
 	0,
-	KEY_ALL_ACCESS, // или подходящие права доступа
-	&v3 // передаете указатель на переменную
+	KEY_ALL_ACCESS, // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	&v3 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 );
 
 if (result == ERROR_SUCCESS) {
-	// Уже открыли, копируем в выходной параметр
+	// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	if (phkResult) {
 		*phkResult = v3;
 	}
 	return true;
 }
 
-// Не удалось открыть, создаем ключ
+// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 result = RegCreateKeyExA(
 	HKEY_CURRENT_USER,
 	DEBUG_KEY,
@@ -51,17 +51,17 @@ result = RegCreateKeyExA(
 	REG_OPTION_NON_VOLATILE,
 	KEY_ALL_ACCESS,
 	NULL, // security attributes
-	&v3,   // возвращаемый дескриптор
+	&v3,   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	&dwDisposition
 );
 
 if (result == ERROR_SUCCESS) {
-	// Создали успешно, возвращаем через параметр
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	if (phkResult) {
 		*phkResult = v3;
 	}
 	else {
-		RegCloseKey(v3); // закроем, если не нужно
+		RegCloseKey(v3); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	}
 	return true;
 }
@@ -76,7 +76,7 @@ LSTATUS Registry::SetDebugByteValue(LPCSTR lpValueName, BYTE value){
 	HKEY hKey = NULL;
 	DWORD type = REG_SZ;
     
-    // 1. Получаем ключ реестра для отладки
+    // 1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     this->GetDebugMode(&hKey);
     RegSetValueExA(hKey, lpValueName, 0, 4, &value,4 );
     return RegCloseKey(hKey);
@@ -102,7 +102,7 @@ bool Registry::GetParamDebug(LPCSTR lpValueName){
 }
 
 
-BYTE  Registry::GetReplaynum(LPCSTR lpValueName) {
+BYTE  Registry::GetReplayNum(LPCSTR lpValueName) {
     HKEY hKey;
     BYTE Data[4];
 	DWORD cbData=4;

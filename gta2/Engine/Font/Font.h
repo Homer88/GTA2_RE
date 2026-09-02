@@ -3,7 +3,7 @@
 
 class Font {
 public:
-	unsigned short GetStringWidth(wchar_t* Text, unsigned short* stringLength);
+	unsigned short GetStringWidth(wchar_t* Text, unsigned short stringLength);
 	wchar_t GetCharHeight(wchar_t) ;
 
 };
