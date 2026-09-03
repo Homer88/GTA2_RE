@@ -378,69 +378,306 @@ int gCodeCash[8] = { 0x33D, 0x2F9, 0x17, 0x281, 0x2B, 0x329, 0x2A5, 0x0BF };
 // ============================================================================
 
 // Инициализация и очистка
-void Menu::InitializeState() { }
+void Menu::InitializeState() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456F80 - Размер: 0x933 байт
+}
 
-void Menu::CleanupResources() { }
+void Menu::CleanupResources() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004578B3 - Размер: 0xC5B байт
+}
 
-void Menu::CloseBinkResources() { }
+void Menu::CloseBinkResources() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00481D30 - Размер: 0x4D байт
+}
 
 // Управление состоянием
-void Menu::SetFrontendState(int state) { }
-void Menu::SetFrontendState() { }
-void Menu::UpdateState() { }
+void Menu::SetFrontendState(int state) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00453A30 - Размер: 0xB байт
+}
+void Menu::SetFrontendState() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00451F60 - Размер: 0xB байт
+}
+void Menu::UpdateState() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456F60 - Размер: 0x103 байт
+}
 
-int  Menu::UpdateMenuFrame() { return 0; }
+int  Menu::UpdateMenuFrame() {
+    // TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456E80 - Размер: 0xF9 байт
+    PlayerSlotSlave* pPlayerProfileName = this->getPlayerProfileName();
+    byte pPlayerSlotSave = 0; //gMapGm.GetPlayerSlotSave(); // TODO: глобал gMapGm не входит в линковку GTA2
+    MenuPage* pMenuPage = &this->MenuPageArray[this->PageNumber];
+    unsigned char pLastActiveArenaSlot = this->FindLastActiveArenaSlot(pPlayerProfileName);
+    unsigned char pBonusStage = this->MultiplayerMenu(pPlayerProfileName);
+    unsigned char pArenaSlot = this->SelectPlayerSlotArray[pPlayerSlotSave];
+    //Menu *pMenu; // НЕ инициализирован в дампе, закомментировано чтобы избежать UB
 
-void Menu::RenderMenu() { }
+    if (pLastActiveArenaSlot >= pArenaSlot) {
+        //gMapGm.SetPlayerArena(pArenaSlot); // API MapGm.h не имеет одноаргументной SetPlayerArena (есть SetPlayerArea)
+    }
+    else {
+        //pMenu->PlayerSlotSave[0].ActiveArenaSlot = pLastActiveArenaSlot; // pMenu не инициализирован - см. TODO
+        //gMapGm.SetPlayerArena(pLastActiveArenaSlot); // API MapGm.h не имеет одноаргументной SetPlayerArena (есть SetPlayerArea)
+    }
+    unsigned char pBonusStage1 = this->BonusStage[0];
+    if (pBonusStage < pBonusStage1 || pBonusStage == 255) {
+        pBonusStage1 = pBonusStage;
+        this->BonusStage[0] = pBonusStage;
+    }
+    //gMapGm.SetBonusStage(pBonusStage1); // TODO: глобал gMapGm не входит в линковку GTA2
+    this->ConfirmExit();
+    this->ActivateElement();
+    int result;
+    if (this->GetSaveFile(pPlayerSlotSave)) {
+        pMenuPage->MenuEntryArray[EntryOptions].Flag[1] = 1;
+        pMenuPage->MenuItemArray[MENUPAGE_PLAY].IndexMenuActions = 1;
+        result = 1;
+    }
+    else {
+        pMenuPage->MenuEntryArray[EntryOptions].Flag[1] = 0;
+        pMenuPage->MenuItemArray[MENUPAGE_PLAY].IndexMenuActions = 0;
+        result = 0;
+    }
+    return result;
+}
+
+void Menu::RenderMenu() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00457199 - Размер: 0x18B байт
+}
 
 // Ввод
-void Menu::InitDevice() { }
+void Menu::InitDevice() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00453D80 - Размер: 0x91 байт
+}
 
-void Menu::ReleaseInputDevice() { }
+void Menu::ReleaseInputDevice() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00451FB0 - Размер: 0x22 байт
+    LPDIRECTINPUTDEVICEA InputDevice; // eax
 
-char Menu::ReadDeviceState() { return 0; }
+    InputDevice = this->InputDevice;
+    if (InputDevice)
+    {
+        //InputDevice->Unacquire(InputDevice);
+        //this->InputDevice->Release(this->InputDevice);
+        this->InputDevice = 0;
+    }
+}
 
-void Menu::ProcessInput() { }
+char Menu::ReadDeviceState() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456AB3 - Размер: 0x4E байт
+    return 0;
+}
 
-bool Menu::HandleKeyPress() { return true; }
+void Menu::ProcessInput() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456B01 - Размер: 0x152 байт
+}
 
-bool Menu::SwitchPage() { return true; }
+bool Menu::HandleKeyPress() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456C53 - Размер: 0x2A байт
+    return true;
+}
 
-void Menu::SetFrontendKeysEnabled(bool enabled) { }
+bool Menu::SwitchPage() {
+    //TODO: Реализовать на основе ассемблерного кода
+    return true;
+}
+
+void Menu::SetFrontendKeysEnabled(bool enabled) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456C7D - Размер: 0xF байт
+    this->FrontendKeysEnabled = enabled;
+}
 
 // Работа с игроком
-void Menu::SetPlayerName() { }
+void Menu::SetPlayerName() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00452490 - Размер: 0x2F байт
+    //wcsncpy(this->PlayerName, gPlayerData.PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
+    // TODO: глобал gPlayerData не входит в линковку GTA2
+}
 
 
-void Menu::SetPlayerNameFromMenu() { }
+void Menu::SetPlayerNameFromMenu() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045862F - Размер: 0x4F байт
+    unsigned short PlayerSlot = this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[EntryPlay].PlayerSlot;
+    //wchar_t* PlayerName = gPlayerData.PlayerSlotSave[PlayerSlot].PlayerName;
+    wchar_t* PlayerName = this->PlayerName;
+    wcsncpy(PlayerName, this->PlayerName, 9);
+    this->PlayerCheat(PlayerName);
+    //gPlayerData.WriteFileNamePlayer(PlayerSlot); // TODO: метод не реализован + глобал gPlayerData не входит в линковку GTA2
+}
 
-bool Menu::ValidatePlayerName(const char* name) { return true; }
+bool Menu::ValidatePlayerName(const char* name) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045867E - Размер: 0x38 байт
+    if (!name || !*name) return false;
+    // Базовая проверка: имя не должно быть пустым
+    return true;
+}
 
-PlayerSlotSlave* Menu::getPlayerProfileName() { return 0; }
+PlayerSlotSlave* Menu::getPlayerProfileName() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004586B6 - Размер: 0x26 байт
+    //return &gPlayerData.PlayerSlotSave[gMapGm.GetPlayerSlotSave()];
+    return 0; // TODO: глобалы gPlayerData/gMapGm не входят в линковку GTA2
+}
 
-void Menu::LoadPlayerProfile(int slot) { }
+void Menu::LoadPlayerProfile(int slot) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004586DC - Размер: 0x25B байт
+    this->CurrentPlayerSlot = slot;
+}
 
-unsigned short Menu::SelectPlayerSlot() { return 0; }
+unsigned short Menu::SelectPlayerSlot() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458937 - Размер: 0x10C байт
+    return 0;
+}
 
-unsigned char Menu::FindLastActiveArenaSlot(PlayerSlotSlave *PlayName) { return 0; }
+unsigned char Menu::FindLastActiveArenaSlot(PlayerSlotSlave *PlayName) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458A43 - Размер: 0x4B байт
+    return (unsigned char)this->CurrentPlayerSlot;
+}
 
 // Сохранение/загрузка
-void Menu::SaveGame() { }
+void Menu::SaveGame() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00452940 - Размер: 0x1B3 байт
+}
 
-void Menu::LoadGame() { }
+void Menu::LoadGame() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458C41 - Размер: 0x6B байт
+}
 
 
 
 
-int Menu::NewGame() { return 0; }
+int Menu::NewGame() {
+    // TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00455F90 - Размер: 0x169 байт
+    unsigned char arenaOut = 0;
+    unsigned char out4 = 0;
+    int pPlayerArena = 0;
+    int pPageNumber=this->PageNumber;
+    int pBonusStage;
+    MenuPage *pMenuPage = &this->MenuPageArray[pPageNumber];
+    int pState = this->State;
+    if (pState != MENUPAGE_DEAD) {// надо смотреть возможно это статус
+        if (pPageNumber) {
+            switch (pPageNumber)
+            {
+            case MENUPAGE_PLAY:
+                pState = pMenuPage->IndexMenuActions;
+                switch (pMenuPage->IndexMenuActions)
+                {
+                case MenyPlayPlayerName:
+                    this->MenuPicture = ePlayerName;
+                    break;
+                case  MenyPlayRestart:
+                    this->MenuPicture = eRestart;
+                    break;
+                case MenyPlayVievHigh:
+                    this->MenuPicture = eVievHigh;
+                    break;
+                case MenyPlayLevel:
+                    //pState = gMapGm.GetPlayerArena() + 7; // TODO: глобал gMapGm не входит в линковку GTA2
+                    this->MenuPicture = pState;
+                    break;
+                case MenyPlayBonus:
+                    //pBonusStage = gMapGm.GetBonusStage();
+                    //gMapGm.DecodeBonusStage((unsigned char)pBonusStage, &arenaOut, &out4); // TODO: глобал gMapGm не входит в линковку GTA2, метод DecodeBonusStage не реализован
+                    pState = arenaOut + 3;
+                    this->MenuPicture = pState;
+                    break;
+                default:
+                    return pState;
+                    break;
+                }
+            case  MENUPAGE_VIEW_HIGH_SCORE:
+                this->MenuPicture = eHighScores;
+            case MENUPAGE_DEAD:
+                this->MenuPicture = eRip;
+                break;
+            case MENUPAGE_AREA_COMPLETE:
+            case MENUPAGE_BONUS_AREA:
+            case MENUPAGE_UNK_KILLS:
+            case MENUPAGE_RESULTS_PLAYER_QUIT:
+            case MENUPAGE_PARENTAL_CONTROL:
+                this->MenuPicture = eResumSave;
+                break;
+            case MENUPAGE_GAME_COMPLETE:
+            case MENUPAGE_NICE_TRY:
+                this->MenuPicture = eMenuPic_15;
+                break;
+            default:
+                this->MenuPicture = pPageNumber |= MENUPAGE_CREDITS ? StartLevel1 : eTitle;
+                break;
+            }
+        }
+        else {
+            pState = pMenuPage->IndexMenuActions;
+            if (pState) {
+                if (--pState) {
+                    if (!--pState) {
+                        this->MenuPicture = eQuit;
+                    }
+                }
+                else {
+                    this->MenuPicture = eOptions;
+                }
+            }
+            else {
+                this->MenuPicture = ePlay;
+            }
+        }
+    }
+    return pState;
+}
 
-bool Menu::CheckSaveFile(const char* filename) { return true; }
+bool Menu::CheckSaveFile(const char* filename) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458E15 - Размер: 0x86 байт
+    return false; // Заглушка
+}
 
-char Menu::GettingSaveFile(byte Index, char * FileNameSave) { return 0; }
+char Menu::GettingSaveFile(byte Index, char * FileNameSave) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004528A0 - Размер: 0x9E байт
+    char Buffer[8];
 
-char Menu::GetSaveFile(unsigned char SlotSave) { return 0; }
+    itoa(Index,Buffer,10);
+    strcpy(FileNameSave, "player\\plyslot");
+    strcat(FileNameSave, Buffer);
+    strcat(FileNameSave, ".svg");
 
-void Menu::SaveSettings() { }
+    return *FileNameSave;
+}
+
+char Menu::GetSaveFile(unsigned char SlotSave) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458F39 - Размер: 0x4E байт
+    return this->SaveFilePath[0];
+}
+
+void Menu::SaveSettings() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458F87 - Размер: 0x6A байт
+}
 
 // Отрисовка и ресурсы
 unsigned short Menu::clearArrayTail() {
@@ -472,7 +709,7 @@ void Menu::LoadTexturesFromTable(void* table) { }
 
 
 
-
+//  поиск картинки устанавливает с помощью  пункта меню.
 void Menu::FindBackground(int iMenuBackground, byte *LeftPicture, byte *RightPicture) {
     switch (iMenuBackground)
     {
@@ -548,6 +785,20 @@ void Menu::FindBackground(int iMenuBackground, byte *LeftPicture, byte *RightPic
         *LeftPicture = Credits_tga;
         *RightPicture = TGA_1;
         break;
+	case 39: //Options
+	case 40: //Video
+	case 41: // Sound
+	case 42: // Launguag
+	case 43: // Net Config
+	case 44: // Debug
+	// net
+	case 45: // Net
+	case 46: //server
+	case 47: //client
+	case 48: //Game Mode 1
+	case 49: //game Mode 2
+	case 50: //controler
+		break;
     default:
         break;
     }
@@ -1303,100 +1554,396 @@ inline void Menu::NetworkClientMenuCreate() {
 
 
 // Обработка событий и навигация
-void Menu::SwitchPage(int pageIndex) { }
+void Menu::SwitchPage(int pageIndex) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456D00 - Размер: 0x2A байт
+}
 
-void Menu::ActivateElement() { }
-void Menu::ActivateElement(int elementIndex) { }
+void Menu::ActivateElement() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456D2A - Размер: 0xBC байт
+}
+void Menu::ActivateElement(int elementIndex) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456D2A - Размер: 0xBC байт
+}
 
-void Menu::HandleMenuEvent(int event) { }
+void Menu::HandleMenuEvent(int event) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456DE6 - Размер: 0x60B байт
+}
 
-void Menu::NavigatePages(int direction) { }
+void Menu::NavigatePages(int direction) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456DF0 - Размер: 0x66 байт
+}
 
-void Menu::GoBack() { }
+void Menu::GoBack() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456E56 - Размер: 0x66 байт
+}
 
 
 // Логика меню
-void Menu::MainMenuLogic() { }
+void Menu::MainMenuLogic() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00457F00 - Размер: 0x35C байт
+}
 
-void Menu::PauseMenu() { }
+void Menu::PauseMenu() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458050 - Размер: 0x1A9 байт
+}
 
-void Menu::OptionsMenu() { }
+void Menu::OptionsMenu() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004581F9 - Размер: 0x2CB байт
+}
 
-void Menu::PlayerList() { }
+void Menu::PlayerList() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004584C4 - Размер: 0x16B байт
+}
 
-unsigned char Menu::MultiplayerMenu(PlayerSlotSlave* pPlayerName) { return 0; }
+unsigned char Menu::MultiplayerMenu(PlayerSlotSlave* pPlayerName) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045862F - Размер: 0xDA байт
+    return 0;
+}
 
-void Menu::ServerSettings() { }
+void Menu::ServerSettings() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458709 - Размер: 0x9C байт
+}
 
 // Настройки и конфигурация
-void Menu::ApplyMoneyCheatIfApplicable() { }
+void Menu::ApplyMoneyCheatIfApplicable() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458800 - Размер: 0x17B байт
+}
 
-void Menu::SetDifficulty(int difficulty) { }
+void Menu::SetDifficulty(int difficulty) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045897B - Размер: 0x2C4 байт
+}
 
-void Menu::SelectCharacter(int characterIndex) { }
+void Menu::SelectCharacter(int characterIndex) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458C3F - Размер: 0x6E байт
+}
 
-void Menu::ConfigureControls(int config) { }
+void Menu::ConfigureControls(int config) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458CAD - Размер: 0x38 байт
+}
 
-void Menu::AudioOptions() { }
+void Menu::AudioOptions() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458CE5 - Размер: 0x28 байт
+}
 
-void Menu::VideoOptions() { }
+void Menu::VideoOptions() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458D0D - Размер: 0x44 байт
+}
 
-void Menu::ApplySettings() { }
+void Menu::ApplySettings() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458D51 - Размер: 0x53 байт
+}
 
-void Menu::ResetSettings() { }
+void Menu::ResetSettings() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458DA4 - Размер: 0x15F байт
+}
 
 // Специальные экраны
-void Menu::Intro_BIK() { }
+void Menu::Intro_BIK() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458F03 - Размер: 0x23 байт
+}
 
-void Menu::PreIntro() { }
+void Menu::PreIntro() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458F26 - Размер: 0x42 байт
+}
 
-void Menu::SelectMission() { }
+void Menu::SelectMission() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458F68 - Размер: 0x66 байт
+}
 
-void Menu::WorldMap() { }
+void Menu::WorldMap() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00458FCE - Размер: 0xF9 байт
+}
 
-void Menu::ShowStatistics() { }
+void Menu::ShowStatistics() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004590C7 - Размер: 0x66 байт
+}
 
-char Menu::ShowAwards(char arg0) { return 0; }
+char Menu::ShowAwards(char arg0) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045912D - Размер: 0x139 байт
+    return 0;
+}
 
-void Menu::Gallery() { }
+void Menu::Gallery() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00459266 - Размер: 0x2A байт
+}
 
-bool Menu::ShowCredits() { return true; }
+bool Menu::ShowCredits() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00459290 - Размер: 0x2A байт
+    return true;
+}
 
-void Menu::ConfirmExit() { }
+void Menu::ConfirmExit() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004592BA - Размер: 0x141 байт
+}
 
 // Проверки и условия
-void Menu::CheckConditions() { }
+void Menu::CheckConditions() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004593FB - Размер: 0x4C+0x69+0x161 байт
+}
 
-void Menu::MenuShowJapanText() { }
+void Menu::MenuShowJapanText() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00453D40 - Размер: 0x31 байт
+}
 
 
 
 
 // Читы и специальные функции
-void Menu::PlayerCheat(wchar_t *PlayerName) { }
+void Menu::PlayerCheat(wchar_t *PlayerName) {
+    // TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004590F0 - Размер: 0x44E байт
+    char* PlayerNameArrayChar = gWinApi.Convertor_wchar_t_ToChar(PlayerName);
+    int PlayerNameLength = wcslen(PlayerName);
+    if (PlayerNameLength <= 16) {
+        int cash = 0;
+        int index = 0;
+        if (PlayerNameLength) {
+            do {
+                cash += gCodeCash[index] * PlayerNameArrayChar[index];
+                ++index;
+            } while (index < PlayerNameLength);
+            if (cash == GOURANGA) {
+                this->isCheat = 1;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+            }
+        }
+        if (this->isCheat) {
+            switch (cash)
+            {
+            case GOREFEST:
+                gDo_Blood = !gDo_Blood;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case BUCKFAST:
+                gBunt = !gBunt;
+                //gCheatIs=9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case VOLTFEST:
+                gVoltfest = !gVoltfest;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case MADEMAN:
+                gMademan = !gMademan;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case LASVEGAS:
+                gLasvegas = !gLasvegas;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case NEKKID:
+                gNEKKID = !gNEKKID;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case EATSOUP:
+                gDoFreeShopping = !gDoFreeShopping;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case DAVEMOON:
+                gDAVEMOON = !gDAVEMOON;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case CUTIE1:
+                gHeats99 = !gHeats99;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case ARSESTAR:
+                gKeepWeaponsAfterDeath = !gKeepWeaponsAfterDeath;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case GODOFGTA:
+                gGetAllWeapons = !gGetAllWeapons;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case PSJABBER:
+                gDoInvulnerable = !gDoInvulnerable;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case DANISGOD:
+                gDANISGOD = !gDANISGOD;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case COCKTART:
+                gExplodingOn = !gExplodingOn;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case FLAMEON:
+                gFLAMEON = !gFLAMEON;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case FYOHZZ0:
+                gFYOHZZ0 = !gFYOHZZ0;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case IAMDAVEJ:
+                gIAMDAVEJ = !gIAMDAVEJ;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case SEGARULZ:
+                gSEGARULZ = !gSEGARULZ;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case UKGAMER:
+                gUKGAMER = !gUKGAMER;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case SUPZZZ0:
+                gSUPZZZ0 = !gSUPZZZ0;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case TUMYFROG:
+                gTUMYFROG = !gTUMYFROG;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                return;
+            case SCHURULZ:
+                gSCHURULZ = !gSCHURULZ;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                break;
+            case HUNSRUS:
+                gHUNSRUS = !gHUNSRUS;
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                break;
+            case FISHFLAP:
+                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gFISHFLAP = !gFISHFLAP;
+                break;
 
-void Menu::SpecialFunction1() { }
+            default:
+                break;
+            }
+        }
+    }
+}
 
-void Menu::SpecialFunction2() { }
+void Menu::SpecialFunction1() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x004598C6 - Размер: 0xC1 байт
+}
 
-void Menu::SpecialFunction3() { }
+void Menu::SpecialFunction2() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00459987 - Размер: 0xF9 байт
+}
 
-void Menu::SpecialFunction4() { }
+void Menu::SpecialFunction3() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00459A80 - Размер: 0x61D байт
+}
 
-void Menu::SpecialFunction5() { }
+void Menu::SpecialFunction4() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045A09D - Размер: 0x1D6 байт
+}
+
+void Menu::SpecialFunction5() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045A273 - Размер: 0x231 байт
+}
 
 
-void Menu::SpecialFunction6() { }
+void Menu::SpecialFunction6() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045A4A4 - Размер: 0xB5 байт
+    this->ProcessInput();
+    this->NewGame();
+    //gCheatIs = 0; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+    switch (this->State) {
+    case MENUSCREEN_PLAY:
+        if (this->PageNumber = MENUPAGE_CREDITS) {
+            this->SelectPlayerSlot();
+        }
+        else {
+            this->SpecialFunction3();
+        }
+        break;
+    case MENUSCREEN_QUIT:
+        this->SetFrontendState();
+        break;
+    case MENUSCREEN_BONUSAC:
+        this->SpecialFunction4();
+        break;
+    case MENUSCREEN_BONUSDF:
+        this->ResetSettings();
+        break;
+    case MENUSCREEN_BONUSGI:
+        this->SpecialFunction5();
+        break;
+    default:
+        //debug_Log
+        break;
+    }
+    if (!gSkipAudio) {
+        //DMAudio::Sub410520()
+    }
+    // Блок гаммы закомментирован: глобал gGamma пока не определён/не входит в линковку GTA2
+    /*if (gGamma) {
+        char pGamma = gRegistry.ConfigureSetScreen("gamma", 10);
+        if (gGamma) {
+            // Заменено на заглушку: реальная логика требует Port SetGamma
+            //if (SetGamma(pGamma))
+            //    --gGamma;
+            //else
+            //    gGamma=0;
+        }
+    }*/
+}
 
-void Menu::SpecialFunction7() { }
+void Menu::SpecialFunction7() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045A559 - Размер: 0x133 байт
+}
 
 // Основной метод меню
 Menu::Menu() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00456F00 - Размер: 0x32E байт
 }
 
 Menu::~Menu() {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x00481C30 - Размер: 0xF0 байт
+    this->ReleaseInputDevice();
+    //if (gTextureManager){
+    //gTextureManager.~TextureManager(); // TODO: глобал gTextureManager не входит в линковку GTA2, деструктор не реализован
+    //}
 }
-void Menu::MenuDelete(byte status) { }
+void Menu::MenuDelete(byte status) {
+    //TODO: Реализовать на основе ассемблерного кода
+    // Адрес: 0x0045731E - Размер: 0x1E байт
+    this->~Menu();
+    if ((status & 1) != 0)
+        free(this);
+}
 
 void Menu::StartGTAManager() {
     // Здесь будет запускаться Менаджер конфигурации

@@ -5,6 +5,12 @@ add_library(gta2tools STATIC
 	MenuDataModel.cpp
 	MenuCodeGen.cpp
 	GxtFormat.cpp
+	CarInfo.cpp
+	StyFormat.cpp
+	GciFormat.cpp
+	CarInfo.h
+	StyFormat.h
+	GciFormat.h
 	GxtFormat.h
 )
 

@@ -1,6 +1,6 @@
 project(CarEditor LANGUAGES CXX)
 
-add_executable(CarEditor main.cpp)
+add_executable(CarEditor main.cpp MainWindow.cpp MainWindow.h)
 
 target_link_libraries(CarEditor PRIVATE
 	gta2tools
