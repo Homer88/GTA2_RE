@@ -1,22 +1,14 @@
 #include <QApplication>
-#include <QMainWindow>
-#include <QLabel>
+#include "MainWindow.h"
 
-// Редактор персонажей. ТЗ:
-//   - параметры персонажей/пешеходов игры;
-//   - редактор персонажей с внешним видом/поведением.
-// Текущее состояние: каркас. Нужен дамп формата.
+// Редактор персонажей GTA2: параметры профессий/пешеходов.
+//   - список профессий (occupation из struct Ped);
+//   - параметры: здоровье, скорость, спрайт, ремап, стартовое оружие, флаги;
+//   - сохранение в текстовом формате .gch.
 int main(int argc, char** argv)
 {
 	QApplication app(argc, argv);
-	QMainWindow w;
-	w.setWindowTitle(QString::fromUtf8("GTA2 CharacterEditor"));
-	QLabel* l = new QLabel(QString::fromUtf8(
-		"Редактор персонажей - в разработке\n\n"
-		"Нужен разбор формата параметров персонажей из дампа игры."));
-	l->setAlignment(Qt::AlignCenter);
-	w.setCentralWidget(l);
-	w.resize(700, 420);
+	MainWindow w;
 	w.show();
 	return app.exec();
 }

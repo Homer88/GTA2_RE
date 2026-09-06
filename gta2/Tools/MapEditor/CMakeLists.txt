@@ -1,6 +1,10 @@
 project(MapEditor LANGUAGES CXX)
 
-add_executable(MapEditor main.cpp)
+add_executable(MapEditor
+	main.cpp
+	MainWindow.cpp
+	MainWindow.h
+)
 
 target_link_libraries(MapEditor PRIVATE
 	gta2tools

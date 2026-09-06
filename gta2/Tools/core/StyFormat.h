@@ -71,6 +71,32 @@ public:
 	// иначе добавляет в конец (для новых). Возвращает указатель на секцию.
 	StySection* SetSection(const char* name, const std::vector<unsigned char>& data);
 
+	// Число тайлов графики в секции TILE (64x64x1 байт палитровых индексов).
+	int NumTiles() const;
+
+	// Рендер тайла licIdx в RGBA (64x64, 4 байта/пиксель, прозрачный = 0).
+	// Использует TILE + PALX (палитра каждого тайла) + PPAL (физические палитры
+	// 256xRGBA, цвета разложены по 64 палитрам в блоке). Возвращает false,
+	// если секций не хватает или индекс вне диапазона.
+	bool RenderTile(int tileIdx, std::vector<unsigned char>& rgba) const;
+
+	// Рендер спрайта spriteIdx (из секций SPRX+SPRG+PPAL) в RGBA.
+	// Возвращает false, если секций не хватает или индекс вне диапазона.
+	// w/h - реальные размеры спрайта (в пикселях).
+	bool RenderSprite(int spriteIdx, std::vector<unsigned char>& rgba, int& w, int& h) const;
+
+	// База спрайтов карты-объектов (слово iMap_Obj секции SPRB), либо -1.
+	int MapObjectSpriteBase() const;
+	// Число спрайтов в секции SPRX.
+	int NumSprites() const;
+
+	// Смещение первого спрайта объекта type от базы map_obj: суммарное число
+	// спрайтов предыдущих объектов из OBJI ({model, count} по 2 байта).
+	// -1, если OBJI отсутствует или type вне диапазона.
+	int MapObjectSpriteOffset(int type) const;
+	// Полный индекс первого спрайта объекта type: base + MapObjectSpriteOffset.
+	int MapObjectSpriteIndex(int type) const;
+
 	bool IsOk() const { return m_ok; }
 	unsigned short Version() const { return m_version; }
 	void SetVersion(unsigned short v) { m_version = v; }

@@ -1,6 +1,12 @@
 project(CharEditor LANGUAGES CXX)
 
-add_executable(CharEditor main.cpp)
+add_executable(CharEditor
+	main.cpp
+	MainWindow.cpp
+	MainWindow.h
+)
+
+target_include_directories(CharEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(CharEditor PRIVATE
 	gta2tools

@@ -1,21 +1,17 @@
 #include <QApplication>
-#include <QMainWindow>
-#include <QLabel>
+#include "MainWindow.h"
 
-// Редактор карт. ТЗ:
-//   - редактирование карт игры (зоны, спавны, пути, дороги, постройки).
-// Текущее состояние: каркас. Нужен дамп формата карт/зоны.
+// Редактор карт GTA2: редактор зон (.gmp, секция ZONE).
+//   - список зон (спавны/территории/пути),
+//   - правка параметров (тип, x, y, w, h, имя),
+//   - отрисовка зон поверх карты,
+//   - сохранение обратно в .gmp без потери прочих секций.
 int main(int argc, char** argv)
 {
 	QApplication app(argc, argv);
-	QMainWindow w;
-	w.setWindowTitle(QString::fromUtf8("GTA2 MapEditor"));
-	QLabel* l = new QLabel(QString::fromUtf8(
-		"Редактор карт - в разработке\n\n"
-		"Нужен дамп формата карт игры."));
-	l->setAlignment(Qt::AlignCenter);
-	w.setCentralWidget(l);
-	w.resize(700, 420);
+	MainWindow w;
 	w.show();
+	if (argc > 1)
+		QMetaObject::invokeMethod(&w, "openFile", Qt::QueuedConnection);
 	return app.exec();
 }
