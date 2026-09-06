@@ -1,5 +1,7 @@
 #include "ScrFormat.h"
 
+#include <utility>
+
 namespace gta2 {
 
 namespace {
@@ -44,18 +46,38 @@ std::vector<ScriptLine> ScrFormat::Lines() const
 {
 	std::vector<ScriptLine> v;
 	if (!m_mission) return v;
-	const size_t n = m_data.size() / 12;
-	v.reserve(n);
-	for (size_t i = 0; i < n; i++) {
-		size_t o = i * 12;
+
+	// Таблица смещений: objective[u16 * 2], индекс = uid - word0;
+	// значение = абсолютное смещение строки в MAIN_BUFFER; 0 = строки нет.
+	std::vector<std::pair<uint16_t, size_t>> tab; // (uid, абсолютное смещение)
+	for (size_t i = 0; i < kObjectiveSize / 2; i++) {
+		uint16_t off = rd16(m_objective, i * 2);
+		if (off != 0)
+			tab.push_back(std::make_pair((uint16_t)(m_word0 + i), (size_t)off));
+	}
+	if (tab.empty()) return v;
+
+	const size_t base = tab[0].second;
+	v.reserve(tab.size());
+	for (size_t i = 0; i < tab.size(); i++) {
+		const size_t rel = tab[i].second - base;
+		if (rel >= m_data.size()) continue;
+		size_t len = (i + 1 < tab.size()) ? (tab[i + 1].second - tab[i].second)
+		                                  : (m_data.size() - rel);
+		if (rel + len > m_data.size())
+			len = m_data.size() - rel;
+
 		ScriptLine l;
-		l.offset = (uint32_t)o;
-		l.uid    = rd16(m_data, o);
-		l.type   = rd16(m_data, o + 2);
-		l.p1     = rd16(m_data, o + 4);
-		l.p2     = rd16(m_data, o + 6);
-		l.p3     = rd16(m_data, o + 8);
-		l.p4     = rd16(m_data, o + 10);
+		l.offset  = (uint32_t)rel;
+		l.uid     = tab[i].first;
+		l.type    = rd16(m_data, rel + 2);
+		l.nextUid = rd16(m_data, rel + 4);
+		l.chain   = rd16(m_data, rel + 6);
+		l.size    = len;
+		if (len > 8) {
+			l.params.assign(m_data.begin() + rel + 8,
+			                m_data.begin() + rel + len);
+		}
 		v.push_back(l);
 	}
 	return v;

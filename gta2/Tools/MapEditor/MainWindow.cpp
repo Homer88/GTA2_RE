@@ -1568,7 +1568,7 @@ QString MainWindow::decodeScriptLines(const gta2::ScrFormat& s) const
 	QString out;
 	out.reserve((int)(s.DataSize() * 2) + 512);
 	const std::vector<gta2::ScriptLine> lines = s.Lines();
-	out += tr("// data: %1 B, записей по 12 байт: %2\n")
+	out += tr("// data: %1 B, строк: %2 (udr_offsets+line+selection primary).\n")
 		.arg((int)s.DataSize()).arg((int)lines.size());
 	int num = 0;
 	for (size_t i = 0; i < lines.size(); i++) {
@@ -1576,16 +1576,28 @@ QString MainWindow::decodeScriptLines(const gta2::ScrFormat& s) const
 		const char* name = gta2::ScriptOpcodeName(l.type);
 		QString n = name && name[0] ? tr("  %1").arg(QString::fromLatin1(name))
 		                            : tr("  (op 0x%1)").arg(l.type, 2, 16, QLatin1Char('0')).toUpper();
-		out += tr("%1: %2 %3 %4")
+		const gta2::ScriptOpcodeHint* hint = gta2::ScriptOpcodeHintFor(l.type);
+		if (hint) {
+			if (hint->note[0])
+				n += tr(" ; %1").arg(QString::fromUtf8(hint->note));
+			if (hint->params[0])
+				n += tr(" (%1)").arg(QString::fromUtf8(hint->params));
+		}
+		QString args;
+		for (size_t k = 0; k + 1 < l.params.size(); k += 2) {
+			if (args.size()) args += QLatin1Char(' ');
+			uint16_t w = l.params[k] | (uint16_t)(l.params[k + 1] << 8);
+			args += QString::fromLatin1("%1").arg(w, 4, 16, QLatin1Char('0')).toUpper();
+		}
+		out += tr("%1: %2 %3 0x%4%5 @%6%7%8")
 			.arg(num++, 5)
 			.arg(l.uid, 4, 16, QLatin1Char('0')).toUpper()
 			.arg(l.type, 4, 16, QLatin1Char('0')).toUpper()
-			.arg(QString("%1 %2 %3 %4 %5")
-				.arg(l.p1, 4, 16, QLatin1Char('0')).toUpper()
-				.arg(l.p2, 4, 16, QLatin1Char('0')).toUpper()
-				.arg(l.p3, 4, 16, QLatin1Char('0')).toUpper()
-				.arg(l.p4, 4, 16, QLatin1Char('0')).toUpper()
-				.arg(QString::fromLatin1("   @%1").arg(l.offset, 4, 16, QLatin1Char('0')).toUpper())) + n + "\n";
+			.arg(l.nextUid, 4, 16, QLatin1Char('0')).toUpper()
+			.arg(l.chain ? tr(" ->") : tr(""))
+			.arg(l.offset, 4, 16, QLatin1Char('0')).toUpper()
+			.arg(l.size > 8 ? QString::fromLatin1(" [%1 B]").arg((int)l.size) : QString())
+			.arg(args) + n + "\n";
 	}
 	return out;
 }
