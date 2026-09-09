@@ -51,7 +51,7 @@ struct PageFile {
 extern PageFile gPageFileMenu[25];
 int gbh_BlitImage(int, int, int, int, int, int, int);
 void ShowTextDisplay(wchar_t*, char*, ...);
-void sub_41F990(int*, unsigned __int16);
+void EncodeCoord16(int*, unsigned __int16);
 void bitShiftLeft1(int*, int);
 void DrawGTATextRawMain(wchar_t*, int, int, int, int);
 void DrawGTATextRaw(wchar_t*, int, int, int, int);
@@ -80,7 +80,7 @@ int gbh_InitImageTable(int);
 bool SetGamma(int);
 bool UpdateVideoFrame();
 
-int sub_4539D0(unsigned short, unsigned char);
+int GetRemapColour(unsigned short, unsigned char);
 int dword_662128;
 
 // Примечание: Все методы реализуются как заглушки, пока не будет найден соответствующий код в ассемблере.
@@ -411,7 +411,7 @@ int  Menu::UpdateMenuFrame() {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00456E80 - Размер: 0xF9 байт
     PlayerSlotSlave* pPlayerProfileName = this->getPlayerProfileName();
-    byte pPlayerSlotSave = 0; //gMapGm.GetPlayerSlotSave(); // TODO: глобал gMapGm не входит в линковку GTA2
+    byte pPlayerSlotSave = gMapGm.GetPlayerSlotSave(); // TODO: глобал gMapGm не входит в линковку GTA2
     MenuPage* pMenuPage = &this->MenuPageArray[this->PageNumber];
     unsigned char pLastActiveArenaSlot = this->FindLastActiveArenaSlot(pPlayerProfileName);
     unsigned char pBonusStage = this->MultiplayerMenu(pPlayerProfileName);
@@ -419,7 +419,7 @@ int  Menu::UpdateMenuFrame() {
     //Menu *pMenu; // НЕ инициализирован в дампе, закомментировано чтобы избежать UB
 
     if (pLastActiveArenaSlot >= pArenaSlot) {
-        //gMapGm.SetPlayerArena(pArenaSlot); // API MapGm.h не имеет одноаргументной SetPlayerArena (есть SetPlayerArea)
+        gMapGm.SetPlayerArena(pArenaSlot); // API MapGm.h не имеет одноаргументной SetPlayerArena (есть SetPlayerArea)
     }
     else {
         //pMenu->PlayerSlotSave[0].ActiveArenaSlot = pLastActiveArenaSlot; // pMenu не инициализирован - см. TODO
@@ -430,7 +430,7 @@ int  Menu::UpdateMenuFrame() {
         pBonusStage1 = pBonusStage;
         this->BonusStage[0] = pBonusStage;
     }
-    //gMapGm.SetBonusStage(pBonusStage1); // TODO: глобал gMapGm не входит в линковку GTA2
+    gMapGm.SetBonusStage(pBonusStage1); // TODO: глобал gMapGm не входит в линковку GTA2
     this->ConfirmExit();
     this->ActivateElement();
     int result;
@@ -504,7 +504,7 @@ void Menu::SetFrontendKeysEnabled(bool enabled) {
 void Menu::SetPlayerName() {
     //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00452490 - Размер: 0x2F байт
-    //wcsncpy(this->PlayerName, gPlayerData.PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
+    wcsncpy(this->PlayerName, gPlayerData.PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
     // TODO: глобал gPlayerData не входит в линковку GTA2
 }
 
@@ -517,7 +517,7 @@ void Menu::SetPlayerNameFromMenu() {
     wchar_t* PlayerName = this->PlayerName;
     wcsncpy(PlayerName, this->PlayerName, 9);
     this->PlayerCheat(PlayerName);
-    //gPlayerData.WriteFileNamePlayer(PlayerSlot); // TODO: метод не реализован + глобал gPlayerData не входит в линковку GTA2
+    gPlayerData.WriteFileNamePlayer(PlayerSlot); // TODO: метод не реализован + глобал gPlayerData не входит в линковку GTA2
 }
 
 bool Menu::ValidatePlayerName(const char* name) {

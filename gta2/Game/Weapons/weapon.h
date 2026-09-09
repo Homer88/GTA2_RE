@@ -86,7 +86,7 @@ struct Weapon
     // 0 = медленный режим (обычный огонь, TimeToReload = 20-50 кадров).
     // Ненулевое = быстрый режим (SMG, TimeToReload = 5 кадров).
     // Также используется как указатель на данные вращения для некоторых
-    // типов оружия (см. Weapon::sub_4CE970).
+    // типов оружия (см. Weapon::SpawnWeaponSprite).
     int SMG;
 
     // +0x08: Неизвестно. Инициализируется 0. Обнуляется при деинициализации.
@@ -222,15 +222,15 @@ struct Arsenal
 //   Weapon::GetDisplayAmmo      — получить отображаемое значение (Ammo+9)/10
 //   Weapon::Decrement10Ammo     — уменьшить Ammo на 10
 //   Weapon::Decrement1Ammo      — уменьшить Ammo на 1
-//   Weapon::sub_4CC880          — проверить Ammo == MAX_AMMO (из таблицы)
-//   Weapon::sub_4CCB70          — добавить патроны (ограничено макс.)
+//   Weapon::IsAtFullAmmo          — проверить Ammo == MAX_AMMO (из таблицы)
+//   Weapon::AddAmmo          — добавить патроны (ограничено макс.)
 //
 // Тип и свойства:
 //   Weapon::SetTypeWeapon_0     — установить тип оружия
 //   Weapon::SetPed              — установить владельца (Ped)
 //   Weapon::SetCar              — установить машину (Car)
 //   Weapon::IsCarWeapon         — является ли оружием транспорта
-//   Weapon::sub_4CC950          — является ли взрывным (ROCKET/Molotov/CAR_BOMB/CAR_MINE/TANK)
+//   Weapon::IsExplosiveWeapon          — является ли взрывным (ROCKET/Molotov/CAR_BOMB/CAR_MINE/TANK)
 //   Weapon::Set_4CCA80          — установить флаг field_2C (только что стрелял)
 //   Weapon::TimeToReload        — применить POWERUP_FAST_RELOAD к таймеру
 //
@@ -240,7 +240,7 @@ struct Arsenal
 //   Weapon::sub_4CE070          — стрельба пистолетом / узи
 //   Weapon::sub_4CE270          — стрельба автоматом (M16)
 //   Weapon::sub_4CE6D0          — стрельба ракетницей / гранатой
-//   Weapon::sub_4CE970          — стрельба (основная функция, все типы)
+//   Weapon::SpawnWeaponSprite          — стрельба (основная функция, все типы)
 //   Weapon::sub_4CF380          — обработка столкновений снаряда с машинами
 //   Weapon::sub_4CFA30          — стрельба из турели
 //   Weapon::sub_4CFBE0          — огонь из турели (водомёт / пожарная)
@@ -252,19 +252,19 @@ struct Arsenal
 //   Weapon::sub_4CD400          — взрыв на машине
 //   Weapon::sub_4CD460          — стрельба ракетой (самонаведение)
 //   Weapon::sub_4CD5F0          — стрельба ракетой (наведение на машину)
-//   Weapon::sub_4CDA90          — создание снаряда (common helper)
-//   Weapon::sub_4CDA90 (DecrArmor) — снижение брони
+//   Weapon::SpawnWeaponProjectile          — создание снаряда (common helper)
+//   Weapon::SpawnWeaponProjectile (DecrArmor) — снижение брони
 //
 // ============================================================================
 // Weapon1 (WeaponDatabase pool functions) — dump/unified/other/Weapon1.cpp (7 ф-й)
 // ============================================================================
-//   Weapon1::sub_4A4F20          — удалить оружие из активного списка, вернуть в пул
+//   Weapon1::TextLabelDeleteWeapon          — удалить оружие из активного списка, вернуть в пул
 //   Weapon1::GetNextWeapon       — получить следующее оружие из активного списка
 //   Weapon1::MoveWeaponToNextList— взять из свободного списка, инициализировать
 //   Weapon1::sub_4CC9E0          — взять из свободного списка (без добавления в активный)
-//   Weapon1::sub_4CD9F0          — деструктор (очистить списки, уничтожить массив)
-//   Weapon1::sub_4CDA70          — вернуть текущее оружие в свободный список
-//   Weapon1::sub_4D07E0          — деструктор + освободить память
+//   Weapon1::DestructTextLabel          — деструктор (очистить списки, уничтожить массив)
+//   Weapon1::TextLabelReturnWeapon          — вернуть текущее оружие в свободный список
+//   Weapon1::DeleteTextLabel          — деструктор + освободить память
 //
 // ============================================================================
 // Arsenal (Turrel) — dump/unified/other/Arsenal.cpp (3 ф-и)
@@ -282,9 +282,9 @@ struct Arsenal
 //   Turrel::CreateWeaponForTurret— создать оружие для турели
 //   Turrel::FindWeaponInPool    — найти оружие по Car + TypeWeapon
 //   Turrel::CarAddWeapon        — добавить/создать оружие для машины
-//   Turrel::sub_4D06E0          — удалить оружие из пула
-//   Turrel::sub_4D0700          — удалить все оружия для конкретной машины
-//   Turrel::sub_4D0800          — уничтожить глобальный WeaponDatabase
+//   Turrel::DeleteWeapon          — удалить оружие из пула
+//   Turrel::DeleteCarWeapons          — удалить все оружия для конкретной машины
+//   Turrel::FreeTextLabel          — уничтожить глобальный WeaponDatabase
 //
 // ============================================================================
 

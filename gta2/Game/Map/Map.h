@@ -17,7 +17,7 @@ class Map {
 public:
     Map();
 
-    char* sub_42A830(int a2, int a3);
+    char* GetTileDataPtr(int a2, int a3);
 
     int&  GridAt(int x, int y);
     int   GetGridTile(int x, int y);
@@ -26,6 +26,9 @@ public:
     BYTE  GetTileMinHeight(int tileIndex);
     BYTE  GetTileMaxHeight(int tileIndex);
     int   GetTileDataRef(int tileIndex, int zLevel);
+
+    // 0x00466910: find highest tile whose boundary type == 2
+    int   FindTileForMaxZ(int x, int y, int* outZ = 0);
 
     TileData* GetTileData(int dataRef);
     int       GetTileCount();

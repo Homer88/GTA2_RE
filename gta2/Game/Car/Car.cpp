@@ -104,14 +104,14 @@ this->LastCar=0;
 //this->EngineStruct=0;
 }
 
-void Car::sub_4BF000(){
+void Car::DestroyAllTurrets(){
 
 }
 
 void Car::sub_421460(){
 
 }
-void Car::sub_424620(){
+void Car::Reset(){
 
 }
 
@@ -137,11 +137,11 @@ void Car::AddRoofWaterGun(){
 
 }
 
-int Car::sub_424630(void *param1 ){
+int Car::SetTrafficCarType(void *param1 ){
     return 0;
 }
 
-void Car::sub_420840(void *param1 ){
+void Car::ChangeTrafficType(void *param1 ){
 
 }
 
@@ -161,8 +161,8 @@ bool Car::GetFullDamage(){
     return this->Damage == 32001;
 }
 
-void * Car::sub_41F730(int pararm){
-    return 0;//(void*)(gCarEngines.sub_4327E0(this->CarType)+44);
+void * Car::GetEngineData(int pararm){
+    return 0;//(void*)(gCarEngines.GetEngineValue(this->CarType)+44);
 
 
 }
@@ -292,7 +292,7 @@ char Car::HandleMaskTransition()
     switch (this->Mask)
     {
     case 2:
-       // if (!this->sub_424010(this))
+       // if (!this->CheckDriver(this))
         ///    return 0;
         //goto LABEL_5;
     case 3:

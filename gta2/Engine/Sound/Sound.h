@@ -53,7 +53,7 @@ public:
 	bool IsPlaying() const; // есть ли активные голоса
 	void SetVolume(char vol); // громкость звуков 0..127 (SFXVol из реестра)
 
-	// Обновление каждый кадр (аналог DMAudio::sub_410520): здесь закрываются
+	// Обновление каждый кадр (аналог DMAudio::PollAllSamples): здесь закрываются
 	// устройства голосов, завершившихся в callback'е waveOut (сам callback этого
 	// делать не может - waveOutClose из callback на некоторых драйверах даёт дедлок).
 	void Update();

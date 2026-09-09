@@ -1,21 +1,27 @@
 #ifndef ___GLOBAL__H_
 #define ___GLOBAL__H_
 //  файлы подключаймые  
-#include "../Engine/ultil/WinApi.h"
-#include "../Engine/System/System.h"
-#include "../Game/Menu/Menu.h"
-#include "../Game/Player/PlayerData.h"
-#include "../Game/MapGm/MapGm.h"
-#include "../Engine/Registry/Registry.h"
-#include "../Engine/TextureManager/TextureManager.h"
+
+
+
 #include "../Engine/bink/Bink.h" 
-#include "../Engine/Text/Text.h"
 #include "../Engine/Font/Font.h"
 #include "../Engine/FileMgr/FileMgr.h"
 #include "../Engine/Input/Keybrd.h"
-#include "../Game/MissionManager/MissionManager.h"
-#include "../Game/MapRelatedStruct/MapRelatedStruct.h"
+#include "../Engine/System/System.h"
+#include "../Engine/Text/Text.h"
+#include "../Engine/TextureManager/TextureManager.h"
+#include "../Engine/Registry/Registry.h"
+#include "../Engine/ultil/WinApi.h"
 
+#include "../Game/EngineStruct/EngineStruct.h"
+#include "../Game/MapGm/MapGm.h"
+#include "../Game/MapRelatedStruct/MapRelatedStruct.h"
+#include "../Game/Menu/Menu.h"
+#include "../Game/MissionManager/MissionManager.h"
+
+#include "../Game/PlayerData/PlayerData.h"
+#include "../Game/PowerUp/PowerUp.h"
 //глобальные классы 
 extern Menu           gMenu;
 extern Registry       gRegistry;
@@ -31,7 +37,8 @@ extern Keyboard		  gKeyboard;
 extern Registry		  gRegistry;
 extern MissionManager gMissionManager;
 extern MapRelatedStruct* gMapRelatedStruct;
-
+extern EngineStruct      gEngineStruct;
+extern PowerUp  gPowerUp;
 
 
 extern int gCheatIs;

@@ -259,7 +259,7 @@ public:
     // Audio
     char sub_469110(int a2, int a3, char a4);
     unsigned int sub_4692B0();
-    char sub_469400(_BYTE* a1, _BYTE* a2, _BYTE* a3, char a4);
+    char ScanZoneStars(_BYTE* a1, _BYTE* a2, _BYTE* a3, char a4);
     _DWORD* sub_469570(_DWORD* arg0, int* arg4, SpriteS1* a3, int a2);
     _DWORD* sub_4696C0(_DWORD* arg0, int* arg4, SpriteS1* a3, int a2);
     int* sub_4696C0(int* arg0, AudioSourceParams* arg4);

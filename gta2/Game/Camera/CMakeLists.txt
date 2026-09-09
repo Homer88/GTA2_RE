@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(Camera LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB CAMERA_SOURCE "*.cpp")
+file(GLOB CAMERA_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  Camera
+add_library(${PROJECT_NAME} STATIC ${CAMERA_SOURCE} ${CAMERA_HEADERS} ${GLOBAL_HEADERS})

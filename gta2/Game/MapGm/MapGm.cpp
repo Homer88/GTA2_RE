@@ -1,14 +1,15 @@
 //=====================================================================
 // MapGm.cpp — модуль карты, восстановлен по дампу GTA2.exe.
 // Байтовые смещения полей сверены с dump\Ghidra\gta2.exe.h (стр. 56854)
-// и дизассемблером dump\Ghidra\gta2.exe.asm (sub_45E630).
+// и дизассемблером dump\Ghidra\gta2.exe.asm (ResetSettings).
 //=====================================================================
 #include "../global.h"
 
+MapGm gMapGm;
 //---------------------------------------------------------------------
-// 0x0045e630: MapGm::sub_45E630 — сброс настроек записи
+// 0x0045e630: MapGm::ResetSettings — сброс настроек записи
 //---------------------------------------------------------------------
-void MapGm::sub_45E630()
+void MapGm::ResetSettings()
 {
 	field_43B = 0;
 	FragLimit = 0;
@@ -36,9 +37,9 @@ void MapGm::sub_45E630()
 }
 
 //---------------------------------------------------------------------
-// 0x0045e740: MapGm::sub_45E740 — единоразовая установка field23
+// 0x0045e740: MapGm::SetField23 — единоразовая установка field23
 //---------------------------------------------------------------------
-void MapGm::sub_45E740(char value)
+void MapGm::SetField23(char value)
 {
 	if (field_442 == 6)
 		field_442 = (unsigned char)value;
@@ -61,9 +62,9 @@ wchar_t* MapGm::Get_45E7A0(unsigned short index)
 }
 
 //---------------------------------------------------------------------
-// 0x0045e830: MapGm::sub_45E830 — элемент массива field_448[6*a2+a3]
+// 0x0045e830: MapGm::GetScoreRow — элемент массива field_448[6*a2+a3]
 //---------------------------------------------------------------------
-short MapGm::sub_45E830(unsigned char a2, unsigned char a3)
+short MapGm::GetScoreRow(unsigned char a2, unsigned char a3)
 {
 	// В дампе: PlayerID[(a3 & 0xff) + (a2 & 0xff) * 6 - 0x24].
 	// Здесь a3 соответствует индексу строки, a2 — столбцу.
@@ -130,31 +131,31 @@ int MapGm::LoadFileResurce()
 	field_434 = 0;
 	field_438 = 0;
 	field_43A = 0;
-	sub_45E630();
+	ResetSettings();
 	return 0;
 }
 
 //---------------------------------------------------------------------
-// 0x0045ec20: MapGm::sub_45EC20 — копирование настроек игрока в MapGm
+// 0x0045ec20: MapGm::LoadFromBuffer — копирование настроек игрока в MapGm
 // Зависит от ещё не портированного класса Player (поле field_644,
 // field_678, field_67c) и Game::GetPlayerSlotByIndex — заглушка.
 //---------------------------------------------------------------------
-void MapGm::sub_45EC20(void* player)
+void MapGm::LoadFromBuffer(void* player)
 {
 	// TODO: зависит от класса Player (ещё не портирован). В дампе:
 	//   for i in 0..9: SetPlayerArena(i, a2->field_644[i]);
-	//   sub_45E5B0(a2->field_678);
+	//   SetCarCost(a2->field_678);
 	//   field_434 = a2->field_67C;
 	(void)player;
 }
 
 //---------------------------------------------------------------------
-// 0x0045ec70: MapGm::sub_45EC70 — регистрация фрага игрока
+// 0x0045ec70: MapGm::RegisterKill — регистрация фрага игрока
 // Зависит от Game/PlayerStats (не портированы) — заглушка.
 //---------------------------------------------------------------------
-void MapGm::sub_45EC70(unsigned char id, unsigned char a3)
+void MapGm::RegisterKill(unsigned char id, unsigned char a3)
 {
-	// TODO: зависит от Game::GetPlayerSlotByIndex и PlayerStats::sub_4B7580
+	// TODO: зависит от Game::GetPlayerSlotByIndex и PlayerStats::SetMoney
 	// (ещё не портированы). В дампе:
 	//   ++field_448[6*id + a3];
 	//   result = Game::GetPlayerSlotByIndex(gGame, id);

@@ -9,6 +9,6 @@ class CarEngines{
 		bool Status;
 		CarEngines();
 		~CarEngines();
-		int sub_4327E0(int CarType);
+		int GetEngineValue(int CarType);
 };
 #endif // !___CarEngines___H_

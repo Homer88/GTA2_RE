@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(Mike LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB MIKE_SOURCE "*.cpp")
+file(GLOB MIKE_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  Mike
+add_library(${PROJECT_NAME} STATIC ${MIKE_SOURCE} ${MIKE_HEADERS} ${GLOBAL_HEADERS})

@@ -358,10 +358,10 @@ BOOL cApp::Init()
 
   // --- Инициализация звука (аналог LoadConfig в оригинале) ---
   // gAudioObject = 2: "2D-звук" (тип объекта, как в оригинальном LoadConfig).
-  // DMAudio::sub_410530 создаёт аудио-объект и кладёт его "частоту" в gSampleRate.
+  // DMAudio::AddAudioObject создаёт аудио-объект и кладёт его "частоту" в gSampleRate.
   gAudioObject = 2;
   if (!skip_audio)
-    gSampleRate = gDMAudio.sub_410530(&gAudioObject);
+    gSampleRate = gDMAudio.AddAudioObject(&gAudioObject);
 
   // --- Загрузить тексты пунктов меню из .gxt (запасной источник для страниц 0 и 1) ---
   // (Text::Bsearch в реконструкции пока заглушена и возвращает пробел, поэтому
@@ -708,9 +708,9 @@ BOOL cApp::Frame()
 {
   HWND hwnd = GethWnd();
 
-  // Обновление звука каждый кадр (в оригинале: if (!skip_audio) DMAudio::sub_410520).
+  // Обновление звука каждый кадр (в оригинале: if (!skip_audio) DMAudio::PollAllSamples).
   if (!skip_audio)
-    gDMAudio.sub_410520();
+    gDMAudio.PollAllSamples();
 
   // ВРЕМЕННО: тест воспроизведения звуков (клавиша S). В оригинальном меню звуков
   // навигации нет, поэтому движок проверяется отдельным хоткеем: первое нажатие

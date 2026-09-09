@@ -29,7 +29,7 @@ add_subdirectory(d3dpoly)
 # Сама игра 
 add_subdirectory(gta2)
 # Вьюер ресурсов игры (TGA-меню, позже STY-тайлы/GMP)
-add_subdirectory(viewer)
+#add_subdirectory(viewer)
 # Конфигуратор
 #add_subdirectory(gta2manager)
 # Аудио

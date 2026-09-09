@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(HudArrow LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB HUDARROW_SOURCE "*.cpp")
+file(GLOB HUDARROW_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  HudArrow
+add_library(${PROJECT_NAME} STATIC ${HUDARROW_SOURCE} ${HUDARROW_HEADERS} ${GLOBAL_HEADERS})

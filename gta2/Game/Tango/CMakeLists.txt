@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(Tango LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB TANGO_SOURCE "*.cpp")
+file(GLOB TANGO_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  Tango
+add_library(${PROJECT_NAME} STATIC ${TANGO_SOURCE} ${TANGO_HEADERS} ${GLOBAL_HEADERS})

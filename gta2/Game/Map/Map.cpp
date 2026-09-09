@@ -12,10 +12,10 @@ Map::Map()
 }
 
 //=============================================================================
-// Map::sub_42A830 (0x0042A830)
+// Map::GetTileDataPtr (0x0042A830)
 // Index tile grid: returns pointer to (char*)this + 1024 * a2 + 4 * a3
 //=============================================================================
-char* Map::sub_42A830(int a2, int a3)
+char* Map::GetTileDataPtr(int a2, int a3)
 {
     return (char*)this + 1024 * a2 + 4 * a3;
 }
@@ -35,7 +35,7 @@ int& Map::GridAt(int x, int y)
 //=============================================================================
 int Map::GetGridTile(int x, int y)
 {
-    return *(int*)sub_42A830(y, x);
+    return *(int*)GetTileDataPtr(y, x);
 }
 
 //=============================================================================
@@ -44,7 +44,7 @@ int Map::GetGridTile(int x, int y)
 //=============================================================================
 void Map::SetGridTile(int x, int y, int tileIndex)
 {
-    *(int*)sub_42A830(y, x) = tileIndex;
+    *(int*)GetTileDataPtr(y, x) = tileIndex;
 }
 
 //=============================================================================
@@ -63,6 +63,37 @@ BYTE Map::GetTileMinHeight(int tileIndex)
 BYTE Map::GetTileMaxHeight(int tileIndex)
 {
     return *(BYTE*)(field_40008 + 4 * tileIndex);
+}
+
+//=============================================================================
+// Map::FindTileForMaxZ (0x00466910)
+// Walks tiles upward from a grid position, returns TileData whose
+// boundary type (flags&3) == 2, writing the matched z to outZ.
+//=============================================================================
+int Map::FindTileForMaxZ(int x, int y, int* outZ)
+{
+    // this is Map* (fields +0x40008 tile index buffer, +0x4000C tile data)
+    int* piVar1 = (int*)GetTileDataPtr(y, x);
+    unsigned int uMin = *(unsigned char*)(field_40008 + 1 + *piVar1 * 4);
+    unsigned char* pb = (unsigned char*)(field_40008 + *piVar1 * 4);
+    int iVar4 = (*pb - uMin) + -1;
+    if ( iVar4 < 0 )
+        return 0;
+    pb = pb + iVar4 * 4 + 4;
+    do
+    {
+        int tile = field_4000C + *(int*)pb * 0xc;
+        if ( (*(unsigned char*)(tile + 0xb) & 3) != 0 )
+        {
+            if ( (*(unsigned char*)(tile + 0xb) & 3) != 2 )
+                return 0;
+            if ( outZ ) *outZ = uMin + iVar4;
+            return tile;
+        }
+        iVar4 = iVar4 - 1;
+        pb = pb - 4;
+    } while ( iVar4 >= 0 );
+    return 0;
 }
 
 //=============================================================================

@@ -10,7 +10,7 @@ CarEngines::~CarEngines(){
 
 }
 
-int CarEngines::sub_4327E0(int CarType){
+int CarEngines::GetEngineValue(int CarType){
 
     return 0;
 }

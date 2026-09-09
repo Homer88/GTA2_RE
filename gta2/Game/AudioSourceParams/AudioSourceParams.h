@@ -10,10 +10,10 @@ struct AudioSourceParams {
     int field_10;      // 0x10 - flags
 
     static int  sub_41F9D0(AudioSourceParams* p);
-    static void sub_4BA5E0(AudioSourceParams* p);
+    static void SetCameraBounds(AudioSourceParams* p);
 };
 #pragma pack(pop)
 
-int sub_463760(AudioSourceParams* p);
+int ProjectPointToScreen(AudioSourceParams* p);
 
 #endif // __AUDIO_SOURCE_PARAMS_H__

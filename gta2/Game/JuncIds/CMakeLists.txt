@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(JuncIds LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB JUNCIDS_SOURCE "*.cpp")
+file(GLOB JUNCIDS_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  JuncIds
+add_library(${PROJECT_NAME} STATIC ${JUNCIDS_SOURCE} ${JUNCIDS_HEADERS} ${GLOBAL_HEADERS})

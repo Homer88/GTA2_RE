@@ -10,19 +10,19 @@ int AudioSourceParams::sub_41F9D0(AudioSourceParams* p)
 }
 
 //=============================================================================
-// AudioSourceParams::sub_4BA5E0
+// AudioSourceParams::SetCameraBounds
 // TODO: implement based on IDA dump
 //=============================================================================
-void AudioSourceParams::sub_4BA5E0(AudioSourceParams* p)
+void AudioSourceParams::SetCameraBounds(AudioSourceParams* p)
 {
     (void)p;
 }
 
 //=============================================================================
-// sub_463760
+// ProjectPointToScreen
 // TODO: implement based on IDA dump
 //=============================================================================
-int sub_463760(AudioSourceParams* p)
+int ProjectPointToScreen(AudioSourceParams* p)
 {
     (void)p;
     return 0;

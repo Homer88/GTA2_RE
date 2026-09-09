@@ -3,7 +3,7 @@
 
 // Класс MapGm (модуль карты) — восстановлен по дампу GTA2.exe.
 // Структура соответствует gta2.exe.h (dump\Ghidra, стр. 56854).
-// Разметка массивов 0x490..0x4b4 уточнена по дизассемблеру sub_45E630
+// Разметка массивов 0x490..0x4b4 уточнена по дизассемблеру ResetSettings
 // (asm 0045e630): PlayerID (4*short) + PlayerArena (10*int) +
 // string_Arr0x16 (6 * 16 wchar) — не пересекаются.
 //
@@ -22,7 +22,7 @@ public:
 	// 0x300 .. 0x3ff — путь к файлу сохранения
 	char saveFile[256];
 	// 0x400 .. 0x404 — байтовые настройки
-	unsigned char playerArea;      // 0x400
+	unsigned char playerArena;      // 0x400
 	unsigned char BonusStage;      // 0x401
 	unsigned char Gang;            // 0x402
 	unsigned char PlayerSlotSave;  // 0x403
@@ -35,13 +35,13 @@ public:
 	int field_430;                 // 0x430
 	int field_434;                 // 0x434
 	// 0x438 .. 0x443 — настройки фрагов и режима
-	short field_438;               // 0x438  (field15; sub_45E5F0/sub_45E600)
+	short field_438;               // 0x438  (field15; SetField15/GetField15)
 	unsigned char field_43A;       // 0x43a  (field16)
 	unsigned char field_43B;       // 0x43b  (field17; get_45E700)
 	int FragLimit;                 // 0x43c  (счётчик/лимит фрагов; ShowLimitFrame)
 	unsigned char field_440;       // 0x440  (field21)
 	unsigned char field_441;       // 0x441  (field22)
-	unsigned char field_442;       // 0x442  (field23; sub_45E740/Get_45E760)
+	unsigned char field_442;       // 0x442  (field23; SetField23/Get_45E760)
 	// 0x443 .. 0x447 — выравнивание
 	char gap443[5];
 	int field_444;                 // 0x444  (field25; Get_field_444)
@@ -66,7 +66,7 @@ public:
 	char* SetScripName(char* Source) { return strncpy(sctiptFile, Source, 0xFFu); }
 	char* SetSaveFile(char* Source) { return strncpy(saveFile, Source, 0xFFu); }
 
-	void SetPlayerArea(char value) { playerArea = (unsigned char)value; }
+	void SetPlayerArena(char value) { playerArena = (unsigned char)value; }
 	void SetBonusStage(char value) { BonusStage = (unsigned char)value; }
 	void SetGang(char value) { Gang = (unsigned char)value; }
 	void SetPlayerSlotSave(char value) { PlayerSlotSave = (unsigned char)value; }
@@ -86,23 +86,23 @@ public:
 
 	// 0x0045e570/0x0045e590 — запись/чтение Arr10[i]
 	void SetPlayerArena(unsigned char index, int value) { Arr10[index & 0xff] = value; }
-	int sub_45E590(unsigned char index) { return Arr10[index]; }
+	int GetAreaData(unsigned char index) { return Arr10[index]; }
 
 	// 0x0045e5b0/0x0045e5c0/0x0045e5e0 — field_430 / field_434
-	void sub_45E5B0(int value) { field_430 = value; }
+	void SetCarCost(int value) { field_430 = value; }
 	int Get_45E5C0() { return field_430; }
 	int Get_45E5E0() { return field_434; }
 
 	// 0x0045e5f0/0x0045e600 — field15_0x438
-	void sub_45E5F0(short value) { field_438 = value; }
-	short sub_45E600() { return field_438; }
+	void SetField15(short value) { field_438 = value; }
+	short GetField15() { return field_438; }
 
 	// 0x0045e610/0x0045e620 — field16_0x43a
-	void sub_45E610(char value) { field_43A = (unsigned char)value; }
+	void SetField16(char value) { field_43A = (unsigned char)value; }
 	char Get_45E620() { return (char)field_43A; }
 
 	// 0x0045e630 — сброс настроек записи (имена/фраги/строки)
-	void sub_45E630();
+	void ResetSettings();
 
 	// 0x0045e700 — field17_0x43b
 	char get_45E700() { return (char)field_43B; }
@@ -115,7 +115,7 @@ public:
 	char Get_45E730() { return (char)field_441; }
 
 	// 0x0045e740/0x0045e760 — field23_0x442 (устанавливается один раз)
-	void sub_45E740(char value);
+	void SetField23(char value);
 	char Get_45E760() { return (char)field_442; }
 
 	// 0x0045e770/0x0045e7a0 — строки имён
@@ -123,23 +123,23 @@ public:
 	wchar_t* Get_45E7A0(unsigned short index);
 
 	// 0x0045e7c0 — PlayerArena[i] += delta
-	void sub_45E7C0(unsigned char index, int delta) { PlayerArena[index & 0xff] += delta; }
+	void AddScore(unsigned char index, int delta) { PlayerArena[index & 0xff] += delta; }
 
 	// 0x0045e7f0/0x0045e810 — PlayerArena[i] / PlayerID[i]
 	int GetPlayerArena_0(unsigned char id) { return PlayerArena[id]; }
 	short GetPlayerID(unsigned char id) { return PlayerID[id]; }
 
 	// 0x0045e830 — field_448[6*a2 + a3] (стилизовано под PlayerID)
-	short sub_45E830(unsigned char a2, unsigned char a3);
+	short GetScoreRow(unsigned char a2, unsigned char a3);
 
 	// 0x0045e8d0 — загрузка имён файлов из реестра + сброс настроек
 	int LoadFileResurce();
 
 	// 0x0045ec20 — копирование настроек из Player (зависит от Player)
-	void sub_45EC20(void* player);
+	void LoadFromBuffer(void* player);
 
 	// 0x0045ec70 — регистрация фрага игрока (зависит от Player/PlayerStats)
-	void sub_45EC70(unsigned char id, unsigned char a3);
+	void RegisterKill(unsigned char id, unsigned char a3);
 
 	// SpecialTokens
 	void SetSpecialTokensDefault() { SpecialTokens = 0; }
@@ -150,7 +150,7 @@ public:
 	int sub_476B10(int value) { SpecialTokens = value; return value; }
 
 	// 0x00453a40 — кодирование bonus stage: (playerArea << 4) | param2
-	int sub_453A40(unsigned char param2) { return (playerArea << 4) | param2; }
+	int EncodeBonusStage(unsigned char param2) { return (playerArea << 4) | param2; }
 	// 0x00453a60 — декодирование bonus stage
 	void DecodeBonusStage(unsigned char bonusStage, unsigned char* playerArenaOut, unsigned char* out4);
 

@@ -5835,7 +5835,7 @@ unsigned int MapRelatedStruct::sub_4692B0() {
 }
 
 // 0x469400
-char MapRelatedStruct::sub_469400(_BYTE* a1, _BYTE* a2, _BYTE* a3, char a4) {
+char MapRelatedStruct::ScanZoneStars(_BYTE* a1, _BYTE* a2, _BYTE* a3, char a4) {
   int v5; 
   int v6; 
   int v7; 

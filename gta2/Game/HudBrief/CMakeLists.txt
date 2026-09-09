@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(HudBrief LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB HUDBRIEF_SOURCE "*.cpp")
+file(GLOB HUDBRIEF_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  HudBrief
+add_library(${PROJECT_NAME} STATIC ${HUDBRIEF_SOURCE} ${HUDBRIEF_HEADERS} ${GLOBAL_HEADERS})

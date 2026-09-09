@@ -112,12 +112,12 @@ public:
     short CollisionOnCar(int Damage);
     bool GetFullDamage();
     void ExplodeCar(int a);
-    void sub_4BF000();
+    void DestroyAllTurrets();
     void sub_421460();
-    void sub_424620();
-    int sub_424630(void*);
-    void sub_420840(void*);
-    void* sub_41F730(int param);
+    void Reset();
+    int SetTrafficCarType(void*);
+    void ChangeTrafficType(void*);
+    void* GetEngineData(int param);
     bool IsDriverPlayer();
     bool isAPC();
     bool isFileTruck();

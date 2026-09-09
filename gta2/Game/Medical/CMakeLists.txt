@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(Medical LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB MEDICAL_SOURCE "*.cpp")
+file(GLOB MEDICAL_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  Medical
+add_library(${PROJECT_NAME} STATIC ${MEDICAL_SOURCE} ${MEDICAL_HEADERS} ${GLOBAL_HEADERS})

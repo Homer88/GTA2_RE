@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(GUI LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB GUI_SOURCE "*.cpp")
+file(GLOB GUI_HEADERS "*.h")
+set(GLOBAL_HEADERS "../global.h")
+
+# ���ઠ  GUI
+add_library(${PROJECT_NAME} STATIC ${GUI_SOURCE} ${GUI_HEADERS} ${GLOBAL_HEADERS})
