@@ -1,8 +1,9 @@
+
 #ifndef __GAME_H_
 #define __GAME_H_
 
-class Game{
 
+class Game{
     public:
 
     // 0x003F113C
@@ -66,7 +67,7 @@ class Game{
     // 0x0045BB00
     int UpdateVisionForAllCameras(void);
     // 0x0045BC90
-    int IsPointVisibleToAnyPlayer(void);
+    int IsPointVisible(void);  // (gm) старый: IsPointVisibleToAnyPlayer -> IsPointVisible
     // 0x0045BD00
     int IsCarOccupiedByAnyPlayer(void);
     // 0x0045C1F0
@@ -83,6 +84,13 @@ class Game{
     void* GetPlayerById(int arg0);
     // 0x004D09C0
     int GetState(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 2 функций
+    // 0x0045A730: Game::IsSpriteVisibleToPlayer
+    void IsSpriteVisibleToPlayer();
+    // 0x0045BB50: Game::IsSpriteVisibleToAnyPlayer
+    void IsSpriteVisibleToAnyPlayer();
+};
 #endif // !__GAME_H_

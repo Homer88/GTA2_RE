@@ -4,7 +4,7 @@
     // 0x00461590
 
 
-void StreamWriter::Allocate(int param_1){
+void StreamWriter::AppendString(int param_1){
 
     }
 

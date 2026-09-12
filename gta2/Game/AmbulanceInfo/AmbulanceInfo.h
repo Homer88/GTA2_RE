@@ -1,8 +1,9 @@
+
 #ifndef __AMBULANCEINFO_H_
 #define __AMBULANCEINFO_H_
 
-class AmbulanceInfo{
 
+class AmbulanceInfo{
     public:
 
     // 0x00432C60

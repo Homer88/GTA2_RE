@@ -1,8 +1,9 @@
+
 #ifndef __TELEPORTER_H_
 #define __TELEPORTER_H_
 
-class Teleporter{
 
+class Teleporter{
     public:
 
     // 0x004B5ED0

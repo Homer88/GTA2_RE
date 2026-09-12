@@ -52,7 +52,7 @@ int Point2D::SetCameraBounds(void){
     // 0x004BA6C0
 
 
-int Point2D::IsPointOnQuad(int param_1){
+int Point2D::CheckAnyPlayer(int param_1) {  // (gm) старый: IsPointOnQuad -> CheckAnyPlayer
         return 0;
     }
 

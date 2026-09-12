@@ -1,57 +1,31 @@
 #include "MissionManager.h"
 #include <cstring>
 #include <cstdio>
-#include "../MapRelatedStruct/MapRelatedStruct.h"
+#include "../global.h"
+#include "../../Engine/MapRelatedStruct/MapRelatedStruct.h"
+//#include "../MissionScriptObjects/MissionScriptObjects.h"
 
-MissionManager gMissionManager;
+MissionManager *gMissionManager;
 
+int gSpecialTokens;
 bool skip_mission;
+
 char do_miss_logging;
-MissionScriptObjects* gMissionScriptObjects;
-void* gTrafficManager;
+
+//MissionScriptObjects* gMissionScriptObjects;
+
 char gStr[256];
-_DWORD dword_664D18[16];
-_DWORD dword_56EC54;
-char byte_5931F4;
-char byte_5931FC[32];
-int unk_664590[0x1D2];
-char byte_6645A9[0x19];
-char byte_6645C2[0x19];
-int unk_6645A8;
-int unk_6645C1;
-int unk_6645DA;
-int unk_6645DB;
-int unk_6645DC;
-int unk_6645DD;
-int unk_6644B0;
-int unk_6644B4;
-int unk_6646BA;
-int unk_6646BC;
-int unk_6646C0;
-_WORD unk_6646C4[600];
-int unk_664CA0[25];
-int unk_664CD4;
-_DWORD dword_6645E4;
-char byte_664B74[32];
-_DWORD dword_673E2C;
-S107* gS107;
-int dword_6644CC[0x964];
-_DWORD unk_664DC4[16];
-_DWORD unk_664E08;
-_DWORD unk_664EBC[4];
-CarSystemManager* gCarSystemManager;
-MapGm gMapGm;
+
+
 Game* gGame;
-Object* gObject;
-MapRelatedStruct* gMapRelatedStruct;
-void* gMissionObjective;
+//void* gMissionObjective;
 
 //=============================================================================
 // Constructor
 //=============================================================================
 MissionManager::MissionManager()
 {
-    this->EVENT_LOG_SIZE[1] = 0;
+   /* this->EVENT_LOG_SIZE[1] = 0;
     if ( !skip_mission )
     {
         memset(this->Script, 0, sizeof(this->Script));
@@ -124,7 +98,7 @@ MissionManager::MissionManager()
     this->field_C1E2F = 0;
     this->field_C1E31 = 0;
     memset(this->arr_12, 0, sizeof(this->arr_12));
-    this->field_C1EA4 = 0;
+    this->field_C1EA4 = 0;*/
 }
 
 //=============================================================================
@@ -145,7 +119,7 @@ MissionManager* MissionManager::MissionManager_Des(char a2)
 
 void MissionManager::MissionManagerDes()
 {
-    if ( gMissionScriptObjects )
+    /*if (gMissionScriptObjects)
     {
         free(gMissionScriptObjects);
         gMissionScriptObjects = 0;
@@ -179,13 +153,14 @@ void MissionManager::MissionManagerDes()
     this->field_34C = 0;
     this->int_A = 0;
     unk_6644B4 = 0;
-    unk_6644B0 = 0;
+    unk_6644B0 = 0;*/
 }
 
 char MissionManager::MissionManager_1()
 {
-    MissionManager* MissionPtrMaybe = this->MissionPtrMaybe;
-    return MissionPtrMaybe && *(_DWORD*)&MissionPtrMaybe->field_0;
+    //MissionManager* MissionPtrMaybe = this->MissionPtrMaybe;
+    //return MissionPtrMaybe && *(_DWORD*)&MissionPtrMaybe->field_0;
+    return 0;
 }
 
 //=============================================================================
@@ -193,7 +168,7 @@ char MissionManager::MissionManager_1()
 //=============================================================================
 _WORD* MissionManager::FindMission(__int16 a2)
 {
-    void* v2 = (void*)this->EVENT_LOG_SIZE[1];
+   /* void* v2 = (void*)this->EVENT_LOG_SIZE[1];
     int v3 = 0;
     _WORD* result = (_WORD*)*((_DWORD*)v2 + 1);
     if ( !result )
@@ -203,14 +178,14 @@ _WORD* MissionManager::FindMission(__int16 a2)
         result = (_WORD*)*((_DWORD*)v2 + (unsigned __int16)++v3 + 1);
         if ( !result )
             return 0;
-    }
-    return result;
+    }*/
+    return 0;//result;
 }
 
 //=============================================================================
 // FindMissionByScriptName
 //=============================================================================
-int MissionManager::FindMissionByScriptName(const char* a2)
+int MissionManager::FindByName(const char* a2)
 {
     int v3 = 0;
     int v4 = *((_DWORD*)this->EVENT_LOG_SIZE[1] + 1);
@@ -254,7 +229,7 @@ void MissionManager::sub_475A40(char a2)
 //=============================================================================
 int MissionManager::CopyMapDetails()
 {
-    int result;
+   /* int result;
     strcpy((char*)unk_664590, (const char*)MapGm_GetMapName(&gMapGm));
     strcpy(byte_6645A9, (const char*)MapGm_GetStyleFile(&gMapGm));
     strcpy(byte_6645C2, (const char*)MapGm_GetScriptName(&gMapGm));
@@ -264,16 +239,16 @@ int MissionManager::CopyMapDetails()
     unk_6645DB = MapGm_GetPlayerArena(&gMapGm);
     unk_6645DC = MapGm_GetBonusStage(&gMapGm);
     LOBYTE(result) = MapGm_GetGang(&gMapGm);
-    unk_6645DD = result;
-    return result;
+    unk_6645DD = result;*/
+    return 0;//result;
 }
 
 //=============================================================================
 // BuildMissionScriptIndex
 //=============================================================================
-_WORD* MissionManager::BuildMissionScriptIndex(unsigned __int16 a2)
+_WORD* MissionManager::SetupMissionText(unsigned __int16 a2)
 {
-    unsigned int v3 = 0;
+  /*  unsigned int v3 = 0;
     char* i;
     for ( i = (char*)this->EVENT_LOG_SIZE[0]; v3 < a2; i += *(unsigned __int8*)(i + 8) + 9 )
         v3 += *(unsigned __int8*)(i + 8) + 9;
@@ -303,7 +278,7 @@ _WORD* MissionManager::BuildMissionScriptIndex(unsigned __int16 a2)
     {
         *(_WORD*)this->EVENT_LOG_SIZE[1] = 0;
     }
-    return result;
+    return result;*/
 }
 
 //=============================================================================
@@ -336,12 +311,12 @@ char* MissionManager::ExtractFileNameWithoutExtension()
 //=============================================================================
 // LoadMissionData
 //=============================================================================
-__int16 MissionManager::LoadMissionData(FileMgr* a2)
+__int16 MissionManager::LoadLanguageFile(FileMgr* a2)
 {
-    int size = 0;
+    /*int size = 0;
     if ( gMissionManager.shouldBeEqTo1 )
     {
-        int v6 = MissionManager::FindMissionByScriptName((const char*)a2);
+        int v6 = MissionManager::FindByName((const char*)a2);
         int v7 = *(unsigned __int16*)(v6 + 2);
         short v8 = *((_WORD*)gMissionManager.BaseScriptMaxPointers + v7);
         size = v8;
@@ -375,16 +350,16 @@ __int16 MissionManager::LoadMissionData(FileMgr* a2)
             (char*)this->Script + *((unsigned __int16*)this->OBJECTIVE_DATA_SIZE + (unsigned __int16)size),
             (int*)&v10);
         FileMgr::CloseFile(0);
-    }
-    return size;
+    }*/
+    return 0;//size;
 }
 
 //=============================================================================
 // LoadMissionScriptData
 //=============================================================================
-unsigned __int16* MissionManager::LoadMissionScriptData()
+unsigned __int16* MissionManager::LoadScriptFiles()
 {
-    unsigned __int16 v2 = 0;
+    /*unsigned __int16 v2 = 0;
     int v12 = 0;
     int v13 = 0;
     unsigned __int16* result = (unsigned __int16*)this->EVENT_LOG_SIZE[1];
@@ -429,8 +404,8 @@ unsigned __int16* MissionManager::LoadMissionScriptData()
             v2 = ++*(_DWORD*)&v2;
         }
         while ( v2 < *result );
-    }
-    return result;
+    }*/
+    return 0;//result;
 }
 
 //=============================================================================
@@ -485,7 +460,7 @@ int* MissionManager::AddRuntimeTimer(int a2, int a3, __int16 a4)
 //=============================================================================
 // FindMissionTarget
 //=============================================================================
-int* MissionManager::FindMissionTarget(int a2, int a3)
+int* MissionManager::FindData(int a2, int a3)
 {
     int* result = this->RuntimeCache;
     int v4 = 0;
@@ -523,9 +498,9 @@ int* MissionManager::sub_476370(int a2, int a3, __int16 a4)
 //=============================================================================
 // RemoveMissionTarget
 //=============================================================================
-_DWORD* MissionManager::RemoveMissionTarget(int a2, int a3)
+_DWORD* MissionManager::RemoveData(int a2, int a3)
 {
-    _DWORD* result = (_DWORD*)MissionManager::FindMissionTarget(a2, a3);
+    _DWORD* result = (_DWORD*)MissionManager::FindData(a2, a3);
     if ( result )
     {
         *result = 0;
@@ -539,7 +514,7 @@ _DWORD* MissionManager::RemoveMissionTarget(int a2, int a3)
 //=============================================================================
 // FindMissionTargetByIndex
 //=============================================================================
-char* MissionManager::FindMissionTargetByIndex(int a2)
+char* MissionManager::FindDataById(int a2)
 {
     char* result = (char*)this->RuntimeCache;
     int v3 = 0;
@@ -557,7 +532,7 @@ char* MissionManager::FindMissionTargetByIndex(int a2)
 //=============================================================================
 char MissionManager::AddOrCheckMissionTarget(int a2, char a3, char a4)
 {
-    int* v5 = 0;
+   /* int* v5 = 0;
     int* arr_30 = this->arr_30;
     unsigned __int8 i;
     for ( i = 0; i < 0xFu; ++i )
@@ -578,7 +553,7 @@ char MissionManager::AddOrCheckMissionTarget(int a2, char a3, char a4)
         *v5 = a2;
         *((_BYTE*)v5 + 6) = 2 * (a4 != 0) + 2;
         ++this->field_278;
-    }
+    }*/
     return 0;
 }
 
@@ -587,7 +562,7 @@ char MissionManager::AddOrCheckMissionTarget(int a2, char a3, char a4)
 //=============================================================================
 char MissionManager::sub_4764D0(int a2, char a3)
 {
-    int v4 = 15;
+   /* int v4 = 15;
     int* arr_30 = this->arr_30;
     char result;
     do
@@ -615,8 +590,8 @@ LABEL_8:
         arr_30 += 2;
         --v4;
     }
-    while ( v4 );
-    return result;
+    while ( v4 );*/
+    return 0;//result;
 }
 
 //=============================================================================
@@ -624,7 +599,7 @@ LABEL_8:
 //=============================================================================
 char MissionManager::UpdateMissionItem(int a2, int a3, char a4)
 {
-    int* arr_30 = this->arr_30;
+  /*  int* arr_30 = this->arr_30;
     char result = MapPedTypeToCategory(a3);
     char v6 = result;
     unsigned __int8 v7 = 0;
@@ -655,8 +630,8 @@ LABEL_11:
         *((_BYTE*)arr_30 + 5) = v6;
         result = v8 | 1;
         *((_BYTE*)arr_30 + 6) = result;
-    }
-    return result;
+    }*/
+    return 0; //result;
 }
 
 //=============================================================================
@@ -664,7 +639,7 @@ LABEL_11:
 //=============================================================================
 bool MissionManager::FindMissionItem(int a2, char a3, char a4)
 {
-    unsigned __int8 v4 = 0;
+    /*unsigned __int8 v4 = 0;
     int* i;
     for ( i = this->arr_30; ; i += 2 )
     {
@@ -676,8 +651,8 @@ bool MissionManager::FindMissionItem(int a2, char a3, char a4)
         }
         if ( ++v4 >= 15u )
             return 0;
-    }
-    return IsGangFlag1(i);
+    }*/
+    return 0;//IsGangFlag1(i);
 }
 
 //=============================================================================
@@ -685,7 +660,7 @@ bool MissionManager::FindMissionItem(int a2, char a3, char a4)
 //=============================================================================
 _DWORD MissionManager::sub_4799D0()
 {
-    MissionScriptObjectData* v1;
+    /*MissionScriptObjectData* v1;
     int* v2 = dword_6644CC;
     MissionScriptObjectData* v13 = v1;
     int* v3 = &dword_6644CC[6];
@@ -714,7 +689,7 @@ _DWORD MissionManager::sub_4799D0()
         v2 = dword_6644CC;
     }
     v13->field_8 = 0;
-    MissionScriptObjectData_sub_476E50(v13, v2);
+    MissionScriptObjectData_sub_476E50(v13, v2);*/
     return 0;
 }
 
@@ -723,7 +698,7 @@ _DWORD MissionManager::sub_4799D0()
 //=============================================================================
 __int16 MissionManager::SetMissionGradeLetter(void* a1, void* a2)
 {
-    unsigned __int8 v3 = 0;
+   /* unsigned __int8 v3 = 0;
     unsigned __int8* v4 = (unsigned __int8*)gMissionManager.field_340;
     while ( a1 != (void*)*v4 )
     {
@@ -741,8 +716,8 @@ LABEL_8:
     {
         InitAndSetField(a2, 3);
         LOWORD(v4) = SetValue(a2, 65);
-    }
-    return (__int16)v4;
+    }*/
+    return 0; //(__int16)v4;
 }
 
 //=============================================================================
@@ -750,7 +725,7 @@ LABEL_8:
 //=============================================================================
 char MissionManager::sub_47EDB0(int a2)
 {
-    MissionManager* started = MissionManager::StartMission(this, a2);
+   /* MissionManager* started = MissionManager::StartMission(this, a2);
     a2 = 3;
     int v17 = 1;
     int v18;
@@ -769,8 +744,8 @@ char MissionManager::sub_47EDB0(int a2)
     int v14 = *v5;
     int FirstElement = (int)v7->FirstElement;
     int v12 = (int)v9->FirstElement;
-    MissionManager* v10 = MissionManager::StartMission(this, HIWORD(started->arr_96[1]));
-    return (char)MissionObjective_sub_4C4F30(gMissionObjective, &v17, &a2, v10->arr_96[1], v12, FirstElement, v14, v15, v16);
+    MissionManager* v10 = MissionManager::StartMission(this, HIWORD(started->arr_96[1]));*/
+    return 0;//(char)MissionObjective_sub_4C4F30(gMissionObjective, &v17, &a2, v10->arr_96[1], v12, FirstElement, v14, v15, v16);
 }
 
 //=============================================================================
@@ -778,7 +753,7 @@ char MissionManager::sub_47EDB0(int a2)
 //=============================================================================
 void MissionManager::BuildActiveMissionList()
 {
-    unsigned __int16 v1 = 0;
+    /*unsigned __int16 v1 = 0;
     unsigned __int16 v2 = 0;
     short* OBJECTIVE_DATA_SIZE = this->OBJECTIVE_DATA_SIZE;
     do
@@ -800,15 +775,15 @@ void MissionManager::BuildActiveMissionList()
     while ( v2 < 0x1770u );
     unk_6646BA = v1;
     if ( v1 < 0x12Cu )
-        memset((void*)(4 * v1 + (int)unk_6646C4), 0, 4 * (300 - v1));
+        memset((void*)(4 * v1 + (int)unk_6646C4), 0, 4 * (300 - v1));*/
 }
 
 //=============================================================================
 // StartAllMissions
 //=============================================================================
-_DWORD* MissionManager::StartAllMissions()
+_DWORD* MissionManager::RestoreMissionValues()
 {
-    _WORD* v1 = unk_6646C4;
+   /* _WORD* v1 = unk_6646C4;
     int v2 = 300;
     _DWORD* result;
     do
@@ -823,8 +798,8 @@ _DWORD* MissionManager::StartAllMissions()
         v1 += 2;
         --v2;
     }
-    while ( v2 );
-    return result;
+    while ( v2 );*/
+    return 0;//result;
 }
 
 //=============================================================================
@@ -832,39 +807,39 @@ _DWORD* MissionManager::StartAllMissions()
 //=============================================================================
 int MissionManager::SaveFile(char* pSaveFileName)
 {
-    char* FileName = pSaveFileName;
+   /* char* FileName = pSaveFileName;
     if ( !pSaveFileName || !*pSaveFileName )
     {
-        char PlayerSlotSave = MapGm_GetPlayerSlotSave(&gMapGm);
+        char PlayerSlotSave = gMapGm.GetPlayerSlotSave();
         sprintf(gStr, "player\\plyslot%d.svg", PlayerSlotSave);
         FileName = gStr;
     }
-    MissionManager::BuildActiveMissionList();
+    this->BuildActiveMissionList();
     Player_sub_4A6B20((void*)((char*)gGame + 0), (int)&dword_6645E4); // TODO: Game::Player offset
     Object_sub_483D90(gObject, byte_664B74);
     // TODO: qmemcpy(unk_664CA0, &gObject->S63[0].S63_1, 50u);
     memcpy(unk_664CA0, (char*)gObject + 0, 50u);  // placeholder offset
-    unk_664CD4 = MapGm_GetSpecialTokens(&gMapGm);
+    gSpecialTokens = gMapGm.GetSpecialTokens();
     int v9, v10, v6, v11, v7;
     void* pSaveFileName_ptr;
-    MapRelatedStruct_sub_4642A0(gMapRelatedStruct, &pSaveFileName_ptr, &v9, &v10, &v6, &v11, &v7);
-    MissionManager::CopyMapDetails();
+   // gMapRelatedStruct.sub_4642A0(&pSaveFileName_ptr, &v9, &v10, &v6, &v11, &v7);
+    this->CopyMapDetails();
     int a3 = 1864;
     WriteSub_402CF0(FileName, unk_664590, &a3);
     a3 = 4;
-    ARWBinarySub_402DA0(FileName, (int)&pSaveFileName_ptr, (int)&a3);
+  //  ARWBinarySub_402DA0(FileName, (int)&pSaveFileName_ptr, (int)&a3);
     if ( pSaveFileName_ptr )
-        ARWBinarySub_402DA0(FileName, v9, (int)&pSaveFileName_ptr);
+    //    ARWBinarySub_402DA0(FileName, v9, (int)&pSaveFileName_ptr);
     a3 = 4;
-    ARWBinarySub_402DA0(FileName, (int)&v6, (int)&a3);
+    //ARWBinarySub_402DA0(FileName, (int)&v6, (int)&a3);
     if ( v6 )
-        ARWBinarySub_402DA0(FileName, v10, (int)&v6);
+      //  ARWBinarySub_402DA0(FileName, v10, (int)&v6);
     a3 = 4;
-    ARWBinarySub_402DA0(FileName, (int)&v7, (int)&a3);
+    //ARWBinarySub_402DA0(FileName, (int)&v7, (int)&a3);
     int result = v7;
-    if ( v7 )
-        return ARWBinarySub_402DA0(FileName, v11, (int)&v7);
-    return result;
+    if (v7)
+        return 0;//ARWBinarySub_402DA0(FileName, v11, (int)&v7);*/
+    return 0;//result;
 }
 
 //=============================================================================
@@ -872,34 +847,34 @@ int MissionManager::SaveFile(char* pSaveFileName)
 //=============================================================================
 int MissionManager::LoadMissionMap(char* SaveFileName)
 {
-    int v10 = 0, v11 = 0;
-    int v8 = 0, v7 = 0;
+    /*void* v10 = 0, v11 = 0;
+    void * v8 = 0, v7 = 0;
     int size = 0;
     FileMgr* v12 = 0;
-    MapRelatedStruct_sub_4642A0(gMapRelatedStruct, &v10, &size, &v11, &v8, &v12, &v7);
-    FileMgr::FileOpen(0, SaveFileName);
+    gMapRelatedStruct.sub_4642A0( &v10, &size, &v11, &v8, &v12, &v7);
+    gFileMgr.FileOpen(0, SaveFileName);
     SaveFileName = (char*)1864;
-    FileMgr::Read((FILE*)unk_664590, (SIZE_T*)&SaveFileName);
+    gFileMgr.ReadFile(unk_664590, (SIZE_T*)&SaveFileName);
     SaveFileName = (char*)4;
-    FileMgr::Read((FILE*)&size, (SIZE_T*)&SaveFileName);
+    gFileMgr.ReadFile(size, (SIZE_T*)&SaveFileName);
     if ( size )
-        FileMgr::Read((FILE*)v10, (SIZE_T*)&size);
+        gFileMgr.ReadFile(v10, (SIZE_T*)&size);
     SaveFileName = (char*)4;
-    FileMgr::Read((FILE*)&v8, (SIZE_T*)&SaveFileName);
+    gFileMgr.ReadFile(v8, (SIZE_T*)&SaveFileName);
     if ( v8 )
-        FileMgr::Read((FILE*)v11, (SIZE_T*)&v8);
+        gFileMgr.ReadFile(v11, (SIZE_T*)&v8);
     SaveFileName = (char*)4;
-    FileMgr::Read((FILE*)&v7, (SIZE_T*)&SaveFileName);
+    gFileMgr.ReadFile(&v7, (SIZE_T*)&SaveFileName);
     if ( v7 )
-        FileMgr::Read((FILE*)v12, (SIZE_T*)&v7);
-    MapRelatedStruct_sub_464250((char*)gMapRelatedStruct + 0, size, (unsigned int)v8, (unsigned int)v7); // TODO: MapRelatedStruct::Map offset
-    FileMgr::CloseFile(0);
-    MissionManager::StartAllMissions();
-    Object_sub_485640(gObject, byte_664B74);
+        gFileMgr.ReadFile(v12, (SIZE_T*)&v7);
+    gMapRelatedStruct.sub_464250((char*)gMapRelatedStruct + 0, size, (unsigned int)v8, (unsigned int)v7); // TODO: MapRelatedStruct::Map offset
+    gFileMgr.CloseFile(0);
+    gMissionManager.RestoreMissionValues();
+    gObject.sub_485640(byte_664B74);
     memcpy(&gObject, unk_664CA0, 48u);
     int result = SetSpecialTokens(&gMapGm, unk_664CD4);
-    this->Bool_A = 1;
-    return result;
+    this->Bool_A = 1;*/
+    return 0;//result;
 }
 
 //=============================================================================
@@ -907,9 +882,9 @@ int MissionManager::LoadMissionMap(char* SaveFileName)
 //=============================================================================
 int MissionManager::ContinueQueuedMissionLine(__int16 a3, char a2)
 {
-    int v3 = (int)MissionScriptObjects_RemoveFirstElement(gMissionScriptObjects);
-    MissionScriptObjectData_sub_475B70((void*)v3, a2, a3);
-    return v3;
+    //int v3 = (int)MissionScriptObjects_RemoveFirstElement(gMissionScriptObjects);
+    //MissionScriptObjectData_sub_475B70((void*)v3, a2, a3);
+    return 0;//v3;
 }
 
 //=============================================================================
@@ -925,7 +900,7 @@ _WORD* MissionManager::sub_47F230(__int16 a2, unsigned __int16 a3)
     _WORD* result;
     while ( 1 )
     {
-        result = (_WORD*)MissionManager::StartMission(this, v3 + a3);
+        result = (_WORD*)this->StartMission( v3 + a3);
         if ( result )
         {
             if ( result[1] == a2 )
@@ -956,22 +931,22 @@ unsigned __int8 MissionManager::loadScript(char* ScriptName)
             ++pScriptName;
         }
         while ( v6 );
-        FileMgr::SetFilePath(this->pathToScriptFile);
-        FileMgr::FileOpen(0, this->pathToScriptFile);
+        //FileMgr::SetFilePath(this->pathToScriptFile);
+        //FileMgr::FileOpen(0, this->pathToScriptFile);
         ScriptName = (char*)12000;
-        FileMgr::Read((FILE*)this->OBJECTIVE_DATA_SIZE, (SIZE_T*)&ScriptName);
+        //FileMgr::Read((FILE*)this->OBJECTIVE_DATA_SIZE, (SIZE_T*)&ScriptName);
         ScriptName = (char*)65536;
-        FileMgr::Read((FILE*)this->Script, (SIZE_T*)&ScriptName);
+        //FileMgr::Read((FILE*)this->Script, (SIZE_T*)&ScriptName);
         ScriptName = (char*)2;
         int size;
-        FileMgr::Read((FILE*)&size, (SIZE_T*)&ScriptName);
+        //FileMgr::Read((FILE*)&size, (SIZE_T*)&ScriptName);
         void* v9 = (void*)this->EVENT_LOG_SIZE[0];
         ScriptName = (char*)5118;
-        partOfLoadScrip(v9, (int*)&ScriptName);
-        FileMgr::CloseFile(0);
-        MissionManager::BuildMissionScriptIndex(size);
-        MissionManager::ExtractFileNameWithoutExtension();
-        return (unsigned __int8)MissionManager::LoadMissionScriptData();
+       // partOfLoadScrip(v9, (int*)&ScriptName);
+        //FileMgr::CloseFile(0);
+        this->SetupMissionText(size);
+        this->ExtractFileNameWithoutExtension();
+        return (unsigned __int8)this->LoadScriptFiles();
     }
     return result;
 }
@@ -981,23 +956,23 @@ unsigned __int8 MissionManager::loadScript(char* ScriptName)
 //=============================================================================
 char MissionManager::sub_47F340(int a2, int a3)
 {
-    int* v4 = MissionManager::sub_476240(a2, a3);
-    int* v5 = v4;
-    if ( !v4 )
-        return 0;
-    MissionManager* started = MissionManager::StartMission(this, *((_WORD*)v4 + 4));
-    int v8 = MissionManager::ContinueQueuedMissionLine(HIWORD(started->arr_96[2]), 0);
-    started->arr_96[1] = v8;
-    if ( !v8 )
-        return 0;
-    __int16 v9 = *(_WORD*)(v8 + 282);
-    char result = 1;
-    LOWORD(started->arr_96[2]) = v9;
-    *v5 = 0;
-    v5[1] = 0;
-    *((_WORD*)v5 + 4) = 0;
-    --this->field_0;
-    return result;
+    //int* v4 = MissionManager::sub_476240(a2, a3);
+    //int* v5 = v4;
+    //if ( !v4 )
+    //    return 0;
+    ////MissionManager* started = this->StartMission( *((_WORD*)v4 + 4));
+    ////int v8 = MissionManager::ContinueQueuedMissionLine(HIWORD(started->arr_96[2]), 0);
+    //started->arr_96[1] = v8;
+    //if ( !v8 )
+    //    return 0;
+    //__int16 v9 = *(_WORD*)(v8 + 282);
+    //char result = 1;
+    ////LOWORD(started->arr_96[2]) = v9;
+    //*v5 = 0;
+    //v5[1] = 0;
+    //*((_WORD*)v5 + 4) = 0;
+    //--this->field_0;
+    return 0;//result;
 }
 
 //=============================================================================
@@ -1005,22 +980,22 @@ char MissionManager::sub_47F340(int a2, int a3)
 //=============================================================================
 char MissionManager::ActivateMissionTarget(int a2, int a3)
 {
-    int* v4 = MissionManager::FindMissionTarget(a2, a3);
+    int* v4 = MissionManager::FindData(a2, a3);
     if ( !v4 )
         return 0;
-    MissionManager* started = MissionManager::StartMission(this, *((_WORD*)v4 + 4));
-    if ( started->field_2 == 168 )
-    {
-        char result = 1;
-        BYTE2(started->arr_96[3]) = 1;
-        return result;
-    }
-    if ( started->field_2 != 213 )
-        return 0;
-    int v7 = MissionManager::ContinueQueuedMissionLine(HIWORD(started->arr_96[2]), 0);
-    started->arr_96[1] = v7;
-    if ( v7 )
-        LOWORD(started->arr_96[2]) = *(_WORD*)(v7 + 282);
+    MissionManager* started = this->StartMission( *((_WORD*)v4 + 4));
+    //if ( started->field_2 == 168 )
+    //{
+    //    char result = 1;
+    //    BYTE2(started->arr_96[3]) = 1;
+    //    return result;
+    //}
+    //if ( started->field_2 != 213 )
+    //    return 0;
+    //int v7 = MissionManager::ContinueQueuedMissionLine(HIWORD(started->arr_96[2]), 0);
+    //started->arr_96[1] = v7;
+    //if ( v7 )
+    //    LOWORD(started->arr_96[2]) = *(_WORD*)(v7 + 282);
     return 1;
 }
 
@@ -1029,9 +1004,9 @@ char MissionManager::ActivateMissionTarget(int a2, int a3)
 //=============================================================================
 int* MissionManager::UnregisterTarget(int a2)
 {
-    int* result = (int*)MissionManager::FindMissionTargetByIndex(a2);
-    if ( result )
-        return MissionManager::RemoveMissionTarget(*result, a2);
+    int* result = (int*)this->FindDataById(a2);
+    //if ( result )
+    //    return this->RemoveData(*result, a2);
     return result;
 }
 
@@ -1040,7 +1015,7 @@ int* MissionManager::UnregisterTarget(int a2)
 //=============================================================================
 int MissionManager::ClearMissionLineFlags()
 {
-    char v2 = 0;
+  /*  char v2 = 0;
     char* arr2_15 = this->arr2_15;
     int v6 = 32;
     int result;
@@ -1048,16 +1023,16 @@ int MissionManager::ClearMissionLineFlags()
     {
         if ( ((1 << v2) & unk_6646BC) != 0 )
         {
-            MissionManager* started = MissionManager::StartMission(this, *(_WORD*)arr2_15);
+            MissionManager* started = this->StartMission( *(_WORD*)arr2_15);
             S63_sub_483C60((EventHandler*)started->arr_96[1], 174);
-            MissionManager::UnregisterTarget(gMissionManager, *(_DWORD*)(started->arr_96[1] + 20));
+            gMissionManager.UnregisterTarget( *(_DWORD*)(started->arr_96[1] + 20));
         }
         ++v2;
         arr2_15 += 2;
         result = --v6;
     }
-    while ( v6 );
-    return result;
+    while ( v6 );*/
+    return 0;//result;
 }
 
 //=============================================================================
@@ -1066,20 +1041,20 @@ int MissionManager::ClearMissionLineFlags()
 Player* MissionManager::StartNextMission()
 {
     Player* result;
-    LOBYTE(result) = (char)skip_mission;
+    //LOBYTE(result) = (char)skip_mission;
     if ( !skip_mission )
     {
-        MissionScriptObjectData* pMissionScriptObjectData = (MissionScriptObjectData*)MissionScriptObjects_RemoveFirstElement(gMissionScriptObjects);
+      //  MissionScriptObjectData* pMissionScriptObjectData = (MissionScriptObjectData*)MissionScriptObjects_RemoveFirstElement(gMissionScriptObjects);
         _WORD* v4 = MissionManager::sub_47F230(59, 0);
         if ( v4 )
         {
             // MissionScriptObjectDatar::StartMissionByType(pMissionScriptObjectData);
-            MissionScriptObjectData_sub_475B70(pMissionScriptObjectData, 0, *v4);
-            return Game_GetPlayer1(gGame);
+        //    MissionScriptObjectData_sub_475B70(pMissionScriptObjectData, 0, *v4);
+          //  return Game_GetPlayer1(gGame);
         }
         else
         {
-            return (Player*)debug_log(0x41u, "miss2.cpp", 12774);
+            //return (Player*)debug_log(0x41u, "miss2.cpp", 12774);
         }
     }
     return result;
@@ -1090,7 +1065,7 @@ Player* MissionManager::StartNextMission()
 //=============================================================================
 void MissionManager::ProcessMissionQueue()
 {
-    if ( skip_mission )
+  /*  if (skip_mission)
     {
         *(int*)((char*)gCarSystemManager + 0x5C) = 0;
     }
@@ -1106,7 +1081,7 @@ void MissionManager::ProcessMissionQueue()
         }
         MissionScriptObjects_sub_481380(gMissionScriptObjects);
         *(int*)((char*)gCarSystemManager + 0x5C) = 0;
-    }
+    }*/
 }
 
 //=============================================================================
@@ -1168,9 +1143,9 @@ unsigned char MissionManager::GetOpcodeParamType(unsigned int opcode)
 }
 
 //=============================================================================
-// AddMissionArgNode (was FUN_00474fb0)
+// ListAddFront(was FUN_00474fb0)
 //=============================================================================
-void MissionManager::AddMissionArgNode(void* node)
+void MissionManager::ListAddFront(void* node)
 {
     *(int*)((char*)node + 8) = *(_DWORD*)this;   // node->next = головa
     *(_DWORD*)this = (int)node;

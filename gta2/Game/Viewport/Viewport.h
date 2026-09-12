@@ -1,8 +1,9 @@
+
 #ifndef __VIEWPORT_H_
 #define __VIEWPORT_H_
 
-class Viewport{
 
+class Viewport{
     public:
 
     // 0x00474F90

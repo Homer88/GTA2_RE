@@ -2,7 +2,7 @@
 #include "Registry.h"
 #include "../Debug/DebugLogFile.h"
 
-Registry gRegistry;
+Registry *gRegistry;
 
 bool Registry::GetPlayReplay(LPCSTR lpValueName){
 	

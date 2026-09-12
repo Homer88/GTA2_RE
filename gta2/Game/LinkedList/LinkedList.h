@@ -1,8 +1,9 @@
+
 #ifndef __LINKEDLIST_H_
 #define __LINKEDLIST_H_
 
-class LinkedList{
 
+class LinkedList{
     public:
 
     // 0x0041E1E0
@@ -17,6 +18,11 @@ class LinkedList{
     int SaveSlotAnimatedValueCheckAllCarsBonus(void);
     // 0x004B7EB0
     int SaveSlotAnimatedValueUpdatePedProfile(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 1 функций
+    // 0x00433130: LinkedList::PushFront
+    void PushFront();
+};
 #endif // !__LINKEDLIST_H_

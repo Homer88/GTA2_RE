@@ -1,12 +1,13 @@
+
 #ifndef __CARGENERATOR_H_
 #define __CARGENERATOR_H_
 
-class CarGenerator{
 
+class CarGenerator{
     public:
 
     // 0x0045AFD0 void __thiscall
-    void SetMaxCars(int param_1);
+    void SetSpawnState(int param_1);  // (gm) старый: SetMaxCars -> SetSpawnState
     // 0x0045AFF0
     int Reset(void);
     // 0x0045B000

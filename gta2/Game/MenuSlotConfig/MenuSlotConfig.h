@@ -1,8 +1,9 @@
+
 #ifndef __MENUSLOTCONFIG_H_
 #define __MENUSLOTCONFIG_H_
 
-class MenuSlotConfig{
 
+class MenuSlotConfig{
     public:
 
     // 0x00449D30

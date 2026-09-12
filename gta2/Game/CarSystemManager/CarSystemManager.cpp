@@ -1,6 +1,11 @@
 #include "CarSystemManager.h"
 
 
+
+CarSystemManager gCarSystemManager;
+
+CarSystemManager::CarSystemManager() {}
+CarSystemManager::~CarSystemManager() {}
     // 0x00401C10
 
 
@@ -132,7 +137,7 @@ int CarSystemManager::CreateCarWithTurret(void){
     // 0x00428F70
 
 
-int CarSystemManager::CarSystemManagerInitialiseCar(void){
+int CarSystemManager::InitialiseCar(void){
         return 0;
     }
 

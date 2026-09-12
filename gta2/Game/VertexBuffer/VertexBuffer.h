@@ -1,8 +1,9 @@
+
 #ifndef __VERTEXBUFFER_H_
 #define __VERTEXBUFFER_H_
 
-class VertexBuffer{
 
+class VertexBuffer{
     public:
 
     // 0x0049C6E0
@@ -16,7 +17,7 @@ class VertexBuffer{
     // 0x0049C820
     int AddPassenger(void);
     // 0x0049CB40 bool __thiscall
-    bool GetFlame(int param_1,int param_2);
+    bool IsNodeTarget(int param_1,int param_2);  // (gm) старый: GetFlame -> IsNodeTarget
     // 0x0049CF10
     int Update(void);
     // 0x0049CF70

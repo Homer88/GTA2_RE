@@ -1,5 +1,6 @@
 
-#include "Global.h"
+#include "../../Game/global.h"
+#include "../Debug/DebugLogFile.h"
 
 
 #include "Keybrd.h"

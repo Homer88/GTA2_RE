@@ -48,7 +48,7 @@ void* Text::Bsearch(const void* pKey) {
 
 Text::Text() {
     char gLanguage[256];
-    gRegistry.GetLanguage("language", gLanguage, 256);
+    gRegistry->GetLanguage("language", gLanguage, 256);
     if (gLanguage[0] == 'e' ||
         gLanguage[0] == 'f' ||
         gLanguage[0] == 'g' ||

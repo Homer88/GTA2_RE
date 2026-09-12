@@ -3,7 +3,11 @@
 
     // 0x00452C30
 
+MenuEntry::MenuEntry() {
 
-int MenuEntry::UpdateToPreviousActive(void){
+}
+void MenuEntry::Init() {};
+
+int MenuEntry::UpdateToPreviousActive(){
         return 0;
     }

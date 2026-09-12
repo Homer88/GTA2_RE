@@ -1,8 +1,9 @@
+
 #ifndef __DECALINFO_H_
 #define __DECALINFO_H_
 
-class DecalInfo{
 
+class DecalInfo{
     public:
 
     // 0x0045B230

@@ -1,5 +1,19 @@
 #include "CarEngines.h"
 
+CarEngines gCarEngines;
+
+CarEngines::CarEngines(){
+
+}
+
+CarEngines::~CarEngines(){
+
+}
+
+int CarEngines::GetEngineValue(int CarType){
+
+    return 0;
+}
 
     // 0x004327E0
 

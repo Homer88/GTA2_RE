@@ -12,7 +12,8 @@ struct Style
 
 unsigned __int8 __stdcall GetNumberOfCars(void* pthis)
 {
-	//написал
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	return 0;
 }
 
 

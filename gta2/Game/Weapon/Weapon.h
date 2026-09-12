@@ -1,9 +1,11 @@
+
 #ifndef __WEAPON_H_
 #define __WEAPON_H_
 
-class Weapon{
 
+class Weapon{
     public:
+    unsigned short Armo;
 
     // 0x0041CC90
     int GetTypeWeapon(void);
@@ -12,7 +14,7 @@ class Weapon{
     // 0x004A4F80
     int GetArrmo(void);
     // 0x004A4F90
-    int GiveWeaponInfiniti(void);
+    int GiveWeaponInfiniti();
     // 0x004A4FA0
     int NotInfiniti(void);
     // 0x004A4FB0

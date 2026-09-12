@@ -4,7 +4,7 @@
     // 0x0045AFD0
 
 
-void CarGenerator::SetMaxCars(int param_1){
+void CarGenerator::SetSpawnState(int param_1){
 
     }
 

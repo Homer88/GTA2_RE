@@ -4,7 +4,7 @@
     // 0x004B8FB0
 
 
-void BrakeInfo::Destroy(void){
+void BrakeInfo::Clear(void) {  // (gm) старый: Destroy -> Clear
 
     }
 

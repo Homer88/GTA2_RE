@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(Network LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB NETWORK_SOURCE "*.cpp")
+file(GLOB NETWORK_HEADERS "*.h")
+set(GLOBAL_HEADERS "../../Game/global.h")
+
+# ���ઠ  Network
+add_library(${PROJECT_NAME} STATIC ${NETWORK_SOURCE} ${NETWORK_HEADERS} ${GLOBAL_HEADERS})

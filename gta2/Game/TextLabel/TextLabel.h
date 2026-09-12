@@ -1,8 +1,9 @@
+
 #ifndef __TEXTLABEL_H_
 #define __TEXTLABEL_H_
 
-class TextLabel{
 
+class TextLabel{
     public:
 
     // 0x004A4F20

@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(Replay LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB REPLAY_SOURCE "*.cpp")
+file(GLOB REPLAY_HEADERS "*.h")
+set(GLOBAL_HEADERS "../../Game/global.h")
+
+# ���ઠ  Replay
+add_library(${PROJECT_NAME} STATIC ${REPLAY_SOURCE} ${REPLAY_HEADERS} ${GLOBAL_HEADERS})

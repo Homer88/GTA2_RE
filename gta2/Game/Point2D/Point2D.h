@@ -1,8 +1,9 @@
+
 #ifndef __POINT2D_H_
 #define __POINT2D_H_
 
-class Point2D{
 
+class Point2D{
     public:
 
     // 0x00401B20
@@ -18,7 +19,7 @@ class Point2D{
     // 0x004BA5E0
     int SetCameraBounds(void);
     // 0x004BA6C0 undefined1 __thiscall
-    int IsPointOnQuad(int param_1);
+    int CheckAnyPlayer(int param_1);  // (gm) старый: IsPointOnQuad -> CheckAnyPlayer
     // 0x004BA720
     int Transform(void);
 };

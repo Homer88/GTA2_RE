@@ -1,8 +1,9 @@
+
 #ifndef __RADAR_H_
 #define __RADAR_H_
 
-class Radar{
 
+class Radar{
     public:
 
     // 0x004C3680

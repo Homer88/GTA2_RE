@@ -19,8 +19,6 @@
 
 DMAudio gDMAudio;
 
-// Глобальный объект реестра (определён в Engine\Registry\Registry.cpp).
-extern Registry gRegistry;
 
 int  skip_audio;   // 0 = звук включён
 int  gSampleRate;  // результат создания звукового объекта (см. суб_410530)
@@ -58,7 +56,7 @@ void DMAudio::Init3DSound(int Vol3D)
 	if (gSound.Sound3D == want)
 		return;
 	gSound.Sound3D = want;
-	gRegistry.SetSound3DConfigure("do_3d_sound", (BYTE)gSound.Sound3D);
+	gRegistry->SetSound3DConfigure("do_3d_sound", (BYTE)gSound.Sound3D);
 }
 
 bool DMAudio::Get3DSound()

@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+project(ScriptVar LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB SCRIPTVAR_SOURCE "*.cpp")
+file(GLOB SCRIPTVAR_HEADERS "*.h")
+set(GLOBAL_HEADERS "../../Game/global.h")
+
+# ���ઠ  ScriptVar
+add_library(${PROJECT_NAME} STATIC ${SCRIPTVAR_SOURCE} ${SCRIPTVAR_HEADERS} ${GLOBAL_HEADERS})

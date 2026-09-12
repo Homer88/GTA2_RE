@@ -1,8 +1,9 @@
+
 #ifndef __CHECKPOINT_H_
 #define __CHECKPOINT_H_
 
-class Checkpoint{
 
+class Checkpoint{
     public:
 
     // 0x00446740

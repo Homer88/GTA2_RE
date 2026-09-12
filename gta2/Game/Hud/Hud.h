@@ -1,8 +1,9 @@
+
 #ifndef __HUD_H_
 #define __HUD_H_
 
-class Hud{
 
+class Hud{
     public:
 
     // 0x004219F0
@@ -37,6 +38,27 @@ class Hud{
     int SetSpeedText_Wrapper(void);
     // 0x004CAC30
     int UpdateWrapper(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 9 функций
+    // 0x004A4760: Hud::ToggleFlag
+    void ToggleFlag();
+    // 0x004C6CA0: Hud::AnimatePlayerStats
+    void AnimatePlayerStats();
+    // 0x004C74F0: Hud::DrawGangStatus
+    void DrawGangStatus();
+    // 0x004C78A0: Hud::DrawPlayerNames
+    void DrawPlayerNames();
+    // 0x004C7B70: Hud::DrawHealth
+    void DrawHealth();
+    // 0x004C8710: Hud::DrawQuitConfirm
+    void DrawQuitConfirm();
+    // 0x004C8990: Hud::DrawChatMessage
+    void DrawChatMessage();
+    // 0x004C8CA0: Hud::DrawNumber
+    void DrawNumber();
+    // 0x004C8E30: Hud::DrawTime
+    void DrawTime();
+};
 #endif // !__HUD_H_

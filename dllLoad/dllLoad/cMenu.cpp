@@ -4,10 +4,19 @@
 #include "cGlobal.h"
 #include "cPlayerData.h"
 #include "cText.h"
-#include "DebugLogFile.h" 
+#include "DebugLogFile.h"
+#include "cHookTrace.h" 
 
 extern PlayerData* gPlayerData;
-static  Menu* gMenu = (Menu*)0x005EB160;
+
+// 0x005EB160 is the address of the global Menu* cell in .data (not the Menu
+// instance!). The real Menu is heap-allocated (operator_new(0x1EB40) in
+// FUN_00457830) and its address is stored in that cell. Read the pointer, do
+// NOT use the cell address itself as a Menu* (that reads garbage -> crash).
+Menu* GetGameMenu(void)
+{
+    return (Menu*)(*(void**)0x005EB160);
+}
 
 //char gNamePlayerASCII[80] ;
 unsigned char *gNamePlayerASCII = (unsigned char*)0x00671880;
@@ -22,14 +31,14 @@ unsigned char*   ConvertWCharToChar(wchar_t *wsc)
 
     int i = 0;
     const wchar_t* src = wsc;
-    constexpr int MAX_LENGTH = 79; // Один символ для нуль-терминатора
+    constexpr int MAX_LENGTH = 79; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-    // Преобразуем до 79 символов (последний остаётся для '\0')
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 79 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ '\0')
     while (*src != L'\0' && i < MAX_LENGTH) {
-        if (*src < 0x80) { // ASCII символ
+        if (*src < 0x80) { // ASCII пїЅпїЅпїЅпїЅпїЅпїЅ
             gNamePlayerASCII[i] = static_cast<char>(*src);
         }
-        else { // Не-ASCII символ - заменяем на '#'
+        else { // пїЅпїЅ-ASCII пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ '#'
             gNamePlayerASCII[i] = '#';
         }
         ++src;
@@ -48,41 +57,43 @@ unsigned short gCodeInit[8] = { 829, 761, 23, 641, 43, 809, 677, 191 };
 //char __thiscall Menu::PlayerCheat(Menu* this, wchar_t* PlayerName)
 
 enum Cheat{
-    CUTIE1 = 0x33A69,                 // Дает 99 жизней
-    NEKKID = 0x36F62,                 // Нудисты
-    MADEMAN = 0x41611,                 // Дает авторитет
-    DANISGOD = 0x44D2F,                 // дает 20000
+    CUTIE1 = 0x33A69,                 // пїЅпїЅпїЅпїЅ 99 пїЅпїЅпїЅпїЅпїЅпїЅ
+    NEKKID = 0x36F62,                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    MADEMAN = 0x41611,                 // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    DANISGOD = 0x44D2F,                 // пїЅпїЅпїЅпїЅ 20000
     FYOHZZ0 = 0x45118,
     FISHFLAP = 0x45AEF,                 // Small Cars
     UKGAMER = 0x45B2C,                 // all towns unlocked
-    FLAMEON = 0x45EC2,                 // Бecкoнeчнaя Flame Gun
-    DAVEMOON = 0x4639F,                 // Базовое оружие и бесконечные патроны
-    EATSOUP = 0x4657B,                 // Бесплатные магазины
-    IAMDAVEJ = 0x4672D,                 // дает 999999
-    LASVEGAS = 0x46BE8,                 // Фaнаты Элвисa
+    FLAMEON = 0x45EC2,                 // пїЅecпїЅoпїЅeпїЅпїЅaпїЅ Flame Gun
+    DAVEMOON = 0x4639F,                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    EATSOUP = 0x4657B,                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    IAMDAVEJ = 0x4672D,                 // пїЅпїЅпїЅпїЅ 999999
+    LASVEGAS = 0x46BE8,                 // пїЅaпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅa
     NAVARONE = 0x47178,                 // All Weapons
-    COCKTART = 0x478A9,                 // За взрывы не будут выдаваться очки.
-    PSJABBER = 0x478FB,                 // на бессмертие
-    ARSESTAR = 0x47AF1,                 // Пocлe apecтa y вac coxpaняютcя вce имeвшиecя в нaличии пyшки
-    GOREFEST = 0x484DF,                 // Количество крови в игре заметно увеличится.
-    BUCKFAST = 0x4878D,                 // Режим «Бунт»
-    GOURANGA = 0x49362,                 // Активация читов
-    GODOFGTA = 0x49771,                 // Все оружие
+    COCKTART = 0x478A9,                 // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
+    PSJABBER = 0x478FB,                 // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    ARSESTAR = 0x47AF1,                 // пїЅocпїЅe apecпїЅa y пїЅac coxpaпїЅпїЅпїЅпїЅcпїЅ пїЅce пїЅпїЅeпїЅпїЅпїЅecпїЅ пїЅ пїЅaпїЅпїЅпїЅпїЅпїЅ пїЅyпїЅпїЅпїЅ
+    GOREFEST = 0x484DF,                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+    BUCKFAST = 0x4878D,                 // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    GOURANGA = 0x49362,                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    GODOFGTA = 0x49771,                 // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     SUPZZZ0 = 0x49C76,
     SEGARULZ = 0x4A98B,                 // 10x Point Multiplier
-    ITSALLUP = 0x4A9B8,                 // Выбop ypoвня
-    HUNSRUS = 0x4B28C,                 // Нeвидимocть
-    SCHURULZ = 0x4D5C4,                 // Двойной урон
-    VOLTFEST = 0x4DA77,                 // Бecкoнeчнaя Electrical Gun
-    TUMYFROG = 0x5073D,                 // Вce бoнyc-ypoвни
+    ITSALLUP = 0x4A9B8,                 // пїЅпїЅпїЅop ypoпїЅпїЅпїЅ
+    HUNSRUS = 0x4B28C,                 // пїЅeпїЅпїЅпїЅпїЅпїЅocпїЅпїЅ
+    SCHURULZ = 0x4D5C4,                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+    VOLTFEST = 0x4DA77,                 // пїЅecпїЅoпїЅeпїЅпїЅaпїЅ Electrical Gun
+    TUMYFROG = 0x5073D,                 // пїЅce пїЅoпїЅyc-ypoпїЅпїЅпїЅ
 };
 
-int* gActiveCheat = (int*)0x005EAF50;// воспроизводит звук принятие пароля
+int* gActiveCheat = (int*)0x005EAF50;// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
 {
-    // TODO ME  убрать отладку  
-    gMenu->isChaet = true;
-    unsigned char *chName; //массив 8  элементов
+    // TODO ME  пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ  
+    if (pthis) {
+        pthis->isChaet = true;
+    }
+    unsigned char *chName; //пїЅпїЅпїЅпїЅпїЅпїЅ 8  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     chName = ConvertWCharToChar(PlayerName);
     DebugLog(chName);
     int  lenString = wcslen(PlayerName);
@@ -184,8 +195,8 @@ char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
                    return 0;
                case UKGAMER:
                    *gAllTower = true;
-                   //S150::sub_4A8B00(gS150); Надо писать ее
-                   //Menu::sub_456E80(this); Надо писать ее
+                   //S150::sub_4A8B00(gS150); пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+                   //Menu::sub_456E80(this); пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
                    *gActiveCheat = 9;
                    return 0;
                case SUPZZZ0:
@@ -233,26 +244,28 @@ char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
 
 //int __thiscall Menu::sub_459540(Menu* pthis)
 
-void  __stdcall sub_459540(void) {
+void  __fastcall sub_459540(Menu* thisMenu) {
 //void  __stdcall sub_459540(Menu* pthis){
     unsigned short PlayerSlot; 
     wchar_t* PlayerName; 
 
+    TraceEvent("Menu::sub_459540 @0x00459540");
+
     int pl = offsetof(Menu, pPlayerName);
-    int address = (uintptr_t)gMenu;
+    int address = (uintptr_t)thisMenu;
 
     //Debuglog(Menu, PLayerName, "PlayerName");
     DebugLog(pl);
     DebugLog(address);
   
-    DebugLog(gMenu->pPlayerName);
+    DebugLog(thisMenu->pPlayerName);
 
 
-    PlayerSlot = gMenu->pMenuPage[1].pMenuEntry[0].PlayerSlot;
+    PlayerSlot = thisMenu->pMenuPage[1].pMenuEntry[0].PlayerSlot;
     PlayerName = gPlayerData->pPlayerSlotSave[PlayerSlot].PlayerName;
     DebugLog(PlayerName);
      // wcsncpy(PlayerName, gMenu->PlayerName, 9u);
-    PlayerCheat(gMenu, gMenu->pPlayerName);
+    PlayerCheat(thisMenu, thisMenu->pPlayerName);
     //S150::sub_4A89E0(gPlayerData, PlayerSlot);
 }
 
@@ -288,56 +301,79 @@ enum  MenuPages // 4 bytes
 };
 
 extern Text* gText;
-short  __stdcall  LoadTextMenu() {
-    gMenu->Filderer0x120 = 16;
-    gMenu->pMenuPage[0].numMenuItems = 3;
-    gMenu->pMenuPage[0].pMenuEntry[0].pMenuActions = MENUPAGE_PLAY;
-    gMenu->pMenuPage[0].pMenuEntry[0].X = 300;
-    gMenu->pMenuPage[0].pMenuEntry[0].Y = 250;
+extern LPVOID _LoadTextMenu; // dllmain.cpp: Detours trampoline to the original 0x00453E20
+
+// 1 = run the reconstructed stub below (only 3 pages, hardcoded "Play"/"quit", no .gxt).
+// 0 = call the ORIGINAL retail Menu::LoadTextMenu (builds all pages, reads text from
+//     gText.Bsearch) - restores the frontend texts.
+#define LOADTEXTMENU_USE_REPLICA 0
+
+short  __fastcall  LoadTextMenu(Menu* thisMenu)
+{
+    TraceEvent("Menu::LoadTextMenu @0x00453E20");
+    DebugLog((int)thisMenu);
+    DebugLog((int)GetGameMenu());
+    if (thisMenu == NULL) {
+        thisMenu = GetGameMenu();
+    }
+#if LOADTEXTMENU_USE_REPLICA
+    thisMenu->Filderer0x120 = 16;
+    thisMenu->pMenuPage[0].numMenuItems = 3;
+    thisMenu->pMenuPage[0].pMenuEntry[0].pMenuActions = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[0].pMenuEntry[0].X = 300;
+    thisMenu->pMenuPage[0].pMenuEntry[0].Y = 250;
     //const wchar_t **play= Bsearch(gText, L"play");
-    wcsncpy(gMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement, L"Play", 50u);
-    DebugLog(gMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement);
-    gMenu->pMenuPage[0].pMenuEntry[0].SelectMenu = MENUPAGE_PLAY;
-    gMenu->pMenuPage[0].pS137[0].Y = 258;
-    gMenu->pMenuPage[0].pS137[0].X = 280;
-    gMenu->pMenuPage[0].pS137[1].X = 280;
-    gMenu->pMenuPage[0].pS137[1].Y = 278;
-    gMenu->pMenuPage[0].pS137[2].X = 280;
-    gMenu->pMenuPage[0].pS137[2].Y = 298;
-    gMenu->pMenuPage[0].IndexMenuActions = MENUPAGE_START_MENU;
-    gMenu->pMenuPage[0].field_BC8 = MENUPAGE_START_MENU;
+    wcsncpy(thisMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement, L"Play", 50u);
+    DebugLog(thisMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement);
+    thisMenu->pMenuPage[0].pMenuEntry[0].SelectMenu = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[0].pS137[0].Y = 258;
+    thisMenu->pMenuPage[0].pS137[0].X = 280;
+    thisMenu->pMenuPage[0].pS137[1].X = 280;
+    thisMenu->pMenuPage[0].pS137[1].Y = 278;
+    thisMenu->pMenuPage[0].pS137[2].X = 280;
+    thisMenu->pMenuPage[0].pS137[2].Y = 298;
+    thisMenu->pMenuPage[0].IndexMenuActions = MENUPAGE_START_MENU;
+    thisMenu->pMenuPage[0].field_BC8 = MENUPAGE_START_MENU;
 
 
-    gMenu->pMenuPage[7].pS136[7].field_2 = 40;
-    gMenu->pMenuPage[7].pS136[8].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pS136[8].field_2 = 100;
-    gMenu->pMenuPage[7].pS136[8].field_4 = 320;
-    gMenu->pMenuPage[7].pS136[9].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pS136[9].field_2 = 100;
-    gMenu->pMenuPage[7].pS136[9].field_4 = 340;
-    gMenu->pMenuPage[7].pS136[10].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pS136[10].field_2 = 100;
-    gMenu->pMenuPage[7].pS136[10].field_4 = 360;
-    gMenu->pMenuPage[7].pS136[11].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pS136[11].field_2 = 100;
-    gMenu->pMenuPage[7].pS136[11].field_4 = 380;
-    gMenu->pMenuPage[7].pS136[12].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pS136[12].field_2 = 100;
-    gMenu->pMenuPage[7].pS136[12].field_4 = 400;
-    gMenu->pMenuPage[7].pS136[13].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pS136[13].field_2 = 30;
-    gMenu->pMenuPage[7].pS136[13].field_4 = 150;
-    gMenu->pMenuPage[7].pMenuEntry[0].pMenuActions = MENUPAGE_PLAY;
-    gMenu->pMenuPage[7].pMenuEntry[0].Y = 430;
+    thisMenu->pMenuPage[7].pS136[7].field_2 = 40;
+    thisMenu->pMenuPage[7].pS136[8].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pS136[8].field_2 = 100;
+    thisMenu->pMenuPage[7].pS136[8].field_4 = 320;
+    thisMenu->pMenuPage[7].pS136[9].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pS136[9].field_2 = 100;
+    thisMenu->pMenuPage[7].pS136[9].field_4 = 340;
+    thisMenu->pMenuPage[7].pS136[10].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pS136[10].field_2 = 100;
+    thisMenu->pMenuPage[7].pS136[10].field_4 = 360;
+    thisMenu->pMenuPage[7].pS136[11].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pS136[11].field_2 = 100;
+    thisMenu->pMenuPage[7].pS136[11].field_4 = 380;
+    thisMenu->pMenuPage[7].pS136[12].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pS136[12].field_2 = 100;
+    thisMenu->pMenuPage[7].pS136[12].field_4 = 400;
+    thisMenu->pMenuPage[7].pS136[13].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pS136[13].field_2 = 30;
+    thisMenu->pMenuPage[7].pS136[13].field_4 = 150;
+    thisMenu->pMenuPage[7].pMenuEntry[0].pMenuActions = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[7].pMenuEntry[0].Y = 430;
    
-    wcsncpy(gMenu->pMenuPage[7].pMenuEntry[0].TextMenuElement, L"quit", 0x32u);
+    wcsncpy(thisMenu->pMenuPage[7].pMenuEntry[0].TextMenuElement, L"quit", 0x32u);
 
-    gMenu->pMenuPage[14].pS136[2].Visible = MENUPAGE_PLAY;
-    gMenu->pMenuPage[14].pS136[2].field_2 = 20;
-    gMenu->pMenuPage[14].pS136[2].field_4 = 200;
+    thisMenu->pMenuPage[14].pS136[2].Visible = MENUPAGE_PLAY;
+    thisMenu->pMenuPage[14].pS136[2].field_2 = 20;
+    thisMenu->pMenuPage[14].pS136[2].field_4 = 200;
 
 
-    gMenu->pMenuPage[14].IndexMenuActions = MENUPAGE_START_MENU;
-    gMenu->pMenuPage[14].field_BC8 = MENUPAGE_START_MENU;
+    thisMenu->pMenuPage[14].IndexMenuActions = MENUPAGE_START_MENU;
+    thisMenu->pMenuPage[14].field_BC8 = MENUPAGE_START_MENU;
     return 0;
+#else
+    // Chain to the original retail implementation (Menu::LoadTextMenu, __thiscall).
+    // This builds the complete menu and fills the strings from the loaded .gxt data.
+    // IMPORTANT: forward the ORIGINAL this (thisMenu, taken from ECX), NOT the global
+    // gMenu cell address - during Menu::Menu() the global is still NULL and the
+    // retail code must write into the real heap Menu.
+    return ((short (__thiscall*)(Menu*))_LoadTextMenu)(thisMenu);
+#endif
 }

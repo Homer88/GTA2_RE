@@ -1,11 +1,11 @@
+
 #ifndef __ENGINESTRUCT_H_
 #define __ENGINESTRUCT_H_
 
-class EngineStruct{
 
+class EngineStruct{
     public:
-    EngineStruct();
-    ~EngineStruct();
+
     // 0x004210C0
     int Init(void);
 };

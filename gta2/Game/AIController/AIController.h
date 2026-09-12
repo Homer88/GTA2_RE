@@ -1,8 +1,9 @@
+
 #ifndef __AICONTROLLER_H_
 #define __AICONTROLLER_H_
 
-class AIController{
 
+class AIController{
     public:
 
     // 0x004035B0

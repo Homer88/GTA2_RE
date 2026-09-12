@@ -1,10 +1,18 @@
 #include "CarDoor.h"
 
+CarDoor gCarDoor;
 
+CarDoor::CarDoor(){
+
+}
+
+CarDoor::~CarDoor(){
+    
+}
     // 0x0041F660
 
 
-void CarDoor::InitDoorState(int arg0,unsigned int param_2){
+void CarDoor::StartAnimation(int arg0,unsigned int param_2){
 
     }
 
@@ -12,7 +20,7 @@ void CarDoor::InitDoorState(int arg0,unsigned int param_2){
     // 0x0041F680
 
 
-unsigned char CarDoor::UpdateDoorState(int param_1){
+unsigned char CarDoor::UpdateAnimation(int param_1){
         return 0;
     }
 
@@ -36,7 +44,7 @@ int CarDoor::S7(void){
     // 0x00421340
 
 
-void CarDoor::ResetDoorState(void){
+void CarDoor::Reset(void){
 
     }
 
@@ -60,7 +68,7 @@ int CarDoor::SetPedInDoor(void){
     // 0x00421390
 
 
-void CarDoor::GetTurrel(int param_1){
+void CarDoor::HornOn(int param_1){
 
     }
 

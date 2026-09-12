@@ -1,10 +1,11 @@
+
 #ifndef ___MENU_H__
 #define ___MENU_H__
 #include <dinput.h>
 #include "../../Engine/input/KeyState.h"
-#include "MenuPage.h"
+#include "../MenuPage/MenuPage.h"
 // Forward declarations
-#include "../Player/PlayerSlotSlave.h"
+#include "../PlayerSlotSlave/PlayerSlotSlave.h"
 //struct DirectInput;
 //struct InputDevice;
 //struct TextMenuElement;
@@ -368,6 +369,11 @@ Menu();
 ~Menu();
 // Адрес: 0x0045731E - Размер: 0x1E байт
 void MenuDelete(byte status);
-};
 
+
+// ==== импорт имён из gm ====
+    // 1 функций
+    // 0x004C1F80: Menu::HandleMenu
+    void HandleMenu();
+};
 #endif // MENU_H

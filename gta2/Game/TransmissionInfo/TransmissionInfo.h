@@ -1,8 +1,9 @@
+
 #ifndef __TRANSMISSIONINFO_H_
 #define __TRANSMISSIONINFO_H_
 
-class TransmissionInfo{
 
+class TransmissionInfo{
     public:
 
     // 0x004B91E0
@@ -12,7 +13,7 @@ class TransmissionInfo{
     // 0x004B9260
     int UpdateBrakes(void);
     // 0x004B94B0 void __thiscall
-    void UpdateTransmission(void);
+    void ValidateSpawnPoints(void);  // (gm) старый: UpdateTransmission -> ValidateSpawnPoints
 };
 
 #endif // !__TRANSMISSIONINFO_H_

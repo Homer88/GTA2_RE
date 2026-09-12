@@ -1,8 +1,9 @@
+
 #ifndef __SPAWNPOINT_H_
 #define __SPAWNPOINT_H_
 
-class SpawnPoint{
 
+class SpawnPoint{
     public:
 
     // 0x00401B40
@@ -39,6 +40,23 @@ class SpawnPoint{
     int LinkPedsToLeader(void);
     // 0x00405240
     int PutGroupInVehicle(void);
-};
 
+
+// ==== Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚ Ð¸Ð¼Ñ‘Ð½ Ð¸Ð· gm ====
+    // 3 Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¹
+    // 0x004B3110: SpawnPoint::InitFromPoint1
+    void InitFromPoint1();
+    // 0x004B3130: SpawnPoint::InitFromPoint2
+    void InitFromPoint2();
+    // 0x004BA620: SpawnPoint::DecodeSpawnData
+    void DecodeSpawnData();
+
+
+    // 0x0049E540
+    // (gm) ñòàðûé: Player::IsTileBlockedPlayer -> SpawnPoint::IsSlotActive
+    int IsSlotActive(int arg0, int arg1);
+    // 0x0049E570
+    // (gm) ñòàðûé: Player::IsTileOneWay -> SpawnPoint::IsSlotFree
+    int IsSlotFree(int arg0, int arg1);
+};
 #endif // !__SPAWNPOINT_H_

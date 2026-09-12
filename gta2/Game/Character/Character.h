@@ -1,10 +1,11 @@
+
 #ifndef __CHARACTER_H_
 #define __CHARACTER_H_
 
+
 class Character{
-
     public:
-
+        bool Bunt;
     // 0x00420C30
     int CharIsValidPedIndex(void);
     // 0x00420C40
@@ -12,7 +13,7 @@ class Character{
     // 0x0043AE10
     int FindPed(void);
     // 0x0043AE40 void __fastcall
-    void IsPedNearToPlayer(int arg0);
+    void DestroyPedPool(int arg0);  // (gm) старый: IsPedNearToPlayer -> DestroyPedPool
     // 0x0043DBD0
     int CreatePedInCar(void);
     // 0x0043DC60

@@ -1,8 +1,9 @@
+
 #ifndef __ROUTEINFO_H_
 #define __ROUTEINFO_H_
 
-class RouteInfo{
 
+class RouteInfo{
     public:
 
     // 0x0045ADF0

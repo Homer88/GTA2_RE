@@ -1,8 +1,9 @@
+
 #ifndef __CAMERAORPHYSICS_H_
 #define __CAMERAORPHYSICS_H_
 
-class CameraOrPhysics{
 
+class CameraOrPhysics{
     public:
 
     // 0x0040FE50
@@ -23,6 +24,17 @@ class CameraOrPhysics{
     int IsActive(void);
     // 0x00475B60
     int ResetAccuracy(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 4 функций
+    // 0x004023E0: CameraOrPhysics::UpdateTransform
+    void UpdateTransform();
+    // 0x0041F180: CameraOrPhysics::CheckSpriteOnScreen
+    void CheckSpriteOnScreen();
+    // 0x004A4CF0: CameraOrPhysics::ReleaseTarget
+    void ReleaseTarget();
+    // 0x004A5090: CameraOrPhysics::SetTargetPosition
+    void SetTargetPosition();
+};
 #endif // !__CAMERAORPHYSICS_H_

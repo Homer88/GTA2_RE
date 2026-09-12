@@ -1,6 +1,19 @@
 #include "Gang.h"
 
 
+typedef enum GANG {
+    Yakuza = 0u,
+    Zaibatsu_Corporation = 1u,
+    Loonies = 2u,
+    GANG_3 = 3u,
+    GANG_4 = 4u,
+    GANG_5 = 5u,
+    GANG_6 = 6u,
+    GANG_7 = 7u,
+    GANG_8 = 8u,
+    GANG_9 = 9u,
+    GANG_10 = 10u,
+}GANG;
     // 0x00433B30
 
 
@@ -20,7 +33,7 @@ void* Gang::SetCurrentGangName(void){
     // 0x0045DA80
 
 
-int Gang::decreaseRespect(void){
+int Gang::DecreaseRespect(void){
         return 0;
     }
 

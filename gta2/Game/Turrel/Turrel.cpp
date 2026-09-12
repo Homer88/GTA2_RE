@@ -12,7 +12,7 @@ int Turrel::Reset(void){
     // 0x00420360
 
 
-int Turrel::IsCurrentPlayer(void){
+int Turrel::IsOwnedByCurrentPlayer(void){
         return 0;
     }
 
@@ -20,7 +20,7 @@ int Turrel::IsCurrentPlayer(void){
     // 0x004207D0
 
 
-bool Turrel::IsWeaponPresent(void){
+bool Turrel::IsVisible(void){
         return 0;
     }
 
@@ -36,7 +36,7 @@ int Turrel::SetSelect(void){
     // 0x00420D80
 
 
-void Turrel::ClearData(int arg0){
+void Turrel::TurrelZeroInit(int arg0){
 
     }
 
@@ -44,7 +44,7 @@ void Turrel::ClearData(int arg0){
     // 0x00420D90
 
 
-void Turrel::ResetTurret(void){
+void Turrel::ClearValue(void){
 
     }
 
@@ -60,7 +60,7 @@ int Turrel::S8(void){
     // 0x00420DC0
 
 
-void Turrel::SetFlag(int arg0){
+void Turrel::SetCarBit(int arg0){
 
     }
 
@@ -100,7 +100,7 @@ int Turrel::ClearFlagInReg(void){
     // 0x00492130
 
 
-void Turrel::ClearSpecialFlag(int param_1){
+void Turrel::ClearStateFlag(int param_1){
 
     }
 
@@ -180,7 +180,7 @@ int Turrel::FreeTurrets(void){
     // 0x004C4F10
 
 
-void Turrel::SetCarModelId(int param_1){
+void Turrel::SetState(int param_1){
 
     }
 
@@ -188,7 +188,7 @@ void Turrel::SetCarModelId(int param_1){
     // 0x004C4F20
 
 
-int Turrel::GetCarWeapon(int param_1){
+int Turrel::GetState(int param_1){
         return 0;
     }
 

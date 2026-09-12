@@ -1,8 +1,9 @@
+
 #ifndef __PACKETINFO_H_
 #define __PACKETINFO_H_
 
-class PacketInfo{
 
+class PacketInfo{
     public:
 
     // 0x004C2780

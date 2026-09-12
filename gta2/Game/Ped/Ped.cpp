@@ -1,6 +1,38 @@
 #include "Ped.h"
 
 
+typedef enum PedState {
+    PEDSTATE_MOVE_TURN = 0,
+    New_Name_1 = 1,
+    New_Name_2 = 2,
+    PEDSTATE_ENTER_CAR = 3,
+    PEDSTATE_EXIT_CAR = 4,
+    PEDSTATE_IDLE1 = 5,
+    New_Name_6 = 6,
+    PEDSTATE_IDLE = 7,
+    PEDSTATE_FALL = 8,
+    PEDSTATE_DEAD = 9,
+    PEDSTATE_IN_CAR = 10,
+    New_Name_11 = 11,
+    New_Name_12 = 12,
+    New_Name_13 = 13,
+    New_Name_14 = 14,
+    New_Name_15 = 15,
+    New_Name_16 = 16,
+    New_Name_17 = 17,
+    New_Name_18 = 18,
+    New_Name_19 = 19
+}PedState;
+
+typedef enum WantedLevelStat {
+    LEVEL_WANTED_0 = 0,
+    LEVEL_WANTED_1 = 600,
+    LEVEL_WANTED_2 = 1600,
+    LEVEL_WANTED_3 = 3000,
+    LEVEL_WANTED_4 = 5000,
+    LEVEL_WANTED_5 = 8000,
+    LEVEL_WANTED_6 = 12000,
+}WantedLevelStat;
     // 0x003F1004
 
 
@@ -76,8 +108,9 @@ int Ped::GetCurrentState(void){
     // 0x004039A0
 
 
-int Ped::SetHealth(void){
-        return 0;
+void  Ped::SetHealth(unsigned short Health){
+
+    this->Health = Health;
     }
 
 
@@ -180,16 +213,18 @@ int Ped::SetAnimationState(void){
     // 0x00403A80
 
 
-int Ped::GetActionParam(void){
-        return 0;
+int Ped::GetActionParam(){
+
+        return this->StatePed;
     }
 
 
     // 0x00403A90
 
 
-int Ped::GetCurrentAction(void){
-        return 0;
+int Ped::GetCurrentAction(){
+    return this->ActionState1;
+       
     }
 
 
@@ -332,8 +367,8 @@ int Ped::GetPosition(void){
     // 0x0041B0A0
 
 
-int Ped::IsPlayerControlled(void){
-        return 0;
+bool  Ped::IsPlayerControlled(){
+        return this->isPlayer !=NULL;
     }
 
 
@@ -372,8 +407,9 @@ int Ped::GetSearchType(void){
     // 0x00420B80
 
 
-int Ped::SetPoliceNoStar(void){
-        return 0;
+void  Ped::SetPoliceNoStar(){
+
+    this->PoliceStar = LEVEL_WANTED_0;
     }
 
 
@@ -780,8 +816,34 @@ int Ped::GetCopStars(void){
     // 0x00434C40
 
 
-int Ped::SetPoliceStarLevel(void){
-        return 0;
+unsigned short Ped::SetPoliceStarLevel(unsigned short CopLevel){
+    
+    switch (CopLevel) {
+    case LEVEL_WANTED_6:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    case LEVEL_WANTED_5:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    case LEVEL_WANTED_4:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    case LEVEL_WANTED_3:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    case LEVEL_WANTED_2:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    case LEVEL_WANTED_1:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    case LEVEL_WANTED_0:
+        this->PoliceStar = CopLevel;
+        return CopLevel;
+    default:
+        this->PoliceStar = CopLevel;
+    }
+    return 0;
     }
 
 
@@ -925,6 +987,15 @@ int Ped::SetSpriteDoorFlag(void){
 
 
 int Ped::HealPed(void){
+    Car* _Car = this->CarCurrent1;
+
+    if (_Car !=NULL) {
+        _Car->Repair(); 
+        return 1;
+    }
+    if (this->StatusPed != PEDSTATE_DEAD) {
+        this->SetHealth(100);
+     }
         return 0;
     }
 
@@ -1236,7 +1307,7 @@ int Ped::PlacePedOnTile(void){
     // 0x0043B7C0
 
 
-void Ped::PickRoadDirection(int arg0){
+void Ped::PlayRandomGesture(int arg0){
 
     }
 

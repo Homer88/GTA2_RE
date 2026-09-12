@@ -1,17 +1,9 @@
 #include "PlayerData.h"
 
-PlayerData gPlayerData;
-    
-PlayerData::PlayerData(){
-}
-PlayerData::~PlayerData(){
-}
 
+    // 0x00452200
 
-
-
-// 0x00452200
-
+PlayerData *gPlayerData;
 
 int PlayerData::ApplyMoneyCheatIfApplicable(void){
         return 0;
@@ -29,7 +21,7 @@ int PlayerData::Dtor(void){
     // 0x004A8820
 
 
-int PlayerData::FindFilePlyslot(void){
+int PlayerData::FindFile_Plyslot(void){
         return 0;
     }
 
@@ -48,10 +40,15 @@ int PlayerData::LoadPlayerSlot(void){
 int PlayerData::WriteFileNamePlayer(void){
         return 0;
     }
-void  PlayerData::WriteFileNamePlayer(wchar_t *NamePlayer){
-        return ;
-    }
+int PlayerData::WriteFileNamePlayer(wchar_t* NamePlayer) {
 
+    return 0;
+}
+// TODO: заглушка - реализовать (объявлен в PlayerData.h)
+int PlayerData::WriteFileNamePlayer(char Slot) { return 0; };
+int PlayerData::WriteFileNamePlayer(wchar_t Slot) { return 0; };
+int WriteFileNamePlayer(char Slot) { return 0; };
+int WriteFileNamePlayer(wchar_t Slot) { return 0; };
     // 0x004A8A90
 
 

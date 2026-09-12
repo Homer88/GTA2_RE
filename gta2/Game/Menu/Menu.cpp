@@ -9,15 +9,15 @@
 #include <string.h>
 
 #include "../global.h"
-#include "../Player/PlayerData.h"
-#include "../Player/PlayerSlotSlave.h"
-#include "../MapGm/MapGm.h"
+#include "../PlayerData/PlayerData.h"
+#include "../PlayerSlotSlave/PlayerSlotSlave.h"
+#include "../../Engine/MapGm/MapGm.h"
 #include "../../Engine/Bink/BinkBuffer.h"
 #include "../../Engine/Movie/Movie.h"
 #include "../../Engine/DMAudio/DMAudio.h"
 #include "Menu.h"
 
-Menu gMenu;
+Menu *gMenu;
 
  
 
@@ -349,7 +349,7 @@ bool gGetAllWeapons 			= false;
 bool gDoInvulnerable 			= false;
 bool gDANISGOD 					= false;
 bool gFYOHZZ0 					= false;
-bool gIAMDAVEJ 					= false;
+bool gGiveMoney99K					= false;
 bool gSEGARULZ 					= false;
 bool gDAVEMOON 					= false;
 bool gExplodingOn 				= false;
@@ -411,7 +411,7 @@ int  Menu::UpdateMenuFrame() {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00456E80 - Размер: 0xF9 байт
     PlayerSlotSlave* pPlayerProfileName = this->getPlayerProfileName();
-    byte pPlayerSlotSave = gMapGm.GetPlayerSlotSave(); // TODO: глобал gMapGm не входит в линковку GTA2
+    byte pPlayerSlotSave = gMapGm->GetPlayerSlotSave(); // TODO: глобал gMapGm не входит в линковку GTA2
     MenuPage* pMenuPage = &this->MenuPageArray[this->PageNumber];
     unsigned char pLastActiveArenaSlot = this->FindLastActiveArenaSlot(pPlayerProfileName);
     unsigned char pBonusStage = this->MultiplayerMenu(pPlayerProfileName);
@@ -419,7 +419,7 @@ int  Menu::UpdateMenuFrame() {
     //Menu *pMenu; // НЕ инициализирован в дампе, закомментировано чтобы избежать UB
 
     if (pLastActiveArenaSlot >= pArenaSlot) {
-        gMapGm.SetPlayerArena(pArenaSlot); // API MapGm.h не имеет одноаргументной SetPlayerArena (есть SetPlayerArea)
+        gMapGm->SetPlayerArena(pArenaSlot); // API MapGm.h не имеет одноаргументной SetPlayerArena (есть SetPlayerArea)
     }
     else {
         //pMenu->PlayerSlotSave[0].ActiveArenaSlot = pLastActiveArenaSlot; // pMenu не инициализирован - см. TODO
@@ -504,7 +504,7 @@ void Menu::SetFrontendKeysEnabled(bool enabled) {
 void Menu::SetPlayerName() {
     //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00452490 - Размер: 0x2F байт
-    wcsncpy(this->PlayerName, gPlayerData.PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
+    wcsncpy(this->PlayerName, gPlayerData->PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
     // TODO: глобал gPlayerData не входит в линковку GTA2
 }
 
@@ -512,12 +512,12 @@ void Menu::SetPlayerName() {
 void Menu::SetPlayerNameFromMenu() {
     //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x0045862F - Размер: 0x4F байт
-    unsigned short PlayerSlot = this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[EntryPlay].PlayerSlot;
+    char PlayerSlot = this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[EntryPlay].PlayerSlot;
     //wchar_t* PlayerName = gPlayerData.PlayerSlotSave[PlayerSlot].PlayerName;
     wchar_t* PlayerName = this->PlayerName;
     wcsncpy(PlayerName, this->PlayerName, 9);
     this->PlayerCheat(PlayerName);
-    gPlayerData.WriteFileNamePlayer(PlayerSlot); // TODO: метод не реализован + глобал gPlayerData не входит в линковку GTA2
+    gPlayerData->WriteFileNamePlayer(PlayerSlot); // TODO: метод не реализован + глобал gPlayerData не входит в линковку GTA2
 }
 
 bool Menu::ValidatePlayerName(const char* name) {
@@ -697,9 +697,9 @@ int Menu::PrintCentr(const wchar_t* text, float x, float y) {
     unsigned short centrScreen = (unsigned short)y;
 
     if (stringLength == 0xFFFF)
-        return centrScreen - (gFont.GetStringWidth((wchar_t*)text, this->FontStyle) >> 1);
+        return centrScreen - (gFont->GetStringWidth((wchar_t*)text, this->FontStyle) >> 1);
     else
-        return centrScreen - (gFont.GetStringWidth((wchar_t*)text, stringLength) >> 1);
+        return centrScreen - (gFont->GetStringWidth((wchar_t*)text, stringLength) >> 1);
 }
 
 void* Menu::LoadTexture(unsigned short ID) { return 0; }
@@ -818,14 +818,14 @@ void Menu::LoadTextMenu() {
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].X = 300;
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].Y = 250;
-    wchar_t* Play = (wchar_t*)gText.Bsearch("play");
+    wchar_t* Play = (wchar_t*)gText->Bsearch("play");
     wcsncpy(this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].TextMenuElementArray, Play, 50);
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].SelectMenu = MENUPAGE_PLAY; //Это какие дествие будут выполняться
     //Пункт Меню Options
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].X = 300;
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].Y = 250;
-    wchar_t* Options = (wchar_t*)gText.Bsearch("Options");
+    wchar_t* Options = (wchar_t*)gText->Bsearch("Options");
     wcsncpy(this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].TextMenuElementArray, Options, 50);
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].SelectMenu = MENUPAGE_GTA2MANAGER; //Это какие дествие будут выполняться
     //Пункт Меню Options
@@ -833,7 +833,7 @@ void Menu::LoadTextMenu() {
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].X = 300;
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].Y = 290;
-    wchar_t* Quit = (wchar_t*)gText.Bsearch("quit");
+    wchar_t* Quit = (wchar_t*)gText->Bsearch("quit");
     wcsncpy(this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].TextMenuElementArray, Quit, 50);
     this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].SelectMenu = MENUPAGE_CREDITS;
 
@@ -841,15 +841,15 @@ void Menu::LoadTextMenu() {
     //FixMe
     if (false)
     {
-        wchar_t* No_cd1 = (wchar_t*)gText.Bsearch("no_cd1");
+        wchar_t* No_cd1 = (wchar_t*)gText->Bsearch("no_cd1");
         wcsncpy(this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].TextMenuElementArray, No_cd1, 50u);
         this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryPlay].SelectMenu = MENUPAGE_CREDITS;
 
-        wchar_t* No_cd2 = (wchar_t*)gText.Bsearch("no_cd2");
+        wchar_t* No_cd2 = (wchar_t*)gText->Bsearch("no_cd2");
         wcsncpy(this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].TextMenuElementArray, No_cd2, 50u);
         this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryOptions].SelectMenu = MENUPAGE_CREDITS;
 
-        wchar_t* No_cd3 = (wchar_t*)gText.Bsearch("no_cd3");
+        wchar_t* No_cd3 = (wchar_t*)gText->Bsearch("no_cd3");
         wcsncpy(this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].TextMenuElementArray, No_cd3, 50u);
         this->MenuPageArray[MENUPAGE_START_MENU].MenuEntryArray[EntryQuit].SelectMenu = MENUPAGE_CREDITS;
     }
@@ -894,7 +894,7 @@ inline void Menu::PlayMenuCreate() {
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[NamePlayer].MenuAction = 2;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[NamePlayer].X = 300;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[NamePlayer].Y = 210;
-    wchar_t* charcrt = (wchar_t*)gText.Bsearch("charctr");
+    wchar_t* charcrt = (wchar_t*)gText->Bsearch("charctr");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[NamePlayer].TextMenuElementArray, charcrt, 50);
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[NamePlayer].PlayerSlot = 0;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[NamePlayer].PlayerSlotNext = 0;
@@ -908,28 +908,28 @@ inline void Menu::PlayMenuCreate() {
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ResumeSaveStatus].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ResumeSaveStatus].X = 300;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ResumeSaveStatus].Y = 230;
-    wchar_t* wResumeSaveStatus = (wchar_t*)gText.Bsearch("savepos");
+    wchar_t* wResumeSaveStatus = (wchar_t*)gText->Bsearch("savepos");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ResumeSaveStatus].TextMenuElementArray, wResumeSaveStatus, 50);
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ResumeSaveStatus].SelectMenu = MENUPAGE_260;
 
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ViewHighScores].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ViewHighScores].X = 300;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ViewHighScores].Y = 250;
-    wchar_t* wViewHighScores = (wchar_t*)gText.Bsearch("hi_scre");
+    wchar_t* wViewHighScores = (wchar_t*)gText->Bsearch("hi_scre");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ViewHighScores].TextMenuElementArray, wViewHighScores, 50);
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[ViewHighScores].SelectMenu = MENUPAGE_VIEW_HIGH_SCORE;
 
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[StartPlayInArena].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[StartPlayInArena].X = 300;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[StartPlayInArena].Y = 270;
-    wchar_t* wStartPlayInArena = (wchar_t*)gText.Bsearch("strlev");
+    wchar_t* wStartPlayInArena = (wchar_t*)gText->Bsearch("strlev");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[StartPlayInArena].TextMenuElementArray, wStartPlayInArena, 50);
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[StartPlayInArena].SelectMenu = MENUPAGE_264;
 
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[BonusIcon].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[BonusIcon].X = 300;
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[BonusIcon].Y = 270;
-    wchar_t* bonusIcon = (wchar_t*)gText.Bsearch("bonslev");
+    wchar_t* bonusIcon = (wchar_t*)gText->Bsearch("bonslev");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[BonusIcon].TextMenuElementArray, bonusIcon, 50);
     this->MenuPageArray[MENUPAGE_PLAY].MenuEntryArray[BonusIcon].SelectMenu = MENUPAGE_265;
 
@@ -967,14 +967,14 @@ inline void Menu::PlayMenuCreate() {
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[PlayArenaLeftArrowRed].Element = 1; //2
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[PlayArenaLeftArrowRed].X = 410;
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[PlayArenaLeftArrowRed].Y = 298;
-    wchar_t* CarDamage = (wchar_t*)gText.Bsearch("car_dam");
+    wchar_t* CarDamage = (wchar_t*)gText->Bsearch("car_dam");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].GUIArray[PlayArenaLeftArrowRed].TextMenuElementArray, CarDamage, 50);
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[PlayArenaLeftArrowRed].dX = 8; //Переменная должна быть
 
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[BonusLeftArrowRed].Element = 1; //3
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[BonusLeftArrowRed].X = 410;
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[BonusLeftArrowRed].Y = 378;
-    wchar_t* CarDamage1 = (wchar_t*)gText.Bsearch("car_dam");
+    wchar_t* CarDamage1 = (wchar_t*)gText->Bsearch("car_dam");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY].GUIArray[BonusLeftArrowRed].TextMenuElementArray, CarDamage1, 50);
     this->MenuPageArray[MENUPAGE_PLAY].GUIArray[BonusLeftArrowRed].dX = 8; //Переменная должна быть
 
@@ -1022,7 +1022,7 @@ inline void Menu::CompliteGameMenuCreate() {
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].GUIArray[GUI_GameComplire].Element = 1;
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].GUIArray[GUI_GameComplire].Y = 230;
 
-    wchar_t* GameComplire = (wchar_t*)gText.Bsearch("gam_cmp");
+    wchar_t* GameComplire = (wchar_t*)gText->Bsearch("gam_cmp");
     wcsncpy(this->MenuPageArray[MENUPAGE_GAME_COMPLETE].GUIArray[GUI_GameComplire].TextMenuElementArray, GameComplire, 50);
 
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].GUIArray[GUI_GameComplire].dX = 13;
@@ -1033,7 +1033,7 @@ inline void Menu::CompliteGameMenuCreate() {
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].MenuEntryArray[Entry_BackToMainMenu].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].MenuEntryArray[Entry_BackToMainMenu].X = 180;
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].MenuEntryArray[Entry_BackToMainMenu].Y = 410;
-    wchar_t* BackToMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* BackToMainMenu = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_GAME_COMPLETE].MenuEntryArray[Entry_BackToMainMenu].TextMenuElementArray, BackToMainMenu, 50);
 
     this->MenuPageArray[MENUPAGE_GAME_COMPLETE].MenuEntryArray[Entry_BackToMainMenu].SelectMenu = MENUPAGE_START_MENU;
@@ -1055,7 +1055,7 @@ inline void Menu::AreaCompliteMenuCreate() {
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].GUIArray[AreaComplite].X = 35;
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].GUIArray[AreaComplite].Y = 11;
 
-    wchar_t* wAreaComplite = (wchar_t*)gText.Bsearch("cmpltd");
+    wchar_t* wAreaComplite = (wchar_t*)gText->Bsearch("cmpltd");
     wcsncat(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].GUIArray[AreaComplite].TextMenuElementArray, 
         wAreaComplite, 50);
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].GUIArray[AreaComplite].dX = 11;
@@ -1063,7 +1063,7 @@ inline void Menu::AreaCompliteMenuCreate() {
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[PlayNextArea].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[PlayNextArea].Y = 365;
 
-    wchar_t* wPlayNextArea = (wchar_t*)gText.Bsearch("nxt_lvl");
+    wchar_t* wPlayNextArea = (wchar_t*)gText->Bsearch("nxt_lvl");
     wcsncpy(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[PlayNextArea].TextMenuElementArray, wPlayNextArea, 50);
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[PlayNextArea].X = 
         this->PrintCentr(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[PlayNextArea].TextMenuElementArray,
@@ -1072,7 +1072,7 @@ inline void Menu::AreaCompliteMenuCreate() {
 
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ResumeSaveStatus].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ResumeSaveStatus].Y = 385;
-    wchar_t* wResumeSaveStatus = (wchar_t*)gText.Bsearch("savepos");
+    wchar_t* wResumeSaveStatus = (wchar_t*)gText->Bsearch("savepos");
     wcsncpy(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ResumeSaveStatus].TextMenuElementArray,
             wResumeSaveStatus, 50);
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ResumeSaveStatus].X = this->PrintCentr(
@@ -1083,7 +1083,7 @@ inline void Menu::AreaCompliteMenuCreate() {
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ReplayPreviousArea].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ReplayPreviousArea].Y = 405;
 
-    wchar_t* wReplayPreviousArea = (wchar_t*)gText.Bsearch("replay");
+    wchar_t* wReplayPreviousArea = (wchar_t*)gText->Bsearch("replay");
 
     wcsncpy(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[ReplayPreviousArea].TextMenuElementArray, wReplayPreviousArea, 50);
 
@@ -1095,7 +1095,7 @@ inline void Menu::AreaCompliteMenuCreate() {
 
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[Contnue].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[Contnue].Y = 425;
-    wchar_t* wContnue = (wchar_t*)gText.Bsearch("contnue");
+    wchar_t* wContnue = (wchar_t*)gText->Bsearch("contnue");
     wcsncpy(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[Contnue].TextMenuElementArray, wContnue, 50);
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[Contnue].X = this->PrintCentr(
         this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[Contnue].TextMenuElementArray,
@@ -1104,7 +1104,7 @@ inline void Menu::AreaCompliteMenuCreate() {
 
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[BackToMainMenu].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[BackToMainMenu].Y = 445;
-    wchar_t* wBackToMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* wBackToMainMenu = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[4].TextMenuElementArray, wBackToMainMenu, 50);
     this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[BackToMainMenu].X = this->PrintCentr(
         this->MenuPageArray[MENUPAGE_AREA_COMPLETE].MenuEntryArray[BackToMainMenu].TextMenuElementArray, 
@@ -1139,8 +1139,8 @@ inline void Menu::ResumeLoadSaveCreate() {
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].GUIArray[TextPlayerQuit].Element = 1;
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].GUIArray[TextPlayerQuit].X = 35;
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].GUIArray[TextPlayerQuit].Y = 11;
-    wchar_t* wTextPlayerQuit = (wchar_t*)gText.Bsearch("plr_qut");
-    gWinApi.CopyWideString(this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].GUIArray[TextPlayerQuit].TextMenuElementArray, 
+    wchar_t* wTextPlayerQuit = (wchar_t*)gText->Bsearch("plr_qut");
+    gWinApi->CopyWideString(this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].GUIArray[TextPlayerQuit].TextMenuElementArray, 
                     wTextPlayerQuit);
 
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].GUIArray[TextPlayerQuit].dX = 13;
@@ -1148,7 +1148,7 @@ inline void Menu::ResumeLoadSaveCreate() {
 
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[ResumeSavedStatus].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[ResumeSavedStatus].Y = 392;
-    wchar_t* wResumeSavedStatus = (wchar_t*)gText.Bsearch("savepos");
+    wchar_t* wResumeSavedStatus = (wchar_t*)gText->Bsearch("savepos");
 
     wcsncpy(this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[ResumeSavedStatus].TextMenuElementArray, wResumeSavedStatus, 50);
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[ResumeSavedStatus].X = 
@@ -1160,7 +1160,7 @@ inline void Menu::ResumeLoadSaveCreate() {
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[Entry_ReplayPreviousArea].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[Entry_ReplayPreviousArea].Y = 412;
 
-    wchar_t* wReplayPreviousArea = (wchar_t*)gText.Bsearch("replay");
+    wchar_t* wReplayPreviousArea = (wchar_t*)gText->Bsearch("replay");
     wcsncpy(this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[Entry_ReplayPreviousArea].TextMenuElementArray,
         wReplayPreviousArea, 50);
 
@@ -1172,7 +1172,7 @@ inline void Menu::ResumeLoadSaveCreate() {
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[Entry_BackToMainMenu_ResumeLoadSave].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[Entry_BackToMainMenu_ResumeLoadSave].Y = 432;
 
-    wchar_t* wBackToMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* wBackToMainMenu = (wchar_t*)gText->Bsearch("mainmen");
 
     wcsncpy(this->MenuPageArray[MENUPAGE_RESULTS_PLAYER_QUIT].MenuEntryArray[Entry_BackToMainMenu_ResumeLoadSave].TextMenuElementArray,
         wBackToMainMenu, 50);
@@ -1204,14 +1204,14 @@ inline  void Menu::YouAreDead_RIP() {
     this->MenuPageArray[MENUPAGE_DEAD].GUIArray[PlayerDead].X = 35;
     this->MenuPageArray[MENUPAGE_DEAD].GUIArray[PlayerDead].Y = 11;
 
-    wchar_t* wPlayerDead = (wchar_t*)gText.Bsearch("plr_ded");
+    wchar_t* wPlayerDead = (wchar_t*)gText->Bsearch("plr_ded");
     wcsncat(this->MenuPageArray[MENUPAGE_DEAD].GUIArray[PlayerDead].TextMenuElementArray, wPlayerDead, 50);
     this->MenuPageArray[MENUPAGE_DEAD].GUIArray[PlayerDead].dX = 13;
     this->MenuPageArray[MENUPAGE_DEAD].GUIArray[PlayerDead].dY = 0;
 
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_ResumeSavedStatus].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_ResumeSavedStatus].Y = 392;
-    wchar_t* wResumeSavedStatus = (wchar_t*)gText.Bsearch("savepos");
+    wchar_t* wResumeSavedStatus = (wchar_t*)gText->Bsearch("savepos");
     wcsncat(this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_ResumeSavedStatus].TextMenuElementArray, 
         wResumeSavedStatus, 50);
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_ResumeSavedStatus].X = this->PrintCentr(
@@ -1223,7 +1223,7 @@ inline  void Menu::YouAreDead_RIP() {
 
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_ReplayPreviousArea].Y = 412;
 
-    wchar_t* wReplayPreviousArea = (wchar_t*)gText.Bsearch("replay");
+    wchar_t* wReplayPreviousArea = (wchar_t*)gText->Bsearch("replay");
     wcsncat(this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_ReplayPreviousArea].TextMenuElementArray, 
         wReplayPreviousArea, 50);
 
@@ -1236,7 +1236,7 @@ inline  void Menu::YouAreDead_RIP() {
 
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_BackToMainMenu].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_BackToMainMenu].Y = 432;
-    wchar_t* wBackToMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* wBackToMainMenu = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_BackToMainMenu].TextMenuElementArray, 
         wBackToMainMenu, 50);
     this->MenuPageArray[MENUPAGE_DEAD].MenuEntryArray[RIP_BackToMainMenu].X = this->PrintCentr(
@@ -1302,7 +1302,7 @@ inline void Menu::HighScoresForAreaCreate() {
     this->MenuPageArray[MENUPAGE_VIEW_HIGH_SCORE].GUIArray[VIEW_HIGH_SCORE_4].X = 340;
     this->MenuPageArray[MENUPAGE_VIEW_HIGH_SCORE].GUIArray[VIEW_HIGH_SCORE_4].Y = 12;
 
-    wchar_t* wHighScoresForAreaText = (wchar_t*)gText.Bsearch("hi_scre");
+    wchar_t* wHighScoresForAreaText = (wchar_t*)gText->Bsearch("hi_scre");
     wcsncpy(this->MenuPageArray[MENUPAGE_VIEW_HIGH_SCORE].GUIArray[VIEW_HIGH_SCORE_4].TextMenuElementArray,
         wHighScoresForAreaText, 30);
 
@@ -1320,7 +1320,7 @@ inline void Menu::PlayVideoMovieMenuCreate() {
     this->MenuPageArray[MENUPAGE_15].MenuEntryArray[0].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_15].MenuEntryArray[0].X = 200;
     this->MenuPageArray[MENUPAGE_15].MenuEntryArray[0].Y = 280;
-    wchar_t* pmainmen = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* pmainmen = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_15].MenuEntryArray[0].TextMenuElementArray, pmainmen, 0x32u);
     this->MenuPageArray[MENUPAGE_15].MenuEntryArray[0].SelectMenu = MENUPAGE_START_MENU;
     this->MenuPageArray[MENUPAGE_15].MenuItemArray[0].X = 180;
@@ -1335,7 +1335,7 @@ inline void Menu::PlayVideoMovieIntroMenuCreate() {
     this->MenuPageArray[MENUPAGE_PLAY_INTRO].MenuEntryArray[0].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PLAY_INTRO].MenuEntryArray[0].X = 200;
     this->MenuPageArray[MENUPAGE_PLAY_INTRO].MenuEntryArray[0].Y = 280;
-    wchar_t* wMainMenu = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* wMainMenu = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_PLAY_INTRO].MenuEntryArray[0].TextMenuElementArray, wMainMenu, 50);
     this->MenuPageArray[MENUPAGE_PLAY_INTRO].MenuEntryArray[0].SelectMenu = MENUPAGE_START_MENU;
     this->MenuPageArray[MENUPAGE_PLAY_INTRO].MenuItemArray[0].X = 180;
@@ -1351,14 +1351,14 @@ inline void Menu::BonusStageCMenuCreate() {
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[0].Element = 1;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[0].X = 35;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[0].Y = 11;
-    wchar_t* wBonusStageText = (wchar_t*)gText.Bsearch("bonslev");
+    wchar_t* wBonusStageText = (wchar_t*)gText->Bsearch("bonslev");
     wcsncpy(this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[0].TextMenuElementArray, wBonusStageText, 50);
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[0].dX = 13;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[0].dY = 5;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[1].Element = 1;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[1].X = 170;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[1].Y = 250;
-    wchar_t* v39 = (wchar_t*)gText.Bsearch("score");
+    wchar_t* v39 = (wchar_t*)gText->Bsearch("score");
     wcsncpy(this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[1].TextMenuElementArray, v39, 50);
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[2].Element = 1;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[2].X = 400;
@@ -1367,7 +1367,7 @@ inline void Menu::BonusStageCMenuCreate() {
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[0].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].GUIArray[2].dX = 5;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[0].Y = 340;
-    wchar_t* v41 = (wchar_t*)gText.Bsearch("repbons");
+    wchar_t* v41 = (wchar_t*)gText->Bsearch("repbons");
     wcsncpy(this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[0].TextMenuElementArray, v41, 50);
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[0].X = this->PrintCentr(
         this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[0].TextMenuElementArray,
@@ -1376,7 +1376,7 @@ inline void Menu::BonusStageCMenuCreate() {
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[0].SelectMenu = MENUPAGE_259;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[1].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[1].Y = 360;
-    wchar_t* v42 = (wchar_t*)gText.Bsearch("nxt_lvl");
+    wchar_t* v42 = (wchar_t*)gText->Bsearch("nxt_lvl");
     wcsncpy(this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[1].TextMenuElementArray, v42, 50);
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[1].X = this->PrintCentr(
         this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[1].TextMenuElementArray,
@@ -1385,7 +1385,7 @@ inline void Menu::BonusStageCMenuCreate() {
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[1].SelectMenu = MENUPAGE_BONUS_AREA;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[2].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[2].Y = 380;
-    wchar_t* v43 = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* v43 = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[2].TextMenuElementArray, v43, 50);
     this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[2].X = Menu::PrintCentr(
         this->MenuPageArray[MENUPAGE_BONUS_AREA].MenuEntryArray[2].TextMenuElementArray,
@@ -1436,7 +1436,7 @@ inline void Menu::NetworkGameMenuCreate() {
     wcsncpy(this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[6].TextMenuElementArray, L"gText_Menu", 0x32u);
     this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[7].Element = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[7].Y = 300;
-    wchar_t* v44 = (wchar_t*)gText.Bsearch("kills_h");
+    wchar_t* v44 = (wchar_t*)gText->Bsearch("kills_h");
     wcsncpy(this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[7].TextMenuElementArray, v44, 0x32u);
     this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[7].X = this->PrintCentr(
         this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[7].TextMenuElementArray, 
@@ -1461,7 +1461,7 @@ inline void Menu::NetworkGameMenuCreate() {
     this->MenuPageArray[MENUPAGE_UNK_KILLS].GUIArray[13].Y = 150;
     this->MenuPageArray[MENUPAGE_UNK_KILLS].MenuEntryArray[0].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_UNK_KILLS].MenuEntryArray[0].Y = 430;
-    wchar_t* v45 = (wchar_t*)gText.Bsearch("quit");
+    wchar_t* v45 = (wchar_t*)gText->Bsearch("quit");
     wcsncpy(this->MenuPageArray[MENUPAGE_UNK_KILLS].MenuEntryArray[0].TextMenuElementArray, v45, 50);
     this->MenuPageArray[MENUPAGE_UNK_KILLS].MenuEntryArray[0].X = this->PrintCentr(
         this->MenuPageArray[MENUPAGE_UNK_KILLS].MenuEntryArray[0].TextMenuElementArray,
@@ -1484,7 +1484,7 @@ inline void Menu::NiceTryMenuCreate() {
     this->MenuPageArray[MENUPAGE_NICE_TRY].NextMenuPage = 1;
     this->MenuPageArray[MENUPAGE_NICE_TRY].GUIArray[0].Element = 1;
     this->MenuPageArray[MENUPAGE_NICE_TRY].GUIArray[0].Y = 230;
-    wchar_t* v48 = (wchar_t*)gText.Bsearch("nicetry");
+    wchar_t* v48 = (wchar_t*)gText->Bsearch("nicetry");
     wcsncpy(this->MenuPageArray[MENUPAGE_NICE_TRY].GUIArray[0].TextMenuElementArray, v48, 0x32u);
 
     this->MenuPageArray[MENUPAGE_NICE_TRY].GUIArray[0].dX = 13;
@@ -1494,7 +1494,7 @@ inline void Menu::NiceTryMenuCreate() {
     this->MenuPageArray[MENUPAGE_NICE_TRY].MenuEntryArray[0].MenuAction = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_NICE_TRY].MenuEntryArray[0].X = 180;
     this->MenuPageArray[MENUPAGE_NICE_TRY].MenuEntryArray[0].Y = 410;
-    wchar_t* wMainmen = (wchar_t*)gText.Bsearch("mainmen");
+    wchar_t* wMainmen = (wchar_t*)gText->Bsearch("mainmen");
     wcsncpy(this->MenuPageArray[MENUPAGE_NICE_TRY].MenuEntryArray[0].TextMenuElementArray, wMainmen, 0x32u);
     this->MenuPageArray[MENUPAGE_NICE_TRY].MenuEntryArray[0].SelectMenu = MENUPAGE_START_MENU;
     this->MenuPageArray[MENUPAGE_NICE_TRY].MenuItemArray[0].X = 160;
@@ -1513,12 +1513,12 @@ inline void Menu::CodeDebugMenuCreate() {
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[0].Element = 1;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[0].X = 20;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[0].Y = 160;
-    wchar_t* v50 = (wchar_t*)gText.Bsearch("fr_ent1");
+    wchar_t* v50 = (wchar_t*)gText->Bsearch("fr_ent1");
     wcsncpy(this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[0].TextMenuElementArray, v50, 50);
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[1].Element = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[1].X = 20;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[1].Y = 180;
-    wchar_t* v51 = (wchar_t*)gText.Bsearch("fr_ent2");
+    wchar_t* v51 = (wchar_t*)gText->Bsearch("fr_ent2");
     wcsncpy(this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[1].TextMenuElementArray, v51, 50);
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[2].Element = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[2].X = 20;
@@ -1527,12 +1527,12 @@ inline void Menu::CodeDebugMenuCreate() {
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[3].Element = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[3].X = 20;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[3].Y = 300;
-    wchar_t* v52 = (wchar_t*)gText.Bsearch("fr_pmpt");
+    wchar_t* v52 = (wchar_t*)gText->Bsearch("fr_pmpt");
     wcsncpy(this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[3].TextMenuElementArray, v52, 50);
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[4].Element = MENUPAGE_PLAY;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[4].X = 20;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[4].Y = 320;
-    wchar_t* wScore = (wchar_t*)gText.Bsearch("score");
+    wchar_t* wScore = (wchar_t*)gText->Bsearch("score");
     wcsncpy(this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].GUIArray[4].TextMenuElementArray, wScore, 50);
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].MenuItemArray[0].X = 150;
     this->MenuPageArray[MENUPAGE_PARENTAL_CONTROL].MenuItemArray[0].Y = 348;
@@ -1723,7 +1723,7 @@ void Menu::MenuShowJapanText() {
 void Menu::PlayerCheat(wchar_t *PlayerName) {
     // TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x004590F0 - Размер: 0x44E байт
-    char* PlayerNameArrayChar = gWinApi.Convertor_wchar_t_ToChar(PlayerName);
+    char* PlayerNameArrayChar = gWinApi->Convertor_wchar_t_ToChar(PlayerName);
     int PlayerNameLength = wcslen(PlayerName);
     if (PlayerNameLength <= 16) {
         int cash = 0;
@@ -1735,7 +1735,7 @@ void Menu::PlayerCheat(wchar_t *PlayerName) {
             } while (index < PlayerNameLength);
             if (cash == GOURANGA) {
                 this->isCheat = 1;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
             }
         }
         if (this->isCheat) {
@@ -1743,98 +1743,98 @@ void Menu::PlayerCheat(wchar_t *PlayerName) {
             {
             case GOREFEST:
                 gDo_Blood = !gDo_Blood;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case BUCKFAST:
                 gBunt = !gBunt;
-                //gCheatIs=9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs=9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case VOLTFEST:
                 gVoltfest = !gVoltfest;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case MADEMAN:
                 gMademan = !gMademan;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case LASVEGAS:
                 gLasvegas = !gLasvegas;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case NEKKID:
                 gNEKKID = !gNEKKID;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case EATSOUP:
                 gDoFreeShopping = !gDoFreeShopping;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case DAVEMOON:
                 gDAVEMOON = !gDAVEMOON;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case CUTIE1:
                 gHeats99 = !gHeats99;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case ARSESTAR:
                 gKeepWeaponsAfterDeath = !gKeepWeaponsAfterDeath;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case GODOFGTA:
                 gGetAllWeapons = !gGetAllWeapons;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case PSJABBER:
                 gDoInvulnerable = !gDoInvulnerable;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case DANISGOD:
                 gDANISGOD = !gDANISGOD;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case COCKTART:
                 gExplodingOn = !gExplodingOn;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case FLAMEON:
                 gFLAMEON = !gFLAMEON;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case FYOHZZ0:
                 gFYOHZZ0 = !gFYOHZZ0;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case IAMDAVEJ:
-                gIAMDAVEJ = !gIAMDAVEJ;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gGiveMoney99K= !gGiveMoney99K;
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case SEGARULZ:
                 gSEGARULZ = !gSEGARULZ;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case UKGAMER:
                 gUKGAMER = !gUKGAMER;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case SUPZZZ0:
                 gSUPZZZ0 = !gSUPZZZ0;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case TUMYFROG:
                 gTUMYFROG = !gTUMYFROG;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case SCHURULZ:
                 gSCHURULZ = !gSCHURULZ;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 break;
             case HUNSRUS:
                 gHUNSRUS = !gHUNSRUS;
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 break;
             case FISHFLAP:
-                //gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+                gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 gFISHFLAP = !gFISHFLAP;
                 break;
 
@@ -1876,7 +1876,7 @@ void Menu::SpecialFunction6() {
     // Адрес: 0x0045A4A4 - Размер: 0xB5 байт
     this->ProcessInput();
     this->NewGame();
-    //gCheatIs = 0; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
+    gCheatIs = 0; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
     switch (this->State) {
     case MENUSCREEN_PLAY:
         if (this->PageNumber = MENUPAGE_CREDITS) {

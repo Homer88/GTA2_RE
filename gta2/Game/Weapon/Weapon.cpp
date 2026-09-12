@@ -1,5 +1,37 @@
 #include "Weapon.h"
 
+typedef enum WeaponType {
+    Pistol = 0,
+    SNG = 1,
+    RPG = 2,
+    ElectroGun = 3,
+    Molotov = 4,
+    Granata = 5,
+    ShotGun = 6,
+    Shoker = 7,
+    FireGun = 8,
+    SMG_S = 9,
+    DualPistol = 10,
+    L = 11,
+    L2 = 12,
+    L3 = 13,
+    L4 = 14 /* 0 */,
+    CAR_BOMB = 15,
+    CAR_OIL = 16,
+    CAR_MINE = 17,
+    CAR_MACHINE_GUN = 18,
+    TANK_MAIN_GUN = 19,
+    WATER_CANNON = 20,
+    FIRE_TRUCK_GUN = 21,
+    ARMY_GUN_JEEP = 22,
+    CAR_BOMB_INSTANT = 23,
+    WEAPON_24 = 24,
+    WEAPON_25 = 25,
+    WEAPON_26 = 26,
+    WEAPON_27 = 27,
+    NO_WEAPON = 28,
+}WeaponType;
+
 
     // 0x0041CC90
 
@@ -28,7 +60,8 @@ int Weapon::GetArrmo(void){
     // 0x004A4F90
 
 
-int Weapon::GiveWeaponInfiniti(void){
+int Weapon::GiveWeaponInfiniti(){
+    this->Armo = 65535;
         return 0;
     }
 

@@ -1,9 +1,72 @@
+
 #ifndef __PED_H_
 #define __PED_H_
 
+#include "../Player/Player.h"
+
+
+   
+   
+
 class Ped{
+    
 
     public:
+        void* S200[50];
+        GameObject* GameObject0;
+        int f13C;
+        Car* CarCurrent1;
+        Ped* PedCurrent;
+        Ped* Driver;
+        Ped* LinkedPed;
+        Car* pVehicle;
+        Car* CurrentVehicle;
+        Car* TargetCarForEnter;
+        Player *isPlayer;
+        Ped* NextPed;
+        //S169* S169;  надо проверить новое имя 
+        GameObject* GameObject1;
+        Car* CurrentCar2;
+        Weapon* CurrentWeapon;
+        Weapon* Weapon1;
+        Weapon* Weapon2;
+        Gang* pGang;
+        Ped* DriverPed;
+        Ped* LastCharPunched;
+        Ped* f18C;
+        //S94* S94;
+        Ped* Ped3;
+        Ped* ElvisLeader;
+        int PositionX, PositionY, PositionZ;
+        int PositionX1, PositionY1, PositionZ1;
+        int X, Y, Z;
+        Ped* DriverPed1;
+        int ID;
+        int IdPed;
+        unsigned short Invulnerability;
+        int ActionState1;
+        unsigned short PoliceStar;
+        unsigned short F20C;
+        short Health;
+        short Objectivetimer;
+        short CarStateTimer;
+        unsigned int Flags;
+        char DamageState;
+        byte ExitAnimState;
+        int TypeSearch;
+        byte CarId;
+        int StatusPed;
+       // Remap pRemap;
+        int TargetCarDoor;
+        byte AnimationState;
+        int ActionState;
+        int CurrentAction;
+        int TypeGraphic;
+        int GangCarModel;
+        int StatePed;
+        int SavedState;
+        int DamageType;
+       
 
     // 0x003F1004
     int FindNearestPlayer(void);
@@ -24,7 +87,7 @@ class Ped{
     // 0x00403990
     int GetCurrentState(void);
     // 0x004039A0
-    int SetHealth(void);
+    void  SetHealth(unsigned short Health);
     // 0x004039B0
     int SetTargetCarDoorIndex(void);
     // 0x004039C0
@@ -50,7 +113,7 @@ class Ped{
     // 0x00403A70
     int SetAnimationState(void);
     // 0x00403A80
-    int GetActionParam(void);
+    int GetActionParam();
     // 0x00403A90
     int GetCurrentAction(void);
     // 0x00403AA0
@@ -88,7 +151,7 @@ class Ped{
     // 0x00416B80
     int GetPosition(void);
     // 0x0041B0A0
-    int IsPlayerControlled(void);
+    bool  IsPlayerControlled();
     // 0x0041B0B0
     int GetAndResetFlag(void);
     // 0x00420B50
@@ -98,7 +161,7 @@ class Ped{
     // 0x00420B70
     int GetSearchType(void);
     // 0x00420B80
-    int SetPoliceNoStar(void);
+    void  SetPoliceNoStar();
     // 0x00420B90
     int CarSystemManager_SelectTraffic(void);
     // 0x00433190
@@ -200,7 +263,7 @@ class Ped{
     // 0x00434C00
     int GetCopStars(void);
     // 0x00434C40
-    int SetPoliceStarLevel(void);
+    unsigned short SetPoliceStarLevel(unsigned short CopLevel);
     // 0x00434CD0
     int HandleWantedEvent(void);
     // 0x00434D70
@@ -236,7 +299,7 @@ class Ped{
     // 0x00435F20
     int SetSpriteDoorFlag(void);
     // 0x00435F40
-    int HealPed(void);
+    int HealPed();
     // 0x00435FA0
     int CreatePlayer(void);
     // 0x00436070
@@ -314,7 +377,7 @@ class Ped{
     // 0x0043B570
     int PlacePedOnTile(void);
     // 0x0043B7C0 void __fastcall
-    void PickRoadDirection(int arg0);
+    void PlayRandomGesture(int arg0);  // (gm) старый: PickRoadDirection -> PlayRandomGesture
     // 0x0043B9D0
     int ProcSpawnTrainRider(void);
     // 0x0043BB50
@@ -437,6 +500,69 @@ class Ped{
     int SetCar2(void);
     // 0x004C6750
     int ShowMessageToPlayer(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 30 функций
+    // 0x00433320: Ped::EnterAsPassenger
+    void EnterAsPassenger();
+    // 0x00433B00: Ped::IsCarried
+    void IsCarried();
+    // 0x00433B60: Ped::FetchActionState
+    void FetchActionState();
+    // 0x00433BE0: Ped::ClearTarget
+    void ClearTarget();
+    // 0x00433C50: Ped::SetActionParam
+    void SetActionParam();
+    // 0x00433C60: Ped::SetActionParam2
+    void SetActionParam2();
+    // 0x00433C70: Ped::SetActionParam3
+    void SetActionParam3();
+    // 0x00433D00: Ped::FindCarToEnter
+    void FindCarToEnter();
+    // 0x004340D0: Ped::GetCarYaw
+    void GetCarYaw();
+    // 0x004340F0: Ped::GetCarPosZ
+    void GetCarPosZ();
+    // 0x00434130: Ped::SetCarSpeed
+    void SetCarSpeed();
+    // 0x00434140: Ped::IsInCarSeat
+    void IsInCarSeat();
+    // 0x004341B0: Ped::GetCarDoorPed
+    void GetCarDoorPed();
+    // 0x004343B0: Ped::GetCarIndex
+    void GetCarIndex();
+    // 0x004348E0: Ped::GetCarAngle
+    void GetCarAngle();
+    // 0x004349A0: Ped::IsCarDoorOccupied
+    void IsCarDoorOccupied();
+    // 0x00434AF0: Ped::IsSamePlayer
+    void IsSamePlayer();
+    // 0x00435460: Ped::AppendActionKeys
+    void AppendActionKeys();
+    // 0x00435D90: Ped::EnterCarDoor
+    void EnterCarDoor();
+    // 0x00436BF0: Ped::UpdateFacing
+    void UpdateFacing();
+    // 0x0043AD50: Ped::PlacePedAtPosition
+    void PlacePedAtPosition();
+    // 0x0043BEB0: Ped::SetAiCheckCar
+    void SetAiCheckCar();
+    // 0x0043BED0: Ped::SetAiCheckCarChase
+    void SetAiCheckCarChase();
+    // 0x004400A0: Ped::SpawnPedGroup
+    void SpawnPedGroup();
+    // 0x004404E0: Ped::SpawnPedGroupFour
+    void SpawnPedGroupFour();
+    // 0x0044A320: Ped::IsVisibleToPlayer
+    void IsVisibleToPlayer();
+    // 0x004BB020: Ped::IsPathBlocked
+    void IsPathBlocked();
+    // 0x004BB560: Ped::IsBlockedBySprite
+    void IsBlockedBySprite();
+    // 0x004BD350: Ped::CheckStandingSurface
+    void CheckStandingSurface();
+    // 0x004BDD40: Ped::GetGroundContactFlags
+    void GetGroundContactFlags();
+};
 #endif // !__PED_H_

@@ -13,14 +13,11 @@
 | Game | 40 | `gta2/Game\Game` |
 | SpriteS1 | 39 | `gta2/Game\SpriteS1` |
 | AIController | 37 | `gta2/Game\AIController` |
-| Registry | 34 | `gta2/Game\Registry` |
 | CarsPrefabs | 33 | `gta2/Game\CarsPrefabs` |
-| DMAudio | 29 | `gta2/Game\DMAudio` |
 | GameObject | 25 | `gta2/Game\GameObject` |
 | CollisionBox | 23 | `gta2/Game\CollisionBox` |
 | Replay | 23 | `gta2/Game\Replay` |
 | CarSystemManager | 21 | `gta2/Game\CarSystemManager` |
-| FileMgr | 21 | `gta2/Game\FileMgr` |
 | SpawnPoint | 21 | `gta2/Game\SpawnPoint` |
 | Sprite | 21 | `gta2/Game\Sprite` |
 | Weapon | 19 | `gta2/Game\Weapon` |
@@ -40,7 +37,6 @@
 | CarDoor | 11 | `gta2/Game\CarDoor` |
 | DecalInfo | 11 | `gta2/Game\DecalInfo` |
 | Passenger | 11 | `gta2/Game\Passenger` |
-| Text | 11 | `gta2/Game\Text` |
 | DamageInfo | 10 | `gta2/Game\DamageInfo` |
 | GarageInfo | 10 | `gta2/Game\GarageInfo` |
 | PathNode | 10 | `gta2/Game\PathNode` |
@@ -58,7 +54,6 @@
 | BrakeInfo | 6 | `gta2/Game\BrakeInfo` |
 | Camera | 6 | `gta2/Game\Camera` |
 | Crt | 6 | `gta2/Game\Crt` |
-| Font | 6 | `gta2/Game\Font` |
 | Input2 | 6 | `gta2/Game\Input2` |
 | Matrix3D | 6 | `gta2/Game\Matrix3D` |
 | ScriptThread | 6 | `gta2/Game\ScriptThread` |

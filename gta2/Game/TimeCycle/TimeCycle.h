@@ -1,8 +1,9 @@
+
 #ifndef __TIMECYCLE_H_
 #define __TIMECYCLE_H_
 
-class TimeCycle{
 
+class TimeCycle{
     public:
 
     // 0x00474E80

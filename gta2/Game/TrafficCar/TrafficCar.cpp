@@ -20,6 +20,6 @@ int TrafficCar::Init(void){
     // 0x0041D900
 
 
-void TrafficCar::ResetFlag(void){
+void TrafficCar::ClearField2B(void){
 
     }

@@ -1,8 +1,9 @@
+
 #ifndef __TAXI_H_
 #define __TAXI_H_
 
-class Taxi{
 
+class Taxi{
     public:
 
     // 0x004330A0

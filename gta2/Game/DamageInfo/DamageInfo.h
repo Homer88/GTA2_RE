@@ -1,8 +1,9 @@
+
 #ifndef __DAMAGEINFO_H_
 #define __DAMAGEINFO_H_
 
-class DamageInfo{
 
+class DamageInfo{
     public:
 
     // 0x0045B2C0
@@ -25,6 +26,13 @@ class DamageInfo{
     int ClearRenderQueue(void);
     // 0x00491240
     int ProcessHeavyDamage(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 2 функций
+    // 0x00461360: DamageInfo::AddToGrid
+    void AddToGrid();
+    // 0x00476AE0: DamageInfo::SetDamageValue
+    void SetDamageValue();
+};
 #endif // !__DAMAGEINFO_H_

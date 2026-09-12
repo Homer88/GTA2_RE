@@ -244,7 +244,7 @@ int Game::UpdateVisionForAllCameras(void){
     // 0x0045BC90
 
 
-int Game::IsPointVisibleToAnyPlayer(void){
+int Game::IsPointVisible(void){
         return 0;
     }
 

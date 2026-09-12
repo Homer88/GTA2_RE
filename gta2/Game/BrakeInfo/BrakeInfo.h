@@ -1,12 +1,13 @@
+
 #ifndef __BRAKEINFO_H_
 #define __BRAKEINFO_H_
 
-class BrakeInfo{
 
+class BrakeInfo{
     public:
 
     // 0x004B8FB0 void __thiscall
-    void Destroy(void);
+    void Clear(void);  // (gm) старый: Destroy -> Clear
     // 0x004B8FD0
     int GetS125(void);
     // 0x004B8FE0

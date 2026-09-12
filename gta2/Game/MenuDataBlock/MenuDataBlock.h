@@ -1,8 +1,9 @@
+
 #ifndef __MENUDATABLOCK_H_
 #define __MENUDATABLOCK_H_
 
-class MenuDataBlock{
 
+class MenuDataBlock{
     public:
 
     // 0x00452D00

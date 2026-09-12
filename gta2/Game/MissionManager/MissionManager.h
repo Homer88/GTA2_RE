@@ -1,3 +1,4 @@
+
 #ifndef __MISSION_MANAGER_H_
 #define __MISSION_MANAGER_H_
 
@@ -11,24 +12,10 @@
 #define _BYTE BYTE
 #endif
 
-class Player;
-class MapGm;
-class MapRelatedStruct;
-class MissionScriptObjects;
-class MissionScriptObjectData;
-class Game;
-class Object;
-struct S107;
-struct S202;
-struct SpriteS1;
-struct PublicTransport;
-#include "../AudioSourceParams/AudioSourceParams.h"
-struct EventHandler;
-struct CarSystemManager;
 
-enum GangType {
-    Yakuza = 0
-};
+
+#include "../../Engine/AudioSourceParams/AudioSourceParams.h"
+
 
 #pragma pack(push, 1)
 class MissionManager {
@@ -104,22 +91,22 @@ public:
     MissionManager* MissionManager_Des(char a2);
 
     _WORD* FindMission(__int16 a2);
-    int FindMissionByScriptName(const char* a2);
+    int FindByName(const char* a2);  // (gm) старый: FindMissionByScriptName -> FindByName
     bool IsGameLoaded();
     char GetMissionStatus();
     void sub_475A40(char a2);
     int CopyMapDetails();
-    _WORD* BuildMissionScriptIndex(unsigned __int16 a2);
+    _WORD* SetupMissionText(unsigned __int16 a2);  // (gm) старый: BuildMissionScriptIndex -> SetupMissionText
     char* ExtractFileNameWithoutExtension();
-    __int16 LoadMissionData(FileMgr* a2);
-    unsigned __int16* LoadMissionScriptData();
+    __int16 LoadLanguageFile(FileMgr* a2);  // (gm) старый: LoadMissionData -> LoadLanguageFile
+    unsigned __int16* LoadScriptFiles();  // (gm) старый: LoadMissionScriptData -> LoadScriptFiles
     MissionManager* StartMission(unsigned __int16 a2);
     int* sub_476240(int a2, int a3);
     int* AddRuntimeTimer(int a2, int a3, __int16 a4);
-    int* FindMissionTarget(int a2, int a3);
+    int* FindData(int a2, int a3);  // (gm) старый: FindMissionTarget -> FindData
     int* sub_476370(int a2, int a3, __int16 a4);
-    _DWORD* RemoveMissionTarget(int a2, int a3);
-    char* FindMissionTargetByIndex(int a2);
+    _DWORD* RemoveData(int a2, int a3);  // (gm) старый: RemoveMissionTarget -> RemoveData
+    char* FindDataById(int a2);  // (gm) старый: FindMissionTargetByIndex -> FindDataById
     char AddOrCheckMissionTarget(int a2, char a3, char a4);
     char sub_4764D0(int a2, char a3);
     char UpdateMissionItem(int a2, int a3, char a4);
@@ -128,7 +115,7 @@ public:
     __int16 SetMissionGradeLetter(void* a1, void* a2);
     char sub_47EDB0(int a2);
     void BuildActiveMissionList();
-    _DWORD* StartAllMissions();
+    _DWORD* RestoreMissionValues();  // (gm) старый: StartAllMissions -> RestoreMissionValues
     int SaveFile(char* pSaveFileName);
     int LoadMissionMap(char* SaveFileName);
     int ContinueQueuedMissionLine(__int16 a3, char a2);
@@ -143,105 +130,58 @@ public:
 
     // --- анализированные функции миссийной подсистемы (2026-09-07) ---
     unsigned char GetOpcodeParamType(unsigned int opcode);
-    void AddMissionArgNode(void* node);
+    void ListAddFront(void* node);  // (gm) старый: AddMissionArgNode -> ListAddFront
     void SetCarFlag_0x8d();
     void PopViewport();
     unsigned char CheckMissionZone(unsigned int op, int x, int y);
     unsigned char GiveWeaponOpcode(void* self);
+
+// ==== импорт имён из gm ====
+    // 3 функций
+    // 0x00475E60: MissionManager::IsMissionTarget
+    void IsMissionTarget();
+    // 0x0047D615: MissionManager::DrawMissionGraphic
+    void DrawMissionGraphic();
+    // 0x0047ECB0: MissionManager::ProcessAnimationEvent
+    void ProcessAnimationEvent();
+    // 0x00479B70
+    // (gm) ������: Script_CheckPedInVehicle -> MissionManager::CheckPedInVehicle
+    void CheckPedInVehicle();
+    // 0x00479CC0
+    // (gm) ������: Script_AddMissionMoney -> MissionManager::GivePlayerMoney
+    void GivePlayerMoney();
+    // 0x00479E10
+    // (gm) ������: Script_SpawnPed -> MissionManager::SpawnRewardObject
+    void SpawnRewardObject();
+    // 0x0047A1E0
+    // (gm) ������: Script_AssignPedToCar -> MissionManager::PlacePedInCar
+    void PlacePedInCar();
+    // 0x0047A330
+    // (gm) ������: Script_SetPedPosition -> MissionManager::SetPedDestination
+    void SetPedDestination();
+    // 0x0047A620
+    // (gm) ������: MapRelatedStruct::RunMissionObjectScript -> MissionManager::GetMarkerSprite
+    void GetMarkerSprite();
+    // 0x0047ACC0
+    // (gm) ������: MapRelatedStruct::RunGangWarCheckScript -> MissionManager::CheckGangWar
+    void CheckGangWar();
+    // 0x0047B430
+    // (gm) ������: Script_GetPlayerMoney -> MissionManager::SavePlayerMoney
+    void SavePlayerMoney();
+    // 0x0047BE00
+    // (gm) ������: Script_CheckCarMatch -> MissionManager::CheckCarAvailability
+    void CheckCarAvailability();
+    // 0x0047C8A0
+    // (gm) ������: MissionManager::CheckMissionObjectType -> MissionManager::CheckMissionState
+    void CheckMissionState();
+    // 0x0047D040
+    // (gm) ������: MissionManager::CheckMissionObjectState -> MissionManager::CheckMissionCondition
+    void CheckMissionCondition();
+    // 0x0047D260
+    // (gm) ������: MissionManager::ExecuteArithmeticOpcode -> MissionManager::ExecuteArithmetic
+    void ExecuteArithmetic();
 };
+
 #pragma pack(pop)
-
-extern MissionManager gMissionManager;
-
-extern bool skip_mission;
-extern char do_miss_logging;
-extern MissionScriptObjects* gMissionScriptObjects;
-extern void* gTrafficManager;
-extern char gStr[256];
-extern _DWORD dword_664D18[16];
-extern _DWORD dword_56EC54;
-extern char byte_5931F4;
-extern char byte_5931FC[32];
-extern int unk_664590[];
-extern char byte_6645A9[];
-extern char byte_6645C2[];
-extern int unk_6645A8;
-extern int unk_6645C1;
-extern int unk_6645DA;
-extern int unk_6645DB;
-extern int unk_6645DC;
-extern int unk_6645DD;
-extern int unk_6644B0;
-extern int unk_6644B4;
-extern int unk_6646BA;
-extern int unk_6646BC;
-extern int unk_6646C0;
-extern _WORD unk_6646C4[];
-extern int unk_664CA0[];
-extern int unk_664CD4;
-extern _DWORD dword_6645E4;
-extern char byte_664B74[];
-extern _DWORD dword_673E2C;
-extern S107* gS107;
-extern int dword_6644CC[];
-extern _DWORD unk_664DC4[];
-extern _DWORD unk_664E08;
-extern _DWORD unk_664EBC[];
-extern CarSystemManager* gCarSystemManager;
-extern MapGm gMapGm;
-extern Game* gGame;
-extern Object* gObject;
-extern MapRelatedStruct* gMapRelatedStruct;
-extern void* gMissionObjective;
-
-extern void* createBuffer(unsigned int size);
-extern void debug_log(unsigned int, const char*, int, ...);
-extern void sub_461690(_DWORD*, const char*, int);
-extern void Allocate(_DWORD*, _DWORD*);
-extern int WriteSub_402CF0(const char*, int*, int*);
-extern int ARWBinarySub_402DA0(const char*, int, int*);
-extern void free_0(void*);
-extern void free_1(void*);
-extern char MapPedTypeToCategory(int a3);
-extern char IsGangFlag2(int* arr);
-extern char IsMissionObjectFlagSet(int* arr);
-extern char IsGangFlag1(int* arr);
-extern void InitAndSetField(void* a2, int a3);
-extern void SetValue(void* a2, unsigned __int8 a3);
-extern void CleanupMissionType(int arr_96_1);
-extern void partOfLoadScrip(void* buffer, int* sizePtr);
-extern int AudioSourceParams_sub_41E370(void*, int, int);
-extern int AudioSourceParams_sub_463710(void*, int);
-extern int S202_sub_401B20(S202*, SpriteS1*, PublicTransport*);
-extern int S202_sub_40CE30(S202*, unsigned __int8);
-extern int MissionObjective_sub_4C4F30(void*, int*, int*, int, int, int, int, int, int);
-extern int SpriteS1_sub_4BB020(void*, void*);
-extern int IsPointOnQuad(void*, void*);
-extern int Decoder_ReadInt(int*, _BYTE*, _DWORD*);
-extern int Player_sub_401B40(void*, S202*, int);
-extern int MapGm_GetMapName(MapGm*);
-extern int MapGm_GetStyleFile(MapGm*);
-extern int MapGm_GetScriptName(MapGm*);
-extern int MapGm_GetPlayerArena(MapGm*);
-extern int MapGm_GetBonusStage(MapGm*);
-extern int MapGm_GetGang(MapGm*);
-extern int MapGm_GetPlayerSlotSave(MapGm*);
-extern int MapGm_GetSpecialTokens(MapGm*);
-extern void MapRelatedStruct_sub_4642A0(MapRelatedStruct*, void**, int*, void**, void*, void**, int*);
-extern void MapRelatedStruct_sub_464250(void*, int, unsigned int, unsigned int);
-extern int MapRelatedStruct_sub_464D00(MapRelatedStruct*, char*, unsigned int);
-extern void Player_sub_4A6B20(void*, int);
-extern void Object_sub_483D90(Object*, void*);
-extern void Object_sub_485640(Object*, void*);
-extern int SetSpecialTokens(MapGm*, int);
-extern int MissionScriptObjects_RemoveFirstElement(MissionScriptObjects*);
-extern void MissionScriptObjectData_sub_475B70(void*, char, __int16);
-extern int MissionScriptObjectData_sub_476E50(void*, void*);
-extern void MissionScriptObjects_sub_47F4D0(MissionScriptObjects*);
-extern void MissionScriptObjects_sub_481380(MissionScriptObjects*);
-extern Game* Game_GetPlayer1(Game*);
-extern void S63_sub_483C60(void*, int);
-extern void MapRelatedStruct_sub_464C70(MapRelatedStruct*, char*);
-extern int MapGm_sub_45E700(MapGm*);
 
 #endif

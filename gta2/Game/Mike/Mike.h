@@ -1,8 +1,9 @@
+
 #ifndef __MIKE_H_
 #define __MIKE_H_
 
-class Mike{
 
+class Mike{
     public:
 
     // 0x004741A0

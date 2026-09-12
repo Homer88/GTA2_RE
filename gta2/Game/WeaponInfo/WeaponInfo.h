@@ -1,8 +1,9 @@
+
 #ifndef __WEAPONINFO_H_
 #define __WEAPONINFO_H_
 
-class WeaponInfo{
 
+class WeaponInfo{
     public:
 
     // 0x004C4D60

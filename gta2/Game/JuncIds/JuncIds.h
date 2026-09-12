@@ -1,8 +1,9 @@
+
 #ifndef __JUNCIDS_H_
 #define __JUNCIDS_H_
 
-class JuncIds{
 
+class JuncIds{
     public:
 
     // 0x0040C690

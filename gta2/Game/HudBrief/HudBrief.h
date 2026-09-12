@@ -1,8 +1,9 @@
+
 #ifndef __HUDBRIEF_H_
 #define __HUDBRIEF_H_
 
-class HudBrief{
 
+class HudBrief{
     public:
 
     // 0x004768A0

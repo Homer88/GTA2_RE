@@ -1,8 +1,9 @@
+
 #ifndef __MAUDIO_H_
 #define __MAUDIO_H_
 
-class MAudio{
 
+class MAudio{
     public:
 
     // 0x00410580

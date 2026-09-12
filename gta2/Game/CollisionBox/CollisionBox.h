@@ -1,8 +1,9 @@
+
 #ifndef __COLLISIONBOX_H_
 #define __COLLISIONBOX_H_
 
-class CollisionBox{
 
+class CollisionBox{
     public:
 
     // 0x00420FF0
@@ -51,6 +52,11 @@ class CollisionBox{
     int UpdateByType(void);
     // 0x00487E80
     int UpdateObject(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 1 функций
+    // 0x004856E0: CollisionBox::SpawnPedOnCollision
+    void SpawnPedOnCollision();
+};
 #endif // !__COLLISIONBOX_H_

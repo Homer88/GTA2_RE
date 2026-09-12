@@ -1,8 +1,9 @@
+
 #ifndef __TANGOMAIN_H_
 #define __TANGOMAIN_H_
 
-class TangoMain{
 
+class TangoMain{
     public:
 
     // 0x00450BC0

@@ -1,8 +1,9 @@
+
 #ifndef __TRAFFICLIGTHSTRUCT_H_
 #define __TRAFFICLIGTHSTRUCT_H_
 
-class TrafficLigthStruct{
 
+class TrafficLigthStruct{
     public:
 
     // 0x00434960

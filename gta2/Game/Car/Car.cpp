@@ -1,6 +1,9 @@
 //реализация классов с машинами
 #include "../global.h"
 #include "Car.h"
+#include "../../Engine/Object/Object.h"
+
+Car gCar;
 
 enum CarModel
 {
@@ -95,7 +98,6 @@ enum CarModel
 
 Car::Car(){
     this->Mask = 0;
-
 }
 
 Car::~Car(){
@@ -124,7 +126,7 @@ void Car::AddRoofAntenna(){
 void Car::AddRoofGun(){
     int a,b,c;
     short d;
-    gObject.SpawnObject(a,b,c,d);
+    gObject->SpawnObject(a,b,c,d);
     // еще функции
 
 }
@@ -175,7 +177,7 @@ void Car::ExplodeCar(int a){
 bool Car::IsDriverPlayer(){
     Ped *PedDriver;
     PedDriver=this->Driver;
-    return PedDriver && PedDriver->Player;
+    return PedDriver && PedDriver->isPlayer;
 
 }
 
@@ -203,8 +205,8 @@ bool Car::IsTrainOrTrainCarriage(){
 }
 void Car::SetPosition(int X, int Y, int Z){
 
-this->SpriteS1->SetPosition(X,Y,Z);
-//this->Physics->
+    this->SpriteCar->SetPosition(X,Y,Z);
+
 }
 
 char  Car::UpdateDamageCooldown(){
@@ -278,9 +280,9 @@ bool Car::isTVVAN(){
 }
 
 
-class Player* Car::GetPlayer(){
-
-    return this->Driver->Player;
+Player* Car::GetPlayer(){
+ 
+    return this->Driver->isPlayer;
 }
 void Car::SetSound( int a2)
 {
@@ -337,7 +339,7 @@ bool  Car::isJeep()
     return this->CarType == JEEP;
 }
 
-bool Car::IsAPC()
+bool Car::isAPC()
 {
     return this->CarType == APC;
 }

@@ -1,8 +1,9 @@
+
 #ifndef __GARAGEINFO_H_
 #define __GARAGEINFO_H_
 
-class GarageInfo{
 
+class GarageInfo{
     public:
 
     // 0x0045D390
@@ -23,6 +24,15 @@ class GarageInfo{
     int FindFreeCarGenerator(void);
     // 0x004C93B0
     int DestroyCarGenerator(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 3 функций
+    // 0x004C9360: GarageInfo::FindFreeGenerator
+    void FindFreeGenerator();
+    // 0x004C93D0: GarageInfo::RemoveGenerator
+    void RemoveGenerator();
+    // 0x004C93F0: GarageInfo::AddGeneratorValue
+    void AddGeneratorValue();
+};
 #endif // !__GARAGEINFO_H_

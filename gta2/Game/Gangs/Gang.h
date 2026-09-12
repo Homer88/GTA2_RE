@@ -1,14 +1,12 @@
+
 #ifndef __GANG_H_
 #define __GANG_H_
 
-#include "Car.h"
-#include "Weapon.h"
 
 
 
 
 class  Gang{
-
 public: 
 	
   bool  Status;
@@ -16,9 +14,6 @@ public:
   char NameGang[10];
   char remap;
   char pad;
-  class Weapon *Weapon1;
-  class Weapon *Weapon2;
-  class Weapon *Weapon3;
   bool MaxOut;
   char Reting;
   int Prestige;
@@ -35,11 +30,9 @@ public:
 	Gang();
 	~Gang();
 	
+  class Weapon *Weapon3;
+  class Weapon *Weapon2;
+  class Weapon *Weapon1;
 };
-
-
-
-
-
 
 #endif

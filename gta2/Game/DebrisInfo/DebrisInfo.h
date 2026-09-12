@@ -1,8 +1,9 @@
+
 #ifndef __DEBRISINFO_H_
 #define __DEBRISINFO_H_
 
-class DebrisInfo{
 
+class DebrisInfo{
     public:
 
     // 0x004C5420

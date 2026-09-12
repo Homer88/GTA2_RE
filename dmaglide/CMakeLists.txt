@@ -3,7 +3,7 @@ project(DMAGLIDE LANGUAGES CXX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
-set(GLIDE3X_DIR "F:/SDK/glide3x-3_10_00_30303-lib-win32")
+set(GLIDE3X_DIR "d:/SDK/glide3x-3_10_00_30303-lib-win32")
 set(GLIDE3X_LIB "${GLIDE3X_DIR}/glide3x.lib")
 
 file(GLOB DMAGLIDE_SOURCE "*.cpp")

@@ -1,8 +1,9 @@
+
 #ifndef __TANGO_H_
 #define __TANGO_H_
 
-class Tango{
 
+class Tango{
     public:
 
     // 0x00450C10

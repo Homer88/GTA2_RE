@@ -1,10 +1,14 @@
+
 #ifndef __CARENGINES_H_
 #define __CARENGINES_H_
 
+
 class CarEngines{
-
     public:
-
+        bool Status;
+		CarEngines();
+		~CarEngines();
+		int GetEngineValue(int CarType);
     // 0x004327E0
     int GetEngineValue(void);
     // 0x00432800
@@ -27,6 +31,11 @@ class CarEngines{
     int TrafficLigthStruct(void);
     // 0x0045ABB0
     int S97(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 1 функций
+    // 0x004B7500: CarEngines::GetSpeedWithGear
+    void GetSpeedWithGear();
+};
 #endif // !__CARENGINES_H_

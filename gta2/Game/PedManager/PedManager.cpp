@@ -1,5 +1,15 @@
 #include "PedManager.h"
 
+PedManager gPedManager;
+
+
+
+PedManager::PedManager() {
+
+}
+PedManager::~PedManager() {
+
+}
 
     // 0x00403890
 

@@ -28,6 +28,6 @@ int TransmissionInfo::UpdateBrakes(void){
     // 0x004B94B0
 
 
-void TransmissionInfo::UpdateTransmission(void){
+void TransmissionInfo::ValidateSpawnPoints(void){
 
     }

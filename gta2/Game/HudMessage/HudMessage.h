@@ -1,8 +1,9 @@
+
 #ifndef __HUDMESSAGE_H_
 #define __HUDMESSAGE_H_
 
-class HudMessage{
 
+class HudMessage{
     public:
 
     // 0x004C5FE0

@@ -1,8 +1,9 @@
+
 #ifndef __PARTICLE2_H_
 #define __PARTICLE2_H_
 
-class Particle2{
 
+class Particle2{
     public:
 
     // 0x00474FA0

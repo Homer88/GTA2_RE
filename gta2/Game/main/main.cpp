@@ -40,10 +40,10 @@
 #include "Engine/DMAudio/DMAudio.h" // звук: gDMAudio (init/update), skip_audio
 #include "Engine/Sound/Sound.h"     // движок: gSound, WavToPcm, PlaySample
 #include "Game/Menu/Menu.h"         // класс Menu (gMenu), MenuPage, MenuEntry
-
+#include "Game/global.h"            //  глобальный  переменнные 
 // Глобальные объекты реконструкции (определены в MENU/ULTIL-библиотеках).
-extern Menu gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
-extern WinApi gWinApi;             // утилиты: CopyWideString, GetVersion и др.
+extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
+extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersion и др.
 extern int skip_audio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
@@ -354,7 +354,7 @@ BOOL cApp::Init()
 
   // Построить данные меню из исходной реконструкции (заполняет MenuPageArray).
   // Вызываются все Create-функции: PlayMenuCreate, OptionsMenuCreate и т.д.
-  gMenu.LoadTextMenu();
+  gMenu->LoadTextMenu();
 
   // --- Инициализация звука (аналог LoadConfig в оригинале) ---
   // gAudioObject = 2: "2D-звук" (тип объекта, как в оригинальном LoadConfig).
@@ -396,22 +396,22 @@ BOOL cApp::Init()
   // --- 8 слотов игроков (Menu::PlayerSlotSave[8]) ---
   // Текущий слот выбирается стрелками в поле PLAYER. Имена по умолчанию
   // PLAYER1..PLAYER8; они могут быть заменены загрузкой сохранений позже.
-  m_playerSlot = gMenu.CurrentPlayerSlot;
+  m_playerSlot = gMenu->CurrentPlayerSlot;
   if (m_playerSlot < 0 || m_playerSlot > 7)
     m_playerSlot = 0;
   for (int s = 0; s < 8; s++) {
     wchar_t def[8];
-    if (gMenu.PlayerSlotSave[s].PlayerName[0])
+    if (gMenu->PlayerSlotSave[s].PlayerName[0])
       continue; // имя уже есть (например, загружено из сохранения) - не трогаем
     swprintf(def, 8, L"PLAYER%d", s + 1);
-    wcsncpy(gMenu.PlayerSlotSave[s].PlayerName, def, 7);
-    gMenu.PlayerSlotSave[s].PlayerName[7] = 0;
+    wcsncpy(gMenu->PlayerSlotSave[s].PlayerName, def, 7);
+    gMenu->PlayerSlotSave[s].PlayerName[7] = 0;
   }
 
   // Начальная страница - главное меню. Активный пункт - как задано в данных
   // (SelectActiveElementDefault страницы).
   m_CurrentPage = 0;
-  m_ActiveItem = gMenu.MenuPageArray[0].SelectActiveElementDefault;
+  m_ActiveItem = gMenu->MenuPageArray[0].SelectActiveElementDefault;
   RenderBackground();   // собрать картинку фона из .tga
   RasterizeMenuText();  // вписать текст пунктов в кадр
 
@@ -431,7 +431,7 @@ BOOL cApp::Shutdown()
 // ограничиваем 10 - размером массива MenuEntryArray.
 int cApp::ItemCount() const
 {
-  MenuPage& page = gMenu.MenuPageArray[m_CurrentPage];
+  MenuPage& page = gMenu->MenuPageArray[m_CurrentPage];
   int n = (int)page.CurentMenuPage;
   if (n < 1 || n > 10)
     n = 0;
@@ -482,13 +482,13 @@ void cApp::SwitchPage(int page)
   if (page < 0 || page > 15)
     return;
   m_CurrentPage = page;
-  gMenu.PageNumber = page;  // номер страницы в данных меню (как в оригинале)
-  gMenu.State = page;       // и в состоянии фронтенда
-  m_ActiveItem = gMenu.MenuPageArray[page].SelectActiveElementDefault;
+  gMenu->PageNumber = page;  // номер страницы в данных меню (как в оригинале)
+  gMenu->State = page;       // и в состоянии фронтенда
+  m_ActiveItem = gMenu->MenuPageArray[page].SelectActiveElementDefault;
   int cnt = ItemCount();
   if (m_ActiveItem < 0 || m_ActiveItem >= cnt)
     m_ActiveItem = 0;
-  gMenu.MenuPageArray[page].SelectActiveElementDefault = m_ActiveItem;
+  gMenu->MenuPageArray[page].SelectActiveElementDefault = m_ActiveItem;
   RenderBackground();
   RasterizeMenuText();
 }
@@ -597,7 +597,7 @@ void cApp::RasterizeMenuText()
     // Пункты текущей страницы берём из MenuPageArray[m_CurrentPage]:
     //   TextMenuElementArray - текст пункта, X/Y - координаты (X из MenuEntryArray,
     //   Y из MenuItemArray - реальные позиции в реконструкции).
-    MenuPage& page = gMenu.MenuPageArray[m_CurrentPage];
+    MenuPage& page = gMenu->MenuPageArray[m_CurrentPage];
     int cnt = ItemCount();
     for (int i = 0; i < cnt; i++) {
       const wchar_t* txt = page.MenuEntryArray[i].TextMenuElementArray;
@@ -605,7 +605,7 @@ void cApp::RasterizeMenuText()
       // Поле PLAYER (2-я страница, пункт 0) - вместо текста из .gxt показываем
       // имя текущего слота из Menu::PlayerSlotSave.
       if (m_CurrentPage == 1 && i == 0)
-        txt = gMenu.PlayerSlotSave[m_playerSlot].PlayerName;
+        txt = gMenu->PlayerSlotSave[m_playerSlot].PlayerName;
       else if (!txt || !*txt || *txt == L' ') {
         // Стаб Text::Bsearch даёт пробел - берём текст из e.gxt по таблице ключей.
         if (m_CurrentPage >= 0 && m_CurrentPage < 2 && i >= 0 && i < 5 &&
@@ -638,7 +638,7 @@ void cApp::RasterizeMenuText()
     // строка в оригинале - "A2 V%d.%d".
     if (m_CurrentPage == 0) {
       DWORD vmajor = 0, vminor = 0;
-      gWinApi.GetVersion(&vmajor, &vminor);
+      gWinApi->GetVersion(&vmajor, &vminor);
       wchar_t vbuf[32];
       swprintf(vbuf, 32, L"A2 V%d.%d", vmajor, vminor);
       SetTextColor(hdc, RGB(255, 255, 255));
@@ -681,7 +681,7 @@ void cApp::EditName(wchar_t ch)
   bool editing = (m_CurrentPage == 1 && m_ActiveItem == 0);
   if (!editing)
     return;
-  wchar_t* name = gMenu.PlayerSlotSave[m_playerSlot].PlayerName;
+  wchar_t* name = gMenu->PlayerSlotSave[m_playerSlot].PlayerName;
   size_t len = wcslen(name);
   if (ch == L'\b') {
     // Backspace: удалить последний символ.
@@ -809,7 +809,7 @@ BOOL cApp::Frame()
     if (cnt > 0) {
       m_ActiveItem = up ? (m_ActiveItem - 1 + cnt) % cnt
                         : (m_ActiveItem + 1) % cnt;
-      gMenu.MenuPageArray[m_CurrentPage].SelectActiveElementDefault = m_ActiveItem;
+      gMenu->MenuPageArray[m_CurrentPage].SelectActiveElementDefault = m_ActiveItem;
       // На страницах 0 и 1 фон зависит от активного пункта - перестроим фон и текст.
       RenderBackground();
       RasterizeMenuText();
@@ -823,8 +823,8 @@ BOOL cApp::Frame()
     if (m_CurrentPage == 1 && m_ActiveItem == 0) {
       m_playerSlot = left ? (m_playerSlot - 1 + 8) % 8
                           : (m_playerSlot + 1) % 8;
-      gMenu.CurrentPlayerSlot = m_playerSlot;
-      gMenu.MenuPageArray[1].MenuEntryArray[0].PlayerSlot = m_playerSlot;
+      gMenu->CurrentPlayerSlot = m_playerSlot;
+      gMenu->MenuPageArray[1].MenuEntryArray[0].PlayerSlot = m_playerSlot;
       RasterizeMenuText();
     }
   }
@@ -832,7 +832,7 @@ BOOL cApp::Frame()
   // Выбор пункта меню (Enter).
   if (GetAsyncKeyState(VK_RETURN) & 1) {
     if (ItemCount() > 0) {
-      MenuEntry& e = gMenu.MenuPageArray[m_CurrentPage].MenuEntryArray[m_ActiveItem];
+      MenuEntry& e = gMenu->MenuPageArray[m_CurrentPage].MenuEntryArray[m_ActiveItem];
       int action = e.MenuAction; // тип действия (CHANGEPAGE, SETPLAYERNAME, ...)
       int sel = e.SelectMenu;    // куда ведёт пункт (страница или спец.значение)
 

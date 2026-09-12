@@ -1,12 +1,26 @@
+
 #ifndef __CARSPREFABS_H_
 #define __CARSPREFABS_H_
 
+class Car;
+
+
 class CarsPrefabs{
-
     public:
-
+      
+        int CarArr[306];
+        unsigned short CarsCount;
+        unsigned short field_E0C2;
+	
+	CarsPrefabs();
+    ~CarsPrefabs();
+	// 0x004254A0
+      // 0x0045AD30
+    unsigned short GetCarsCount();
+    Car* GetCar();
+    Car* InsertCarAtFront(Car *pCar);
     // 0x0040F390 undefined4 * __fastcall
-    void* InitSinTable(int arg0);
+    void* ConstructSinLookupTable(int arg0);  // (gm) старый: InitSinTable -> ConstructSinLookupTable
     // 0x0040F400 Ped * __thiscall
     void* GetDriver(void);
     // 0x0040F410 int __thiscall
@@ -20,19 +34,20 @@ class CarsPrefabs{
     // 0x0040F490
     int InitializeCarPrefab(void);
     // 0x0040F4B0 undefined4 __fastcall
-    int GetMaxValue(int arg0);
+    int DereferencePointer(int arg0);  // (gm) старый: GetMaxValue -> DereferencePointer
     // 0x0040F4E0 bool __thiscall
-    bool IsLessOrEqual(short arg0);
+    bool CompareGreaterOrEqual(short arg0);  // (gm) старый: IsLessOrEqual -> CompareGreaterOrEqual
     // 0x0040F500
     int GetPrefabValue(void);
     // 0x0040F520
     int GetPrefabData(void);
     // 0x00420E40 void __fastcall
-    void ClearList(int arg0);
+    void InitToZero(int arg0);  // (gm) старый: ClearList -> InitToZero
     // 0x00420E50
-    int GetCar(void);
+    int GetCarEnd(void);
+   
     // 0x00420E60 void __fastcall
-    void ClearCarList(int arg0);
+    void LinkedListZeroInit(int arg0);  // (gm) старый: ClearCarList -> LinkedListZeroInit
     // 0x00420E70
     int S1(void);
     // 0x00420F20
@@ -47,8 +62,8 @@ class CarsPrefabs{
     int S4(void);
     // 0x00425400
     int S5_Destruct(void);
-    // 0x004254A0
-    int GetCarEnd(void);
+    
+    
     // 0x00426AC0
     int ActualSpawnCar(void);
     // 0x00426D90
@@ -58,7 +73,11 @@ class CarsPrefabs{
     // 0x0042A2D0
     int UpdateCars(void);
     // 0x0045AD30
-    int GetCarsCount(void);
+
+
+    class Car *Car2;
+    class Car *Car3;
+    
 };
 
 #endif // !__CARSPREFABS_H_

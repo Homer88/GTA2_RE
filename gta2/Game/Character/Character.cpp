@@ -1,6 +1,6 @@
 #include "Character.h"
 
-
+Character *gCharacter;
     // 0x00420C30
 
 
@@ -28,7 +28,7 @@ int Character::FindPed(void){
     // 0x0043AE40
 
 
-void Character::IsPedNearToPlayer(int arg0){
+void Character::DestroyPedPool(int arg0){
 
     }
 

@@ -1,4 +1,5 @@
 #include "FileMgr.h"
+
 FileMgr gFileMgr;
 
 
@@ -18,3 +19,7 @@ FILE* FileMgr::WriteReadFile(const char* filename, const char* mode) {
 
 	return file;
 };
+void FileMgr::FileOpen(char* filename, char* mode) {};
+
+void FileMgr::ReadFile(void* outbuffer, void* inBuffer) {};
+void FileMgr::ReadFile(void* buffer, size_t SizeRead) {};

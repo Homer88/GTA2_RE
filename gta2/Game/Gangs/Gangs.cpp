@@ -1,8 +1,11 @@
 #include "Gangs.h"
 
+
+Gangs *gGangs;
+
 Gangs::Gangs() {
 
-	Gang* pGang = new Gang[10];
+	//Gang* pGang = new Gang[10];
 
 }
 

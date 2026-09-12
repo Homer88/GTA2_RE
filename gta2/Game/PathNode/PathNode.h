@@ -1,8 +1,9 @@
+
 #ifndef __PATHNODE_H_
 #define __PATHNODE_H_
 
-class PathNode{
 
+class PathNode{
     public:
 
     // 0x00488170
@@ -25,6 +26,17 @@ class PathNode{
     int LoadNetwork(void);
     // 0x004C6E30
     int GetValue(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 4 функций
+    // 0x00488200: PathNode::SetNodeFlag
+    void SetNodeFlag();
+    // 0x004883A0: PathNode::ApplyToSprite
+    void ApplyToSprite();
+    // 0x00488E70: PathNode::UpdateNodeSprite
+    void UpdateNodeSprite();
+    // 0x00488EF0: PathNode::CreateSprite
+    void CreateSprite();
+};
 #endif // !__PATHNODE_H_

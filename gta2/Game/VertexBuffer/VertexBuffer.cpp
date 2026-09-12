@@ -44,7 +44,7 @@ int VertexBuffer::AddPassenger(void){
     // 0x0049CB40
 
 
-bool VertexBuffer::GetFlame(int param_1,int param_2){
+bool VertexBuffer::IsNodeTarget(int param_1,int param_2){
         return 0;
     }
 

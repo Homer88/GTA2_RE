@@ -1,8 +1,9 @@
+
 #ifndef __MODELINDEX_H_
 #define __MODELINDEX_H_
 
-class ModelIndex{
 
+class ModelIndex{
     public:
 
     // 0x0045AE10

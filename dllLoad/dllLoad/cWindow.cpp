@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "cWindow.h"
 #include "DebugLogFile.h"
+#include "cHookTrace.h"
 
 #include "Registry.h" 
 
@@ -117,21 +118,23 @@ bool* gExploding_on = (bool*)0x005EAD5D;
 int gData_6735A5;
 
 
-char *aTestReplay0Rep = (char*)0x00595FF0; // 11 масcив
+char *aTestReplay0Rep = (char*)0x00595FF0; // 11 пїЅпїЅпїЅcпїЅпїЅ
 
 
 void __stdcall GetVersionLaunch( int * pMajorVersion,  int  * pMinorVersion) {
 
-    // Проверка входных указателей
+    TraceEvent("Menu::GetVersionLaunch @0x004D0920");
+
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     if (pMajorVersion == NULL || pMinorVersion == NULL) {
         return;
     }
 
-    // Инициализация выходных значений
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     *pMajorVersion = 0;
     *pMinorVersion = 0;
 
-    // Получение размера информации о версии
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     DWORD dummyHandle = 0;
     DWORD versionInfoSize = GetFileVersionInfoSizeA("GTA2.EXE", &dummyHandle);
 
@@ -139,19 +142,19 @@ void __stdcall GetVersionLaunch( int * pMajorVersion,  int  * pMinorVersion) {
         return;
     }
 
-    // Выделение памяти (C++98 style)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (C++98 style)
     BYTE* pVersionInfo = (BYTE*)malloc(versionInfoSize);
     if (pVersionInfo == NULL) {
         return;
     }
 
-    // Получение информации о версии
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     if (!GetFileVersionInfoA("GTA2.EXE", 0, versionInfoSize, pVersionInfo)) {
         free(pVersionInfo);
         return;
     }
 
-    // Получение указателя на структуру версии
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     VS_FIXEDFILEINFO* pFileInfo = NULL;
     UINT fileInfoLen = 0;
 
@@ -163,16 +166,17 @@ void __stdcall GetVersionLaunch( int * pMajorVersion,  int  * pMinorVersion) {
         return;
     }
 
-    // Извлечение версий с помощью макросов Windows
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Windows
     *pMajorVersion = HIWORD(pFileInfo->dwFileVersionMS);
     *pMinorVersion = LOWORD(pFileInfo->dwFileVersionMS);
-    // Освобождение памяти
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
   
 
     free(pVersionInfo);
 }
 
 void __stdcall GetDebugParam() {
+    TraceEvent("Menu::GetDebugParam @0x00451930");
     *gPlayReplay = gRegistry.GetPlayReplay("play_replay");
     *gByte1 = true;
     *gByte2 = true;
@@ -268,6 +272,7 @@ void __stdcall GetDebugParam() {
 }
 
 bool __stdcall  AllGtxFile() {
+    TraceEvent("Menu::AllGtxFile @0x00451800");
     bool EnglishFile; // bl
     FILE* English; // eax
     FILE* France; // eax

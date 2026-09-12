@@ -1,8 +1,9 @@
+
 #ifndef __POLICE_H_
 #define __POLICE_H_
 
-class Police{
 
+class Police{
     public:
 
     // 0x004A9430
@@ -36,7 +37,16 @@ class Police{
     // 0x004AAD40
     int UpdateCriminalPosition(void);
     // 0x004AADD0 void __fastcall
-    void PoliceCreateCopCarCrew(int arg0);
-};
+    void SpawnPoliceDriver(int arg0);  // (gm) старый: PoliceCreateCopCarCrew -> SpawnPoliceDriver
 
+
+// ==== импорт имён из gm ====
+    // 3 функций
+    // 0x004AACA0: Police::UpdateCrimeReport
+    void UpdateCrimeReport();
+    // 0x004ABAE0: Police::ReturnStolenCar
+    void ReturnStolenCar();
+    // 0x004ABD70: Police::ReleaseBlockedCars
+    void ReleaseBlockedCars();
+};
 #endif // !__POLICE_H_

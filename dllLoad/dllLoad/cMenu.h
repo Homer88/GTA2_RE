@@ -35,7 +35,7 @@ enum MenuPic :char {
 	MenuPic_19 = 19u,
 };
 
-#pragma pack(push, 1) // устанавливает выравнивание по 1 байту (максимально упакованная структура)
+#pragma pack(push, 1) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 struct Menu{
 	
 	LPDIRECTINPUTA DirectInput;
@@ -149,9 +149,9 @@ struct Menu{
 	char field_1EB3F;
 };
 
-#pragma pack(pop) // возвращает предыдущие настройки
+#pragma pack(pop) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //48932
-//51 596-48 932
+//51пїЅ596-48 932
 //51 972					 //125755
 //FIXME
 //static_assert(sizeof(Menu) == 125760, "ERROR MENU STRUCT");
@@ -160,19 +160,29 @@ struct Menu{
 
 
 
-extern  Menu* gMenu;
+// NOTE: 0x005EB160 is the address of the global Menu* pTABLE (4 bytes in .data).
+// The real Menu instance lives on the heap (operator_new(0x1EB40) in FUN_00457830);
+// its address is stored in that global cell. Access it through GetGameMenu()
+// (cMenu.cpp) - never cast 0x005EB160 itself to Menu*, that reads the pointer cell
+// as the struct and returns garbage (caused the GetRemapColour16 / PrintCentr crash).
 
+Menu*  GetGameMenu();                 // returns *(Menu**)0x005EB160 (may be NULL)
 
-//функции 
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 //char* __thiscall Menu::WCHARToChar(Menu* this, char* PlayerName)
 //unsigned char* __stdcall WCHARToChar(Menu* pthis, wchar_t* PlayerName);
 char  PlayerCheat(Menu* pthis, wchar_t* PlayerName);
 //void  __stdcall sub_459540(Menu* pthis);
-void  __stdcall sub_459540();
+// Retail sub_459540 is __thiscall: the real Menu* arrives in ECX.
+void  __fastcall sub_459540(Menu* thisMenu);
 
 
 //typedef short(__fastcall* LoadTextMenu)(Menu*);
-short  __stdcall   LoadTextMenu();
+// Retail Menu::LoadTextMenu is __thiscall; the Detour must forward the ORIGINAL
+// this (Menu* in ECX) to the trampoline. Using the global gMenu is wrong here:
+// during Menu::Menu() the global cell is still NULL (it is assigned only AFTER
+// the constructor returns, in FUN_00457830: gMenu = Menu::Menu(pMenu)).
+short  __fastcall   LoadTextMenu(Menu* thisMenu);
 
 
 

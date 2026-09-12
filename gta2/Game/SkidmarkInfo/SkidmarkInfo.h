@@ -1,8 +1,9 @@
+
 #ifndef __SKIDMARKINFO_H_
 #define __SKIDMARKINFO_H_
 
-class SkidmarkInfo{
 
+class SkidmarkInfo{
     public:
 
     // 0x0045E000

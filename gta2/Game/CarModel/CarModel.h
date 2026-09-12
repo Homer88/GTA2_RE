@@ -1,8 +1,9 @@
+
 #ifndef __CARMODEL_H_
 #define __CARMODEL_H_
 
-class CarModel{
 
+class CarModel{
     public:
 
     // 0x004C4B40

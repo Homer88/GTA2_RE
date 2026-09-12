@@ -124,6 +124,6 @@ int Police::UpdateCriminalPosition(void){
     // 0x004AADD0
 
 
-void Police::PoliceCreateCopCarCrew(int arg0){
+void Police::SpawnPoliceDriver(int arg0){
 
     }

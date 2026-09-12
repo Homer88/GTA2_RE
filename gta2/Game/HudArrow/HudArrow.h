@@ -1,8 +1,9 @@
+
 #ifndef __HUDARROW_H_
 #define __HUDARROW_H_
 
-class HudArrow{
 
+class HudArrow{
     public:
 
     // 0x004C5E60
@@ -35,6 +36,25 @@ class HudArrow{
     int GetHudArrow(void);
     // 0x004CAAD0
     int UpdateForPlayers(void);
-};
 
+
+// ==== импорт имён из gm ====
+    // 8 функций
+    // 0x00476880: HudArrow::ResetAll
+    void ResetAll();
+    // 0x004C6FB0: HudArrow::AreBothTracesFree
+    void AreBothTracesFree();
+    // 0x004C7030: HudArrow::SetArrowId
+    void SetArrowId();
+    // 0x004C7060: HudArrow::NextArrowTrace
+    void NextArrowTrace();
+    // 0x004C85D0: HudArrow::RemoveDuplicateArrows
+    void RemoveDuplicateArrows();
+    // 0x004C8650: HudArrow::FindByType
+    void FindByType();
+    // 0x004CA860: HudArrow::UpdateEntry
+    void UpdateEntry();
+    // 0x004CAA80: HudArrow::CreateForObject
+    void CreateForObject();
+};
 #endif // !__HUDARROW_H_

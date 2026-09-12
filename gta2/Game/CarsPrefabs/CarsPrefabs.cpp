@@ -1,10 +1,34 @@
 #include "CarsPrefabs.h"
+#include "../Car/Car.h"
 
 
     // 0x0040F390
+CarsPrefabs gCarsPrefabs;
+
+CarsPrefabs::CarsPrefabs(){}
+
+CarsPrefabs::~CarsPrefabs(){}
+
+unsigned short CarsPrefabs::GetCarsCount(){
+
+    return this->CarsCount;
+}
+
+// 0x00420E50
+
+Car* CarsPrefabs::GetCar(){
+    
+    return this->Car3;
+}
 
 
-void* CarsPrefabs::InitSinTable(int arg0){
+Car* CarsPrefabs::InsertCarAtFront(Car *pCar){
+
+    pCar->LastCar=this->Car2;
+    this->Car2=pCar;
+    return this->Car2;
+}
+void* CarsPrefabs::ConstructSinLookupTable(int arg0){
         return 0;
     }
 
@@ -60,7 +84,7 @@ int CarsPrefabs::InitializeCarPrefab(void){
     // 0x0040F4B0
 
 
-int CarsPrefabs::GetMaxValue(int arg0){
+int CarsPrefabs::DereferencePointer(int arg0){
         return 0;
     }
 
@@ -68,7 +92,7 @@ int CarsPrefabs::GetMaxValue(int arg0){
     // 0x0040F4E0
 
 
-bool CarsPrefabs::IsLessOrEqual(short arg0){
+bool CarsPrefabs::CompareGreaterOrEqual(short arg0){
         return 0;
     }
 
@@ -92,23 +116,21 @@ int CarsPrefabs::GetPrefabData(void){
     // 0x00420E40
 
 
-void CarsPrefabs::ClearList(int arg0){
+void CarsPrefabs::InitToZero(int arg0){
 
     }
 
 
-    // 0x00420E50
 
 
-int CarsPrefabs::GetCar(void){
-        return 0;
-    }
+
+
 
 
     // 0x00420E60
 
 
-void CarsPrefabs::ClearCarList(int arg0){
+void CarsPrefabs::LinkedListZeroInit(int arg0){
 
     }
 
@@ -210,8 +232,3 @@ int CarsPrefabs::UpdateCars(void){
 
 
     // 0x0045AD30
-
-
-int CarsPrefabs::GetCarsCount(void){
-        return 0;
-    }

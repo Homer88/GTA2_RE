@@ -36,7 +36,7 @@ public:
 	LSTATUS GetPlayerName(LPCSTR lpValueName, char* Data, int size);
 	
 };
-extern Registry gRegistry;
+extern Registry *gRegistry;
 
 #endif // !__REGISTRY__H__
 

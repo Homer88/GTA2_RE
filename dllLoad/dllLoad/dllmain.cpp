@@ -13,6 +13,8 @@
 #include "InitMapGM.h"
 //#include "InitS20Fun.h"
 #include "DebugLogFile.h"
+#include "cHookTrace.h"
+#include "cInspector.h"
 
 #include "cDirectX.h"
 //#include "cGang.h"
@@ -38,6 +40,70 @@ void printError(LONG Error, PVOID address);
 
 unsigned int Error;
 
+// Trampoline to the original Menu::LoadTextMenu (0x00453E20).
+// DetourAttach rewrites this variable to the Detours trampoline; cMenu.cpp
+// calls through it so the retail code still builds every menu page / reads .gxt text.
+LPVOID _LoadTextMenu = (LPVOID)0x00453E20;
+
+static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* ep) {
+    char path[MAX_PATH + 32];
+    char exe[MAX_PATH];
+    DWORD n = GetModuleFileNameA(NULL, exe, MAX_PATH);
+    if (n > 0 && n < MAX_PATH) {
+        char* sl = strrchr(exe, '\\');
+        if (sl) { sl[1] = 0; } else { exe[0] = 0; }
+        sprintf(path, "%sgta2_crash.log", exe);
+    }
+    else {
+        strcpy(path, "gta2_crash.log");
+    }
+    FILE* f = fopen(path, "ab");
+    if (f) {
+        EXCEPTION_RECORD* er = ep->ExceptionRecord;
+        CONTEXT* ctx = ep->ContextRecord;
+        SYSTEMTIME st;
+        unsigned char code[16];
+        DWORD* stack = (DWORD*)ctx->Esp;
+        int i;
+        GetLocalTime(&st);
+        fprintf(f, "\r\n--- CRASH %04d-%02d-%02d %02d:%02d:%02d.%03d ---\r\n",
+                st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+        fprintf(f, "Code: 0x%08X  Addr: 0x%08X  Flags: 0x%08X\r\n",
+                er->ExceptionCode, (unsigned int)(ULONG_PTR)er->ExceptionAddress, er->ExceptionFlags);
+        fprintf(f, "EIP: 0x%08X  EAX: 0x%08X  EBX: 0x%08X\r\n",
+                ctx->Eip, ctx->Eax, ctx->Ebx);
+        fprintf(f, "ECX: 0x%08X  EDX: 0x%08X  ESI: 0x%08X\r\n",
+                ctx->Ecx, ctx->Edx, ctx->Esi);
+        fprintf(f, "EDI: 0x%08X  ESP: 0x%08X  EBP: 0x%08X\r\n",
+                ctx->Edi, ctx->Esp, ctx->Ebp);
+        __try {
+            for (i = 0; i < 16; i++) {
+                code[i] = *(unsigned char*)(ctx->Eip + i);
+            }
+            fprintf(f, "CODE: ");
+            for (i = 0; i < 16; i++) {
+                fprintf(f, "%02X ", code[i]);
+            }
+            fprintf(f, "\r\n");
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            fprintf(f, "CODE: <unreadable>\r\n");
+        }
+        __try {
+            fprintf(f, "STACK: ");
+            for (i = 0; i < 8; i++) {
+                fprintf(f, "0x%08X ", stack[i]);
+            }
+            fprintf(f, "\r\n");
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            fprintf(f, "STACK: <unreadable>\r\n");
+        }
+        fclose(f);
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  dwReason,
                        LPVOID lpReserved
@@ -56,12 +122,19 @@ BOOL APIENTRY DllMain( HMODULE hModule,
    // LPVOID _InitDiretX =  (LPVOID)0x004031c0;
     //LPVOID _GetDebugParam = (LPVOID)0x00451930;
     //LPVOID _GetNumberOfCars = (LPVOID)0x00432850;
-    LPVOID _LoadTextMenu = (LPVOID)0x00453E20;
+    // _LoadTextMenu is now a file-scope global (see above)
    // LPVOID  _AllGtxFile = (LPVOID)0x00451800;
    // LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
-   // LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
+    //LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
     //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
     //LPVOID _sub_459540 = (LPVOID)0x00459540;
+
+    // --- enabled for the load-function trace (set to 0 to detach them) ---
+    LPVOID _InfoVersion = (LPVOID)0x004D0920;    // GetVersionLaunch
+    LPVOID _GetDebugParam = (LPVOID)0x00451930;  // GetDebugParam
+    LPVOID _AllGtxFile = (LPVOID)0x00451800;     // AllGtxFile
+    LPVOID _sub_459540 = (LPVOID)0x00459540;     // PlayerCheat / start menu
+    (void)_InfoVersion; (void)_GetDebugParam; (void)_AllGtxFile; (void)_sub_459540;
     //LPVOID _CopyNameGang= (LPVOID)0x0045DB40;
     
     
@@ -78,9 +151,13 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     switch (dwReason){
      
 
-    case DLL_PROCESS_ATTACH:
+case DLL_PROCESS_ATTACH:
        /// MessageBox(0, L"Load Dll!", 0, 0);
-       
+        SetUnhandledExceptionFilter(&CrashFilter);
+        TraceInit();
+        TraceEvent("DllMain: DLL_PROCESS_ATTACH");
+        StartInspector();
+
         DetourRestoreAfterWith();
         if (DetourTransactionBegin() != NO_ERROR)
         {
@@ -108,6 +185,15 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         DetourAttach(&_FUN_00433810, (PVOID)SetTypeWeapons);
         DetourAttach(&_Weapon_FUN_004cca10, (PVOID)Weapon_FUN_004cca10);
         */
+        //--- active trace hooks (functions are traced to hook_trace.log) ---
+        Error = DetourAttach(&_InfoVersion, (PVOID)GetVersionLaunch);
+        printError(Error, _InfoVersion);
+        Error = DetourAttach(&_GetDebugParam, (PVOID)GetDebugParam);
+        printError(Error, _GetDebugParam);
+        Error = DetourAttach(&_AllGtxFile, (PVOID)AllGtxFile);
+        printError(Error, _AllGtxFile);
+        Error = DetourAttach(&_sub_459540, (PVOID)sub_459540);
+        printError(Error, _sub_459540);
         //Error =  DetourAttach(&_InitDiretX, (PVOID)InitDiretX);
         //printError(Error, _InitDiretX);
 
@@ -128,8 +214,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
      break;
    case DLL_THREAD_ATTACH:
    case DLL_THREAD_DETACH:
+       break;
     case DLL_PROCESS_DETACH:
-      break;
+        TraceEvent("DllMain: DLL_PROCESS_DETACH (unload)");
+        StopInspector();
+        TraceClose();
+        break;
     }
     //DetourRestoreAfterWith();
     printf("Dettach and shutdown everything\n");

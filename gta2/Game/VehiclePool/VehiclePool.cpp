@@ -4,7 +4,7 @@
     // 0x004BCA80
 
 
-int VehiclePool::IsVehicleControlledByPlayer(int arg0){
+int VehiclePool::IsOwnedByOtherPlayer(int arg0){
         return 0;
     }
 
@@ -12,7 +12,7 @@ int VehiclePool::IsVehicleControlledByPlayer(int arg0){
     // 0x004BE830
 
 
-int VehiclePool::IsVehicleSpawnable(void){
+int VehiclePool::IsObjectTracked(void){
         return 0;
     }
 
@@ -20,7 +20,7 @@ int VehiclePool::IsVehicleSpawnable(void){
     // 0x004BE850
 
 
-unsigned char VehiclePool::IsTruckType(void){
+unsigned char VehiclePool::IsSpecialObject(void){
         return 0;
     }
 

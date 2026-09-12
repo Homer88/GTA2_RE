@@ -36,7 +36,7 @@ int SaveSlotAnimatedValue::GetAccurcy(void){
     // 0x004B7490
 
 
-int SaveSlotAnimatedValue::SaveSlotAnimatedValueInitPlayer(void){
+int SaveSlotAnimatedValue::InitPlayer(void){
         return 0;
     }
 
@@ -52,7 +52,7 @@ int SaveSlotAnimatedValue::ValueGet(void){
     // 0x004B85B0
 
 
-int SaveSlotAnimatedValue::ValueLogCarEvent(void){
+int SaveSlotAnimatedValue::LogCarEvent(void){
         return 0;
     }
 

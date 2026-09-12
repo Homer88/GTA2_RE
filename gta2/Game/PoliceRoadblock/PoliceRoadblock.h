@@ -1,8 +1,9 @@
+
 #ifndef __POLICEROADBLOCK_H_
 #define __POLICEROADBLOCK_H_
 
-class PoliceRoadblock{
 
+class PoliceRoadblock{
     public:
 
     // 0x004A99F0

@@ -12,7 +12,7 @@ int CrashData::IsCarInvolved(void){
     // 0x004769E0
 
 
-void CrashData::SetCrashData(int param_2,int param_3){
+void CrashData::SetTarget3(int param_2,int param_3){
 
     }
 
@@ -20,7 +20,7 @@ void CrashData::SetCrashData(int param_2,int param_3){
     // 0x00476A00
 
 
-void CrashData::SetCrashDamage(int param_2){
+void CrashData::SetSecondary(int param_2){
 
     }
 
@@ -28,7 +28,7 @@ void CrashData::SetCrashDamage(int param_2){
     // 0x00476A10
 
 
-void CrashData::SetCrashField24(int param_1,int param_2){
+void CrashData::SetField24(int param_1,int param_2){
 
     }
 
@@ -36,7 +36,7 @@ void CrashData::SetCrashField24(int param_1,int param_2){
     // 0x00476A20
 
 
-void CrashData::SetCrashBounds(int param_1,int param_2){
+void CrashData::SetTextPos(int param_1,int param_2){
 
     }
 
@@ -44,7 +44,7 @@ void CrashData::SetCrashBounds(int param_1,int param_2){
     // 0x00476A30
 
 
-void CrashData::ClearCrashObjects(void){
+void CrashData::DrawText(void){
 
     }
 
@@ -52,7 +52,7 @@ void CrashData::ClearCrashObjects(void){
     // 0x00476A60
 
 
-void CrashData::RemoveCrashObjects(void){
+void CrashData::UpdateBoth(void){
 
     }
 
@@ -60,7 +60,7 @@ void CrashData::RemoveCrashObjects(void){
     // 0x00476A90
 
 
-int CrashData::GetCrashField20(void){
+int CrashData::GetValue(void){
         return 0;
     }
 
@@ -76,7 +76,7 @@ void CrashData::SetActiveFlag(void){
     // 0x00476AB0
 
 
-void CrashData::ClearActiveFlag(void){
+void CrashData::SetInactive(void){
 
     }
 
@@ -92,7 +92,7 @@ int CrashData::SetActive(void){
     // 0x004895E0
 
 
-void CrashData::ShutdownCrashCar(int arg0){
+void CrashData::ResetBuffer8(int arg0){
 
     }
 
@@ -100,7 +100,7 @@ void CrashData::ShutdownCrashCar(int arg0){
     // 0x004895F0
 
 
-void CrashData::ClearCrashActive(void){
+void CrashData::ResetBufferState(void){
 
     }
 
@@ -116,7 +116,7 @@ int CrashData::ProcessCrash(void){
     // 0x00489B10
 
 
-void CrashData::ProcessParkingCrash(int param_1){
+void CrashData::ParkVehicleUpdate(int param_1){
 
     }
 

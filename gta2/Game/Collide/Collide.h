@@ -1,8 +1,9 @@
+
 #ifndef __COLLIDE_H_
 #define __COLLIDE_H_
 
-class Collide{
 
+class Collide{
     public:
 
     // 0x00446FD0

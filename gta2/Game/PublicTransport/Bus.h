@@ -1,12 +1,14 @@
+
 #ifndef __BUS__H__
 #define __BUS__H__
-#include "Car.h"
+
+class Car;
 
 class Bus {
 public:
 	char Car1;
-	class Car* CAR;
 	char SkipCount;
+	class Car* CAR;
 };
 
 
