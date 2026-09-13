@@ -1,7 +1,17 @@
 
 #ifndef __PLAYER_CLASS_H_
 #define __PLAYER_CLASS_H_
-#include "../global.h" 
+#include <windows.h>
+#include "../PowerUp/PowerUp.h"
+#include "../Weapon/Weapon.h"
+#include "../CameraOrPhysics/CameraOrPhysics.h"
+
+class VehiclePool;
+class Gang;
+class Car;
+class AudioManager;
+class Ped;
+class PlayerSlotSlave; 
 
 
 class Player{
@@ -47,9 +57,9 @@ class Player{
 		short Damage,Reload, Electrofinger, Invisibility;
 		//int Money,  Lives,  MultiPlayer;
 		PlayerSlotSlave *Money, *Lives,*MultiPlayer; //  нужна реализация 
-		PowerUP PowerType[18];
+		PowerUp PowerType[18];
 		Weapon  WeaponArray[28];
-		short SelectWeapon;
+		short CurrentWeapon;
 		bool quit1;
 		Ped  *PedNext;
 		bool NetworkPlayer=false;
@@ -63,6 +73,7 @@ class Player{
 		void SetMultiPlayer(byte Multi);
 		int  AddLives(int Lives);
 		void StartGame();
+		byte SelectWeapon(int TypeWeapon, int Ammo);
 
 		
 };	

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+int  gCheatIs;
 
     // 0x003F113C
 

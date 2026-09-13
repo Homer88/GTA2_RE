@@ -1,6 +1,6 @@
 #include "Font.h"
 
-Font gFont;
+Font *gFont;
 
 unsigned short Font::GetStringWidth(wchar_t* Text, unsigned short stringLength) {
 	return 40; };

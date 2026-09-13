@@ -1,8 +1,8 @@
 
 #ifndef __PEDMANAGER_H_
 #define __PEDMANAGER_H_
-#include "../global.h"
 #include "../Ped/Ped.h"
+
 
 class PedManager{
     public:

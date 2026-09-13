@@ -1,4 +1,6 @@
 #include "Gangs.h"
+#include "../Gang/Gang.h"
+#include <windows.h>
 
 
 Gangs *gGangs;
@@ -10,4 +12,12 @@ Gangs::Gangs() {
 }
 
 Gangs::~Gangs() {
+}
+
+
+Gang* Gangs::GetNextGang() {
+	return NULL;
+}
+Gang* Gangs::GetFirstUsedGang(){
+	return NULL;
 }

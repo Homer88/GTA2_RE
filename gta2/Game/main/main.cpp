@@ -40,11 +40,10 @@
 #include "Engine/DMAudio/DMAudio.h" // звук: gDMAudio (init/update), skip_audio
 #include "Engine/Sound/Sound.h"     // движок: gSound, WavToPcm, PlaySample
 #include "Game/Menu/Menu.h"         // класс Menu (gMenu), MenuPage, MenuEntry
-#include "Game/global.h"            //  глобальный  переменнные 
 // Глобальные объекты реконструкции (определены в MENU/ULTIL-библиотеках).
 extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
 extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersion и др.
-extern int skip_audio;             // флаг "звук выключен" (определён в DMAudio.cpp)
+extern bool  skip_audio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
 

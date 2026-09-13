@@ -7,16 +7,24 @@
 #include "MenuPage.h"*/
 
 #include <string.h>
-
-#include "../global.h"
+#include "../../Engine/Text/Text.h"
+#include "../../Engine/Font/Font.h"
 #include "../PlayerData/PlayerData.h"
 #include "../PlayerSlotSlave/PlayerSlotSlave.h"
 #include "../../Engine/MapGm/MapGm.h"
 #include "../../Engine/Bink/BinkBuffer.h"
 #include "../../Engine/Movie/Movie.h"
 #include "../../Engine/DMAudio/DMAudio.h"
+#include "../../Engine/ultil/WinApi.h"
+#include "../Game/Game.h"
 #include "Menu.h"
-
+extern MapGm *gMapGm;
+extern PlayerData *gPlayerData;
+extern Font *gFont;
+extern Text* gText;
+extern WinApi* gWinApi;
+extern bool gSkipAudio;
+extern  int  gCheatIs;
 Menu *gMenu;
 
  
@@ -24,7 +32,6 @@ Menu *gMenu;
 
 
 // Globals from dump
-extern int skip_audio;
 extern int gSampleRate;
 extern unsigned short word_67065C;
 extern unsigned short word_67066C;
@@ -430,7 +437,7 @@ int  Menu::UpdateMenuFrame() {
         pBonusStage1 = pBonusStage;
         this->BonusStage[0] = pBonusStage;
     }
-    gMapGm.SetBonusStage(pBonusStage1); // TODO: глобал gMapGm не входит в линковку GTA2
+    gMapGm->SetBonusStage(pBonusStage1); // TODO: глобал gMapGm не входит в линковку GTA2
     this->ConfirmExit();
     this->ActivateElement();
     int result;

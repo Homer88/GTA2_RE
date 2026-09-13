@@ -5,6 +5,9 @@
 #include <windows.h>
 #include <cstring>
 #include "../../Engine/FileMgr/FileMgr.h"
+#include "../Player/Player.h"
+#include "../../Engine/AudioSourceParams/AudioSourceParams.h"
+
 
 #ifndef _WORD
 #define _WORD WORD
@@ -14,7 +17,6 @@
 
 
 
-#include "../../Engine/AudioSourceParams/AudioSourceParams.h"
 
 
 #pragma pack(push, 1)

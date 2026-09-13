@@ -1,7 +1,20 @@
 
 #ifndef __GANG_H_
 #define __GANG_H_
-#include "../global.h"
+#include "../Weapon/Weapon.h"
+typedef enum GANG {
+    Yakuza = 0u,
+    Zaibatsu_Corporation = 1u,
+    Loonies = 2u,
+    GANG_3 = 3u,
+    GANG_4 = 4u,
+    GANG_5 = 5u,
+    GANG_6 = 6u,
+    GANG_7 = 7u,
+    GANG_8 = 8u,
+    GANG_9 = 9u,
+    GANG_10 = 10u,
+}GANG;
 
 class Gang{
     public:
@@ -37,10 +50,10 @@ class Gang{
     void* SetCurrentGangName(void);
     // 0x0045DA80
     int DecreaseRespect(void);
-    int IncreaseRespect(int ID, int count) {};
+    int IncreaseRespect(int ID, int count);
     // 0x0045DAC0
     int getWarMaskGang(void);
-    int GetRespect(int ID) {};
+    int GetRespect(int ID);
     // 0x0045DB40
     int SetName(void);
     // 0x0045DD50
@@ -51,7 +64,7 @@ class Gang{
     int ChangeRespect(void);
     // 0x00475900
     int Set_475900(void);
-    void SetRespect(int id, char CountRespect) {};
+    int  SetRespect(int id, char CountRespect);
 
 
 // ==== импорт имён из gm ====

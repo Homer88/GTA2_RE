@@ -1,10 +1,11 @@
 #include "MissionManager.h"
 #include <cstring>
 #include <cstdio>
-#include "../global.h"
 #include "../../Engine/MapRelatedStruct/MapRelatedStruct.h"
+#include "../Game/Game.h"
 //#include "../MissionScriptObjects/MissionScriptObjects.h"
 
+extern MapRelatedStruct* gMapRelatedStruct;
 MissionManager *gMissionManager;
 
 int gSpecialTokens;
@@ -17,7 +18,7 @@ char do_miss_logging;
 char gStr[256];
 
 
-Game* gGame;
+extern Game* gGame;
 //void* gMissionObjective;
 
 //=============================================================================
@@ -279,6 +280,7 @@ _WORD* MissionManager::SetupMissionText(unsigned __int16 a2)
         *(_WORD*)this->EVENT_LOG_SIZE[1] = 0;
     }
     return result;*/
+    return 0;
 }
 
 //=============================================================================

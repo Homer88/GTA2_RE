@@ -2,11 +2,7 @@
 //Structure S117 0x005EB898
 #ifndef __GANGS_H_
 #define __GANGS_H_
-
-#include "../global.h"
-
-
-
+#include "../Gang/Gang.h"
 
 class  Gangs{
 public: 
@@ -17,9 +13,9 @@ public:
 
 	Gangs();
 	~Gangs();
-	Gang* GetNextGang() { return NULL; };
-	Gang* GetFirstUsedGang() { return  NULL; };
-	
+	Gang* GetNextGang();
+	Gang* GetFirstUsedGang();
+		  
 };
 
 

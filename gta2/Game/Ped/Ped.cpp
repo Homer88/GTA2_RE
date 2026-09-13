@@ -1,38 +1,7 @@
 #include "Ped.h"
+#include "../Car/Car.h"
 
 
-typedef enum PedState {
-    PEDSTATE_MOVE_TURN = 0,
-    New_Name_1 = 1,
-    New_Name_2 = 2,
-    PEDSTATE_ENTER_CAR = 3,
-    PEDSTATE_EXIT_CAR = 4,
-    PEDSTATE_IDLE1 = 5,
-    New_Name_6 = 6,
-    PEDSTATE_IDLE = 7,
-    PEDSTATE_FALL = 8,
-    PEDSTATE_DEAD = 9,
-    PEDSTATE_IN_CAR = 10,
-    New_Name_11 = 11,
-    New_Name_12 = 12,
-    New_Name_13 = 13,
-    New_Name_14 = 14,
-    New_Name_15 = 15,
-    New_Name_16 = 16,
-    New_Name_17 = 17,
-    New_Name_18 = 18,
-    New_Name_19 = 19
-}PedState;
-
-typedef enum WantedLevelStat {
-    LEVEL_WANTED_0 = 0,
-    LEVEL_WANTED_1 = 600,
-    LEVEL_WANTED_2 = 1600,
-    LEVEL_WANTED_3 = 3000,
-    LEVEL_WANTED_4 = 5000,
-    LEVEL_WANTED_5 = 8000,
-    LEVEL_WANTED_6 = 12000,
-}WantedLevelStat;
     // 0x003F1004
 
 

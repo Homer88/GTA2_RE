@@ -2,10 +2,46 @@
 #ifndef __PED_H_
 #define __PED_H_
 
+#include <windows.h>
 #include "../Player/Player.h"
 
+class GameObject;
+class Car;
+class Weapon;
+class Gang;
 
-   
+typedef enum PedState {
+    PEDSTATE_MOVE_TURN = 0,
+    PEDSTATE_1 = 1,
+    PEDSTATE_2 = 2,
+    PEDSTATE_ENTER_CAR = 3,
+    PEDSTATE_EXIT_CAR = 4,
+    PEDSTATE_IDLE1 = 5,
+    PEDSTATE_6 = 6,
+    PEDSTATE_IDLE = 7,
+    PEDSTATE_FALL = 8,
+    PEDSTATE_DEAD = 9,
+    PEDSTATE_IN_CAR = 10,
+    PEDSTATE_11 = 11,
+    PEDSTATE_12 = 12,
+    PEDSTATE_13 = 13,
+    PEDSTATE_14 = 14,
+    PEDSTATE_15 = 15,
+    PEDSTATE_16 = 16,
+    PEDSTATE_17 = 17,
+    PEDSTATE_18 = 18,
+    PEDSTATE_19 = 19,
+}PedState;
+
+typedef enum WantedLevelStat {
+    LEVEL_WANTED_0 = 0,
+    LEVEL_WANTED_1 = 600,
+    LEVEL_WANTED_2 = 1600,
+    LEVEL_WANTED_3 = 3000,
+    LEVEL_WANTED_4 = 5000,
+    LEVEL_WANTED_5 = 8000,
+    LEVEL_WANTED_6 = 12000,
+}WantedLevelStat;
    
 
 class Ped{

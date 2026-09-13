@@ -3,8 +3,9 @@
 // Байтовые смещения полей сверены с dump\Ghidra\gta2.exe.h (стр. 56854)
 // и дизассемблером dump\Ghidra\gta2.exe.asm (ResetSettings).
 //=====================================================================
-#include "../../Game/global.h"
-
+#include "../../Engine/ultil/WinApi.h"
+#include "MapGm.h"
+extern WinApi *gWinApi;
 MapGm *gMapGm;
 // TODO: заглушки - реализовать (объявлены в MapGm.h)
 MapGm::MapGm()

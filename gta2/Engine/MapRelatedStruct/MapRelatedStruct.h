@@ -5,7 +5,9 @@
 #include <windows.h>
 #include <cstdio>
 #include <cstdlib>
-#include "../../Game/global.h"
+#include "../../Engine/Sprite/Sprite.h"
+#include "../../Engine/SpriteS1/SpriteS1.h"
+#include "../../Engine/FileMgr/FileMgr.h"
 
 #ifndef _DWORD
 typedef signed int _DWORD;
@@ -37,15 +39,8 @@ typedef __int64 _QWORD;
 #endif
 
 #include "../Map/Map.h"
-
-struct S16_01;
-struct S202;
-class SpriteS1;
-class Sprite;
-class Player;
 #include "../AudioSourceParams/AudioSourceParams.h"
-struct GameEntity;
-class PublicTransport;
+
 
 #pragma pack(push, 1)
 
@@ -80,7 +75,7 @@ struct S202 {
     char field_1F;                  // 0x1F
 
     static void sub_41F980(S202* p, int value);
-    static void* sub_401B20(S202*, SpriteS1*, PublicTransport*);
+   // static void* sub_401B20(S202*, SpriteS1*, PublicTransport*);
 };
 
 class MapRelatedStruct {
@@ -230,8 +225,8 @@ public:
     int sub_4653C0(int a2, int a3, int a4);
     S16_02** sub_465410(int a2, int a3, int a4);
     int sub_465490(int a2, int a3, int a4);
-    int sub_465510(GameEntity* a2);
-    int sub_4655B0(int a2, GameEntity* a3);
+   // int sub_465510(GameEntity* a2);
+   // int sub_4655B0(int a2, GameEntity* a3);
     int sub_465650(int a2, int a3, Player* a4);
     char sub_4656D0(int a2, int a3, int a4, int a5, _DWORD* a6, char a7);
 
@@ -245,7 +240,7 @@ public:
     int sub_466910(int a2, int a3, _DWORD* a4);
     _WORD* FindMaxZForTile(int a2, int a3, _DWORD* a4);
     _WORD* sub_466A00(int a2, int a3, int* a4);
-    char sub_466AF0(int a2, int a3, GameEntity* a4);
+   // char sub_466AF0(int a2, int a3, GameEntity* a4);
     char sub_466B70(int* a2, S202* pS202);
     bool sub_466CF0(int a2, int a3, int a4);
     __int16 sub_466D30(AudioSourceParams a2);
@@ -361,6 +356,5 @@ public:
 
 #pragma pack(pop)
 
-extern MapRelatedStruct* gMapRelatedStruct;
 
 #endif // __MAP_RELATED_STRUCT_H__

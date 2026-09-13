@@ -6,14 +6,12 @@
 void* operator_new(size_t size);
 
 // S16_02::sub_44C840 - init/zero the struct
-void S16_02::sub_44C840(S16_02* p)
-{
+void S16_02::sub_44C840(S16_02* p){
     memset(p, 0, sizeof(S16_02));
 }
 
 // S202::sub_41F980 - write value into field_0
-void S202::sub_41F980(S202* p, int value)
-{
+void S202::sub_41F980(S202* p, int value){
     p->field_0 = value;
 }
 void free_0(void* ptr);
@@ -26,7 +24,7 @@ class Car;
 class Data16 { public: static int sub_40CE90(void*); unsigned short field_0; unsigned short field_2; int field_4; };
 //class FileMgr { public: static void* FileOpen(void*, LPCSTR); static int CloseFile(void*); static int Read(void*, void*); static int ReadLine(void*, char*, int); static int SeekPosition(void*, int); };
 //class Gangs { public: static int FindByName(int, const char*); static int AddNewGang(int, int); };
-class JuncIds {
+/*class JuncIds {
 public:
     static int sub_40C6D0(void*, int, int, int);
     int Arr_0x884[128];
@@ -36,7 +34,7 @@ public:
     int field_CC64;
     int Count;
     int Arr_316_Data16[32];
-};
+};*/
 //class Player { public: static int CheckCondition(void*, void*); static int IsCurrentPlayer(void*); static void* sub_401B40(void*, void*, int); static int sub_40CE70(void*); static int sub_41E260(void*); };
 //class PublicTransport;
 //class Radar { public: static void AddBlip(int, int, int, int); };
@@ -51,7 +49,7 @@ public:
 //struct Ped;
 
 //void SpawnObject(Object* obj, unsigned char a2, int a3, int a4, int a5, int a6);
-int sub_4BB860(void* a1, int a2, int a3, int a4);
+/*int sub_4BB860(void* a1, int a2, int a3, int a4);
 int sub_4BB910(void* a1, int a2, int a3, int a4);
 unsigned int sub_463940(Map* a1, int a2);
 int bitShiftLeft1(int value, int shift);
@@ -162,16 +160,15 @@ static S16_01* S16_01_sub_463990(S16_01* s, char a2, char a3, int a4) {
             return (S16_01*)-1;
     }
     s->field_320++;*/
-    return 0;
-}
+ //   return 0;
+//}
 
 //=============================================================================
 // MapRelatedStruct::MapRelatedStruct - Constructor
 //=============================================================================
 // MapRelatedStruct::MapRelatedStruct - Constructor
 //=============================================================================
-MapRelatedStruct::MapRelatedStruct()
-{
+MapRelatedStruct::MapRelatedStruct(){
   /*s16_01.field_320 = 0;
   Len = -1;
   field_369 = -1;
@@ -212,16 +209,14 @@ MapRelatedStruct::MapRelatedStruct()
 //=============================================================================
 // MapRelatedStruct::~MapRelatedStruct - Destructor
 //=============================================================================
-MapRelatedStruct::~MapRelatedStruct()
-{
+MapRelatedStruct::~MapRelatedStruct(){
   //sub_464B30();
 }
 
 //=============================================================================
 // MapRelatedStruct::sub_464B30 - Destructor helper
 //=============================================================================
-void MapRelatedStruct::sub_464B30()
-{
+void MapRelatedStruct::sub_464B30(){
   /*void* v2;
   void *v3;
   void *v4;
@@ -273,8 +268,7 @@ void MapRelatedStruct::sub_464B30()
 //=============================================================================
 // MapRelatedStruct::sub_466D30 - AudioSourceParams
 //=============================================================================
-/*short MapRelatedStruct::sub_466D30(AudioSourceParams a2)
-{
+/*short MapRelatedStruct::sub_466D30(AudioSourceParams a2){
   /*int v3;
   __int16 result;
   int v5;
@@ -2964,7 +2958,7 @@ int MapRelatedStruct::sub_465490(int a2, int a3, int a4) {
 }
 
 // 0x465510
-int MapRelatedStruct::sub_465510(GameEntity* a2) {
+//int MapRelatedStruct::sub_465510(GameEntity* a2) {
   //SpriteS1 *v3; 
   //int v4; 
   //int v5; 
@@ -2995,11 +2989,11 @@ int MapRelatedStruct::sub_465510(GameEntity* a2) {
   //if ( v8 && (v6 = *v8) != 0 )
   //  return Style::sub_462FD0(gStyle, v6 & 0x3FF);
   //else
-    return 0;
-}
+  //  return 0;
+//}
 
 // 0x4655B0
-int MapRelatedStruct::sub_4655B0(int a2, GameEntity* a3) {
+//int MapRelatedStruct::sub_4655B0(int a2, GameEntity* a3) {
   //SpriteS1 *v4; 
   //int v5; 
   //int v6; 
@@ -3030,8 +3024,8 @@ int MapRelatedStruct::sub_4655B0(int a2, GameEntity* a3) {
   //if ( v9 && (v7 = *(_WORD *)(v9 + 4)) != 0 )
   //  return Style::sub_462FD0(gStyle, v7 & 0x3FF);
   //else
-    return 0;
-}
+  //  return 0;
+//}
 
 // 0x465650
 int MapRelatedStruct::sub_465650(int a2, int a3, Player* a4) {
@@ -4112,7 +4106,7 @@ _WORD* MapRelatedStruct::sub_466A00(int a2, int a3, int* a4) {
 }
 
 // 0x466AF0
-char MapRelatedStruct::sub_466AF0(int a2, int a3, GameEntity* a4) {
+//char MapRelatedStruct::sub_466AF0(int a2, int a3, GameEntity* a4) {
 //  SpriteS1 *v5; 
 //  int v6; 
 //  _WORD *v7; 
@@ -4134,8 +4128,8 @@ char MapRelatedStruct::sub_466AF0(int a2, int a3, GameEntity* a4) {
 //  if ( (*((_BYTE *)v8 + 11) & 3) != 0 )
 //    return 0;
 //  else
-    return 5;
-}
+   // return 5;
+//}
 
 // 0x466B70
 char MapRelatedStruct::sub_466B70(int* a2, S202* pS202) {
@@ -4206,7 +4200,7 @@ char MapRelatedStruct::sub_466B70(int* a2, S202* pS202) {
 }
 
 // 0x466CF0
-bool MapRelatedStruct::sub_466CF0(int a2, int a3, int a4) {
+//bool MapRelatedStruct::sub_466CF0(int a2, int a3, int a4) {
 //  int v4; 
 //  char v5; // al
 //  bool result; // al
@@ -4218,11 +4212,11 @@ bool MapRelatedStruct::sub_466CF0(int a2, int a3, int a4) {
 //    if ( (v5 & 0xFC) != 0 && (v5 & 0xFCu) < 0xB4 && (v5 & 3) != 0 )
 //      return 1;
 //  }
-    return 0;//result;
-}
+   // return 0;//result;
+//}
 
 // 0x466D30
-short MapRelatedStruct::sub_466D30(AudioSourceParams a2) {
+//short MapRelatedStruct::sub_466D30(AudioSourceParams a2) {
 //  int v3; 
 //  __int16 result; // ax
 //  int v5; 
@@ -4283,11 +4277,11 @@ short MapRelatedStruct::sub_466D30(AudioSourceParams a2) {
 //    default:
 //      goto LABEL_14;
 //  }
-    return 0; //result;
-}
+//    return 0; //result;
+//}
 
 // 0x466E20
-_DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int a2) {
+//_DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int a2) {
  /* SpriteS1* v6;
   int v7; 
   SpriteS1 *v8; 
@@ -4352,11 +4346,11 @@ _DWORD* MapRelatedStruct::sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int 
       return arg0;
     }
   }*/
-    return 0;//result;
-}
+   // return 0;//result;
+//}
 
 // 0x466F70
-_DWORD* MapRelatedStruct::sub_466F70(_DWORD* arg0, S202* a2) {
+//_DWORD* MapRelatedStruct::sub_466F70(_DWORD* arg0, S202* a2) {
   /*int v4;
   int v5; 
   char v7; // al
@@ -4392,16 +4386,16 @@ _DWORD* MapRelatedStruct::sub_466F70(_DWORD* arg0, S202* a2) {
     bitShiftLeft1((int)arg0, 0);
     return arg0;
   }*/
-    return 0;
-}
+   // return 0;
+//}
 
 // 0x467020
-short MapRelatedStruct::sub_467020(int*, SpriteS1*, void*, void*, void*) {
-    return 0;
-}
+//short MapRelatedStruct::sub_467020(int*, SpriteS1*, void*, void*, void*) {
+ //   return 0;
+//}
 
 // 0x467110
-int MapRelatedStruct::sub_467110(int* arg0, Sprite* pSprite, int* a4, Player* pPlayer) {
+//int MapRelatedStruct::sub_467110(int* arg0, Sprite* pSprite, int* a4, Player* pPlayer) {
 //  int *field; 
 //  int v7; 
 //  SpriteS1 *FirstElement; 
@@ -4994,11 +4988,11 @@ LABEL_80:
   v85 = *sub_466E20( &pPlayer, field, FirstElement, (int)v87.carMgr);
   result = v90.type;
   *a4 = v85;*/
-return 0;//result;
-}
+//return 0;//result;
+//}
 
 // 0x467F80
-int MapRelatedStruct::sub_467F80(int** arg0, SpriteS1** a3, int* a4, Player* a5) {
+//int MapRelatedStruct::sub_467F80(int** arg0, SpriteS1** a3, int* a4, Player* a5) {
  /* int* field;
   SpriteS1 *v7; 
   SpriteS1 *v8; 
@@ -5709,9 +5703,9 @@ LABEL_90:
            field,
            v7,
            (int)v99.carMgr);*/
-return 0; //sub_42A660(&v100.z);
-}
-
+//return 0; //sub_42A660(&v100.z);
+//}
+//}
 // 0x469110
 char MapRelatedStruct::sub_469110(int a2, int a3, char a4) {
 /*  char* v5;

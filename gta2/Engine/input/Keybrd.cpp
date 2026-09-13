@@ -1,5 +1,4 @@
 
-#include "../../Game/global.h"
 #include "../Debug/DebugLogFile.h"
 
 
