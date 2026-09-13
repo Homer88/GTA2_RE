@@ -9,6 +9,8 @@ public:
 	int NumberOfElements;
 	Text();
 	~Text();
+	void Load();
+	void LoadGCI();
 	void* Bsearch(const void* pKey);
 	wchar_t* ConvertWordsToBig(wchar_t* str);
 	wchar_t ConvertToUpper(wchar_t str);

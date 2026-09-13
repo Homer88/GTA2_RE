@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(RouteInfo LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 98)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 file(GLOB ROUTEINFO_SOURCE "*.cpp")
 file(GLOB ROUTEINFO_HEADERS "*.h")
-set(GLOBAL_HEADERS "../global.h")
 
 # ���ઠ  RouteInfo
-add_library(${PROJECT_NAME} STATIC ${ROUTEINFO_SOURCE} ${ROUTEINFO_HEADERS} ${GLOBAL_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${ROUTEINFO_SOURCE} ${ROUTEINFO_HEADERS})

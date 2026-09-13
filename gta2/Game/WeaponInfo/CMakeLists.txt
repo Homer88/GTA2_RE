@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(WeaponInfo LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 98)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 file(GLOB WEAPONINFO_SOURCE "*.cpp")
 file(GLOB WEAPONINFO_HEADERS "*.h")
-set(GLOBAL_HEADERS "../global.h")
 
 # ���ઠ  WeaponInfo
-add_library(${PROJECT_NAME} STATIC ${WEAPONINFO_SOURCE} ${WEAPONINFO_HEADERS} ${GLOBAL_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${WEAPONINFO_SOURCE} ${WEAPONINFO_HEADERS})

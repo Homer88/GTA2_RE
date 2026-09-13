@@ -16,15 +16,20 @@
 #include "../../Engine/Movie/Movie.h"
 #include "../../Engine/DMAudio/DMAudio.h"
 #include "../../Engine/ultil/WinApi.h"
+#include "../../Engine/TextureManager/TextureManager.h"
 #include "../Game/Game.h"
+#include "../../Engine/Style/Style.h"
 #include "Menu.h"
 extern MapGm *gMapGm;
 extern PlayerData *gPlayerData;
 extern Font *gFont;
 extern Text* gText;
+extern Style* gStyle;
+extern TextureManager *gTextureManager;
 extern WinApi* gWinApi;
 extern bool gSkipAudio;
 extern  int  gCheatIs;
+int gCheatActive;
 Menu *gMenu;
 
  
@@ -80,7 +85,7 @@ char unk_5EB060[256];
 char aDataMoviePrein[256];
 int gBool1;
 int gAudioObject;
-int* gCheatActive;
+
 int unk_5EAF44;
 int gImageTable;
 int gbh_InitImageTable(int);
@@ -356,7 +361,7 @@ bool gGetAllWeapons 			= false;
 bool gDoInvulnerable 			= false;
 bool gDANISGOD 					= false;
 bool gFYOHZZ0 					= false;
-bool gGiveMoney99K					= false;
+bool gGiveMoney99k					= false;
 bool gSEGARULZ 					= false;
 bool gDAVEMOON 					= false;
 bool gExplodingOn 				= false;
@@ -1718,7 +1723,7 @@ void Menu::CheckConditions() {
     // Адрес: 0x004593FB - Размер: 0x4C+0x69+0x161 байт
 }
 
-void Menu::MenuShowJapanText() {
+void Menu::ShowJapanText() {
     //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00453D40 - Размер: 0x31 байт
 }
@@ -1813,7 +1818,7 @@ void Menu::PlayerCheat(wchar_t *PlayerName) {
                 gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case IAMDAVEJ:
-                gGiveMoney99K= !gGiveMoney99K;
+                gGiveMoney99k= !gGiveMoney99k;
                 gCheatIs = 9; // TODO: глобал gCheatIs пока не определён/не входит в линковку GTA2
                 return;
             case SEGARULZ:
@@ -1932,6 +1937,62 @@ void Menu::SpecialFunction7() {
 
 // Основной метод меню
 Menu::Menu() {
+    //this->MenuPageArray = new MenuPage[17];
+    if (gText == NULL) {
+        gText = new Text;
+    }
+    if (gStyle == NULL) {
+        gStyle = new Style();
+    }
+    if (gTextureManager == NULL) {
+        gTextureManager = new TextureManager;
+    }
+    this->InitDevice();
+    gText->Load();
+    gStyle->Load("data\\fstyle.sty");
+    gTextureManager->Load();
+    // ResolveColorSetting();
+    this->State = 1;
+    this->OldKeyState.up = 0;
+    this->OldKeyState.down = 0;
+    this->OldKeyState.left = 0;
+    this->OldKeyState.Right = 0;
+    this->OldKeyState.enter = 0;
+    this->OldKeyState.esc = 0;
+    this->OldKeyState.del = 0;
+    this->KeyboardAcquired = 0;
+    this->FrontendState = 2;
+    this->isCheat = false;
+    this->ShowJapanText();
+    this->TimeToWaitDemoStart = timeGetTime();
+    this->FrameCounter = 0;
+    this->PageNumber = 0;
+    this->TimeToWaitBeforeDemoStart = 0;
+    this->LoadTextMenu();
+    this->Length = 0;
+    this->Key = 256;
+    this->PlayerName[0] = NULL;
+    this->MenuItems[0] = 0;
+    this->MenuItems[1] = 0;
+    this->MenuItems[2] = 0;
+    this->MenuItems[3] = 0;
+    this->MenuItems[4] = 0;
+    this->MenuItems[5] = 0;
+    this->MenuItems[6] = 0;
+    this->MenuItems[7] = 0;
+    this->MenuItems[8] = 0;
+    this->CurrentMenuItemsIndex = 0;
+    this->CountArena = 0;
+    this->MainMenuLogic();
+    this->LoadGame();
+    this->MenuPicture = Play;
+    //this->LoadTexturesFromTable();
+    //this->PlayerSlotSave[0] = NULL;
+    this->Index = 0;
+    //this->Player=gPlayer
+    for (int i = 0; i < 9; i++) {
+        this->BonusStage[i] = -1;
+    }
     //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00456F00 - Размер: 0x32E байт
 }

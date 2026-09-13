@@ -91,7 +91,8 @@ public:
     unsigned char Keys[256];                   // +0x0008 - состояние клавиш (256 байт)
     KeyState OldKeyState;                      // +0x0108
     KeyState NewKeyState;                      // +0x010F
-    
+    char KeyboardAcquired;
+    byte Length, CurrentMenuItemsIndex, CountArena;
     // Состояние фронтенда (0x0200 - 0x0210)
     int FrontendState;         // +0x0116 - текущее состояние
     int PreviousState;         // +0x010C - предыдущее состояние
@@ -342,7 +343,7 @@ void StartGTAManager();
 // Адрес: 0x004593FB - Размер: 0x4C+0x69+0x161 байт
 void CheckConditions();
 // Адрес: 0x00453D40 - Размер: 0x31 байт
-void MenuShowJapanText();
+void ShowJapanText();
 
 // Читы и специальные функции
 // Адрес: 0x004590F0  - Размер: 0x44E байт

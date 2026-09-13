@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(TrafficCar LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 98)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 file(GLOB TRAFFICCAR_SOURCE "*.cpp")
 file(GLOB TRAFFICCAR_HEADERS "*.h")
-set(GLOBAL_HEADERS "../global.h")
 
 # ���ઠ  TrafficCar
-add_library(${PROJECT_NAME} STATIC ${TRAFFICCAR_SOURCE} ${TRAFFICCAR_HEADERS} ${GLOBAL_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${TRAFFICCAR_SOURCE} ${TRAFFICCAR_HEADERS})

@@ -40,8 +40,10 @@
 #include "Engine/DMAudio/DMAudio.h" // звук: gDMAudio (init/update), skip_audio
 #include "Engine/Sound/Sound.h"     // движок: gSound, WavToPcm, PlaySample
 #include "Game/Menu/Menu.h"         // класс Menu (gMenu), MenuPage, MenuEntry
+#include "Engine/Registry/Registry.h" // регистр: gRegistry (настройки/язык)
 // Глобальные объекты реконструкции (определены в MENU/ULTIL-библиотеках).
 extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
+extern Registry *gRegistry;         // реестр Windows: язык, настройки экрана/звука
 extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersion и др.
 extern bool  skip_audio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
@@ -350,17 +352,6 @@ static bool ComposeBackground(const char* leftName, const char* rightName, bool 
 BOOL cApp::Init()
 {
   strcpy(m_Caption, "GTA2 - viewer");
-
-  // Построить данные меню из исходной реконструкции (заполняет MenuPageArray).
-  // Вызываются все Create-функции: PlayMenuCreate, OptionsMenuCreate и т.д.
-  gMenu->LoadTextMenu();
-
-  // --- Инициализация звука (аналог LoadConfig в оригинале) ---
-  // gAudioObject = 2: "2D-звук" (тип объекта, как в оригинальном LoadConfig).
-  // DMAudio::AddAudioObject создаёт аудио-объект и кладёт его "частоту" в gSampleRate.
-  gAudioObject = 2;
-  if (!skip_audio)
-    gSampleRate = gDMAudio.AddAudioObject(&gAudioObject);
 
   // --- Загрузить тексты пунктов меню из .gxt (запасной источник для страниц 0 и 1) ---
   // (Text::Bsearch в реконструкции пока заглушена и возвращает пробел, поэтому
@@ -860,10 +851,26 @@ BOOL cApp::Frame()
   return TRUE;
 }
 
+// Создание меню (аналог оригинальной функции FUN_00457830 из WinMain):
+// конструктор Menu сам выделяет объекты (gText, gStyle, gTextureManager) и
+// загружает тексты меню (LoadTextMenu). Дополнительно настраиваем звук.
+void SetupMenu()
+{
+  if (gMenu == NULL)
+    gMenu = new Menu;          // new = operator_new + Menu::Menu()
+
+  // Доп. параметры из оригинального FUN_00457830: аудио-объект для меню.
+  gAudioObject = 2;            // "2D-звук" (как в оригинальном LoadConfig)
+  if (!skip_audio)
+    gSampleRate = gDMAudio.AddAudioObject(&gAudioObject);
+}
+
 // Точка входа приложения: создаём объект cApp и запускаем окно (Run() держит
 // цикл сообщений и вызывает Init/Frame/Shutdown).
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
+  gRegistry = new Registry; // реестр Windows (язык, настройки) - как в оригинальном WinMain
+  SetupMenu();              // создать меню + доп. параметры (аудио), аналог FUN_00457830
   cApp App;
   return App.Run();
 }

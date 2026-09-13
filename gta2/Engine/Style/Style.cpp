@@ -1,9 +1,14 @@
 #include "Style.h"
-
+#include "../FileMgr/FileMgr.h"
 
     // 0x00420200
+Style *gStyle;
 
+void Style::Load(char* FileName) {
+    FileMgr* pFileMng;
+    //pFileMng->FileOpen(FileName);
 
+}
 int Style::CarExist(void){
         return 0;
     }

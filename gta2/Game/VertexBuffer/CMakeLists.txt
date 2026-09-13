@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(VertexBuffer LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 98)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 file(GLOB VERTEXBUFFER_SOURCE "*.cpp")
 file(GLOB VERTEXBUFFER_HEADERS "*.h")
-set(GLOBAL_HEADERS "../global.h")
 
 # ���ઠ  VertexBuffer
-add_library(${PROJECT_NAME} STATIC ${VERTEXBUFFER_SOURCE} ${VERTEXBUFFER_HEADERS} ${GLOBAL_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${VERTEXBUFFER_SOURCE} ${VERTEXBUFFER_HEADERS})

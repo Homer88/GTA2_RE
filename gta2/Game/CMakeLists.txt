@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(GAME LANGUAGES CXX)
 
 
@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
-# пути для include: gta2/, gta2/Engine, gta2/Game (global.h и кросс-инклюды)
+# пути для include: gta2/, gta2/Engine, gta2/Game (кросс-инклюды)
 include_directories(${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/.. ${CMAKE_CURRENT_LIST_DIR}/../Engine)
 
 # все поддиректории (классы) сборки Game
@@ -99,7 +99,6 @@ add_subdirectory(Taxi)
 add_subdirectory(Teleporter)
 add_subdirectory(TextLabel)
 add_subdirectory(TextLabelPool)
-add_subdirectory(TextureManager)
 add_subdirectory(TimeCycle)
 add_subdirectory(TrafficCar)
 add_subdirectory(TrafficLigthStruct)

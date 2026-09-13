@@ -5,7 +5,8 @@
 
 class Style{
     public:
-
+    
+        void Load(char* FileName);
     // 0x00420200
     int CarExist(void);
     // 0x00420220

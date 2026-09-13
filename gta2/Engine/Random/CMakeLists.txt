@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(Random LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 98)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 file(GLOB RANDOM_SOURCE "*.cpp")
 file(GLOB RANDOM_HEADERS "*.h")
-set(GLOBAL_HEADERS "../../Game/global.h")
 
 # ���ઠ  Random
-add_library(${PROJECT_NAME} STATIC ${RANDOM_SOURCE} ${RANDOM_HEADERS} ${GLOBAL_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${RANDOM_SOURCE} ${RANDOM_HEADERS})

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(ENGINE LANGUAGES CXX)
 
 
@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
-# пути для include: gta2/, gta2/Game (global.h и кросс-инклюды)
+# пути для include: gta2/, gta2/Game (кросс-инклюды)
 include_directories(${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/.. ${CMAKE_CURRENT_LIST_DIR}/../Game)
 
 # все поддиректории (классы) сборки Engine (TextureManager берётся из Game, тут дубль)
@@ -64,7 +64,7 @@ add_subdirectory(SpriteSx)
 add_subdirectory(Style)
 add_subdirectory(System)
 add_subdirectory(Text)
-# add_subdirectory(TextureManager)  # дублирует Game/TextureManager (коллизия имён цели)
+add_subdirectory(TextureManager) 
 add_subdirectory(TileAnim)
 add_subdirectory(TileNode)
 add_subdirectory(Timing)

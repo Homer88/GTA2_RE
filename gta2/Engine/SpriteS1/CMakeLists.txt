@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 project(SpriteS1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 98)
@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
 
 file(GLOB SPRITES1_SOURCE "*.cpp")
 file(GLOB SPRITES1_HEADERS "*.h")
-set(GLOBAL_HEADERS "../../Game/global.h")
 
 # ���ઠ  SpriteS1
-add_library(${PROJECT_NAME} STATIC ${SPRITES1_SOURCE} ${SPRITES1_HEADERS} ${GLOBAL_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${SPRITES1_SOURCE} ${SPRITES1_HEADERS})
