@@ -15,12 +15,13 @@
 
 #include "../Registry/Registry.h"
 #include "DMAudio.h"
+#include "../AudioManager/AudioManager.h"
 #include "../Sound/Sound.h"
 bool skip_audio;
 
 DMAudio gDMAudio;
 
-
+extern AudioManager* gAudioManager;
 //int  skip_audio;   // 0 = звук включён
 int  gSampleRate;  // результат создания звукового объекта (см. суб_410530)
 
@@ -97,4 +98,9 @@ int DMAudio::PollAllSamples()
 {
 	gSound.Update();
 	return 0;
+}
+
+
+void DMAudio::LoadSTY(char* FileName) {
+	gAudioManager->PlayStream(FileName);
 }

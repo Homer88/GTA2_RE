@@ -10,6 +10,7 @@ public:
 	void SetCDVol(char CDvol);
 	void SetSFXVol(char SFXVol);
 	void Init3DSound(int Vol3D);
+	void LoadSTY(char * FileName);
 	bool Get3DSound();
 	int IsInitialised();
 	int AddAudioObject(int* pAudioObject);

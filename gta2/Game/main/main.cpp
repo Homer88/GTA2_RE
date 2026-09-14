@@ -48,6 +48,137 @@ extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersio
 extern bool  skip_audio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
+extern	HINSTANCE ghInstance;
+
+DWORD	gMajor;
+DWORD	gMinor;
+bool    gPlayReplay;
+bool	gDoTest;
+bool	gSkipMission;
+bool	gShowCycle;
+bool	gDoBrianTest;
+bool	gDoIainTest;
+bool	gSkipTiles;
+bool	gDoShowCounters;
+bool	gDoShowCamera;
+bool	gDoShowInput;
+bool	gDoShowTiming;
+bool	gDoShowCollisionBox;
+bool	gDoShowPhysics;
+bool	gDoShowImaginary;
+bool	gSkipUser;
+bool	gSkipTrafficLights;
+bool	gSkipRecycling;
+bool	gLogCollisions;
+bool	gDoShowTrafficLightsInfo;
+bool	gDoShowIds;
+bool	gLimitRecycling;
+bool	gNoAnnoyingChars;
+bool	gSkipSlopes;
+bool	gSkipLeft;
+bool	gSkipRight;
+bool	gSkipTop;
+bool	gSkipBottom;
+bool	gSkipLid;
+bool	gLogRoutefinder;
+bool	gDoMike;
+bool	gSkipParticles;
+bool	gShowHiddenFaces;
+bool	gDoExitAfterReplay;
+bool	gDontGetCarBack;
+bool	gDoShowInstruments;
+bool	gSkipAmbulance;
+bool	gSkilPolice;
+bool	gSkipFrontend;
+bool	gShowAllArrows;
+bool	gDoShowHorn;
+bool	gSkipSkidMarks;
+bool	gDoShowJuncIds;
+bool	gDoCornerWindow;
+bool	gDoInfiniteLives;
+bool	gDoLoadSaveGame;
+bool	gSkipAudio;
+bool	gDoDebugKeys;
+bool	gLogRandom;
+bool	gLogRandomExtra;
+bool	gLogInput;
+bool	gLogDirectInput;
+bool	gIgnoreReplayHeader;
+bool	gSkipTrains;
+bool	gSkipBuses;
+bool	gSkipQuitConfirm;
+bool	gDoSyncCheck;
+bool	gSkipFireEngines;
+bool	gShowBriefNumber;
+bool    gSkipWindowCheck;
+bool	gSkipReplaySyncCheck;
+bool	gDoShowObjectIds;
+bool	gGoKillPhonesOnAnswer;
+bool	gDoMissLogging;
+bool	gDoTextIdTest;
+bool	gDoPolice1;
+bool	gDoPolice2;
+bool	gDoPolice3;
+bool	gSkipDraw;
+bool	gSkipDummies;
+bool	gDoBlood;
+bool	gDo3dSound;
+bool	gTestFileGxt;
+bool	gShowPlayerNames;
+bool    gByte1;
+bool    gByte2;
+bool	gSkipFrontend1;
+bool    gSmallCar;
+bool	gNopCheat;
+bool	gInvisibility;
+bool	gBonusAll;
+bool	gGiveBasikWeapon;
+bool	gElvis;
+bool	gHealth99;
+bool	gJailKey;
+int	gActiveCheat;
+bool gGiveMoney20k, gAllTower;
+HANDLE  gHANDLE;
+LPVOID* gDirectInput6;
+//REFIID  gREFIID;
+
+
+ HWND		gHWND;
+int			gRenderDevice;
+int			gVideoDevice;
+int			gVideoPlay;
+char		gData[256];
+char		gVideo[255];
+int			gGamma;
+int			gTimer, gTime;
+ byte		gControl;
+//const char	gD3ddll[11];
+//const char	gDmavideo[13];
+char			gKeyBuffer[255];
+
+char			 gLanguage[256];
+unsigned char gNamePlayerASCII[80];
+bool			 gNetworkGame;
+
+int gWindowWidth, gWindowHeight;
+
+int gFullWidth, gFullHeight;
+
+int gStartMode;
+int gTrippleBuffer;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ---------------------------------------------------------------------------
 // Чтение строк меню из .gxt (бинарный формат текстов игры: GBL head + TKEY + TDAT).
@@ -351,7 +482,12 @@ static bool ComposeBackground(const char* leftName, const char* rightName, bool 
 // ---------------------------------------------------------------------------
 BOOL cApp::Init()
 {
-  strcpy(m_Caption, "GTA2 - viewer");
+  strcpy(m_Caption, "GTA2");
+
+  // Окно уже создано в Run() - настройки видео из реестра (в оригинале это пары
+  // вызовов ConfigureDevice+ConfigureWindow из RestoreVideoDevices, FUN_004CC6A0):
+  gWinApi->ConfigureVideoDevice();   // 0x004CB1D0: frame rate, освещение, exploding_on
+  gWinApi->ConfigureVideoWindow();   // 0x004CB290: window/full размеры, start_mode, tripple
 
   // --- Загрузить тексты пунктов меню из .gxt (запасной источник для страниц 0 и 1) ---
   // (Text::Bsearch в реконструкции пока заглушена и возвращает пробел, поэтому
@@ -406,7 +542,7 @@ BOOL cApp::Init()
   RasterizeMenuText();  // вписать текст пунктов в кадр
 
   // окно уже создано в Run() - обновим заголовок с подсказками по управлению
-  SetWindowTextA(GethWnd(), "GTA2 - viewer (Esc=quit/back, Enter=select)");
+  SetWindowTextA(GethWnd(), "GTA2");
   return TRUE;
 }
 
@@ -863,6 +999,7 @@ void SetupMenu()
   gAudioObject = 2;            // "2D-звук" (как в оригинальном LoadConfig)
   if (!skip_audio)
     gSampleRate = gDMAudio.AddAudioObject(&gAudioObject);
+   //gDMAudio.LoadSTY
 }
 
 // Точка входа приложения: создаём объект cApp и запускаем окно (Run() держит
@@ -870,6 +1007,14 @@ void SetupMenu()
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
   gRegistry = new Registry; // реестр Windows (язык, настройки) - как в оригинальном WinMain
+  gWinApi = new WinApi;     // создать объект утилит (GetVersion, GetDebugParam и др.)
+
+  // Последовательность инициализации - как в оригинальном WinMain (0x004D1170):
+  gWinApi->GetDebugParam();      // 0x004D121A: чтение debug-параметров из реестра (fPlayReplay)
+  gWinApi->FindGraphicDevice();  // 0x004D128F: выбор устройства рендеринга/видео
+  gWinApi->DefautInitParam();    // 0x00461853 (InitializeGlobals): сброс параметров к умолчаниям
+  gWinApi->InitTimer();          // запуск таймера кадров (gTimer = timeGetTime())
+
   SetupMenu();              // создать меню + доп. параметры (аудио), аналог FUN_00457830
   cApp App;
   return App.Run();

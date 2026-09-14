@@ -1919,7 +1919,7 @@ void Menu::SpecialFunction6() {
     }
     // Блок гаммы закомментирован: глобал gGamma пока не определён/не входит в линковку GTA2
     /*if (gGamma) {
-        char pGamma = gRegistry.ConfigureSetScreen("gamma", 10);
+        char pGamma = gRegistry->ConfigureSetScreen("gamma", 10);
         if (gGamma) {
             // Заменено на заглушку: реальная логика требует Port SetGamma
             //if (SetGamma(pGamma))

@@ -13,8 +13,8 @@ bool gFireGun = false;
 bool gPointMultiPlayerX10 = false;
 bool gJailFreeCard = false;
 bool gInvisibilit = false;
-bool gDoubleDamag = false;
-bool gJailKey = false;
+bool gDoubleDamage = false;
+extern bool gJailKey;
 extern bool gGiveMoney20k;
 extern bool gGiveMoney99k;
 extern bool gMademan;
@@ -158,7 +158,7 @@ void Player::StartGame() {
     if (gInvisibilit != false) {
         this->GivePowerUp(POWERUP_TYPE_INVISIBILITY);
     }
-    if (gDoubleDamag != false) {
+    if (gDoubleDamage != false) {
         this->GivePowerUp(POWERUP_TYPE_DOUBLE_DAMAGE);
     }
     if (gJailKey != false) {

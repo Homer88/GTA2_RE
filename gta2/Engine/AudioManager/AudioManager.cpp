@@ -1,6 +1,9 @@
 #include "AudioManager.h"
+#include "../SoundCard/SoundCard.h"
 
+extern SoundCard* gSoundCard;
 
+static char gBaseNameBuffer[256];   // размер подберите по оригиналу
 
 int AudioManager::InitArray() {
 	
@@ -392,7 +395,21 @@ int AudioManager::Shutdown(void){
     // 0x00416570
 
 
-int AudioManager::ExtractBaseName(void){
+char* AudioManager::ExtractBaseName(char* FileName){
+    // 1. Отбрасываем путь: ищем последний '\'
+    const char* pSlash = strrchr(FileName, '\\');
+    const char* pName = pSlash ? (pSlash + 1) : FileName;
+
+    // 2. Копируем до '.' или '\0'
+    int i = 0;
+    while (pName[i] != '.' && pName[i] != '\0') {
+        gBaseNameBuffer[i] = pName[i];
+        ++i;
+    }
+    gBaseNameBuffer[i] = '\0';
+
+    // 3. Возвращаем указатель на статический буфер
+    return gBaseNameBuffer;
         return 0;
     }
 
@@ -488,7 +505,11 @@ int AudioManager::StopStream(void){
     // 0x00416D30
 
 
-int AudioManager::PlayStream(void){
+int AudioManager::PlayStream(char * FileName){
+    if (this->Status != 0) {
+        char * basename= this->ExtractBaseName(FileName);
+        gSoundCard->LoadSounds(basename);
+    }
         return 0;
     }
 

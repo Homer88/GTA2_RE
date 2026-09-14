@@ -107,7 +107,7 @@ public:
     // 0x004164D0
     int Shutdown(void);
     // 0x00416570
-    int ExtractBaseName(void);
+    char* ExtractBaseName(char* FileName);
     // 0x004165E0
     int SetSFXVol(void);
     // 0x00416630
@@ -131,7 +131,7 @@ public:
     // 0x00416C10
     int StopStream(void);
     // 0x00416D30
-    int PlayStream(void);
+    int PlayStream(char* FileName);
     // 0x00416D60
     int ResetChannelLists(void);
     // 0x00416DA0

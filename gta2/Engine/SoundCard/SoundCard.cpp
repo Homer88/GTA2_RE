@@ -1,5 +1,11 @@
 #include "SoundCard.h"
+#include <stdio.h>
+#include <string.h>
+#include "../FileMgr/FileMgr.h"
 
+
+SoundCard* gSoundCard;
+extern FileMgr* gFileMgr;
 
     // 0x004B5F70
 
@@ -402,10 +408,58 @@ int SoundCard::EndSample(void){
 
 
     // 0x004B6B40
+char gBufferSize[5288];
 
+int SoundCard::LoadSounds(char* baseName){
 
-int SoundCard::LoadSounds(void){
+    this->FlagLoadFile = false;
+
+    char rawPath[260];
+    char sdtPath[260];
+
+    // data\audio\<baseName>.RAW
+    strcpy(rawPath, "data\\audio\\");
+    strcat(rawPath, baseName);
+    strcat(rawPath, ".RAW");
+
+    // data\audio\<baseName>.SDT
+    strcpy(sdtPath, "data\\audio\\");
+    strcat(sdtPath, baseName);
+    strcat(sdtPath, ".SDT");
+
+    // --- .RAW ---
+    FILE* f = gFileMgr->WriteReadFile(rawPath, "rb");
+    if (!f) {
+        // fallback: data\audio\BIL.p
+        strcpy(rawPath, "data\\audio\\BIL.p");
+        f = gFileMgr->WriteReadFile(rawPath, "rb");
+        if (!f) return 0;
+    }
+
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    if (size > (long)sizeof(gBufferSize)) {   //  сравнение с размером массива
+        fclose(f);
         return 0;
+    }
+    rewind(f);
+    fread(this->allocatedMemory, 1, size, f);
+    fclose(f);
+
+    // --- .SDT ---
+    FILE* f2 = gFileMgr->WriteReadFile(sdtPath, "rb");
+    if (!f2) {
+        // fallback: data\audio\BIL.SDT
+        strcpy(sdtPath, "data\\audio\\BIL.SDT");
+        f2 = gFileMgr->WriteReadFile(sdtPath, "rb");
+        if (!f2) return 0;
+    }
+
+    fread(&this->SDTfile, 0x18, 0x140, f2);
+    fclose(f2);
+
+    this->FlagLoadFile = true;
+    return 1;
     }
 
 

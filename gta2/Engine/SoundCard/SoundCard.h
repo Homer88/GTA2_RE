@@ -5,7 +5,9 @@
 
 class SoundCard{
     public:
-
+        bool FlagLoadFile;
+        void* allocatedMemory; //RAW  файлы 
+        char SDTfile[7680];
     // 0x004B5F70
     int AcquireSampleHandle(void);
     // 0x004B5FB0
@@ -107,7 +109,7 @@ class SoundCard{
     // 0x004B6B20
     int EndSample(void);
     // 0x004B6B40
-    int LoadSounds(void);
+    int LoadSounds(char* baseName);
     // 0x004B6DE0
     int InitializeAudioStream(void);
     // 0x004B6EE0
