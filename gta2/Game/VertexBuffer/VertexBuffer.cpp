@@ -1,5 +1,5 @@
 #include "VertexBuffer.h"
-
+VertexBuffer* gVertexBuffer;
 
     // 0x0049C6E0
 

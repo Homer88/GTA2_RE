@@ -1,5 +1,5 @@
 #include "FireInfo.h"
-
+FireInfo* gFireInfo;
 
     // 0x0044A3A0
 

@@ -9,5 +9,5 @@ class Renderer{
     // 0x004012C0
     int SetTransform(void);
 };
-
+extern Renderer* gRenderer;
 #endif // !__RENDERER_H_

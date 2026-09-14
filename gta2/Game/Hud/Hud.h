@@ -61,4 +61,5 @@ class Hud{
     // 0x004C8E30: Hud::DrawTime
     void DrawTime();
 };
+extern Hud* gHud;
 #endif // !__HUD_H_

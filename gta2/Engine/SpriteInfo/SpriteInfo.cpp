@@ -1,5 +1,8 @@
 #include "SpriteInfo.h"
+SpriteInfo* gSpriteInfo;
+SpriteInfo::SpriteInfo() {
 
+}
 
     // 0x004768C0
 

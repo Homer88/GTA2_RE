@@ -1,6 +1,6 @@
 #include "PathNode.h"
 
-
+PathNode* gPathNode;
     // 0x00488170
 
 

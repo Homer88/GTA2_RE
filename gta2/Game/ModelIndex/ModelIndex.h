@@ -11,5 +11,5 @@ class ModelIndex{
     // 0x0045AE20
     int FreeModelIndex(void);
 };
-
+extern ModelIndex* gModelIndex;
 #endif // !__MODELINDEX_H_

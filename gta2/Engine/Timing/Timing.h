@@ -11,5 +11,6 @@ class Timing{
     // 0x004C3760
     int UpdateFPS(void);
 };
+extern Timing* gTiming;
 
 #endif // !__TIMING_H_

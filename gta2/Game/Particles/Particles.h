@@ -9,5 +9,5 @@ class Particles{
     // 0x0048D4E0
     int RenderGlass(void);
 };
-
+extern Particles* gParticles;
 #endif // !__PARTICLES_H_

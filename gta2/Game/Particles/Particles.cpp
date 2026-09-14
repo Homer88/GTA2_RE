@@ -1,5 +1,5 @@
 #include "Particles.h"
-
+Particles* gParticles;
 
     // 0x0048D4E0
 

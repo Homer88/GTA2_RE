@@ -68,14 +68,19 @@ class Player{
 		int State;
 		byte Gan;
 		Player();
+		Player(int Id);
 		~Player();
 		byte GivePowerUp(int PowerType);
 		void SetMultiPlayer(byte Multi);
 		int  AddLives(int Lives);
 		void StartGame();
 		byte SelectWeapon(int TypeWeapon, int Ammo);
+		void SetActive(Player*);
 
 		
 };	
+
+extern Player* gPlayer;
+
 
 #endif

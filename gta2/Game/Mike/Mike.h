@@ -11,5 +11,5 @@ class Mike{
     // 0x00474530
     int ShowStats(void);
 };
-
+extern Mike* gMike;
 #endif // !__MIKE_H_

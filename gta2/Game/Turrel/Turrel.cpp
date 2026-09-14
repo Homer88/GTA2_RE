@@ -1,5 +1,5 @@
 #include "Turrel.h"
-
+Turrel* gTurrel;
 
     // 0x00420350
 

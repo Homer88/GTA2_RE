@@ -1,5 +1,5 @@
 #include "Sprite.h"
-
+Sprite* gSprite;
 
     // 0x00420600
 

@@ -10,10 +10,15 @@ public:
 
 	FileMgr();
 	~FileMgr();
-	void FileOpen(char* filename, char * mode);
+	FILE* FileOpen(char* filename, char * mode);
+	FILE* FileOpen(char* filename);
 	void ReadFile(void * outbuffer, void * inBuffer);
 	void ReadFile(void* buffer, size_t SizeRead);
 	int SetFilePath(char* filename);
 	FILE* WriteReadFile(const char* filename, const char* mode);
+	void LoadFronSprites();
 };
+
+
+extern FileMgr* gFileMgr;
 #endif // !__FILEMANAGER_H_

@@ -202,8 +202,8 @@ public:
 
     // Map file I/O
     unsigned char sub_464880();
-    unsigned char sub_464890(_BYTE* a2, FileMgr* dwBytes);
-    _WORD* sub_464990(LPCSTR lpFileName);
+    unsigned char ParseMapLine(_BYTE* a2, FileMgr* dwBytes);
+    _WORD* LoadMap(LPCSTR lpFileName);
     _WORD* sub_464980();
     
     // Zone search
@@ -356,5 +356,6 @@ public:
 
 #pragma pack(pop)
 
+extern MapRelatedStruct* gMapRelatedStruct;
 
 #endif // __MAP_RELATED_STRUCT_H__

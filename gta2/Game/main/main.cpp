@@ -45,7 +45,7 @@
 extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
 extern Registry *gRegistry;         // реестр Windows: язык, настройки экрана/звука
 extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersion и др.
-extern bool  skip_audio;             // флаг "звук выключен" (определён в DMAudio.cpp)
+extern bool  gSkipAudio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
 extern	HINSTANCE ghInstance;
@@ -97,7 +97,6 @@ bool	gDoShowJuncIds;
 bool	gDoCornerWindow;
 bool	gDoInfiniteLives;
 bool	gDoLoadSaveGame;
-bool	gSkipAudio;
 bool	gDoDebugKeys;
 bool	gLogRandom;
 bool	gLogRandomExtra;
@@ -835,8 +834,8 @@ BOOL cApp::Frame()
   HWND hwnd = GethWnd();
 
   // Обновление звука каждый кадр (в оригинале: if (!skip_audio) DMAudio::PollAllSamples).
-  if (!skip_audio)
-    gDMAudio.PollAllSamples();
+  if (!gSkipAudio)
+    gDMAudio->PollAllSamples();
 
   // ВРЕМЕННО: тест воспроизведения звуков (клавиша S). В оригинальном меню звуков
   // навигации нет, поэтому движок проверяется отдельным хоткеем: первое нажатие
@@ -997,8 +996,8 @@ void SetupMenu()
 
   // Доп. параметры из оригинального FUN_00457830: аудио-объект для меню.
   gAudioObject = 2;            // "2D-звук" (как в оригинальном LoadConfig)
-  if (!skip_audio)
-    gSampleRate = gDMAudio.AddAudioObject(&gAudioObject);
+  if (!gSkipAudio)
+    gSampleRate = gDMAudio->AddAudioObject(&gAudioObject);
    //gDMAudio.LoadSTY
 }
 

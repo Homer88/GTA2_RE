@@ -17,5 +17,5 @@ class General{
     // 0x0045F9E0
     int GetRandomNumber(void);
 };
-
+extern  General* gGeneral;
 #endif // !__GENERAL_H_

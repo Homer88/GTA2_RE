@@ -5,9 +5,10 @@
 class Door {
 public:
 	bool Status;
-	Door() {};
-	~Door() {};
+	Door();
+	~Door();
 };
 
+extern Door* gDoor;
 
 #endif

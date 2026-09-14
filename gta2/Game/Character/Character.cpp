@@ -1,5 +1,7 @@
 #include "Character.h"
 
+
+
 Character *gCharacter;
     // 0x00420C30
 

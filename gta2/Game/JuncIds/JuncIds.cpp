@@ -1,5 +1,5 @@
 #include "JuncIds.h"
-
+JuncIds* gJuncIds;
 
     // 0x0040C690
 

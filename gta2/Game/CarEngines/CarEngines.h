@@ -22,7 +22,7 @@ class CarEngines{
     // 0x00432EA0
     int BuildEngineState(void);
     // 0x00432FC0
-    int LoadFromGci(void);
+    int LoadFromGci(char* FileName);
     // 0x00433000
     int FreeResources(void);
     // 0x00433050
@@ -38,4 +38,8 @@ class CarEngines{
     // 0x004B7500: CarEngines::GetSpeedWithGear
     void GetSpeedWithGear();
 };
+
+
+extern char gFileGCI[256];
+extern CarEngines* gCarEngines;
 #endif // !__CARENGINES_H_

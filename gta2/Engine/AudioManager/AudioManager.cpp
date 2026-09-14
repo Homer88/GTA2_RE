@@ -2,6 +2,7 @@
 #include "../SoundCard/SoundCard.h"
 
 extern SoundCard* gSoundCard;
+AudioManager* gAudioManager;
 
 static char gBaseNameBuffer[256];   // размер подберите по оригиналу
 

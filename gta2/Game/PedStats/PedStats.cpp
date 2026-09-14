@@ -1,5 +1,5 @@
 #include "PedStats.h"
-
+PedStats *gPedStats;
 
     // 0x00401B10
 

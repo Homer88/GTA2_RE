@@ -17,5 +17,6 @@ class TextureManager{
     // 0x004C2C30: TextureManager::AssignPalette
     void AssignPalette();
     int Load();
-};	
+};
+extern TextureManager* gTextureManager;
 #endif //___TEXTURE_MANAGER__H_

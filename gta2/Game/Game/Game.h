@@ -1,11 +1,31 @@
+#include <cstddef>
+
 
 #ifndef __GAME_H_
 #define __GAME_H_
-
+#include "../Player/Player.h"
 
 class Game{
     public:
+        bool Status;
+        //GameStatus *Status;
+        Player* ArrayPlayer[6];
+        Player* PlayerMain;
+        Player* CurrentPlayer;
+        char CurentPlayer__;
+        byte ID;
+        BYTE NumPlayers;
+        char PlayerInFocus;
+        int State;
+        int SkipPolice;
+        Player* pPlayer1;
+        bool SkipPolice;
+        int MaxIdx;
+        int ModeStatus;
 
+
+        Game();
+        Game(int modeStatus, char ids);
     // 0x003F113C
     int GetCurrentPlayerSlot(void);
     // 0x003F11A8
@@ -27,7 +47,7 @@ class Game{
     // 0x0045A460
     int GetFrameTimeStep(void);
     // 0x0045A4D0
-    int Over(void);
+    int GameOver(void);
     // 0x0045A540
     int SetSkipPolice(void);
     // 0x0045A5A0
@@ -51,7 +71,7 @@ class Game{
     // 0x0045ACF0
     int is1(void);
     // 0x0045B469
-    int LoadResources(void);
+    unsigned char  LoadResources();
     // 0x0045B5F0
     int StartGameSession(void);
     // 0x0045B750

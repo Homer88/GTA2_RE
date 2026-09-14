@@ -183,7 +183,7 @@ public:
     // (gm) ������: MissionManager::ExecuteArithmeticOpcode -> MissionManager::ExecuteArithmetic
     void ExecuteArithmetic();
 };
-
+extern MissionManager* gMissionManager;
 #pragma pack(pop)
 
 #endif

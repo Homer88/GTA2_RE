@@ -25,6 +25,7 @@ class Style{
     // 0x004539D0 byte __thiscall
     // (gm) old: Font::GetRemapColour -> Style::GetRemapColour (wrapper over StyleGetRemapColour)
     unsigned char GetRemapColour(unsigned short param_1, unsigned short param_2);
+    void LoadFileSTY(char* fileName);
     // 0x004B9F20
     int StyleGetSpriteCount(void);
     // 0x004BF1F0
@@ -127,3 +128,4 @@ class Style{
     void GetCharData();
 };
 #endif // !__STYLE_H_
+extern Style* gStyle;

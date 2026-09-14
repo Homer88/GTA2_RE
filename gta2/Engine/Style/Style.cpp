@@ -9,6 +9,9 @@ void Style::Load(char* FileName) {
     //pFileMng->FileOpen(FileName);
 
 }
+void Style::LoadFileSTY(char* fileName) {
+
+}
 int Style::CarExist(void){
         return 0;
     }

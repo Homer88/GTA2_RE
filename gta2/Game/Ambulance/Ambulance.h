@@ -5,12 +5,13 @@
 class Ambulance {
 public:
 	bool Status;
-	Ambulance() {};
-	~Ambulance() {};
+	Ambulance();
+	~Ambulance();
 
 // ==== импорт имён из gm ====
     // 1 функций
     // 0x00472F60: Ambulance::FindFreeSlot
     void FindFreeSlot();
 };
+extern Ambulance* gAmbulance;
 #endif // !___Ambulance__H__

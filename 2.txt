@@ -1,0 +1,12 @@
+
+N:\GTA2_RE>cmake -S . -B build  -A Win32 "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" 
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.19044.
+-- Configuring incomplete, errors occurred!
+
+N:\GTA2_RE>cmake --build  ./build   
+╨Т╨╡╤А╤Б╨╕╤П MSBuild 17.14.40+3e7442088 ╨┤╨╗╤П .NET Framework
+MSBUILD : error MSB1009: ╤Д╨░╨╣╨╗ ╨┐╤А╨╛╨╡╨║╤В╨░ ╨╜╨╡ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╨╡╤В.
+╨Ъ╨╗╤О╤З: ALL_BUILD.vcxproj
+
+N:\GTA2_RE>pause
+Для продолжения нажмите любую клавишу . . . 

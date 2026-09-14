@@ -2,7 +2,7 @@
 
 
 
-CarSystemManager gCarSystemManager;
+CarSystemManager *gCarSystemManager;
 
 CarSystemManager::CarSystemManager() {}
 CarSystemManager::~CarSystemManager() {}

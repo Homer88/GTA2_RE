@@ -17,5 +17,5 @@ class Taxi{
     // 0x004C09B0
     int Init(void);
 };
-
+extern Taxi* gTaxi;
 #endif // !__TAXI_H_

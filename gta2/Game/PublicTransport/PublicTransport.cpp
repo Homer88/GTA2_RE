@@ -1,8 +1,7 @@
 #include "PublicTransport.h"
 
 
-
-PublicTransport gPublicTransport;
+PublicTransport *gPublicTransport;
 
 
 PublicTransport::PublicTransport()  {}

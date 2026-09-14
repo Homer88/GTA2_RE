@@ -10,4 +10,5 @@ class TileAnim{
     int UpdateScripts(void);
 };
 
+extern TileAnim* gTileAnim;
 #endif // !__TILEANIM_H_

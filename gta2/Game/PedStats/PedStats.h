@@ -5,7 +5,7 @@
 
 class PedStats{
     public:
-
+        PedStats();
     // 0x00401B10
     int EncodedFloatToRegularFloat(void);
     // 0x0045B040
@@ -31,4 +31,5 @@ class PedStats{
     // 0x0046C0C0: PedStats::SetCachedField
     void SetCachedField();
 };
+extern PedStats* gPedStats;
 #endif // !__PEDSTATS_H_

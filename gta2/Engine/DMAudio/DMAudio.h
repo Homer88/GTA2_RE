@@ -22,6 +22,7 @@ public:
 
 };
 
-extern DMAudio gDMAudio;
+extern DMAudio *gDMAudio;
+extern bool gSkipAudio;
 #endif // !__DMAudio_H_
 

@@ -41,4 +41,5 @@ class Camera{
     // 0x0046DFE0: Camera::RenderLid
     void RenderLid();
 };
+extern Camera* gCamera;
 #endif // !__CAMERA_H_

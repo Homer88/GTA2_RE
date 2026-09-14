@@ -1,6 +1,7 @@
 #include "CarEngines.h"
 
-CarEngines gCarEngines;
+CarEngines *gCarEngines;
+char gFileGCI[256];
 
 CarEngines::CarEngines(){
 
@@ -66,7 +67,7 @@ int CarEngines::BuildEngineState(void){
     // 0x00432FC0
 
 
-int CarEngines::LoadFromGci(void){
+int CarEngines::LoadFromGci(char* FileName){
         return 0;
     }
 

@@ -16,5 +16,7 @@ public:
 	wchar_t ConvertToUpper(wchar_t str);
     bool  LanguageJapan();	
 };
+extern Text* gText;
+extern char gLanguage;
 
 #endif

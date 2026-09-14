@@ -255,6 +255,6 @@ public:
     // 0x00416BF0: AudioManager::ProcessIfActive
     void ProcessIfActive();
 };
-
+extern AudioManager* gAudiManager;
 #endif // !____AudioManager_H_
 

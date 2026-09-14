@@ -21,5 +21,5 @@ class JuncIds{
     // 0x0044B970
     int S19(void);
 };
-
+extern JuncIds* gJuncIds;
 #endif // !__JUNCIDS_H_

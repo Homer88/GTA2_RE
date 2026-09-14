@@ -81,4 +81,5 @@ class Turrel{
     // 0x004BED60: Turrel::AttachEventHandler
     void AttachEventHandler();
 };
+extern Turrel* gTurrel;
 #endif // !__TURREL_H_

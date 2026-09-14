@@ -46,4 +46,5 @@ class Sprite{
     // 0x004BE570: Sprite::MergeDrawSortKey
     void MergeDrawSortKey();
 };
+extern Sprite* gSprite;
 #endif // !__SPRITE_H_

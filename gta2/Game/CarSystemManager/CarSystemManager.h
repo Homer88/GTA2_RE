@@ -70,4 +70,5 @@ class CarSystemManager{
     // 0x004955F0: CarSystemManager::SpawnAtWorldPos
     void SpawnAtWorldPos();
 };
+extern CarSystemManager* gCarSystemManager;
 #endif // !__CARSYSTEMMANAGER_H_

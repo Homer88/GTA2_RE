@@ -1,5 +1,6 @@
 #include "General.h"
 
+General* gGeneral;
 
     // 0x0041CFE0
 

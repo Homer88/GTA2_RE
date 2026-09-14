@@ -23,4 +23,5 @@ public:
     class Bus  BusMetrics;
     class Bus  BUS[10];
 };
+extern PublicTransport* gPublicTransport;
 #endif // !1

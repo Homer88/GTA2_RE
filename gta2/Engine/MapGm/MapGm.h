@@ -180,4 +180,5 @@ int   MapGm_sub_45E700(MapGm*);
     // 0x004C7370: MapGm::IsNotMode3
     void IsNotMode3();
 };
+extern MapGm* gMapGm;
 #endif //__MAP_GM_H_

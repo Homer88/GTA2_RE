@@ -1,5 +1,5 @@
 #include "Timing.h"
-
+Timing* gTiming;
 
     // 0x004C36C0
 

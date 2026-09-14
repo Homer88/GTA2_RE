@@ -1,5 +1,5 @@
 #include "Camera.h"
-
+Camera* gCamera;
 
     // 0x0045BEC0
 

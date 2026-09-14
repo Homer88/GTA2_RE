@@ -27,5 +27,6 @@ class Object{
     // 0x00487ED0
     int RemoveDeadObjects(void);
 };
+extern Object* gObject;
 
 #endif // !__OBJECT_H_

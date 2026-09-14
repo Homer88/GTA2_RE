@@ -1,5 +1,5 @@
 #include "ModelIndex.h"
-
+ModelIndex* gModelIndex;
 
     // 0x0045AE10
 

@@ -19,5 +19,6 @@ class ScriptThread{
     // 0x004B9980
     int FreeScriptThread(void);
 };
+extern ScriptThread* gScriptThread;
 
 #endif // !__SCRIPTTHREAD_H_

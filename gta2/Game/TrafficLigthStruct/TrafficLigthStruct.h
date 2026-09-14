@@ -11,5 +11,6 @@ class TrafficLigthStruct{
     // 0x004C4B00
     int RegisterCars(void);
 };
+extern TrafficLigthStruct *gTrafficLigthStruct;
 
 #endif // !__TRAFFICLIGTHSTRUCT_H_

@@ -1,5 +1,5 @@
 #include "Mike.h"
-
+Mike* gMike;
 
     // 0x004741A0
 

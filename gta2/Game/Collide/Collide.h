@@ -11,5 +11,5 @@ class Collide{
     // 0x004470B0
     int CheckpointFindCollidedObject(void);
 };
-
+extern Collide* gCollide;
 #endif // !__COLLIDE_H_

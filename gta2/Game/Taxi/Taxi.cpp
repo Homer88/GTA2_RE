@@ -1,5 +1,5 @@
 #include "Taxi.h"
-
+Taxi* gTaxi;
 
     // 0x004330A0
 

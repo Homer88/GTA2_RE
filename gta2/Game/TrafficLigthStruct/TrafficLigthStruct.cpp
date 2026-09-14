@@ -1,5 +1,5 @@
 #include "TrafficLigthStruct.h"
-
+TrafficLigthStruct* gTrafficLigthStruct;
 
     // 0x00434960
 

@@ -17,9 +17,9 @@
 #include "DMAudio.h"
 #include "../AudioManager/AudioManager.h"
 #include "../Sound/Sound.h"
-bool skip_audio;
+bool gSkipAudio;
 
-DMAudio gDMAudio;
+DMAudio *gDMAudio;
 
 extern AudioManager* gAudioManager;
 //int  skip_audio;   // 0 = звук включён
@@ -30,7 +30,7 @@ int  gSampleRate;  // результат создания звукового о�
 void DMAudio::InitAudioManager()
 {
 	if (!gSound.InitAudioSystem())
-		skip_audio = 1;
+		gSkipAudio = true;
 }
 
 void DMAudio::InitAudioManager3D()

@@ -10,6 +10,13 @@ class Random{
     unsigned char GetZoneIndex(int arg0);  // (gm) старый: GetRandomIndex -> GetZoneIndex
     // 0x00472E90
     int PauseGame(void);
+    int Restart();
+    int SetSeed(int seed);
+
+
 };
 
+extern int gSeed;
+extern Random* gRandom;
 #endif // !__RANDOM_H_
+

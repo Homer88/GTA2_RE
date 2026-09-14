@@ -21,4 +21,5 @@ class FireInfo{
     // 0x0044A9C0: FireInfo::AllocateSmoke
     void AllocateSmoke();
 };
+extern FireInfo* gFireInfo;
 #endif // !__FIREINFO_H_

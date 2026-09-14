@@ -1,5 +1,5 @@
 #include "Hud.h"
-
+Hud* gHud;
 
     // 0x004219F0
 

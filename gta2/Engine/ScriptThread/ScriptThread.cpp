@@ -1,5 +1,5 @@
 #include "ScriptThread.h"
-
+ScriptThread* gScriptThread;
 
     // 0x00420F10
 

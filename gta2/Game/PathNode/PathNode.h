@@ -39,4 +39,7 @@ class PathNode{
     // 0x00488EF0: PathNode::CreateSprite
     void CreateSprite();
 };
+
+
+extern PathNode* gPathNode;
 #endif // !__PATHNODE_H_

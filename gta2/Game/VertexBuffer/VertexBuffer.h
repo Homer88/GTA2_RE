@@ -23,5 +23,5 @@ class VertexBuffer{
     // 0x0049CF70
     int VertexBufferFindPath(void);
 };
-
+extern VertexBuffer* gVertexBuffer;
 #endif // !__VERTEXBUFFER_H_

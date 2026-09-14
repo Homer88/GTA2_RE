@@ -2,6 +2,9 @@
 #include <cstring>
 #include <new>
 
+
+MapRelatedStruct *gMapRelatedStruct;
+
 // Forward declarations for external functions
 void* operator_new(size_t size);
 
@@ -2517,7 +2520,7 @@ unsigned char MapRelatedStruct::sub_464880()
 //=============================================================================
 // sub_464890: Dispatch chunk loading by four-cc ident
 //=============================================================================
-unsigned char MapRelatedStruct::sub_464890(_BYTE *a2, FileMgr *dwBytes)
+unsigned char MapRelatedStruct::ParseMapLine(_BYTE *a2, FileMgr *dwBytes)
 {
  //   if (!strncmp((const char*)a2, "DMAP", 4))
  //       return sub_4646A0((int)dwBytes);
@@ -2544,12 +2547,15 @@ _WORD *MapRelatedStruct::sub_464980()
     return 0;(_WORD*)this;
 
 }
-
 //=============================================================================
 // sub_464990: Load a .MAP file by name
 //=============================================================================
-_WORD *MapRelatedStruct::sub_464990(LPCSTR lpFileName)
+_WORD *MapRelatedStruct::LoadMap(LPCSTR lpFileName)
 {
+    FILE *pFile= gFileMgr->FileOpen((char*)lpFileName);
+    int size = 6;
+    gFileMgr->ReadFile(pFile, size);
+    //TODO  требуется дописать
     //FileMgr *v3;
     //unsigned int size;
     //FILE v6[2];

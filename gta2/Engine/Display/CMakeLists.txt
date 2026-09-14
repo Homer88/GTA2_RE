@@ -1,7 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
 project(Display LANGUAGES CXX)
 
-# header-only
 
-add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+# стандарт
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+
+file(GLOB DISPLAY_SOURCE "*.cpp")
+file(GLOB DISPLAY_HEADERS "*.h")
+
+add_library(${PROJECT_NAME} STATIC ${DISPLAY_SOURCE} ${DISPLAY_HEADERS})

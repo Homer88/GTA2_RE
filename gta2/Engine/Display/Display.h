@@ -3,10 +3,11 @@
 class Display {
 
 public:
-	Display() {};
-	~Display() {};
+	Display();
+	~Display();
 };
 
+extern Display *gDisplay;
 
 
 

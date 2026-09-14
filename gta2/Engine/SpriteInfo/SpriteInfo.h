@@ -5,7 +5,7 @@
 
 class SpriteInfo{
     public:
-
+        SpriteInfo();
     // 0x004768C0
     int DisableObject(void);
     // 0x00476930 void __thiscall
@@ -21,4 +21,5 @@ class SpriteInfo{
     // 0x004C4EA0: SpriteInfo::InitEventSlot
     void InitEventSlot();
 };
+extern SpriteInfo* gSpriteInfo;
 #endif // !__SPRITEINFO_H_

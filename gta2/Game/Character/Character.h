@@ -38,4 +38,5 @@ class Character{
     int IsPedRelatedByGangOrOccupation(void);
 };
 
+extern Character* gCharacter;
 #endif // !__CHARACTER_H_
