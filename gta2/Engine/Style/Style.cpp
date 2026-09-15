@@ -1,13 +1,24 @@
 #include "Style.h"
 #include "../FileMgr/FileMgr.h"
+#include "../ultil/WinApi.h"
+
+
 
     // 0x00420200
 Style *gStyle;
+
 
 void Style::Load(char* FileName) {
     FileMgr* pFileMng;
     //pFileMng->FileOpen(FileName);
 
+}
+
+void Style::InitSpecArray() {
+    
+    for (int i = 0; i < 1024; ++i) {
+        this->ArrayStyle[i] = 1;
+    }
 }
 void Style::LoadFileSTY(char* fileName) {
 

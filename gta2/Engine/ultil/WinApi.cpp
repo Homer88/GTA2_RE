@@ -1,5 +1,6 @@
 #include "WinApi.h"
 #include <stdlib.h>
+#include <windows.h>
 #include <iostream>
 #include "../Registry/Registry.h"
 #include "../Movie/Movie.h"
@@ -567,5 +568,7 @@ char WinApi::VideoCheck1() {
 
 
 void  WinApi::DirectInput2() {}
+
+
 
 WinApi::~WinApi(){};

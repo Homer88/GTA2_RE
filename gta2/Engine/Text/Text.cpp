@@ -61,13 +61,13 @@ void Text::Clear() {
 
 Text::Text() {
     this->Clear();                       // Base = NULL; Num = 0;
-    //AutoClass4::AutoClass4(&this->AutoClass4);
+    //AutoClass4::AutoClass4(&this->AutoClass4); //TODO
 
     gRegistry->GetLanguage("language", gLanguage, 256);
 
     char lang = (char)gLanguage[0];
     if (lang == 'e' || lang == 'f' || lang == 'g' ||
-        lang == 'i' || lang == 's' || lang == 'j')
+        lang == 'i' || lang == 's' || lang== 'r' || lang == 'j')
     {
         this->Language = lang;
     }

@@ -35,10 +35,11 @@ class WinApi{
 		char VideoCheck1();
 		void VideoCheck();
 		void DirectInput2();// удалю когда напишу полностью directx 
+	
 		~WinApi();
 };
 
-
+extern WinApi* gWinApi;
 
  
 #endif  //___WIN_API___H__

@@ -1,11 +1,15 @@
 
 #ifndef __STYLE_H_
 #define __STYLE_H_
-
+#include "../../Game/Car/Car.h"
 
 class Style{
     public:
-    
+       unsigned int ArrayStyle[1024];
+       unsigned short PallitrePal;
+       Car* ColorCar;
+       int Tiles;
+        void InitSpecArray();
         void Load(char* FileName);
     // 0x00420200
     int CarExist(void);
