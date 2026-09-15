@@ -13,5 +13,5 @@ class SkidmarkInfo{
     // 0x0045E330
     int AddEntry(void);
 };
-
+extern SkidmarkInfo* gSkidmarkInfo;
 #endif // !__SKIDMARKINFO_H_

@@ -5,7 +5,8 @@
 
 class General{
     public:
-
+        unsigned int Cycle, RandomNumber;
+        General();
     // 0x0041CFE0
     int GetCycle(void);
     // 0x0044AA90
@@ -18,4 +19,5 @@ class General{
     int GetRandomNumber(void);
 };
 extern  General* gGeneral;
+extern bool gShowCycle;
 #endif // !__GENERAL_H_

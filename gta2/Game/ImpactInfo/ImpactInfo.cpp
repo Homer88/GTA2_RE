@@ -1,5 +1,5 @@
 #include "ImpactInfo.h"
-
+ImpactInfo* gImpactInfo;
 
     // 0x0045BF50
 

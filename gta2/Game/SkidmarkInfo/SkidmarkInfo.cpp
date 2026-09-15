@@ -1,5 +1,5 @@
 #include "SkidmarkInfo.h"
-
+SkidmarkInfo* gSkidmarkInfo;
 
     // 0x0045E000
 

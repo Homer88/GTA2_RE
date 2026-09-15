@@ -81,6 +81,6 @@ class Player{
 };	
 
 extern Player* gPlayer;
-
+extern bool gSkipPolice;
 
 #endif

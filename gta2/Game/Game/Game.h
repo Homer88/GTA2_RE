@@ -12,14 +12,17 @@ class Game{
         Player* ArrayPlayer[6];
         Player* PlayerMain;
         Player* CurrentPlayer;
-        char CurentPlayer__;
-        byte ID;
-        BYTE NumPlayers;
+        char CurrentPlayerCopy;
+        byte IndexPlayer;
+        byte NumPlayers;
+        byte und1;
         char PlayerInFocus;
         int State;
         int SkipPolice;
+        int isDead;
+        bool NoFrameLimit;
         Player* pPlayer1;
-        bool SkipPolice;
+        bool bSkipPolice;
         int MaxIdx;
         int ModeStatus;
 

@@ -15,4 +15,5 @@ class ImpactInfo{
     // 0x0045AD00: ImpactInfo::Clear
     void Clear();
 };
+extern ImpactInfo* gImpactInfo;
 #endif // !__IMPACTINFO_H_

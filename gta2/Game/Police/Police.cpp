@@ -1,5 +1,5 @@
 #include "Police.h"
-
+Police* gPolice;
 
     // 0x004A9430
 

@@ -1,5 +1,5 @@
 #include "CameraOrPhysics.h"
-
+CameraOrPhysics* gCameraOrPhysics;
 
     // 0x0040FE50
 

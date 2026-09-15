@@ -49,4 +49,5 @@ class Police{
     // 0x004ABD70: Police::ReleaseBlockedCars
     void ReleaseBlockedCars();
 };
+extern Police* gPolice;
 #endif // !__POLICE_H_

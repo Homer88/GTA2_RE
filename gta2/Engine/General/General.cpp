@@ -1,9 +1,11 @@
 #include "General.h"
 
 General* gGeneral;
-
     // 0x0041CFE0
-
+General::General(){
+    this->Cycle = 0;
+    this->RandomNumber = 0;
+}
 
 int General::GetCycle(void){
         return 0;

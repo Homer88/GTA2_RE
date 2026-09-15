@@ -17,5 +17,5 @@ class TangoMain{
     // 0x00451510
     int CanStartTango(void);
 };
-
+extern TangoMain* gTangoMain;
 #endif // !__TANGOMAIN_H_

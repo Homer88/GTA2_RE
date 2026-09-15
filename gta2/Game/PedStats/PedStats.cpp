@@ -2,6 +2,8 @@
 PedStats *gPedStats;
 
     // 0x00401B10
+PedStats::PedStats() {
+}
 
 
 int PedStats::EncodedFloatToRegularFloat(void){

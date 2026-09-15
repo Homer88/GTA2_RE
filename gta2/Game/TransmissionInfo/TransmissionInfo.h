@@ -15,5 +15,5 @@ class TransmissionInfo{
     // 0x004B94B0 void __thiscall
     void ValidateSpawnPoints(void);  // (gm) старый: UpdateTransmission -> ValidateSpawnPoints
 };
-
+extern TransmissionInfo* gTransmissionInfo;
 #endif // !__TRANSMISSIONINFO_H_

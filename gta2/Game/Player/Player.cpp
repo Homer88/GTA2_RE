@@ -14,6 +14,7 @@ bool gPointMultiPlayerX10 = false;
 bool gJailFreeCard = false;
 bool gInvisibilit = false;
 bool gDoubleDamage = false;
+bool gSkipPolice = false;
 extern bool gJailKey;
 extern bool gGiveMoney20k;
 extern bool gGiveMoney99k;
@@ -29,9 +30,15 @@ Player::Player(){
     this->Damage = 900;
 }
 
+Player::Player(int Id) {
+}
 
 Player::~Player() {
 
+}
+
+
+void Player::SetActive(Player*) {
 }
 
 

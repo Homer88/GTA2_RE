@@ -1,5 +1,5 @@
 #include "DebrisInfo.h"
-
+DebrisInfo *gDebrisInfo;
 
     // 0x004C5420
 

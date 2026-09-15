@@ -54,8 +54,32 @@ void* Text::Bsearch(const void* pKey) {
     }
     else { return " "; }
 }
+void Text::Clear() {
+    this->Base = 0;
+    this->NumberOfElements = 0;
+}
 
 Text::Text() {
+    this->Clear();                       // Base = NULL; Num = 0;
+    //AutoClass4::AutoClass4(&this->AutoClass4);
+
+    gRegistry->GetLanguage("language", gLanguage, 256);
+
+    char lang = (char)gLanguage[0];
+    if (lang == 'e' || lang == 'f' || lang == 'g' ||
+        lang == 'i' || lang == 's' || lang == 'j')
+    {
+        this->Language = lang;
+    }
+    else
+    {
+        this->Language = 'e';                // по умолчанию — английский
+    }
+
+
+
+
+    /*
     char gLanguage[256];
     gRegistry->GetLanguage("language", gLanguage, 256);
     if (gLanguage[0] == 'e' ||
@@ -67,7 +91,7 @@ Text::Text() {
         gLanguage[0] == 'r')
         this->Language = gLanguage[0];
     else
-        this->Language = 'e';
+        this->Language = 'e';*/
 }
 
 Text::~Text() {

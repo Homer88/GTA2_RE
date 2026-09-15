@@ -16,6 +16,8 @@ public:
 	int AddAudioObject(int* pAudioObject);
 	int FreeSample(int SampleRate);
 	int PollAllSamples();
+	void Service() {//TODO
+	};
 
 	DMAudio() {};
 	~DMAudio() {};

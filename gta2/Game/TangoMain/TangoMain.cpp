@@ -1,5 +1,5 @@
 #include "TangoMain.h"
-
+TangoMain* gTangoMain;
 
     // 0x00450BC0
 

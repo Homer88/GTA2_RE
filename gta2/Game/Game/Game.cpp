@@ -40,8 +40,15 @@
 //#include "../../Engine/RenderQueue/RenderQueue.h" //TODO
 #include "../FireInfo/FireInfo.h"
 #include "../SkidmarkInfo/SkidmarkInfo.h"
+#include "../DebrisInfo/DebrisInfo.h"
+#include "../Police/Police.h"
+#include "../ImpactInfo/ImpactInfo.h"
+#include "../Gangs/Gangs.h" 
+#include "../CrashData/CrashData.h"
+#include "../TransmissionInfo/TransmissionInfo.h"
+#include "../TangoMain/TangoMain.h"
 Game* gGame;
-
+extern bool gExploding_on;
 extern bool gSkipPolice;
 int  gCheatIs;
 
@@ -53,10 +60,10 @@ Game::Game(int modeStatus, char ids)
     Player* pPlayer;
         gRandom->Restart();
 
-        this->SkipPolice = gSkipPolice;
+        this->bSkipPolice = gSkipPolice;
         memset(this->ArrayPlayer, 0, sizeof(this->ArrayPlayer));
         this->ModeStatus = (byte)modeStatus;
-        this->ID = (byte)ids;
+        this->IndexPlayer = (byte)ids;
 
         // --- Игроки ---
         for (int i = 0; i < this->ModeStatus; ++i) {
@@ -65,7 +72,7 @@ Game::Game(int modeStatus, char ids)
                 DebugLog(0x20, "game.cpp", 1782);
         }
 
-        this->PlayerMain = this->ArrayPlayer[this->ID];
+        this->PlayerMain = this->ArrayPlayer[this->IndexPlayer];
         pPlayer->SetActive(this->PlayerMain);
         this->CurrentPlayer = this->PlayerMain;
 
@@ -207,8 +214,8 @@ Game::Game(int modeStatus, char ids)
             if (gTransmissionInfo == NULL) DebugLog(0x20, "game.cpp", 1907);
         }
 
-        gS127 = new S127();
-        if (gS127 == NULL) DebugLog(0x20, "game.cpp", 1911);
+        //gS127 = new S127();
+        //if (gS127 == NULL) DebugLog(0x20, "game.cpp", 1911);
 
         gTangoMain = new TangoMain();
         if (gTangoMain == NULL) DebugLog(0x20, "game.cpp", 1913);
@@ -217,20 +224,20 @@ Game::Game(int modeStatus, char ids)
         if (gCameraOrPhysics == NULL) DebugLog(0x20, "game.cpp", 1916);
 
         // --- FileMgr только для японской версии ---
-        if (gText->GetLanguageJapan()) {
+        if (gText->LanguageJapan()) {
             gFileMgr = new FileMgr();
             if (gFileMgr == NULL) DebugLog(0x20, "game.cpp", 1921);
         }
 
         // --- Начальное состояние игры ---
         this->IndexPlayer = 0;
-        this->field_0x22 = 0;
-        this->StatusGameMode = 1;
-        DAT_005e7220 = 0;
-        this->CurrentPlayer = 0;
-        this->GameOver = -1;
-        this->field13_0x30 = 0;
-        this->field12_0x2c = 0;
+        this->und1 = 0;
+        this->Status = true;
+         int DAT_005e7220 = 0;
+        this->CurrentPlayerCopy = 0;
+        this->isDead = -1;
+        this->NoFrameLimit = false;
+        this->State = 0;
         this->SkipPolice = 0;
 
         // --- Аудио ---

@@ -1,5 +1,5 @@
 #include "CrashData.h"
-
+CrashData* gCrashData;
 
     // 0x0044C870
 

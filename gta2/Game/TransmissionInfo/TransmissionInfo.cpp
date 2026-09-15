@@ -1,5 +1,5 @@
 #include "TransmissionInfo.h"
-
+TransmissionInfo* gTransmissionInfo;
 
     // 0x004B91E0
 

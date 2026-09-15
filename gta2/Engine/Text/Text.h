@@ -9,6 +9,7 @@ public:
 	int NumberOfElements;
 	Text();
 	~Text();
+	void Clear();
 	void Load();
 	void LoadGCI();
 	void* Bsearch(const void* pKey);
@@ -17,6 +18,6 @@ public:
     bool  LanguageJapan();	
 };
 extern Text* gText;
-extern char gLanguage;
+extern char gLanguage[256];
 
 #endif

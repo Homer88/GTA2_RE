@@ -41,5 +41,5 @@ class CrashData{
     // 0x00493540
     int IsCarEqual(void);
 };
-
+extern CrashData* gCrashData;
 #endif // !__CRASHDATA_H_

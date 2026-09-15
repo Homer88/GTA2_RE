@@ -37,4 +37,7 @@ class CameraOrPhysics{
     // 0x004A5090: CameraOrPhysics::SetTargetPosition
     void SetTargetPosition();
 };
+
+
+extern CameraOrPhysics* gCameraOrPhysics;
 #endif // !__CAMERAORPHYSICS_H_
