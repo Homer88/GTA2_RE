@@ -7,6 +7,10 @@
     // 0x00420200
 Style *gStyle;
 
+Style::Style() {
+    this->InitSpecArray();
+    //TODO  надо много что диассемблировать 
+}
 
 void Style::Load(char* FileName) {
     FileMgr* pFileMng;

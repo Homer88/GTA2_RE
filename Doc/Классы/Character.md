@@ -1,7 +1,7 @@
 # Character
 
 - **Место**: `gta2/Game/Character/`
-- **Файлы**: `.cpp` 121 строк, `.h` 41 строк
+- **Файлы**: `.cpp` 123 строк, `.h` 42 строк
 - **Методов**: 15
 - **Полностью реализовано**: 0
 - **Частично (TODO/незавершено)**: 0
@@ -13,18 +13,18 @@
 
 | метод | строка | строк кода | адрес из дампа |
 |---|---|---|---|
-| `CharIsValidPedIndex()` | 7 | 3 |  |
-| `CarSystemManagerUnderCarLimit()` | 15 | 3 |  |
-| `FindPed()` | 23 | 3 |  |
-| `DestroyPedPool(int arg0)` | 31 | 3 |  |
-| `CreatePedInCar()` | 39 | 3 |  |
-| `CharCreateDriver()` | 47 | 3 |  |
-| `CharCreateDummyDriver()` | 55 | 3 |  |
-| `CharCreatePed()` | 63 | 3 |  |
-| `CreateRandomPedInCar()` | 71 | 3 |  |
-| `CreatePed()` | 79 | 3 |  |
-| `ClonePed()` | 87 | 3 |  |
-| `CreateDriver()` | 95 | 3 |  |
-| `Control()` | 103 | 3 |  |
-| `Characte()` | 111 | 3 |  |
-| `IsPedRelatedByGangOrOccupation()` | 119 | 3 |  |
+| `CharIsValidPedIndex()` | 9 | 3 |  |
+| `CarSystemManagerUnderCarLimit()` | 17 | 3 |  |
+| `FindPed()` | 25 | 3 |  |
+| `DestroyPedPool(int arg0)` | 33 | 3 |  |
+| `CreatePedInCar()` | 41 | 3 |  |
+| `CharCreateDriver()` | 49 | 3 |  |
+| `CharCreateDummyDriver()` | 57 | 3 |  |
+| `CharCreatePed()` | 65 | 3 |  |
+| `CreateRandomPedInCar()` | 73 | 3 |  |
+| `CreatePed()` | 81 | 3 |  |
+| `ClonePed()` | 89 | 3 |  |
+| `CreateDriver()` | 97 | 3 |  |
+| `Control()` | 105 | 3 |  |
+| `Characte()` | 113 | 3 |  |
+| `IsPedRelatedByGangOrOccupation()` | 121 | 3 |  |

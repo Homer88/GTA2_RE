@@ -145,7 +145,7 @@ public:
 	void RegisterKill(unsigned char id, unsigned char a3);
 
 	// SpecialTokens
-	void SetSpecialTokensDefault() { SpecialTokens = 0; }
+	void SetSpecialTokensDefault() { this->SpecialTokens = 0; }
 	int GetSpecialTokens() { return SpecialTokens; }
 	void SetSpecialTokens(int value) { SpecialTokens = value; }
 	void IncrementSpecialTokens() { ++SpecialTokens; }

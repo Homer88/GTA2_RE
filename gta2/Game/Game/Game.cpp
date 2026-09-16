@@ -73,7 +73,7 @@ Game::Game(int modeStatus, char ids)
         }
 
         this->PlayerMain = this->ArrayPlayer[this->IndexPlayer];
-        pPlayer->SetActive(this->PlayerMain);
+        this->PlayerMain->SetActive(this->PlayerMain);
         this->CurrentPlayer = this->PlayerMain;
 
         // --- Глобальные подсистемы ---

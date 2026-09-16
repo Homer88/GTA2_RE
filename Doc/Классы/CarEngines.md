@@ -1,7 +1,7 @@
 # CarEngines
 
 - **Место**: `gta2/Game/CarEngines/`
-- **Файлы**: `.cpp` 104 строк, `.h` 41 строк
+- **Файлы**: `.cpp` 105 строк, `.h` 45 строк
 - **Методов**: 13
 - **Полностью реализовано**: 0
 - **Частично (TODO/незавершено)**: 0
@@ -13,18 +13,18 @@
 
 | метод | строка | строк кода | адрес из дампа |
 |---|---|---|---|
-| `GetEngineValue()` | 13 | 4 |  |
-| `GetEngineValue(int CarType)` | 13 | 4 |  |
-| `State()` | 29 | 3 |  |
-| `ResetEngineArrays()` | 37 | 3 |  |
-| `InitCarPhysics()` | 45 | 3 |  |
-| `CarInfo()` | 53 | 3 |  |
-| `BuildEngineState()` | 61 | 3 |  |
-| `LoadFromGci()` | 69 | 3 |  |
-| `FreeResources()` | 77 | 3 |  |
-| `ReloadGci()` | 85 | 3 |  |
-| `TrafficLigthStruct()` | 93 | 3 |  |
-| `S97()` | 101 | 3 |  |
+| `GetEngineValue()` | 14 | 4 |  |
+| `GetEngineValue(int CarType)` | 14 | 4 |  |
+| `State()` | 30 | 3 |  |
+| `ResetEngineArrays()` | 38 | 3 |  |
+| `InitCarPhysics()` | 46 | 3 |  |
+| `CarInfo()` | 54 | 3 |  |
+| `BuildEngineState()` | 62 | 3 |  |
+| `LoadFromGci(char* FileName)` | 70 | 3 |  |
+| `FreeResources()` | 78 | 3 |  |
+| `ReloadGci()` | 86 | 3 |  |
+| `TrafficLigthStruct()` | 94 | 3 |  |
+| `S97()` | 102 | 3 |  |
 
 ## Объявлены в .h, но не определены
 

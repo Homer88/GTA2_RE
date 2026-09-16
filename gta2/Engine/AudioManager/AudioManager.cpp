@@ -6,6 +6,17 @@ AudioManager* gAudioManager;
 
 static char gBaseNameBuffer[256];   // размер подберите по оригиналу
 
+// Конструктор (соответствует инициализации в DMAudio::sub_410500 / 0x00410500):
+// задаёт значения по умолчанию для полей AudioManager (ранее задавались при
+// открытии звуковой системы; у нас объект выделяется в DMAudio::InitAudioManager).
+AudioManager::AudioManager() {
+	Status      = true;
+	filder_0x98 = 0;
+	filder_0x1450 = 0;
+	Sound3D     = false;
+	count       = 0;
+}
+
 int AudioManager::InitArray() {
 	
 	int v3;
@@ -507,7 +518,7 @@ int AudioManager::StopStream(void){
 
 
 int AudioManager::PlayStream(char * FileName){
-    if (this->Status != 0) {
+    if (this->Status != false) {
         char * basename= this->ExtractBaseName(FileName);
         gSoundCard->LoadSounds(basename);
     }

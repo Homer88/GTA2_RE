@@ -1,25 +1,27 @@
 # FileMgr
 
 - **Место**: `gta2/Engine/FileMgr/`
-- **Файлы**: `.cpp` 25 строк, `.h` 19 строк
-- **Методов**: 5
-- **Полностью реализовано**: 1
+- **Файлы**: `.cpp` 31 строк, `.h` 24 строк
+- **Методов**: 7
+- **Полностью реализовано**: 3
 - **Частично (TODO/незавершено)**: 0
 - **Заглушки**: 4
 - **Объявлено, но не определено**: 0
-- **Реализация в целом: ~20%** (полные + 0.5*частичные)
+- **Реализация в целом: ~43%** (полные + 0.5*частичные)
 
 ## Полностью реализованные методы
 
 | метод | строка | строк кода | адрес из дампа |
 |---|---|---|---|
-| `WriteReadFile(const char* filename, const char* mode)` | 15 | 7 |  |
+| `WriteReadFile(const char* filename, const char* mode)` | 17 | 7 |  |
+| `FileOpen(char* filename)` | 24 | 3 |  |
+| `FileOpen(char* filename, char * mode)` | 24 | 3 |  |
 
 ## Заглушки (мини-тела / return-заглушки)
 
 | метод | строка | строк кода | адрес из дампа |
 |---|---|---|---|
 | `SetFilePath(char* filename)` | 10 | 4 |  |
-| `FileOpen(char* filename, char * mode)` | 22 | 1 |  |
-| `ReadFile(void * outbuffer, void * inBuffer)` | 24 | 1 |  |
-| `ReadFile(void* buffer, size_t SizeRead)` | 24 | 1 |  |
+| `LoadFronSprites()` | 14 | 3 |  |
+| `ReadFile(void * outbuffer, void * inBuffer)` | 30 | 1 |  |
+| `ReadFile(void* buffer, size_t SizeRead)` | 30 | 1 |  |

@@ -5,6 +5,22 @@
 
 MapRelatedStruct *gMapRelatedStruct;
 
+//=============================================================================
+// MapRelatedStruct::MapRelatedStruct - Constructor
+//=============================================================================
+MapRelatedStruct::MapRelatedStruct() {
+   //16_01::S16_01(this->_s16_01) TODO
+    this->len = 0xff;
+    this->Buffer_ZONE = NULL;
+    this->count = 0;
+    this->Buffer_MOBJ = NULL;
+    this->_Map = NULL;
+    this->Buffer_ANIM = NULL;
+    this->Buffer_LGHT = NULL;
+
+
+}
+
 // Forward declarations for external functions
 void* operator_new(size_t size);
 
@@ -166,48 +182,7 @@ static S16_01* S16_01_sub_463990(S16_01* s, char a2, char a3, int a4) {
  //   return 0;
 //}
 
-//=============================================================================
-// MapRelatedStruct::MapRelatedStruct - Constructor
-//=============================================================================
-// MapRelatedStruct::MapRelatedStruct - Constructor
-//=============================================================================
-MapRelatedStruct::MapRelatedStruct(){
-  /*s16_01.field_320 = 0;
-  Len = -1;
-  field_369 = -1;
-  Buffer_ZONE = 0;
-  count = 0;
-  Buffer_MOBJ = 0;
-  field_344 = 0;
-  getMap() = 0;
-  field_330 = 0;
-  field_334 = 0;
-  Buffer_ANIM = 0;
-  Buffer_LGHT = 0;
-  field_348 = 0;
-  field_350 = 0;
-  field_34C = 0;
-  field_354 = 0;
-  field_358 = 0;
-  field_35C = 0;
-  field_360 = 0;
-  field_364 = -1;
-  field_36A = 0;
-  field_36B = 0;
-  field_36C = 0;
-  field_366 = 0;
-  field_36D = 0;
-  field_36E = 0;
-  field_36F = 0;
-  S16_02::sub_44C840(&unk_662BC0);
-  S16_02::sub_44C840(&unk_662B94);
-  unk_662B94.field = 3073;
-  unk_662B94.field_2 = 3073;
-  unk_662B94.field_4 = 3073;
-  unk_662B94.field_6 = 3073;
-  unk_662B94.field_8 = 1;
-  unk_662B94.field_B = 3;*/
-}
+
 
 //=============================================================================
 // MapRelatedStruct::~MapRelatedStruct - Destructor

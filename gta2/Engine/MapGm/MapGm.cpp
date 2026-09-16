@@ -10,6 +10,22 @@ MapGm *gMapGm;
 // TODO: заглушки - реализовать (объявлены в MapGm.h)
 MapGm::MapGm()
 {
+	// 0x0045e860: инициализация полей по дампу (sub_45E860, вызывается сразу после меню)
+	gmpFile[0]    = 0;
+	styFile[0]    = 0;
+	sctiptFile[0] = 0;
+	saveFile[0]   = 0;
+	playerArena   = 0;
+	BonusStage    = 0;
+	Gang          = 0;
+	PlayerSlotSave = 0;
+	Bonus         = 0;
+	memset(Arr10, 0, sizeof(Arr10));
+	field_430     = 0;
+	field_434     = 0;
+	field_438     = 0;
+	field_43A     = 0;
+	ResetSettings();
 }
 MapGm::~MapGm()
 {

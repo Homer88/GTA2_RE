@@ -80,26 +80,23 @@ struct S202 {
 
 class MapRelatedStruct {
 public:
+    //  переменные 
+    Map* _Map;
+    S16_01 _s16_01;
+    void* Buffer_ZONE, * Buffer_MOBJ, * Buffer_LGHT, * Buffer_ANIM;
+    int count;
+    byte len;
     // 0x000: S16_01 (804 bytes), Map* overlaps at offset 0
-    S16_01 s16_01;
+    //функции
 
     // Map* accessors (shares offset 0 with S16_01.gap0[0..3])
-    Map*& getMap() { return *(Map**)&s16_01.gap0[0]; }
+    Map*& getMap() { return *(Map**)&_s16_01.gap0[0]; }
 
-    // 0x324
-    void* Buffer_ZONE;
-    // 0x328
-    int* count;
     // 0x32C
     unsigned char* field_330;
     // 0x330
     _WORD* field_334;
     // 0x334
-    void* Buffer_MOBJ;
-    // 0x338
-    void* Buffer_ANIM;
-    // 0x33C
-    void* Buffer_LGHT;
     // 0x340
     int field_344;
     // 0x344

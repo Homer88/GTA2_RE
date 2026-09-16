@@ -40,11 +40,15 @@
 #include "Engine/DMAudio/DMAudio.h" // звук: gDMAudio (init/update), skip_audio
 #include "Engine/Sound/Sound.h"     // движок: gSound, WavToPcm, PlaySample
 #include "Game/Menu/Menu.h"         // класс Menu (gMenu), MenuPage, MenuEntry
+#include "Game/Game/Game.h"         // класс Game (gGame)
+#include "Engine/MapGm/MapGm.h"     // класс MapGm (gMapGm)
 #include "Engine/Registry/Registry.h" // регистр: gRegistry (настройки/язык)
+#include "../MapGm/MapGm.h"
 // Глобальные объекты реконструкции (определены в MENU/ULTIL-библиотеках).
 extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
 extern Registry *gRegistry;         // реестр Windows: язык, настройки экрана/звука
 extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersion и др.
+extern Game *gGame;                 // игра: конструктор создаёт gText, gStyle и др. (Game.cpp)
 extern bool  gSkipAudio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
@@ -993,7 +997,9 @@ void SetupMenu()
 {
   if (gMenu == NULL)
     gMenu = new Menu;          // new = operator_new + Menu::Menu()
-
+  if (gMapGm == NULL) {
+      gMapGm = new MapGm;
+  }
   // Доп. параметры из оригинального FUN_00457830: аудио-объект для меню.
   gAudioObject = 2;            // "2D-звук" (как в оригинальном LoadConfig)
   if (!gSkipAudio)
@@ -1015,6 +1021,14 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
   gWinApi->InitTimer();          // запуск таймера кадров (gTimer = timeGetTime())
 
   SetupMenu();              // создать меню + доп. параметры (аудио), аналог FUN_00457830
+
+  // Одиночная игра (одиночная ветка InitFrontedLessGame 0x00461DE0 -> 0x00462001):
+  // Game(int modeStatus, char ids) - 1 игрок, индекс 0.
+  gMapGm = new MapGm();            // проект хранит MapGm как указатель (в дампе - статик &gMapGm)
+  gGame = new Game(1, 0);
+  gGame->LoadResources();
+  gGame->StartGameSession();
+
   cApp App;
   return App.Run();
 }

@@ -178,6 +178,19 @@ def analyze_class(folder, classname):
             "cpp_lines": cpp_lines, "h_lines": h_lines}
 
 
+def class_names_from_headers(folder):
+    """Вернёт имена классов, найденные в .h файлах папки."""
+    names = []
+    for hf in sorted(os.listdir(folder)):
+        if not hf.lower().endswith(".h"):
+            continue
+        text = strip_comments(read(os.path.join(folder, hf)))
+        for m in re.finditer(r"\bclass\s+([A-Za-z_][A-Za-z0-9_]*)", text):
+            if m.group(1) not in names:
+                names.append(m.group(1))
+    return names
+
+
 def main():
     os.makedirs(OUTDIR, exist_ok=True)
     summary = []
@@ -191,12 +204,15 @@ def main():
                 continue
             if not any(f.lower().endswith(".cpp") for f in os.listdir(folder)):
                 continue
-            info = analyze_class(folder, d)
+            # имя класса: фактическое из .h, иначе имя папки
+            names = class_names_from_headers(folder)
+            classname = names[0] if names else d
+            info = analyze_class(folder, classname)
             total = len(info["methods"])
             # частичные учитываются с коэффициентом 0.5
             pct = round(100.0 * (len(info["implemented"]) + 0.5 * len(info["partials"])) / total) if total else 0
 
-            L = [f"# {d}", "",
+            L = [f"# {classname}", "",
                  f"- **Место**: `gta2/{lib}/{d}/`",
                  f"- **Файлы**: `.cpp` {info['cpp_lines']} строк, `.h` {info['h_lines']} строк",
                  f"- **Методов**: {total}"]
@@ -237,9 +253,9 @@ def main():
                 L += ["## Свободные функции в .cpp (глобальные)", "",
                       ", ".join(f"`{n}`" for n in info["extra"]), ""]
 
-            with open(os.path.join(OUTDIR, f"{d}.md"), "w", encoding="utf-8") as f:
+            with open(os.path.join(OUTDIR, f"{classname}.md"), "w", encoding="utf-8") as f:
                 f.write("\n".join(L))
-            summary.append((d, f"gta2/{lib}/{d}", total,
+            summary.append((classname, f"gta2/{lib}/{d}", total,
                             len(info["implemented"]), len(info["partials"]), pct,
                             len(info["stubs"]), len(info["missing"]), info["cpp_lines"]))
 

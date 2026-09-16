@@ -5,10 +5,17 @@
 
 class Style{
     public:
+        //переменные 
        unsigned int ArrayStyle[1024];
        unsigned short PallitrePal;
        Car* ColorCar;
        int Tiles;
+       byte ColourDepth;
+       //функции
+
+
+       Style();
+
         void InitSpecArray();
         void Load(char* FileName);
     // 0x00420200

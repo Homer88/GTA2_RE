@@ -3,6 +3,9 @@ Mike* gMike;
 
     // 0x004741A0
 
+Mike::Mike() {
+
+}
 
 int Mike::DoMiKe_EM(void){
         return 0;

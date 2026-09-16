@@ -25,10 +25,12 @@ extern AudioManager* gAudioManager;
 //int  skip_audio;   // 0 = звук включён
 int  gSampleRate;  // результат создания звукового объекта (см. суб_410530)
 
-// Инициализация аудио-системы (аналог DMAudio::Initialise: создаёт SoundCard и
+// Инициализация аудио-системы (аналог DMAudio::sub_410500: создаёт SoundCard и
 // аудио-объект, если его ещё нет). Движок gSound проверяет доступность волны.
 void DMAudio::InitAudioManager()
 {
+	if (gAudioManager == NULL)
+		gAudioManager = new AudioManager();
 	if (!gSound.InitAudioSystem())
 		gSkipAudio = true;
 }
@@ -102,5 +104,6 @@ int DMAudio::PollAllSamples()
 
 
 void DMAudio::LoadSTY(char* FileName) {
-	gAudioManager->PlayStream(FileName);
+	
+	//gAudioManager->PlayStream(FileName); // TODO работает но надо выше писать функции todo 
 }

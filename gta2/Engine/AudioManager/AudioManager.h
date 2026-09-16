@@ -11,6 +11,7 @@ public:
 	bool	Sound3D;
 	unsigned int count;
 
+	AudioManager();
 	int InitArray();
 	void DefauntParam();
 
@@ -255,6 +256,6 @@ public:
     // 0x00416BF0: AudioManager::ProcessIfActive
     void ProcessIfActive();
 };
-extern AudioManager* gAudiManager;
+extern AudioManager* gAudioManager;
 #endif // !____AudioManager_H_
 

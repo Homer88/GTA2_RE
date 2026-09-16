@@ -1,11 +1,11 @@
 # PedStats
 
 - **Место**: `gta2/Game/PedStats/`
-- **Файлы**: `.cpp` 66 строк, `.h` 34 строк
-- **Методов**: 10
+- **Файлы**: `.cpp` 68 строк, `.h` 35 строк
+- **Методов**: 11
 - **Полностью реализовано**: 0
 - **Частично (TODO/незавершено)**: 0
-- **Заглушки**: 8
+- **Заглушки**: 9
 - **Объявлено, но не определено**: 2
 - **Реализация в целом: ~0%** (полные + 0.5*частичные)
 
@@ -13,14 +13,15 @@
 
 | метод | строка | строк кода | адрес из дампа |
 |---|---|---|---|
-| `EncodedFloatToRegularFloat()` | 7 | 3 |  |
-| `ClearGroundList()` | 15 | 3 |  |
-| `IsTileBlockedPedStats()` | 23 | 3 |  |
-| `Defaut()` | 31 | 3 |  |
-| `ResetTriangleCount()` | 39 | 3 |  |
-| `RenderGroundList()` | 47 | 3 |  |
-| `RenderGround()` | 55 | 3 |  |
-| `GetStatById()` | 63 | 3 |  |
+| `PedStats()` | 5 | 2 |  |
+| `EncodedFloatToRegularFloat()` | 9 | 3 |  |
+| `ClearGroundList()` | 17 | 3 |  |
+| `IsTileBlockedPedStats()` | 25 | 3 |  |
+| `Defaut()` | 33 | 3 |  |
+| `ResetTriangleCount()` | 41 | 3 |  |
+| `RenderGroundList()` | 49 | 3 |  |
+| `RenderGround()` | 57 | 3 |  |
+| `GetStatById()` | 65 | 3 |  |
 
 ## Объявлены в .h, но не определены
 

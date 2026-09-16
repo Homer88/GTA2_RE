@@ -161,15 +161,18 @@ bool Registry::GetNetworkKey(PHKEY phkResult) {
 
 LSTATUS Registry::ReadKeyMap(LPCSTR lpValueName, LPBYTE lpData, DWORD dataSize){
 	
-	HKEY hKey;
+	HKEY hKey = NULL;
+	LSTATUS result = ERROR_SUCCESS;
 	
 	if (this->GetDebugMode(&hKey)){
-		RegQueryValueExA(hKey,lpValueName,NULL,0, lpData, &dataSize);
+		result = RegQueryValueExA(hKey,lpValueName,NULL,0, lpData, &dataSize);
 	}
-	LSTATUS result=RegCloseKey(hKey);
-	if (result)
-	{
-		DebugLog(0x2Au, "registry.cpp", 531);
+	if (hKey) {
+		LSTATUS closeResult = RegCloseKey(hKey);
+		if (closeResult)
+		{
+			DebugLog(0x2Au, "registry.cpp", 531);
+		}
 	}
 	return result;
 	

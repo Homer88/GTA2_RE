@@ -116,4 +116,5 @@ class Game{
     // 0x0045BB50: Game::IsSpriteVisibleToAnyPlayer
     void IsSpriteVisibleToAnyPlayer();
 };
+extern Game* gGame;
 #endif // !__GAME_H_

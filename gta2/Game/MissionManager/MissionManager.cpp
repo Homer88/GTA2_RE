@@ -929,7 +929,7 @@ unsigned __int8 MissionManager::loadScript(char* ScriptName)
         do
         {
             v6 = *pScriptName;
-            pScriptName[index] = *pScriptName;
+            //pScriptName[index] = *pScriptName;
             ++pScriptName;
         }
         while ( v6 );
@@ -946,9 +946,9 @@ unsigned __int8 MissionManager::loadScript(char* ScriptName)
         ScriptName = (char*)5118;
        // partOfLoadScrip(v9, (int*)&ScriptName);
         //FileMgr::CloseFile(0);
-        this->SetupMissionText(size);
-        this->ExtractFileNameWithoutExtension();
-        return (unsigned __int8)this->LoadScriptFiles();
+     //   this->SetupMissionText(size);
+       // this->ExtractFileNameWithoutExtension();
+        return  0;//(unsigned __int8)this->LoadScriptFiles();
     }
     return result;
 }
