@@ -5,7 +5,7 @@
 
 class SpriteS4{
     public:
-
+        SpriteS4();
     // 0x004BDCB0
     int S39(void);
     // 0x004BDCD0
@@ -15,5 +15,5 @@ class SpriteS4{
     // 0x004BEE30
     int SpriteS4Alloc(void);
 };
-
+extern SpriteS4* gSpriteS4;
 #endif // !__SPRITES4_H_

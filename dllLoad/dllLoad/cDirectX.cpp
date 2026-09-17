@@ -5,6 +5,7 @@
 #include <dinput.h>
 
 #include "cDirectX.h"
+#include "cHookTrace.h"
 
 LPDIRECTINPUT8 gDirectInput8 = (LPDIRECTINPUT8) 0x005E8FA4;
 
@@ -15,8 +16,9 @@ LPDIRECTINPUT8 gDirectInput8 = (LPDIRECTINPUT8) 0x005E8FA4;
 #pragma comment(lib, "dinput8.lib")
 
 
-BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
+BOOL  __stdcall InitGraphicsAndInput(HINSTANCE phInstance, DWORD* pFlags) {
     OSVERSIONINFO osInfo;
+    TraceCall("InitGraphicsAndInput @0x004031C0", TRACE_CALLER_ADDR);
     HMODULE ddrawLib, dinputLib;
     LPVOID lpDDSurfaceDesc = NULL;
     LPDIRECTDRAW lpDDraw = NULL;
@@ -36,7 +38,7 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return TRUE;
     }
 
-    // Загрузка библиотеки DirectDraw
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ DirectDraw
     ddrawLib = LoadLibrary(TEXT("DDRAW.DLL"));
     if (!ddrawLib)
     {
@@ -44,7 +46,7 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return FALSE;
     }
 
-    // Получение адреса функции DirectDrawCreate
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ DirectDrawCreate
     FARPROC procAddr = GetProcAddress(ddrawLib, ("DirectDrawCreate"));
     if (!procAddr)
     {
@@ -53,7 +55,7 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return FALSE;
     }
 
-    // Создаем объект DirectDraw
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ DirectDraw
     hr = ((HRESULT(WINAPI*)(GUID*, LPDIRECTDRAW*, IUnknown*))procAddr)(NULL, &lpDDraw, NULL);
     if (FAILED(hr))
     {
@@ -62,7 +64,7 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return FALSE;
     }
 
-    // Проверяем успешность инициализации
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     if (lpDDraw->QueryInterface(IID_IDirectDraw2, (LPVOID*)&lpDDraw) != S_OK)
     {
         OutputDebugString(TEXT("Failed to initialize DirectDraw2 interface"));
@@ -70,7 +72,7 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return FALSE;
     }
 
-    // Загружаем библиотеку DirectInput
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ DirectInput
     dinputLib = LoadLibrary(TEXT("DINPUT.DLL"));
     if (!dinputLib)
     {
@@ -79,7 +81,7 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return FALSE;
     }
 
-    // Получаем адрес функции DirectInputCreateA
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ DirectInputCreateA
     procAddr = GetProcAddress(dinputLib, "DirectInputCreateA");
     if (!procAddr)
     {
@@ -89,8 +91,8 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
         return FALSE;
     }
 
-    // Успешная загрузка всех компонентов
-    *pFlags |= 1 << 1 | 1 << 2 | 1 << 3; // Установлены флаги для DirectDraw и DirectInput
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    *pFlags |= 1 << 1 | 1 << 2 | 1 << 3; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ DirectDraw пїЅ DirectInput
     return TRUE;
 }
 
@@ -98,11 +100,11 @@ BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags) {
 void __stdcall CleanupDirectInput() {
    
    
-   // не понятная ошибка 
+   // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 
    /* if (gDirectInput8) {
-        // Вызываем Release() и приводим результат обратно к указателю
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Release() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         gDirectInput8->Release();
-        gDirectInput8 = NULL; // Защита от повторного использования
+        gDirectInput8 = NULL; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     }*/
 
 
@@ -111,7 +113,7 @@ void __stdcall CleanupDirectInput() {
 ///bool byte_5E8F54 = (bool*)0x5E8F54;
 bool __stdcall directInputUtils(void* a, void* b) {
 
-    /// переписать данную функцию
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
    /// byte_5E8F54 = 0;
    /// if (DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&gDirectInput8, NULL) < 0)

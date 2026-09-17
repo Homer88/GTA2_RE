@@ -172,9 +172,9 @@ Menu*  GetGameMenu();                 // returns *(Menu**)0x005EB160 (may be NUL
 //char* __thiscall Menu::WCHARToChar(Menu* this, char* PlayerName)
 //unsigned char* __stdcall WCHARToChar(Menu* pthis, wchar_t* PlayerName);
 char  PlayerCheat(Menu* pthis, wchar_t* PlayerName);
-//void  __stdcall sub_459540(Menu* pthis);
-// Retail sub_459540 is __thiscall: the real Menu* arrives in ECX.
-void  __fastcall sub_459540(Menu* thisMenu);
+//void  __stdcall SetPlayerNameFromMenu(Menu* pthis);
+// Retail 0x00459540 is __thiscall: the real Menu* arrives in ECX.
+void  __fastcall SetPlayerNameFromMenu(Menu* thisMenu);
 
 
 //typedef short(__fastcall* LoadTextMenu)(Menu*);
@@ -183,6 +183,18 @@ void  __fastcall sub_459540(Menu* thisMenu);
 // during Menu::Menu() the global cell is still NULL (it is assigned only AFTER
 // the constructor returns, in FUN_00457830: gMenu = Menu::Menu(pMenu)).
 short  __fastcall   LoadTextMenu(Menu* thisMenu);
+
+
+// Retail versions are __thiscall; the detours forward to the original trampolines
+// (trace only - the retail behaviour is preserved).
+char  __fastcall   LoadGame(Menu* thisMenu);              // Menu::LoadGame @0x00455C20
+unsigned __int8  __fastcall   SaveGame(Menu* thisMenu);   // Menu::SaveGame @0x00455C90
+char  __fastcall   MultiplayerMenu(Menu* thisMenu, void* _EDX, void* pPlayerName); // Menu::MultiplayerMenu @0x004565E0
+
+// Menu::ProcessInput @0x00452050 - per-frame keyboard reader (DirectInput
+// GetDeviceState -> Menu::Keys[256]). Hook logs every newly-pressed key and
+// dumps the current menu page state (down to MenuEntry/S136 sub-classes).
+void __fastcall HookProcessInput(Menu* thisMenu, void* _EDX);
 
 
 

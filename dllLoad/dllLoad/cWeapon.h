@@ -48,9 +48,12 @@ struct Weapon {
 };
 static_assert (sizeof(Weapon) == 0x30, "ERROR SIZE WEAPON");
 
-void SetTypeWeapons (Weapon* pWeapon, WeaponTypeModel param_1);
-
-void Weapon_FUN_004cca10 (Weapon* pWeapon, struct Ped* pPed);
+// Detours must mirror the retail __thiscall ABI exactly. The __fastcall form
+// (this, _EDX, <stack args...>) keeps ECX = this, places the retail-pushed
+// arguments on the stack at the right offsets and cleans the 4/8 bytes the
+// retail caller expects, so the call site stays balanced.
+void __fastcall SetWeapon(Weapon* pWeapon, void* _EDX, void* TypeWeapon); // Weapon::SetWeapon @0x00433810
+void __fastcall SetPed(Weapon* pWeapon, void* _EDX, void* pPed);          // Weapon::SetPed    @0x004CCA10
 
 
 #endif // !__Weapon__H__

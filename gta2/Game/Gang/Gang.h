@@ -5,7 +5,7 @@
 typedef enum GANG {
     Yakuza = 0u,
     Zaibatsu_Corporation = 1u,
-    Loonies = 2u,
+    looniegang = 2u,
     GANG_3 = 3u,
     GANG_4 = 4u,
     GANG_5 = 5u,

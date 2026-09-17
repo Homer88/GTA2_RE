@@ -320,6 +320,35 @@ struct Gang {
 
 static_assert (sizeof(Gang)== 324, "ERROR SIZE GANG");
 
+// gGangs is a pointer cell (Gangs*): the array itself is heap-allocated
+// (operator_new(0xCA8) = 10 * sizeof(Gang), Gangs::Gangs_ctor in game init).
+#define kGangsPtrAddress 0x005EB898UL
+
+static inline Gang* GetGangsArray(void)
+{
+    return *(Gang**)kGangsPtrAddress;
+}
+
+// Index of a Gang inside the heap gGangs array, or -1 if not inside it.
+static inline int GangIndexOf(Gang* pGang)
+{
+    Gang* base = GetGangsArray();
+    unsigned long off;
+    int idx;
+    if (base == NULL || (const char*)pGang < (const char*)base) {
+        return -1;
+    }
+    off = (unsigned long)((const char*)pGang - (const char*)base);
+    if (off % sizeof(Gang) != 0) {
+        return -1;
+    }
+    idx = (int)(off / sizeof(Gang));
+    return (idx >= 0 && idx <= 16) ? idx : -1;
+}
+
+const char* GangEnumName(int index);
+
 static  Gang *gGang;
 void CopyNameGang(Gang* pGans, char* NameGang, unsigned char index);
+void __fastcall HookSetName(Gang* pGang, void* _EDX, char* Source, unsigned __int8 Len);  // Gang::SetName @0x0045DB40
 #endif // !__GANG_H__

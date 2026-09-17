@@ -1,8 +1,22 @@
 #include "SpriteS1.h"
-
+#include <cstddef>
+SpriteS1* gSpriteS1;
 
     // 0x00401AD0
+SpriteS1::SpriteS1() {
 
+        // 2. Связываем элементы в односвязный список
+        for (int i = 0; i < 5030; ++i) {
+            this->ArrayCarTransforms[i].NextElement = &this->ArrayCarTransforms[i + 1];
+        }
+
+        // 3. Последний элемент — конец списка
+        this->ArrayCarTransforms[5030].NextElement = NULL;
+
+        // 4. Указатель на голову списка
+        this->FirstCarTransforms = &this->ArrayCarTransforms[0];
+
+}
 
 int SpriteS1::SetToNewVal(void){
         return 0;

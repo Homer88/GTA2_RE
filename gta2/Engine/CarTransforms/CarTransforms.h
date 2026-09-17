@@ -1,11 +1,11 @@
 
-#ifndef __MATRIX3D_H_
-#define __MATRIX3D_H_
+#ifndef __CARTRANSFORMS_H_
+#define __CARTRANSFORMS_H_
 
 
-class Matrix3D{
+class CarTransforms{
     public:
-
+        CarTransforms* NextElement;
     // 0x004BB860
     int TestCollisionPoint(void);
     // 0x004BB910 bool __thiscall
@@ -17,5 +17,5 @@ class Matrix3D{
     // 0x004BCCC0
     int Detach(void);
 };
-
+extern CarTransforms *gCarTransforms;
 #endif // !__MATRIX3D_H_

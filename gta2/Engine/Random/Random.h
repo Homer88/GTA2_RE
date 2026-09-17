@@ -17,6 +17,6 @@ class Random{
 };
 
 extern int gSeed;
-extern Random* gRandom;
+extern Random gRandom;
 #endif // !__RANDOM_H_
 

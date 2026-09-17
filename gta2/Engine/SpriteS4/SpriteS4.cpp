@@ -1,8 +1,10 @@
 #include "SpriteS4.h"
-
+SpriteS4* gSpriteS4;
 
     // 0x004BDCB0
+SpriteS4::SpriteS4() {
 
+}
 
 int SpriteS4::S39(void){
         return 0;

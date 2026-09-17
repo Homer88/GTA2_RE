@@ -8,6 +8,10 @@ void DebugLog(char* ErrorFile);
 void DebugLog(const char* ErrorFile);
 void DebugLog(void* Structure, void* offsetPole, char *text);
 
+// Returns "log\\<launch-timestamp>\\<fileName>" (relative to the game CWD),
+// creating "log" and the timestamped subdirectory on first call.
+const char* GetLogPath(const char* fileName);
+
 void DebugLog(wchar_t* ErrorFile);
 void DebugLog(bool* ErrorFile);
 void DebugLog(unsigned char* ErrorFile);

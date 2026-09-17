@@ -86,7 +86,7 @@ enum Cheat{
     TUMYFROG = 0x5073D,                 // �ce �o�yc-ypo���
 };
 
-int* gActiveCheat = (int*)0x005EAF50;// ������������� ���� �������� ������
+int* gCheatIs = (int*)0x005EAF50;// ������������� ���� �������� ������
 char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
 {
     // TODO ME  ������ �������  
@@ -95,7 +95,7 @@ char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
     }
     unsigned char *chName; //������ 8  ���������
     chName = ConvertWCharToChar(PlayerName);
-    DebugLog(chName);
+    writeFileLog((char*)"menu.txt", (char*)"chName", (char*)"PlayerCheat", (char*)chName);
     int  lenString = wcslen(PlayerName);
     if (lenString <= 16) {
         int index = 0;
@@ -113,7 +113,7 @@ char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
 
             if (cash == GOURANGA) {
                 pthis->isChaet = true;
-                *gActiveCheat = 9;
+                *gCheatIs = 9;
                 return 0;
             }
            if (pthis->isChaet){
@@ -122,108 +122,108 @@ char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
                {
                case GOREFEST:
                    *gDoBlood = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case BUCKFAST:
                    *gBunt = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case VOLTFEST:
-                   *gElectroGun = true;
-                   *gActiveCheat = 9;
+                   *gVOLTFEST = true;
+                   *gCheatIs = 9;
                    return 0;
                case MADEMAN:
                    *gMADEMAN = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case LASVEGAS:
-                   *gElvis = true;
-                   *gActiveCheat = 9;
+                   *gLASVEGAS = true;
+                   *gCheatIs = 9;
                    return 0;
                case NEKKID:
                    *gNEKKID = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case EATSOUP:
                    *gDoFreeShopping = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case DAVEMOON:
-                  *gGiveBasikWeapon = true;
-                   *gActiveCheat = 9;
+                  *gDAVEMOON = true;
+                   *gCheatIs = 9;
                    return 0;
                case CUTIE1:
-                   *gHealth99 = true;
-                   DebugLog("GO");
-                   *gActiveCheat = 9;
+*gHeats99 = true;
+                    writeFileLog((char*)"menu.txt", (char*)"Cutie1", (char*)"PlayerCheat", (char*)"GO");
+                   *gCheatIs = 9;
                    return 0;
                case ARSESTAR:
                    *gKeepWeaponsAfterDeath= !*gKeepWeaponsAfterDeath;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case GODOFGTA:
                    *gGetAllWeapons =true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case PSJABBER:
                    *gDoInvulnerable = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case DANISGOD:
-                   *gGiveMoney20 = true;
-                   *gActiveCheat = 9;
+                   *gDANISGOD = true;
+                   *gCheatIs = 9;
                    return 0;
                case COCKTART:
                    *gExploding_on = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case FLAMEON:
-                   *gFireGun = true;
-                   *gActiveCheat = 9;
+                   *gFLAMEON = true;
+                   *gCheatIs = 9;
                    return 0;
                case FYOHZZ0:
-                   *gJailFreeCard = true;
-                   *gActiveCheat = 9;
+                   *gFYOHZZ0 = true;
+                   *gCheatIs = 9;
                    return 0;
                case IAMDAVEJ:
                    *gIAMDAVEJ = true;
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case SEGARULZ:
-                   *gPontMultiplaerX10 = true;
-                   *gActiveCheat = 9;
+                   *gSEGARULZ = true;
+                   *gCheatIs = 9;
                    return 0;
                case UKGAMER:
-                   *gAllTower = true;
+                   *gUKGAMER = true;
                    //S150::sub_4A8B00(gS150); ���� ������ ��
                    //Menu::sub_456E80(this); ���� ������ ��
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case SUPZZZ0:
                    *gSUPZZZ0 = !*gSUPZZZ0;
                    //S150::sub_4A8A90(gS150, 1u, 0);
                    //Menu::sub_456E80(this);
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case TUMYFROG:
-                   *gBonusAll = !*gBonusAll;
+                   *gTUMYFROG = !*gTUMYFROG;
                    //PlayerData::sub_4A8B00(gPlayerData);
                    //S150::sub_4A8A90(gPlayerData, 2u, 2u);
                    //S150::sub_4A8A90(gPlayerData, 1u, 0);
                    //Menu::sub_456E80(this);
-                   *gActiveCheat = 9;
+                   *gCheatIs = 9;
                    return 0;
                case SCHURULZ:
-                   *gDoubleDamage = !*gDoubleDamage;
-                   *gActiveCheat = 9;
+                   *gSCHURULZ = !*gSCHURULZ;
+                   *gCheatIs = 9;
                    break;
                case HUNSRUS:
-                   *gInvisibility =!*gInvisibility;
-                   *gActiveCheat = 9;
+                   *gHUNSRUS =!*gHUNSRUS;
+                   *gCheatIs = 9;
                    break;
                case FISHFLAP:
-                   *gActiveCheat = 9;
-                   *gSmallCar = !*gSmallCar;
+                   *gCheatIs = 9;
+                   *gFISHFLAP = !*gFISHFLAP;
                    break;
                default:
                    break;
@@ -242,28 +242,28 @@ char PlayerCheat(Menu* pthis, wchar_t* PlayerName)
 
 
 
-//int __thiscall Menu::sub_459540(Menu* pthis)
+//int __thiscall Menu::SetPlayerNameFromMenu(Menu* this)
 
-void  __fastcall sub_459540(Menu* thisMenu) {
-//void  __stdcall sub_459540(Menu* pthis){
+void  __fastcall SetPlayerNameFromMenu(Menu* thisMenu) {
+//void  __stdcall SetPlayerNameFromMenu(Menu* pthis){
     unsigned short PlayerSlot; 
     wchar_t* PlayerName; 
 
-    TraceEvent("Menu::sub_459540 @0x00459540");
+    TraceCall("Menu::SetPlayerNameFromMenu @0x00459540", TRACE_CALLER_ADDR);
 
     int pl = offsetof(Menu, pPlayerName);
     int address = (uintptr_t)thisMenu;
 
     //Debuglog(Menu, PLayerName, "PlayerName");
-    DebugLog(pl);
-    DebugLog(address);
-  
-    DebugLog(thisMenu->pPlayerName);
+    writeFileLog((char*)"menu.txt", (char*)"offsetof(pPlayerName)", (char*)"SetPlayerNameFromMenu", (unsigned int)pl);
+    writeFileLog((char*)"menu.txt", (char*)"thisMenu", (char*)"SetPlayerNameFromMenu", (unsigned int)address);
+
+    writeFileLog((char*)"menu.txt", (char*)"pPlayerName", (char*)"SetPlayerNameFromMenu", (unsigned int)thisMenu->pPlayerName);
 
 
     PlayerSlot = thisMenu->pMenuPage[1].pMenuEntry[0].PlayerSlot;
     PlayerName = gPlayerData->pPlayerSlotSave[PlayerSlot].PlayerName;
-    DebugLog(PlayerName);
+    writeFileLog((char*)"menu.txt", (char*)"PlayerName", (char*)"SetPlayerNameFromMenu", (unsigned int)PlayerName);
      // wcsncpy(PlayerName, gMenu->PlayerName, 9u);
     PlayerCheat(thisMenu, thisMenu->pPlayerName);
     //S150::sub_4A89E0(gPlayerData, PlayerSlot);
@@ -302,6 +302,10 @@ enum  MenuPages // 4 bytes
 
 extern Text* gText;
 extern LPVOID _LoadTextMenu; // dllmain.cpp: Detours trampoline to the original 0x00453E20
+extern LPVOID _LoadGame;
+extern LPVOID _SaveGame;
+extern LPVOID _MultiplayerMenu;
+extern LPVOID _ProcessInput; // dllmain.cpp: Detours trampoline to Menu::ProcessInput 0x00452050
 
 // 1 = run the reconstructed stub below (only 3 pages, hardcoded "Play"/"quit", no .gxt).
 // 0 = call the ORIGINAL retail Menu::LoadTextMenu (builds all pages, reads text from
@@ -310,9 +314,9 @@ extern LPVOID _LoadTextMenu; // dllmain.cpp: Detours trampoline to the original 
 
 short  __fastcall  LoadTextMenu(Menu* thisMenu)
 {
-    TraceEvent("Menu::LoadTextMenu @0x00453E20");
-    DebugLog((int)thisMenu);
-    DebugLog((int)GetGameMenu());
+    TraceCall("Menu::LoadTextMenu @0x00453E20", TRACE_CALLER_ADDR);
+    writeFileLog((char*)"menu.txt", (char*)"thisMenu", (char*)"LoadTextMenu", (unsigned int)thisMenu);
+    writeFileLog((char*)"menu.txt", (char*)"gMenu", (char*)"LoadTextMenu", (unsigned int)GetGameMenu());
     if (thisMenu == NULL) {
         thisMenu = GetGameMenu();
     }
@@ -324,7 +328,7 @@ short  __fastcall  LoadTextMenu(Menu* thisMenu)
     thisMenu->pMenuPage[0].pMenuEntry[0].Y = 250;
     //const wchar_t **play= Bsearch(gText, L"play");
     wcsncpy(thisMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement, L"Play", 50u);
-    DebugLog(thisMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement);
+    writeFileLog((char*)"menu.txt", (char*)"TextMenuElement", (char*)"LoadTextMenu", (unsigned int)thisMenu->pMenuPage[0].pMenuEntry[0].TextMenuElement);
     thisMenu->pMenuPage[0].pMenuEntry[0].SelectMenu = MENUPAGE_PLAY;
     thisMenu->pMenuPage[0].pS137[0].Y = 258;
     thisMenu->pMenuPage[0].pS137[0].X = 280;
@@ -376,4 +380,197 @@ short  __fastcall  LoadTextMenu(Menu* thisMenu)
     // retail code must write into the real heap Menu.
     return ((short (__thiscall*)(Menu*))_LoadTextMenu)(thisMenu);
 #endif
+}
+
+// Retail Menu::LoadGame @0x00455C20 (__thiscall): iterates the 8 save slots via
+// Menu::GetSaveFile + MenuDataBlock::Load. Trace + forward to the original.
+char __fastcall LoadGame(Menu* thisMenu)
+{
+    TraceCall("Menu::LoadGame @0x00455C20", TRACE_CALLER_ADDR);
+    writeFileLog((char*)"menu.txt", (char*)"thisMenu", (char*)"LoadGame", (unsigned int)thisMenu);
+    if (thisMenu == NULL) {
+        thisMenu = GetGameMenu();
+    }
+    return ((char (__thiscall*)(Menu*))_LoadGame)(thisMenu);
+}
+
+unsigned __int8 __fastcall SaveGame(Menu* thisMenu)
+{
+    TraceCall("Menu::SaveGame @0x00455C90", TRACE_CALLER_ADDR);
+    writeFileLog((char*)"menu.txt", (char*)"thisMenu", (char*)"SaveGame", (unsigned int)thisMenu);
+    if (thisMenu == NULL) {
+        thisMenu = GetGameMenu();
+    }
+    return ((unsigned __int8 (__thiscall*)(Menu*))_SaveGame)(thisMenu);
+}
+
+char __fastcall MultiplayerMenu(Menu* thisMenu, void* _EDX, void* pPlayerName)
+{
+    (void)_EDX;
+    TraceCall("Menu::MultiplayerMenu @0x004565E0", TRACE_CALLER_ADDR);
+    writeFileLog((char*)"menu.txt", (char*)"thisMenu", (char*)"MultiplayerMenu", (unsigned int)thisMenu);
+    writeFileLog((char*)"menu.txt", (char*)"pPlayerName", (char*)"MultiplayerMenu", (unsigned int)pPlayerName);
+    if (thisMenu == NULL) {
+        thisMenu = GetGameMenu();
+    }
+    return ((char (__thiscall*)(Menu*, void*))_MultiplayerMenu)(thisMenu, pPlayerName);
+}
+
+static const char* const kDIKNames[256] = {
+    /* 0  */ "none", "esc", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+    /* 12 */ "-", "=", "back", "tab", "q", "w", "e", "r", "t", "y", "u", "i",
+    /* 24 */ "o", "p", "[", "]", "enter", "lctrl", "a", "s", "d", "f", "g",
+    /* 35 */ "h", "j", "k", "l", ";", "'", "`", "lshift", "\\", "z", "x", "c",
+    /* 47 */ "v", "b", "n", "m", ",", ".", "/", "rshift", "*", "lalt", "space",
+    /* 58 */ "caps", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10",
+    /* 69 */ "numlock", "scroll", "num7", "num8", "num9", "num-", "num4", "num5",
+    /* 77 */ "num6", "num+", "num1", "num2", "num3", "num0", "num.",
+    /* 84 */ NULL, NULL, NULL,
+    /* 87 */ "f11", "f12",
+    /* 89 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /* 99 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*109 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*119 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*129 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*139 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*149 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*159 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*169 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*179 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*189 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*199 */ "home", "up", "pgup", NULL, "left", NULL, "right", NULL,
+    /*207 */ "end", "down", "pgdn", "ins", "del",
+    /*212 */ NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    /*219 */ "lwin", "rwin", "apps",
+};
+
+static void KeysPressedList(const Menu* m, char* out, size_t outSize)
+{
+    const unsigned char* k = (const unsigned char*)m->Keys;
+    char* p = out;
+    size_t left = outSize;
+    int first = 1;
+    int i;
+    out[0] = 0;
+    for (i = 0; i < 256; i++) {
+        const char* name;
+        int n;
+        if (!(k[i] & 0x80))
+            continue;
+        name = kDIKNames[i];
+        if (name == NULL) {
+            char raw[8];
+            _snprintf(raw, sizeof(raw), "0x%02X", i);
+            n = _snprintf(p, left, "%s%s", first ? "" : "+", raw);
+        }
+        else {
+            n = _snprintf(p, left, "%s%s", first ? "" : "+", name);
+        }
+        if (n < 0 || (size_t)n >= left) {
+            break;
+        }
+        p += n;
+        left -= (size_t)n;
+        first = 0;
+    }
+}
+
+static void WCharToAsciiBuf(const wchar_t* w, char* out, size_t outSize, size_t maxLen)
+{
+    size_t i = 0;
+    if (w == NULL) {
+        out[0] = 0;
+        return;
+    }
+    for (i = 0; i < maxLen && w[i] != 0 && i + 1 < outSize; i++) {
+        out[i] = (w[i] >= 0x20 && w[i] <= 0x7E) ? (char)w[i] : '?';
+    }
+    out[i] = 0;
+}
+
+void __fastcall HookProcessInput(Menu* m, void* _EDX)
+{
+    static unsigned char s_lastKeys[256];
+    static Menu* s_lastMenu = NULL;
+    static unsigned char s_booted = 0;
+    char keys[160];
+    char pageDump[768];
+    char buf[1400];
+    char tmp[64];
+    const unsigned char* k;
+    MenuPage* pg;
+    int n;
+    int e;
+    int i;
+    int pressedNew = 0;
+
+    (void)_EDX;
+    TraceCall("Menu::ProcessInput @0x00452050", TRACE_CALLER_ADDR);
+    ((void (__thiscall*)(Menu*))_ProcessInput)(m);
+
+    __try {
+        if (!m->FrontendKeysEnabled) {
+            return;
+        }
+        k = (const unsigned char*)m->Keys;
+        if (m != s_lastMenu) {
+            s_lastMenu = m;
+            memcpy(s_lastKeys, k, 256);
+        }
+        for (i = 0; i < 256; i++) {
+            if ((k[i] & 0x80) && !(s_lastKeys[i] & 0x80)) {
+                pressedNew++;
+            }
+        }
+        memcpy(s_lastKeys, k, 256);
+        if (!pressedNew && s_booted) {
+            return;
+        }
+        s_booted = 1;
+
+        KeysPressedList(m, keys, sizeof(keys));
+
+        pg = &m->pMenuPage[m->Page];
+        n = pg->numMenuItems;
+        if (n < 0 || n > 10) {
+            n = 0;
+        }
+        pageDump[0] = 0;
+        _snprintf(pageDump, sizeof(pageDump),
+                  "page %u: %d items, idx=%u, ", (unsigned)m->Page, n,
+                  (unsigned)m->CurrentMenuItemsIndex);
+        for (e = 0; e < n; e++) {
+            const MenuEntry* en = &pg->pMenuEntry[e];
+            char t[64];
+            char one[160];
+            WCharToAsciiBuf(en->TextMenuElement, t, sizeof(t), 30);
+            _snprintf(one, sizeof(one), "e%d[a=%u@(%d,%d) sel=%u \"%s\"]",
+                      e, (unsigned)en->pMenuActions, en->X, en->Y,
+                      (unsigned)en->SelectMenu, t);
+            if (strlen(pageDump) + strlen(one) + 1 < sizeof(pageDump)) {
+                strcat(pageDump, one);
+            }
+        }
+
+        WCharToAsciiBuf(m->MenuItems, tmp, sizeof(tmp), 8);
+        // KeyState is an empty struct in cMenu.h; read the raw bytes instead.
+        // NewKeyState @0xC9B8 and OldKeyState @0xC9C0 are 8 bytes each.
+        {
+            const unsigned char* nk = (const unsigned char*)m + offsetof(Menu, NewKeyState);
+            const unsigned char* ok = nk + 8;
+            _snprintf(buf, sizeof(buf),
+                      "keys=%s | FrontendKeysEnabled=%d State=%d Page=%u MenuItems=\"%s\" Key=%d | "
+                      "NewKey=%02X %02X %02X %02X %02X %02X %02X %02X Old=%02X %02X %02X %02X %02X %02X %02X %02X | %s",
+                      keys, (int)m->FrontendKeysEnabled, (int)m->FrontendState,
+                      (unsigned)m->Page, tmp, (int)m->Key,
+                      nk[0], nk[1], nk[2], nk[3], nk[4], nk[5], nk[6], nk[7],
+                      ok[0], ok[1], ok[2], ok[3], ok[4], ok[5], ok[6], ok[7],
+                      pageDump);
+        }
+        writeFileLog((char*)"menu.txt", buf, (char*)"KeyPress", (char*)"");
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        writeFileLog((char*)"menu.txt", (char*)"<HookProcessInput read error>",
+                     (char*)"KeyPress", (char*)"");
+    }
 }

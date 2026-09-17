@@ -1,7 +1,9 @@
+
 //реализация классов с машинами
+
 #include "../../Engine/Object/Object.h"
 #include "../../Engine/Text/Text.h"
-#include "../../Engine/Sprite/Sprite.h"
+//#include "../../Engine/SpriteMain/SpriteMain.h"
 #include "../Ped/Ped.h" 
 
 #include "Car.h"
@@ -120,7 +122,7 @@ bool Car::IsTrainOrTrainCarriage(){
 }
 void Car::SetPosition(int X, int Y, int Z){
 
-    this->SpriteCar->SetPosition(X,Y,Z);
+   // this->SpriteCar->SetPosition(X,Y,Z);
 
 }
 

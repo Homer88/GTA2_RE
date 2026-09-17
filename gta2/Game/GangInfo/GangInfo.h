@@ -4,8 +4,11 @@
 
 
 class GangInfo{
-    public:
 
+    public:
+        GangInfo* NextGangInfo;
+        GangInfo();
+        void Init();
     // 0x004BA020
     int Reset(void);
 

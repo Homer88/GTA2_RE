@@ -23,7 +23,7 @@ class WinApi{
 		void GetVersion(DWORD *pMajorVersion, DWORD *pMinorVersion);
 		void InitTimer();
 		void GetDebugParam();
-		bool AllGtxFile();
+		bool AllGxtFile();
 		void DefautInitParam();
 		void FindGraphicDevice();
 		void ConfigureVideoDevice();

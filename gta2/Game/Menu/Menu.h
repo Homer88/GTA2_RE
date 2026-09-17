@@ -167,15 +167,15 @@ public:
 // Формат: // Адрес: 0xXXXXXX - Размер: 0xXX байт
 
 // Инициализация и очистка
-// Адрес: 0x00456F80 - Размер: 0x933 байт
+// Адрес: 0x004587B0 - Размер: 0x933 байт (dump: InitializeState; 0x00456F80 = sub_456F80)
 void InitializeState();
-// Адрес: 0x004578B3 - Размер: 0xC5B байт
+// Адрес: 0x00457920 - Размер: 0xC5B байт (dump: CleanupResources)
 void CleanupResources();
 // Адрес: 0x00481D30 - Размер: 0x4D байт
 void CloseBinkResources();
 
 // Управление состоянием
-// Адрес: 0x00453A30 - Размер: 0xB байт
+// Адрес: 0x00451F60 - Размер: 0xB байт (dump: SetFrontendState; 0x00453A30 = SetFrontendKeysEnabled)
 void SetFrontendState( int state);
 // Адрес: 0x00451F60 - Размер: 0xB байт
 void SetFrontendState();
@@ -217,17 +217,17 @@ void ProcessInput();
     unsigned char FindLastActiveArenaSlot(PlayerSlotSlave* PlayerSlotSave);
 
 // Сохранение/загрузка
-// Адрес: 0x00452940 - Размер: 0x1B3 байт
+// Адрес: 0x00455C90 - Размер: 0x1B3 байт (dump: SaveGame)
 void SaveGame();
 // Адрес: 0x00458C41 - Размер: 0x6B байт
 void LoadGame();
 // Адрес: 0x00455F90 - Размер: 0x169 байт
 int NewGame();
-    // Адрес: 0x00458E15 - Размер: 0x86 байт
+    // Адрес: 0x00452810 - Размер: 0x86 байт (dump sig: (Menu*, ushort a2, ushort a3, char* a4, char* a5, char* a6) — копирует 3 строки, НЕ проверка файла)
     bool CheckSaveFile( const char* filename);
     // Адрес: 0x004528A0 - Размер: 0x9E байт
     char GettingSaveFile(byte Index, char* FileNameSave);
-    // Адрес: 0x00458F39 - Размер: 0x4E байт
+    // Адрес: 0x00452940 - Размер: 0x4E байт (dump: GetSaveFile)
     char GetSaveFile(unsigned char SlotSave);
 // Адрес: 0x00458F87 - Размер: 0x6A байт
 void SaveSettings();
@@ -290,7 +290,7 @@ void MainMenuLogic();
 void PauseMenu();
 // Адрес: 0x004581F9 - Размер: 0x2CB байт
 void OptionsMenu();
-// Адрес: 0x004584C4 - Размер: 0x16B байт
+// Адрес: 0x004568C0 - Размер: 0x16B байт (dump sig: (Menu*, KeyCode_1, ushort, ushort, int, int))
 void PlayerList();
 // Адрес: 0x0045862F - Размер: 0xDA байт
 unsigned char  MultiplayerMenu(PlayerSlotSlave* PlayerSlotSave);
@@ -300,9 +300,9 @@ void ServerSettings();
 // Настройки и конфигурация
 // Адрес: 0x00458800 - Размер: 0x17B байт
 void ApplyMoneyCheatIfApplicable();
-// Адрес: 0x0045897B - Размер: 0x2C4 байт
+// Адрес: 0x00453590 - Размер: 0x2C4 байт (dump: SetDifficulty)
 void SetDifficulty( int difficulty);
-// Адрес: 0x00458C3F - Размер: 0x6E байт
+// Адрес: 0x00453870 - Размер: 0x6E байт (dump: SelectCharacter)
 void SelectCharacter( int characterIndex);
 // Адрес: 0x00458CAD - Размер: 0x38 байт
 void ConfigureControls( int config);
@@ -366,9 +366,9 @@ void SpecialFunction7();
 // Основной метод меню
 // Адрес: 0x00456F00 - Размер: 0x32E байт
 Menu();
-// Адрес: 0x00481C30 - Размер: 0xF0 байт
+// Адрес: 0x00456D90 - Размер: 0xF0 байт (dump calls this Menu_Des; 0x00481C30 = CloseBinkResources)
 ~Menu();
-// Адрес: 0x0045731E - Размер: 0x1E байт
+// Адрес: 0x00457900 - Размер: 0x1E байт (dump: MenuDelete)
 void MenuDelete(byte status);
 
 

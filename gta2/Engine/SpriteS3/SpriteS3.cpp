@@ -1,8 +1,10 @@
 #include "SpriteS3.h"
-
+SpriteS3* gSpriteS3;
 
     // 0x004BC8F0
+SpriteS3::SpriteS3() {
 
+}
 
 int SpriteS3::SpriteS3Init(void){
         return 0;

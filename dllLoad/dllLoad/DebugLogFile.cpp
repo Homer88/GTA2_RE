@@ -1,9 +1,30 @@
 #include <windows.h>
 #include <stdio.h>
 #include "DebugLogFile.h"
+static char s_logDir[MAX_PATH];
+static BOOL s_logDirInitialized = FALSE;
+
+const char* GetLogPath(const char* fileName)
+{
+    static char buf[MAX_PATH];
+    SYSTEMTIME st;
+
+    if (!s_logDirInitialized) {
+        GetLocalTime(&st);
+        _snprintf(s_logDir, sizeof(s_logDir),
+            "log\\%04u-%02u-%02u_%02u-%02u-%02u",
+            (unsigned)st.wYear, (unsigned)st.wMonth, (unsigned)st.wDay,
+            (unsigned)st.wHour, (unsigned)st.wMinute, (unsigned)st.wSecond);
+        CreateDirectoryA("log", NULL);
+        CreateDirectoryA(s_logDir, NULL);
+        s_logDirInitialized = TRUE;
+    }
+    _snprintf(buf, sizeof(buf), "%s\\%s", s_logDir, fileName);
+    return buf;
+}
 
 int writeFileLog(char* FileName, char* str, char* error, char* data) {
-	FILE* file = fopen(FileName, "a");
+	FILE* file = fopen(GetLogPath(FileName), "a");
 	if (file == NULL) {
 		printf("Ошибка при открытии файла!\n");
 		return 1; // Возвращаем код ошибки
@@ -17,7 +38,7 @@ int writeFileLog(char* FileName, char* str, char* error, char* data) {
 }
 int writeFileLog(char* FileName, char* str, char* error, bool* address) {
 	
-	FILE* file = fopen(FileName, "a");
+	FILE* file = fopen(GetLogPath(FileName), "a");
 	if (file == NULL) {
 		printf("Ошибка при открытии файла!\n");
 		return 1; // Возвращаем код ошибки
@@ -31,7 +52,7 @@ int writeFileLog(char* FileName, char* str, char* error, bool* address) {
 }
 int writeFileLog(char* FileName, char* str, char* error, unsigned int  data) {
 
-	FILE* file = fopen(FileName, "a");
+	FILE* file = fopen(GetLogPath(FileName), "a");
 	if (file == NULL) {
 		printf("Ошибка при открытии файла!\n");
 		return 1; // Возвращаем код ошибки
@@ -46,7 +67,7 @@ int writeFileLog(char* FileName, char* str, char* error, unsigned int  data) {
 
 int writeFileLog(char* FileName, char* str, char* error, BYTE  *data) {
 
-	FILE* file = fopen(FileName, "a");
+	FILE* file = fopen(GetLogPath(FileName), "a");
 	if (file == NULL) {
 		printf("Ошибка при открытии файла!\n");
 		return 1; // Возвращаем код ошибки
@@ -61,7 +82,7 @@ int writeFileLog(char* FileName, char* str, char* error, BYTE  *data) {
 
 int writeFileLog(char* FileName, LPCSTR lpValueName, char* str, char* error, BYTE* data) {
 
-	FILE* file = fopen(FileName, "a");
+	FILE* file = fopen(GetLogPath(FileName), "a");
 	if (file == NULL) {
 		printf("Ошибка при открытии файла!\n");
 		return 1; // Возвращаем код ошибки

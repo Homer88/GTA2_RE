@@ -4,6 +4,7 @@
 // as numbers or text. All globals from done.md are listed too.
 #include <windows.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include "cInspector.h"
@@ -11,6 +12,12 @@
 #include "cMapGm.h"
 #include "cPlayerData.h"
 #include "cText.h"
+#include "cGang.h"
+#include "cGame.h"
+#include "cAudioManager.h"
+#include "AddrToFunc.h"
+#include "GlobalsData.h"
+#include "DebugLogFile.h"
 
 // Fixed addresses of global instances (addresses from done.md)
 // NOTE: 0x005EB160 is a global Menu* pointer cell (4 bytes), not the Menu struct.
@@ -455,6 +462,70 @@ static const InspField kPlayerDataFields[] = {
 static const int kPlayerDataFieldCount = sizeof(kPlayerDataFields) / sizeof(kPlayerDataFields[0]);
 
 // ---------------------------------------------------------------------------
+// Game fields (cGame.h) - heap instance; gGame cell @0x005EB4FC holds pointer
+// ---------------------------------------------------------------------------
+static const InspField kGameFields[] = {
+    INSP_FIELD(Game, Status),
+    { offsetof(Game, pPlayer) + 0 * sizeof(Player*), sizeof(Player*), "pPlayer[0]" },
+    { offsetof(Game, pPlayer) + 1 * sizeof(Player*), sizeof(Player*), "pPlayer[1]" },
+    { offsetof(Game, pPlayer) + 2 * sizeof(Player*), sizeof(Player*), "pPlayer[2]" },
+    { offsetof(Game, pPlayer) + 3 * sizeof(Player*), sizeof(Player*), "pPlayer[3]" },
+    { offsetof(Game, pPlayer) + 4 * sizeof(Player*), sizeof(Player*), "pPlayer[4]" },
+    { offsetof(Game, pPlayer) + 5 * sizeof(Player*), sizeof(Player*), "pPlayer[5]" },
+    INSP_FIELD(Game, CurrentPlayer),
+    INSP_FIELD(Game, Index),
+    INSP_FIELD(Game, CurrentPlayerCopy),
+    INSP_FIELD(Game, fi_22),
+    INSP_FIELD(Game, NumberPlayer),
+    INSP_FIELD(Game, PlayerInFocus),
+    INSP_FIELD(Game, fi_25),
+    INSP_FIELD(Game, field_26),
+    INSP_FIELD(Game, field_27),
+    INSP_FIELD(Game, isDead),
+    INSP_FIELD(Game, State),
+    INSP_FIELD(Game, NoFrameLimit),
+    INSP_FIELD(Game, SkipPolice),
+    INSP_FIELD(Game, Player),
+    INSP_FIELD(Game, gSkilPolice),
+    INSP_FIELD(Game, field_3D),
+    INSP_FIELD(Game, field_3E),
+    INSP_FIELD(Game, field_3F),
+};
+static const int kGameFieldCount = sizeof(kGameFields) / sizeof(kGameFields[0]);
+
+// ---------------------------------------------------------------------------
+// AudioManager fields (cAudioManager.h) - fixed global @0x005DCBC8
+// ---------------------------------------------------------------------------
+static const InspField kAudioManagerFields[] = {
+    INSP_FIELD(AudioManager, AudioObject),
+    INSP_FIELD(AudioManager, IsUserPaused),
+    INSP_FIELD(AudioManager, field_2),
+    INSP_FIELD(AudioManager, field_4),
+    INSP_FIELD(AudioManager, SampCount),
+    INSP_FIELD(AudioManager, Sound3D),
+    INSP_FIELD(AudioManager, field_10),
+    INSP_FIELD(AudioManager, SampleRate),
+    INSP_FIELD(AudioManager, EffectsVolume),
+    INSP_FIELD(AudioManager, MusicVolume),
+    INSP_FIELD(AudioManager, SFXVol),
+    INSP_FIELD(AudioManager, CDVol),
+    INSP_FIELD(AudioManager, Car),
+    INSP_FIELD(AudioManager, Player),
+    INSP_FIELD(AudioManager, SoundCar),
+    INSP_FIELD(AudioManager, HZ),
+    INSP_FIELD(AudioManager, Arr32_S155),
+    INSP_FIELD(AudioManager, Index),
+    INSP_FIELD(AudioManager, field_5450),
+    INSP_FIELD(AudioManager, relToAudio),
+    INSP_FIELD(AudioManager, VOCAL),
+    INSP_FIELD(AudioManager, Vocal),
+    INSP_FIELD(AudioManager, field_5460),
+    INSP_FIELD(AudioManager, field_5474),
+    INSP_FIELD(AudioManager, AudioBuffer),
+};
+static const int kAudioManagerFieldCount = sizeof(kAudioManagerFields) / sizeof(kAudioManagerFields[0]);
+
+// ---------------------------------------------------------------------------
 // All globals from done.md (only rows with an address)
 // ---------------------------------------------------------------------------
 struct InspGlobal {
@@ -545,10 +616,25 @@ static const InspGlobal kGlobals[] = {
     { "S270 MapGm",              0x005ec070, 0x554 },
     { "S279 LPDIRECTINPUTDEVICE8",0x005E8F4C, 0x0 },
     { "S280 LPDIRECTINPUTA",     0x005E8F58, 0x0 },
-    { "S300 Game",               0x005eb4fc, 0x40 },
+    { "S300 Game* gGame (ptr cell)", 0x005eb4fc, 0x4 },
     { "S500 Register",           0x0066C6B4, 0x0 },
 };
 static const int kGlobalCount = sizeof(kGlobals) / sizeof(kGlobals[0]);
+
+const char* GetGlobalStructName(unsigned long addr)
+{
+    for (int i = 0; i < kGlobalCount; i++) {
+        if (kGlobals[i].addr == addr) {
+            return kGlobals[i].name;
+        }
+    }
+    for (int i = 0; i < kGlobalCount; i++) {
+        if (kGlobals[i].size && addr >= kGlobals[i].addr && addr < kGlobals[i].addr + kGlobals[i].size) {
+            return kGlobals[i].name;
+        }
+    }
+    return NULL;
+}
 
 // ---------------------------------------------------------------------------
 // Text buffer helpers
@@ -593,6 +679,8 @@ struct PrevVal {
 static PrevVal s_prevMenu[kMenuFieldCount];
 static PrevVal s_prevMapGm[kMapGmFieldCount];
 static PrevVal s_prevPlayer[kPlayerDataFieldCount];
+static PrevVal s_prevGame[kGameFieldCount];
+static PrevVal s_prevAudio[kAudioManagerFieldCount];
 static PrevVal s_prevGlobals[kGlobalCount];
 
 static void ReadFieldBytes(const void* base, size_t off, int size,
@@ -628,31 +716,40 @@ static int FieldChanged(PrevVal* pv, unsigned long long a, unsigned long long b)
     return changed;
 }
 
-// Write the dump text to "gta2_struct_dump.log" next to the game executable
+// Append a timestamped snapshot to log\<launch-timestamp>\gta2_struct_dump.log
+// so intermediate states between refreshes are preserved instead of the last
+// refresh overwriting everything. Rotate to a new file once a file gets large.
 static void DumpWriteToFile(const char* buf, size_t len)
 {
-    char exe[MAX_PATH];
-    char path[MAX_PATH + 32];
-    DWORD n;
-    char* slash;
+    static int s_part = 1;
+    static __int64 s_bytes = 0;
+    SYSTEMTIME st;
+    char path[MAX_PATH];
+    char head[160];
     FILE* f;
-    n = GetModuleFileNameA(NULL, exe, MAX_PATH);
-    if (n == 0 || n >= MAX_PATH) {
+
+    s_bytes += (__int64)len;
+    if (s_bytes > (__int64)8 * 1024 * 1024) {
+        s_bytes = (__int64)len;
+        s_part++;
+    }
+    if (s_part == 1) {
+        _snprintf(path, sizeof(path), "gta2_struct_dump.log");
+    } else {
+        _snprintf(path, sizeof(path), "gta2_struct_dump.%d.log", s_part);
+    }
+    f = fopen(GetLogPath(path), "ab");
+    if (f == NULL) {
         return;
     }
-    slash = strrchr(exe, '\\');
-    if (slash != NULL) {
-        slash[1] = 0;
-    }
-    else {
-        exe[0] = 0;
-    }
-    sprintf(path, "%sgta2_struct_dump.log", exe);
-    f = fopen(path, "wb");
-    if (f != NULL) {
-        fwrite(buf, 1, len, f);
-        fclose(f);
-    }
+    GetLocalTime(&st);
+    _snprintf(head, sizeof(head),
+        "\n==== snapshot part %d @ %02u:%02u:%02u.%03u ====\n",
+        s_part, (unsigned)st.wHour, (unsigned)st.wMinute,
+        (unsigned)st.wSecond, (unsigned)st.wMilliseconds);
+    fwrite(head, 1, strlen(head), f);
+    fwrite(buf, 1, len, f);
+    fclose(f);
 }
 
 static unsigned long long ReadScalar(const unsigned char* p, int size)
@@ -756,6 +853,84 @@ static BOOL IsSkippedField(const char* name)
     return (name[0] == 'g' && name[1] == 'a' && name[2] == 'p');
 }
 
+// Fields without a meaningful name (IDA auto-names) that we try to interpret
+// as byte / short / int / text / pointer below.
+static int IsUnknownField(const char* name)
+{
+    return (strncmp(name, "field_", 6) == 0 ||
+            strncmp(name, "unk_", 4) == 0 ||
+            strncmp(name, "gap", 3) == 0);
+}
+
+// Resolve an image-range pointer (or heap pointer) to a readable target:
+//   code ptr  -> fn:ContainingFunction
+//   data ptr  -> gd:OwningGlobal or gd:OwningGlobal+0xOFF
+//   heap ptr  -> heap 0xADDR
+//   otherwise -> NULL
+static const char* ImagePtrName(unsigned long v, char* out, int outSize)
+{
+    const char* name;
+    int i;
+    unsigned long base;
+
+    if (v == 0) {
+        return NULL;
+    }
+    if (v >= 0x01000000 && v < 0x7FFFFFFF) {
+        _snprintf(out, outSize, "heap 0x%08X", v);
+        return out;
+    }
+    if (v < 0x00400000 || v >= 0x00700000) {
+        return NULL;
+    }
+    if (v < 0x0056E000) {
+        name = GetFunctionNameAt(v);
+        if (name == NULL) {
+            return NULL;
+        }
+        _snprintf(out, outSize, "fn:%s", name);
+        return out;
+    }
+    i = DataGlobalNumAt(v);
+    if (i < 0) {
+        return NULL;
+    }
+    base = kDataGlobals[i].addr;
+    if (base == v) {
+        _snprintf(out, outSize, "gd:%s", kDataGlobals[i].name);
+    }
+    else {
+        _snprintf(out, outSize, "gd:%s+0x%X", kDataGlobals[i].name, v - base);
+    }
+    return out;
+}
+
+// Extra interpretations for unknown fields: read the same bytes as the OTHER
+// widths (byte/short/int), as a pointer (with resolved target) and as text.
+static void AppendUnknownTry(DumpBuf* b, const unsigned char* p, int size)
+{
+    unsigned long d;
+    char namebuf[96];
+    const char* n;
+
+    d = (unsigned long)ReadScalar(p, 4);
+    DumpPrintf(b, "  try:");
+    if (size == 1) {
+        DumpPrintf(b, " w=0x%04X i=0x%08X(%d)", (unsigned int)(d & 0xFFFF), d, (int)d);
+    }
+    else if (size == 2) {
+        DumpPrintf(b, " b=0x%02X i=0x%08X(%d)", (unsigned int)(d & 0xFF), d, (int)d);
+    }
+    else if (size == 4) {
+        DumpPrintf(b, " b=0x%02X w=0x%04X", (unsigned int)(d & 0xFF), (unsigned int)(d & 0xFFFF));
+    }
+    n = ImagePtrName(d, namebuf, sizeof(namebuf));
+    if (n != NULL) {
+        DumpPrintf(b, " ptr->%s", n);
+    }
+    AppendTextPreview(b, (const char*)p);
+}
+
 static void FormatFieldValue(DumpBuf* b, const void* base, const InspField* f)
 {
     const unsigned char* p = (const unsigned char*)base + f->offset;
@@ -808,6 +983,9 @@ static void FormatFieldValue(DumpBuf* b, const void* base, const InspField* f)
                 }
             }
         }
+        if (IsUnknownField(f->name) && f->size <= 4) {
+            AppendUnknownTry(b, p, f->size);
+        }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(b, "= <read error>");
@@ -854,11 +1032,18 @@ static void DumpGlobals(DumpBuf* b)
         const unsigned char* p = (const unsigned char*)(ULONG_PTR)g->addr;
         int j;
         int size;
+        int di;
+        unsigned long base;
         unsigned long long a;
         unsigned long long bb;
         int changed;
         __try {
             size = (int)g->size;
+            di = DataGlobalNumAt(g->addr);
+            base = (di >= 0) ? kDataGlobals[di].addr : g->addr;
+            if (di >= 0 && base == g->addr && size == 0) {
+                size = (int)DataGlobalSizeAt(di);
+            }
             ReadFieldBytes((const void*)(ULONG_PTR)g->addr, 0,
                            size >= 16 ? 16 : (size > 0 ? size : 8), &a, &bb);
             changed = FieldChanged(&s_prevGlobals[i], a, bb);
@@ -868,11 +1053,22 @@ static void DumpGlobals(DumpBuf* b)
             }
             DumpPrintf(b, "%3d. %c %-33s @0x%08X",
                        i + 1, changed ? '*' : ' ', g->name, g->addr);
-            if (size == 0) {
-                DumpPrintf(b, "  size=?");
+            if (g->size > 0) {
+                DumpPrintf(b, "  size=0x%X", size);
+            }
+            else if (di >= 0 && base == g->addr) {
+                DumpPrintf(b, "  size=0x%X (gap)", size);
             }
             else {
-                DumpPrintf(b, "  size=0x%X", size);
+                DumpPrintf(b, "  size=?");
+            }
+            if (di >= 0) {
+                if (base == g->addr) {
+                    DumpPrintf(b, "  ida:%s", kDataGlobals[di].name);
+                }
+                else {
+                    DumpPrintf(b, "  ida:%s+0x%X", kDataGlobals[di].name, g->addr - base);
+                }
             }
             DumpPrintf(b, "  [");
             for (j = 0; j < 8; j++) {
@@ -888,6 +1084,43 @@ static void DumpGlobals(DumpBuf* b)
     }
     if (skipped > 0) {
         DumpPrintf(b, "... (%d zero globals skipped)\n", skipped);
+    }
+    DumpPrintf(b, "\n");
+}
+
+static void DumpGangNames(DumpBuf* b)
+{
+    static const char* const kNames[] = { "Yakuza", "Zaibatsu", "Loonies", "G3", "G4",
+                                          "G5", "G6", "G7", "G8", "G9", "G10" };
+    Gang* gangs;
+    int i;
+
+    gangs = GetGangsArray();
+    if (gangs == NULL) {
+        DumpPrintf(b, "== Gangs: *(Gang**)0x005EB898 is NULL yet ==\n\n");
+        return;
+    }
+    DumpPrintf(b, "== Gangs array via gGangs @0x005EB898 (%d x 0x%X) @heap 0x%08X ==\n",
+               10, (unsigned)sizeof(Gang), (unsigned)(ULONG_PTR)gangs);
+    for (i = 0; i < 10; i++) {
+        const char* ng = gangs[i].NameGang;
+        char tmp[12];
+        int j;
+        __try {
+            for (j = 0; j < 10; j++) {
+                unsigned char c = (unsigned char)ng[j];
+                if (c == 0 || c < 0x20 || c > 0x7E) {
+                    break;
+                }
+                tmp[j] = (char)c;
+            }
+            tmp[j] = 0;
+            DumpPrintf(b, "  [%2d] %-8s NameGang=\"%s\"  CurrentGang=%d\n",
+                       i, kNames[i], tmp, (int)gangs[i].CurrentGang);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            DumpPrintf(b, "  [%2d] %-8s <read error>\n", i, kNames[i]);
+        }
     }
     DumpPrintf(b, "\n");
 }
@@ -925,11 +1158,41 @@ static void BuildDump(void)
     }
 
     __try {
+        Game* pg = GetGamePtr(); // deref the gGame pointer cell @0x005EB4FC
+        if (pg != NULL) {
+            char title[96];
+            _snprintf(title, sizeof(title), "Game -> heap 0x%08X (0x40, gGame@0x005EB4FC)",
+                      (unsigned long)(ULONG_PTR)pg);
+            DumpStruct(&b, title, pg, kGameFields, kGameFieldCount, s_prevGame);
+        } else {
+            DumpPrintf(&b, "== Game: gGame@0x005EB4FC is NULL (not created yet) ==\n\n");
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<Game read failed>\n");
+    }
+
+    __try {
         DumpStruct(&b, "PlayerData @0x0066B404 (0x2bc0)", s_pPlayerData,
                    kPlayerDataFields, kPlayerDataFieldCount, s_prevPlayer);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<PlayerData read failed>\n");
+    }
+
+    __try {
+        DumpGangNames(&b);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<Gangs read failed>\n");
+    }
+
+    __try {
+        DumpStruct(&b, "AudioManager @0x005DCBC8 (0x5562)", (AudioManager*)0x005DCBC8,
+                   kAudioManagerFields, kAudioManagerFieldCount, s_prevAudio);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<AudioManager read failed>\n");
     }
 
     __try {

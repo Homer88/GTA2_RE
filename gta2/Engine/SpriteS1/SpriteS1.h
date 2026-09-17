@@ -1,11 +1,13 @@
 
 #ifndef __SPRITES1_H_
 #define __SPRITES1_H_
-
+#include "../CarTransforms/CarTransforms.h"
 
 class SpriteS1{
     public:
-
+        CarTransforms ArrayCarTransforms[5031];
+        CarTransforms *FirstCarTransforms;
+        SpriteS1();
     // 0x00401AD0
     int SetToNewVal(void);
     // 0x0040F7B0
@@ -109,4 +111,5 @@ class SpriteS1{
     // (gm) старый: MapRelatedStruct::DecodeCoordScaled -> SpriteS1::SetMatrixPacked
     void* SetMatrixPacked(int arg1, int arg2);
 };
+extern SpriteS1* gSpriteS1;
 #endif // !__SPRITES1_H_

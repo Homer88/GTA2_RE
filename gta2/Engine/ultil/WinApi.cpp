@@ -12,7 +12,7 @@ extern Movie* gMovie;
 
 #define MaxTextElement 80
 extern int gTimer, gTime;
-extern bool  gPlayReplay, gByte1, gByte2;
+extern bool  gPlayReplay, gReplayToFile, gReplayActive;
 extern	HINSTANCE ghInstance;
 extern Registry* gRegistry;
 extern HWND gHWND;
@@ -136,8 +136,8 @@ void WinApi::InitTimer() {
 
 void WinApi::GetDebugParam() {
     gPlayReplay = gRegistry->GetPlayReplay("play_replay");
-    gByte1 = true;
-    gByte2 = true;
+    gReplayToFile = true;
+    gReplayActive = true;
 
     BYTE pDebugMode = gRegistry->GetReplayNum("replaynum") + 48;
 
@@ -226,11 +226,11 @@ void WinApi::GetDebugParam() {
     gSkipDummies                    = gRegistry->GetParamDebug("skip_dummies");
     gDoBlood                        = gRegistry->GetParamDebug("do_blood");
     gDo3dSound                      = gRegistry->GetParamDebug("do_3d_sound");
-    gTestFileGxt                    = this->AllGtxFile();
+    gTestFileGxt                    = this->AllGxtFile();
     gShowPlayerNames                = gRegistry->SetShowPlayerName("show_player_names", 1u);
 }
 
-bool WinApi::AllGtxFile() {
+bool WinApi::AllGxtFile() {
 
     // Список файлов для проверки
     const char* gxtFiles[] = {

@@ -1,6 +1,6 @@
 #include "Random.h"
 int gSeed;
-Random *gRandom;
+Random gRandom;
 
     // 0x00472C00
 

@@ -2,9 +2,9 @@
 #define __CGLOBAL__H__
 #include "cText.h"
 
-// переменные глобальные 
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 extern unsigned char* gNamePlayerASCII;
-extern int* gActiveCheat;
+extern int* gCheatIs;
 extern bool* gDoTest;
 extern bool* gSkipMission;
 extern bool* gShowCycle;
@@ -68,7 +68,7 @@ extern bool* gShowBriefNumber;
 extern bool* gSkipWindowCheck;
 extern bool* gSkipReplaySyncCheck;
 extern bool* gDoShowObjectIds;
-extern bool* gGoKillPhonesOnAnswer;
+extern bool* gDoKillPhonesOnAnswer;   // == dump do_kill_phones_on_answer
 extern bool* gDoMissLogging;
 extern bool* gDoTextIdTest;
 extern bool* gDoPolice1;
@@ -79,29 +79,29 @@ extern bool* gDoFreeShopping;
 extern bool* gSkipDummies;
 extern bool* gDoBlood;
 extern bool* gDo3DSound;
-extern bool* gTestFileGxt;
+extern bool* gAllGxtFile;             // == dump gAllGxtFile, 0x005EAD73
 extern bool* gShowPlayerNames;
-extern bool* gByte1;
-extern bool* gByte2;
+extern bool* gReplayActive;         // 0x005EAD92 (unk_5EAD92): replay record/playback pipeline gate
+extern bool* gReplayToFile;         // 0x005EADA3 (unk_5EADA3): gate writing replay frames to replay.rep
 extern bool* gPlayReplay;
-extern bool* gSmallCar;
+extern bool* gFISHFLAP;
 extern bool* gNopCheat;
-extern bool* gGiveMoney20;
-extern bool* gFireGun;
+extern bool* gDANISGOD;
+extern bool* gFLAMEON;
 extern bool* gJailKey;
-extern bool* gDoubleDamage;
+extern bool* gSCHURULZ;
 extern bool* gSUPZZZ0;
-extern bool* gInvisibility;
-extern bool* gJailFreeCard;
-extern bool* gHealth99;
-extern bool* gElectroGun;
+extern bool* gHUNSRUS;
+extern bool* gFYOHZZ0;
+extern bool* gHeats99;
+extern bool* gVOLTFEST;
 extern bool* gIAMDAVEJ;
 extern bool* gMADEMAN;
-extern bool* gAllTower;
-extern bool* gPontMultiplaerX10;
-extern bool* gBonusAll;
-extern bool* gGiveBasikWeapon;
-extern bool* gElvis;
+extern bool* gUKGAMER;
+extern bool* gSEGARULZ;
+extern bool* gTUMYFROG;
+extern bool* gDAVEMOON;
+extern bool* gLASVEGAS;
 extern bool* gBunt;
 extern bool* gNEKKID;
 //extern void   *gBinkBufferClose;
@@ -111,7 +111,7 @@ extern int gData_6735A5;
 extern bool *gExploding_on;
 extern Text* gText;
 
-extern char* aTestReplay0Rep; // 11 масcив
+extern char* aTestReplay0Rep; // 11 пїЅпїЅпїЅcпїЅпїЅ
 
 
 

@@ -75,7 +75,7 @@ bool	*gShowBriefNumber = (bool*)0x005EADA5;
 bool    *gSkipWindowCheck = (bool*)0x005EAD6C;
 bool	*gSkipReplaySyncCheck = (bool*)0x005EADA4;
 bool	*gDoShowObjectIds = (bool*)0x005EAD52;
-bool	*gGoKillPhonesOnAnswer = (bool*)0x005EADB3;
+bool	*gDoKillPhonesOnAnswer = (bool*)0x005EADB3;
 bool	*gDoMissLogging = (bool*)0x005EAD66;
 bool	*gDoTextIdTest = (bool*)0x005EAD9A;
 bool	*gDoPolice1 = (bool*)0x005EAD60;
@@ -86,29 +86,29 @@ bool	*gDoFreeShopping = (bool*)0x005EAD84;
 bool	*gSkipDummies = (bool*)0x005EAD69;
 bool	*gDoBlood = (bool*)0x005EAD51;
 bool	*gDo3DSound = (bool*)0x005EAD50;
-bool	*gTestFileGxt = (bool*)0x005EAD73;
+bool	*gAllGxtFile = (bool*)0x005EAD73;
 bool	*gShowPlayerNames = (bool*)0x005EAD76;
-bool    *gByte1 = (bool*)0x005EADA3;
-bool    *gByte2 = (bool*)0x005EAD92;
+bool    *gReplayActive = (bool*)0x005EAD92;  // unk_5EAD92
+bool    *gReplayToFile = (bool*)0x005EADA3;  // unk_5EADA3
 bool    *gPlayReplay = (bool*)0x005EADAA;
-bool    *gSmallCar = (bool*)0x005EAD6D;
+bool    *gFISHFLAP = (bool*)0x005EAD6D;
 bool	*gNopCheat = (bool*)0x005EAD62;
-bool	*gGiveMoney20 = (bool*)0x005EAD97;
-bool	*gFireGun = (bool*)0x005EAD9B;
+bool	*gDANISGOD = (bool*)0x005EAD97;
+bool	*gFLAMEON = (bool*)0x005EAD9B;
 bool	*gJailKey = (bool*)0x005EADA2;
-bool	*gDoubleDamage = (bool*)0x005EAD65;
+bool	*gSCHURULZ = (bool*)0x005EAD65;
 bool	*gSUPZZZ0 = (bool*)0x005EAD98;
-bool	*gInvisibility = (bool*)0x005EAD8E;
-bool	*gJailFreeCard = (bool*)0x005EAD83;
-bool	*gHealth99 = (bool*)0x005EAD8F;
-bool	*gElectroGun = (bool*)0x005EAD70;
+bool	*gHUNSRUS = (bool*)0x005EAD8E;
+bool	*gFYOHZZ0 = (bool*)0x005EAD83;
+bool	*gHeats99 = (bool*)0x005EAD8F;
+bool	*gVOLTFEST = (bool*)0x005EAD70;
 bool	*gIAMDAVEJ = (bool*)0x005EADA6;
 bool	*gMADEMAN = (bool*)0x005EAD8A;
-bool	*gAllTower = (bool*)0x005EAD5C;
-bool	*gPontMultiplaerX10 = (bool*)0x005EAD7B;
-bool	*gBonusAll = (bool*)0x005EAD6A;
-bool	*gGiveBasikWeapon = (bool*)0x005EAD6E;
-bool	*gElvis = (bool*)0x005EAD9F;
+bool	*gUKGAMER = (bool*)0x005EAD5C;
+bool	*gSEGARULZ = (bool*)0x005EAD7B;
+bool	*gTUMYFROG = (bool*)0x005EAD6A;
+bool	*gDAVEMOON = (bool*)0x005EAD6E;
+bool	*gLASVEGAS = (bool*)0x005EAD9F;
 bool	*gBunt = (bool*)0x005EAD93;
 bool	*gNEKKID = (bool*)0x005EADA0;
 bool* gExploding_on = (bool*)0x005EAD5D;
@@ -121,9 +121,9 @@ int gData_6735A5;
 char *aTestReplay0Rep = (char*)0x00595FF0; // 11 ���c��
 
 
-void __stdcall GetVersionLaunch( int * pMajorVersion,  int  * pMinorVersion) {
+void __stdcall GetVersionFiles( int * pMajorVersion,  int  * pMinorVersion) {
 
-    TraceEvent("Menu::GetVersionLaunch @0x004D0920");
+    TraceCall("GetVersionFiles @0x004D0920", TRACE_CALLER_ADDR);
 
     // �������� ������� ����������
     if (pMajorVersion == NULL || pMinorVersion == NULL) {
@@ -175,11 +175,11 @@ void __stdcall GetVersionLaunch( int * pMajorVersion,  int  * pMinorVersion) {
     free(pVersionInfo);
 }
 
-void __stdcall GetDebugParam() {
-    TraceEvent("Menu::GetDebugParam @0x00451930");
+void __stdcall fPlayReplay() {
+    TraceCall("fPlayReplay @0x00451930", TRACE_CALLER_ADDR);
     *gPlayReplay = gRegistry.GetPlayReplay("play_replay");
-    *gByte1 = true;
-    *gByte2 = true;
+    *gReplayToFile = true;
+    *gReplayActive = true;
 
     BYTE pDebugMode = gRegistry.GetReplaynum("replaynum") + 48;
 
@@ -255,7 +255,7 @@ void __stdcall GetDebugParam() {
     *gSkipWindowCheck = gRegistry.GetParamDebug("skip_window_check");
     *gSkipReplaySyncCheck = gRegistry.GetParamDebug("skip_replay_sync_check");
     *gDoShowObjectIds = gRegistry.GetParamDebug("do_show_object_ids");
-    *gGoKillPhonesOnAnswer = gRegistry.GetParamDebug("do_kill_phones_on_answer");
+    *gDoKillPhonesOnAnswer = gRegistry.GetParamDebug("do_kill_phones_on_answer");
     *gDoMissLogging = gRegistry.GetParamDebug("do_miss_logging");
     *gDoTextIdTest = gRegistry.GetParamDebug("do_text_id_test");
     *gDoPolice1 = gRegistry.GetParamDebug("do_police_1");
@@ -266,13 +266,13 @@ void __stdcall GetDebugParam() {
     *gSkipDummies = gRegistry.GetParamDebug("skip_dummies");
     *gDoBlood = gRegistry.GetParamDebug("do_blood");
     *gDo3DSound = gRegistry.GetParamDebug("do_3d_sound");
-    *gTestFileGxt = AllGtxFile();
+    *gAllGxtFile = AllGxtFile();
     *gShowPlayerNames = gRegistry.SetShowPlayerName("show_player_names", 1u);
 
 }
 
-bool __stdcall  AllGtxFile() {
-    TraceEvent("Menu::AllGtxFile @0x00451800");
+bool __stdcall  AllGxtFile() {
+    TraceCall("AllGxtFile @0x00451800", TRACE_CALLER_ADDR);
     bool EnglishFile; // bl
     FILE* English; // eax
     FILE* France; // eax
@@ -340,9 +340,9 @@ bool __stdcall  AllGtxFile() {
 void  __stdcall  InitDefautValue() {
 
 
-    MessageBox(0, L"InitDefautValue!", 0, 0);
+    TraceCall("InitDefautValue @0x00461AF0", TRACE_CALLER_ADDR);
     *gShowAllArrows = true;
-    *gGoKillPhonesOnAnswer = false;
+    *gDoKillPhonesOnAnswer = false;
     *gSkipDummies = false;
     *gSkipTiles = false;
     *gDoTest = false;
@@ -393,24 +393,24 @@ void  __stdcall  InitDefautValue() {
     *gDoPolice3 = false;
     *gSkipDraw = false;
     *gDoFreeShopping = false;
-    *gSmallCar = false;
-    *gGiveMoney20 = true;
+    *gFISHFLAP = false;
+    *gDANISGOD = true;
     *gIAMDAVEJ = false;
-    *gElectroGun = false;
+    *gVOLTFEST = false;
     *gMADEMAN = false;
-    *gHealth99 = false;
-    *gPontMultiplaerX10 = false;
-    *gAllTower = false;
+    *gHeats99 = false;
+    *gSEGARULZ = false;
+    *gUKGAMER = false;
     *gSUPZZZ0 = false;
-    *gBonusAll = false;
-    *gGiveBasikWeapon = true;
-    *gElvis = false;
+    *gTUMYFROG = false;
+    *gDAVEMOON = true;
+    *gLASVEGAS = false;
     *gBunt = false;
     *gNEKKID = false;
-    *gJailFreeCard =false;
-    *gInvisibility = false;
-    *gDoubleDamage = false;
+    *gFYOHZZ0 =false;
+    *gHUNSRUS = false;
+    *gSCHURULZ = false;
     *gJailKey = false;
-    *gFireGun = false;
+    *gFLAMEON = false;
     *gDoShowCounters = false;
 }

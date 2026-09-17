@@ -1,11 +1,14 @@
 
-#ifndef __SPRITE_H_
-#define __SPRITE_H_
+#ifndef __SPRITE_MAIN_H_
+#define __SPRITE_MAIN_H_
 
 
-class Sprite{
+class SpriteMain{
     public:
+        void* ptr;
+        short W, H;
         int x, y, z;
+        SpriteMain();
     // 0x00420600
     int SetPosition(void);
     void SetPosition(int x, int y, int z);
@@ -26,7 +29,7 @@ class Sprite{
     // 0x004BCB40
     int DrawArrow(void);
     // 0x004BD290
-    int SpriteDraw(void);
+    int Draw(void);
     // 0x004BDDB0
     int CopySpriteData(void);
     // 0x004BDEF0
@@ -46,5 +49,6 @@ class Sprite{
     // 0x004BE570: Sprite::MergeDrawSortKey
     void MergeDrawSortKey();
 };
-extern Sprite* gSprite;
+
+extern SpriteMain* gSpriteMain;
 #endif // !__SPRITE_H_

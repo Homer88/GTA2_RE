@@ -1,4 +1,4 @@
-﻿// dllmain.cpp : Определяет точку входа для приложения DLL.
+// dllmain.cpp : Определяет точку входа для приложения DLL.
 #include <iostream>
 //#include <cstdlib>
 #include <Windows.h>
@@ -30,6 +30,9 @@
 #include "cStyle.h"
 //#include "cWeapon.h"
 #include "cWindow.h"
+#include "cGang.h"
+#include "cWeapon.h"
+#include "cGame.h"
 
 
 #pragma comment(lib, "detours.lib")
@@ -44,6 +47,26 @@ unsigned int Error;
 // DetourAttach rewrites this variable to the Detours trampoline; cMenu.cpp
 // calls through it so the retail code still builds every menu page / reads .gxt text.
 LPVOID _LoadTextMenu = (LPVOID)0x00453E20;
+
+
+LPVOID _InitDefautValue = (LPVOID)0x00461AF0;        // InitDefautValue
+LPVOID _InitGraphicsAndInput = (LPVOID)0x004031C0;     // InitGraphicsAndInput
+LPVOID _SetWeapon = (LPVOID)0x00433810;               // Weapon::SetWeapon
+LPVOID _SetPed = (LPVOID)0x004CCA10;                  // Weapon::SetPed
+LPVOID _CopyNameGang = (LPVOID)0x0045DB40;             // Gang::SetName
+LPVOID _LoadGame = (LPVOID)0x00455C20;                // Menu::LoadGame
+LPVOID _SaveGame = (LPVOID)0x00455C90;                // Menu::SaveGame
+LPVOID _MultiplayerMenu = (LPVOID)0x004565E0;         // Menu::MultiplayerMenu
+LPVOID _SetGameState = (LPVOID)0x0045A480;             // Game::sub_45A480 (State/isDead setter)
+LPVOID _GameCtor = (LPVOID)0x0045C4D0;                 // Game::Game (constructor)
+LPVOID _ProcessInput = (LPVOID)0x00452050;             // Menu::ProcessInput (reads keyboard)
+LPVOID _InitFrontedLessGame = (LPVOID)0x00461DE0;      // InitFrontedLessGame (boot/level init)
+LPVOID _Resurs = (LPVOID)0x0045B469;                   // Game::Resurs (loads Level resources)
+LPVOID _sub_45B5F0 = (LPVOID)0x0045B5F0;               // Game::sub_45B5F0 (inits world)
+LPVOID _Sub465390 = (LPVOID)0x00465390;                // MapRelatedStruct::sub_465390 (gangs/zone)
+LPVOID _Sub481890 = (LPVOID)0x00481890;                // MissionManager::sub_481890 (missions)
+LPVOID _StartGames = (LPVOID)0x004A6DA0;               // Player::StartGames (starts player)
+LPVOID _UpdateWrapper = (LPVOID)0x004CAC30;            // Hud::UpdateWrapper
 
 static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* ep) {
     char path[MAX_PATH + 32];
@@ -119,33 +142,33 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     }
 
     //LPVOID _InfoVersion = (LPVOID)0x004D0920;
-   // LPVOID _InitDiretX =  (LPVOID)0x004031c0;
+   // LPVOID _InitGraphicsAndInput =  (LPVOID)0x004031c0;
     //LPVOID _GetDebugParam = (LPVOID)0x00451930;
     //LPVOID _GetNumberOfCars = (LPVOID)0x00432850;
     // _LoadTextMenu is now a file-scope global (see above)
-   // LPVOID  _AllGtxFile = (LPVOID)0x00451800;
+   // LPVOID  _AllGxtFile = (LPVOID)0x00451800;
    // LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
     //LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
     //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
     //LPVOID _sub_459540 = (LPVOID)0x00459540;
 
     // --- enabled for the load-function trace (set to 0 to detach them) ---
-    LPVOID _InfoVersion = (LPVOID)0x004D0920;    // GetVersionLaunch
-    LPVOID _GetDebugParam = (LPVOID)0x00451930;  // GetDebugParam
-    LPVOID _AllGtxFile = (LPVOID)0x00451800;     // AllGtxFile
-    LPVOID _sub_459540 = (LPVOID)0x00459540;     // PlayerCheat / start menu
-    (void)_InfoVersion; (void)_GetDebugParam; (void)_AllGtxFile; (void)_sub_459540;
-    //LPVOID _CopyNameGang= (LPVOID)0x0045DB40;
-    
+    LPVOID _GetVersionFiles = (LPVOID)0x004D0920;    // GetVersionFiles
+    LPVOID _fPlayReplay = (LPVOID)0x00451930;        // fPlayReplay (reads all debug params)
+    LPVOID _AllGxtFile = (LPVOID)0x00451800;        // AllGxtFile
+    LPVOID _SetPlayerNameFromMenu = (LPVOID)0x00459540; // Menu::SetPlayerNameFromMenu
+    (void)_GetVersionFiles; (void)_fPlayReplay; (void)_AllGxtFile; (void)_SetPlayerNameFromMenu;
+    //LPVOID _CopyNameGang = (LPVOID)0x0045DB40;
+    //LPVOID _CopyNameGang = (LPVOID)0x0045DB40;  // Gang::SetName
     
     ///S19
    // LPVOID _SetPararam_0 = (LPVOID)0x004c4d60;
     
     //cText
-    //LPVOID _GetLanguageJapan = (LPVOID)0x00452E60;
+    //LPVOID _GetLanguageJapan = (LPVOID)0x00452E60;  // Text::LanguageJapan
     // Weapons
-    //LPVOID _FUN_00433810 = (LPVOID)0x00433810;
-    ///LPVOID _Weapon_FUN_004cca10 = (LPVOID)0x004cca10;
+    //LPVOID _SetWeapon = (LPVOID)0x00433810;   // Weapon::SetWeapon
+    ///LPVOID _SetPed = (LPVOID)0x004cca10;     // Weapon::SetPed
     
     AllocConsole();
     switch (dwReason){
@@ -171,41 +194,90 @@ case DLL_PROCESS_ATTACH:
             return FALSE;
         }
 
-       /* Error = DetourAttach(&_InfoVersion, (PVOID)GetVersionLaunch);
-        printError(Error, _InfoVersion);
+       /* Error = DetourAttach(&_GetVersionFiles, (PVOID)GetVersionFiles);
+        printError(Error, _GetVersionFiles);
         DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
         //DetourAttach(&_CleanupDirectInput, (PVOID)CleanupDirectInput);
         //DetourAttach(&_CreateInputDevice, (PVOID)CreateInputDevice);
-        ///DetourAttach(&_sub_459540, (PVOID)sub_459540);
+        ///DetourAttach(&_SetPlayerNameFromMenu, (PVOID)SetPlayerNameFromMenu);
         DetourAttach(&_GetNumberOfCars, (PVOID)GetNumberOfCars);
         /*DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
         DetourAttach(&_CopyNameGang, (PVOID)CopyNameGang);
         DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
         DetourAttach(&_GetLanguageJapan, (PVOID)GetLanguageJapan);
-        DetourAttach(&_FUN_00433810, (PVOID)SetTypeWeapons);
-        DetourAttach(&_Weapon_FUN_004cca10, (PVOID)Weapon_FUN_004cca10);
+        DetourAttach(&_SetWeapon, (PVOID)SetWeapon);
+        DetourAttach(&_SetPed, (PVOID)SetPed);
         */
         //--- active trace hooks (functions are traced to hook_trace.log) ---
-        Error = DetourAttach(&_InfoVersion, (PVOID)GetVersionLaunch);
-        printError(Error, _InfoVersion);
-        Error = DetourAttach(&_GetDebugParam, (PVOID)GetDebugParam);
-        printError(Error, _GetDebugParam);
-        Error = DetourAttach(&_AllGtxFile, (PVOID)AllGtxFile);
-        printError(Error, _AllGtxFile);
-        Error = DetourAttach(&_sub_459540, (PVOID)sub_459540);
-        printError(Error, _sub_459540);
-        //Error =  DetourAttach(&_InitDiretX, (PVOID)InitDiretX);
-        //printError(Error, _InitDiretX);
+        Error = DetourAttach(&_GetVersionFiles, (PVOID)GetVersionFiles);
+        printError(Error, _GetVersionFiles);
+        Error = DetourAttach(&_fPlayReplay, (PVOID)fPlayReplay);
+        printError(Error, _fPlayReplay);
+        Error = DetourAttach(&_AllGxtFile, (PVOID)AllGxtFile);
+        printError(Error, _AllGxtFile);
+        Error = DetourAttach(&_SetPlayerNameFromMenu, (PVOID)SetPlayerNameFromMenu);
+        printError(Error, _SetPlayerNameFromMenu);
+        //Error =  DetourAttach(&_InitGraphicsAndInput, (PVOID)InitGraphicsAndInput);
+        //printError(Error, _InitGraphicsAndInput);
 
-        //Error = DetourAttach(&_GetDebugParam, (PVOID)GetDebugParam);
-        //printError(Error, _GetDebugParam);
+        //Error = DetourAttach(&_fPlayReplay, (PVOID)fPlayReplay);
+        //printError(Error, _fPlayReplay);
 
-       /// Error = DetourAttach(&_AllGtxFile, (PVOID)AllGtxFile);
-        //printError(Error, _AllGtxFile);
+       /// Error = DetourAttach(&_AllGxtFile, (PVOID)AllGxtFile);
+        //printError(Error, _AllGxtFile);
         //*/
         //FunS20();
         //FunMapGM();
         DetourAttach(&_LoadTextMenu, (PVOID)LoadTextMenu);
+
+        // --- Menu load/save series + setter hooks (trace + chain to original) ---
+        Error = DetourAttach(&_LoadGame, (PVOID)LoadGame);
+        printError(Error, _LoadGame);
+        Error = DetourAttach(&_SaveGame, (PVOID)SaveGame);
+        printError(Error, _SaveGame);
+        Error = DetourAttach(&_MultiplayerMenu, (PVOID)MultiplayerMenu);
+        printError(Error, _MultiplayerMenu);
+        Error = DetourAttach(&_ProcessInput, (PVOID)HookProcessInput);
+        printError(Error, _ProcessInput);
+        Error = DetourAttach(&_CopyNameGang, (PVOID)HookSetName);
+        printError(Error, _CopyNameGang);
+
+        // ---------------- risky REPLACEMENT hooks: 0 = NOT attached -------------
+        // They replace the real video / input init; the re-implemented bodies are
+        // incomplete. Flip the define to 1 to attach them, at your own risk. ----
+#define HOOK_INITDAFAULTVALUE 0
+#define HOOK_INITGRAPHICSANDINPUT 0
+#if HOOK_INITDAFAULTVALUE
+        Error = DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
+        printError(Error, _InitDefautValue);
+#endif
+#if HOOK_INITGRAPHICSANDINPUT
+        Error = DetourAttach(&_InitGraphicsAndInput, (PVOID)InitGraphicsAndInput);
+        printError(Error, _InitGraphicsAndInput);
+#endif
+        Error = DetourAttach(&_SetWeapon, (PVOID)SetWeapon);
+        printError(Error, _SetWeapon);
+        Error = DetourAttach(&_SetPed, (PVOID)SetPed);
+        printError(Error, _SetPed);
+        // ---- Game ----
+        Error = DetourAttach(&_SetGameState, (PVOID)HookSetState);
+        printError(Error, _SetGameState);
+        Error = DetourAttach(&_GameCtor, (PVOID)HookGameCtor);
+        printError(Error, _GameCtor);
+        Error = DetourAttach(&_InitFrontedLessGame, (PVOID)HookInitFrontedLessGame);
+        printError(Error, _InitFrontedLessGame);
+        Error = DetourAttach(&_Resurs, (PVOID)HookResurs);
+        printError(Error, _Resurs);
+        Error = DetourAttach(&_sub_45B5F0, (PVOID)Hook_sub_45B5F0);
+        printError(Error, _sub_45B5F0);
+        Error = DetourAttach(&_Sub465390, (PVOID)HookSub465390);
+        printError(Error, _Sub465390);
+        Error = DetourAttach(&_Sub481890, (PVOID)HookSub481890);
+        printError(Error, _Sub481890);
+        Error = DetourAttach(&_StartGames, (PVOID)HookStartGames);
+        printError(Error, _StartGames);
+        Error = DetourAttach(&_UpdateWrapper, (PVOID)HookUpdateWrapper);
+        printError(Error, _UpdateWrapper);
         if (DetourTransactionCommit() != NO_ERROR)
         {
             printf("error DetourTransactionCommit");

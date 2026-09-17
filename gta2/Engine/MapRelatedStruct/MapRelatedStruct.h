@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <cstdio>
 #include <cstdlib>
-#include "../../Engine/Sprite/Sprite.h"
+#include "../../Engine/SpriteMain/SpriteMain.h"
 #include "../../Engine/SpriteS1/SpriteS1.h"
 #include "../../Engine/FileMgr/FileMgr.h"
 
@@ -244,7 +244,7 @@ public:
     _DWORD* sub_466E20(_DWORD* arg0, int* arg4, SpriteS1* a3, int a2);
     _DWORD* sub_466F70(_DWORD* arg0, S202* a2);
     __int16 sub_467020(int*, SpriteS1*, void*, void*, void*);
-    int sub_467110(int* arg0, Sprite* pSprite, int* a4, Player* pPlayer);
+    int sub_467110(int* arg0, SpriteMain* pSpriteMian, int* a4, Player* pPlayer);
     int sub_467F80(int** arg0, SpriteS1** a3, int* a4, Player* a5);
 
     // Audio

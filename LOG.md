@@ -103,6 +103,55 @@
 
 ---
 
+## Хук-DLL диагностика (17.09.2026)
+
+Подход для проверки раскладки структур на ЖИВОЙ игре (ретро-проект, DE найден через
+`done.md`/CheatEngine .ct, аттач отладчика невозможен — только хук-DLL): 
+
+- **`dllLoad/dllLoad`** — DLL с детурами (Microsoft Detours) на функции ритейла, впрыскивается
+  в процесс игры (кладётся как `gta2-resurection.dll` в каталог игры; игра её подхватывает).
+- Хуки __thiscall = `__fastcall(this, void* _EDX, ...)`. Ключевое правило: хук обязан
+  возвращать/сохранять оригинальный `EAX`, если вызывающий код использует результат
+  (иначе ломается логика — см. ниже про gGame).
+- **`cInspector.cpp`** — окно-инспектор + снэпшоты дампа структур (`gta2_struct_dump.log`)
+  по таблице глобалов (адреса+размеры из `done.md`, поля из `cGame.h` и т.п.).
+- **`cHookTrace`/`cGame`/`cMenu`** — логи вызовов (`game.txt`, `menu.txt`, `hook_trace.log`).
+
+### Установленные адреса и раскладка Game (S300)
+
+- `gGame` — ячейка-указатель **0x005EB4FC** (объявлена `dd ?` в .data, перед `unk_5EB500`).
+- Сам объект Game — heap-объект: `InitFrontedLessGame @0x00461DE0` делает
+  `operator_new(0x40) → Game::Game @0x0045C4D0 → mov [0x005EB4FC], eax`.
+- Раскладка Game (размер 0x40): `Status`@0x00, `ArrayPlayer[6]`@0x04, `CurrentPlayer`@0x1C,
+  `Index`@0x20, `CurrentPlayerCopy`@0x21, `NumberPlayer`@0x23, `PlayerInFocus`@0x24,
+  `isDead int`@0x28 (= -1 в ctor), `State int`@0x2C (=0), `NoFrameLimit byte`@0x30,
+  `PlayerMain`@0x38 (отдельный heap Player). Подтверждено живым дампом:
+  Game@0x01801818, pPlayer[0]/CurrentPlayer/Player = 0x0180C3B8 (17.09.2026).
+- Хуки цепочки инициализации (все подтверждены рантаймом, совпадают с IDA dump):
+  `InitFrontedLessGame @0x00461DE0` → `Resurs @0x0045B469` → `sub_45B5F0 @0x0045B5F0` →
+  `sub_465390 @0x00465390` (банды/зоны) → `UpdateWrapper @0x004CAC30` → `sub_481890 @0x00481890`
+  (миссии) → `Player::StartGames @0x004A6DA0` → SetState.
+- `Game::SetState @0x0045A4B0` → `Game::sub_45A480 @0x0045A480` (isDead/State/bonus).
+
+### Грабли (важно для будущего)
+
+- **Урок 1**: первая версия `HookGameCtor` была `void` и после чейна к оригиналу логировала,
+  затирая `EAX`; вызывающий код делал `A3 FC B4 5E 00` (mov [gGame],eax) — в gGame писался
+  мусор (обычно 0) → игра падала на `gGame->PlayerMain` ДО города. Вина была НАША, не в адресе.
+  Вывод: хуки, чей результат используется, обязаны возвращать результат чейна.
+- **Урок 2**: сканирование памяти для поиска ячейки-указателя падает на NOACCESS-страницах
+  (SEH игры глотает исключение) — обходить страницы через `VirtualQuery`.
+- Сборка == дамп (дистрибутив «Фаргус»): call-site ctor `0x00462001` (InitFrontedLessGame+0x221)
+  и байты `A3 FC B4 5E 00` / `8B 0D FC B4 5E 00` совпадают — адреса из дампа можно
+  использовать для хуков как есть.
+- `CrashFilter` (SetUnhandledExceptionFilter, dllmain) пишет `gta2_crash.log` рядом с exe —
+  реальный путь запускаемого exe неизвестен (в c:\games\gta2 лежит только DLL+логи;
+  GTA2.exe на C: — стаб bin\GTA2.exe). Для crджи - логи важно искать по месту запуска игры.
+- Осталось: `Sound`/`DMAudio`/`AudioManager` (скелеты `cAudioManager.h`/`cDMAudio.h`;
+  глобалы `AudioManager @0x005DCBC8` 0x5578, `gDMAudio @0x005D85A0` 0x3E84 видны в дампе).
+
+---
+
 ## Что делаем сейчас
 
 ### 1. CarPhysics (Car/CarPhysics.h)

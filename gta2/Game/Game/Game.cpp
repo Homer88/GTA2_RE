@@ -19,7 +19,7 @@
 #include "../Mike/Mike.h"
 #include "../../Engine/SpriteInfo/SpriteInfo.h"
 #include "../Camera/Camera.h"
-#include "../../Engine/Sprite/Sprite.h"
+#include "../../Engine/SpriteMain/SpriteMain.h"
 #include "../../Engine/Timing/Timing.h"
 #include "../Character/Character.h"
 #include  "../../Engine/Object/Object.h"
@@ -51,6 +51,7 @@ Game* gGame;
 extern bool gExploding_on;
 extern bool gSkipPolice;
 int  gCheatIs;
+bool DAT_005e7220;
 
 
 Game::Game() {}
@@ -58,14 +59,14 @@ Game::Game() {}
 Game::Game(int modeStatus, char ids)
     {
     Player* pPlayer;
-        gRandom->Restart();
+        gRandom.Restart();
 
         this->bSkipPolice = gSkipPolice;
         memset(this->ArrayPlayer, 0, sizeof(this->ArrayPlayer));
         this->ModeStatus = (byte)modeStatus;
         this->IndexPlayer = (byte)ids;
 
-        // --- Игроки ---
+        // --- пїЅпїЅпїЅпїЅпїЅпїЅ ---
         for (int i = 0; i < this->ModeStatus; ++i) {
             this->ArrayPlayer[i] = new Player(i);
             if (this->ArrayPlayer[i] == NULL)
@@ -76,7 +77,7 @@ Game::Game(int modeStatus, char ids)
         this->PlayerMain->SetActive(this->PlayerMain);
         this->CurrentPlayer = this->PlayerMain;
 
-        // --- Глобальные подсистемы ---
+        // --- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ---
 
         gGeneral = new General();
         if (gGeneral == NULL) DebugLog(0x20, "game.cpp", 1791);
@@ -102,7 +103,7 @@ Game::Game(int modeStatus, char ids)
         gCarSystemManager = new CarSystemManager();
         if (gCarSystemManager == NULL) DebugLog(0x20, "game.cpp", 1825);
 
-        // SpriteInfo — без конструктора (POD), просто выделение
+        // SpriteInfo пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (POD), пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         gSpriteInfo = new SpriteInfo();
         if (gSpriteInfo == NULL) DebugLog(0x20, "game.cpp", 1827);
 
@@ -115,8 +116,8 @@ Game::Game(int modeStatus, char ids)
         gTiming = new Timing();
         if (gTiming == NULL) DebugLog(0x20, "game.cpp", 1834);
 
-        gSprite = new Sprite();
-        if (gSprite == NULL) DebugLog(0x20, "game.cpp", 1837);
+        gSpriteMain = new SpriteMain();
+        if (gSpriteMain == NULL) DebugLog(0x20, "game.cpp", 1837);
 
         gCharacter = new Character();
         if (gCharacter == NULL) DebugLog(0x20, "game.cpp", 1839);
@@ -208,7 +209,7 @@ Game::Game(int modeStatus, char ids)
         //gS121 = new S121(); //TODO
        // if (gS121 == NULL) DebugLog(0x20, "game.cpp", 1901);
 
-        // --- TransmissionInfo только если взрывы выключены ---
+        // --- TransmissionInfo пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ---
         if (!gExploding_on) {
             gTransmissionInfo = new TransmissionInfo();
             if (gTransmissionInfo == NULL) DebugLog(0x20, "game.cpp", 1907);
@@ -223,24 +224,24 @@ Game::Game(int modeStatus, char ids)
         gCameraOrPhysics = new CameraOrPhysics();
         if (gCameraOrPhysics == NULL) DebugLog(0x20, "game.cpp", 1916);
 
-        // --- FileMgr только для японской версии ---
+        // --- FileMgr пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ---
         if (gText->LanguageJapan()) {
             gFileMgr = new FileMgr();
             if (gFileMgr == NULL) DebugLog(0x20, "game.cpp", 1921);
         }
 
-        // --- Начальное состояние игры ---
+        // --- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ ---
         this->IndexPlayer = 0;
         this->und1 = 0;
         this->Status = true;
-         int DAT_005e7220 = 0;
+         DAT_005e7220 = 0;
         this->CurrentPlayerCopy = 0;
         this->isDead = -1;
         this->NoFrameLimit = false;
         this->State = 0;
         this->SkipPolice = 0;
 
-        // --- Аудио ---
+        // --- пїЅпїЅпїЅпїЅпїЅ ---
         if (!gSkipAudio) {
             gDMAudio->Service();
         }

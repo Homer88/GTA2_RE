@@ -1,7 +1,7 @@
 
 #ifndef ___CAR__H__
 #define ___CAR__H__
-
+#include "../../Engine/SpriteS1/SpriteS1.h"
 
 
 
@@ -139,7 +139,7 @@ public:
     //CAR_LIGHTS_AND_DOORS_BITSTATE carLights;
    // CarDoor CarDoor[4];
     Car  *LastCar;
-    Sprite *SpriteCar;
+    SpriteS1 *SpriteCar;
     Ped *Driver;
     //Player *Physics;
     //EngineStruct* EngineStruct;

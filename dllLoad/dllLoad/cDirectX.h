@@ -3,7 +3,7 @@
 
 #include <dinput.h>
 
-BOOL  __stdcall InitDiretX(HINSTANCE phInstance, DWORD* pFlags);
+BOOL  __stdcall InitGraphicsAndInput(HINSTANCE phInstance, DWORD* pFlags);
 void __stdcall CleanupDirectInput();
 HRESULT __stdcall CreateInputDevice(HINSTANCE hinst);
 bool __stdcall directInputUtils(void* a, void* b);
