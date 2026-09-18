@@ -7,10 +7,9 @@ struct Car;
 struct Player;
 
 // AudioManager (S154) @0x005DCBC8, ext. size ~0x5578 (ida:unk_5DCBC8).
-// Layout from dump gta2.exe.h /* 178 */ (field names/types preserved; most
-// fields are raw charset dumps, hence anonymous).
+// Layout verified against dump gta2.exe.h /* 178 */ (pack(1)).
 
-/* 60959 */ enum VOCAL
+enum VOCAL
 {
   VOCAL_0 = 0u,
   VOCAL_INSANE_STUNT_BONUS = 1u,
@@ -79,19 +78,20 @@ struct Player;
   VOCAL_64 = 64u,
 };
 
-struct Elements
-{
-};
+struct Elements { char c; };
 
+#pragma pack(push, 1)
 struct AudioBuffer
 {
-    __int16 isActive;
-    __int16 dataSize;
+    short isActive;
+    short dataSize;
     int sampleRate;
     int endOffset;
-    __int16 field_C;
+    short field_C;
 };
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 struct AudioManager
 {
     char AudioObject;
@@ -99,7 +99,7 @@ struct AudioManager
     char field_2;
     char field_3;
     int field_4;
-    unsigned __int8 field_8;
+    unsigned char field_8;
     char field_9;
     char field_A;
     char field_B;
@@ -118,11 +118,11 @@ struct AudioManager
     char field_1E;
     char field_1F;
     char field_20;
-    unsigned __int8 EffectsVolume;
-    unsigned __int8 MusicVolume;
+    unsigned char EffectsVolume;
+    unsigned char MusicVolume;
     char field_23;
     bool SFXVol;
-    unsigned __int8 CDVol;
+    unsigned char CDVol;
     char volume;
     char field_27;
     Car* Car;
@@ -145,7 +145,7 @@ struct AudioManager
     char field_4B;
     int field_4C;
     int HZ;
-    unsigned __int8 field_54;
+    unsigned char field_54;
     char field_55;
     char field_56;
     char field_57;
@@ -180,7 +180,7 @@ struct AudioManager
     char field_92;
     char field_93;
     int field_94;
-    unsigned __int8 field_98;
+    unsigned char field_98;
     char field_99;
     char field_9A;
     char field_9B;
@@ -203,6 +203,7 @@ struct AudioManager
     char field_AF;
     char field_B0;
     char field_B1;
+    unsigned char gapB2[30];
     char field_D0;
     char field_D1;
     char field_D2;
@@ -227,23 +228,40 @@ struct AudioManager
     unsigned char gapE5[96];
     char field_145;
     char gap146;
+    unsigned char gap147[120];
     char field_1BF;
+    unsigned char gap1C0[333];
     char field_30D;
+    unsigned char gap30E[411];
     char field_4A9;
+    unsigned char gap4AA[292];
     char field_5CE;
+    unsigned char gap5CF[566];
     char field_805;
+    unsigned char gap806[176];
     char field_8B6;
+    unsigned char gap8B7[365];
     char field_A24;
+    unsigned char gapA25[245];
     char field_B1A;
+    unsigned char gapB1B[141];
     char field_BA8;
+    unsigned char gapBA9[199];
     char field_C70;
+    unsigned char gapC71[95];
     char field_CD0;
+    unsigned char gapCD1[114];
     char field_D43;
+    unsigned char gapD44[67];
     char field_D87;
-    unsigned __int8 field_D8F;
+    unsigned char gapD88[7];
+    unsigned char field_D8F;
+    unsigned char gapD90[18];
     char field_DA2;
+    unsigned char gapDA3[23];
     char field_DBA;
-    unsigned int field_DBC[1];
+    unsigned char gapDBB[1];
+    unsigned int field_DBC;
     int field_DC0;
     char field_DC4;
     char field_DC5;
@@ -284,6 +302,7 @@ struct AudioManager
     char field_DF1;
     char field_DF2;
     char field_DF3;
+    unsigned char gapDF4[14];
     char field_E02;
     char field_E03;
     int field_E04;
@@ -313,56 +332,73 @@ struct AudioManager
     char field_E22;
     char field_E23;
     char field_E24;
+    unsigned char gapE25[18];
     char field_E37;
     unsigned char gapE38[638];
     char field_10B6;
     unsigned char gap10B7[692];
     char field_136B;
     char gap136C;
+    unsigned char gap136D[40];
     char field_1395;
+    unsigned char gap1396[1];
     char field_1397;
+    unsigned char gap1398[4];
     char field_139C;
+    unsigned char gap139D[39];
     char field_13C4;
+    unsigned char gap13C5[11];
     char field_13D0;
+    unsigned char gap13D1[3];
     char field_13D4;
+    unsigned char gap13D5[13];
     char field_13E2;
+    unsigned char gap13E3[13];
     char field_13F0;
+    unsigned char gap13F1[9];
     char field_13FA;
+    unsigned char gap13FB[35];
     char field_141E;
+    unsigned char gap141F[35];
     char field_1442;
+    unsigned char gap1443[5];
     char field_1448;
+    unsigned char gap1449[2];
     char field_144B;
+    unsigned char gap144C[5];
     char field_1451;
+    unsigned char gap1452[2];
     int field_1454;
     int field_1458;
     int field_145C;
+    unsigned char gap1460[8];
     int field_1468;
     int field_146C;
     int field_1470;
-    __int16 Rotation;
+    short Rotation;
     unsigned char gap1476[2];
     int Length;
-    Elements Elements_1[1];
+    Elements Elements_1;
+    unsigned char gap147D[11];
     char field_1488;
     unsigned char gap1489[3];
-    int field_1489;
+    unsigned char gap148C[4];
     unsigned char gap1490[110];
-    char field_14FB;
+    unsigned char gap14FE[1];
     unsigned char gap14FF[21];
     char field_1514;
     char field_1515;
-    __int16 gap1516;
+    short gap1516;
     unsigned char gap1518[47];
     char field_1547;
     unsigned char gap1548[124];
-    char field_15C1;
-    char gap15C2;
+    unsigned char gap15C4[2];
     unsigned char gap15C6[3];
     unsigned char gap15C9[4948];
     int field_291D;
     unsigned char gap2921[6954];
-    char field_4448;
-    int Ids[1];
+    int Ids;
+    unsigned char gap444F[5];
     char gap4454;
     char field_4455;
     char field_4456;
@@ -385,12 +421,14 @@ struct AudioManager
     char field_4467;
     char field_4468;
     char field_4469;
+    unsigned char gap446A[3842];
     char field_536C;
+    unsigned char gap536D[3];
     char field_5370;
     unsigned char gap5371[144];
     char field_5401;
     unsigned char gap5402;
-    char field_5400;
+    unsigned char gap5403[1];
     char gap5404;
     char field_5405;
     char field_5406;
@@ -401,7 +439,9 @@ struct AudioManager
     char field_540B;
     char field_540C;
     char field_540D;
+    unsigned char gap540E[11];
     char field_5419;
+    unsigned char gap541A[18];
     char field_542C;
     char field_542D;
     char field_542E;
@@ -419,16 +459,16 @@ struct AudioManager
     char field_543A;
     char field_543B;
     int Index;
-    int field_543C;
     int field_5440;
     int field_5444;
+    unsigned char gap5448[4];
     char field_544C;
     char field_544D;
     char field_544E;
     char field_544F;
     int field_5450;
     int relToAudio;
-    char field_5454;
+    unsigned char gap5458[1];
     char gap5459;
     char field_545A;
     char field_545B;
@@ -439,19 +479,19 @@ struct AudioManager
     int field_5460;
     enum VOCAL VOCAL;
     enum VOCAL Vocal;
-    int field_5468;
     int field_546C;
     int field_5470;
     int field_5474;
     int field_5478;
-    __int16 gap5480;
+    unsigned char gap547C[4];
+    short gap5480;
     char field_5482;
     unsigned char gap5483[101];
     AudioBuffer AudioBuffer[4];
     unsigned char gap5520[4];
-    char field_5510;
+    unsigned char gap5524[1];
     unsigned char gap5525[7];
-    char field_5518[15];
+    unsigned char gap552C[15];
     char field_553B;
     char field_553C;
     char field_553D;
@@ -492,5 +532,7 @@ struct AudioManager
     char field_5560;
     char field_5561;
 };
+#pragma pack(pop)
+
 static_assert(sizeof(AudioManager) == 0x5562, "Error Size AudioManager");
 #endif // !__cAudioManager__H__

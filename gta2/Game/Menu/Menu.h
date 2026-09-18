@@ -145,7 +145,7 @@ public:
     int SpecialFlag1;                    // +0x1A008 - специальный флаг 1
     int SpecialFlag2;                    // +0x1A00C - специальный флаг 2
     // ... остальные поля до 0x1EB40
-    
+    char LoadMapName[38][50];
     char isCheat;                        //Активирован Чит
     int MenuPicture;                    //какой рисунок загружать 
     unsigned char SelectPlayerSlotArray[10];

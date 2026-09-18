@@ -76,39 +76,10 @@ struct Menu{
 	char field_C9CE;
 	char field_C9CF;
 	int TimeToWaitBeforeDemoStart;
-	__int16 gapC9D4;
-	char field_C9D6[50];
-	char field_CA08[10];
-	char field_CA12;
-	char field_CA13;
-	__int16 gapCA13;
-	char field_CA15[200];
-	char field_CADD[50];
-	char field_CB0F[50];
-	char field_CB41[50];
-	char field_CB72[50];
-	char field_CBA4[50];
-	char field_CBD6[50];
-	char field_CC08[50];
-	char field_CC3A[50];
-	char field_CC6C[50];
-	char field_CC9E[50];
-	char field_CCD0[50];
-	char field_EDB6[50];
-	char field_CD36[1000];
-	char field_D11E[1000];
-	char field_D506[500];
-	char field_D6FA[500];
-	char field_D8EE[500];
-	char field_DAE2[500];
-	char field_DCD6[500];
-	char field_DECA[1000];
-	char field_E2B2[1000];
-	char field_E69A[1000];
-	char field_EA82[500];
-	char field_EC76[200];
-	char field_ED3E[100];
-	char field_EDA2[50];
+	// Level-file table: each record is a plain 0x100 (256) byte field, the
+	// filename text (.gmp/.sty/.scr) sits at the very start of the record, i.e.
+	// record i base = Menu+0xC9D4+i*0x100  (field start == text start).
+	char LevelFile[36][0x100];	// 0xC9D4 (0x2400 bytes)
 	S138 S138[8];
 	MenuPic MenuPic;
 	char field_EDF5;

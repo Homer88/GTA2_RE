@@ -6,6 +6,8 @@
 class GangInfo{
 
     public:
+        
+
         GangInfo* NextGangInfo;
         GangInfo();
         void Init();

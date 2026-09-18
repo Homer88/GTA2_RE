@@ -30,6 +30,66 @@ MapGm::MapGm()
 MapGm::~MapGm()
 {
 }
+
+
+// --- СЃРµС‚С‚РµСЂС‹ РёРјС‘РЅ С„Р°Р№Р»РѕРІ ---
+char* MapGm::SetMapName(char* Source) { 
+	return strncpy(this->gmpFile, Source, 0xFFu); 
+}
+char* MapGm::SetStyleName(char* Source) { 
+	return strncpy(this->styFile, Source, 0xFFu); 
+}
+char* MapGm::SetScripName(char* Source) {
+	return strncpy(this->sctiptFile, Source, 0xFFu); 
+}
+char* MapGm::SetSaveFile(char* Source) { 
+	return strncpy(this->saveFile, Source, 0xFFu); 
+}
+
+void MapGm::SetPlayerArena(char value) { 
+	this->playerArena = (unsigned char)value; 
+}
+void MapGm::SetBonusStage(char value) { 
+		this->    BonusStage = (unsigned char)value; 
+}
+void MapGm::SetGang(char value) { 
+		this->Gang = (unsigned char)value; 
+}
+void MapGm::SetPlayerSlotSave(char value) {
+			this->PlayerSlotSave = (unsigned char)value; 
+}
+void MapGm::SetBonus(char value) { 
+		this->Bonus = (unsigned char)value;
+}
+// --- РіРµС‚С‚РµСЂС‹ РёРјС‘РЅ С„Р°Р№Р»РѕРІ ---
+char* MapGm::GetMapName() { 
+	return this->gmpFile; 
+}
+char* MapGm::GetStyleFile() { 
+	return this->styFile; 
+}
+char* MapGm::GetScriptName() { 
+	return this->sctiptFile; 
+}
+char* MapGm::GetSaveFile() { 
+	return this->saveFile; 
+}
+
+unsigned char MapGm::GetPlayerArena() { 
+	return this->playerArena; 
+}
+unsigned char MapGm::GetBonusStage() { 
+	return this->BonusStage; 
+}
+unsigned char MapGm::GetGang() { 
+	return this->Gang; 
+}
+unsigned char MapGm::GetPlayerSlotSave() { 
+	return this->PlayerSlotSave; 
+}
+unsigned char MapGm::GetBonus() { 
+	return this->Bonus; 
+}
 //---------------------------------------------------------------------
 // 0x0045e630: MapGm::ResetSettings — сброс настроек записи
 //---------------------------------------------------------------------
@@ -202,13 +262,13 @@ void MapGm::DecodeBonusStage(unsigned char bonusStage, unsigned char* playerAren
 // Свободные обёртки для MissionManager (MissionManager.h)
 //=====================================================================
 
-int MapGm_GetMapName(MapGm* obj)        { return (int)obj->GetMapName(); }
-int MapGm_GetStyleFile(MapGm* obj)      { return (int)obj->GetStyleFile(); }
-int MapGm_GetScriptName(MapGm* obj)     { return (int)obj->GetScriptName(); }
-int MapGm_GetPlayerArena(MapGm* obj)    { return obj->GetPlayerArena(); }
-int MapGm_GetBonusStage(MapGm* obj)     { return obj->GetBonusStage(); }
-int MapGm_GetGang(MapGm* obj)           { return obj->GetGang(); }
-int MapGm_GetPlayerSlotSave(MapGm* obj) { return obj->GetPlayerSlotSave(); }
-int MapGm_GetSpecialTokens(MapGm* obj)  { return obj->GetSpecialTokens(); }
-int sub_476B10(MapGm* obj, int value)   { return obj->sub_476B10(value); }
-int MapGm_sub_45E700(MapGm* obj)        { return obj->get_45E700(); }
+//int MapGm_GetMapName(MapGm* obj)        { return (int)obj->GetMapName(); }
+//int MapGm_GetStyleFile(MapGm* obj)      { return (int)obj->GetStyleFile(); }
+//int MapGm_GetScriptName(MapGm* obj)     { return (int)obj->GetScriptName(); }
+//int MapGm_GetPlayerArena(MapGm* obj)    { return obj->GetPlayerArena(); }
+//int MapGm_GetBonusStage(MapGm* obj)     { return obj->GetBonusStage(); }
+//int MapGm_GetGang(MapGm* obj)           { return obj->GetGang(); }
+//int MapGm_GetPlayerSlotSave(MapGm* obj) { return obj->GetPlayerSlotSave(); }
+//int MapGm_GetSpecialTokens(MapGm* obj)  { return obj->GetSpecialTokens(); }
+//int sub_476B10(MapGm* obj, int value)   { return obj->sub_476B10(value); }
+//int MapGm_sub_45E700(MapGm* obj)        { return obj->get_45E700(); }

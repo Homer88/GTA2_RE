@@ -54,7 +54,26 @@ int  gCheatIs;
 bool DAT_005e7220;
 
 
-Game::Game() {}
+Game::Game() {
+    this->CurrentPlayer = NULL;
+    this->PlayerMain = NULL;
+    this->IndexPlayer = 0;
+    this->MaxIdx = 0;
+    this->ModeStatus = 0;
+    this->CurrentPlayerCopy = 0;
+    this->NoFrameLimit = false;
+    this->State = 0;
+    this->Status = 0;
+    this->bSkipPolice = false;
+    this->NumPlayers = 0;
+    this->PlayerInFocus = 0;
+    this->isDead = 0;
+    this->pPlayer1 = NULL;
+    this->SkipPolice = 0;
+    this->und1 = 0;
+
+    
+}
 
 Game::Game(int modeStatus, char ids)
     {
@@ -76,6 +95,7 @@ Game::Game(int modeStatus, char ids)
         this->PlayerMain = this->ArrayPlayer[this->IndexPlayer];
         this->PlayerMain->SetActive(this->PlayerMain);
         this->CurrentPlayer = this->PlayerMain;
+        this->CurrentPlayerCopy = this->IndexPlayer;
 
         // --- ���������� ���������� ---
 
@@ -598,3 +618,9 @@ void* Game::GetPlayerById(int arg0){
 int Game::GetState(void){
         return 0;
     }
+
+void Game::IsSpriteVisibleToPlayer() {
+
+}
+// 0x0045BB50: Game::IsSpriteVisibleToAnyPlayer
+void Game::IsSpriteVisibleToAnyPlayer(){}

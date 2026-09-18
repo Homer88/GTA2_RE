@@ -33,7 +33,7 @@ static HWND s_hEdit = NULL;
 static BOOL s_classRegistered = FALSE;
 static volatile long s_refreshPending = 0;
 static BOOL s_paused = FALSE;
-static BOOL s_skipZero = TRUE;
+static BOOL s_skipZero = FALSE;
 static BOOL s_saveFile = TRUE;
 
 #define INSP_FIELD(TYPE, MEMBER) { offsetof(TYPE, MEMBER), sizeof(((TYPE*)0)->MEMBER), #MEMBER }
@@ -85,39 +85,6 @@ static const InspField kMenuFields[] = {
     INSP_FIELD(Menu, field_C9CE),
     INSP_FIELD(Menu, field_C9CF),
     INSP_FIELD(Menu, TimeToWaitBeforeDemoStart),
-    INSP_FIELD(Menu, gapC9D4),
-    INSP_FIELD(Menu, field_C9D6),
-    INSP_FIELD(Menu, field_CA08),
-    INSP_FIELD(Menu, field_CA12),
-    INSP_FIELD(Menu, field_CA13),
-    INSP_FIELD(Menu, gapCA13),
-    INSP_FIELD(Menu, field_CA15),
-    INSP_FIELD(Menu, field_CADD),
-    INSP_FIELD(Menu, field_CB0F),
-    INSP_FIELD(Menu, field_CB41),
-    INSP_FIELD(Menu, field_CB72),
-    INSP_FIELD(Menu, field_CBA4),
-    INSP_FIELD(Menu, field_CBD6),
-    INSP_FIELD(Menu, field_CC08),
-    INSP_FIELD(Menu, field_CC3A),
-    INSP_FIELD(Menu, field_CC6C),
-    INSP_FIELD(Menu, field_CC9E),
-    INSP_FIELD(Menu, field_CCD0),
-    INSP_FIELD(Menu, field_EDB6),
-    INSP_FIELD(Menu, field_CD36),
-    INSP_FIELD(Menu, field_D11E),
-    INSP_FIELD(Menu, field_D506),
-    INSP_FIELD(Menu, field_D6FA),
-    INSP_FIELD(Menu, field_D8EE),
-    INSP_FIELD(Menu, field_DAE2),
-    INSP_FIELD(Menu, field_DCD6),
-    INSP_FIELD(Menu, field_DECA),
-    INSP_FIELD(Menu, field_E2B2),
-    INSP_FIELD(Menu, field_E69A),
-    INSP_FIELD(Menu, field_EA82),
-    INSP_FIELD(Menu, field_EC76),
-    INSP_FIELD(Menu, field_ED3E),
-    INSP_FIELD(Menu, field_EDA2),
     INSP_FIELD(Menu, S138),
     INSP_FIELD(Menu, MenuPic),
     INSP_FIELD(Menu, field_EDF5),
@@ -862,6 +829,205 @@ static int IsUnknownField(const char* name)
             strncmp(name, "gap", 3) == 0);
 }
 
+// Level file table inside Menu (real data, see Menu runtime logs):
+// 36 records x 0x100 bytes starting at Menu+0xC900, each holds a .gmp/.scr/.sty
+// filename somewhere at +0xD4 (record 0 has it at +0xD6). Whole range 0xC900..
+// 0xECFF is non-zero, everything after 0xED00 is zeros.
+#define LEVELFILE_BASE  0xC900
+#define LEVELFILE_COUNT 36
+#define LEVELFILE_SIZE  0x100
+
+// Clear listing of the LevelFile[36] table: one line per record with every
+// printable ASCII run (>=3 chars) found anywhere in the 0x100 record, plus
+// count of non-zero records actually loaded.
+static void FormatMenuLevelFiles(DumpBuf* b, const void* menuBase)
+{
+    const unsigned char* p;
+    int i;
+    int nWithData = 0;
+
+    DumpPrintf(b, "== LevelFile[%d] @Menu+0x%04X (records %d x 0x%X) ==\n",
+               LEVELFILE_COUNT, LEVELFILE_BASE, LEVELFILE_COUNT, LEVELFILE_SIZE);
+    __try {
+        p = (const unsigned char*)menuBase + LEVELFILE_BASE;
+        for (i = 0; i < LEVELFILE_COUNT; i++) {
+            const unsigned char* rec = p + (size_t)i * LEVELFILE_SIZE;
+            int nz;
+            int j;
+            nz = 0;
+            for (j = 0; j < LEVELFILE_SIZE; j++) {
+                if (rec[j] != 0) {
+                    nz++;
+                }
+            }
+            if (nz > 0) {
+                nWithData++;
+            }
+            DumpPrintf(b, "  [%02d] @+0x%04X  nonzero=%d", i,
+                       LEVELFILE_BASE + i * LEVELFILE_SIZE, nz);
+            for (j = 0; j <= LEVELFILE_SIZE; j++) {
+                int start;
+                unsigned char c = (j < LEVELFILE_SIZE) ? rec[j] : 0;
+                if (c >= 0x20 && c <= 0x7E && j < LEVELFILE_SIZE) {
+                    start = j;
+                    while (j < LEVELFILE_SIZE && rec[j] >= 0x20 && rec[j] <= 0x7E) {
+                        j++;
+                    }
+                    if (j - start >= 3) {
+                        int k;
+                        start = j;
+                        while (start > 0 && rec[start - 1] >= 0x20 && rec[start - 1] <= 0x7E) {
+                            start--;
+                        }
+                        DumpPrintf(b, "  \"");
+                        for (k = start; k < j; k++) {
+                            DumpPrintf(b, "%c", rec[k]);
+                        }
+                        DumpPrintf(b, "\"@+0x%04X", start);
+                    }
+                }
+            }
+            DumpPrintf(b, "\n");
+            for (j = 0; j < LEVELFILE_SIZE; j += 16) {
+                int k;
+                DumpPrintf(b, "       +%04X  ", j);
+                for (k = 0; k < 16 && j + k < LEVELFILE_SIZE; k++) {
+                    DumpPrintf(b, "%s%02X", k ? " " : "", rec[j + k]);
+                }
+                DumpPrintf(b, " ");
+                for (k = 0; k < 16 && j + k < LEVELFILE_SIZE; k++) {
+                    unsigned char c = rec[j + k];
+                    if (c >= 0x20 && c <= 0x7E) {
+                        DumpPrintf(b, "%c", c);
+                    }
+                    else {
+                        DumpPrintf(b, ".");
+                    }
+                }
+                DumpPrintf(b, "\n");
+            }
+        }
+        DumpPrintf(b, "  -> %d of %d records have data\n\n", nWithData, LEVELFILE_COUNT);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "<LevelFile read failed>\n\n");
+    }
+}
+
+// Append the LevelFile[36] listing to the per-struct Menu.log (in addition to
+// the byte-by-byte field dump that BuildDump writes into the common window).
+static void AppendMenuLevelFilesToFile(const void* menuBase)
+{
+    static char s_lvBuf[64 * 1024];
+    DumpBuf b;
+    FILE* f;
+
+    f = fopen(GetLogPath("Menu.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    b.data = s_lvBuf;
+    b.cap = sizeof(s_lvBuf);
+    b.len = 0;
+    s_lvBuf[0] = 0;
+    FormatMenuLevelFiles(&b, menuBase);
+    if (b.len > 0) {
+        fwrite(s_lvBuf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
+// DMAudio state dump (global gDMAudio @0x005D85A0, size 0x3E84 = next global
+// unk_5DC424 @0x005DC424).  Raw byte state by design: DMAudio fields are array
+// buffers, we show every byte/run + full hexdump like the Menu LevelFile table.
+#define DMAUDIO_BASE 0x005D85A0UL
+#define DMAUDIO_SIZE 0x3E84
+static void FormatDMAudioState(DumpBuf* b, const void* dmaBase)
+{
+    const unsigned char* p;
+    int i;
+    int nWithData = 0;
+
+    DumpPrintf(b, "== gDMAudio @+0x%04X (0x%X bytes, next global @+0x%06X) ==\n",
+               DMAUDIO_BASE - 0x005D0000UL, DMAUDIO_SIZE,
+               DMAUDIO_BASE + DMAUDIO_SIZE);
+    __try {
+        p = (const unsigned char*)dmaBase;
+        for (i = 0; i <= DMAUDIO_SIZE; i++) {
+            int start;
+            unsigned char c = (i < DMAUDIO_SIZE) ? p[i] : 0;
+            if (c >= 0x20 && c <= 0x7E && i < DMAUDIO_SIZE) {
+                start = i;
+                while (i < DMAUDIO_SIZE && p[i] >= 0x20 && p[i] <= 0x7E) {
+                    i++;
+                }
+                if (i - start >= 3) {
+                    int k;
+                    start = i;
+                    while (start > 0 && p[start - 1] >= 0x20 && p[start - 1] <= 0x7E) {
+                        start--;
+                    }
+                    DumpPrintf(b, "  \"");
+                    for (k = start; k < i; k++) {
+                        DumpPrintf(b, "%c", p[k]);
+                    }
+                    DumpPrintf(b, "\"@+0x%04X", start);
+                }
+            }
+        }
+        DumpPrintf(b, "\n");
+        for (i = 0; i < DMAUDIO_SIZE; i += 16) {
+            int j;
+            DumpPrintf(b, "  +%04X  ", i);
+            for (j = 0; j < 16 && i + j < DMAUDIO_SIZE; j++) {
+                DumpPrintf(b, "%s%02X", j ? " " : "", p[i + j]);
+            }
+            DumpPrintf(b, "  ");
+            for (j = 0; j < 16 && i + j < DMAUDIO_SIZE; j++) {
+                unsigned char c = p[i + j];
+                if (c >= 0x20 && c <= 0x7E) {
+                    DumpPrintf(b, "%c", c);
+                }
+                else {
+                    DumpPrintf(b, ".");
+                }
+            }
+            DumpPrintf(b, "\n");
+        }
+        for (i = 0; i < DMAUDIO_SIZE; i++) {
+            if (p[i] != 0) {
+                nWithData++;
+            }
+        }
+        DumpPrintf(b, "  -> %d of %d bytes nonzero\n\n", nWithData, DMAUDIO_SIZE);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "<DMAudio read failed>\n\n");
+    }
+}
+
+// Append the DMAudio state dump to DMAudio.log (mirrors AppendMenuLevelFiles).
+static void AppendDMAudioStateToFile(const void* dmaBase)
+{
+    static char s_dmaBuf[64 * 1024];
+    DumpBuf b;
+    FILE* f;
+
+    f = fopen(GetLogPath("DMAudio.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    b.data = s_dmaBuf;
+    b.cap = sizeof(s_dmaBuf);
+    b.len = 0;
+    s_dmaBuf[0] = 0;
+    FormatDMAudioState(&b, dmaBase);
+    if (b.len > 0) {
+        fwrite(s_dmaBuf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
 // Resolve an image-range pointer (or heap pointer) to a readable target:
 //   code ptr  -> fn:ContainingFunction
 //   data ptr  -> gd:OwningGlobal or gd:OwningGlobal+0xOFF
@@ -1125,6 +1291,118 @@ static void DumpGangNames(DumpBuf* b)
     DumpPrintf(b, "\n");
 }
 
+// Print printable ASCII runs (>=3 chars) found anywhere inside the buffer,
+// each with its offset. Missing from the previous dump: text is usually at
+// the END of large zero-padded fields, which AsciiTextLen never sees.
+static void AppendStringsAnywhere(DumpBuf* b, const unsigned char* p, int size)
+{
+    int i;
+    int start = -1;
+    for (i = 0; i <= size; i++) {
+        unsigned char c = (i < size) ? p[i] : 0;
+        int printable = (c >= 0x20 && c <= 0x7E);
+        if (printable) {
+            if (start < 0) {
+                start = i;
+            }
+        } else {
+            if (start >= 0) {
+                int len = i - start;
+                if (len >= 3) {
+                    int j;
+                    int n = len < 120 ? len : 120;
+                    DumpPrintf(b, "        @+0x%04X str: \"", start);
+                    for (j = 0; j < n; j++) {
+                        DumpPrintf(b, "%c", p[start + j]);
+                    }
+                    if (len > 120) {
+                        DumpPrintf(b, "...");
+                    }
+                    DumpPrintf(b, "\"\n");
+                }
+            }
+            start = -1;
+        }
+    }
+}
+
+// Dump every field of a struct to its own per-struct log file. Unknown fields
+// (field_/unk_/gap) are written byte-by-byte so nothing is lost, named fields
+// use the compact formatter. Zero values are kept. Appends one snapshot.
+static void DumpStructToFile(const char* fileName, const char* title,
+                             const void* base, const InspField* fields, int count)
+{
+    static char s_buf[512 * 1024];
+    static int s_bufCap = (int)sizeof(s_buf);
+    DumpBuf b;
+    SYSTEMTIME st;
+    char head[160];
+    char path[MAX_PATH];
+    FILE* f;
+    int i;
+
+    f = fopen(GetLogPath(fileName), "ab");
+    if (f == NULL) {
+        return;
+    }
+    GetLocalTime(&st);
+    _snprintf(head, sizeof(head),
+        "\n== %s @ %02u:%02u:%02u.%03u ==\n",
+        title, (unsigned)st.wHour, (unsigned)st.wMinute,
+        (unsigned)st.wSecond, (unsigned)st.wMilliseconds);
+    fwrite(head, 1, strlen(head), f);
+
+    b.data = s_buf;
+    b.cap = (size_t)s_bufCap;
+    b.len = 0;
+    s_buf[0] = 0;
+
+    for (i = 0; i < count; i++) {
+        const InspField* fl = &fields[i];
+        const unsigned char* p;
+        int j;
+        if (IsSkippedField(fl->name)) {
+            continue;
+        }
+        p = (const unsigned char*)base + fl->offset;
+        __try {
+            if (IsUnknownField(fl->name)) {
+                DumpPrintf(&b, "  +0x%04X  %-28s [%d bytes]\n",
+                           fl->offset, fl->name, fl->size);
+                for (j = 0; j < fl->size; j++) {
+                    if ((j & 15) == 0) {
+                        DumpPrintf(&b, "      %04X:", j);
+                    }
+                    DumpPrintf(&b, " %02X", p[j]);
+                    if ((j & 15) == 15) {
+                        DumpPrintf(&b, "\n");
+                    }
+                }
+                if (fl->size & 15) {
+                    DumpPrintf(&b, "\n");
+                }
+                AppendStringsAnywhere(&b, p, fl->size);
+            }
+            else {
+                DumpPrintf(&b, "  +0x%04X  %-28s ", fl->offset, fl->name);
+                FormatFieldValue(&b, base, fl);
+                DumpPrintf(&b, "\n");
+            }
+            if (b.len > (size_t)b.cap - 4096) {
+                fwrite(s_buf, 1, b.len, f);
+                b.len = 0;
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            DumpPrintf(&b, "  +0x%04X  %-28s <read error>\n", fl->offset, fl->name);
+        }
+    }
+    if (b.len > 0) {
+        fwrite(s_buf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
 static void BuildDump(void)
 {
     static char s_buf[300 * 1024];
@@ -1141,6 +1419,10 @@ static void BuildDump(void)
         if (realMenu != NULL) {
             DumpStruct(&b, "Menu (heap, via *(Menu**)0x005EB160 = gMenu)", realMenu,
                        kMenuFields, kMenuFieldCount, s_prevMenu);
+            DumpStructToFile("Menu.log", "Menu (heap 0x005EB160)", realMenu,
+                             kMenuFields, kMenuFieldCount);
+            FormatMenuLevelFiles(&b, realMenu);
+            AppendMenuLevelFilesToFile(realMenu);
         } else {
             DumpPrintf(&b, "== Menu: gMenu global is NULL yet (not initialized) ==\n\n");
         }
@@ -1150,8 +1432,23 @@ static void BuildDump(void)
     }
 
     __try {
+        const void* dmaBase = GetRealDMAudio();
+        if (dmaBase != NULL) {
+            FormatDMAudioState(&b, dmaBase);
+            AppendDMAudioStateToFile(dmaBase);
+        } else {
+            DumpPrintf(&b, "== DMAudio: gDMAudio global is NULL (not initialized) ==\n\n");
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<DMAudio read failed>\n");
+    }
+
+    __try {
         DumpStruct(&b, "MapGm @0x005EC070 (0x554)", s_pMapGm,
                    kMapGmFields, kMapGmFieldCount, s_prevMapGm);
+        DumpStructToFile("MapGm.log", "MapGm @0x005EC070 (0x554)", s_pMapGm,
+                         kMapGmFields, kMapGmFieldCount);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<MapGm read failed>\n");
@@ -1164,6 +1461,8 @@ static void BuildDump(void)
             _snprintf(title, sizeof(title), "Game -> heap 0x%08X (0x40, gGame@0x005EB4FC)",
                       (unsigned long)(ULONG_PTR)pg);
             DumpStruct(&b, title, pg, kGameFields, kGameFieldCount, s_prevGame);
+            DumpStructToFile("Game.log", title, pg,
+                             kGameFields, kGameFieldCount);
         } else {
             DumpPrintf(&b, "== Game: gGame@0x005EB4FC is NULL (not created yet) ==\n\n");
         }
@@ -1175,6 +1474,8 @@ static void BuildDump(void)
     __try {
         DumpStruct(&b, "PlayerData @0x0066B404 (0x2bc0)", s_pPlayerData,
                    kPlayerDataFields, kPlayerDataFieldCount, s_prevPlayer);
+        DumpStructToFile("PlayerData.log", "PlayerData @0x0066B404 (0x2bc0)",
+                         s_pPlayerData, kPlayerDataFields, kPlayerDataFieldCount);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<PlayerData read failed>\n");
@@ -1190,13 +1491,20 @@ static void BuildDump(void)
     __try {
         DumpStruct(&b, "AudioManager @0x005DCBC8 (0x5562)", (AudioManager*)0x005DCBC8,
                    kAudioManagerFields, kAudioManagerFieldCount, s_prevAudio);
+        DumpStructToFile("AudioManager.log", "AudioManager @0x005DCBC8 (0x5562)",
+                         (AudioManager*)0x005DCBC8,
+                         kAudioManagerFields, kAudioManagerFieldCount);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<AudioManager read failed>\n");
     }
 
     __try {
-        DumpGlobals(&b);
+        static BOOL s_globalsOnce = FALSE;
+        if (!s_globalsOnce) {
+            DumpGlobals(&b);
+            s_globalsOnce = TRUE;
+        }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<Globals read failed>\n");
@@ -1272,7 +1580,7 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         CreateWindowExA(0, "BUTTON", "Save to file",
                         WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX | BS_LEFTTEXT,
                         318, 14, 90, 20, hwnd, (HMENU)IDC_INSP_SAVEFILE, hInst, NULL);
-        CheckDlgButton(hwnd, IDC_INSP_SKIPZERO, BST_CHECKED);
+        CheckDlgButton(hwnd, IDC_INSP_SKIPZERO, BST_UNCHECKED);
         CheckDlgButton(hwnd, IDC_INSP_SAVEFILE, BST_CHECKED);
         SetTimer(hwnd, 1, 1000, NULL);
         return 0;

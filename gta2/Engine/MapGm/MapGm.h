@@ -64,28 +64,28 @@ public:
 	~MapGm();
 
 	// --- сеттеры имён файлов ---
-	char* SetMapName(char* Source) { return strncpy(gmpFile, Source, 0xFFu); }
-	char* SetStyleName(char* Source) { return strncpy(styFile, Source, 0xFFu); }
-	char* SetScripName(char* Source) { return strncpy(sctiptFile, Source, 0xFFu); }
-	char* SetSaveFile(char* Source) { return strncpy(saveFile, Source, 0xFFu); }
+	char* SetMapName(char* Source);
+	char* SetStyleName(char* Source);
+	char* SetScripName(char* Source);
+	char* SetSaveFile(char* Source);
 
-	void SetPlayerArena(char value) { playerArena = (unsigned char)value; }
-	void SetBonusStage(char value) { BonusStage = (unsigned char)value; }
-	void SetGang(char value) { Gang = (unsigned char)value; }
-	void SetPlayerSlotSave(char value) { PlayerSlotSave = (unsigned char)value; }
-	void SetBonus(char value) { Bonus = (unsigned char)value; }
+	void SetPlayerArena(char value);
+	void SetBonusStage(char value);
+	void SetGang(char value);
+	void SetPlayerSlotSave(char value);
+	void SetBonus(char value);
 
 	// --- геттеры имён файлов ---
-	char* GetMapName() { return gmpFile; }
-	char* GetStyleFile() { return styFile; }
-	char* GetScriptName() { return sctiptFile; }
-	char* GetSaveFile() { return saveFile; }
+	char* GetMapName();
+	char* GetStyleFile();
+	char* GetScriptName();
+	char* GetSaveFile();
 
-	unsigned char GetPlayerArena() { return playerArena; }
-	unsigned char GetBonusStage() { return BonusStage; }
-	unsigned char GetGang() { return Gang; }
-	unsigned char GetPlayerSlotSave() { return PlayerSlotSave; }
-	unsigned char GetBonus() { return Bonus; }
+	unsigned char GetPlayerArena();
+	unsigned char GetBonusStage();
+	unsigned char GetGang();
+	unsigned char GetPlayerSlotSave();
+	unsigned char GetBonus();
 
 	// 0x0045e570/0x0045e590 — запись/чтение Arr10[i]
 	void SetPlayerArena(unsigned char index, int value) { Arr10[index & 0xff] = value; }
@@ -160,18 +160,6 @@ public:
 	// 0x00461dc0 — Get_field_444
 	int Get_field_444() { return field_444; }
 
-
-// Свободные обёртки для MissionManager (объявлены в MissionManager.h)
-int   MapGm_GetMapName(MapGm*);
-int   MapGm_GetStyleFile(MapGm*);
-int   MapGm_GetScriptName(MapGm*);
-int   MapGm_GetPlayerArena(MapGm*);
-int   MapGm_GetBonusStage(MapGm*);
-int   MapGm_GetGang(MapGm*);
-int   MapGm_GetPlayerSlotSave(MapGm*);
-int   MapGm_GetSpecialTokens(MapGm*);
-int   sub_476B10(MapGm*, int);
-int   MapGm_sub_45E700(MapGm*);
 
 // ==== импорт имён из gm ====
     // 2 функций

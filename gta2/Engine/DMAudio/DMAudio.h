@@ -19,7 +19,7 @@ public:
 	void Service() {//TODO
 	};
 
-	DMAudio() {};
+	DMAudio();
 	~DMAudio() {};
 
 };

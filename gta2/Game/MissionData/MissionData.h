@@ -5,6 +5,8 @@
 
 class MissionData{
     public:
+        unsigned int    field_0;
+        unsigned short  field_10;
 
     // 0x0044AFE0
     int ResetAll(void);

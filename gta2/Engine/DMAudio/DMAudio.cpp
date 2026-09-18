@@ -21,14 +21,24 @@ bool gSkipAudio;
 
 DMAudio *gDMAudio;
 
+
+
+
 extern AudioManager* gAudioManager;
 //int  skip_audio;   // 0 = звук включён
 int  gSampleRate;  // результат создания звукового объекта (см. суб_410530)
 
 // Инициализация аудио-системы (аналог DMAudio::sub_410500: создаёт SoundCard и
 // аудио-объект, если его ещё нет). Движок gSound проверяет доступность волны.
-void DMAudio::InitAudioManager()
-{
+DMAudio::DMAudio() {
+
+	this->_CDvol = 0;
+	this->_SFXVol = 0;
+
+
+
+}
+void DMAudio::InitAudioManager(){
 	if (gAudioManager == NULL)
 		gAudioManager = new AudioManager();
 	if (!gSound.InitAudioSystem())
