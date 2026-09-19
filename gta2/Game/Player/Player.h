@@ -4,14 +4,15 @@
 #include <windows.h>
 #include "../PowerUp/PowerUp.h"
 #include "../Weapon/Weapon.h"
+
 #include "../CameraOrPhysics/CameraOrPhysics.h"
 
 class VehiclePool;
 class Gang;
-class Car;
 class AudioManager;
-class Ped;
 class PlayerSlotSlave; 
+class Ped;
+class Car;
 
 
 class Player{
@@ -19,7 +20,7 @@ class Player{
 		Player *CurrentPlayer;
 		Player* NextPlayer;
 		short CountPlayer;
-		void* Forw;//  движение 
+		Car* Vehicle;//  движение 
 		VehiclePool* PoolVehicle;
 		short SW;
 		int TypeWeapon;
@@ -41,8 +42,8 @@ class Player{
 		int MultiPlayerMode;
 		byte DeathReason;
 		void* Sound;
-		byte DoDebugKeys1;
 		byte DoDebugKeys;
+		byte DoDebugKeys1;
 		bool Key_UP, Key_Down, Key_Right, Key_Left, Key_PrevWeapon, Key_NextWeapon, Key_DebugKey1, Key_DebugKey2, Forward, Backward,
 				RotateLeft, RotateRight, Enter, Jump, NextWeaponZ, PrevWeaponX, KeySpecial, KeySpecial2, AttackIsChanged;
 		byte NextPlayerId;
@@ -76,6 +77,7 @@ class Player{
 		void StartGame();
 		byte SelectWeapon(int TypeWeapon, int Ammo);
 		void SetActive(Player*);
+		void GetVehicle(Car* Vehicle);
 
 		
 };	

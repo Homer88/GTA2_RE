@@ -6,7 +6,8 @@
 #include "../PlayerData/PlayerData.h"
 #include "../PlayerSlotSlave/PlayerSlotSlave.h"
 #include "../Character/Character.h"
-
+#include "../Ped/Ped.h"
+#include "../Car/Car.h"
 bool gDoInfiteLives = false;
 bool gElectroGun = false;
 bool gFireGun = false;
@@ -177,4 +178,8 @@ void Player::StartGame() {
 byte Player::SelectWeapon(int TypeWeapon, int Ammo) {
 
     return 0;
+}
+
+void Player::GetVehicle(Car* Vehicle) {
+   // Vehicle->Vehicle=this->Vehicle; // TODO Vehicle Нету пока поля 
 }

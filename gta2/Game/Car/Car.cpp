@@ -1,10 +1,11 @@
 
 //реализация классов с машинами
+#include "../Player/Player.h"
+#include "../Ped/Ped.h" 
 
 #include "../../Engine/Object/Object.h"
 #include "../../Engine/Text/Text.h"
 //#include "../../Engine/SpriteMain/SpriteMain.h"
-#include "../Ped/Ped.h" 
 
 #include "Car.h"
 extern Text *gText;

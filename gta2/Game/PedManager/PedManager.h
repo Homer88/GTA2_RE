@@ -1,21 +1,21 @@
 
 #ifndef __PEDMANAGER_H_
 #define __PEDMANAGER_H_
-#include "../Ped/Ped.h"
+class Ped;
 
 
 class PedManager{
     public:
-        Ped* FirstElement;
-        Ped* NextPed;
+        Ped* FirstPed;
+        Ped* NextPed; //возможно имя currentPed
         Ped ArrayPed[200];
         short PedInUse;
         PedManager();
         ~PedManager();
     // 0x00403890
-    int GetPed(void);
+    Ped* GetPed(void);
     // 0x00435530
-    int GetNextPed(void);
+    Ped* GetNextPed(void);
     // 0x0043DB40
     int SpawnPedAtPosition(void);
     // 0x00445960

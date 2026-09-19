@@ -1,8 +1,15 @@
-#include "Ped.h"
 #include "../Car/Car.h"
+#include "../Player/Player.h"
+#include "Ped.h"
+
 
 
     // 0x003F1004
+Ped::Ped() {
+    this->isPlayer = NULL;
+    this->NextPed;
+    this->BasicCleanup();
+}
 
 
 int Ped::FindNearestPlayer(void){
@@ -53,8 +60,9 @@ int Ped::UpdateState(void){
     // 0x00403970
 
 
-int Ped::SetCurrentOccupation(void){
-        return 0;
+void  Ped::SetCurrentOccupation(int occupation){
+    this->Occupation = occupation;
+        
     }
 
 
@@ -62,7 +70,7 @@ int Ped::SetCurrentOccupation(void){
 
 
 int Ped::GetOccupation(void){
-        return 0;
+        return this->Occupation;
     }
 
 
@@ -70,7 +78,7 @@ int Ped::GetOccupation(void){
 
 
 int Ped::GetCurrentState(void){
-        return 0;
+    return this->StatusPed;
     }
 
 
@@ -208,8 +216,8 @@ int Ped::EnterCar(void){
     // 0x00403AC0
 
 
-int Ped::SetAsDriver(void){
-        return 0;
+void  Ped::SetAsDriver(Ped* driver){
+    this->Driver = driver;
     }
 
 
@@ -232,8 +240,8 @@ int Ped::SetLinkedPedestrian(void){
     // 0x00403B00
 
 
-int Ped::SetTargetVehicle(void){
-        return 0;
+void Ped::SetVehicle(Car* car){
+    this->VehiclePed = car;
     }
 
 
@@ -248,9 +256,6 @@ int Ped::GetCurrentCar(void){
     // 0x00403B20
 
 
-int Ped::GetCarStateTimer(void){
-        return 0;
-    }
 
 
     // 0x00403B30
@@ -361,7 +366,7 @@ int Ped::GetMissionThreadId(void){
 
 
 int Ped::GetIdPlayer(void){
-        return 0;
+        return this->IdPlayer;
     }
 
 
@@ -394,7 +399,19 @@ int Ped::CarSystemManager_SelectTraffic(void){
 
 
 int Ped::GetOccupationPolice(void){
-        return 0;
+    switch (this->Occupation) {
+    case POLICE:
+    case SWAT:
+    case FBI:
+    case ARMYARMY:
+    case UNK_REL_TO_POLICE_1:
+    case UNK_REL_TO_POLICE_2:
+    case UNK_REL_TO_POLICE_3:
+    case UNK_REL_TO_POLICE_4:
+        return EMPTY;
+    default:
+        return PLAYER;
+    }
     }
 
 
@@ -570,7 +587,7 @@ int Ped::SetParam(void){
 
 
 int Ped::GetRemap(void){
-        return 0;
+        return this->Remap;
     }
 
 
@@ -625,8 +642,9 @@ int Ped::SetActionState(void){
     // 0x00433C90
 
 
-int Ped::GetOCcupationIsElvis(void){
-        return 0;
+bool  Ped::GetOccupationIsElvis(void){
+    return  this->Occupation == ELVIS;
+        
     }
 
 
@@ -650,7 +668,7 @@ int Ped::IsInAction(void){
 
 
 int Ped::GetPoliceStar(void){
-        return 0;
+        return this->PoliceStar;
     }
 
 
@@ -688,9 +706,9 @@ int Ped::ProcessCarDamage(void){
 
     // 0x00434160
 
-
-int Ped::GetCarSearchRange(void){
-        return 0;
+Car*  Ped::GetCar(Car* Vehicle){
+    this->isPlayer->GetVehicle(Vehicle);
+        return Vehicle;
     }
 
 
@@ -815,7 +833,9 @@ unsigned short Ped::SetPoliceStarLevel(unsigned short CopLevel){
     return 0;
     }
 
-
+Ped* Ped::GetPed() {
+    return this->LinkedPed;
+}
     // 0x00434CD0
 
 
@@ -884,6 +904,14 @@ int Ped::IsInTrain(void){
 
 
 int Ped::BasicCleanup(void){
+       
+        this->StatePed = 0;
+        this->Occupation = DUMMY;
+        this->Health = 0;
+        this->Remap = 0xff;
+        this->TargetCarDoor = 1;
+        this->IdPed = 0;
+        // TODO дописывать нужно.
         return 0;
     }
 
@@ -1317,6 +1345,8 @@ int Ped::SetRampageCriminal(void){
 
 
 int Ped::AreAnyPedActive(void){
+   /* if ((((this->GameObject1 != NULL &&
+        this->Vehicle==NULL && this->))))*/
         return 0;
     }
 
@@ -1421,7 +1451,7 @@ int Ped::AbandonVehicle(void){
 
 
 int Ped::SearchForPed(void){
-        return 0;
+        return this->TypeSearch;
     }
 
 

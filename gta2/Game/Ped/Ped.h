@@ -3,12 +3,12 @@
 #define __PED_H_
 
 #include <windows.h>
-#include "../Player/Player.h"
 
 class GameObject;
 class Car;
 class Weapon;
 class Gang;
+class Palyer;
 
 typedef enum PedState {
     PEDSTATE_MOVE_TURN = 0,
@@ -33,6 +33,62 @@ typedef enum PedState {
     PEDSTATE_19 = 19,
 }PedState;
 
+typedef enum  ALL_PED 
+{
+    PLAYER = 0u,
+    EMPTY = 1u,
+    UNKNOWN_OCUPATION2 = 2u,
+    DUMMY = 3u,
+    UNKNOWN_OCUPATION_DRIVER4 = 4u,
+    DRIVER = 5u,
+    UNKNOWN_OCUPATION6 = 6u,
+    UNKNOWN_OCUPATION7 = 7u,
+    UNKNOWN_OCUPATION8 = 8u,
+    UNKNOWN_OCUPATION9 = 9u,
+    DRIVER2 = 10u,
+    UNKNOWN_OCUPATION_11 = 11u,
+    UNKNOWN_OCUPATION_12 = 12u,
+    UNKNOWN_OCUPATION_13 = 13u,
+    PSYCHO = 14u,
+    MUGGER = 15u,
+    CARTHIEF = 16u,
+    BANK_ROBBER = 17u,
+    CRIMINAL = 18u,
+    UNKNOWN_OCUPATION_19 = 19u,
+    UNKNOWN_OCUPATION_20 = 20u,
+    UNKNOWN_OCUPATION_21 = 21u,
+    ELVIS = 22u,
+    UNKNOWN_OCUPATION_23 = 23u,
+    POLICE = 24u,
+    SWAT = 25u,
+    FBI = 26u,
+    ARMYARMY = 27u,
+    GUARD = 28u,
+    UNK_REL_TO_POLICE_1 = 29u,
+    UNK_REL_TO_POLICE_2 = 30u,
+    UNK_REL_TO_POLICE_3 = 31u,
+    GUARD_AGAINST_PLAYER = 32u,
+    CRIMINAL_TYPE_1 = 33u,
+    CRIMINAL_TYPE_2 = 34u,
+    SPECIAL_GROUP_MEMBER = 35u,
+    TANK_DRIVER = 36u,
+    UNK_REL_TO_POLICE_4 = 37u,
+    FIREMAN = 38u,
+    ROAD_BLOCK_TANK_MAN = 39u,
+    UNKNOWN_OCUPATION_40 = 40u,
+    DRONE = 41u,
+    UNKNOWN_OCUPATION_42 = 42u,
+    STAND_STILL_BLOKE = 43u,
+    ELVIS_LEADER = 44u,
+    REFUGEES = 45u,
+    ANY_LAW_ENFORCEMENT = 46u,
+    ANY_EMERGENCY_SERVICE_MAN = 47u,
+    ANY_GANG_MEMBER = 48u,
+    ANY_ELVIS = 49u,
+    DRIVER3 = 50u,
+    NO_OCCUPATION = 51u,
+}ALL_PED;
+
 typedef enum WantedLevelStat {
     LEVEL_WANTED_0 = 0,
     LEVEL_WANTED_1 = 600,
@@ -55,7 +111,8 @@ class Ped{
         Ped* PedCurrent;
         Ped* Driver;
         Ped* LinkedPed;
-        Car* pVehicle;
+        Car* Vehicle;
+        Car* VehiclePed;
         Car* CurrentVehicle;
         Car* TargetCarForEnter;
         Player *isPlayer;
@@ -77,7 +134,7 @@ class Ped{
         int PositionX1, PositionY1, PositionZ1;
         int X, Y, Z;
         Ped* DriverPed1;
-        int ID;
+        int IdPlayer;
         int IdPed;
         unsigned short Invulnerability;
         int ActionState1;
@@ -92,6 +149,7 @@ class Ped{
         int TypeSearch;
         byte CarId;
         int StatusPed;
+        byte Remap;
        // Remap pRemap;
         int TargetCarDoor;
         byte AnimationState;
@@ -102,8 +160,9 @@ class Ped{
         int StatePed;
         int SavedState;
         int DamageType;
+        int Occupation;
        
-
+        Ped();
     // 0x003F1004
     int FindNearestPlayer(void);
     // 0x00403920
@@ -117,7 +176,7 @@ class Ped{
     // 0x00403960
     int UpdateState(void);
     // 0x00403970
-    int SetCurrentOccupation(void);
+    void  SetCurrentOccupation(int occupation);
     // 0x00403980
     int GetOccupation(void);
     // 0x00403990
@@ -130,7 +189,10 @@ class Ped{
     int GetFlags1(void);
     // 0x004039D0
     int GetFlags2(void);
+
+    Ped* GetPed();
     // 0x004039E0
+    
     int GetDamageState(void);
     // 0x004039F0
     int GetSub_4039F0(void);
@@ -155,17 +217,17 @@ class Ped{
     // 0x00403AA0
     int EnterCar(void);
     // 0x00403AC0
-    int SetAsDriver(void);
+    void SetAsDriver(Ped* driver);
     // 0x00403AD0
     int GetPassenger(void);
     // 0x00403AE0
     int SetLinkedPedestrian(void);
     // 0x00403B00
-    int SetTargetVehicle(void);
+    void  SetVehicle(Car* Vehicle);
     // 0x00403B10
     int GetCurrentCar(void);
     // 0x00403B20
-    int GetCarStateTimer(void);
+    Car* GetCar(Car* Vehicle);
     // 0x00403B30
     int GetActionState(void);
     // 0x00403B40
@@ -259,7 +321,7 @@ class Ped{
     // 0x00433C80
     int SetActionState(void);
     // 0x00433C90
-    int GetOCcupationIsElvis(void);
+    bool  GetOccupationIsElvis(void);
     // 0x00433CB0
     int GetPedFromSprite(void);
     // 0x00433DA0
