@@ -35,3 +35,8 @@ add_subdirectory(gta2)
 #add_subdirectory(gta2manager)
 # Аудио
 #add_subdirectory(mms32)
+#библиотека для hook 
+add_subdirectory(dllLoad)
+
+
+

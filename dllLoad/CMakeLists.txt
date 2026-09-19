@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0)
+project(HookLoad LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_M_IX86")
+
+file(GLOB DLL_LOAD_SOURCE "dllLoad/*.cpp")
+file(GLOB DLL_LOAD_HEADERS "dllLoad/*.h")
+
+#  библиотека для hook 
+add_library(${PROJECT_NAME} STATIC ${DLL_LOAD_SOURCE} ${DLL_LOAD_HEADERS})
+add_library(${PROJECT_NAME}_SHARED SHARED ${DLL_LOAD_SOURCE} ${DLL_LOAD_HEADERS})
+set_target_properties(${PROJECT_NAME}_SHARED PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+

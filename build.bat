@@ -2,8 +2,6 @@
 setlocal
 
 set "SCRIPT_DIR=%~dp0"
-set "MSBUILD=D:\dev\VisualStudio\vs17\MSBuild\Current\Bin\MSBuild.exe"
-set "SLN=%SCRIPT_DIR%dllLoad\dllLoad.sln"
 
 :menu
 cls
@@ -106,6 +104,12 @@ if "%M%"=="7" goto build_mss32
 if "%M%"=="8" goto build_mssds3dh
 if "%M%"=="9" goto build_polygon
 if "%M%"=="10" goto build_all
+
+
+echo  Неверный выбор.
+pause
+goto menu
+
 :menuRes
 cls
 echo.
@@ -137,6 +141,9 @@ if "%M%"=="7" goto build_mss32
 if "%M%"=="8" goto build_mssds3dh
 if "%M%"=="9" goto build_polygon
 if "%M%"=="10" goto build_all
+echo  Неверный выбор.
+pause
+goto menu
 :menuConsol
 cls
 echo.
@@ -153,8 +160,10 @@ echo    6 - Собрать под Nintenod 64(N64)
 echo    7 - Собрать под Nintenod GameCube(GC)
 echo    8 - Собрать под Nintenod WII
 echo    9 - Собрать под Nintendo WII U
-echo    10 - Собрать под Microsoft Xbox 
-echo    11 - Собрать под Microsoft Xbox 360
+echo    10 - Собрать под Nintendo Switch
+echo    11 - Собрать под Nintendo Switch 2 (нету SDK)
+echo    12 - Собрать под Microsoft Xbox 
+echo    13 - Собрать под Microsoft Xbox 360
 echo  ================================================
 echo.
 set /p "M=Выберите пункт: "
@@ -170,7 +179,9 @@ if "%M%"=="7" goto build_mss32
 if "%M%"=="8" goto build_mssds3dh
 if "%M%"=="9" goto build_polygon
 if "%M%"=="10" goto build_all
-
+echo  Неверный выбор.
+pause
+goto menu
 
 :clean
 echo.
@@ -184,8 +195,15 @@ goto menu
 
 :build_hook_dll
 echo.
-echo  Сборка DLL (Debug|Win32)...
-call :do_build_dll
+echo  Сборка DLL Win32...
+cmake -S . -B build  -A Win32 "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+if errorlevel 1 (
+    echo.
+    echo  [ОШИБКА] Конфигурация CMake не удалась.
+    pause
+    goto menu
+)
+cmake --build build --target HookLoad
 if errorlevel 1 (
     echo.
     echo  [ОШИБКА] DLL не собрана.
@@ -282,6 +300,3 @@ if errorlevel 1 (
 pause
 goto menu
 
-:do_build_dll
-"%MSBUILD%" "%SLN%" /t:Build /p:Configuration=Debug /p:Platform=Win32 /m /nologo
-exit /b %errorlevel%
