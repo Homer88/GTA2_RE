@@ -24,6 +24,10 @@
 // The real Menu is heap-allocated (operator_new(0x1EB40) in FUN_00457830).
 // We read the pointer at dump time to follow the heap address.
 static Menu*      GetRealMenu(void) { return (Menu*)(*(void**)0x005EB160); }
+// gDMAudio lives directly at 0x005D85A0 (the object, not a pointer cell); raw state
+// is hexdumped from this address by FormatDMAudioState (0x3E84 bytes = next global
+// unk_5DC424 @0x005DC424).
+static const void* GetRealDMAudio(void) { return (const void*)0x005D85A0; }
 static MapGm*     s_pMapGm     = (MapGm*)0x005EC070;
 static PlayerData* s_pPlayerData = (PlayerData*)0x0066B404;
 static Text*      s_pText      = (Text*)0x00671550;

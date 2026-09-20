@@ -1,4 +1,5 @@
 #include "../Car/Car.h"
+#include "../PowerUp/PowerUp.h"
 #include "../Player/Player.h"
 #include "Ped.h"
 
@@ -1025,7 +1026,12 @@ int Ped::SetPedPosition(void){
 
 
 int Ped::SetDoubleDamage(void){
-        return 0;
+    
+    if ((this != NULL) && (this->isPlayer != NULL)){
+        this->isPlayer->GivePowerUp(POWERUP_TYPE_DOUBLE_DAMAGE);
+        return 2;
+    }
+        return 1;
     }
 
 

@@ -169,7 +169,7 @@ int gFullWidth, gFullHeight;
 
 int gStartMode;
 int gTrippleBuffer;
-
+void LoadConfig();
 
 
 
@@ -1019,7 +1019,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
   gWinApi->FindGraphicDevice();  // 0x004D128F: выбор устройства рендеринга/видео
   gWinApi->DefautInitParam();    // 0x00461853 (InitializeGlobals): сброс параметров к умолчаниям
   gWinApi->InitTimer();          // запуск таймера кадров (gTimer = timeGetTime())
-
+  LoadConfig();
   SetupMenu();              // создать меню + доп. параметры (аудио), аналог FUN_00457830
 
   // Одиночная игра (одиночная ветка InitFrontedLessGame 0x00461DE0 -> 0x00462001):
@@ -1031,4 +1031,14 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 
   cApp App;
   return App.Run();
+}
+
+void PlayDataInit();
+void LoadConfig() {
+    //configKeybord(); //TODO
+    PlayDataInit();
+}
+
+void PlayDataInit() {
+    gPlayerData = new PlayerData;
 }
