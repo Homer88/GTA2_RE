@@ -9,8 +9,9 @@
 #include <string.h>
 #include "../../Engine/Text/Text.h"
 #include "../../Engine/Font/Font.h"
-#include "../PlayerData/PlayerData.h"
 #include "../PlayerSlotSlave/PlayerSlotSlave.h"
+#include "../PlayerData/PlayerData.h"
+
 #include "../../Engine/MapGm/MapGm.h"
 #include "../../Engine/Bink/BinkBuffer.h"
 #include "../../Engine/Movie/Movie.h"

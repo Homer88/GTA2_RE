@@ -29,3 +29,19 @@ FILE* FileMgr::FileOpen(char* filename) {
 };
 void FileMgr::ReadFile(void* outbuffer, void* inBuffer) {};
 void FileMgr::ReadFile(void* buffer, size_t SizeRead) {};
+
+
+int  FileMgr::ReadToken(FILE* f, WORD* out) {
+    unsigned char i = 0;
+    int c;
+
+    do {
+        c = getc(f);
+        if (c == '\n' || c == ' ')
+            break;
+        out[i++] = (WORD)c;
+    } while (1);
+
+    out[i] = 0;
+    return c;
+}

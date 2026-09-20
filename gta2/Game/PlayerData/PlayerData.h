@@ -2,7 +2,9 @@
 #ifndef __PLAYERDATA_H_
 #define __PLAYERDATA_H_
 
-#include "../PlayerSlotSlave/PlayerSlotSlave.h"
+
+class PlayerSlotSlave;
+
 
 class PlayerData{
     public:
@@ -54,4 +56,5 @@ class PlayerData{
     // 0x004D6DCA: PlayerData::CreateEntry
     void CreateEntry();
 };
+extern PlayerData* gPlayerData;
 #endif // !__PLAYERDATA_H_

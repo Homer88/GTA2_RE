@@ -1,3 +1,4 @@
+#include "../PlayerSlotSlave/PlayerSlotSlave.h"
 #include "PlayerData.h"
 
 

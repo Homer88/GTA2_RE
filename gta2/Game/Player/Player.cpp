@@ -3,8 +3,9 @@
 #include "../Weapon/Weapon.h"
 #include "../PowerUp/PowerUp.h"
 #include "../Ped/Ped.h"
-#include "../PlayerData/PlayerData.h"
 #include "../PlayerSlotSlave/PlayerSlotSlave.h"
+#include "../PlayerData/PlayerData.h"
+
 #include "../Character/Character.h"
 #include "../Ped/Ped.h"
 #include "../Car/Car.h"

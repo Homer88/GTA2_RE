@@ -1,8 +1,11 @@
 #include "PlayerSlotSlave.h"
+#include <cstddef>
 
 PlayerSlotSlave::PlayerSlotSlave(){
 
 	this->Value = 0;
+	this->ActiveArenaSlot = 0;
+	//this->PlayerName = (wchar_t)NULL;
 }
 
 unsigned int PlayerSlotSlave::GetValue() {

@@ -44,6 +44,8 @@
 #include "Engine/MapGm/MapGm.h"     // класс MapGm (gMapGm)
 #include "Engine/Registry/Registry.h" // регистр: gRegistry (настройки/язык)
 #include "../MapGm/MapGm.h"
+#include "../PlayerData/PlayerData.h"
+#include "../Keybord/Keybord.h"
 // Глобальные объекты реконструкции (определены в MENU/ULTIL-библиотеках).
 extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerSlotSave и т.д.
 extern Registry *gRegistry;         // реестр Windows: язык, настройки экрана/звука
@@ -170,6 +172,7 @@ int gFullWidth, gFullHeight;
 int gStartMode;
 int gTrippleBuffer;
 void LoadConfig();
+
 
 
 
@@ -1032,13 +1035,22 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
   cApp App;
   return App.Run();
 }
-
+void ConfigKeybord();
 void PlayDataInit();
+
 void LoadConfig() {
-    //configKeybord(); //TODO
+    ConfigKeybord(); //TODO
     PlayDataInit();
 }
+void ConfigKeybord() {
 
+    if (gKeybord == NULL) {
+        gKeybord = new Keybord;
+    }
+    gKeybord->LoadKeybord();
+}
 void PlayDataInit() {
-    gPlayerData = new PlayerData;
+    if (gPlayerData == NULL) {
+        gPlayerData = new PlayerData;
+    }
 }
