@@ -16,8 +16,7 @@ struct MapGm{
 	char field_405;
 	char field_406;
 	char field_407;
-	int Arr10i[9];
-	int field_42C;
+	int Arr10i[10];
 	int field_430;
 	int field_434;
 	short field_438;
@@ -142,21 +141,16 @@ struct MapGm{
 	char field_4B1;
 	char field_4B2;
 	char field_4B3;
-	char field_4B4;
-	char field_4B5;
-	char field_4B6;
-	char field_4B7;
-	char field_4B8;
-	char gap4B9[183];
+	wchar_t string_Arr0x16[16];
+	char gap4D4[156];
 	char field_570;
 	char field_571;
 	char field_572;
 	char field_573;
 	int SpecialTokens;
-	int field_578;
 };
 
-static_assert(sizeof(MapGm), "Error Size MapGm");
+static_assert(sizeof(MapGm) == 0x578, "Size MapGm");
 
 static MapGm* gMapGm = (MapGm*)0x005ec070;
 

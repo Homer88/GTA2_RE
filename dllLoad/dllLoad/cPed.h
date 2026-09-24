@@ -1,17 +1,9 @@
-#ifndef __PED__H__
-#define __PED__H__
+#ifndef ___PED___H_
+#define ___PED___H_
 
 #include <assert.h>
-#include <stdio.h>
 
-#include "cS200.h"
-#include "cCar.h"
-#include "cGameObject.h"
-#include "cPlayer.h"
-#include "cWeapon.h"
-
-
-enum OCUPATION :unsigned char {
+enum OCUPATION : unsigned char {
 	OCCUPATION_PLAYER = 0u,
 	OCCUPATION_EMPTY = 1u,
 	OCCUPATION_2 = 2u,
@@ -48,10 +40,9 @@ enum OCUPATION :unsigned char {
 	OCCUPATION_ANY_ELVIS = 49u,
 	OCCUPATION_50 = 50u,
 	OCCUPATION_NONE = 51u
-
 };
 
-enum PedActions :unsigned int {
+enum PedActions : unsigned int {
 	ACTION_ENTERING_CAR = 1u,
 	ACTION_EXITING_CAR = 59u
 };
@@ -66,7 +57,7 @@ enum PedState : unsigned int {
 	PEDSTATE_IN_CAR = 10u
 };
 
-enum Remap :unsigned char {
+enum Remap : unsigned char {
 	REMAP_COP = 0u,
 	REMAP_GREEN_COP = 1u,
 	REMAP_RED_COP = 2u,
@@ -95,168 +86,253 @@ enum Remap :unsigned char {
 	REMAP_PLAYER = 25u,
 	REMAP_NAKED_PEDESTRIAN = 26u,
 };
-enum FlagPed : unsigned char {
 
-};
+// Ped struct (IDA gta2.exe.h:3925). Size 0x294 (660 bytes), verified:
+// PedManager pool = operator_new(0x203AC); Construct(this->Ped, 0x294, 200, ...)
+// free-list step +165 dwords (=+660) => 200 peds x 0x294.
+// IDA named the header block S200[3] and then jumped to field_CB: the unnamed
+// animation area 0x09..0xCA is kept as gap. Pack(1) preserves the raw offsets
+// (several pointer fields sit on unaligned addresses).
+
+struct Player;
+struct Car;
+struct GameObject;
+struct Weapon;
+struct Gang;
+struct S94;
+struct S169;
+
+#pragma pack(push, 1)
 struct Ped {
-	S200 structS200[49];
-	unsigned int Counter;
-	unsigned char uns0[145];
-	unsigned short uns1;
-	unsigned short uns2;
-	unsigned short uns3;
-	unsigned short uns4;
-	unsigned short uns5;
-	char uns6;
-	char uns7;
-	int uns8;
-	int uns9;
-	int uns10;
-	Ped *structPed;
-	Ped *structPed1;
-	Ped *LinkerPed;
-	Car *structCar;
-	Car *ObjectiveTargetCar;
-	Car* TargetCarForEnter;
-	Player* CurentPlayer;
-	struct Ped* NextPed;
-	int *Class4;
-	GameObject* CurrentGameObject;
-	Car* CarCurrent; //0x16c
-	struct Weapon* SelectWeapon;
-	struct Weapon* Weapon1;
-	struct Weapon* Weapon2;
-	void* uns13;
-	Ped* PedDriver;
-	void* uns15;
-	void* uns16;
-	void* uns17;
-	void* uns18;
-	void* uns19;
-	Ped* Ped3;
-	void* uns20;
-	void* uns21;
-	void* uns22;
-	void* uns23;
-	int	PositionX;
-	int	PositionY;
-	int	PositionZ;
-	Ped* Ped4;
-	void* uns30;
-	void* uns31;
-	void* uns32;
-	void* uns33;
-	void* uns34;
-	void* uns35;
-	void* uns36;
-	void* SpriteS1;
-	Car* Car1;
-	Car* Car2;
-	void* uns40;
-	void* uns41;
-	void* uns42;
-	void* uns43;
-	void* uns44;
-	void* uns45;
-	void* uns46;
-	int ID;
-	int PedID;
-	short uns49;
-	short PoliceStar;
-	short uns50;
-	short uns51;
-	short uns52;
-	short uns53;
-	short uns54;
-	short Health;//  здоровье
-	short uns56;
-	short uns57;
-	FlagPed  FlagPed;
-	char  uns59;
-	char  uns60;
-	char  uns61;
-	void* uns62;
-	unsigned char usn63;
-	unsigned char CarDamageState;
-	//0x226
-	unsigned char ExitAnimState;
-	char uns66;
-	char uns67;
-	char uns68;
-	char uns69;
-	char uns70;
-	//0x22c
-	void* uns71;
-	// 0x230
-	void* uns72;
-
-	char uns73;
-	char uns74;
-	char uns75;
-	char uns76;
-	void* SearchType;
-	unsigned char IndexPed;
-	char uns79;
-	char uns80;
-	char uns81;
-	OCUPATION Occupation;
-	Remap RemapEnum;
-	//0x245
-	char uns84;
-	char uns85;
-	char uns86;
-	int TargetCarDoor;
-	unsigned char Index;
-	char uns90;
-	char uns91;
-	char uns92;
-	void* uns93;
-	void* uns94;
-	int State;
-	int CurrentAction;
-	char uns100;
-	char uns101;
-	char uns102;
-	char uns103;
-	char uns104;
-	char uns105;
-	char uns106;
-	char uns107;
-	char uns108;
-	char uns109;
-	char uns110;
-	char uns111;
-	//0x26c
-	void* GraphicType;
-	//0x270
-	void* uns270;
-	//0x274
-	void* GangCarModel;
-	//0x278
-	PedState CurrentState;
-	//0x27C
-	void* field_0x27C;
-	//0x280
-	PedState SavedState;
-	//0x284
-	void* field_0x284;
-	//0x288
-	void* field_0x288;
-	//0x28C
-	void* field_0x28C;
-	//0x290
-	void* field_0x290;
+    char S200[9];            // 0x00 S200[3] (header / anim block prefix)
+    char gap9[0xC2];         // 0x09..0xCA (unnamed animation area)
+    char field_CB;           // 0xCB
+    char field_CC;
+    char field_CD;
+    char field_CE;
+    char field_CF;
+    char field_D0;
+    char field_D1;
+    char field_D2;
+    char field_D3;
+    char field_D4;
+    char field_D5;
+    char field_D6;
+    char field_D7;
+    char field_D8;
+    char field_D9;
+    char field_DA;
+    char field_DB;
+    char field_DC;
+    char field_DD;
+    char field_DE;
+    char field_DF;
+    char field_E0;
+    char field_E1;
+    char field_E2;
+    char field_E3;
+    char field_E4;
+    char field_E5;
+    char field_E6;
+    char field_E7;
+    char field_E8;
+    char field_E9;
+    char field_EA;
+    char field_EB;
+    char field_EC;
+    char field_ED;
+    char field_EE;
+    char field_EF;
+    char field_F0;
+    char field_F1;
+    char field_F2;
+    char field_F3;
+    char field_F4;
+    char field_F5;
+    char field_F6;
+    char field_F7;
+    char field_F8;
+    char field_F9;
+    char field_FA;
+    Player* isPlayer;        // 0xFB
+    char field_FF;
+    char field_100;
+    char field_101;
+    char field_102;
+    char field_103;
+    char field_104;
+    char field_105;
+    char field_106;
+    GameObject* GameObject2; // 0x107
+    char field_10B;
+    char field_10C;
+    char field_10D;
+    char field_10E;
+    Weapon* WeaponSelect;    // 0x10F
+    char field_113;
+    char field_114;
+    char field_115;
+    char field_116;
+    short field_117;
+    char field_119;
+    char field_11A;
+    char field_11B;
+    char field_11C;
+    char field_11D;
+    char field_11E;
+    char field_11F;
+    char field_120;
+    char field_121;
+    char field_122;
+    char field_123;
+    char field_124;
+    char field_125;
+    char field_126;
+    char field_127;
+    short field_128;
+    char field_12A;
+    char field_12B;
+    short field_12C;
+    short field_12E;
+    short field_130;
+    short field_132;
+    short field_134;
+    char field_136;
+    char field_137;
+    GameObject* GameObject1; // 0x138
+    int field_13C;
+    Car* Car1;               // 0x140
+    Ped* sPed1;              // 0x144
+    Ped* Driver;             // 0x148
+    Ped* LinkedPed;          // 0x14C
+    Car* Vehicle;            // 0x150
+    Car* CurrentVehicle;     // 0x154
+    Car* TargetCarForEnter;  // 0x158
+    Player* Player;          // 0x15C
+    Ped* NextPed;            // 0x160
+    S169* S169;              // 0x164
+    GameObject* GameObject;  // 0x168
+    Car* CurrentCar;         // 0x16C
+    Weapon* SelectedWeapon;  // 0x170
+    Weapon* Weapon1;         // 0x174
+    Weapon* Weapon2;         // 0x178
+    struct Gang* Gang;        // 0x17C (member name shadows type Gang)
+    Ped* DriverPed;          // 0x180
+    int field_184;
+    Ped* LastCharPunched;    // 0x188
+    Ped* field_18C;
+    S94* S94;                // 0x190
+    int field_194;
+    Ped* sPed3;              // 0x198
+    struct Gang* Gang1;      // 0x19C
+    int PedId;               // 0x1A0
+    short TargetCarDoor1;    // 0x1A4
+    short PoliceStar1;       // 0x1A6
+    Ped* ElvisLeader;        // 0x1A8
+    int XCoordinate;         // 0x1AC
+    int PositionY;           // 0x1B0
+    int Camer_Z_View;        // 0x1B4
+    int PositionX1;          // 0x1B8
+    int PositionY1;          // 0x1BC
+    int PositionZ2;          // 0x1C0
+    int X;                   // 0x1C4
+    int Y;                   // 0x1C8
+    int Z;                   // 0x1CC
+    int field_1D0;
+    int field_1D4;
+    int field_1D8;
+    int OCCUPATION;          // 0x1DC
+    Ped* DriverPed1;         // 0x1E0
+    int PositionZ1;          // 0x1E4
+    int field_1E8;
+    int field_1EC;
+    int field_1F0;
+    int field_1F4;
+    int CurrentAction1;      // 0x1F8
+    int field_1FC;
+    int ID;                  // 0x200
+    int IDPed;               // 0x204
+    short Invulnerability;   // 0x208
+    short PoliceStar;        // 0x20A
+    short field_20C;
+    unsigned short field_20E;
+    short field_210;
+    short field_212;
+    short field_214;         // PedState (GetPedState returns field_214)
+    short Health;            // 0x216 (HIWORD of PositionY alias in SetHealth)
+    short ObjectiveTimer;
+    short CarStateTimer;
+    unsigned int Flags;      // 0x21C
+    int field_220;
+    char field_224;
+    char DamageState;        // 0x225
+    unsigned char ExitAnimState;
+    char field_227;
+    int field_228;
+    int field_22C;
+    int field_230;
+    char field_234;
+    char field_235;
+    char field_236;
+    char field_237;
+    int SearchType;          // 0x238
+    char CarId;              // 0x23C
+    char field_23D;
+    char field_23E;
+    char field_23F;
+    int Occupation;          // 0x240 (ALL_PED)
+    char Remap;              // 0x244 (enum :int8)
+    char field_245;
+    char field_246;
+    char field_247;
+    int TargetCarDoor;       // 0x248
+    char AnimationState;     // 0x24C
+    char field_24D;
+    char field_24E;
+    char field_24F;
+    int field_250;
+    char field_254;
+    char field_255;
+    char field_256;
+    char field_257;
+    int ActionState;         // 0x258
+    int CurrentAction;       // 0x25C
+    char field_260;
+    char field_261;
+    char field_262;
+    char field_263;
+    char field_264;
+    unsigned char field_265;
+    char field_266;
+    char field_267;
+    char field_268;
+    char field_269;
+    char field_26A;
+    char field_26B;
+    int GraphicType;         // 0x26C
+    int field_270;
+    int GangCarModel;        // 0x274
+    int PedState;            // 0x278
+    int field_27C;
+    int SavedState;          // 0x280
+    int field_284;
+    int field_288;
+    int field_28C;
+    int DamageType;          // 0x290
 };
-static_assert (sizeof(Ped) == 660, "SIZE PED ERROR"); // размер Ped
+#pragma pack(pop)
+static_assert(sizeof(Ped) == 0x294, "Ped size 0x294");
 
-static struct Ped* gPed;
-
-
-
-
-
-
-
-
+// PedManager (gta2.exe.h:10201), heap pool 0x203AC =
+// 8 header + 200*0x294 + PedsInUse(2) + 2. Global gPedManager ptr @0x005E5BBC.
+struct PedManager {
+    Ped* FirstElement;
+    Ped* NextPed;
+    Ped Ped[200];
+    short PedsInUse;
+    char field_203AA;
+    char field_203AB;
+};
+static_assert(sizeof(PedManager) == 0x203AC, "PedManager size 0x203AC");
 
 #endif

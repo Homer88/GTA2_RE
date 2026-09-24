@@ -3,57 +3,30 @@
 
 #include <assert.h>
 
-struct DMAudio
+// One 0x10-byte slot of the gDMAudio table (observed in game dump).
+// Layout confirmed from logs (frame 0 = empty, later frames = loaded):
+//   +0x00 u32 pData   -- heap buffer (0x06...) or in-global buffer ptr; while
+//                        empty it is a self pointer: base + off + 4
+//   +0x04 u32 size    -- small size/type (0..9 at loaded slots: 1,6,7,8,9,...)
+//   +0x08 u32 zero    -- always 0
+//   +0x0C u32 index   -- global running index (2,4,5,6,... 138...)
+struct DMAudioChannel
 {
-	//CameraOrPhysics* CameraOrPhysics;
-	void* field0;
-	char gap4;
-	char field_5;
-	char field_6;
-	char field_7;
-	char field_8;
-	char field_9;
-	char field_A;
-	char field_B;
-	char field_C;
-	char field_D;
-	char field_E;
-	char field_F;
-	char field_10;
-	char field_11;
-	char field_12;
-	char field_13;
-	char field_0;
-	char field_15[1000];
-	char field_3FD[100];
-	char field_461[1000];
-	char field_849[500];
-	char field_A3D[2000];
-	char field_120D[1000];
-	char field_15F5[1000];
-	char field_19DD[400];
-	char field_1B6D[500];
-	char field_1D61[2000];
-	char field_2531[1000];
-	char field_2919[1000];
-	char field_2D01[500];
-	char field_2EF5[50];
-	char field_2F27[25];
-	char field_2F40[20];
-	char field_2F54[10];
-	char field_2F5E[10];
-	char field_2F68[10];
-	char field_2F72;
-	char field_2F73;
-	char field_2F74;
-	char field_2F75;
-	char field_2F76;
-	char field_2F77;
-	char field_2F78;
-
+	unsigned int pData;
+	unsigned int size;
+	unsigned int zero;
+	unsigned int index;
 };
 
-static_assert(sizeof(DMAudio)==12156, "Error Size MapGm");
+// gDMAudio @0x005D85A0, next global unk_5DC424 @0x005DC424 -> 0x3E84 bytes.
+// Real layout: table of 1000 x 0x10 records (0x3E80) + 4 tail bytes.
+struct DMAudio
+{
+	DMAudioChannel channel[1000];
+	char gap_E80[4];
+};
+
+static_assert(sizeof(DMAudio) == 0x3E84, "Error Size DMAudio");
 
 
 #endif

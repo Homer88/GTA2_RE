@@ -15,6 +15,10 @@
 #include "cGang.h"
 #include "cGame.h"
 #include "cAudioManager.h"
+#include "cCar.h"
+#include "cPed.h"
+#include "cWeapon.h"
+#include "cS200Watch.h"
 #include "AddrToFunc.h"
 #include "GlobalsData.h"
 #include "DebugLogFile.h"
@@ -39,6 +43,8 @@ static volatile long s_refreshPending = 0;
 static BOOL s_paused = FALSE;
 static BOOL s_skipZero = FALSE;
 static BOOL s_saveFile = TRUE;
+static BOOL s_s200Only = FALSE;
+static BOOL s_s200Watch = FALSE;
 
 #define INSP_FIELD(TYPE, MEMBER) { offsetof(TYPE, MEMBER), sizeof(((TYPE*)0)->MEMBER), #MEMBER }
 
@@ -146,7 +152,6 @@ static const InspField kMapGmFields[] = {
     INSP_FIELD(MapGm, field_406),
     INSP_FIELD(MapGm, field_407),
     INSP_FIELD(MapGm, Arr10i),
-    INSP_FIELD(MapGm, field_42C),
     INSP_FIELD(MapGm, field_430),
     INSP_FIELD(MapGm, field_434),
     INSP_FIELD(MapGm, field_438),
@@ -271,18 +276,13 @@ static const InspField kMapGmFields[] = {
     INSP_FIELD(MapGm, field_4B1),
     INSP_FIELD(MapGm, field_4B2),
     INSP_FIELD(MapGm, field_4B3),
-    INSP_FIELD(MapGm, field_4B4),
-    INSP_FIELD(MapGm, field_4B5),
-    INSP_FIELD(MapGm, field_4B6),
-    INSP_FIELD(MapGm, field_4B7),
-    INSP_FIELD(MapGm, field_4B8),
-    INSP_FIELD(MapGm, gap4B9),
+    INSP_FIELD(MapGm, string_Arr0x16),
+    INSP_FIELD(MapGm, gap4D4),
     INSP_FIELD(MapGm, field_570),
     INSP_FIELD(MapGm, field_571),
     INSP_FIELD(MapGm, field_572),
     INSP_FIELD(MapGm, field_573),
     INSP_FIELD(MapGm, SpecialTokens),
-    INSP_FIELD(MapGm, field_578),
 };
 static const int kMapGmFieldCount = sizeof(kMapGmFields) / sizeof(kMapGmFields[0]);
 
@@ -465,6 +465,516 @@ static const InspField kGameFields[] = {
 static const int kGameFieldCount = sizeof(kGameFields) / sizeof(kGameFields[0]);
 
 // ---------------------------------------------------------------------------
+// Player fields (cPlayer.h) - heap instances, one per slot; the pointers live
+// in Game->pPlayer[0..5] (Game+0x04). Size 0x85C (operator_new in gta2.exe.c).
+// ---------------------------------------------------------------------------
+static const InspField kPlayerFields[] = {
+    INSP_FIELD(Player, CurrentPlayer),
+    INSP_FIELD(Player, Player),
+    INSP_FIELD(Player, Rotate),
+    INSP_FIELD(Player, FW),
+    INSP_FIELD(Player, S103),
+    INSP_FIELD(Player, Sw),
+    INSP_FIELD(Player, TypeWeapon),
+    INSP_FIELD(Player, S103_1),
+    INSP_FIELD(Player, SelectWeaponNext),
+    INSP_FIELD(Player, field_1E),
+    INSP_FIELD(Player, field_1F),
+    INSP_FIELD(Player, pS103),
+    INSP_FIELD(Player, ID),
+    INSP_FIELD(Player, S103_2),
+    INSP_FIELD(Player, MoneyValue),
+    INSP_FIELD(Player, Ids),
+    INSP_FIELD(Player, field_2F),
+    INSP_FIELD(Player, S103_5),
+    INSP_FIELD(Player, RESPECT),
+    INSP_FIELD(Player, field_38),
+    INSP_FIELD(Player, field_3C),
+    INSP_FIELD(Player, S103_4),
+    INSP_FIELD(Player, DeathReason),
+    INSP_FIELD(Player, Tango1),
+    INSP_FIELD(Player, Sound),
+    INSP_FIELD(Player, field_50),
+    INSP_FIELD(Player, field_54),
+    INSP_FIELD(Player, field_58),
+    INSP_FIELD(Player, sCar1),
+    INSP_FIELD(Player, field_60),
+    INSP_FIELD(Player, field_64),
+    INSP_FIELD(Player, MultiPlayerMode),
+    INSP_FIELD(Player, field_6C),
+    INSP_FIELD(Player, Up),
+    INSP_FIELD(Player, Down),
+    INSP_FIELD(Player, Left),
+    INSP_FIELD(Player, Right),
+    INSP_FIELD(Player, prevWeapon),
+    INSP_FIELD(Player, nextWeapon),
+    INSP_FIELD(Player, debugKey1),
+    INSP_FIELD(Player, debugKey2),
+    INSP_FIELD(Player, Forward),
+    INSP_FIELD(Player, Backward),
+    INSP_FIELD(Player, RotateLeft),
+    INSP_FIELD(Player, RotateRight),
+    INSP_FIELD(Player, Attack),
+    INSP_FIELD(Player, Enter),
+    INSP_FIELD(Player, Jump),
+    INSP_FIELD(Player, NextWeaponZ),
+    INSP_FIELD(Player, PrevWeaponX),
+    INSP_FIELD(Player, keySpecial),
+    INSP_FIELD(Player, keySpecial2),
+    INSP_FIELD(Player, field_83),
+    INSP_FIELD(Player, field_84),
+    INSP_FIELD(Player, field_88),
+    INSP_FIELD(Player, AttackIsChanged),
+    INSP_FIELD(Player, field_8D),
+    INSP_FIELD(Player, PlayerNext),
+    INSP_FIELD(Player, field_8F),
+    INSP_FIELD(Player, CameraOrPhysics1),
+    INSP_FIELD(Player, field_94),
+    INSP_FIELD(Player, field_95),
+    INSP_FIELD(Player, field_96),
+    INSP_FIELD(Player, field_97),
+    INSP_FIELD(Player, State),
+    INSP_FIELD(Player, AudioManager),
+    INSP_FIELD(Player, field_A0),
+    INSP_FIELD(Player, field_A7),
+    INSP_FIELD(Player, field_A8),
+    INSP_FIELD(Player, field_A9),
+    INSP_FIELD(Player, sbw),
+    INSP_FIELD(Player, tpa),
+    INSP_FIELD(Player, field_AC),
+    INSP_FIELD(Player, S1__),
+    INSP_FIELD(Player, field_D3),
+    INSP_FIELD(Player, field_DB),
+    INSP_FIELD(Player, field_EA),
+    INSP_FIELD(Player, field_F7),
+    INSP_FIELD(Player, field_102),
+    INSP_FIELD(Player, field_115),
+    INSP_FIELD(Player, field_116),
+    INSP_FIELD(Player, field_117),
+    INSP_FIELD(Player, field_118),
+    INSP_FIELD(Player, field_11C),
+    INSP_FIELD(Player, field_120),
+    INSP_FIELD(Player, field_124),
+    INSP_FIELD(Player, field_125),
+    INSP_FIELD(Player, field_126),
+    INSP_FIELD(Player, field_127),
+    INSP_FIELD(Player, field_128),
+    INSP_FIELD(Player, field_12C),
+    INSP_FIELD(Player, field_130),
+    INSP_FIELD(Player, CameraOrPhysics),
+    INSP_FIELD(Player, field_154),
+    INSP_FIELD(Player, field_193),
+    INSP_FIELD(Player, field_1A6),
+    INSP_FIELD(Player, field_1C7),
+    INSP_FIELD(Player, field_1D1),
+    INSP_FIELD(Player, field_1D4),
+    INSP_FIELD(Player, field_1D8),
+    INSP_FIELD(Player, field_1DC),
+    INSP_FIELD(Player, Camer_X_View),
+    INSP_FIELD(Player, Camer_Y_View),
+    INSP_FIELD(Player, Camer_Z_View),
+    INSP_FIELD(Player, field_1F3),
+    INSP_FIELD(Player, field_1FA),
+    INSP_FIELD(Player, field_202),
+    INSP_FIELD(Player, CameraOrPhysics2),
+    INSP_FIELD(Player, field_20C),
+    INSP_FIELD(Player, field_229),
+    INSP_FIELD(Player, field_24D),
+    INSP_FIELD(Player, field_259),
+    INSP_FIELD(Player, field_26B),
+    INSP_FIELD(Player, field_28C),
+    INSP_FIELD(Player, field_298),
+    INSP_FIELD(Player, field_29E),
+    INSP_FIELD(Player, field_29F),
+    INSP_FIELD(Player, AuxGameCameraX),
+    INSP_FIELD(Player, AuxGameCameraY),
+    INSP_FIELD(Player, AuxGameCameraZ),
+    INSP_FIELD(Player, MainPed),
+    INSP_FIELD(Player, pPassenger),
+    INSP_FIELD(Player, sCar2),
+    INSP_FIELD(Player, field_2D0),
+    INSP_FIELD(Player, Money),
+    INSP_FIELD(Player, field_343),
+    INSP_FIELD(Player, field_3E4),
+    INSP_FIELD(Player, field_41A),
+    INSP_FIELD(Player, field_449),
+    INSP_FIELD(Player, field_640),
+    INSP_FIELD(Player, field_644),
+    INSP_FIELD(Player, field_678),
+    INSP_FIELD(Player, field_67C),
+    INSP_FIELD(Player, field_680),
+    INSP_FIELD(Player, field_682),
+    INSP_FIELD(Player, Lives),
+    INSP_FIELD(Player, MultiPlayer),
+    INSP_FIELD(Player, field_6C0),
+    INSP_FIELD(Player, field_6D9),
+    INSP_FIELD(Player, field_6E5),
+    INSP_FIELD(Player, field_6EC),
+    INSP_FIELD(Player, PowerUp),
+    INSP_FIELD(Player, sWeapon),
+    INSP_FIELD(Player, SelectWeapon),
+    INSP_FIELD(Player, quit1),
+    INSP_FIELD(Player, field_78B),
+    INSP_FIELD(Player, sPed1),
+    INSP_FIELD(Player, Network),
+    INSP_FIELD(Player, field_79E),
+    INSP_FIELD(Player, string_Arr0x16),
+};
+static const int kPlayerFieldCount = sizeof(kPlayerFields) / sizeof(kPlayerFields[0]);
+
+// ---------------------------------------------------------------------------
+// Car fields (cCar.h) - heap instances in gActiveCarsPool (0xD264 pool,
+// 176 cars x 0x132); pointers also arrive via Player->sCar1/sCar2 and
+// Ped->Vehicle. Source of truth: IDA struct Car, gta2.exe.h:3279.
+// ---------------------------------------------------------------------------
+static const InspField kCarFields[] = {
+    INSP_FIELD(Car, pCar),
+    INSP_FIELD(Car, Passenger),
+    INSP_FIELD(Car, PlayerStats),
+    INSP_FIELD(Car, CarDoor),
+    INSP_FIELD(Car, LastCar),
+    INSP_FIELD(Car, CarSprite),
+    INSP_FIELD(Car, Driver),
+    INSP_FIELD(Car, Player),
+    INSP_FIELD(Car, EngineStruct),
+    INSP_FIELD(Car, Model),
+    INSP_FIELD(Car, TrailerCtrl),
+    INSP_FIELD(Car, field_68),
+    INSP_FIELD(Car, ID),
+    INSP_FIELD(Car, lastDamagingPed),
+    INSP_FIELD(Car, Damage),
+    INSP_FIELD(Car, field_76),
+    INSP_FIELD(Car, PhysicsBitmask),
+    INSP_FIELD(Car, field_7A),
+    INSP_FIELD(Car, field_7B),
+    INSP_FIELD(Car, SearchType),
+    INSP_FIELD(Car, field_80),
+    INSP_FIELD(Car, field_81),
+    INSP_FIELD(Car, field_82),
+    INSP_FIELD(Car, field_83),
+    INSP_FIELD(Car, CarType),
+    INSP_FIELD(Car, Mask),
+    INSP_FIELD(Car, FireState),
+    INSP_FIELD(Car, field_8D),
+    INSP_FIELD(Car, AlarmTime),
+    INSP_FIELD(Car, field_8F),
+    INSP_FIELD(Car, DamageType),
+    INSP_FIELD(Car, DamageShotTimer),
+    INSP_FIELD(Car, PlayerId),
+    INSP_FIELD(Car, field_96),
+    INSP_FIELD(Car, field_97),
+    INSP_FIELD(Car, locksDoor),
+    INSP_FIELD(Car, engineState),
+    INSP_FIELD(Car, trafficCarType),
+    INSP_FIELD(Car, sirenState),
+    INSP_FIELD(Car, sirenPhase),
+    INSP_FIELD(Car, field_A6),
+    INSP_FIELD(Car, horn),
+    INSP_FIELD(Car, field_A8),
+    INSP_FIELD(Car, FireTimer),
+    INSP_FIELD(Car, field_AA),
+    INSP_FIELD(Car, field_AB),
+    INSP_FIELD(Car, field_AC),
+    INSP_FIELD(Car, field_B0),
+    INSP_FIELD(Car, currentUpgradeSound),
+    INSP_FIELD(Car, field_B8),
+    INSP_FIELD(Car, field_B9),
+    INSP_FIELD(Car, field_BA),
+    INSP_FIELD(Car, gapBB),
+    INSP_FIELD(Car, gapBC),
+};
+static const int kCarFieldCount = sizeof(kCarFields) / sizeof(kCarFields[0]);
+
+// ---------------------------------------------------------------------------
+// Ped fields (cPed.h) - heap instances in gPedManager pool (0x203AC pool,
+// 200 peds x 0x294); main ped reachable via Player->MainPed. Source of truth:
+// IDA struct Ped, gta2.exe.h:3925.
+// ---------------------------------------------------------------------------
+static const InspField kPedFields[] = {
+    INSP_FIELD(Ped, S200),
+    INSP_FIELD(Ped, gap9),
+    INSP_FIELD(Ped, field_CB),
+    INSP_FIELD(Ped, field_CC),
+    INSP_FIELD(Ped, field_CD),
+    INSP_FIELD(Ped, field_CE),
+    INSP_FIELD(Ped, field_CF),
+    INSP_FIELD(Ped, field_D0),
+    INSP_FIELD(Ped, field_D1),
+    INSP_FIELD(Ped, field_D2),
+    INSP_FIELD(Ped, field_D3),
+    INSP_FIELD(Ped, field_D4),
+    INSP_FIELD(Ped, field_D5),
+    INSP_FIELD(Ped, field_D6),
+    INSP_FIELD(Ped, field_D7),
+    INSP_FIELD(Ped, field_D8),
+    INSP_FIELD(Ped, field_D9),
+    INSP_FIELD(Ped, field_DA),
+    INSP_FIELD(Ped, field_DB),
+    INSP_FIELD(Ped, field_DC),
+    INSP_FIELD(Ped, field_DD),
+    INSP_FIELD(Ped, field_DE),
+    INSP_FIELD(Ped, field_DF),
+    INSP_FIELD(Ped, field_E0),
+    INSP_FIELD(Ped, field_E1),
+    INSP_FIELD(Ped, field_E2),
+    INSP_FIELD(Ped, field_E3),
+    INSP_FIELD(Ped, field_E4),
+    INSP_FIELD(Ped, field_E5),
+    INSP_FIELD(Ped, field_E6),
+    INSP_FIELD(Ped, field_E7),
+    INSP_FIELD(Ped, field_E8),
+    INSP_FIELD(Ped, field_E9),
+    INSP_FIELD(Ped, field_EA),
+    INSP_FIELD(Ped, field_EB),
+    INSP_FIELD(Ped, field_EC),
+    INSP_FIELD(Ped, field_ED),
+    INSP_FIELD(Ped, field_EE),
+    INSP_FIELD(Ped, field_EF),
+    INSP_FIELD(Ped, field_F0),
+    INSP_FIELD(Ped, field_F1),
+    INSP_FIELD(Ped, field_F2),
+    INSP_FIELD(Ped, field_F3),
+    INSP_FIELD(Ped, field_F4),
+    INSP_FIELD(Ped, field_F5),
+    INSP_FIELD(Ped, field_F6),
+    INSP_FIELD(Ped, field_F7),
+    INSP_FIELD(Ped, field_F8),
+    INSP_FIELD(Ped, field_F9),
+    INSP_FIELD(Ped, field_FA),
+    INSP_FIELD(Ped, isPlayer),
+    INSP_FIELD(Ped, field_FF),
+    INSP_FIELD(Ped, field_100),
+    INSP_FIELD(Ped, field_101),
+    INSP_FIELD(Ped, field_102),
+    INSP_FIELD(Ped, field_103),
+    INSP_FIELD(Ped, field_104),
+    INSP_FIELD(Ped, field_105),
+    INSP_FIELD(Ped, field_106),
+    INSP_FIELD(Ped, GameObject2),
+    INSP_FIELD(Ped, field_10B),
+    INSP_FIELD(Ped, field_10C),
+    INSP_FIELD(Ped, field_10D),
+    INSP_FIELD(Ped, field_10E),
+    INSP_FIELD(Ped, WeaponSelect),
+    INSP_FIELD(Ped, field_113),
+    INSP_FIELD(Ped, field_114),
+    INSP_FIELD(Ped, field_115),
+    INSP_FIELD(Ped, field_116),
+    INSP_FIELD(Ped, field_117),
+    INSP_FIELD(Ped, field_119),
+    INSP_FIELD(Ped, field_11A),
+    INSP_FIELD(Ped, field_11B),
+    INSP_FIELD(Ped, field_11C),
+    INSP_FIELD(Ped, field_11D),
+    INSP_FIELD(Ped, field_11E),
+    INSP_FIELD(Ped, field_11F),
+    INSP_FIELD(Ped, field_120),
+    INSP_FIELD(Ped, field_121),
+    INSP_FIELD(Ped, field_122),
+    INSP_FIELD(Ped, field_123),
+    INSP_FIELD(Ped, field_124),
+    INSP_FIELD(Ped, field_125),
+    INSP_FIELD(Ped, field_126),
+    INSP_FIELD(Ped, field_127),
+    INSP_FIELD(Ped, field_128),
+    INSP_FIELD(Ped, field_12A),
+    INSP_FIELD(Ped, field_12B),
+    INSP_FIELD(Ped, field_12C),
+    INSP_FIELD(Ped, field_12E),
+    INSP_FIELD(Ped, field_130),
+    INSP_FIELD(Ped, field_132),
+    INSP_FIELD(Ped, field_134),
+    INSP_FIELD(Ped, field_136),
+    INSP_FIELD(Ped, field_137),
+    INSP_FIELD(Ped, GameObject1),
+    INSP_FIELD(Ped, field_13C),
+    INSP_FIELD(Ped, Car1),
+    INSP_FIELD(Ped, sPed1),
+    INSP_FIELD(Ped, Driver),
+    INSP_FIELD(Ped, LinkedPed),
+    INSP_FIELD(Ped, Vehicle),
+    INSP_FIELD(Ped, CurrentVehicle),
+    INSP_FIELD(Ped, TargetCarForEnter),
+    INSP_FIELD(Ped, Player),
+    INSP_FIELD(Ped, NextPed),
+    INSP_FIELD(Ped, S169),
+    INSP_FIELD(Ped, GameObject),
+    INSP_FIELD(Ped, CurrentCar),
+    INSP_FIELD(Ped, SelectedWeapon),
+    INSP_FIELD(Ped, Weapon1),
+    INSP_FIELD(Ped, Weapon2),
+    INSP_FIELD(Ped, Gang),
+    INSP_FIELD(Ped, DriverPed),
+    INSP_FIELD(Ped, field_184),
+    INSP_FIELD(Ped, LastCharPunched),
+    INSP_FIELD(Ped, field_18C),
+    INSP_FIELD(Ped, S94),
+    INSP_FIELD(Ped, field_194),
+    INSP_FIELD(Ped, sPed3),
+    INSP_FIELD(Ped, Gang1),
+    INSP_FIELD(Ped, PedId),
+    INSP_FIELD(Ped, TargetCarDoor1),
+    INSP_FIELD(Ped, PoliceStar1),
+    INSP_FIELD(Ped, ElvisLeader),
+    INSP_FIELD(Ped, XCoordinate),
+    INSP_FIELD(Ped, PositionY),
+    INSP_FIELD(Ped, Camer_Z_View),
+    INSP_FIELD(Ped, PositionX1),
+    INSP_FIELD(Ped, PositionY1),
+    INSP_FIELD(Ped, PositionZ2),
+    INSP_FIELD(Ped, X),
+    INSP_FIELD(Ped, Y),
+    INSP_FIELD(Ped, Z),
+    INSP_FIELD(Ped, field_1D0),
+    INSP_FIELD(Ped, field_1D4),
+    INSP_FIELD(Ped, field_1D8),
+    INSP_FIELD(Ped, OCCUPATION),
+    INSP_FIELD(Ped, DriverPed1),
+    INSP_FIELD(Ped, PositionZ1),
+    INSP_FIELD(Ped, field_1E8),
+    INSP_FIELD(Ped, field_1EC),
+    INSP_FIELD(Ped, field_1F0),
+    INSP_FIELD(Ped, field_1F4),
+    INSP_FIELD(Ped, CurrentAction1),
+    INSP_FIELD(Ped, field_1FC),
+    INSP_FIELD(Ped, ID),
+    INSP_FIELD(Ped, IDPed),
+    INSP_FIELD(Ped, Invulnerability),
+    INSP_FIELD(Ped, PoliceStar),
+    INSP_FIELD(Ped, field_20C),
+    INSP_FIELD(Ped, field_20E),
+    INSP_FIELD(Ped, field_210),
+    INSP_FIELD(Ped, field_212),
+    INSP_FIELD(Ped, field_214),
+    INSP_FIELD(Ped, Health),
+    INSP_FIELD(Ped, ObjectiveTimer),
+    INSP_FIELD(Ped, CarStateTimer),
+    INSP_FIELD(Ped, Flags),
+    INSP_FIELD(Ped, field_220),
+    INSP_FIELD(Ped, field_224),
+    INSP_FIELD(Ped, DamageState),
+    INSP_FIELD(Ped, ExitAnimState),
+    INSP_FIELD(Ped, field_227),
+    INSP_FIELD(Ped, field_228),
+    INSP_FIELD(Ped, field_22C),
+    INSP_FIELD(Ped, field_230),
+    INSP_FIELD(Ped, field_234),
+    INSP_FIELD(Ped, field_235),
+    INSP_FIELD(Ped, field_236),
+    INSP_FIELD(Ped, field_237),
+    INSP_FIELD(Ped, SearchType),
+    INSP_FIELD(Ped, CarId),
+    INSP_FIELD(Ped, field_23D),
+    INSP_FIELD(Ped, field_23E),
+    INSP_FIELD(Ped, field_23F),
+    INSP_FIELD(Ped, Occupation),
+    INSP_FIELD(Ped, Remap),
+    INSP_FIELD(Ped, field_245),
+    INSP_FIELD(Ped, field_246),
+    INSP_FIELD(Ped, field_247),
+    INSP_FIELD(Ped, TargetCarDoor),
+    INSP_FIELD(Ped, AnimationState),
+    INSP_FIELD(Ped, field_24D),
+    INSP_FIELD(Ped, field_24E),
+    INSP_FIELD(Ped, field_24F),
+    INSP_FIELD(Ped, field_250),
+    INSP_FIELD(Ped, field_254),
+    INSP_FIELD(Ped, field_255),
+    INSP_FIELD(Ped, field_256),
+    INSP_FIELD(Ped, field_257),
+    INSP_FIELD(Ped, ActionState),
+    INSP_FIELD(Ped, CurrentAction),
+    INSP_FIELD(Ped, field_260),
+    INSP_FIELD(Ped, field_261),
+    INSP_FIELD(Ped, field_262),
+    INSP_FIELD(Ped, field_263),
+    INSP_FIELD(Ped, field_264),
+    INSP_FIELD(Ped, field_265),
+    INSP_FIELD(Ped, field_266),
+    INSP_FIELD(Ped, field_267),
+    INSP_FIELD(Ped, field_268),
+    INSP_FIELD(Ped, field_269),
+    INSP_FIELD(Ped, field_26A),
+    INSP_FIELD(Ped, field_26B),
+    INSP_FIELD(Ped, GraphicType),
+    INSP_FIELD(Ped, field_270),
+    INSP_FIELD(Ped, GangCarModel),
+    INSP_FIELD(Ped, PedState),
+    INSP_FIELD(Ped, field_27C),
+    INSP_FIELD(Ped, SavedState),
+    INSP_FIELD(Ped, field_284),
+    INSP_FIELD(Ped, field_288),
+    INSP_FIELD(Ped, field_28C),
+    INSP_FIELD(Ped, DamageType),
+};
+static const int kPedFieldCount = sizeof(kPedFields) / sizeof(kPedFields[0]);
+
+// ---------------------------------------------------------------------------
+// Weapon/WeaponDatabase fields (cWeapon.h) - 255-slot heap table; the global
+// gWeaponDatabase pointer cell @0x005D85A0-style lives @0x00673944 (pointer
+// cell, deref at dump time). Heap instance op_new(0x2FDC) = 8 + 255*0x30.
+// ---------------------------------------------------------------------------
+static const InspField kWeaponFields[] = {
+    INSP_FIELD(Weapon, Ammo),
+    INSP_FIELD(Weapon, TimeToReload),
+    INSP_FIELD(Weapon, field_3),
+    INSP_FIELD(Weapon, SMG),
+    INSP_FIELD(Weapon, field_8),
+    INSP_FIELD(Weapon, field_C),
+    INSP_FIELD(Weapon, shortField),
+    INSP_FIELD(Weapon, field_12),
+    INSP_FIELD(Weapon, field_13),
+    INSP_FIELD(Weapon, Car),
+    INSP_FIELD(Weapon, NextWeapon),
+    INSP_FIELD(Weapon, TypeWeapon),
+    INSP_FIELD(Weapon, field_20),
+    INSP_FIELD(Weapon, field_21),
+    INSP_FIELD(Weapon, field_22),
+    INSP_FIELD(Weapon, field_23),
+    INSP_FIELD(Weapon, Ped),
+    INSP_FIELD(Weapon, SoundWeapon),
+    INSP_FIELD(Weapon, field_2C),
+    INSP_FIELD(Weapon, field_2D),
+    INSP_FIELD(Weapon, field_2E),
+    INSP_FIELD(Weapon, field_2F),
+};
+static const int kWeaponFieldCount = sizeof(kWeaponFields) / sizeof(kWeaponFields[0]);
+
+static const InspField kWeaponDatabaseFields[] = {
+    INSP_FIELD(WeaponDatabase, sWeapon),
+    INSP_FIELD(WeaponDatabase, NextWeapon),
+    INSP_FIELD(WeaponDatabase, sWeapon_Arr255),
+    INSP_FIELD(WeaponDatabase, field_2FD8),
+    INSP_FIELD(WeaponDatabase, field_2FDA),
+    INSP_FIELD(WeaponDatabase, field_2FDB),
+};
+static const int kWeaponDatabaseFieldCount =
+    sizeof(kWeaponDatabaseFields) / sizeof(kWeaponDatabaseFields[0]);
+
+// gWeaponDatabase is a pointer cell @0x00673944; deref to the heap instance.
+static WeaponDatabase* GetRealWeaponDatabase(void) {
+    return *(WeaponDatabase**)0x00673944;
+}
+
+// ---------------------------------------------------------------------------
+// PedManager fields (gta2.exe.h:10201): heap instance 0x203AC; the global
+// gPedManager pointer cell @0x005E5BBC holds the heap address.
+// ---------------------------------------------------------------------------
+static const InspField kPedManagerFields[] = {
+    INSP_FIELD(PedManager, FirstElement),
+    INSP_FIELD(PedManager, NextPed),
+    INSP_FIELD(PedManager, PedsInUse),
+    INSP_FIELD(PedManager, field_203AA),
+    INSP_FIELD(PedManager, field_203AB),
+};
+static const int kPedManagerFieldCount =
+    sizeof(kPedManagerFields) / sizeof(kPedManagerFields[0]);
+
+static PedManager* GetRealPedManager(void) {
+    return *(PedManager**)0x005E5BBC;
+}
+
+// ---------------------------------------------------------------------------
 // AudioManager fields (cAudioManager.h) - fixed global @0x005DCBC8
 // ---------------------------------------------------------------------------
 static const InspField kAudioManagerFields[] = {
@@ -610,13 +1120,7 @@ const char* GetGlobalStructName(unsigned long addr)
 // ---------------------------------------------------------------------------
 // Text buffer helpers
 // ---------------------------------------------------------------------------
-struct DumpBuf {
-    char* data;
-    size_t cap;
-    size_t len;
-};
-
-static void DumpAppendV(DumpBuf* b, const char* fmt, va_list ap)
+void DumpAppendV(DumpBuf* b, const char* fmt, va_list ap)
 {
     if (b->len >= b->cap - 1) {
         return;
@@ -630,7 +1134,7 @@ static void DumpAppendV(DumpBuf* b, const char* fmt, va_list ap)
     }
 }
 
-static void DumpPrintf(DumpBuf* b, const char* fmt, ...)
+void DumpPrintf(DumpBuf* b, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -651,7 +1155,13 @@ static PrevVal s_prevMenu[kMenuFieldCount];
 static PrevVal s_prevMapGm[kMapGmFieldCount];
 static PrevVal s_prevPlayer[kPlayerDataFieldCount];
 static PrevVal s_prevGame[kGameFieldCount];
+static PrevVal s_prevPlayerObj[kPlayerFieldCount];
 static PrevVal s_prevAudio[kAudioManagerFieldCount];
+static PrevVal s_prevCar[kCarFieldCount];
+static PrevVal s_prevPed[kPedFieldCount];
+static PrevVal s_prevPedMgr[kPedManagerFieldCount];
+static PrevVal s_prevWeapon[kWeaponFieldCount];
+static PrevVal s_prevWeaponDb[kWeaponDatabaseFieldCount];
 static PrevVal s_prevGlobals[kGlobalCount];
 
 static void ReadFieldBytes(const void* base, size_t off, int size,
@@ -1013,7 +1523,7 @@ static void FormatDMAudioState(DumpBuf* b, const void* dmaBase)
 // Append the DMAudio state dump to DMAudio.log (mirrors AppendMenuLevelFiles).
 static void AppendDMAudioStateToFile(const void* dmaBase)
 {
-    static char s_dmaBuf[64 * 1024];
+    static char s_dmaBuf[128 * 1024];
     DumpBuf b;
     FILE* f;
 
@@ -1028,6 +1538,236 @@ static void AppendDMAudioStateToFile(const void* dmaBase)
     FormatDMAudioState(&b, dmaBase);
     if (b.len > 0) {
         fwrite(s_dmaBuf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
+// ---------------------------------------------------------------------------
+// PedManager pool scan: list every ped slot carrying live data (any of the
+// anchor fields nonzero). Pool = pmgr->Ped[0..199], 0x294 bytes each.
+// ---------------------------------------------------------------------------
+static void FormatPedManagerPeds(DumpBuf* b, const PedManager* pmgr)
+{
+    int i;
+    int nLive = 0;
+
+    DumpPrintf(b, "-- Ped pool scan (200 x 0x294):\n");
+    __try {
+        for (i = 0; i < 200; i++) {
+            const Ped* pd = &pmgr->Ped[i];
+            if (pd->PedId != 0 || pd->ID != 0 || pd->Health != 0 ||
+                pd->PositionX1 != 0 || pd->X != 0 || pd->Y != 0 ||
+                pd->Z != 0 || pd->Driver != NULL || pd->Player != NULL ||
+                pd->CurrentCar != NULL)
+            {
+                DumpPrintf(b, "  [%3d] +0x%06X  PedId=%d ID=%d Health=%d State=%d"
+                              " occ=%d X=%d Y=%d Z=%d PosX1=%08X Driver=%08X "
+                              "Player=%08X Car=%08X\n",
+                           i, (unsigned long)((const char*)pd - (const char*)pmgr),
+                           pd->PedId, pd->ID, pd->Health, pd->PedState,
+                           pd->Occupation, pd->X, pd->Y, pd->Z,
+                           (unsigned long)pd->PositionX1,
+                           (unsigned long)(ULONG_PTR)pd->Driver,
+                           (unsigned long)(ULONG_PTR)pd->Player,
+                           (unsigned long)(ULONG_PTR)pd->CurrentCar);
+                nLive++;
+            }
+        }
+        DumpPrintf(b, "  -> %d / 200 slots with live data (PedsInUse=%d)\n\n",
+                   nLive, pmgr->PedsInUse);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "  <ped pool scan failed>\n\n");
+    }
+}
+
+static void AppendPedManagerPedsToFile(const PedManager* pmgr)
+{
+    static char s_pedBuf[64 * 1024];
+    DumpBuf b;
+    FILE* f;
+
+    f = fopen(GetLogPath("PedManager.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    b.data = s_pedBuf;
+    b.cap = sizeof(s_pedBuf);
+    b.len = 0;
+    s_pedBuf[0] = 0;
+    FormatPedManagerPeds(&b, pmgr);
+    if (b.len > 0) {
+        fwrite(s_pedBuf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
+// ---------------------------------------------------------------------------
+// S200 raw dump: the Ped ctor builds Construct(this, 3, 100, S200..) so the
+// S200 block is a 100-entry array of 3-byte records (300 bytes, 0x00..0x12B).
+// IDA only typed S200[3] (9 bytes) and left the rest unmapped. Print all 100
+// entries as word+byte so the live counter / collision layout shows up.
+// ---------------------------------------------------------------------------
+static void FormatPedS200(DumpBuf* b, const Ped* pd)
+{
+    int i;
+    int nLive = 0;
+    int first = -1;
+    const unsigned char* p = (const unsigned char*)pd;
+
+    DumpPrintf(b, "-- S200 block scan (100 x 3 bytes = 300 bytes, +0x00..+0x12B):\n");
+    __try {
+        DumpPrintf(b, "  full raw (300 bytes):\n  ");
+        for (i = 0; i < 100; i++) {
+            DumpPrintf(b, "%02X%02X%02X%s",
+                       p[i * 3 + 0], p[i * 3 + 1], p[i * 3 + 2],
+                       ((i % 10) == 9) ? "\n  " : " ");
+        }
+        DumpPrintf(b, "\n");
+        for (i = 0; i < 100; i++) {
+            unsigned int a = p[i * 3 + 0];
+            unsigned int bb = p[i * 3 + 1];
+            unsigned int c = p[i * 3 + 2];
+            if (a | bb | c) {
+                if (nLive == 0) {
+                    first = i;
+                }
+                nLive++;
+                DumpPrintf(b, "  [%3d] +0x%03X  A=0x%02X B=0x%02X C=0x%02X"
+                              "  word=0x%04X\n",
+                           i, i * 3, a, bb, c, (unsigned int)(a | (bb << 8)));
+            }
+        }
+        DumpPrintf(b, "  -> %d / 100 S200 entries live%s\n\n", nLive,
+                   first >= 0 ? " <<< LIVE" : "");
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "  <S200 block read failed>\n\n");
+    }
+}
+
+// Compact single-line summary for the live console window so it can be
+// eyeballed against a memory watcher without scrolling 100 entries.
+static void FormatPedS200Live(DumpBuf* b, const Ped* pd)
+{
+    int i;
+    int nLive = 0;
+    const unsigned char* p = (const unsigned char*)pd;
+
+    __try {
+        for (i = 0; i < 100 && nLive < 8; i++) {
+            unsigned int a = p[i * 3 + 0];
+            unsigned int bb = p[i * 3 + 1];
+            unsigned int c = p[i * 3 + 2];
+            if (a | bb | c) {
+                nLive++;
+                DumpPrintf(b, "[%2d]=%02X%02X%02X ", i, a, bb, c);
+            }
+        }
+        if (nLive == 0) {
+            DumpPrintf(b, "S200 all-zero (100x3)");
+        }
+        else {
+            DumpPrintf(b, "| S200 live=%d/100", nLive);
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "S200 <read failed>");
+    }
+}
+
+static void AppendPedS200ToFile(const Ped* pd, const char* title)
+{
+    static char s_s200Buf[16 * 1024];
+    DumpBuf b;
+    FILE* f;
+
+    f = fopen(GetLogPath("Ped.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    b.data = s_s200Buf;
+    b.cap = sizeof(s_s200Buf);
+    b.len = 0;
+    s_s200Buf[0] = 0;
+    DumpPrintf(&b, "%s [S200 raw]\n", title);
+    FormatPedS200(&b, pd);
+    if (b.len > 0) {
+        fwrite(s_s200Buf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
+static void AppendPedS200ToS200Log(const Ped* pd)
+{
+    static char s_s200Buf[16 * 1024];
+    DumpBuf b;
+    FILE* f;
+
+    f = fopen(GetLogPath("S200.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    b.data = s_s200Buf;
+    b.cap = sizeof(s_s200Buf);
+    b.len = 0;
+    s_s200Buf[0] = 0;
+    FormatPedS200(&b, pd);
+    if (b.len > 0) {
+        fwrite(s_s200Buf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
+// ---------------------------------------------------------------------------
+// WeaponDatabase slot scan: list every non-empty slot of the 255-entry table.
+// ---------------------------------------------------------------------------
+static void FormatWeaponSlots(DumpBuf* b, const WeaponDatabase* wdb)
+{
+    int i;
+    int nLive = 0;
+
+    DumpPrintf(b, "-- Weapon slots scan (255 x 0x30):\n");
+    __try {
+        for (i = 0; i < 255; i++) {
+            const Weapon* wp = &wdb->sWeapon_Arr255[i];
+            if (wp->Ammo != 0 || wp->TypeWeapon != 0 || wp->field_8 != 0 ||
+                wp->Ped != NULL || wp->Car != NULL || wp->NextWeapon != NULL)
+            {
+                DumpPrintf(b, "  [%3d] +0x%04X  Ammo=%d Reload=%d Type=%d SMG=%d"
+                              " f8=%08X Next=%08X Ped=%08X Car=%08X Snd=%d\n",
+                           i, i * 0x30, wp->Ammo, wp->TimeToReload, wp->TypeWeapon,
+                           wp->SMG, (unsigned long)wp->field_8,
+                           (unsigned long)(ULONG_PTR)wp->NextWeapon,
+                           (unsigned long)(ULONG_PTR)wp->Ped,
+                           (unsigned long)(ULONG_PTR)wp->Car, wp->SoundWeapon);
+                nLive++;
+            }
+        }
+        DumpPrintf(b, "  -> %d / 255 slots with live data\n\n", nLive);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "  <weapon slot scan failed>\n\n");
+    }
+}
+
+static void AppendWeaponSlotsToFile(const WeaponDatabase* wdb)
+{
+    static char s_wpBuf[64 * 1024];
+    DumpBuf b;
+    FILE* f;
+
+    f = fopen(GetLogPath("WeaponDatabase.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    b.data = s_wpBuf;
+    b.cap = sizeof(s_wpBuf);
+    b.len = 0;
+    s_wpBuf[0] = 0;
+    FormatWeaponSlots(&b, wdb);
+    if (b.len > 0) {
+        fwrite(s_wpBuf, 1, b.len, f);
     }
     fclose(f);
 }
@@ -1163,7 +1903,8 @@ static void FormatFieldValue(DumpBuf* b, const void* base, const InspField* f)
 }
 
 static void DumpStruct(DumpBuf* b, const char* title, const void* base,
-                       const InspField* fields, int count, PrevVal* prev)
+                       const InspField* fields, int count, PrevVal* prev,
+                       int showGap)
 {
     int i;
     int skipped = 0;
@@ -1173,7 +1914,7 @@ static void DumpStruct(DumpBuf* b, const char* title, const void* base,
         unsigned long long a;
         unsigned long long bb;
         int changed;
-        if (IsSkippedField(f->name)) {
+        if (!showGap && IsSkippedField(f->name)) {
             continue;
         }
         ReadFieldBytes(base, (size_t)f->offset, f->size, &a, &bb);
@@ -1334,7 +2075,8 @@ static void AppendStringsAnywhere(DumpBuf* b, const unsigned char* p, int size)
 // (field_/unk_/gap) are written byte-by-byte so nothing is lost, named fields
 // use the compact formatter. Zero values are kept. Appends one snapshot.
 static void DumpStructToFile(const char* fileName, const char* title,
-                             const void* base, const InspField* fields, int count)
+                             const void* base, const InspField* fields, int count,
+                             int showGap)
 {
     static char s_buf[512 * 1024];
     static int s_bufCap = (int)sizeof(s_buf);
@@ -1365,7 +2107,7 @@ static void DumpStructToFile(const char* fileName, const char* title,
         const InspField* fl = &fields[i];
         const unsigned char* p;
         int j;
-        if (IsSkippedField(fl->name)) {
+        if (!showGap && IsSkippedField(fl->name)) {
             continue;
         }
         p = (const unsigned char*)base + fl->offset;
@@ -1407,6 +2149,22 @@ static void DumpStructToFile(const char* fileName, const char* title,
     fclose(f);
 }
 
+static void BuildDumpMainPedS200(DumpBuf* b, Ped* mped)
+{
+    char title[128];
+    _snprintf(title, sizeof(title),
+              "Player[0] MainPed (game->Player->Ped, heap 0x%08X, 0x294)",
+              (unsigned long)(ULONG_PTR)mped);
+    FormatPedS200(b, mped);
+    AppendPedS200ToS200Log(mped);
+    if (s_s200Watch) {
+        S200WatchSetTarget(mped);
+        S200WatchDump(b);
+        S200WatchFlushToFile();
+    }
+    (void)title;
+}
+
 static void BuildDump(void)
 {
     static char s_buf[300 * 1024];
@@ -1416,15 +2174,34 @@ static void BuildDump(void)
     b.len = 0;
     s_buf[0] = 0;
 
+    // --- S200-only mode: just the S200 block (no other structures) -------
+    if (s_s200Only) {
+        Game* pg = GetGamePtr();
+        if (pg != NULL && pg->pPlayer[0] != NULL) {
+            Ped* mped = pg->pPlayer[0]->MainPed;
+            if (mped != NULL) {
+                BuildDumpMainPedS200(&b, mped);
+            } else {
+                DumpPrintf(&b, "MainPed is NULL yet\n");
+            }
+        } else {
+            DumpPrintf(&b, "Game/Player not ready\n");
+        }
+        if (s_hEdit) {
+            SetWindowTextA(s_hEdit, s_buf);
+        }
+        return;
+    }
+
     DumpPrintf(&b, "GTA2 struct inspector - live, refresh 1s  (addresses from done.md)\n\n");
 
     __try {
         Menu* realMenu = GetRealMenu();
         if (realMenu != NULL) {
             DumpStruct(&b, "Menu (heap, via *(Menu**)0x005EB160 = gMenu)", realMenu,
-                       kMenuFields, kMenuFieldCount, s_prevMenu);
+                       kMenuFields, kMenuFieldCount, s_prevMenu, 1);
             DumpStructToFile("Menu.log", "Menu (heap 0x005EB160)", realMenu,
-                             kMenuFields, kMenuFieldCount);
+                             kMenuFields, kMenuFieldCount, 1);
             FormatMenuLevelFiles(&b, realMenu);
             AppendMenuLevelFilesToFile(realMenu);
         } else {
@@ -1449,10 +2226,10 @@ static void BuildDump(void)
     }
 
     __try {
-        DumpStruct(&b, "MapGm @0x005EC070 (0x554)", s_pMapGm,
-                   kMapGmFields, kMapGmFieldCount, s_prevMapGm);
-        DumpStructToFile("MapGm.log", "MapGm @0x005EC070 (0x554)", s_pMapGm,
-                         kMapGmFields, kMapGmFieldCount);
+        DumpStruct(&b, "MapGm @0x005EC070 (0x578)", s_pMapGm,
+                   kMapGmFields, kMapGmFieldCount, s_prevMapGm, 1);
+        DumpStructToFile("MapGm.log", "MapGm @0x005EC070 (0x578)", s_pMapGm,
+                         kMapGmFields, kMapGmFieldCount, 1);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<MapGm read failed>\n");
@@ -1464,9 +2241,9 @@ static void BuildDump(void)
             char title[96];
             _snprintf(title, sizeof(title), "Game -> heap 0x%08X (0x40, gGame@0x005EB4FC)",
                       (unsigned long)(ULONG_PTR)pg);
-            DumpStruct(&b, title, pg, kGameFields, kGameFieldCount, s_prevGame);
+            DumpStruct(&b, title, pg, kGameFields, kGameFieldCount, s_prevGame, 1);
             DumpStructToFile("Game.log", title, pg,
-                             kGameFields, kGameFieldCount);
+                             kGameFields, kGameFieldCount, 1);
         } else {
             DumpPrintf(&b, "== Game: gGame@0x005EB4FC is NULL (not created yet) ==\n\n");
         }
@@ -1476,10 +2253,96 @@ static void BuildDump(void)
     }
 
     __try {
+        Game* pg2 = GetGamePtr(); // deref the gGame pointer cell @0x005EB4FC
+        if (pg2 != NULL) {
+            int pi;
+            for (pi = 0; pi < 6; pi++) {
+                Player* pp = pg2->pPlayer[pi];
+                char title[96];
+                if (pp == NULL) {
+                    continue;
+                }
+                _snprintf(title, sizeof(title), "Player[%d] (Game slot, heap 0x%08X, 0x85C)",
+                          pi, (unsigned long)(ULONG_PTR)pp);
+                DumpStruct(&b, title, pp, kPlayerFields, kPlayerFieldCount, s_prevPlayerObj, 1);
+                DumpStructToFile("Player.log", title, pp,
+                                 kPlayerFields, kPlayerFieldCount, 1);
+            }
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<Player read failed>\n");
+    }
+
+    __try {
+        Game* pgCar = GetGamePtr();
+        if (pgCar != NULL) {
+            int pi;
+            for (pi = 0; pi < 6; pi++) {
+                Player* pp = pgCar->pPlayer[pi];
+                if (pp == NULL) {
+                    continue;
+                }
+                // Ped: dump MainPed; Car: dump sCar1/sCar2 (live only when
+                // player is in a vehicle).
+                __try {
+Ped* mped = pp->MainPed;
+                        if (mped != NULL) {
+                            char title[96];
+                            _snprintf(title, sizeof(title),
+                                      "Player[%d] MainPed (game->Player->Ped, heap 0x%08X, 0x294)",
+                                      pi, (unsigned long)(ULONG_PTR)mped);
+                            DumpStruct(&b, title, mped, kPedFields, kPedFieldCount,
+                                       s_prevPed, 1);
+                            FormatPedS200Live(&b, mped);
+                            DumpPrintf(&b, "\n");
+                            DumpStructToFile("Ped.log", title, mped,
+                                             kPedFields, kPedFieldCount, 1);
+                            AppendPedS200ToFile(mped, title);
+                            if (s_s200Watch) {
+                                S200WatchSetTarget(mped);
+                                S200WatchDump(&b);
+                                S200WatchFlushToFile();
+                            }
+                    }
+                    Car* c1 = pp->sCar1;
+                    if (c1 != NULL) {
+                        char title[96];
+                        _snprintf(title, sizeof(title),
+                                  "Player[%d] sCar1 (heap 0x%08X, 0x132)",
+                                  pi, (unsigned long)(ULONG_PTR)c1);
+                        DumpStruct(&b, title, c1, kCarFields, kCarFieldCount,
+                                   s_prevCar, 1);
+                        DumpStructToFile("Car.log", title, c1,
+                                         kCarFields, kCarFieldCount, 1);
+                    }
+                    Car* c2 = pp->sCar2;
+                    if (c2 != NULL && c2 != c1) {
+                        char title[96];
+                        _snprintf(title, sizeof(title),
+                                  "Player[%d] sCar2 (heap 0x%08X, 0x132)",
+                                  pi, (unsigned long)(ULONG_PTR)c2);
+                        DumpStruct(&b, title, c2, kCarFields, kCarFieldCount,
+                                   s_prevCar, 1);
+                        DumpStructToFile("Car.log", title, c2,
+                                         kCarFields, kCarFieldCount, 1);
+                    }
+                }
+                __except (EXCEPTION_EXECUTE_HANDLER) {
+                    DumpPrintf(&b, "<Player[%d] Ped/Car read failed>\n", pi);
+                }
+            }
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<Player Ped/Car read failed>\n");
+    }
+
+    __try {
         DumpStruct(&b, "PlayerData @0x0066B404 (0x2bc0)", s_pPlayerData,
-                   kPlayerDataFields, kPlayerDataFieldCount, s_prevPlayer);
+                   kPlayerDataFields, kPlayerDataFieldCount, s_prevPlayer, 1);
         DumpStructToFile("PlayerData.log", "PlayerData @0x0066B404 (0x2bc0)",
-                         s_pPlayerData, kPlayerDataFields, kPlayerDataFieldCount);
+                         s_pPlayerData, kPlayerDataFields, kPlayerDataFieldCount, 1);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<PlayerData read failed>\n");
@@ -1494,13 +2357,48 @@ static void BuildDump(void)
 
     __try {
         DumpStruct(&b, "AudioManager @0x005DCBC8 (0x5562)", (AudioManager*)0x005DCBC8,
-                   kAudioManagerFields, kAudioManagerFieldCount, s_prevAudio);
+                   kAudioManagerFields, kAudioManagerFieldCount, s_prevAudio, 1);
         DumpStructToFile("AudioManager.log", "AudioManager @0x005DCBC8 (0x5562)",
                          (AudioManager*)0x005DCBC8,
-                         kAudioManagerFields, kAudioManagerFieldCount);
+                         kAudioManagerFields, kAudioManagerFieldCount, 1);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         DumpPrintf(&b, "<AudioManager read failed>\n");
+    }
+
+    __try {
+        PedManager* pmgr = GetRealPedManager();
+        if (pmgr != NULL) {
+            DumpStruct(&b, "PedManager (heap, via gPedManager@0x005E5BBC, 0x203AC)",
+                       pmgr, kPedManagerFields, kPedManagerFieldCount, s_prevPedMgr, 1);
+            DumpStructToFile("PedManager.log", "PedManager (gPedManager@0x005E5BBC)",
+                             pmgr, kPedManagerFields, kPedManagerFieldCount, 1);
+            FormatPedManagerPeds(&b, pmgr);
+            AppendPedManagerPedsToFile(pmgr);
+        } else {
+            DumpPrintf(&b, "== PedManager: gPedManager@0x005E5BBC is NULL ==\n\n");
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<PedManager read failed>\n");
+    }
+
+    __try {
+        WeaponDatabase* wdb = GetRealWeaponDatabase();
+        if (wdb != NULL) {
+            DumpStruct(&b, "WeaponDatabase (heap, via gWeaponDatabase@0x00673944, 0x2FDC)",
+                       wdb, kWeaponDatabaseFields, kWeaponDatabaseFieldCount,
+                       s_prevWeaponDb, 1);
+            DumpStructToFile("WeaponDatabase.log", "WeaponDatabase (gWeaponDatabase@0x00673944)",
+                             wdb, kWeaponDatabaseFields, kWeaponDatabaseFieldCount, 1);
+            FormatWeaponSlots(&b, wdb);
+            AppendWeaponSlotsToFile(wdb);
+        } else {
+            DumpPrintf(&b, "== WeaponDatabase: gWeaponDatabase@0x00673944 is NULL ==\n\n");
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<WeaponDatabase read failed>\n");
     }
 
     __try {
@@ -1556,6 +2454,8 @@ static void BuildDump(void)
 #define IDC_INSP_PAUSE   103
 #define IDC_INSP_SKIPZERO 104
 #define IDC_INSP_SAVEFILE 105
+#define IDC_INSP_S200ONLY 106
+#define IDC_INSP_S200WATCH 107
 #define WM_INSP_REFRESH  (WM_APP + 1)
 
 static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -1586,6 +2486,12 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
                         318, 14, 90, 20, hwnd, (HMENU)IDC_INSP_SAVEFILE, hInst, NULL);
         CheckDlgButton(hwnd, IDC_INSP_SKIPZERO, BST_UNCHECKED);
         CheckDlgButton(hwnd, IDC_INSP_SAVEFILE, BST_CHECKED);
+        CreateWindowExA(0, "BUTTON", "S200 only",
+                        WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX | BS_LEFTTEXT,
+                        414, 14, 76, 20, hwnd, (HMENU)IDC_INSP_S200ONLY, hInst, NULL);
+        CreateWindowExA(0, "BUTTON", "S200 write-watch",
+                        WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX | BS_LEFTTEXT,
+                        496, 14, 108, 20, hwnd, (HMENU)IDC_INSP_S200WATCH, hInst, NULL);
         SetTimer(hwnd, 1, 1000, NULL);
         return 0;
     }
@@ -1625,6 +2531,17 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         }
         if (LOWORD(wParam) == IDC_INSP_SAVEFILE && HIWORD(wParam) == BN_CLICKED) {
             s_saveFile = IsDlgButtonChecked(hwnd, IDC_INSP_SAVEFILE);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_S200ONLY && HIWORD(wParam) == BN_CLICKED) {
+            s_s200Only = IsDlgButtonChecked(hwnd, IDC_INSP_S200ONLY);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_S200WATCH && HIWORD(wParam) == BN_CLICKED) {
+            s_s200Watch = IsDlgButtonChecked(hwnd, IDC_INSP_S200WATCH);
+            BuildDump();
             return 0;
         }
         break;
@@ -1689,6 +2606,7 @@ void StartInspector(void)
     if (s_hThread != NULL) {
         return;
     }
+    S200WatchInit();
     s_hThread = CreateThread(NULL, 0, InspectorThreadProc, NULL, 0, NULL);
 }
 
