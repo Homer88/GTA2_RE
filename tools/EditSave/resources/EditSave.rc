@@ -1,0 +1,38 @@
+// Windows resources for EditSave.exe.
+//
+// The PNG in the qrc only reaches the Qt window decoration. Explorer, the task
+// bar and Alt-Tab read the Win32 icon resource, so the same artwork is packed
+// here as a multi-size .ico (16..256). ICON_DISCARDABLE keeps the pixels out of
+// memory when nothing is drawing them; windres calls the name
+// "DISCARABLE", and MSVC accepts that spelling too.
+//
+// EditSave.ico is resolved through the target's include path (see
+// CMakeLists.txt), not relative to this file, because windres searches the
+// build directory rather than the script's own location.
+
+IDI_ICON1 ICON DISCARDABLE "EditSave.ico"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+FILEOS          0x40004L
+FILETYPE        0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName",      "GTA2RE"
+            VALUE "FileDescription",  "GTA2 save editor (plyslotN.svg / plyslotN.dat)"
+            VALUE "FileVersion",      "1.0.0"
+            VALUE "InternalName",     "EditSave"
+            VALUE "OriginalFilename", "EditSave.exe"
+            VALUE "ProductName",      "EditSave"
+            VALUE "ProductVersion",   "1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

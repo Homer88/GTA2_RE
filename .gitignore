@@ -114,3 +114,4 @@ re_file/IDA/struct_mapping_ida.csv
 re_file/IDA/struct_report.txt
 re_file/IDA/struct_samename_report.txt
 *.pdb
+/tools/EditSave/build

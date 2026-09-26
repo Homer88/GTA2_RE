@@ -16,7 +16,7 @@
 |12.|S12|PathNode
 |13.|S13|General|0x8|0x005e8108|
 |14.|S14|Text|0x14|0x00671550|
-|15.|S15|Style|0x106c|0x00670684
+|15.|S15|Style|0x106c|0x00670684|63 функции (46 названы) — не реализованы|-|gta2/Engine/Style/Style.h, dllLoad/dllLoad/cStyle.h|gta2/Engine/Style/CMakeLists.txt (не подключён)|частично|layout 0x106C восстановлен (IDA gta2.exe.h:7470, ctor gta2.exe.asm:20469), инспектор дампит Style.log; gStyle @0x00670684 — указательная ячейка, объект на куче; загрузчик .STY (LoadFstyle 0x4C0820, 16 чанков) и методы не сделаны
 |16.|S16|MapRelatedStruct|0x370|0x00662c08|~110 functions filled from IDA dump (stubs)|-|MapRelatedStruct.h, MapRelatedStruct.cpp|CMakeLists.txt|да|globals unk_662B*, требует доопределения CarSystemManager, SpriteS1, S202, AudioSourceParams, S16_01; Map вынесен в отдельный класс
 |17.|S17|EntityManager|0x0x2f04|0x006633c8
 |18.|S18|Display|0x1c|0x005e8b80
@@ -273,7 +273,7 @@
 |267.|S267|||||||||||
 |268.|S268|||||||||||
 |269.|S269|||||||||||
-|270.|S270|MapGm|0x554|0x005ec070||||||||
+|270.|S270|MapGm|0x578|0x005ec070||||||||
 |271.|S271|||||||||||
 |272.|S272|||||||||||
 |273.|S273|||||||||||

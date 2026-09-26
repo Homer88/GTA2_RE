@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>EditSave.png</file>
+        <file>EditSave.ico</file>
+    </qresource>
+</RCC>

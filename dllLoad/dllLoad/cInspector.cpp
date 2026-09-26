@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include "cSaveLog.h"
 #include "cInspector.h"
 #include "cMenu.h"
 #include "cMapGm.h"
@@ -17,6 +18,9 @@
 #include "cAudioManager.h"
 #include "cCar.h"
 #include "cPed.h"
+#include "cGameObject.h"
+#include "cSpriteS1.h"
+#include "cStyle.h"
 #include "cWeapon.h"
 #include "cS200Watch.h"
 #include "AddrToFunc.h"
@@ -35,6 +39,15 @@ static const void* GetRealDMAudio(void) { return (const void*)0x005D85A0; }
 static MapGm*     s_pMapGm     = (MapGm*)0x005EC070;
 static PlayerData* s_pPlayerData = (PlayerData*)0x0066B404;
 static Text*      s_pText      = (Text*)0x00671550;
+// gStyle is a pointer cell (gta2.exe.asm:1072033 `Style *gStyle`); the Style
+// object is heap-allocated (operator_new(0x106C), Menu::Menu gta2.exe.c:72299).
+static Style*     GetRealStyle(void) { return (Style*)(*(void**)0x00670684); }
+// Style file path of the loaded level = MapGm::GetStyleFile() -> this->styFile
+// (gta2.exe.c:78418 `return this->styFile;`, field @+0x100; the caller at
+// gta2.exe.c:76207-76211 passes exactly this to Style::LoadFstyle).
+// NB: byte_6645A9[24] is a DIFFERENT buffer - the save-file style name written
+// by MissionManager::sub_475CA0, it stays empty while a level is running.
+static const char* GetStyleFilePath(void) { return s_pMapGm->styFile; }
 
 static HWND s_hWnd = NULL;
 static HWND s_hEdit = NULL;
@@ -1007,6 +1020,157 @@ static const InspField kAudioManagerFields[] = {
 static const int kAudioManagerFieldCount = sizeof(kAudioManagerFields) / sizeof(kAudioManagerFields[0]);
 
 // ---------------------------------------------------------------------------
+// GameObject fields (cGameObject.h) - pool elements of S50 PedPool
+// (400 x 0xB4).  Reachable live via Ped::GameObject2 (0x107) ->
+// GameObject::SpriteS1 (0x80).  Source of truth: IDA struct GameObject,
+// gta2.exe.h:4988-5061; raw cross-checks at gta2.exe.c:121949/121957/121959.
+// ---------------------------------------------------------------------------
+static const InspField kGameObjectFields[] = {
+    INSP_FIELD(GameObject, NextGameObject1),
+    INSP_FIELD(GameObject, field_4),
+    INSP_FIELD(GameObject, Remap),
+    INSP_FIELD(GameObject, field_6),
+    INSP_FIELD(GameObject, field_7),
+    INSP_FIELD(GameObject, field_8),
+    INSP_FIELD(GameObject, field_C),
+    INSP_FIELD(GameObject, field_10),
+    INSP_FIELD(GameObject, field_14),
+    INSP_FIELD(GameObject, field_16),
+    INSP_FIELD(GameObject, field_17),
+    INSP_FIELD(GameObject, field_18),
+    INSP_FIELD(GameObject, ProbablyPhysics),
+    INSP_FIELD(GameObject, field_20),
+    INSP_FIELD(GameObject, field_24),
+    INSP_FIELD(GameObject, field_28),
+    INSP_FIELD(GameObject, field_2A),
+    INSP_FIELD(GameObject, field_2C),
+    INSP_FIELD(GameObject, field_2E),
+    INSP_FIELD(GameObject, field_2F),
+    INSP_FIELD(GameObject, field_30),
+    INSP_FIELD(GameObject, short_),
+    INSP_FIELD(GameObject, field_36),
+    INSP_FIELD(GameObject, field_37),
+    INSP_FIELD(GameObject, Speed),
+    INSP_FIELD(GameObject, NextGameObject),
+    INSP_FIELD(GameObject, Rotation),
+    INSP_FIELD(GameObject, field_42),
+    INSP_FIELD(GameObject, field_44),
+    INSP_FIELD(GameObject, field_45),
+    INSP_FIELD(GameObject, field_46),
+    INSP_FIELD(GameObject, field_48),
+    INSP_FIELD(GameObject, field_49),
+    INSP_FIELD(GameObject, CigaretteIdleTimer),
+    INSP_FIELD(GameObject, Car1),
+    INSP_FIELD(GameObject, Car2),
+    INSP_FIELD(GameObject, field_54),
+    INSP_FIELD(GameObject, field_55),
+    INSP_FIELD(GameObject, field_56),
+    INSP_FIELD(GameObject, field_57),
+    INSP_FIELD(GameObject, field_58),
+    INSP_FIELD(GameObject, field_5C),
+    INSP_FIELD(GameObject, field_60),
+    INSP_FIELD(GameObject, field_64),
+    INSP_FIELD(GameObject, field_68),
+    INSP_FIELD(GameObject, field_69),
+    INSP_FIELD(GameObject, field_6A),
+    INSP_FIELD(GameObject, field_6B),
+    INSP_FIELD(GameObject, field_6C),
+    INSP_FIELD(GameObject, field_70),
+    INSP_FIELD(GameObject, field_71),
+    INSP_FIELD(GameObject, field_72),
+    INSP_FIELD(GameObject, field_73),
+    INSP_FIELD(GameObject, field_74),
+    INSP_FIELD(GameObject, field_76),
+    INSP_FIELD(GameObject, field_77),
+    INSP_FIELD(GameObject, GameObject),
+    INSP_FIELD(GameObject, Ped),
+    INSP_FIELD(GameObject, SpriteS1),
+    INSP_FIELD(GameObject, GetVehicle),
+    INSP_FIELD(GameObject, Car),
+    INSP_FIELD(GameObject, field_8C),
+    INSP_FIELD(GameObject, Speed1),
+    INSP_FIELD(GameObject, field_94),
+    INSP_FIELD(GameObject, deltaX),
+    INSP_FIELD(GameObject, deltaY),
+    INSP_FIELD(GameObject, field_A0),
+    INSP_FIELD(GameObject, teleportX),
+    INSP_FIELD(GameObject, teleportY),
+    INSP_FIELD(GameObject, teleportZ),
+    INSP_FIELD(GameObject, field_B0),
+};
+static const int kGameObjectFieldCount = sizeof(kGameObjectFields) / sizeof(kGameObjectFields[0]);
+
+// ---------------------------------------------------------------------------
+// CarTransforms == the single live sprite element (SpriteS1::S3_arr5031[0],
+// SpriteS1* + 0x04).  Element size 0x3C.  sprite_type must read 3 for a
+// GameObject's sprite (set by SpriteS1::sub_4206F0(pSpriteS1, 3) in
+// GameObject::sub_493850, gta2.exe.c:122220).
+// ---------------------------------------------------------------------------
+static const InspField kCarTransformsFields[] = {
+    INSP_FIELD(CarTransforms, SpriteS1_),
+    INSP_FIELD(CarTransforms, GameObject),
+    INSP_FIELD(CarTransforms, SpriteS3),
+    INSP_FIELD(CarTransforms, NextElement),
+    INSP_FIELD(CarTransforms, PositionX),
+    INSP_FIELD(CarTransforms, PositionY),
+    INSP_FIELD(CarTransforms, PositionZ),
+    INSP_FIELD(CarTransforms, spriteId),
+    INSP_FIELD(CarTransforms, Remap),
+    INSP_FIELD(CarTransforms, field_22),
+    INSP_FIELD(CarTransforms, field_24),
+    INSP_FIELD(CarTransforms, field_28),
+    INSP_FIELD(CarTransforms, sprite_type),
+    INSP_FIELD(CarTransforms, field_30),
+    INSP_FIELD(CarTransforms, field_34),
+    INSP_FIELD(CarTransforms, field_38),
+};
+static const int kCarTransformsFieldCount = sizeof(kCarTransformsFields) / sizeof(kCarTransformsFields[0]);
+
+// ---------------------------------------------------------------------------
+// Style (S15) == .STY descriptor, heap via *(Style**)0x00670684, 0x106C.
+// Layout: IDA gta2.exe.h:7470-7506, offsets cross-checked against
+// Style::Style ctor gta2.exe.asm:20469-20509.  Chunk tags are the 16 names
+// dispatched by Style::parse_chunk 0x004C05B0 (gta2.exe.c:159148).
+// ---------------------------------------------------------------------------
+static const InspField kStyleFields[] = {
+    INSP_FIELD(Style, totalPal),
+    INSP_FIELD(Style, charCount),
+    INSP_FIELD(Style, spriteCount),
+    INSP_FIELD(Style, objectCount),
+    INSP_FIELD(Style, colourBanks),
+    INSP_FIELD(Style, field_A),
+    INSP_FIELD(Style, field_B),
+    INSP_FIELD(Style, S382),
+    INSP_FIELD(Style, PALB),
+    INSP_FIELD(Style, SPRB1),
+    INSP_FIELD(Style, SPRB),
+    INSP_FIELD(Style, FONB),
+    INSP_FIELD(Style, SPRX),
+    INSP_FIELD(Style, OBJI),
+    INSP_FIELD(Style, PALX),
+    INSP_FIELD(Style, PPAL),
+    INSP_FIELD(Style, PPAL_Base),
+    INSP_FIELD(Style, SPRG),
+    INSP_FIELD(Style, SPRG_Base),
+    INSP_FIELD(Style, TILE),
+    INSP_FIELD(Style, S1501),
+    INSP_FIELD(Style, TILE_Base),
+    INSP_FIELD(Style, DELS),
+    INSP_FIELD(Style, DELX),
+    INSP_FIELD(Style, SpriteBuffer),
+    INSP_FIELD(Style, SpriteLookup),
+    INSP_FIELD(Style, CARI),
+    INSP_FIELD(Style, pCar_5C),
+    INSP_FIELD(Style, delx3),
+    INSP_FIELD(Style, RECY),
+    INSP_FIELD(Style, n_recy),
+    INSP_FIELD(Style, ColourDepth),
+    INSP_FIELD(Style, pad2),
+    INSP_FIELD(Style, arr1024),
+};
+static const int kStyleFieldCount = sizeof(kStyleFields) / sizeof(kStyleFields[0]);
+
+// ---------------------------------------------------------------------------
 // All globals from done.md (only rows with an address)
 // ---------------------------------------------------------------------------
 struct InspGlobal {
@@ -1094,7 +1258,7 @@ static const InspGlobal kGlobals[] = {
     { "S154 AudioManager",       0x005dcbc8, 0x0 },
     { "S157 DMAudio",            0x005d85a0, 0x0 },
     { "S195 Passenger",          0x005e5ee0, 0x8 },
-    { "S270 MapGm",              0x005ec070, 0x554 },
+    { "S270 MapGm",              0x005ec070, 0x578 },
     { "S279 LPDIRECTINPUTDEVICE8",0x005E8F4C, 0x0 },
     { "S280 LPDIRECTINPUTA",     0x005E8F58, 0x0 },
     { "S300 Game* gGame (ptr cell)", 0x005eb4fc, 0x4 },
@@ -1163,6 +1327,9 @@ static PrevVal s_prevPedMgr[kPedManagerFieldCount];
 static PrevVal s_prevWeapon[kWeaponFieldCount];
 static PrevVal s_prevWeaponDb[kWeaponDatabaseFieldCount];
 static PrevVal s_prevGlobals[kGlobalCount];
+static PrevVal s_prevGameObject[kGameObjectFieldCount];
+static PrevVal s_prevCarTransforms[kCarTransformsFieldCount];
+static PrevVal s_prevStyle[kStyleFieldCount];
 
 static void ReadFieldBytes(const void* base, size_t off, int size,
                            unsigned long long* outA, unsigned long long* outB)
@@ -2149,6 +2316,269 @@ static void DumpStructToFile(const char* fileName, const char* title,
     fclose(f);
 }
 
+// ---------------------------------------------------------------------------
+// Style::arr1024 full dump. The generic formatter stops at 12 bytes for any
+// named field larger than 4 bytes, so the SPEC table (1024 ints) never made it
+// into Style.log. Contents come from read_spec_records_REAL (gta2.exe.c:158800)
+// -> sub_4C0040 (158774): for group g = 2..10 read u16 ids until 0 and set
+// arr1024[id] = g; untouched entries keep the ctor default 1 (fstyle.sty has no
+// SPEC chunk at all -> all 1024 stay 1).
+// Written only when the content changes, otherwise the 1 s timer would multiply
+// a ~100-line block by the frame count.
+// ---------------------------------------------------------------------------
+static unsigned int Arr1024Signature(const Style* st)
+{
+    unsigned int h = 0x811C9DC5u;
+    int i;
+    for (i = 0; i < 1024; i++) {
+        h ^= (unsigned int)st->arr1024[i];
+        h *= 0x01000193u;
+    }
+    return h;
+}
+
+static void DumpArr1024ToFile(const Style* st, unsigned int sig)
+{
+    static char s_arrBuf[96 * 1024];
+    DumpBuf b;
+    FILE* f;
+    int i, j, hist[11], run;
+
+    f = fopen(GetLogPath("Style.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+
+    b.data = s_arrBuf;
+    b.cap = sizeof(s_arrBuf);
+    b.len = 0;
+    s_arrBuf[0] = 0;
+
+    __try {
+        for (i = 0; i < 11; i++) {
+            hist[i] = 0;
+        }
+        for (i = 0; i < 1024; i++) {
+            j = st->arr1024[i];
+            if (j >= 0 && j <= 10) {
+                hist[j]++;
+            }
+        }
+        DumpPrintf(&b, "\n== Style::arr1024[1024] signature=0x%08X ==\n", sig);
+        DumpPrintf(&b, "  histogram:");
+        for (i = 0; i < 11; i++) {
+            if (hist[i]) {
+                DumpPrintf(&b, " %d:%d", i, hist[i]);
+            }
+        }
+        DumpPrintf(&b, "\n  run-length:\n");
+        run = 0;
+        for (i = 1; i <= 1024; i++) {
+            if (i < 1024 && st->arr1024[i] == st->arr1024[run]) {
+                continue;
+            }
+            DumpPrintf(&b, "    [%04d..%04d] = %d\n", run, i - 1, st->arr1024[run]);
+            run = i;
+        }
+        DumpPrintf(&b, "  full (16 per line):\n");
+        for (i = 0; i < 1024; i += 16) {
+            DumpPrintf(&b, "    %04d:", i);
+            for (j = 0; j < 16; j++) {
+                DumpPrintf(&b, " %2d", st->arr1024[i + j]);
+            }
+            DumpPrintf(&b, "\n");
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "  <arr1024 read error>\n");
+    }
+
+    if (b.len > 0) {
+        fwrite(s_arrBuf, 1, b.len, f);
+    }
+    fclose(f);
+}
+
+// ---------------------------------------------------------------------------
+// GameObject + Sprite (SpriteS1/CarTransforms) live dump.
+// Chain: Ped::GameObject2 (Ped+0x107) -> GameObject::SpriteS1 (GameObject+0x80)
+//      -> &SpriteS1::S3_arr5031[0] == the CarTransforms at SpriteS1* + 0x04.
+// Includes the three checks that make the layouts falsifiable:
+//   1. SpriteS1* inside gSpriteS1 pool [0x0066FF1C, +0x49B28)
+//   2. CarTransforms.sprite_type == 3 (GameObject::sub_493850 calls
+//      SpriteS1::sub_4206F0(pSpriteS1, 3), gta2.exe.c:122220)
+//   3. sprite PositionX/Y/Z equal to the Ped's own world coordinates
+// ---------------------------------------------------------------------------
+// gPedPool global pointer lives at 0x0066A3B4 (see gta2.exe.asm: unk_66A3B0
+// dword @0x66A3B0, PedPool* gPedPool @0x66A3B4, unk_66A3B8, unk_66A3BC).
+// PedPool == { GameObject* FirstGameObject; GameObject GameObject[400]; } == 0x11944.
+static const char* FindPedGameObject(Ped* mped, GameObject** outGo)
+{
+    unsigned long cand[3];
+    const unsigned char* pool;
+    const unsigned char* elems;
+    GameObject* g;
+    int i;
+
+    *outGo = NULL;
+
+    __try { cand[0] = (unsigned long)(ULONG_PTR)mped->GameObject2; }
+    __except (EXCEPTION_EXECUTE_HANDLER) { cand[0] = 0; }
+    __try { cand[1] = (unsigned long)(ULONG_PTR)mped->GameObject1; }
+    __except (EXCEPTION_EXECUTE_HANDLER) { cand[1] = 0; }
+    __try { cand[2] = (unsigned long)(ULONG_PTR)mped->GameObject;  }
+    __except (EXCEPTION_EXECUTE_HANDLER) { cand[2] = 0; }
+
+    for (i = 0; i < 3; i++) {
+        if (cand[i] == 0) continue;
+        g = (GameObject*)cand[i];
+        __try {
+            if (g->Ped == mped && g->SpriteS1 != NULL) {
+                *outGo = g;
+                if (i == 0) return "Ped+0x107 GameObject2";
+                if (i == 1) return "Ped+0x138 GameObject1";
+                return "Ped+0x168 GameObject";
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) { }
+    }
+
+    __try {
+        pool = *(const unsigned char**)0x0066A3B4UL;
+        if (pool != NULL) {
+            elems = pool + 4; // skip FirstGameObject
+            for (i = 0; i < 400; i++) {
+                g = (GameObject*)(elems + (unsigned)i * 0xB4u);
+                if (g->Ped == mped && g->SpriteS1 != NULL) {
+                    *outGo = g;
+                    return "gPedPool scan";
+                }
+            }
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) { }
+
+    return NULL;
+}
+
+static void DumpGameObjectAndSprite(DumpBuf* b, Ped* mped)
+{
+    GameObject* go = NULL;
+    SpriteS1* sp;
+    const CarTransforms* el;
+    const char* src;
+    char title[128];
+
+    if (mped == NULL) {
+        return;
+    }
+
+    __try {
+        DumpPrintf(b, "== GameObject search for MainPed @0x%08X ==\n",
+                   (unsigned long)(ULONG_PTR)mped);
+        DumpPrintf(b, "  Ped+0x107 GameObject2      0x%08X\n",
+                   (unsigned long)(ULONG_PTR)mped->GameObject2);
+        DumpPrintf(b, "  Ped+0x138 GameObject1      0x%08X\n",
+                   (unsigned long)(ULONG_PTR)mped->GameObject1);
+        DumpPrintf(b, "  Ped+0x168 GameObject       0x%08X\n",
+                   (unsigned long)(ULONG_PTR)mped->GameObject);
+        DumpPrintf(b, "  gPedPool @*0x0066A3B4      0x%08X\n",
+                   (unsigned long)(ULONG_PTR)*(void**)0x0066A3B4UL);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "<Ped candidate read failed>\n");
+        return;
+    }
+
+    src = FindPedGameObject(mped, &go);
+    if (go == NULL) {
+        DumpPrintf(b, "== GameObject: NONE of the candidates round-trips "
+                      "(g->Ped == mped && g->SpriteS1 != NULL) ==\n"
+                      "  (ped was never placed: Ped::SetPedPosition not run?)\n\n");
+        return;
+    }
+    DumpPrintf(b, "  chosen                  %s -> 0x%08X\n\n", src,
+               (unsigned long)(ULONG_PTR)go);
+
+    __try {
+        _snprintf(title, sizeof(title),
+                  "GameObject (%s, heap 0x%08X, 0xB4)", src,
+                  (unsigned long)(ULONG_PTR)go);
+        DumpStruct(b, title, go, kGameObjectFields, kGameObjectFieldCount,
+                   s_prevGameObject, 1);
+        DumpStructToFile("GameObject.log", title, go,
+                         kGameObjectFields, kGameObjectFieldCount, 1);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "<GameObject read failed>\n");
+        return;
+    }
+
+    __try {
+        sp = go->SpriteS1;
+        if (sp == NULL) {
+            DumpPrintf(b, "== Sprite: GameObject->SpriteS1 (GameObject+0x80) is NULL ==\n\n");
+            return;
+        }
+        el = &sp->S3_arr5031[0];
+
+        DumpPrintf(b, "== SpriteS1* @0x%08X (gSpriteS1 = *0x0066FF1C) ==\n",
+                   (unsigned long)(ULONG_PTR)sp);
+        DumpPrintf(b, "  +0x0000 FirstElement       0x%08X\n",
+                   (unsigned long)(ULONG_PTR)sp->FirstElement);
+        {
+            const unsigned char* sPool =
+                *(const unsigned char**)0x0066FF1CUL;
+            if (sPool == NULL) {
+                DumpPrintf(b, "  CHECK1 gSpriteS1          NULL (pool not inited?)\n");
+            } else {
+                unsigned long off = (unsigned long)((const char*)sp - (const char*)sPool);
+                DumpPrintf(b, "  CHECK1 gSpriteS1 base      0x%08X  range 0x49B28\n",
+                           (unsigned long)(ULONG_PTR)sPool);
+                DumpPrintf(b, "  CHECK1 sp-base             0x%08X  %s  elemIdx=%d%s\n",
+                           off,
+                           (sp >= (const SpriteS1*)sPool &&
+                            sp < (const SpriteS1*)((const char*)sPool + 0x49B28))
+                               ? "INSIDE" : "OUTSIDE",
+                           (int)(off / 0x3Cu),
+                           (((off - 4) % 0x3Cu) == 0 && off >= 4) ? " (aligned)" : " (UNALIGNED)");
+                DumpPrintf(b, "  CHECK1 header FirstElement 0x%08X\n",
+                           (unsigned long)(ULONG_PTR)((const SpriteS1*)sPool)->FirstElement);
+            }
+            DumpPrintf(b, "  el->SpriteS1_ (el+0x00)    0x%08X  %s sp\n",
+                       (unsigned long)(ULONG_PTR)el->SpriteS1_,
+                       (el->SpriteS1_ == sp) ? "==" : "!=");
+        }
+
+        DumpStruct(b, "SpriteS1.S3_arr5031[0] == CarTransforms @SpriteS1*+0x04 (0x3C)",
+                   el, kCarTransformsFields, kCarTransformsFieldCount,
+                   s_prevCarTransforms, 1);
+        DumpStructToFile("Sprite.log",
+                         "SpriteS1.S3_arr5031[0] CarTransforms (SpriteS1*+0x04)",
+                         el, kCarTransformsFields, kCarTransformsFieldCount, 1);
+
+        DumpPrintf(b, "  CHECK2 sprite_type        %d (expect 3 for GameObject)\n",
+                   el->sprite_type);
+        DumpPrintf(b, "  CHECK2 owner GameObject*   0x%08X (expect 0x%08X)\n",
+                   (unsigned long)(ULONG_PTR)el->GameObject,
+                   (unsigned long)(ULONG_PTR)go);
+        DumpPrintf(b, "  CHECK3 sprite X/Y/Z        %d / %d / %d\n",
+                   el->PositionX, el->PositionY, el->PositionZ);
+        DumpPrintf(b, "  CHECK3 ped  1AC/B0/B4       %d / %d / %d\n",
+                   mped->XCoordinate, mped->PositionY, mped->Camer_Z_View);
+        DumpPrintf(b, "  CHECK3 ped  1B8/BC/1E4      %d / %d / %d\n",
+                   mped->PositionX1, mped->PositionY1, mped->PositionZ2);
+        DumpPrintf(b, "  raw *(SpriteS1*+10/14/18)  %d / %d / %d  (only X,Y of the 3 matches)\n",
+                   *(const int*)((const char*)sp + 0x10),
+                   *(const int*)((const char*)sp + 0x14),
+                   *(const int*)((const char*)sp + 0x18));
+        DumpPrintf(b, "\n");
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(b, "<Sprite read failed>\n");
+    }
+}
+
 static void BuildDumpMainPedS200(DumpBuf* b, Ped* mped)
 {
     char title[128];
@@ -2236,6 +2666,74 @@ static void BuildDump(void)
     }
 
     __try {
+        Style* st = GetRealStyle();
+        if (st == NULL) {
+            DumpPrintf(&b, "== Style: gStyle (cell 0x00670684) is NULL (not initialized) ==\n\n");
+        } else {
+            char styPath[25];
+            int si;
+            int specNonZero = 0;
+            int specChanged = 0;
+            for (si = 0; si < 24; si++) {
+                styPath[si] = GetStyleFilePath()[si];
+            }
+            styPath[24] = 0;
+            for (si = 0; si < 1024; si++) {
+                if (st->arr1024[si] != 0) {
+                    specNonZero++;
+                }
+                if (st->arr1024[si] != 1) {
+                    specChanged++;
+                }
+            }
+            DumpPrintf(&b, "  gStyle cell @0x00670684    -> heap 0x%08X  (Style 0x106C)\n",
+                       (unsigned long)(ULONG_PTR)st);
+            DumpPrintf(&b, "  CHECK style file           \"%s\"\n", styPath);
+            DumpPrintf(&b, "  CHECK counts               pal=%d chars=%d sprites=%u objects=%u banks=%u\n",
+                       st->totalPal, st->charCount, (unsigned)st->spriteCount,
+                       (unsigned)st->objectCount, (unsigned)st->colourBanks);
+            DumpPrintf(&b, "  CHECK buffers              PALB=0x%08X SPRB1=0x%08X SPRB=0x%08X FONB=0x%08X\n",
+                       (unsigned long)(ULONG_PTR)st->PALB,
+                       (unsigned long)(ULONG_PTR)st->SPRB1,
+                       (unsigned long)(ULONG_PTR)st->SPRB,
+                       (unsigned long)(ULONG_PTR)st->FONB);
+            DumpPrintf(&b, "  CHECK buffers              SPRX=0x%08X OBJI=0x%08X PALX=0x%08X PPAL=0x%08X\n",
+                       (unsigned long)(ULONG_PTR)st->SPRX,
+                       (unsigned long)(ULONG_PTR)st->OBJI,
+                       (unsigned long)(ULONG_PTR)st->PALX,
+                       (unsigned long)(ULONG_PTR)st->PPAL);
+            DumpPrintf(&b, "  CHECK buffers              TILE=0x%08X S1501=0x%08X SPRG=0x%08X CARI=0x%08X\n",
+                       (unsigned long)(ULONG_PTR)st->TILE,
+                       (unsigned long)(ULONG_PTR)st->S1501,
+                       (unsigned long)(ULONG_PTR)st->SPRG,
+                       (unsigned long)(ULONG_PTR)st->CARI);
+            DumpPrintf(&b, "  CHECK SPEC arr1024         non-zero=%d/1024 non-default(!=1)=%d/1024, first 12 = "
+                           "%d %d %d %d %d %d %d %d %d %d %d %d\n",
+                       specNonZero, specChanged,
+                       st->arr1024[0], st->arr1024[1], st->arr1024[2], st->arr1024[3],
+                       st->arr1024[4], st->arr1024[5], st->arr1024[6], st->arr1024[7],
+                       st->arr1024[8], st->arr1024[9], st->arr1024[10], st->arr1024[11]);
+
+            DumpStruct(&b, "Style (heap, via *(Style**)0x00670684 = gStyle, 0x106C)", st,
+                       kStyleFields, kStyleFieldCount, s_prevStyle, 1);
+            DumpStructToFile("Style.log", "Style (heap via gStyle, 0x106C)", st,
+                             kStyleFields, kStyleFieldCount, 1);
+            {
+                static unsigned int s_arrSig = 0;
+                unsigned int sig = Arr1024Signature(st);
+                if (sig != s_arrSig) {
+                    s_arrSig = sig;
+                    DumpPrintf(&b, "  CHECK arr1024              signature=0x%08X -> full dump in Style.log\n", sig);
+                    DumpArr1024ToFile(st, sig);
+                }
+            }
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        DumpPrintf(&b, "<Style read failed>\n");
+    }
+
+    __try {
         Game* pg = GetGamePtr(); // deref the gGame pointer cell @0x005EB4FC
         if (pg != NULL) {
             char title[96];
@@ -2303,6 +2801,9 @@ Ped* mped = pp->MainPed;
                                 S200WatchSetTarget(mped);
                                 S200WatchDump(&b);
                                 S200WatchFlushToFile();
+                            }
+                            if (pi == 0) {
+                                DumpGameObjectAndSprite(&b, mped);
                             }
                     }
                     Car* c1 = pp->sCar1;
@@ -2456,6 +2957,9 @@ Ped* mped = pp->MainPed;
 #define IDC_INSP_SAVEFILE 105
 #define IDC_INSP_S200ONLY 106
 #define IDC_INSP_S200WATCH 107
+#define IDC_INSP_ADDMONEY  108
+#define IDC_INSP_ADDWANTED 109
+#define IDC_INSP_WHEREAMI  110
 #define WM_INSP_REFRESH  (WM_APP + 1)
 
 static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -2492,6 +2996,15 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         CreateWindowExA(0, "BUTTON", "S200 write-watch",
                         WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX | BS_LEFTTEXT,
                         496, 14, 108, 20, hwnd, (HMENU)IDC_INSP_S200WATCH, hInst, NULL);
+        CreateWindowExA(0, "BUTTON", "+ДЕНЬГИ",
+                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                        10, 48, 110, 26, hwnd, (HMENU)IDC_INSP_ADDMONEY, hInst, NULL);
+        CreateWindowExA(0, "BUTTON", "+РОЗЫСК",
+                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                        126, 48, 110, 26, hwnd, (HMENU)IDC_INSP_ADDWANTED, hInst, NULL);
+        CreateWindowExA(0, "BUTTON", "Где я?",
+                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                        242, 48, 110, 26, hwnd, (HMENU)IDC_INSP_WHEREAMI, hInst, NULL);
         SetTimer(hwnd, 1, 1000, NULL);
         return 0;
     }
@@ -2499,7 +3012,7 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         RECT rc;
         GetClientRect(hwnd, &rc);
         if (s_hEdit) {
-            MoveWindow(s_hEdit, 0, 46, rc.right, rc.bottom - 46, TRUE);
+            MoveWindow(s_hEdit, 0, 80, rc.right, rc.bottom - 80, TRUE);
         }
         return 0;
     }
@@ -2541,6 +3054,21 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         }
         if (LOWORD(wParam) == IDC_INSP_S200WATCH && HIWORD(wParam) == BN_CLICKED) {
             s_s200Watch = IsDlgButtonChecked(hwnd, IDC_INSP_S200WATCH);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_ADDMONEY && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugAddMoney(SAVE_HOTKEY_MONEY);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_ADDWANTED && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugAddWanted(SAVE_HOTKEY_WANTED);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_WHEREAMI && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugWhereAmI("кнопка 'Где я?'");
             BuildDump();
             return 0;
         }

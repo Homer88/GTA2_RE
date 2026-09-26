@@ -33,6 +33,7 @@
 #include "cGang.h"
 #include "cWeapon.h"
 #include "cGame.h"
+#include "cSaveLog.h"
 
 
 #pragma comment(lib, "detours.lib")
@@ -67,6 +68,11 @@ LPVOID _Sub465390 = (LPVOID)0x00465390;                // MapRelatedStruct::sub_
 LPVOID _Sub481890 = (LPVOID)0x00481890;                // MissionManager::sub_481890 (missions)
 LPVOID _StartGames = (LPVOID)0x004A6DA0;               // Player::StartGames (starts player)
 LPVOID _UpdateWrapper = (LPVOID)0x004CAC30;            // Hud::UpdateWrapper
+
+// --- save-file writers (see cSaveLog.h): trampolines used by cSaveLog.cpp ---
+LPVOID _WriteFileSvg = (LPVOID)0x0047EF40;  // MissionManager::SaveFile
+LPVOID _WriteFileDat = (LPVOID)0x004A89E0;  // PlayerData::WriteFileNamePlayer
+LPVOID _WriteFileHsc = (LPVOID)0x004A8D80;  // PlayerData::sub_4A8D80 (hiscores)
 
 static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* ep) {
     char path[MAX_PATH + 32];
@@ -178,8 +184,9 @@ case DLL_PROCESS_ATTACH:
        /// MessageBox(0, L"Load Dll!", 0, 0);
         SetUnhandledExceptionFilter(&CrashFilter);
         TraceInit();
-        TraceEvent("DllMain: DLL_PROCESS_ATTACH");
-        StartInspector();
+         TraceEvent("DllMain: DLL_PROCESS_ATTACH");
+         StartInspector();
+         SaveDebugStartHotkeys();
 
         DetourRestoreAfterWith();
         if (DetourTransactionBegin() != NO_ERROR)
@@ -278,6 +285,13 @@ case DLL_PROCESS_ATTACH:
         printError(Error, _StartGames);
         Error = DetourAttach(&_UpdateWrapper, (PVOID)HookUpdateWrapper);
         printError(Error, _UpdateWrapper);
+        // save-file writers -> Save.log (cSaveLog.cpp)
+        Error = DetourAttach(&_WriteFileSvg, (PVOID)HookSaveFile);
+        printError(Error, _WriteFileSvg);
+        Error = DetourAttach(&_WriteFileDat, (PVOID)HookWriteFileNamePlayer);
+        printError(Error, _WriteFileDat);
+        Error = DetourAttach(&_WriteFileHsc, (PVOID)HookWriteHiscores);
+        printError(Error, _WriteFileHsc);
         if (DetourTransactionCommit() != NO_ERROR)
         {
             printf("error DetourTransactionCommit");
