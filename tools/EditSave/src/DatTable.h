@@ -10,7 +10,13 @@ class QLineEdit;
 //
 // Layout proven by PlayerData::WriteFileNamePlayer:
 //   18 B header, then 12 x 9 B { u8 flag; u32 best; u32 last; }
-// best/last are money snapshots written by PlayerData::sub_4A8F90 - NOT a score.
+//
+// flag is genuine player progress, not a map constant:
+//   PlayerData::sub_4A8A90 sets one (arena, sub) pair's flag to 1 on completion;
+//   PlayerData::sub_4A8B00 sets all 12 flags to 1 - the game's own "unlock
+//   everything" routine. A real 100% save carries flag=1 on every row.
+//
+// best/last are money snapshots, NOT a score.
 // Record index maps to location as arena = idx / 4, sub = idx % 4.
 // ---------------------------------------------------------------------------
 class DatTable : public QWidget
@@ -22,6 +28,7 @@ public:
     void setSave(SaveFile *save);
     void reload();
     bool apply();
+    void setAllFlags(quint8 v);
 
 signals:
     void dirtyChanged(bool dirty);

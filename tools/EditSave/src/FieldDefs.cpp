@@ -1,6 +1,6 @@
 #include "FieldDefs.h"
 
-#include <QObject>
+#include <QCoreApplication>
 
 namespace {
 
@@ -33,12 +33,12 @@ QVector<FieldDef> build()
                0, 0, true,  "e.g. data\\wil.sty")
       << makeF("script", "Script file", 0x32, 25, FieldKind::Name, FieldGroup::Identity,
                0, 0, true,  "e.g. data\\wil.scr - the mission script")
-      << makeF("city",   "City",        0x4B, 1, FieldKind::U8, FieldGroup::Identity,
-               0, 2, true,  "0..2 - which city the player is in")
-      << makeF("level",  "Level",       0x4C, 1, FieldKind::U8, FieldGroup::Identity,
-               0, 255, true,"packed city<<4 | sublevel; 0xFF = no level")
+      << makeF("arena",  "Arena",       0x4B, 1, FieldKind::U8, FieldGroup::Identity,
+               0, 2, true,  "MapGm::GetPlayerArena - which of the 3 cities")
+      << makeF("bonusStage", "Bonus stage", 0x4C, 1, FieldKind::U8, FieldGroup::Identity,
+               0, 255, true, "MapGm::GetBonusStage")
       << makeF("gang",   "Gang",        0x4D, 1, FieldKind::U8, FieldGroup::Identity,
-               0, 9, true,  "0..9 - current gang (0 = none)");
+               0, 9, true,  "MapGm::GetGang - 0 = none");
 
     // ---- progress ---------------------------------------------------------
     v << makeF("money",      "Money",      0x64, 4, FieldKind::U32, FieldGroup::Progress,
@@ -47,19 +47,32 @@ QVector<FieldDef> build()
                0, 0xFFFFFFFFu, true, "GetMultiPlayer / SetMultiPlayer")
       << makeF("health",     "Health",     0x6C, 2, FieldKind::U16, FieldGroup::Progress,
                0, 0xFFFF, true, "Ped::GetHealth")
+      << makeF("posX",       "Pos X",      0x54, 4, FieldKind::U32, FieldGroup::Progress,
+               0, 0xFFFFFFFFu, true, "Ped::GetXCoordinate")
+      << makeF("posY",       "Pos Y",      0x58, 4, FieldKind::U32, FieldGroup::Progress,
+               0, 0xFFFFFFFFu, true, "Ped::GetYCoordinate")
+      << makeF("posZ",       "Pos Z",      0x5C, 4, FieldKind::U32, FieldGroup::Progress,
+               0, 0xFFFFFFFFu, true, "Ped::GetPositionZ")
+      << makeF("rotation",   "Rotation",   0x60, 2, FieldKind::U16, FieldGroup::Progress,
+               0, 0xFFFF, true, "Ped::GetRotation")
       << makeF("lives",      "Lives",      0xD4, 1, FieldKind::U8, FieldGroup::Progress,
-               0, 255, true, "SetMonyeLives")
+               0, 255, true, "SetMonyeLives; the community docs call this Point multiplier")
       << makeF("policeStar", "Wanted",     0xE0, 2, FieldKind::U16, FieldGroup::Progress,
                0, 6, true, "police star level, in-game max is 6")
       << makeF("tokens",     "Tokens",     0x744, 4, FieldKind::U32, FieldGroup::Progress,
                0, 0xFFFFFFFFu, true, "MapGm::GetSpecialTokens");
 
     // ---- bonuses ----------------------------------------------------------
-    for (int i = 0; i < 17; ++i) {
+    // Player::sub_4A5A50 reads a2+26 (== 0x6E) as 17 single bytes, one per
+    // powerup - NOT 17 words. Each byte is a timer: 0 = inactive, 0xFF lasts
+    // roughly 45 minutes. Names from gta2/Game/PowerUp/PowerUp.h.
+    for (int i = 0; i < PupSlotCount; ++i) {
         v << makeF(QString("powerup.%1").arg(i),
-                   QString("Bonus %1").arg(i), 0x6E + i * 2, 2, FieldKind::U16,
-                   FieldGroup::Bonuses, 0, 0xFFFF, true,
-                   "loaded by sub_4A5A50; 6/9 = special fx, 11 = invisibility");
+                   powerupSlotName(i), 0x6E + i, 1, FieldKind::U8,
+                   FieldGroup::Bonuses, 0, 255, true,
+                   i == PupInvulnerability || i == PupElectroFingers || i == PupInvisibility
+                       ? "applies an effect on load: sub_4A5A50 cases 6/9/11"
+                       : "timer in 1/256 units, 0xFF = about 45 minutes");
     }
 
     // ---- gangs ------------------------------------------------------------
@@ -71,15 +84,21 @@ QVector<FieldDef> build()
     }
 
     // ---- arsenal ----------------------------------------------------------
-    for (int i = 0; i < 15; ++i) {
+    // sWeapon[0..14] are WeaponType 0..14 in enum order (see FieldDefs.h), and
+    // sub_4A6B20 stores GetDisplayAmmo for each - so these 15 bytes are the
+    // per-weapon ammo counters, one byte each. 0 = weapon not carried.
+    for (int i = 0; i < WpnSlotCount; ++i) {
         v << makeF(QString("ammo.%1").arg(i),
-                   QString("Ammo %1").arg(i), 0xBA + i, 1, FieldKind::U8,
-                   FieldGroup::Arsenal, 0, 255, true, "ammo for weapon slot i");
+                   weaponSlotName(i), 0xBA + i, 1, FieldKind::U8,
+                   FieldGroup::Arsenal, 0, 255, true,
+                   "ammo for this weapon; a non-zero value arms it");
     }
     v << makeF("remap",        "Weapon remap",  0xD3, 1, FieldKind::U8, FieldGroup::Arsenal,
-               0, 255, true, "index into the remap table - invalid values break the load")
-      << makeF("selectWeapon", "Selected weap", 0xD6, 2, FieldKind::U16, FieldGroup::Arsenal,
-               0, 0xFFFF, true, "0xFFFF = none, otherwise an arsenal index");
+               0, 255, true,
+               "Ped::GetRemap - weapon model index; invalid values break the load")
+      << makeF("selectWeapon", "Equipped weapon", 0xD6, 2, FieldKind::U16,
+               FieldGroup::Arsenal, 0, 0xFFFF, true,
+               "weapon slot index, 0xFFFF = none; sub_4A5B40 starts the player at -1");
 
     // ---- internals we copy verbatim but have not identified ---------------
     for (int i = 0; i < 10; ++i) {
@@ -128,6 +147,102 @@ QVector<FieldDef> build()
 
 } // namespace
 
+// ---------------------------------------------------------------------------
+// Named slot tables. Keys are the recovered enum names from
+// gta2/Game/Weapon/Weapon.h and gta2/Game/PowerUp/PowerUp.h; the values are
+// tr()'d so a translation file can localise them without touching the order.
+// ---------------------------------------------------------------------------
+namespace {
+
+struct NamedSlot { const char *key; const char *text; };
+
+const NamedSlot kWeapons[] = {
+    { "weapon.pistol",      QT_TRANSLATE_NOOP("FieldDefs", "Pistol") },
+    { "weapon.smg",         QT_TRANSLATE_NOOP("FieldDefs", "Uzi SMG") },
+    { "weapon.rocket",      QT_TRANSLATE_NOOP("FieldDefs", "Rocket launcher") },
+    { "weapon.electorgun",  QT_TRANSLATE_NOOP("FieldDefs", "Electro Gun") },
+    { "weapon.molotov",     QT_TRANSLATE_NOOP("FieldDefs", "Molotov cocktail") },
+    { "weapon.grenade",     QT_TRANSLATE_NOOP("FieldDefs", "Grenade") },
+    { "weapon.shotgun",     QT_TRANSLATE_NOOP("FieldDefs", "Shotgun") },
+    { "weapon.shocker",     QT_TRANSLATE_NOOP("FieldDefs", "Shocker") },
+    { "weapon.flamegun",    QT_TRANSLATE_NOOP("FieldDefs", "Flamethrower") },
+    { "weapon.smggrenade",  QT_TRANSLATE_NOOP("FieldDefs", "Grenade launcher") },
+    { "weapon.dualpistol",  QT_TRANSLATE_NOOP("FieldDefs", "Dual pistols") },
+    { "weapon.machinegun",  QT_TRANSLATE_NOOP("FieldDefs", "Machine gun") },
+    { "weapon.unknown12",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown weapon 12") },
+    { "weapon.unknown13",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown weapon 13") },
+    { "weapon.unknown14",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown weapon 14") },
+};
+
+const NamedSlot kPowerups[] = {
+    { "powerup.multiplier",  QT_TRANSLATE_NOOP("FieldDefs", "Point multiplier") },
+    { "powerup.life",        QT_TRANSLATE_NOOP("FieldDefs", "Extra life") },
+    { "powerup.health",      QT_TRANSLATE_NOOP("FieldDefs", "Health") },
+    { "powerup.armor",       QT_TRANSLATE_NOOP("FieldDefs", "Armor") },
+    { "powerup.jailcard",    QT_TRANSLATE_NOOP("FieldDefs", "Get out of jail card") },
+    { "powerup.copbribe",    QT_TRANSLATE_NOOP("FieldDefs", "COP bribe") },
+    { "powerup.invuln",      QT_TRANSLATE_NOOP("FieldDefs", "Invulnerability") },
+    { "powerup.doubledmg",   QT_TRANSLATE_NOOP("FieldDefs", "Double damage") },
+    { "powerup.fastreload",  QT_TRANSLATE_NOOP("FieldDefs", "Fast reload") },
+    { "powerup.electro",     QT_TRANSLATE_NOOP("FieldDefs", "Electro fingers") },
+    { "powerup.respect",     QT_TRANSLATE_NOOP("FieldDefs", "Respect") },
+    { "powerup.invis",       QT_TRANSLATE_NOOP("FieldDefs", "Invisibility") },
+    { "powerup.gang",        QT_TRANSLATE_NOOP("FieldDefs", "Instant gang") },
+    { "powerup.unknown13",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown powerup 13") },
+    { "powerup.unknown14",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown powerup 14") },
+    { "powerup.unknown15",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown powerup 15") },
+    { "powerup.unknown16",   QT_TRANSLATE_NOOP("FieldDefs", "Unknown powerup 16") },
+};
+
+// The names come from a table, so the lookup cannot be a tr() call at the
+// call site - lupdate would not see it, and the runtime translation would be
+// looked up under the wrong context. Naming the context explicitly is what
+// makes these strings translatable at all.
+QString lookup(const NamedSlot *tab, int n, int idx)
+{
+    if (idx < 0 || idx >= n)
+        return QCoreApplication::translate("FieldDefs", "Unknown");
+    return QCoreApplication::translate("FieldDefs", tab[idx].text);
+}
+
+} // namespace
+
+QString weaponSlotName(int slot) { return lookup(kWeapons, WpnSlotCount, slot); }
+QString powerupSlotName(int slot) { return lookup(kPowerups, PupSlotCount, slot); }
+
+// Notes explain what the byte does, so the raw number is not the only clue.
+static const char *const kPowerupNotes[PupSlotCount] = {
+    QT_TRANSLATE_NOOP("FieldDefs", "point multiplier timer"),
+    QT_TRANSLATE_NOOP("FieldDefs", "extra life timer"),
+    QT_TRANSLATE_NOOP("FieldDefs", "health pickup timer"),
+    QT_TRANSLATE_NOOP("FieldDefs", "armour pickup timer"),
+    QT_TRANSLATE_NOOP("FieldDefs", "get outta jail free card"),
+    QT_TRANSLATE_NOOP("FieldDefs", "cop bribe"),
+    QT_TRANSLATE_NOOP("FieldDefs", "invulnerability"),
+    QT_TRANSLATE_NOOP("FieldDefs", "double damage"),
+    QT_TRANSLATE_NOOP("FieldDefs", "fast reload"),
+    QT_TRANSLATE_NOOP("FieldDefs", "electro fingers"),
+    QT_TRANSLATE_NOOP("FieldDefs", "respect / gang points"),
+    QT_TRANSLATE_NOOP("FieldDefs", "invisibility"),
+    QT_TRANSLATE_NOOP("FieldDefs", "instant gang access"),
+    QT_TRANSLATE_NOOP("FieldDefs", "not identified"),
+    QT_TRANSLATE_NOOP("FieldDefs", "not identified"),
+    QT_TRANSLATE_NOOP("FieldDefs", "not identified"),
+    QT_TRANSLATE_NOOP("FieldDefs", "not identified"),
+};
+
+QString powerupSlotNote(int slot)
+{
+    if (slot < 0 || slot >= PupSlotCount)
+        return QCoreApplication::translate("FieldDefs", "no such slot");
+    return QCoreApplication::translate("FieldDefs", kPowerupNotes[slot]);
+}
+
+int weaponSlotForType(int weaponType)
+{
+    return (weaponType >= 0 && weaponType < WpnSlotCount) ? weaponType : -1;
+}
+
 const QVector<FieldDef> &fieldDefs()
 {
     static const QVector<FieldDef> defs = build();
@@ -137,13 +252,13 @@ const QVector<FieldDef> &fieldDefs()
 QString fieldGroupTitle(FieldGroup g)
 {
     switch (g) {
-    case FieldGroup::Identity:  return QObject::tr("Identity / level");
-    case FieldGroup::Progress:  return QObject::tr("Progress");
-    case FieldGroup::Bonuses:   return QObject::tr("Bonuses");
-    case FieldGroup::Gangs:     return QObject::tr("Gang respect");
-    case FieldGroup::Arsenal:   return QObject::tr("Weapons");
-    case FieldGroup::Internals: return QObject::tr("Unidentified (copied verbatim)");
-    case FieldGroup::Dangerous: return QObject::tr("Map-derived / unsafe");
+    case FieldGroup::Identity:  return QCoreApplication::translate("FieldDefs", "Identity / level");
+    case FieldGroup::Progress:  return QCoreApplication::translate("FieldDefs", "Progress");
+    case FieldGroup::Bonuses:   return QCoreApplication::translate("FieldDefs", "Bonuses");
+    case FieldGroup::Gangs:     return QCoreApplication::translate("FieldDefs", "Gang respect");
+    case FieldGroup::Arsenal:   return QCoreApplication::translate("FieldDefs", "Weapons");
+    case FieldGroup::Internals: return QCoreApplication::translate("FieldDefs", "Unidentified (copied verbatim)");
+    case FieldGroup::Dangerous: return QCoreApplication::translate("FieldDefs", "Map-derived / unsafe");
     }
     return QString();
 }

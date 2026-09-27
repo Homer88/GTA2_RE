@@ -4,6 +4,7 @@
 #include <QFont>
 #include <QSettings>
 #include <QString>
+#include <QStringList>
 
 class QApplication;
 class QWidget;
@@ -51,6 +52,19 @@ public:
     int  lastSlot() const { return m_lastSlot; }
     void setLastSlot(int slot) { m_lastSlot = slot; }
 
+    // --- game data --------------------------------------------------------
+    // Folder holding wil/ste/bil .gmp/.sty/.scr. Needed to rebuild the mission
+    // table and to name a save's map; the game itself stores the same relative
+    // "data\wil.gmp" style names in the .svg.
+    QString dataDir() const { return m_dataDir; }
+    void setDataDir(const QString &dir) { m_dataDir = dir; }
+
+    // --- language ---------------------------------------------------------
+    // "en" or "ru". The C++ source is English; "ru" loads a QTranslator.
+    QString language() const { return m_language; }
+    void setLanguage(const QString &code) { m_language = code; }
+    static QStringList availableLanguages();
+
     // --- behaviour --------------------------------------------------------
     bool autoBackup() const { return m_autoBackup; }
     void setAutoBackup(bool on) { m_autoBackup = on; }
@@ -64,8 +78,11 @@ public:
     void resetToDefaults();
     QString configFilePath() const;
 
-    static const int kMinScale = 70;
-    static const int kMaxScale = 300;
+    // constexpr, not static const: these are passed to QWidget::setRange()
+    // and qBound(), which take them by const reference, and only constexpr
+    // members are implicitly inline in C++17.
+    static constexpr int kMinScale = 70;
+    static constexpr int kMaxScale = 300;
 
 private:
     AppSettings();
@@ -82,6 +99,8 @@ private:
     QByteArray m_state;
     QString  m_playerDir;
     int      m_lastSlot      = 0;
+    QString  m_dataDir       = QStringLiteral("C:/work/GTA2_RE/bin/data");
+    QString  m_language      = QStringLiteral("en");
     bool     m_autoBackup    = true;
     bool     m_confirmOnExit = true;
     bool     m_showHexColumns = true;

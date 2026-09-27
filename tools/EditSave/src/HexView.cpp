@@ -23,12 +23,16 @@ void MissionTableView::buildUi()
     QVBoxLayout *v = new QVBoxLayout(this);
 
     QLabel *hint = new QLabel(
-        tr("<b>Map-derived, not player state.</b> MissionManager::sub_47EE70 walks all 6000 "
-           "script slots and rebuilds this table on <i>every</i> save, keeping only markers of "
-           "type 275/276. That is why the id range differs per map (wil starts at 414, bil at 67) "
-           "but is identical for every slot of the same map. Editing it here would have no effect - "
-           "the game overwrites it. The per-mission progress bits at 0x12C/0x130 index RAM arrays "
-           "that are never saved, which is why forcing them crashes the load."),
+        tr("<b>Read-only map fingerprint - editing it changes nothing.</b><br>"
+           "MissionManager::SaveFile calls sub_47EE70 before writing, and that function rebuilds "
+           "all 300 rows from the live Script buffer; StartMission returns a pointer straight into "
+           "that buffer, not into a live object. So both columns are static data from "
+           "<code>data\\&lt;city&gt;.scr</code>:<br>"
+           "&bull; <b>id</b> = the id of every type-275/276 script record - byte-for-byte identical "
+           "to the .scr (verified against real saves: wil 155/155 identical, bil 107/107 ids match).<br>"
+           "&bull; <b>extra</b> = the static +8 of those records. A real completed save has the same "
+           "values as a fresh one here.<br>"
+           "Per-location progress lives in the <b>.dat records</b> tab, not here."),
         this);
     hint->setWordWrap(true);
     v->addWidget(hint);

@@ -1,8 +1,10 @@
 #include "SettingsPage.h"
 #include "AppSettings.h"
+#include "Translator.h"
 
 #include <QApplication>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
@@ -44,18 +46,18 @@ SettingsPage::SettingsPage(QWidget *parent)
     reloadFromConfig();
 }
 
-QWidget *SettingsPage::buildUi()
+QVBoxLayout *SettingsPage::buildUi()
 {
     auto *root = new QVBoxLayout(this);
     root->setContentsMargins(12, 12, 12, 12);
     root->setSpacing(10);
 
     // --- interface scale --------------------------------------------------
-    auto *scaleBox = new QGroupBox(tr("Интерфейс"), this);
+    auto *scaleBox = new QGroupBox(tr("Interface"), this);
     auto *scaleLay = new QVBoxLayout(scaleBox);
 
     auto *scaleRow = new QHBoxLayout;
-    auto *scaleLabel = new QLabel(tr("Масштаб:"), scaleBox);
+    auto *scaleLabel = new QLabel(tr("Scale:"), scaleBox);
 
     m_slider = new QSlider(Qt::Horizontal, scaleBox);
     m_slider->setRange(AppSettings::kMinScale, AppSettings::kMaxScale);
@@ -76,6 +78,17 @@ QWidget *SettingsPage::buildUi()
     scaleRow->addWidget(m_spin);
     scaleLay->addLayout(scaleRow);
 
+    auto *langRow = new QHBoxLayout;
+    langRow->addWidget(new QLabel(tr("Language:"), scaleBox));
+    m_langBox = new QComboBox(scaleBox);
+    // The combo shows each language in its own name, so the list is readable
+    // regardless of the currently active one.
+    m_langBox->addItem(QStringLiteral("English"), QStringLiteral("en"));
+    m_langBox->addItem(QString::fromUtf8("Русский"), QStringLiteral("ru"));
+    m_langBox->setToolTip(tr("Takes effect immediately, no restart needed"));
+    langRow->addWidget(m_langBox, 1);
+    scaleLay->addLayout(langRow);
+
     m_scaleHint = new QLabel(scaleBox);
     m_scaleHint->setWordWrap(true);
     m_scaleHint->setStyleSheet(QStringLiteral("color: palette(mid);"));
@@ -89,16 +102,16 @@ QWidget *SettingsPage::buildUi()
     root->addWidget(scaleBox);
 
     // --- save folder ------------------------------------------------------
-    auto *pathBox = new QGroupBox(tr("Папка сохранений"), this);
+    auto *pathBox = new QGroupBox(tr("Save folder"), this);
     auto *pathLay = new QGridLayout(pathBox);
 
     m_dirEdit = new QLineEdit(pathBox);
     m_dirEdit->setPlaceholderText(QStringLiteral("C:/work/log/player"));
-    m_dirEdit->setToolTip(tr("Папка с файлами plyslotN.svg / plyslotN.dat"));
+    m_dirEdit->setToolTip(tr("Folder holding plyslotN.svg / plyslotN.dat"));
 
-    auto *browse = new QPushButton(tr("Обзор..."), pathBox);
-    auto *useCurrent = new QPushButton(tr("Текущая папка"), pathBox);
-    useCurrent->setToolTip(tr("Подставить рабочую папку приложения"));
+    auto *browse = new QPushButton(tr("Browse..."), pathBox);
+    auto *useCurrent = new QPushButton(tr("Current folder"), pathBox);
+    useCurrent->setToolTip(tr("Use the current working folder"));
 
     pathLay->addWidget(m_dirEdit,     0, 0, 1, 2);
     pathLay->addWidget(browse,        0, 2);
@@ -106,13 +119,29 @@ QWidget *SettingsPage::buildUi()
     pathLay->setColumnStretch(0, 1);
     root->addWidget(pathBox);
 
+    // --- game data folder -------------------------------------------------
+    // Needed to rebuild the mission table when the city is switched.
+    auto *dataBox = new QGroupBox(tr("Game data"), pathBox->parentWidget());
+    auto *dataLay = new QGridLayout(dataBox);
+
+    m_dataEdit = new QLineEdit(dataBox);
+    m_dataEdit->setPlaceholderText(QStringLiteral("C:/work/GTA2_RE/bin/data"));
+    m_dataEdit->setToolTip(tr("Folder with wil.gmp / wil.sty / wil.scr and the other two cities.\n"
+                              "The mission table is rebuilt from the .scr when the city changes."));
+
+    auto *dataBrowse = new QPushButton(tr("Browse..."), dataBox);
+    dataLay->addWidget(m_dataEdit,   0, 0);
+    dataLay->addWidget(dataBrowse,   0, 1);
+    dataLay->setColumnStretch(0, 1);
+    root->addWidget(dataBox);
+
     // --- behaviour --------------------------------------------------------
-    auto *behBox = new QGroupBox(tr("Поведение"), this);
+    auto *behBox = new QGroupBox(tr("Behaviour"), this);
     auto *behLay = new QVBoxLayout(behBox);
 
-    m_autoBackup = new QCheckBox(tr("Автоматически делать резервную копию перед записью"), behBox);
-    m_confirm   = new QCheckBox(tr("Спрашивать подтверждение при выходе с несохранёнными правками"), behBox);
-    m_hexCols   = new QCheckBox(tr("Показывать колонку с hex-адресами в просмотре"), behBox);
+    m_autoBackup = new QCheckBox(tr("Make a timestamped backup before writing"), behBox);
+    m_confirm   = new QCheckBox(tr("Ask for confirmation when quitting with unsaved edits"), behBox);
+    m_hexCols   = new QCheckBox(tr("Show the hex address column in the viewer"), behBox);
 
     behLay->addWidget(m_autoBackup);
     behLay->addWidget(m_confirm);
@@ -127,10 +156,10 @@ QWidget *SettingsPage::buildUi()
     m_configPath->setTextInteractionFlags(Qt::TextSelectableByMouse);
     m_configPath->setStyleSheet(QStringLiteral("color: palette(mid);"));
 
-    auto *openCfg = new QPushButton(tr("Открыть папку"), this);
-    auto *reset   = new QPushButton(tr("Сбросить всё"), this);
-    reset->setToolTip(tr("Вернуть значения по умолчанию.\n"
-                         "Файлы сохранений при этом не затрагиваются."));
+    auto *openCfg = new QPushButton(tr("Open folder"), this);
+    auto *reset   = new QPushButton(tr("Reset all"), this);
+    reset->setToolTip(tr("Restore the default values.\n"
+                         "Save files are not affected."));
 
     foot->addWidget(m_configPath, 1);
     foot->addWidget(openCfg);
@@ -148,6 +177,9 @@ QWidget *SettingsPage::buildUi()
     connect(m_autoBackup, &QCheckBox::toggled, this, &SettingsPage::onAutoBackupToggled);
     connect(m_confirm,   &QCheckBox::toggled, this, &SettingsPage::onConfirmOnExitToggled);
     connect(m_hexCols,   &QCheckBox::toggled, this, &SettingsPage::onHexColumnsToggled);
+    connect(m_langBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsPage::onLanguageChanged);
+    connect(dataBrowse, &QPushButton::clicked, this, &SettingsPage::onBrowseDataDir);
 
     connect(browse, &QPushButton::clicked, this, &SettingsPage::onBrowseSaveDir);
     connect(useCurrent, &QPushButton::clicked, this, [this] {
@@ -160,8 +192,45 @@ QWidget *SettingsPage::buildUi()
     connect(m_dirEdit, &QLineEdit::editingFinished, this, [this] {
         applyPlayerDir(m_dirEdit->text());
     });
+    connect(m_dataEdit, &QLineEdit::editingFinished, this, [this] {
+        applyDataDir(m_dataEdit->text());
+    });
 
-    return this;
+    return root;
+}
+
+void SettingsPage::applyDataDir(const QString &raw)
+{
+    if (raw.trimmed().isEmpty())
+        return;
+    const QString clean = QDir::cleanPath(raw);
+    m_dataEdit->setText(QDir::toNativeSeparators(clean));
+    AppSettings::instance().setDataDir(clean);
+    AppSettings::instance().sync();
+}
+
+void SettingsPage::onBrowseDataDir()
+{
+    const QString cur = m_dataEdit->text().trimmed().isEmpty()
+                            ? AppSettings::instance().dataDir()
+                            : m_dataEdit->text();
+    const QString picked = QFileDialog::getExistingDirectory(
+        this, tr("Select the game data folder"), QDir::toNativeSeparators(cur));
+    if (!picked.isEmpty())
+        applyDataDir(picked);
+}
+
+void SettingsPage::onLanguageChanged(int index)
+{
+    if (m_updating)
+        return;
+    const QString code = m_langBox->itemData(index).toString();
+    if (code.isEmpty() || code == AppSettings::instance().language())
+        return;
+    AppSettings::instance().setLanguage(code);
+    AppSettings::instance().sync();
+    // main.cpp installs the translator and re-translates every live window.
+    Translator::instance().applyLanguage(code);
 }
 
 void SettingsPage::applyPlayerDir(const QString &raw)
@@ -182,6 +251,9 @@ void SettingsPage::reloadFromConfig()
     m_updating = true;
     setScaleControls(cfg.uiScalePercent());
     m_dirEdit->setText(QDir::toNativeSeparators(cfg.playerDir()));
+    m_dataEdit->setText(QDir::toNativeSeparators(cfg.dataDir()));
+    const int li = m_langBox->findData(cfg.language());
+    m_langBox->setCurrentIndex(li >= 0 ? li : 0);
     m_autoBackup->setChecked(cfg.autoBackup());
     m_confirm->setChecked(cfg.confirmOnExit());
     m_hexCols->setChecked(cfg.showHexColumns());
@@ -201,26 +273,26 @@ void SettingsPage::refreshDerivedLabels()
     const int pct = cfg.uiScalePercent();
 
     const QFont scaled = AppSettings::scaledFont(cfg.baseFont(), pct);
-    m_fontInfo->setText(tr("Шрифт: %1, %2 pt, экран %3 DPI")
+    m_fontInfo->setText(tr("Font: %1, %2 pt, screen %3 DPI")
                             .arg(QFontInfo(scaled).family())
                             .arg(scaled.pointSizeF(), 0, 'f', 1)
                             .arg(primaryDpi()));
 
     switch (pct) {
     case 100:
-        m_scaleHint->setText(tr("Обычный размер."));
+        m_scaleHint->setText(tr("Normal size."));
         break;
     case AppSettings::kMinScale:
     case AppSettings::kMaxScale:
-        m_scaleHint->setText(tr("Крайнее значение диапазона."));
+        m_scaleHint->setText(tr("Extreme value of the range."));
         break;
     default:
-        m_scaleHint->setText(pct < 100 ? tr("Уменьшенный интерфейс — больше данных на экране.")
-                                       : tr("Увеличенный интерфейс — удобнее на высоких DPI."));
+        m_scaleHint->setText(pct < 100 ? tr("Smaller interface - more data on screen.")
+                                       : tr("Larger interface - easier on high-DPI displays."));
         break;
     }
 
-    m_configPath->setText(tr("Конфигурация: %1").arg(cfg.configFilePath()));
+    m_configPath->setText(tr("Config: %1").arg(cfg.configFilePath()));
 }
 
 void SettingsPage::onScalePercentChanged(int percent)
@@ -274,7 +346,7 @@ void SettingsPage::onBrowseSaveDir()
                             ? AppSettings::instance().playerDir()
                             : m_dirEdit->text();
     const QString picked = QFileDialog::getExistingDirectory(
-        this, tr("Выберите папку сохранений"), QDir::toNativeSeparators(cur));
+        this, tr("Select the save folder"), QDir::toNativeSeparators(cur));
     if (!picked.isEmpty())
         applyPlayerDir(picked);
 }

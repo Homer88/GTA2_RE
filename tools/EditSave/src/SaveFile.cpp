@@ -1,4 +1,7 @@
 #include "SaveFile.h"
+#include "Cities.h"
+#include "FieldDefs.h"
+#include "ScriptFile.h"
 
 #include <QFile>
 #include <QObject>
@@ -33,6 +36,162 @@ inline void wr32(QByteArray &b, int off, quint32 v)
 } // namespace
 
 SaveFile::SaveFile() = default;
+
+void SaveFile::clear()
+{
+    m_block0.clear();
+    m_trailing.clear();
+    m_dat.clear();
+    m_svgPath.clear();
+    m_datPath.clear();
+}
+
+// ---------------------------------------------------------------------------
+// creation
+// ---------------------------------------------------------------------------
+bool SaveFile::createNew(int arena, const QString &templatePath, QString *error)
+{
+    const CityDef *city = Cities::byArena(arena);
+    if (!city) {
+        if (error) *error = QObject::tr("Arena %1 is out of range (0-2).").arg(arena);
+        return false;
+    }
+
+    // Trailing blocks come from a reference save of the same city when we have
+    // one. They are map constants, not player state: the first two were
+    // byte-identical across every wil save compared, and MapRelatedStruct
+    // regenerates them from the .gmp rather than from the player.
+    m_trailing.clear();
+    if (!templatePath.isEmpty()) {
+        QString ignored;
+        SaveFile ref;
+        if (ref.loadSvg(templatePath, &ignored) && ref.m_trailing.size() == kTrailingNum)
+            m_trailing = ref.m_trailing;
+    }
+    if (m_trailing.size() != kTrailingNum) {
+        if (error) *error = QObject::tr(
+            "No usable template: the save needs three trailing map-constant blocks "
+            "and none could be read from %1. Open an existing save of this city "
+            "first and use it as the template.").arg(templatePath.isEmpty()
+                                                    ? QObject::tr("(nothing)")
+                                                    : QFileInfo(templatePath).fileName());
+        m_trailing.clear();
+        return false;
+    }
+
+    m_block0 = QByteArray(kBlock0Size, '\0');
+
+    setNameAt(0x00, city->mapFile);
+    setNameAt(0x19, city->styleFile);
+    setNameAt(0x32, city->scriptFile);
+    setU8(0x4B, quint8(city->arena));   // arena
+    setU8(0x4C, 0);                     // bonus stage
+    setU8(0x4D, 0);                     // gang = none
+
+    setU32(0x54, 0);                    // pos X/Y/Z + rotation: spawn point
+    setU32(0x58, 0);
+    setU32(0x5C, 0);
+    setU16(0x60, 0);
+    setU32(0x64, 0);                    // money
+    setU32(0x68, 3);                    // lives (multiplayer counter)
+    setU16(0x6C, 100);                  // health
+
+    for (int i = 0; i < 10; ++i) setU32(0x90 + i * 4, 0);   // field_644
+    for (int i = 0; i < WpnSlotCount; ++i) setU8(0xBA + i, 0);
+    for (int i = 0; i < 10; ++i) setU8(0xC9 + i, 0);       // respect
+    setU8(0xD3, 0);                     // weapon remap
+    setU8(0xD4, 3);                     // lives / point multiplier
+    setU16(0xD6, 0xFFFF);               // nothing equipped
+    setU32(0xD8, 0);
+    setU32(0xDC, 0);
+    setU16(0xE0, 0);                    // wanted level
+
+    m_svgPath.clear();
+    m_datPath.clear();
+
+    // A fresh .dat: 18 B header, 12 records of 9 B. Nothing unlocked yet.
+    m_dat = QByteArray(kDatSize, '\0');
+    const char *nm = "PLAYER";
+    for (int i = 0; i < 6 && nm[i]; ++i) {
+        m_dat[i * 2]     = nm[i];
+        m_dat[i * 2 + 1] = '\0';
+    }
+    for (int i = 0; i < kDatRecCount; ++i) {
+        const int o = kDatHeader + i * kDatRecSize;
+        m_dat[o]     = 0;               // flag: location not completed
+        wr32(m_dat, o + 1, 0);
+        wr32(m_dat, o + 5, 0);
+    }
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// city switching
+// ---------------------------------------------------------------------------
+bool SaveFile::applyCityNames(int arena, QString *error)
+{
+    if (!hasSvg()) {
+        if (error) *error = QObject::tr("No .svg loaded.");
+        return false;
+    }
+    const CityDef *city = Cities::byArena(arena);
+    if (!city) {
+        if (error) *error = QObject::tr("Arena %1 is out of range (0-2).").arg(arena);
+        return false;
+    }
+    setNameAt(0x00, city->mapFile);
+    setNameAt(0x19, city->styleFile);
+    setNameAt(0x32, city->scriptFile);
+    setU8(0x4B, quint8(city->arena));
+    return true;
+}
+
+bool SaveFile::applyCity(int arena, const ScriptFile &script, QString *error)
+{
+    if (!hasSvg()) {
+        if (error) *error = QObject::tr("No .svg loaded.");
+        return false;
+    }
+    if (!script.isLoaded()) {
+        if (error) *error = QObject::tr("Mission script was not loaded.");
+        return false;
+    }
+    const CityDef *city = Cities::byArena(arena);
+    if (!city) {
+        if (error) *error = QObject::tr("Arena %1 is out of range (0-2).").arg(arena);
+        return false;
+    }
+    // Refuse a mismatched pair rather than writing a save that points at one
+    // map's names and another map's missions.
+    if (Cities::baseName(script.path()).compare(
+            Cities::baseName(city->scriptFile), Qt::CaseInsensitive) != 0) {
+        if (error) *error = QObject::tr(
+            "%1 is not the mission script for %2 (%3).")
+            .arg(Cities::baseName(script.path()))
+            .arg(city->displayName, Cities::baseName(city->scriptFile));
+        return false;
+    }
+
+    applyCityNames(arena, nullptr);
+
+    // sub_47EE70 stores {id, state} for every type-275/276 record, then
+    // zeroes the rest of the 300 rows. Reproduce that verbatim.
+    const QVector<QPair<quint16, quint16> > rows = script.markers();
+    for (int i = 0; i < 300; ++i) {
+        const int off = 0x134 + i * 4;
+        if (i < rows.size()) {
+            wr16(m_block0, off,     rows.at(i).first);
+            wr16(m_block0, off + 2, rows.at(i).second);
+        } else {
+            wr16(m_block0, off,     0);
+            wr16(m_block0, off + 2, 0);
+        }
+    }
+    setU16(0x12A, quint16(rows.size()));
+    setU32(0x12C, 0);
+    setU32(0x130, 0);
+    return true;
+}
 
 int SaveFile::trailingBytes() const
 {

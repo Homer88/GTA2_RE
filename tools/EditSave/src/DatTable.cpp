@@ -22,8 +22,12 @@ void DatTable::buildUi()
     QVBoxLayout *v = new QVBoxLayout(this);
 
     QLabel *hint = new QLabel(
-        tr("best / last are <b>money</b> snapshots written by PlayerData::sub_4A8F90 - "
-           "they are not a score. Record index maps to location as arena = idx/4, sub = idx%4."),
+        tr("<b>flag is the real per-location progress marker.</b> "
+           "PlayerData::sub_4A8A90 sets it to 1 for one (arena, sub) pair, and "
+           "sub_4A8B00 sets all 12 at once - that is the game's own "
+           "\"everything unlocked\" routine. A real 100%% save has flag=1 on all 12 rows.<br>"
+           "best / last are <b>money</b> snapshots, not a score. Record index maps to location as "
+           "arena = idx/4, sub = idx%4."),
         this);
     hint->setWordWrap(true);
     v->addWidget(hint);
@@ -48,6 +52,10 @@ void DatTable::buildUi()
     v->addWidget(m_table, 1);
 
     QHBoxLayout *btnRow = new QHBoxLayout;
+    QPushButton *unlockAll = new QPushButton(tr("Unlock all 12"), this);
+    QPushButton *lockAll   = new QPushButton(tr("Lock all"), this);
+    btnRow->addWidget(unlockAll);
+    btnRow->addWidget(lockAll);
     btnRow->addStretch(1);
     QPushButton *reload = new QPushButton(tr("Discard edits"), this);
     QPushButton *apply  = new QPushButton(tr("Apply to .dat"), this);
@@ -57,6 +65,22 @@ void DatTable::buildUi()
 
     connect(reload, &QPushButton::clicked, this, &DatTable::reload);
     connect(apply,  &QPushButton::clicked, this, [this]{ this->apply(); });
+    connect(unlockAll, &QPushButton::clicked, this, [this]{ this->setAllFlags(1); });
+    connect(lockAll,   &QPushButton::clicked, this, [this]{ this->setAllFlags(0); });
+}
+
+// Mirrors PlayerData::sub_4A8B00, which flags every (arena, sub) pair in one go.
+void DatTable::setAllFlags(quint8 v)
+{
+    if (!m_save || !m_save->hasDat())
+        return;
+    for (int i = 0; i < SaveFile::kDatRecCount; ++i) {
+        m_save->setDatFlag(i, v);
+        if (QTableWidgetItem *it = m_table->item(i, 3))
+            it->setText(QString::number(v));
+    }
+    m_dirty = true;
+    emit dirtyChanged(true);
 }
 
 void DatTable::setSave(SaveFile *save)

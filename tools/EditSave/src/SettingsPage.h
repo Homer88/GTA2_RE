@@ -9,6 +9,7 @@ class QLineEdit;
 class QPushButton;
 class QSlider;
 class QSpinBox;
+class QVBoxLayout;
 
 // ---------------------------------------------------------------------------
 // Settings tab.
@@ -41,20 +42,25 @@ private slots:
     void onConfirmOnExitToggled(bool on);
     void onHexColumnsToggled(bool on);
     void onBrowseSaveDir();
+    void onBrowseDataDir();
+    void onLanguageChanged(int index);
     void onResetDefaults();
     void onOpenConfigDir();
 
 private:
-    QWidget *buildUi();
+    QVBoxLayout *buildUi();
     void reloadFromConfig();
     void setScaleControls(int percent);
     void refreshDerivedLabels();
     void applyPlayerDir(const QString &raw);
+    void applyDataDir(const QString &raw);
 
     QSlider   *m_slider    = nullptr;
     QSpinBox  *m_spin      = nullptr;
     QLabel    *m_scaleHint = nullptr;
     QLineEdit *m_dirEdit   = nullptr;
+    QLineEdit *m_dataEdit  = nullptr;
+    QComboBox *m_langBox   = nullptr;
     QCheckBox *m_autoBackup = nullptr;
     QCheckBox *m_confirm   = nullptr;
     QCheckBox *m_hexCols   = nullptr;

@@ -36,6 +36,22 @@ public:
 
     SaveFile();
 
+    // ---- creation ---------------------------------------------------------
+    // Builds a fresh, game-loadable pair in memory. templatePath may be empty;
+    // when given, the three trailing map-constant blocks are copied from it
+    // verbatim, because their generator (MapRelatedStruct::sub_4642A0) is not
+    // fully recovered and they are map-derived rather than player state.
+    bool createNew(int arena, const QString &templatePath, QString *error);
+    void clear();
+
+    // ---- city switching ---------------------------------------------------
+    // Writes the three name fields for the city and regenerates the mission
+    // table from its .scr, exactly as MissionManager::sub_47EE70 would.
+    // script is the already-loaded ScriptFile for that city. Returns false and
+    // fills error if the .scr does not match this save's map.
+    bool applyCity(int arena, const class ScriptFile &script, QString *error);
+    bool applyCityNames(int arena, QString *error);
+
     // ---- whole-file IO ---------------------------------------------------
     // .svg and .dat are independent: a slot may legitimately have only one of
     // them, so each is loaded and stored on its own.
