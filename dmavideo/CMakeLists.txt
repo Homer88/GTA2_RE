@@ -15,3 +15,5 @@ add_library(DMAVIDEO STATIC ${DMAVIDEO_SOURCE} ${DMAVIDEO_HEADERS})
 #dll
 add_library(DMAVIDEO_SHARED SHARED ${DMAVIDEO_SOURCE} ${DMAVIDEO_HEADERS})
 set_target_properties(DMAVIDEO_SHARED PROPERTIES OUTPUT_NAME "DMAVIDEO")
+# Vid_* device layer contract, identical to retail dmaglide.dll.
+set_target_properties(DMAVIDEO_SHARED PROPERTIES LINK_FLAGS "/DEF:${CMAKE_CURRENT_SOURCE_DIR}/Exports.def")

@@ -1,0 +1,110 @@
+// gta2_globals.h — дополнение вручную: именованные глобалы данных.
+// Выведены из dump/IDA/gta2.exe.c и контекстов использования в модулях.
+// Вставляется collect_globals.ps1 в конец файла.
+extern int gInt;
+extern unsigned char gSpawnPoint;
+extern char aTestReplay0Rep[];
+extern char gTestReplayRep[];
+extern struct MissionManager *gMissionManager;
+extern struct PedManager *gPedManager;
+struct _G5D2E18 { void *field_10; };
+extern struct _G5D2E18 stru_5D2E18;
+extern struct Player stru_5D22FC;
+
+// --- global-данные по использованиям в winmain (Ghidra-имена) ---
+// (gRandom, _DAT_00599ee0/_DAT_005cc2b0 и пр. теперь собираются collect_globals.ps1 автоматически)
+extern int gBufferSize[0x10000];
+extern struct Random gRandom;
+extern struct CameraOrPhysics *gCameraOrPhysics;
+extern char *gStr;
+extern char gByte5;
+extern wchar_t TextWcharT[1024];
+
+// --- именованные глобалы (Ghidra/IDA), типы выведены из контекста вызовов ---
+extern struct Ambulance *gAmbulance;
+extern struct Turrel *gArsenal;
+extern void *gCamera;
+extern struct CameraManager *gCameraManager;
+extern struct CarEngines *gCarEngines;
+extern struct CarsPrefabs *gCarsPrefabs;
+extern struct CarSystemManager *gCarSystemManager;
+extern struct Character *gCharacter;
+extern void *gCollisionBox;
+extern struct DMAudio *gDMAudio;
+extern struct Door *gDoor;
+extern struct Game *gGame;
+extern struct Gangs *gGangs;
+extern struct General *gGeneral;
+extern struct Hud *gHud;
+extern struct JuncIds *gJuncIds;
+extern struct MapGm *gMapGm;
+extern struct MapRelatedStruct *gMapRelatedStruct;
+extern void *gMissionObjective;
+extern struct Object *gObject;
+extern struct Particle *gParticle;
+extern struct Particles *gParticles;
+extern struct PathNode *gPathNode;
+extern struct Ped *gPed;
+extern struct Police *gPolice;
+extern struct PublicTransport *gPublicTransport;
+extern struct RenderManager *gRenderManager;
+extern void *gScriptThread;
+extern void *gScriptVar;
+extern struct SoundCard *gSoundCard;
+extern struct SpriteEntry *gSpriteEntry;
+extern struct SpriteS1 *gSpriteS1;
+extern struct SpriteS2 *gSpriteS2;
+extern struct S39 *gSpriteS3;
+extern struct SpriteS4 *gSpriteS4;
+extern struct Style *gStyle;
+extern struct Text *gText;
+extern struct TextureManager *gTextureManager;
+extern struct TileAnim *gTileAnim;
+extern struct TrafficLigthStruct *gTrafficLigthStruct;
+extern void *gTrafficManager;
+extern void *gTriggerVolume;
+extern void *gWeaponDatabase;
+
+// --- именованные глобалы, найденные по C2065 (модуль other) ---
+extern struct AudioSourceParams *gAudioSourceParams;
+extern void *gbh_GetGlobals;
+extern void *gBink;
+extern char gBinkBuffer;
+extern struct CarSystemManager *gCarSystemManager2;
+extern void *gCheckpoint1;
+extern void *gCheckpoint2;
+extern void *gCheckpoint3;
+extern char gFileGCI[0x40];
+extern char gFileGTX[0x40];
+extern char gLanguage[0x40];
+extern char gLanguage_0[256];
+extern void *gLighting;
+extern float gMaxZForTile;
+extern void *gNetworkGame;
+extern void *gPedModel;
+extern void *gS100;
+extern void *gS102;
+extern void *gS105;
+extern void *gS107;
+extern void *gS109;
+extern void *gS115;
+extern void *gS121;
+extern void *gS16_02;
+extern void *gS16_02_1;
+extern void *gS17_V1;
+extern void *gS17_V2;
+extern void *gS17_V3;
+extern void *gS95;
+extern unsigned int gSeed;
+extern char gSkilPolice;
+extern char gSkipAudio;
+extern char gSkipLeft;
+extern char gSkipParticles;
+extern char gSkipRight;
+extern char *gSource;
+extern void *gSpriteS3_0;
+extern char gText_Menu[0x40];
+extern char *gTextLabel;
+extern char gTextUse[0x80];
+extern void *gTileAnim1;
+extern void *gTimer;

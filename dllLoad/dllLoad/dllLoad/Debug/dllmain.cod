@@ -27,6 +27,19 @@ PUBLIC	?_CopyNameGang@@3PAXA				; _CopyNameGang
 PUBLIC	?_LoadGame@@3PAXA				; _LoadGame
 PUBLIC	?_SaveGame@@3PAXA				; _SaveGame
 PUBLIC	?_MultiplayerMenu@@3PAXA			; _MultiplayerMenu
+PUBLIC	?_SetGameState@@3PAXA				; _SetGameState
+PUBLIC	?_GameCtor@@3PAXA				; _GameCtor
+PUBLIC	?_ProcessInput@@3PAXA				; _ProcessInput
+PUBLIC	?_InitFrontedLessGame@@3PAXA			; _InitFrontedLessGame
+PUBLIC	?_Resurs@@3PAXA					; _Resurs
+PUBLIC	?_sub_45B5F0@@3PAXA				; _sub_45B5F0
+PUBLIC	?_Sub465390@@3PAXA				; _Sub465390
+PUBLIC	?_Sub481890@@3PAXA				; _Sub481890
+PUBLIC	?_StartGames@@3PAXA				; _StartGames
+PUBLIC	?_UpdateWrapper@@3PAXA				; _UpdateWrapper
+PUBLIC	?_WriteFileSvg@@3PAXA				; _WriteFileSvg
+PUBLIC	?_WriteFileDat@@3PAXA				; _WriteFileDat
+PUBLIC	?_WriteFileHsc@@3PAXA				; _WriteFileHsc
 ;	COMDAT __Avx2WmemEnabledWeakValue
 _BSS	SEGMENT
 __Avx2WmemEnabledWeakValue DD 01H DUP (?)
@@ -301,6 +314,8 @@ __917CD9AF_cHookTrace@h DB 01H
 __E9349C2E_cInspector@h DB 01H
 __8A1DD271_dinput@h DB 01H
 __38919FB4_cDirectX@h DB 01H
+__62CA0ACA_cAudioWatch@h DB 01H
+__1DDB86C3_cMilesWatch@h DB 01H
 __9FB25DBE_assert@h DB 01H
 __5114DCDB_cMapGm@h DB 01H
 __536A40AE_cS136@h DB 01H
@@ -318,10 +333,9 @@ __41DEB396_cStyle@h DB 01H
 __5C579666_cWindow@h DB 01H
 __1EC29DB1_cCar@h DB 01H
 __A7275C10_cGang@h DB 01H
-__02F2E922_cS200@h DB 01H
-__A8AF3CFB_cGameObject@h DB 01H
 __EC36E77A_cWeapon@h DB 01H
-__AE4B3876_cPed@h DB 01H
+__B6162790_cGame@h DB 01H
+__3C24454C_cSaveLog@h DB 01H
 __CD055685_dllmain@cpp DB 01H
 msvcjmc	ENDS
 _DATA	SEGMENT
@@ -341,6 +355,19 @@ _DATA	SEGMENT
 ?_LoadGame@@3PAXA DD 0455c20H				; _LoadGame
 ?_SaveGame@@3PAXA DD 0455c90H				; _SaveGame
 ?_MultiplayerMenu@@3PAXA DD 04565e0H			; _MultiplayerMenu
+?_SetGameState@@3PAXA DD 045a480H			; _SetGameState
+?_GameCtor@@3PAXA DD 045c4d0H				; _GameCtor
+?_ProcessInput@@3PAXA DD 0452050H			; _ProcessInput
+?_InitFrontedLessGame@@3PAXA DD 0461de0H		; _InitFrontedLessGame
+?_Resurs@@3PAXA DD 045b469H				; _Resurs
+?_sub_45B5F0@@3PAXA DD 045b5f0H				; _sub_45B5F0
+?_Sub465390@@3PAXA DD 0465390H				; _Sub465390
+?_Sub481890@@3PAXA DD 0481890H				; _Sub481890
+?_StartGames@@3PAXA DD 04a6da0H				; _StartGames
+?_UpdateWrapper@@3PAXA DD 04cac30H			; _UpdateWrapper
+?_WriteFileSvg@@3PAXA DD 047ef40H			; _WriteFileSvg
+?_WriteFileDat@@3PAXA DD 04a89e0H			; _WriteFileDat
+?_WriteFileHsc@@3PAXA DD 04a8d80H			; _WriteFileHsc
 _DATA	ENDS
 PUBLIC	?__empty_global_delete@@YAXPAX@Z		; __empty_global_delete
 PUBLIC	?__empty_global_delete@@YAXPAXI@Z		; __empty_global_delete
@@ -352,7 +379,6 @@ PUBLIC	__vsnprintf_l
 PUBLIC	__vsprintf_l
 PUBLIC	_sprintf
 PUBLIC	?strrchr@@YAPADQADH@Z				; strrchr
-PUBLIC	?GetNumberOfCars@@YGEPAX@Z			; GetNumberOfCars
 PUBLIC	?FunMapGM@@YAHXZ				; FunMapGM
 PUBLIC	?printError@@YAXJPAX@Z				; printError
 PUBLIC	_DllMain@12
@@ -414,17 +440,33 @@ EXTRN	?TraceEvent@@YAXPBD@Z:PROC			; TraceEvent
 EXTRN	?TraceClose@@YAXXZ:PROC				; TraceClose
 EXTRN	?StartInspector@@YAXXZ:PROC			; StartInspector
 EXTRN	?StopInspector@@YAXXZ:PROC			; StopInspector
+EXTRN	_InstallAudioWatchHooks:PROC
+EXTRN	_InstallMilesWatchHooks:PROC
 EXTRN	?SetPlayerNameFromMenu@@YIXPAUMenu@@@Z:PROC	; SetPlayerNameFromMenu
 EXTRN	?LoadTextMenu@@YIFPAUMenu@@@Z:PROC		; LoadTextMenu
 EXTRN	?LoadGame@@YIDPAUMenu@@@Z:PROC			; LoadGame
 EXTRN	?SaveGame@@YIEPAUMenu@@@Z:PROC			; SaveGame
 EXTRN	?MultiplayerMenu@@YIDPAUMenu@@PAX1@Z:PROC	; MultiplayerMenu
+EXTRN	?HookProcessInput@@YIXPAUMenu@@PAX@Z:PROC	; HookProcessInput
 EXTRN	?GetVersionFiles@@YGXPAH0@Z:PROC		; GetVersionFiles
 EXTRN	?fPlayReplay@@YGXXZ:PROC			; fPlayReplay
 EXTRN	?AllGxtFile@@YG_NXZ:PROC			; AllGxtFile
 EXTRN	?HookSetName@@YIXPAUGang@@PAXPADE@Z:PROC	; HookSetName
 EXTRN	?SetWeapon@@YIXPAUWeapon@@PAX1@Z:PROC		; SetWeapon
 EXTRN	?SetPed@@YIXPAUWeapon@@PAX1@Z:PROC		; SetPed
+EXTRN	?HookSetState@@YIHPAUGame@@PAXHHD@Z:PROC	; HookSetState
+EXTRN	?HookGameCtor@@YIPAUGame@@PAU1@PAXHD@Z:PROC	; HookGameCtor
+EXTRN	?HookInitFrontedLessGame@@YGXXZ:PROC		; HookInitFrontedLessGame
+EXTRN	?HookResurs@@YIXPAUGame@@PAX@Z:PROC		; HookResurs
+EXTRN	?Hook_sub_45B5F0@@YIXPAUGame@@PAX@Z:PROC	; Hook_sub_45B5F0
+EXTRN	?HookSub465390@@YIXPAX0@Z:PROC			; HookSub465390
+EXTRN	?HookSub481890@@YIXPAX0@Z:PROC			; HookSub481890
+EXTRN	?HookStartGames@@YIXPAX0@Z:PROC			; HookStartGames
+EXTRN	?HookUpdateWrapper@@YIXPAX0@Z:PROC		; HookUpdateWrapper
+EXTRN	?HookSaveFile@@YIHPAX0PAD@Z:PROC		; HookSaveFile
+EXTRN	?HookWriteFileNamePlayer@@YIHPAX0G@Z:PROC	; HookWriteFileNamePlayer
+EXTRN	?HookWriteHiscores@@YIHPAX0@Z:PROC		; HookWriteHiscores
+EXTRN	?SaveDebugStartHotkeys@@YAXXZ:PROC		; SaveDebugStartHotkeys
 EXTRN	@_RTC_CheckStackVars@8:PROC
 EXTRN	@__CheckForDebuggerJustMyCode@4:PROC
 EXTRN	@__security_check_cookie@4:PROC
@@ -589,7 +631,7 @@ CONST	ENDS
 ;	COMDAT voltbl
 voltbl	SEGMENT
 _volmd	DW	022H
-	DW	032fH
+	DW	0556H
 voltbl	ENDS
 ;	COMDAT voltbl
 voltbl	SEGMENT
@@ -635,7 +677,7 @@ _dwReason$ = 12						; size = 4
 _lpReserved$ = 16					; size = 4
 _DllMain@12 PROC					; COMDAT
 
-; 123  : {
+; 142  : {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -655,9 +697,9 @@ _DllMain@12 PROC					; COMDAT
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 124  : 
-; 125  :     // Получить дескриптор окна консоли
-; 126  :     HWND consoleWindow = GetConsoleWindow();
+; 143  : 
+; 144  :     // Получить дескриптор окна консоли
+; 145  :     HWND consoleWindow = GetConsoleWindow();
 
   00030	8b f4		 mov	 esi, esp
   00032	ff 15 00 00 00
@@ -666,14 +708,14 @@ _DllMain@12 PROC					; COMDAT
   0003a	e8 00 00 00 00	 call	 __RTC_CheckEsp
   0003f	89 45 f4	 mov	 DWORD PTR _consoleWindow$[ebp], eax
 
-; 127  : 
-; 128  :     if (consoleWindow != NULL) {
+; 146  : 
+; 147  :     if (consoleWindow != NULL) {
 
   00042	83 7d f4 00	 cmp	 DWORD PTR _consoleWindow$[ebp], 0
   00046	74 16		 je	 SHORT $LN4@DllMain
 
-; 129  :         // Спрятать окно
-; 130  :         ShowWindow(consoleWindow, SW_HIDE);
+; 148  :         // Спрятать окно
+; 149  :         ShowWindow(consoleWindow, SW_HIDE);
 
   00048	8b f4		 mov	 esi, esp
   0004a	6a 00		 push	 0
@@ -686,54 +728,54 @@ _DllMain@12 PROC					; COMDAT
   0005d	90		 npad	 1
 $LN4@DllMain:
 
-; 131  :     }
-; 132  : 
-; 133  :     //LPVOID _InfoVersion = (LPVOID)0x004D0920;
-; 134  :    // LPVOID _InitGraphicsAndInput =  (LPVOID)0x004031c0;
-; 135  :     //LPVOID _GetDebugParam = (LPVOID)0x00451930;
-; 136  :     //LPVOID _GetNumberOfCars = (LPVOID)0x00432850;
-; 137  :     // _LoadTextMenu is now a file-scope global (see above)
-; 138  :    // LPVOID  _AllGxtFile = (LPVOID)0x00451800;
-; 139  :    // LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
-; 140  :     //LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
-; 141  :     //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
-; 142  :     //LPVOID _sub_459540 = (LPVOID)0x00459540;
-; 143  : 
-; 144  :     // --- enabled for the load-function trace (set to 0 to detach them) ---
-; 145  :     LPVOID _GetVersionFiles = (LPVOID)0x004D0920;    // GetVersionFiles
+; 150  :     }
+; 151  : 
+; 152  :     //LPVOID _InfoVersion = (LPVOID)0x004D0920;
+; 153  :    // LPVOID _InitGraphicsAndInput =  (LPVOID)0x004031c0;
+; 154  :     //LPVOID _GetDebugParam = (LPVOID)0x00451930;
+; 155  :     //LPVOID _GetNumberOfCars = (LPVOID)0x00432850;
+; 156  :     // _LoadTextMenu is now a file-scope global (see above)
+; 157  :    // LPVOID  _AllGxtFile = (LPVOID)0x00451800;
+; 158  :    // LPVOID  _InitDefautValue = (LPVOID)0x00461AF0;
+; 159  :     //LPVOID _CleanupDirectInput = (LPVOID)0x0044BA40;
+; 160  :     //LPVOID _CreateInputDevice = (LPVOID)0x0044BA00;
+; 161  :     //LPVOID _sub_459540 = (LPVOID)0x00459540;
+; 162  : 
+; 163  :     // --- enabled for the load-function trace (set to 0 to detach them) ---
+; 164  :     LPVOID _GetVersionFiles = (LPVOID)0x004D0920;    // GetVersionFiles
 
   0005e	c7 45 e8 20 09
 	4d 00		 mov	 DWORD PTR __GetVersionFiles$[ebp], 5048608 ; 004d0920H
 
-; 146  :     LPVOID _fPlayReplay = (LPVOID)0x00451930;        // fPlayReplay (reads all debug params)
+; 165  :     LPVOID _fPlayReplay = (LPVOID)0x00451930;        // fPlayReplay (reads all debug params)
 
   00065	c7 45 dc 30 19
 	45 00		 mov	 DWORD PTR __fPlayReplay$[ebp], 4528432 ; 00451930H
 
-; 147  :     LPVOID _AllGxtFile = (LPVOID)0x00451800;        // AllGxtFile
+; 166  :     LPVOID _AllGxtFile = (LPVOID)0x00451800;        // AllGxtFile
 
   0006c	c7 45 d0 00 18
 	45 00		 mov	 DWORD PTR __AllGxtFile$[ebp], 4528128 ; 00451800H
 
-; 148  :     LPVOID _SetPlayerNameFromMenu = (LPVOID)0x00459540; // Menu::SetPlayerNameFromMenu
+; 167  :     LPVOID _SetPlayerNameFromMenu = (LPVOID)0x00459540; // Menu::SetPlayerNameFromMenu
 
   00073	c7 45 c4 40 95
 	45 00		 mov	 DWORD PTR __SetPlayerNameFromMenu$[ebp], 4560192 ; 00459540H
 
-; 149  :     (void)_GetVersionFiles; (void)_fPlayReplay; (void)_AllGxtFile; (void)_SetPlayerNameFromMenu;
-; 150  :     //LPVOID _CopyNameGang = (LPVOID)0x0045DB40;
-; 151  :     //LPVOID _CopyNameGang = (LPVOID)0x0045DB40;  // Gang::SetName
-; 152  :     
-; 153  :     ///S19
-; 154  :    // LPVOID _SetPararam_0 = (LPVOID)0x004c4d60;
-; 155  :     
-; 156  :     //cText
-; 157  :     //LPVOID _GetLanguageJapan = (LPVOID)0x00452E60;  // Text::LanguageJapan
-; 158  :     // Weapons
-; 159  :     //LPVOID _SetWeapon = (LPVOID)0x00433810;   // Weapon::SetWeapon
-; 160  :     ///LPVOID _SetPed = (LPVOID)0x004cca10;     // Weapon::SetPed
-; 161  :     
-; 162  :     AllocConsole();
+; 168  :     (void)_GetVersionFiles; (void)_fPlayReplay; (void)_AllGxtFile; (void)_SetPlayerNameFromMenu;
+; 169  :     //LPVOID _CopyNameGang = (LPVOID)0x0045DB40;
+; 170  :     //LPVOID _CopyNameGang = (LPVOID)0x0045DB40;  // Gang::SetName
+; 171  :     
+; 172  :     ///S19
+; 173  :    // LPVOID _SetPararam_0 = (LPVOID)0x004c4d60;
+; 174  :     
+; 175  :     //cText
+; 176  :     //LPVOID _GetLanguageJapan = (LPVOID)0x00452E60;  // Text::LanguageJapan
+; 177  :     // Weapons
+; 178  :     //LPVOID _SetWeapon = (LPVOID)0x00433810;   // Weapon::SetWeapon
+; 179  :     ///LPVOID _SetPed = (LPVOID)0x004cca10;     // Weapon::SetPed
+; 180  :     
+; 181  :     AllocConsole();
 
   0007a	8b f4		 mov	 esi, esp
   0007c	ff 15 00 00 00
@@ -742,26 +784,26 @@ $LN4@DllMain:
   00084	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00089	90		 npad	 1
 
-; 163  :     switch (dwReason){
+; 182  :     switch (dwReason){
 
   0008a	8b 45 0c	 mov	 eax, DWORD PTR _dwReason$[ebp]
   0008d	89 85 fc fe ff
 	ff		 mov	 DWORD PTR tv66[ebp], eax
   00093	83 bd fc fe ff
 	ff 00		 cmp	 DWORD PTR tv66[ebp], 0
-  0009a	0f 84 50 02 00
+  0009a	0f 84 77 04 00
 	00		 je	 $LN11@DllMain
   000a0	83 bd fc fe ff
 	ff 01		 cmp	 DWORD PTR tv66[ebp], 1
   000a7	74 05		 je	 SHORT $LN5@DllMain
-  000a9	e9 5b 02 00 00	 jmp	 $LN2@DllMain
+  000a9	e9 82 04 00 00	 jmp	 $LN2@DllMain
 $LN5@DllMain:
 
-; 164  :      
-; 165  : 
-; 166  : case DLL_PROCESS_ATTACH:
-; 167  :        /// MessageBox(0, L"Load Dll!", 0, 0);
-; 168  :         SetUnhandledExceptionFilter(&CrashFilter);
+; 183  :      
+; 184  : 
+; 185  : case DLL_PROCESS_ATTACH:
+; 186  :        /// MessageBox(0, L"Load Dll!", 0, 0);
+; 187  :         SetUnhandledExceptionFilter(&CrashFilter);
 
   000ae	8b f4		 mov	 esi, esp
   000b0	68 00 00 00 00	 push	 OFFSET ?CrashFilter@@YGJPAU_EXCEPTION_POINTERS@@@Z ; CrashFilter
@@ -771,474 +813,715 @@ $LN5@DllMain:
   000bd	e8 00 00 00 00	 call	 __RTC_CheckEsp
   000c2	90		 npad	 1
 
-; 169  :         TraceInit();
+; 188  :         TraceInit();
 
   000c3	e8 00 00 00 00	 call	 ?TraceInit@@YAXXZ	; TraceInit
   000c8	90		 npad	 1
 
-; 170  :         TraceEvent("DllMain: DLL_PROCESS_ATTACH");
+; 189  :          TraceEvent("DllMain: DLL_PROCESS_ATTACH");
 
   000c9	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@OFIHLKAI@DllMain?3?5DLL_PROCESS_ATTACH@
   000ce	e8 00 00 00 00	 call	 ?TraceEvent@@YAXPBD@Z	; TraceEvent
   000d3	83 c4 04	 add	 esp, 4
 
-; 171  :         StartInspector();
+; 190  :          StartInspector();
 
   000d6	e8 00 00 00 00	 call	 ?StartInspector@@YAXXZ	; StartInspector
   000db	90		 npad	 1
 
-; 172  : 
-; 173  :         DetourRestoreAfterWith();
+; 191  :          SaveDebugStartHotkeys();
 
-  000dc	e8 00 00 00 00	 call	 _DetourRestoreAfterWith@0
+  000dc	e8 00 00 00 00	 call	 ?SaveDebugStartHotkeys@@YAXXZ ; SaveDebugStartHotkeys
   000e1	90		 npad	 1
 
-; 174  :         if (DetourTransactionBegin() != NO_ERROR)
+; 192  : 
+; 193  :         DetourRestoreAfterWith();
 
-  000e2	e8 00 00 00 00	 call	 _DetourTransactionBegin@0
-  000e7	85 c0		 test	 eax, eax
-  000e9	74 1c		 je	 SHORT $LN6@DllMain
+  000e2	e8 00 00 00 00	 call	 _DetourRestoreAfterWith@0
+  000e7	90		 npad	 1
 
-; 175  :         {
-; 176  :             OutputDebugStringA("error DetourTransactionBegin");
+; 194  :         if (DetourTransactionBegin() != NO_ERROR)
 
-  000eb	8b f4		 mov	 esi, esp
-  000ed	68 00 00 00 00	 push	 OFFSET ??_C@_0BN@NONHAAIK@error?5DetourTransactionBegin@
-  000f2	ff 15 00 00 00
+  000e8	e8 00 00 00 00	 call	 _DetourTransactionBegin@0
+  000ed	85 c0		 test	 eax, eax
+  000ef	74 1c		 je	 SHORT $LN6@DllMain
+
+; 195  :         {
+; 196  :             OutputDebugStringA("error DetourTransactionBegin");
+
+  000f1	8b f4		 mov	 esi, esp
+  000f3	68 00 00 00 00	 push	 OFFSET ??_C@_0BN@NONHAAIK@error?5DetourTransactionBegin@
+  000f8	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__OutputDebugStringA@4
-  000f8	3b f4		 cmp	 esi, esp
-  000fa	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000ff	90		 npad	 1
+  000fe	3b f4		 cmp	 esi, esp
+  00100	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00105	90		 npad	 1
 
-; 177  :             return FALSE;
+; 197  :             return FALSE;
 
-  00100	33 c0		 xor	 eax, eax
-  00102	e9 14 02 00 00	 jmp	 $LN1@DllMain
+  00106	33 c0		 xor	 eax, eax
+  00108	e9 35 04 00 00	 jmp	 $LN1@DllMain
 $LN6@DllMain:
 
-; 178  :         }
-; 179  : 
-; 180  :         if (DetourUpdateThread(GetCurrentThread()) != NO_ERROR)
+; 198  :         }
+; 199  : 
+; 200  :         if (DetourUpdateThread(GetCurrentThread()) != NO_ERROR)
 
-  00107	8b f4		 mov	 esi, esp
-  00109	ff 15 00 00 00
+  0010d	8b f4		 mov	 esi, esp
+  0010f	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__GetCurrentThread@0
-  0010f	3b f4		 cmp	 esi, esp
-  00111	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00116	50		 push	 eax
-  00117	e8 00 00 00 00	 call	 _DetourUpdateThread@4
-  0011c	85 c0		 test	 eax, eax
-  0011e	74 14		 je	 SHORT $LN7@DllMain
+  00115	3b f4		 cmp	 esi, esp
+  00117	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0011c	50		 push	 eax
+  0011d	e8 00 00 00 00	 call	 _DetourUpdateThread@4
+  00122	85 c0		 test	 eax, eax
+  00124	74 14		 je	 SHORT $LN7@DllMain
 
-; 181  :         {
-; 182  :             printf("error DetourUpdateThread");
+; 201  :         {
+; 202  :             printf("error DetourUpdateThread");
 
-  00120	68 00 00 00 00	 push	 OFFSET ??_C@_0BJ@IIGGJLMJ@error?5DetourUpdateThread@
-  00125	e8 00 00 00 00	 call	 _printf
-  0012a	83 c4 04	 add	 esp, 4
+  00126	68 00 00 00 00	 push	 OFFSET ??_C@_0BJ@IIGGJLMJ@error?5DetourUpdateThread@
+  0012b	e8 00 00 00 00	 call	 _printf
+  00130	83 c4 04	 add	 esp, 4
 
-; 183  :             return FALSE;
+; 203  :             return FALSE;
 
-  0012d	33 c0		 xor	 eax, eax
-  0012f	e9 e7 01 00 00	 jmp	 $LN1@DllMain
+  00133	33 c0		 xor	 eax, eax
+  00135	e9 08 04 00 00	 jmp	 $LN1@DllMain
 $LN7@DllMain:
 
-; 184  :         }
-; 185  : 
-; 186  :        /* Error = DetourAttach(&_GetVersionFiles, (PVOID)GetVersionFiles);
-; 187  :         printError(Error, _GetVersionFiles);
-; 188  :         DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
-; 189  :         //DetourAttach(&_CleanupDirectInput, (PVOID)CleanupDirectInput);
-; 190  :         //DetourAttach(&_CreateInputDevice, (PVOID)CreateInputDevice);
-; 191  :         ///DetourAttach(&_SetPlayerNameFromMenu, (PVOID)SetPlayerNameFromMenu);
-; 192  :         DetourAttach(&_GetNumberOfCars, (PVOID)GetNumberOfCars);
-; 193  :         /*DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
-; 194  :         DetourAttach(&_CopyNameGang, (PVOID)CopyNameGang);
-; 195  :         DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
-; 196  :         DetourAttach(&_GetLanguageJapan, (PVOID)GetLanguageJapan);
-; 197  :         DetourAttach(&_SetWeapon, (PVOID)SetWeapon);
-; 198  :         DetourAttach(&_SetPed, (PVOID)SetPed);
-; 199  :         */
-; 200  :         //--- active trace hooks (functions are traced to hook_trace.log) ---
-; 201  :         Error = DetourAttach(&_GetVersionFiles, (PVOID)GetVersionFiles);
+; 204  :         }
+; 205  : 
+; 206  :        /* Error = DetourAttach(&_GetVersionFiles, (PVOID)GetVersionFiles);
+; 207  :         printError(Error, _GetVersionFiles);
+; 208  :         DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
+; 209  :         //DetourAttach(&_CleanupDirectInput, (PVOID)CleanupDirectInput);
+; 210  :         //DetourAttach(&_CreateInputDevice, (PVOID)CreateInputDevice);
+; 211  :         ///DetourAttach(&_SetPlayerNameFromMenu, (PVOID)SetPlayerNameFromMenu);
+; 212  :         DetourAttach(&_GetNumberOfCars, (PVOID)GetNumberOfCars);
+; 213  :         /*DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
+; 214  :         DetourAttach(&_CopyNameGang, (PVOID)CopyNameGang);
+; 215  :         DetourAttach(&_SetPararam_0, (PVOID)SetPararam_0);
+; 216  :         DetourAttach(&_GetLanguageJapan, (PVOID)GetLanguageJapan);
+; 217  :         DetourAttach(&_SetWeapon, (PVOID)SetWeapon);
+; 218  :         DetourAttach(&_SetPed, (PVOID)SetPed);
+; 219  :         */
+; 220  :         //--- active trace hooks (functions are traced to hook_trace.log) ---
+; 221  :         Error = DetourAttach(&_GetVersionFiles, (PVOID)GetVersionFiles);
 
-  00134	68 00 00 00 00	 push	 OFFSET ?GetVersionFiles@@YGXPAH0@Z ; GetVersionFiles
-  00139	8d 45 e8	 lea	 eax, DWORD PTR __GetVersionFiles$[ebp]
-  0013c	50		 push	 eax
-  0013d	e8 00 00 00 00	 call	 _DetourAttach@8
-  00142	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+  0013a	68 00 00 00 00	 push	 OFFSET ?GetVersionFiles@@YGXPAH0@Z ; GetVersionFiles
+  0013f	8d 45 e8	 lea	 eax, DWORD PTR __GetVersionFiles$[ebp]
+  00142	50		 push	 eax
+  00143	e8 00 00 00 00	 call	 _DetourAttach@8
+  00148	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
 
-; 202  :         printError(Error, _GetVersionFiles);
+; 222  :         printError(Error, _GetVersionFiles);
 
-  00147	8b 45 e8	 mov	 eax, DWORD PTR __GetVersionFiles$[ebp]
-  0014a	50		 push	 eax
-  0014b	8b 0d 00 00 00
+  0014d	8b 45 e8	 mov	 eax, DWORD PTR __GetVersionFiles$[ebp]
+  00150	50		 push	 eax
+  00151	8b 0d 00 00 00
 	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  00151	51		 push	 ecx
-  00152	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  00157	83 c4 08	 add	 esp, 8
+  00157	51		 push	 ecx
+  00158	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  0015d	83 c4 08	 add	 esp, 8
 
-; 203  :         Error = DetourAttach(&_fPlayReplay, (PVOID)fPlayReplay);
+; 223  :         Error = DetourAttach(&_fPlayReplay, (PVOID)fPlayReplay);
 
-  0015a	68 00 00 00 00	 push	 OFFSET ?fPlayReplay@@YGXXZ ; fPlayReplay
-  0015f	8d 45 dc	 lea	 eax, DWORD PTR __fPlayReplay$[ebp]
-  00162	50		 push	 eax
-  00163	e8 00 00 00 00	 call	 _DetourAttach@8
-  00168	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+  00160	68 00 00 00 00	 push	 OFFSET ?fPlayReplay@@YGXXZ ; fPlayReplay
+  00165	8d 45 dc	 lea	 eax, DWORD PTR __fPlayReplay$[ebp]
+  00168	50		 push	 eax
+  00169	e8 00 00 00 00	 call	 _DetourAttach@8
+  0016e	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
 
-; 204  :         printError(Error, _fPlayReplay);
+; 224  :         printError(Error, _fPlayReplay);
 
-  0016d	8b 45 dc	 mov	 eax, DWORD PTR __fPlayReplay$[ebp]
-  00170	50		 push	 eax
-  00171	8b 0d 00 00 00
+  00173	8b 45 dc	 mov	 eax, DWORD PTR __fPlayReplay$[ebp]
+  00176	50		 push	 eax
+  00177	8b 0d 00 00 00
 	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  00177	51		 push	 ecx
-  00178	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  0017d	83 c4 08	 add	 esp, 8
+  0017d	51		 push	 ecx
+  0017e	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00183	83 c4 08	 add	 esp, 8
 
-; 205  :         Error = DetourAttach(&_AllGxtFile, (PVOID)AllGxtFile);
+; 225  :         Error = DetourAttach(&_AllGxtFile, (PVOID)AllGxtFile);
 
-  00180	68 00 00 00 00	 push	 OFFSET ?AllGxtFile@@YG_NXZ ; AllGxtFile
-  00185	8d 45 d0	 lea	 eax, DWORD PTR __AllGxtFile$[ebp]
-  00188	50		 push	 eax
-  00189	e8 00 00 00 00	 call	 _DetourAttach@8
-  0018e	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+  00186	68 00 00 00 00	 push	 OFFSET ?AllGxtFile@@YG_NXZ ; AllGxtFile
+  0018b	8d 45 d0	 lea	 eax, DWORD PTR __AllGxtFile$[ebp]
+  0018e	50		 push	 eax
+  0018f	e8 00 00 00 00	 call	 _DetourAttach@8
+  00194	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
 
-; 206  :         printError(Error, _AllGxtFile);
+; 226  :         printError(Error, _AllGxtFile);
 
-  00193	8b 45 d0	 mov	 eax, DWORD PTR __AllGxtFile$[ebp]
-  00196	50		 push	 eax
-  00197	8b 0d 00 00 00
+  00199	8b 45 d0	 mov	 eax, DWORD PTR __AllGxtFile$[ebp]
+  0019c	50		 push	 eax
+  0019d	8b 0d 00 00 00
 	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  0019d	51		 push	 ecx
-  0019e	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  001a3	83 c4 08	 add	 esp, 8
+  001a3	51		 push	 ecx
+  001a4	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  001a9	83 c4 08	 add	 esp, 8
 
-; 207  :         Error = DetourAttach(&_SetPlayerNameFromMenu, (PVOID)SetPlayerNameFromMenu);
+; 227  :         Error = DetourAttach(&_SetPlayerNameFromMenu, (PVOID)SetPlayerNameFromMenu);
 
-  001a6	68 00 00 00 00	 push	 OFFSET ?SetPlayerNameFromMenu@@YIXPAUMenu@@@Z ; SetPlayerNameFromMenu
-  001ab	8d 45 c4	 lea	 eax, DWORD PTR __SetPlayerNameFromMenu$[ebp]
-  001ae	50		 push	 eax
-  001af	e8 00 00 00 00	 call	 _DetourAttach@8
-  001b4	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+  001ac	68 00 00 00 00	 push	 OFFSET ?SetPlayerNameFromMenu@@YIXPAUMenu@@@Z ; SetPlayerNameFromMenu
+  001b1	8d 45 c4	 lea	 eax, DWORD PTR __SetPlayerNameFromMenu$[ebp]
+  001b4	50		 push	 eax
+  001b5	e8 00 00 00 00	 call	 _DetourAttach@8
+  001ba	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
 
-; 208  :         printError(Error, _SetPlayerNameFromMenu);
+; 228  :         printError(Error, _SetPlayerNameFromMenu);
 
-  001b9	8b 45 c4	 mov	 eax, DWORD PTR __SetPlayerNameFromMenu$[ebp]
-  001bc	50		 push	 eax
-  001bd	8b 0d 00 00 00
+  001bf	8b 45 c4	 mov	 eax, DWORD PTR __SetPlayerNameFromMenu$[ebp]
+  001c2	50		 push	 eax
+  001c3	8b 0d 00 00 00
 	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  001c3	51		 push	 ecx
-  001c4	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  001c9	83 c4 08	 add	 esp, 8
+  001c9	51		 push	 ecx
+  001ca	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  001cf	83 c4 08	 add	 esp, 8
 
-; 209  :         //Error =  DetourAttach(&_InitGraphicsAndInput, (PVOID)InitGraphicsAndInput);
-; 210  :         //printError(Error, _InitGraphicsAndInput);
-; 211  : 
-; 212  :         //Error = DetourAttach(&_fPlayReplay, (PVOID)fPlayReplay);
-; 213  :         //printError(Error, _fPlayReplay);
-; 214  : 
-; 215  :        /// Error = DetourAttach(&_AllGxtFile, (PVOID)AllGxtFile);
-; 216  :         //printError(Error, _AllGxtFile);
-; 217  :         //*/
-; 218  :         //FunS20();
-; 219  :         //FunMapGM();
-; 220  :         DetourAttach(&_LoadTextMenu, (PVOID)LoadTextMenu);
-
-  001cc	68 00 00 00 00	 push	 OFFSET ?LoadTextMenu@@YIFPAUMenu@@@Z ; LoadTextMenu
-  001d1	68 00 00 00 00	 push	 OFFSET ?_LoadTextMenu@@3PAXA ; _LoadTextMenu
-  001d6	e8 00 00 00 00	 call	 _DetourAttach@8
-  001db	90		 npad	 1
-
-; 221  : 
-; 222  :         // --- Menu load/save series + setter hooks (trace + chain to original) ---
-; 223  :         Error = DetourAttach(&_LoadGame, (PVOID)LoadGame);
-
-  001dc	68 00 00 00 00	 push	 OFFSET ?LoadGame@@YIDPAUMenu@@@Z ; LoadGame
-  001e1	68 00 00 00 00	 push	 OFFSET ?_LoadGame@@3PAXA ; _LoadGame
-  001e6	e8 00 00 00 00	 call	 _DetourAttach@8
-  001eb	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
-
-; 224  :         printError(Error, _LoadGame);
-
-  001f0	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_LoadGame@@3PAXA ; _LoadGame
-  001f5	50		 push	 eax
-  001f6	8b 0d 00 00 00
-	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  001fc	51		 push	 ecx
-  001fd	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  00202	83 c4 08	 add	 esp, 8
-
-; 225  :         Error = DetourAttach(&_SaveGame, (PVOID)SaveGame);
-
-  00205	68 00 00 00 00	 push	 OFFSET ?SaveGame@@YIEPAUMenu@@@Z ; SaveGame
-  0020a	68 00 00 00 00	 push	 OFFSET ?_SaveGame@@3PAXA ; _SaveGame
-  0020f	e8 00 00 00 00	 call	 _DetourAttach@8
-  00214	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
-
-; 226  :         printError(Error, _SaveGame);
-
-  00219	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SaveGame@@3PAXA ; _SaveGame
-  0021e	50		 push	 eax
-  0021f	8b 0d 00 00 00
-	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  00225	51		 push	 ecx
-  00226	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  0022b	83 c4 08	 add	 esp, 8
-
-; 227  :         Error = DetourAttach(&_MultiplayerMenu, (PVOID)MultiplayerMenu);
-
-  0022e	68 00 00 00 00	 push	 OFFSET ?MultiplayerMenu@@YIDPAUMenu@@PAX1@Z ; MultiplayerMenu
-  00233	68 00 00 00 00	 push	 OFFSET ?_MultiplayerMenu@@3PAXA ; _MultiplayerMenu
-  00238	e8 00 00 00 00	 call	 _DetourAttach@8
-  0023d	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
-
-; 228  :         printError(Error, _MultiplayerMenu);
-
-  00242	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_MultiplayerMenu@@3PAXA ; _MultiplayerMenu
-  00247	50		 push	 eax
-  00248	8b 0d 00 00 00
-	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  0024e	51		 push	 ecx
-  0024f	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  00254	83 c4 08	 add	 esp, 8
-
-; 229  :         Error = DetourAttach(&_CopyNameGang, (PVOID)HookSetName);
-
-  00257	68 00 00 00 00	 push	 OFFSET ?HookSetName@@YIXPAUGang@@PAXPADE@Z ; HookSetName
-  0025c	68 00 00 00 00	 push	 OFFSET ?_CopyNameGang@@3PAXA ; _CopyNameGang
-  00261	e8 00 00 00 00	 call	 _DetourAttach@8
-  00266	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
-
-; 230  :         printError(Error, _CopyNameGang);
-
-  0026b	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_CopyNameGang@@3PAXA ; _CopyNameGang
-  00270	50		 push	 eax
-  00271	8b 0d 00 00 00
-	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  00277	51		 push	 ecx
-  00278	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  0027d	83 c4 08	 add	 esp, 8
-
+; 229  :         //Error =  DetourAttach(&_InitGraphicsAndInput, (PVOID)InitGraphicsAndInput);
+; 230  :         //printError(Error, _InitGraphicsAndInput);
 ; 231  : 
-; 232  :         // ---------------- risky REPLACEMENT hooks: 0 = NOT attached -------------
-; 233  :         // They replace the real video / input init; the re-implemented bodies are
-; 234  :         // incomplete. Flip the define to 1 to attach them, at your own risk. ----
-; 235  : #define HOOK_INITDAFAULTVALUE 0
-; 236  : #define HOOK_INITGRAPHICSANDINPUT 0
-; 237  : #if HOOK_INITDAFAULTVALUE
-; 238  :         Error = DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
-; 239  :         printError(Error, _InitDefautValue);
-; 240  : #endif
-; 241  : #if HOOK_INITGRAPHICSANDINPUT
-; 242  :         Error = DetourAttach(&_InitGraphicsAndInput, (PVOID)InitGraphicsAndInput);
-; 243  :         printError(Error, _InitGraphicsAndInput);
-; 244  : #endif
-; 245  :         Error = DetourAttach(&_SetWeapon, (PVOID)SetWeapon);
+; 232  :         //Error = DetourAttach(&_fPlayReplay, (PVOID)fPlayReplay);
+; 233  :         //printError(Error, _fPlayReplay);
+; 234  : 
+; 235  :        /// Error = DetourAttach(&_AllGxtFile, (PVOID)AllGxtFile);
+; 236  :         //printError(Error, _AllGxtFile);
+; 237  :         //*/
+; 238  :         //FunS20();
+; 239  :         //FunMapGM();
+; 240  :         DetourAttach(&_LoadTextMenu, (PVOID)LoadTextMenu);
 
-  00280	68 00 00 00 00	 push	 OFFSET ?SetWeapon@@YIXPAUWeapon@@PAX1@Z ; SetWeapon
-  00285	68 00 00 00 00	 push	 OFFSET ?_SetWeapon@@3PAXA ; _SetWeapon
-  0028a	e8 00 00 00 00	 call	 _DetourAttach@8
-  0028f	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+  001d2	68 00 00 00 00	 push	 OFFSET ?LoadTextMenu@@YIFPAUMenu@@@Z ; LoadTextMenu
+  001d7	68 00 00 00 00	 push	 OFFSET ?_LoadTextMenu@@3PAXA ; _LoadTextMenu
+  001dc	e8 00 00 00 00	 call	 _DetourAttach@8
+  001e1	90		 npad	 1
 
-; 246  :         printError(Error, _SetWeapon);
+; 241  : 
+; 242  :         // --- Menu load/save series + setter hooks (trace + chain to original) ---
+; 243  :         Error = DetourAttach(&_LoadGame, (PVOID)LoadGame);
 
-  00294	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SetWeapon@@3PAXA ; _SetWeapon
-  00299	50		 push	 eax
-  0029a	8b 0d 00 00 00
+  001e2	68 00 00 00 00	 push	 OFFSET ?LoadGame@@YIDPAUMenu@@@Z ; LoadGame
+  001e7	68 00 00 00 00	 push	 OFFSET ?_LoadGame@@3PAXA ; _LoadGame
+  001ec	e8 00 00 00 00	 call	 _DetourAttach@8
+  001f1	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 244  :         printError(Error, _LoadGame);
+
+  001f6	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_LoadGame@@3PAXA ; _LoadGame
+  001fb	50		 push	 eax
+  001fc	8b 0d 00 00 00
 	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  002a0	51		 push	 ecx
-  002a1	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  002a6	83 c4 08	 add	 esp, 8
+  00202	51		 push	 ecx
+  00203	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00208	83 c4 08	 add	 esp, 8
 
-; 247  :         Error = DetourAttach(&_SetPed, (PVOID)SetPed);
+; 245  :         Error = DetourAttach(&_SaveGame, (PVOID)SaveGame);
 
-  002a9	68 00 00 00 00	 push	 OFFSET ?SetPed@@YIXPAUWeapon@@PAX1@Z ; SetPed
-  002ae	68 00 00 00 00	 push	 OFFSET ?_SetPed@@3PAXA	; _SetPed
-  002b3	e8 00 00 00 00	 call	 _DetourAttach@8
-  002b8	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+  0020b	68 00 00 00 00	 push	 OFFSET ?SaveGame@@YIEPAUMenu@@@Z ; SaveGame
+  00210	68 00 00 00 00	 push	 OFFSET ?_SaveGame@@3PAXA ; _SaveGame
+  00215	e8 00 00 00 00	 call	 _DetourAttach@8
+  0021a	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
 
-; 248  :         printError(Error, _SetPed);
+; 246  :         printError(Error, _SaveGame);
 
-  002bd	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SetPed@@3PAXA ; _SetPed
-  002c2	50		 push	 eax
-  002c3	8b 0d 00 00 00
+  0021f	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SaveGame@@3PAXA ; _SaveGame
+  00224	50		 push	 eax
+  00225	8b 0d 00 00 00
 	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
-  002c9	51		 push	 ecx
-  002ca	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
-  002cf	83 c4 08	 add	 esp, 8
+  0022b	51		 push	 ecx
+  0022c	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00231	83 c4 08	 add	 esp, 8
 
-; 249  :         if (DetourTransactionCommit() != NO_ERROR)
+; 247  :         Error = DetourAttach(&_MultiplayerMenu, (PVOID)MultiplayerMenu);
 
-  002d2	e8 00 00 00 00	 call	 _DetourTransactionCommit@0
-  002d7	85 c0		 test	 eax, eax
-  002d9	74 11		 je	 SHORT $LN8@DllMain
+  00234	68 00 00 00 00	 push	 OFFSET ?MultiplayerMenu@@YIDPAUMenu@@PAX1@Z ; MultiplayerMenu
+  00239	68 00 00 00 00	 push	 OFFSET ?_MultiplayerMenu@@3PAXA ; _MultiplayerMenu
+  0023e	e8 00 00 00 00	 call	 _DetourAttach@8
+  00243	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
 
-; 250  :         {
-; 251  :             printf("error DetourTransactionCommit");
+; 248  :         printError(Error, _MultiplayerMenu);
 
-  002db	68 00 00 00 00	 push	 OFFSET ??_C@_0BO@IBJBLAGN@error?5DetourTransactionCommit@
-  002e0	e8 00 00 00 00	 call	 _printf
-  002e5	83 c4 04	 add	 esp, 4
+  00248	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_MultiplayerMenu@@3PAXA ; _MultiplayerMenu
+  0024d	50		 push	 eax
+  0024e	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00254	51		 push	 ecx
+  00255	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  0025a	83 c4 08	 add	 esp, 8
 
-; 252  :             return FALSE;
+; 249  :         Error = DetourAttach(&_ProcessInput, (PVOID)HookProcessInput);
 
-  002e8	33 c0		 xor	 eax, eax
-  002ea	eb 2f		 jmp	 SHORT $LN1@DllMain
+  0025d	68 00 00 00 00	 push	 OFFSET ?HookProcessInput@@YIXPAUMenu@@PAX@Z ; HookProcessInput
+  00262	68 00 00 00 00	 push	 OFFSET ?_ProcessInput@@3PAXA ; _ProcessInput
+  00267	e8 00 00 00 00	 call	 _DetourAttach@8
+  0026c	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 250  :         printError(Error, _ProcessInput);
+
+  00271	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_ProcessInput@@3PAXA ; _ProcessInput
+  00276	50		 push	 eax
+  00277	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  0027d	51		 push	 ecx
+  0027e	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00283	83 c4 08	 add	 esp, 8
+
+; 251  :         Error = DetourAttach(&_CopyNameGang, (PVOID)HookSetName);
+
+  00286	68 00 00 00 00	 push	 OFFSET ?HookSetName@@YIXPAUGang@@PAXPADE@Z ; HookSetName
+  0028b	68 00 00 00 00	 push	 OFFSET ?_CopyNameGang@@3PAXA ; _CopyNameGang
+  00290	e8 00 00 00 00	 call	 _DetourAttach@8
+  00295	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 252  :         printError(Error, _CopyNameGang);
+
+  0029a	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_CopyNameGang@@3PAXA ; _CopyNameGang
+  0029f	50		 push	 eax
+  002a0	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  002a6	51		 push	 ecx
+  002a7	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  002ac	83 c4 08	 add	 esp, 8
+
+; 253  : 
+; 254  :         // ---------------- risky REPLACEMENT hooks: 0 = NOT attached -------------
+; 255  :         // They replace the real video / input init; the re-implemented bodies are
+; 256  :         // incomplete. Flip the define to 1 to attach them, at your own risk. ----
+; 257  : #define HOOK_INITDAFAULTVALUE 0
+; 258  : #define HOOK_INITGRAPHICSANDINPUT 0
+; 259  : #if HOOK_INITDAFAULTVALUE
+; 260  :         Error = DetourAttach(&_InitDefautValue, (PVOID)InitDefautValue);
+; 261  :         printError(Error, _InitDefautValue);
+; 262  : #endif
+; 263  : #if HOOK_INITGRAPHICSANDINPUT
+; 264  :         Error = DetourAttach(&_InitGraphicsAndInput, (PVOID)InitGraphicsAndInput);
+; 265  :         printError(Error, _InitGraphicsAndInput);
+; 266  : #endif
+; 267  :         Error = DetourAttach(&_SetWeapon, (PVOID)SetWeapon);
+
+  002af	68 00 00 00 00	 push	 OFFSET ?SetWeapon@@YIXPAUWeapon@@PAX1@Z ; SetWeapon
+  002b4	68 00 00 00 00	 push	 OFFSET ?_SetWeapon@@3PAXA ; _SetWeapon
+  002b9	e8 00 00 00 00	 call	 _DetourAttach@8
+  002be	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 268  :         printError(Error, _SetWeapon);
+
+  002c3	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SetWeapon@@3PAXA ; _SetWeapon
+  002c8	50		 push	 eax
+  002c9	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  002cf	51		 push	 ecx
+  002d0	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  002d5	83 c4 08	 add	 esp, 8
+
+; 269  :         Error = DetourAttach(&_SetPed, (PVOID)SetPed);
+
+  002d8	68 00 00 00 00	 push	 OFFSET ?SetPed@@YIXPAUWeapon@@PAX1@Z ; SetPed
+  002dd	68 00 00 00 00	 push	 OFFSET ?_SetPed@@3PAXA	; _SetPed
+  002e2	e8 00 00 00 00	 call	 _DetourAttach@8
+  002e7	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 270  :         printError(Error, _SetPed);
+
+  002ec	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SetPed@@3PAXA ; _SetPed
+  002f1	50		 push	 eax
+  002f2	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  002f8	51		 push	 ecx
+  002f9	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  002fe	83 c4 08	 add	 esp, 8
+
+; 271  :         // ---- Game ----
+; 272  :         Error = DetourAttach(&_SetGameState, (PVOID)HookSetState);
+
+  00301	68 00 00 00 00	 push	 OFFSET ?HookSetState@@YIHPAUGame@@PAXHHD@Z ; HookSetState
+  00306	68 00 00 00 00	 push	 OFFSET ?_SetGameState@@3PAXA ; _SetGameState
+  0030b	e8 00 00 00 00	 call	 _DetourAttach@8
+  00310	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 273  :         printError(Error, _SetGameState);
+
+  00315	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_SetGameState@@3PAXA ; _SetGameState
+  0031a	50		 push	 eax
+  0031b	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00321	51		 push	 ecx
+  00322	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00327	83 c4 08	 add	 esp, 8
+
+; 274  :         Error = DetourAttach(&_GameCtor, (PVOID)HookGameCtor);
+
+  0032a	68 00 00 00 00	 push	 OFFSET ?HookGameCtor@@YIPAUGame@@PAU1@PAXHD@Z ; HookGameCtor
+  0032f	68 00 00 00 00	 push	 OFFSET ?_GameCtor@@3PAXA ; _GameCtor
+  00334	e8 00 00 00 00	 call	 _DetourAttach@8
+  00339	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 275  :         printError(Error, _GameCtor);
+
+  0033e	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_GameCtor@@3PAXA ; _GameCtor
+  00343	50		 push	 eax
+  00344	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  0034a	51		 push	 ecx
+  0034b	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00350	83 c4 08	 add	 esp, 8
+
+; 276  :         Error = DetourAttach(&_InitFrontedLessGame, (PVOID)HookInitFrontedLessGame);
+
+  00353	68 00 00 00 00	 push	 OFFSET ?HookInitFrontedLessGame@@YGXXZ ; HookInitFrontedLessGame
+  00358	68 00 00 00 00	 push	 OFFSET ?_InitFrontedLessGame@@3PAXA ; _InitFrontedLessGame
+  0035d	e8 00 00 00 00	 call	 _DetourAttach@8
+  00362	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 277  :         printError(Error, _InitFrontedLessGame);
+
+  00367	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_InitFrontedLessGame@@3PAXA ; _InitFrontedLessGame
+  0036c	50		 push	 eax
+  0036d	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00373	51		 push	 ecx
+  00374	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00379	83 c4 08	 add	 esp, 8
+
+; 278  :         Error = DetourAttach(&_Resurs, (PVOID)HookResurs);
+
+  0037c	68 00 00 00 00	 push	 OFFSET ?HookResurs@@YIXPAUGame@@PAX@Z ; HookResurs
+  00381	68 00 00 00 00	 push	 OFFSET ?_Resurs@@3PAXA	; _Resurs
+  00386	e8 00 00 00 00	 call	 _DetourAttach@8
+  0038b	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 279  :         printError(Error, _Resurs);
+
+  00390	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_Resurs@@3PAXA ; _Resurs
+  00395	50		 push	 eax
+  00396	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  0039c	51		 push	 ecx
+  0039d	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  003a2	83 c4 08	 add	 esp, 8
+
+; 280  :         Error = DetourAttach(&_sub_45B5F0, (PVOID)Hook_sub_45B5F0);
+
+  003a5	68 00 00 00 00	 push	 OFFSET ?Hook_sub_45B5F0@@YIXPAUGame@@PAX@Z ; Hook_sub_45B5F0
+  003aa	68 00 00 00 00	 push	 OFFSET ?_sub_45B5F0@@3PAXA ; _sub_45B5F0
+  003af	e8 00 00 00 00	 call	 _DetourAttach@8
+  003b4	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 281  :         printError(Error, _sub_45B5F0);
+
+  003b9	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_sub_45B5F0@@3PAXA ; _sub_45B5F0
+  003be	50		 push	 eax
+  003bf	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  003c5	51		 push	 ecx
+  003c6	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  003cb	83 c4 08	 add	 esp, 8
+
+; 282  :         Error = DetourAttach(&_Sub465390, (PVOID)HookSub465390);
+
+  003ce	68 00 00 00 00	 push	 OFFSET ?HookSub465390@@YIXPAX0@Z ; HookSub465390
+  003d3	68 00 00 00 00	 push	 OFFSET ?_Sub465390@@3PAXA ; _Sub465390
+  003d8	e8 00 00 00 00	 call	 _DetourAttach@8
+  003dd	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 283  :         printError(Error, _Sub465390);
+
+  003e2	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_Sub465390@@3PAXA ; _Sub465390
+  003e7	50		 push	 eax
+  003e8	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  003ee	51		 push	 ecx
+  003ef	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  003f4	83 c4 08	 add	 esp, 8
+
+; 284  :         Error = DetourAttach(&_Sub481890, (PVOID)HookSub481890);
+
+  003f7	68 00 00 00 00	 push	 OFFSET ?HookSub481890@@YIXPAX0@Z ; HookSub481890
+  003fc	68 00 00 00 00	 push	 OFFSET ?_Sub481890@@3PAXA ; _Sub481890
+  00401	e8 00 00 00 00	 call	 _DetourAttach@8
+  00406	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 285  :         printError(Error, _Sub481890);
+
+  0040b	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_Sub481890@@3PAXA ; _Sub481890
+  00410	50		 push	 eax
+  00411	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00417	51		 push	 ecx
+  00418	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  0041d	83 c4 08	 add	 esp, 8
+
+; 286  :         Error = DetourAttach(&_StartGames, (PVOID)HookStartGames);
+
+  00420	68 00 00 00 00	 push	 OFFSET ?HookStartGames@@YIXPAX0@Z ; HookStartGames
+  00425	68 00 00 00 00	 push	 OFFSET ?_StartGames@@3PAXA ; _StartGames
+  0042a	e8 00 00 00 00	 call	 _DetourAttach@8
+  0042f	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 287  :         printError(Error, _StartGames);
+
+  00434	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_StartGames@@3PAXA ; _StartGames
+  00439	50		 push	 eax
+  0043a	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00440	51		 push	 ecx
+  00441	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00446	83 c4 08	 add	 esp, 8
+
+; 288  :         Error = DetourAttach(&_UpdateWrapper, (PVOID)HookUpdateWrapper);
+
+  00449	68 00 00 00 00	 push	 OFFSET ?HookUpdateWrapper@@YIXPAX0@Z ; HookUpdateWrapper
+  0044e	68 00 00 00 00	 push	 OFFSET ?_UpdateWrapper@@3PAXA ; _UpdateWrapper
+  00453	e8 00 00 00 00	 call	 _DetourAttach@8
+  00458	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 289  :         printError(Error, _UpdateWrapper);
+
+  0045d	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_UpdateWrapper@@3PAXA ; _UpdateWrapper
+  00462	50		 push	 eax
+  00463	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00469	51		 push	 ecx
+  0046a	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  0046f	83 c4 08	 add	 esp, 8
+
+; 290  :         // save-file writers -> Save.log (cSaveLog.cpp)
+; 291  :         Error = DetourAttach(&_WriteFileSvg, (PVOID)HookSaveFile);
+
+  00472	68 00 00 00 00	 push	 OFFSET ?HookSaveFile@@YIHPAX0PAD@Z ; HookSaveFile
+  00477	68 00 00 00 00	 push	 OFFSET ?_WriteFileSvg@@3PAXA ; _WriteFileSvg
+  0047c	e8 00 00 00 00	 call	 _DetourAttach@8
+  00481	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 292  :         printError(Error, _WriteFileSvg);
+
+  00486	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_WriteFileSvg@@3PAXA ; _WriteFileSvg
+  0048b	50		 push	 eax
+  0048c	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  00492	51		 push	 ecx
+  00493	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  00498	83 c4 08	 add	 esp, 8
+
+; 293  :         Error = DetourAttach(&_WriteFileDat, (PVOID)HookWriteFileNamePlayer);
+
+  0049b	68 00 00 00 00	 push	 OFFSET ?HookWriteFileNamePlayer@@YIHPAX0G@Z ; HookWriteFileNamePlayer
+  004a0	68 00 00 00 00	 push	 OFFSET ?_WriteFileDat@@3PAXA ; _WriteFileDat
+  004a5	e8 00 00 00 00	 call	 _DetourAttach@8
+  004aa	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 294  :         printError(Error, _WriteFileDat);
+
+  004af	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_WriteFileDat@@3PAXA ; _WriteFileDat
+  004b4	50		 push	 eax
+  004b5	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  004bb	51		 push	 ecx
+  004bc	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  004c1	83 c4 08	 add	 esp, 8
+
+; 295  :         Error = DetourAttach(&_WriteFileHsc, (PVOID)HookWriteHiscores);
+
+  004c4	68 00 00 00 00	 push	 OFFSET ?HookWriteHiscores@@YIHPAX0@Z ; HookWriteHiscores
+  004c9	68 00 00 00 00	 push	 OFFSET ?_WriteFileHsc@@3PAXA ; _WriteFileHsc
+  004ce	e8 00 00 00 00	 call	 _DetourAttach@8
+  004d3	a3 00 00 00 00	 mov	 DWORD PTR ?Error@@3IA, eax ; Error
+
+; 296  :         printError(Error, _WriteFileHsc);
+
+  004d8	a1 00 00 00 00	 mov	 eax, DWORD PTR ?_WriteFileHsc@@3PAXA ; _WriteFileHsc
+  004dd	50		 push	 eax
+  004de	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?Error@@3IA ; Error
+  004e4	51		 push	 ecx
+  004e5	e8 00 00 00 00	 call	 ?printError@@YAXJPAX@Z	; printError
+  004ea	83 c4 08	 add	 esp, 8
+
+; 297  :         if (DetourTransactionCommit() != NO_ERROR)
+
+  004ed	e8 00 00 00 00	 call	 _DetourTransactionCommit@0
+  004f2	85 c0		 test	 eax, eax
+  004f4	74 11		 je	 SHORT $LN8@DllMain
+
+; 298  :         {
+; 299  :             printf("error DetourTransactionCommit");
+
+  004f6	68 00 00 00 00	 push	 OFFSET ??_C@_0BO@IBJBLAGN@error?5DetourTransactionCommit@
+  004fb	e8 00 00 00 00	 call	 _printf
+  00500	83 c4 04	 add	 esp, 4
+
+; 300  :             return FALSE;
+
+  00503	33 c0		 xor	 eax, eax
+  00505	eb 3b		 jmp	 SHORT $LN1@DllMain
 $LN8@DllMain:
 
-; 253  :         }
-; 254  :      break;
+; 301  :         }
+; 302  :         // audio-path probe: DMAudio/LoadSTY/PlayMusic/StopMusic + open of *.wav
+; 303  :         InstallAudioWatchHooks();
 
-  002ec	eb 1b		 jmp	 SHORT $LN2@DllMain
+  00507	e8 00 00 00 00	 call	 _InstallAudioWatchHooks
+  0050c	90		 npad	 1
 
-; 255  :    case DLL_THREAD_ATTACH:
-; 256  :    case DLL_THREAD_DETACH:
-; 257  :        break;
+; 304  :         // Miles probe: all 52 AIL_* exports gta2.exe imports from mss32.dll v5.0r
+; 305  :         InstallMilesWatchHooks();
 
-  002ee	eb 19		 jmp	 SHORT $LN2@DllMain
+  0050d	e8 00 00 00 00	 call	 _InstallMilesWatchHooks
+  00512	90		 npad	 1
+
+; 306  :      break;
+
+  00513	eb 1b		 jmp	 SHORT $LN2@DllMain
+
+; 307  :    case DLL_THREAD_ATTACH:
+; 308  :    case DLL_THREAD_DETACH:
+; 309  :        break;
+
+  00515	eb 19		 jmp	 SHORT $LN2@DllMain
 $LN11@DllMain:
 
-; 258  :     case DLL_PROCESS_DETACH:
-; 259  :         TraceEvent("DllMain: DLL_PROCESS_DETACH (unload)");
+; 310  :     case DLL_PROCESS_DETACH:
+; 311  :         TraceEvent("DllMain: DLL_PROCESS_DETACH (unload)");
 
-  002f0	68 00 00 00 00	 push	 OFFSET ??_C@_0CF@NFANGHGA@DllMain?3?5DLL_PROCESS_DETACH?5?$CIun@
-  002f5	e8 00 00 00 00	 call	 ?TraceEvent@@YAXPBD@Z	; TraceEvent
-  002fa	83 c4 04	 add	 esp, 4
+  00517	68 00 00 00 00	 push	 OFFSET ??_C@_0CF@NFANGHGA@DllMain?3?5DLL_PROCESS_DETACH?5?$CIun@
+  0051c	e8 00 00 00 00	 call	 ?TraceEvent@@YAXPBD@Z	; TraceEvent
+  00521	83 c4 04	 add	 esp, 4
 
-; 260  :         StopInspector();
+; 312  :         StopInspector();
 
-  002fd	e8 00 00 00 00	 call	 ?StopInspector@@YAXXZ	; StopInspector
-  00302	90		 npad	 1
+  00524	e8 00 00 00 00	 call	 ?StopInspector@@YAXXZ	; StopInspector
+  00529	90		 npad	 1
 
-; 261  :         TraceClose();
+; 313  :         TraceClose();
 
-  00303	e8 00 00 00 00	 call	 ?TraceClose@@YAXXZ	; TraceClose
-  00308	90		 npad	 1
+  0052a	e8 00 00 00 00	 call	 ?TraceClose@@YAXXZ	; TraceClose
+  0052f	90		 npad	 1
 $LN2@DllMain:
 
-; 262  :         break;
-; 263  :     }
-; 264  :     //DetourRestoreAfterWith();
-; 265  :     printf("Dettach and shutdown everything\n");
+; 314  :         break;
+; 315  :     }
+; 316  :     //DetourRestoreAfterWith();
+; 317  :     printf("Dettach and shutdown everything\n");
 
-  00309	68 00 00 00 00	 push	 OFFSET ??_C@_0CB@PEGNNIBG@Dettach?5and?5shutdown?5everything@
-  0030e	e8 00 00 00 00	 call	 _printf
-  00313	83 c4 04	 add	 esp, 4
+  00530	68 00 00 00 00	 push	 OFFSET ??_C@_0CB@PEGNNIBG@Dettach?5and?5shutdown?5everything@
+  00535	e8 00 00 00 00	 call	 _printf
+  0053a	83 c4 04	 add	 esp, 4
 
-; 266  :     return true;
+; 318  :     return true;
 
-  00316	b8 01 00 00 00	 mov	 eax, 1
+  0053d	b8 01 00 00 00	 mov	 eax, 1
 $LN1@DllMain:
 
-; 267  : }
+; 319  : }
 
-  0031b	52		 push	 edx
-  0031c	8b cd		 mov	 ecx, ebp
-  0031e	50		 push	 eax
-  0031f	8d 15 00 00 00
+  00542	52		 push	 edx
+  00543	8b cd		 mov	 ecx, ebp
+  00545	50		 push	 eax
+  00546	8d 15 00 00 00
 	00		 lea	 edx, DWORD PTR $LN18@DllMain
-  00325	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
-  0032a	58		 pop	 eax
-  0032b	5a		 pop	 edx
-  0032c	5f		 pop	 edi
-  0032d	5e		 pop	 esi
-  0032e	5b		 pop	 ebx
-  0032f	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
-  00332	33 cd		 xor	 ecx, ebp
-  00334	e8 00 00 00 00	 call	 @__security_check_cookie@4
-  00339	81 c4 04 01 00
+  0054c	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
+  00551	58		 pop	 eax
+  00552	5a		 pop	 edx
+  00553	5f		 pop	 edi
+  00554	5e		 pop	 esi
+  00555	5b		 pop	 ebx
+  00556	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
+  00559	33 cd		 xor	 ecx, ebp
+  0055b	e8 00 00 00 00	 call	 @__security_check_cookie@4
+  00560	81 c4 04 01 00
 	00		 add	 esp, 260		; 00000104H
-  0033f	3b ec		 cmp	 ebp, esp
-  00341	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00346	8b e5		 mov	 esp, ebp
-  00348	5d		 pop	 ebp
-  00349	c2 0c 00	 ret	 12			; 0000000cH
+  00566	3b ec		 cmp	 ebp, esp
+  00568	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0056d	8b e5		 mov	 esp, ebp
+  0056f	5d		 pop	 ebp
+  00570	c2 0c 00	 ret	 12			; 0000000cH
+  00573	90		 npad	 1
 $LN18@DllMain:
-  0034c	04 00 00 00	 DD	 4
-  00350	00 00 00 00	 DD	 $LN17@DllMain
+  00574	04 00 00 00	 DD	 4
+  00578	00 00 00 00	 DD	 $LN17@DllMain
 $LN17@DllMain:
-  00354	e8 ff ff ff	 DD	 -24			; ffffffe8H
-  00358	04 00 00 00	 DD	 4
-  0035c	00 00 00 00	 DD	 $LN13@DllMain
-  00360	dc ff ff ff	 DD	 -36			; ffffffdcH
-  00364	04 00 00 00	 DD	 4
-  00368	00 00 00 00	 DD	 $LN14@DllMain
-  0036c	d0 ff ff ff	 DD	 -48			; ffffffd0H
-  00370	04 00 00 00	 DD	 4
-  00374	00 00 00 00	 DD	 $LN15@DllMain
-  00378	c4 ff ff ff	 DD	 -60			; ffffffc4H
-  0037c	04 00 00 00	 DD	 4
-  00380	00 00 00 00	 DD	 $LN16@DllMain
+  0057c	e8 ff ff ff	 DD	 -24			; ffffffe8H
+  00580	04 00 00 00	 DD	 4
+  00584	00 00 00 00	 DD	 $LN13@DllMain
+  00588	dc ff ff ff	 DD	 -36			; ffffffdcH
+  0058c	04 00 00 00	 DD	 4
+  00590	00 00 00 00	 DD	 $LN14@DllMain
+  00594	d0 ff ff ff	 DD	 -48			; ffffffd0H
+  00598	04 00 00 00	 DD	 4
+  0059c	00 00 00 00	 DD	 $LN15@DllMain
+  005a0	c4 ff ff ff	 DD	 -60			; ffffffc4H
+  005a4	04 00 00 00	 DD	 4
+  005a8	00 00 00 00	 DD	 $LN16@DllMain
 $LN16@DllMain:
-  00384	5f		 DB	 95			; 0000005fH
-  00385	53		 DB	 83			; 00000053H
-  00386	65		 DB	 101			; 00000065H
-  00387	74		 DB	 116			; 00000074H
-  00388	50		 DB	 80			; 00000050H
-  00389	6c		 DB	 108			; 0000006cH
-  0038a	61		 DB	 97			; 00000061H
-  0038b	79		 DB	 121			; 00000079H
-  0038c	65		 DB	 101			; 00000065H
-  0038d	72		 DB	 114			; 00000072H
-  0038e	4e		 DB	 78			; 0000004eH
-  0038f	61		 DB	 97			; 00000061H
-  00390	6d		 DB	 109			; 0000006dH
-  00391	65		 DB	 101			; 00000065H
-  00392	46		 DB	 70			; 00000046H
-  00393	72		 DB	 114			; 00000072H
-  00394	6f		 DB	 111			; 0000006fH
-  00395	6d		 DB	 109			; 0000006dH
-  00396	4d		 DB	 77			; 0000004dH
-  00397	65		 DB	 101			; 00000065H
-  00398	6e		 DB	 110			; 0000006eH
-  00399	75		 DB	 117			; 00000075H
-  0039a	00		 DB	 0
+  005ac	5f		 DB	 95			; 0000005fH
+  005ad	53		 DB	 83			; 00000053H
+  005ae	65		 DB	 101			; 00000065H
+  005af	74		 DB	 116			; 00000074H
+  005b0	50		 DB	 80			; 00000050H
+  005b1	6c		 DB	 108			; 0000006cH
+  005b2	61		 DB	 97			; 00000061H
+  005b3	79		 DB	 121			; 00000079H
+  005b4	65		 DB	 101			; 00000065H
+  005b5	72		 DB	 114			; 00000072H
+  005b6	4e		 DB	 78			; 0000004eH
+  005b7	61		 DB	 97			; 00000061H
+  005b8	6d		 DB	 109			; 0000006dH
+  005b9	65		 DB	 101			; 00000065H
+  005ba	46		 DB	 70			; 00000046H
+  005bb	72		 DB	 114			; 00000072H
+  005bc	6f		 DB	 111			; 0000006fH
+  005bd	6d		 DB	 109			; 0000006dH
+  005be	4d		 DB	 77			; 0000004dH
+  005bf	65		 DB	 101			; 00000065H
+  005c0	6e		 DB	 110			; 0000006eH
+  005c1	75		 DB	 117			; 00000075H
+  005c2	00		 DB	 0
 $LN15@DllMain:
-  0039b	5f		 DB	 95			; 0000005fH
-  0039c	41		 DB	 65			; 00000041H
-  0039d	6c		 DB	 108			; 0000006cH
-  0039e	6c		 DB	 108			; 0000006cH
-  0039f	47		 DB	 71			; 00000047H
-  003a0	78		 DB	 120			; 00000078H
-  003a1	74		 DB	 116			; 00000074H
-  003a2	46		 DB	 70			; 00000046H
-  003a3	69		 DB	 105			; 00000069H
-  003a4	6c		 DB	 108			; 0000006cH
-  003a5	65		 DB	 101			; 00000065H
-  003a6	00		 DB	 0
+  005c3	5f		 DB	 95			; 0000005fH
+  005c4	41		 DB	 65			; 00000041H
+  005c5	6c		 DB	 108			; 0000006cH
+  005c6	6c		 DB	 108			; 0000006cH
+  005c7	47		 DB	 71			; 00000047H
+  005c8	78		 DB	 120			; 00000078H
+  005c9	74		 DB	 116			; 00000074H
+  005ca	46		 DB	 70			; 00000046H
+  005cb	69		 DB	 105			; 00000069H
+  005cc	6c		 DB	 108			; 0000006cH
+  005cd	65		 DB	 101			; 00000065H
+  005ce	00		 DB	 0
 $LN14@DllMain:
-  003a7	5f		 DB	 95			; 0000005fH
-  003a8	66		 DB	 102			; 00000066H
-  003a9	50		 DB	 80			; 00000050H
-  003aa	6c		 DB	 108			; 0000006cH
-  003ab	61		 DB	 97			; 00000061H
-  003ac	79		 DB	 121			; 00000079H
-  003ad	52		 DB	 82			; 00000052H
-  003ae	65		 DB	 101			; 00000065H
-  003af	70		 DB	 112			; 00000070H
-  003b0	6c		 DB	 108			; 0000006cH
-  003b1	61		 DB	 97			; 00000061H
-  003b2	79		 DB	 121			; 00000079H
-  003b3	00		 DB	 0
+  005cf	5f		 DB	 95			; 0000005fH
+  005d0	66		 DB	 102			; 00000066H
+  005d1	50		 DB	 80			; 00000050H
+  005d2	6c		 DB	 108			; 0000006cH
+  005d3	61		 DB	 97			; 00000061H
+  005d4	79		 DB	 121			; 00000079H
+  005d5	52		 DB	 82			; 00000052H
+  005d6	65		 DB	 101			; 00000065H
+  005d7	70		 DB	 112			; 00000070H
+  005d8	6c		 DB	 108			; 0000006cH
+  005d9	61		 DB	 97			; 00000061H
+  005da	79		 DB	 121			; 00000079H
+  005db	00		 DB	 0
 $LN13@DllMain:
-  003b4	5f		 DB	 95			; 0000005fH
-  003b5	47		 DB	 71			; 00000047H
-  003b6	65		 DB	 101			; 00000065H
-  003b7	74		 DB	 116			; 00000074H
-  003b8	56		 DB	 86			; 00000056H
-  003b9	65		 DB	 101			; 00000065H
-  003ba	72		 DB	 114			; 00000072H
-  003bb	73		 DB	 115			; 00000073H
-  003bc	69		 DB	 105			; 00000069H
-  003bd	6f		 DB	 111			; 0000006fH
-  003be	6e		 DB	 110			; 0000006eH
-  003bf	46		 DB	 70			; 00000046H
-  003c0	69		 DB	 105			; 00000069H
-  003c1	6c		 DB	 108			; 0000006cH
-  003c2	65		 DB	 101			; 00000065H
-  003c3	73		 DB	 115			; 00000073H
-  003c4	00		 DB	 0
+  005dc	5f		 DB	 95			; 0000005fH
+  005dd	47		 DB	 71			; 00000047H
+  005de	65		 DB	 101			; 00000065H
+  005df	74		 DB	 116			; 00000074H
+  005e0	56		 DB	 86			; 00000056H
+  005e1	65		 DB	 101			; 00000065H
+  005e2	72		 DB	 114			; 00000072H
+  005e3	73		 DB	 115			; 00000073H
+  005e4	69		 DB	 105			; 00000069H
+  005e5	6f		 DB	 111			; 0000006fH
+  005e6	6e		 DB	 110			; 0000006eH
+  005e7	46		 DB	 70			; 00000046H
+  005e8	69		 DB	 105			; 00000069H
+  005e9	6c		 DB	 108			; 0000006cH
+  005ea	65		 DB	 101			; 00000065H
+  005eb	73		 DB	 115			; 00000073H
+  005ec	00		 DB	 0
 _DllMain@12 ENDP
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -1262,7 +1545,7 @@ __$SEHRec$ = -24					; size = 24
 _ep$ = 8						; size = 4
 ?CrashFilter@@YGJPAU_EXCEPTION_POINTERS@@@Z PROC	; CrashFilter, COMDAT
 
-; 60   : static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* ep) {
+; 79   : static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* ep) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1295,9 +1578,9 @@ _ep$ = 8						; size = 4
   00050	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00055	90		 npad	 1
 
-; 61   :     char path[MAX_PATH + 32];
-; 62   :     char exe[MAX_PATH];
-; 63   :     DWORD n = GetModuleFileNameA(NULL, exe, MAX_PATH);
+; 80   :     char path[MAX_PATH + 32];
+; 81   :     char exe[MAX_PATH];
+; 82   :     DWORD n = GetModuleFileNameA(NULL, exe, MAX_PATH);
 
   00056	8b f4		 mov	 esi, esp
   00058	68 04 01 00 00	 push	 260			; 00000104H
@@ -1312,7 +1595,7 @@ _ep$ = 8						; size = 4
   00073	89 85 a4 fd ff
 	ff		 mov	 DWORD PTR _n$[ebp], eax
 
-; 64   :     if (n > 0 && n < MAX_PATH) {
+; 83   :     if (n > 0 && n < MAX_PATH) {
 
   00079	83 bd a4 fd ff
 	ff 00		 cmp	 DWORD PTR _n$[ebp], 0
@@ -1323,7 +1606,7 @@ _ep$ = 8						; size = 4
   00090	0f 83 81 00 00
 	00		 jae	 $LN11@CrashFilte
 
-; 65   :         char* sl = strrchr(exe, '\\');
+; 84   :         char* sl = strrchr(exe, '\\');
 
   00096	6a 5c		 push	 92			; 0000005cH
   00098	8d 85 b0 fd ff
@@ -1334,7 +1617,7 @@ _ep$ = 8						; size = 4
   000a7	89 85 98 fd ff
 	ff		 mov	 DWORD PTR _sl$9[ebp], eax
 
-; 66   :         if (sl) { sl[1] = 0; } else { exe[0] = 0; }
+; 85   :         if (sl) { sl[1] = 0; } else { exe[0] = 0; }
 
   000ad	83 bd 98 fd ff
 	ff 00		 cmp	 DWORD PTR _sl$9[ebp], 0
@@ -1364,7 +1647,7 @@ $LN20@CrashFilte:
 	ff ff 00	 mov	 BYTE PTR _exe$[ebp+edx], 0
 $LN14@CrashFilte:
 
-; 67   :         sprintf(path, "%sgta2_crash.log", exe);
+; 86   :         sprintf(path, "%sgta2_crash.log", exe);
 
   000fa	8d 85 b0 fd ff
 	ff		 lea	 eax, DWORD PTR _exe$[ebp]
@@ -1376,13 +1659,13 @@ $LN14@CrashFilte:
   0010d	e8 00 00 00 00	 call	 _sprintf
   00112	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 68   :     }
+; 87   :     }
 
   00115	eb 14		 jmp	 SHORT $LN12@CrashFilte
 $LN11@CrashFilte:
 
-; 69   :     else {
-; 70   :         strcpy(path, "gta2_crash.log");
+; 88   :     else {
+; 89   :         strcpy(path, "gta2_crash.log");
 
   00117	68 00 00 00 00	 push	 OFFSET ??_C@_0P@GFDEBDDK@gta2_crash?4log@
   0011c	8d 85 bc fe ff
@@ -1392,8 +1675,8 @@ $LN11@CrashFilte:
   00128	83 c4 08	 add	 esp, 8
 $LN12@CrashFilte:
 
-; 71   :     }
-; 72   :     FILE* f = fopen(path, "ab");
+; 90   :     }
+; 91   :     FILE* f = fopen(path, "ab");
 
   0012b	8b f4		 mov	 esi, esp
   0012d	68 00 00 00 00	 push	 OFFSET ??_C@_02BOGAIONP@ab@
@@ -1408,30 +1691,30 @@ $LN12@CrashFilte:
   00149	89 85 8c fd ff
 	ff		 mov	 DWORD PTR _f$[ebp], eax
 
-; 73   :     if (f) {
+; 92   :     if (f) {
 
   0014f	83 bd 8c fd ff
 	ff 00		 cmp	 DWORD PTR _f$[ebp], 0
   00156	0f 84 1b 03 00
 	00		 je	 $LN15@CrashFilte
 
-; 74   :         EXCEPTION_RECORD* er = ep->ExceptionRecord;
+; 93   :         EXCEPTION_RECORD* er = ep->ExceptionRecord;
 
   0015c	8b 45 08	 mov	 eax, DWORD PTR _ep$[ebp]
   0015f	8b 08		 mov	 ecx, DWORD PTR [eax]
   00161	89 8d 80 fd ff
 	ff		 mov	 DWORD PTR _er$8[ebp], ecx
 
-; 75   :         CONTEXT* ctx = ep->ContextRecord;
+; 94   :         CONTEXT* ctx = ep->ContextRecord;
 
   00167	8b 45 08	 mov	 eax, DWORD PTR _ep$[ebp]
   0016a	8b 48 04	 mov	 ecx, DWORD PTR [eax+4]
   0016d	89 8d 74 fd ff
 	ff		 mov	 DWORD PTR _ctx$7[ebp], ecx
 
-; 76   :         SYSTEMTIME st;
-; 77   :         unsigned char code[16];
-; 78   :         DWORD* stack = (DWORD*)ctx->Esp;
+; 95   :         SYSTEMTIME st;
+; 96   :         unsigned char code[16];
+; 97   :         DWORD* stack = (DWORD*)ctx->Esp;
 
   00173	8b 85 74 fd ff
 	ff		 mov	 eax, DWORD PTR _ctx$7[ebp]
@@ -1440,8 +1723,8 @@ $LN12@CrashFilte:
   0017f	89 8d 38 fd ff
 	ff		 mov	 DWORD PTR _stack$4[ebp], ecx
 
-; 79   :         int i;
-; 80   :         GetLocalTime(&st);
+; 98   :         int i;
+; 99   :         GetLocalTime(&st);
 
   00185	8b f4		 mov	 esi, esp
   00187	8d 85 5c fd ff
@@ -1453,7 +1736,7 @@ $LN12@CrashFilte:
   00196	e8 00 00 00 00	 call	 __RTC_CheckEsp
   0019b	90		 npad	 1
 
-; 81   :         fprintf(f, "\r\n--- CRASH %04d-%02d-%02d %02d:%02d:%02d.%03d ---\r\n",
+; 100  :         fprintf(f, "\r\n--- CRASH %04d-%02d-%02d %02d:%02d:%02d.%03d ---\r\n",
 
   0019c	0f b7 85 6a fd
 	ff ff		 movzx	 eax, WORD PTR _st$6[ebp+14]
@@ -1483,8 +1766,8 @@ $LN12@CrashFilte:
   001e0	e8 00 00 00 00	 call	 _fprintf
   001e5	83 c4 24	 add	 esp, 36			; 00000024H
 
-; 82   :                 st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-; 83   :         fprintf(f, "Code: 0x%08X  Addr: 0x%08X  Flags: 0x%08X\r\n",
+; 101  :                 st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+; 102  :         fprintf(f, "Code: 0x%08X  Addr: 0x%08X  Flags: 0x%08X\r\n",
 
   001e8	8b 85 80 fd ff
 	ff		 mov	 eax, DWORD PTR _er$8[ebp]
@@ -1505,8 +1788,8 @@ $LN12@CrashFilte:
   00211	e8 00 00 00 00	 call	 _fprintf
   00216	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 84   :                 er->ExceptionCode, (unsigned int)(ULONG_PTR)er->ExceptionAddress, er->ExceptionFlags);
-; 85   :         fprintf(f, "EIP: 0x%08X  EAX: 0x%08X  EBX: 0x%08X\r\n",
+; 103  :                 er->ExceptionCode, (unsigned int)(ULONG_PTR)er->ExceptionAddress, er->ExceptionFlags);
+; 104  :         fprintf(f, "EIP: 0x%08X  EAX: 0x%08X  EBX: 0x%08X\r\n",
 
   00219	8b 85 74 fd ff
 	ff		 mov	 eax, DWORD PTR _ctx$7[ebp]
@@ -1530,8 +1813,8 @@ $LN12@CrashFilte:
   0024c	e8 00 00 00 00	 call	 _fprintf
   00251	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 86   :                 ctx->Eip, ctx->Eax, ctx->Ebx);
-; 87   :         fprintf(f, "ECX: 0x%08X  EDX: 0x%08X  ESI: 0x%08X\r\n",
+; 105  :                 ctx->Eip, ctx->Eax, ctx->Ebx);
+; 106  :         fprintf(f, "ECX: 0x%08X  EDX: 0x%08X  ESI: 0x%08X\r\n",
 
   00254	8b 85 74 fd ff
 	ff		 mov	 eax, DWORD PTR _ctx$7[ebp]
@@ -1555,8 +1838,8 @@ $LN12@CrashFilte:
   00287	e8 00 00 00 00	 call	 _fprintf
   0028c	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 88   :                 ctx->Ecx, ctx->Edx, ctx->Esi);
-; 89   :         fprintf(f, "EDI: 0x%08X  ESP: 0x%08X  EBP: 0x%08X\r\n",
+; 107  :                 ctx->Ecx, ctx->Edx, ctx->Esi);
+; 108  :         fprintf(f, "EDI: 0x%08X  ESP: 0x%08X  EBP: 0x%08X\r\n",
 
   0028f	8b 85 74 fd ff
 	ff		 mov	 eax, DWORD PTR _ctx$7[ebp]
@@ -1580,13 +1863,13 @@ $LN12@CrashFilte:
   002c2	e8 00 00 00 00	 call	 _fprintf
   002c7	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 90   :                 ctx->Edi, ctx->Esp, ctx->Ebp);
-; 91   :         __try {
+; 109  :                 ctx->Edi, ctx->Esp, ctx->Ebp);
+; 110  :         __try {
 
   002ca	c7 45 fc 00 00
 	00 00		 mov	 DWORD PTR __$SEHRec$[ebp+20], 0
 
-; 92   :             for (i = 0; i < 16; i++) {
+; 111  :             for (i = 0; i < 16; i++) {
 
   002d1	c7 85 2c fd ff
 	ff 00 00 00 00	 mov	 DWORD PTR _i$3[ebp], 0
@@ -1602,7 +1885,7 @@ $LN4@CrashFilte:
 	ff 10		 cmp	 DWORD PTR _i$3[ebp], 16	; 00000010H
   002f3	7d 24		 jge	 SHORT $LN3@CrashFilte
 
-; 93   :                 code[i] = *(unsigned char*)(ctx->Eip + i);
+; 112  :                 code[i] = *(unsigned char*)(ctx->Eip + i);
 
   002f5	8b 85 74 fd ff
 	ff		 mov	 eax, DWORD PTR _ctx$7[ebp]
@@ -1616,12 +1899,12 @@ $LN4@CrashFilte:
   00310	88 8c 15 44 fd
 	ff ff		 mov	 BYTE PTR _code$5[ebp+edx], cl
 
-; 94   :             }
+; 113  :             }
 
   00317	eb c4		 jmp	 SHORT $LN2@CrashFilte
 $LN3@CrashFilte:
 
-; 95   :             fprintf(f, "CODE: ");
+; 114  :             fprintf(f, "CODE: ");
 
   00319	68 00 00 00 00	 push	 OFFSET ??_C@_06FELPOFLO@CODE?3?5@
   0031e	8b 85 8c fd ff
@@ -1630,7 +1913,7 @@ $LN3@CrashFilte:
   00325	e8 00 00 00 00	 call	 _fprintf
   0032a	83 c4 08	 add	 esp, 8
 
-; 96   :             for (i = 0; i < 16; i++) {
+; 115  :             for (i = 0; i < 16; i++) {
 
   0032d	c7 85 2c fd ff
 	ff 00 00 00 00	 mov	 DWORD PTR _i$3[ebp], 0
@@ -1646,7 +1929,7 @@ $LN7@CrashFilte:
 	ff 10		 cmp	 DWORD PTR _i$3[ebp], 16	; 00000010H
   0034f	7d 25		 jge	 SHORT $LN6@CrashFilte
 
-; 97   :                 fprintf(f, "%02X ", code[i]);
+; 116  :                 fprintf(f, "%02X ", code[i]);
 
   00351	8b 85 2c fd ff
 	ff		 mov	 eax, DWORD PTR _i$3[ebp]
@@ -1660,12 +1943,12 @@ $LN7@CrashFilte:
   0036c	e8 00 00 00 00	 call	 _fprintf
   00371	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 98   :             }
+; 117  :             }
 
   00374	eb c3		 jmp	 SHORT $LN5@CrashFilte
 $LN6@CrashFilte:
 
-; 99   :             fprintf(f, "\r\n");
+; 118  :             fprintf(f, "\r\n");
 
   00376	68 00 00 00 00	 push	 OFFSET ??_C@_02PCIJFNDE@?$AN?6@
   0037b	8b 85 8c fd ff
@@ -1674,7 +1957,7 @@ $LN6@CrashFilte:
   00382	e8 00 00 00 00	 call	 _fprintf
   00387	83 c4 08	 add	 esp, 8
 
-; 100  :         }
+; 119  :         }
 
   0038a	c7 45 fc fe ff
 	ff ff		 mov	 DWORD PTR __$SEHRec$[ebp+20], -2 ; fffffffeH
@@ -1682,7 +1965,7 @@ $LN6@CrashFilte:
 $LN22@CrashFilte:
 $LN39@CrashFilte:
 
-; 101  :         __except (EXCEPTION_EXECUTE_HANDLER) {
+; 120  :         __except (EXCEPTION_EXECUTE_HANDLER) {
 
   00393	b8 01 00 00 00	 mov	 eax, 1
 $LN24@CrashFilte:
@@ -1691,7 +1974,7 @@ $LN37@CrashFilte:
 $LN23@CrashFilte:
   00399	8b 65 e8	 mov	 esp, DWORD PTR __$SEHRec$[ebp]
 
-; 102  :             fprintf(f, "CODE: <unreadable>\r\n");
+; 121  :             fprintf(f, "CODE: <unreadable>\r\n");
 
   0039c	68 00 00 00 00	 push	 OFFSET ??_C@_0BF@JHAJHNAF@CODE?3?5?$DMunreadable?$DO?$AN?6@
   003a1	8b 85 8c fd ff
@@ -1700,19 +1983,19 @@ $LN23@CrashFilte:
   003a8	e8 00 00 00 00	 call	 _fprintf
   003ad	83 c4 08	 add	 esp, 8
 
-; 100  :         }
+; 119  :         }
 
   003b0	c7 45 fc fe ff
 	ff ff		 mov	 DWORD PTR __$SEHRec$[ebp+20], -2 ; fffffffeH
 $LN25@CrashFilte:
 
-; 103  :         }
-; 104  :         __try {
+; 122  :         }
+; 123  :         __try {
 
   003b7	c7 45 fc 01 00
 	00 00		 mov	 DWORD PTR __$SEHRec$[ebp+20], 1
 
-; 105  :             fprintf(f, "STACK: ");
+; 124  :             fprintf(f, "STACK: ");
 
   003be	68 00 00 00 00	 push	 OFFSET ??_C@_07LNNEHJJP@STACK?3?5@
   003c3	8b 85 8c fd ff
@@ -1721,7 +2004,7 @@ $LN25@CrashFilte:
   003ca	e8 00 00 00 00	 call	 _fprintf
   003cf	83 c4 08	 add	 esp, 8
 
-; 106  :             for (i = 0; i < 8; i++) {
+; 125  :             for (i = 0; i < 8; i++) {
 
   003d2	c7 85 2c fd ff
 	ff 00 00 00 00	 mov	 DWORD PTR _i$3[ebp], 0
@@ -1737,7 +2020,7 @@ $LN10@CrashFilte:
 	ff 08		 cmp	 DWORD PTR _i$3[ebp], 8
   003f4	7d 26		 jge	 SHORT $LN9@CrashFilte
 
-; 107  :                 fprintf(f, "0x%08X ", stack[i]);
+; 126  :                 fprintf(f, "0x%08X ", stack[i]);
 
   003f6	8b 85 2c fd ff
 	ff		 mov	 eax, DWORD PTR _i$3[ebp]
@@ -1752,12 +2035,12 @@ $LN10@CrashFilte:
   00412	e8 00 00 00 00	 call	 _fprintf
   00417	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 108  :             }
+; 127  :             }
 
   0041a	eb c2		 jmp	 SHORT $LN8@CrashFilte
 $LN9@CrashFilte:
 
-; 109  :             fprintf(f, "\r\n");
+; 128  :             fprintf(f, "\r\n");
 
   0041c	68 00 00 00 00	 push	 OFFSET ??_C@_02PCIJFNDE@?$AN?6@
   00421	8b 85 8c fd ff
@@ -1766,7 +2049,7 @@ $LN9@CrashFilte:
   00428	e8 00 00 00 00	 call	 _fprintf
   0042d	83 c4 08	 add	 esp, 8
 
-; 110  :         }
+; 129  :         }
 
   00430	c7 45 fc fe ff
 	ff ff		 mov	 DWORD PTR __$SEHRec$[ebp+20], -2 ; fffffffeH
@@ -1774,7 +2057,7 @@ $LN9@CrashFilte:
 $LN26@CrashFilte:
 $LN40@CrashFilte:
 
-; 111  :         __except (EXCEPTION_EXECUTE_HANDLER) {
+; 130  :         __except (EXCEPTION_EXECUTE_HANDLER) {
 
   00439	b8 01 00 00 00	 mov	 eax, 1
 $LN28@CrashFilte:
@@ -1783,7 +2066,7 @@ $LN38@CrashFilte:
 $LN27@CrashFilte:
   0043f	8b 65 e8	 mov	 esp, DWORD PTR __$SEHRec$[ebp]
 
-; 112  :             fprintf(f, "STACK: <unreadable>\r\n");
+; 131  :             fprintf(f, "STACK: <unreadable>\r\n");
 
   00442	68 00 00 00 00	 push	 OFFSET ??_C@_0BG@EMANILLJ@STACK?3?5?$DMunreadable?$DO?$AN?6@
   00447	8b 85 8c fd ff
@@ -1792,14 +2075,14 @@ $LN27@CrashFilte:
   0044e	e8 00 00 00 00	 call	 _fprintf
   00453	83 c4 08	 add	 esp, 8
 
-; 110  :         }
+; 129  :         }
 
   00456	c7 45 fc fe ff
 	ff ff		 mov	 DWORD PTR __$SEHRec$[ebp+20], -2 ; fffffffeH
 $LN29@CrashFilte:
 
-; 113  :         }
-; 114  :         fclose(f);
+; 132  :         }
+; 133  :         fclose(f);
 
   0045d	8b f4		 mov	 esi, esp
   0045f	8b 85 8c fd ff
@@ -1813,13 +2096,13 @@ $LN29@CrashFilte:
   00476	90		 npad	 1
 $LN15@CrashFilte:
 
-; 115  :     }
-; 116  :     return EXCEPTION_CONTINUE_SEARCH;
+; 134  :     }
+; 135  :     return EXCEPTION_CONTINUE_SEARCH;
 
   00477	33 c0		 xor	 eax, eax
 $LN1@CrashFilte:
 
-; 117  : }
+; 136  : }
 
   00479	52		 push	 edx
   0047a	8b cd		 mov	 ecx, ebp
@@ -1901,7 +2184,7 @@ _Error$ = 8						; size = 4
 _address$ = 12						; size = 4
 ?printError@@YAXJPAX@Z PROC				; printError, COMDAT
 
-; 270  : void printError(LONG Error, PVOID address) {
+; 322  : void printError(LONG Error, PVOID address) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1918,9 +2201,9 @@ _address$ = 12						; size = 4
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 271  : 
-; 272  : 
-; 273  :     switch (Error)
+; 323  : 
+; 324  : 
+; 325  :     switch (Error)
 
   00026	8b 45 08	 mov	 eax, DWORD PTR _Error$[ebp]
   00029	89 85 3c ff ff
@@ -1946,9 +2229,9 @@ $LN11@printError:
   00068	e9 8d 00 00 00	 jmp	 $LN9@printError
 $LN4@printError:
 
-; 274  :     {
-; 275  :     case ERROR_INVALID_BLOCK:
-; 276  :         MessageBox(0, L"ERROR_INVALID_BLOCK", 0, 0);
+; 326  :     {
+; 327  :     case ERROR_INVALID_BLOCK:
+; 328  :         MessageBox(0, L"ERROR_INVALID_BLOCK", 0, 0);
 
   0006d	8b f4		 mov	 esi, esp
   0006f	6a 00		 push	 0
@@ -1961,13 +2244,13 @@ $LN4@printError:
   00082	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00087	90		 npad	 1
 
-; 277  :         break;
+; 329  :         break;
 
   00088	eb 70		 jmp	 SHORT $LN2@printError
 $LN5@printError:
 
-; 278  :     case ERROR_INVALID_HANDLE:
-; 279  :         MessageBox(0, L"ERROR_INVALID_HANDLE", 0, 0);
+; 330  :     case ERROR_INVALID_HANDLE:
+; 331  :         MessageBox(0, L"ERROR_INVALID_HANDLE", 0, 0);
 
   0008a	8b f4		 mov	 esi, esp
   0008c	6a 00		 push	 0
@@ -1980,13 +2263,13 @@ $LN5@printError:
   0009f	e8 00 00 00 00	 call	 __RTC_CheckEsp
   000a4	90		 npad	 1
 
-; 280  :         break;
+; 332  :         break;
 
   000a5	eb 53		 jmp	 SHORT $LN2@printError
 $LN6@printError:
 
-; 281  :     case ERROR_INVALID_OPERATION:
-; 282  :         MessageBox(0, L"ERROR_INVALID_OPERATION", 0, 0);
+; 333  :     case ERROR_INVALID_OPERATION:
+; 334  :         MessageBox(0, L"ERROR_INVALID_OPERATION", 0, 0);
 
   000a7	8b f4		 mov	 esi, esp
   000a9	6a 00		 push	 0
@@ -1999,7 +2282,7 @@ $LN6@printError:
   000bc	e8 00 00 00 00	 call	 __RTC_CheckEsp
   000c1	90		 npad	 1
 
-; 283  :         writeFileLog((char*)"windows.txt", (char*)"addres=", (char*)"Error ", (unsigned int)address);
+; 335  :         writeFileLog((char*)"windows.txt", (char*)"addres=", (char*)"Error ", (unsigned int)address);
 
   000c2	8b 45 0c	 mov	 eax, DWORD PTR _address$[ebp]
   000c5	50		 push	 eax
@@ -2009,13 +2292,13 @@ $LN6@printError:
   000d5	e8 00 00 00 00	 call	 ?writeFileLog@@YAHPAD00I@Z ; writeFileLog
   000da	83 c4 10	 add	 esp, 16			; 00000010H
 
-; 284  :         break;
+; 336  :         break;
 
   000dd	eb 1b		 jmp	 SHORT $LN2@printError
 $LN7@printError:
 
-; 285  :     case ERROR_NOT_ENOUGH_MEMORY:
-; 286  :         MessageBox(0, L"ERROR_NOT_ENOUGH_MEMORY", 0, 0);
+; 337  :     case ERROR_NOT_ENOUGH_MEMORY:
+; 338  :         MessageBox(0, L"ERROR_NOT_ENOUGH_MEMORY", 0, 0);
 
   000df	8b f4		 mov	 esi, esp
   000e1	6a 00		 push	 0
@@ -2030,14 +2313,14 @@ $LN7@printError:
 $LN9@printError:
 $LN2@printError:
 
-; 287  :         break;
-; 288  :     case NO_ERROR:
-; 289  :         //MessageBox(0, L"NO_ERROR", 0, 0);
-; 290  :         break;
-; 291  :     default:
-; 292  :         break;
-; 293  :     }
-; 294  : }
+; 339  :         break;
+; 340  :     case NO_ERROR:
+; 341  :         //MessageBox(0, L"NO_ERROR", 0, 0);
+; 342  :         break;
+; 343  :     default:
+; 344  :         break;
+; 345  :     }
+; 346  : }
 
   000fa	5f		 pop	 edi
   000fb	5e		 pop	 esi
@@ -2057,7 +2340,7 @@ _TEXT	ENDS
 _TEXT	SEGMENT
 ?FunMapGM@@YAHXZ PROC					; FunMapGM, COMDAT
 
-; 299  : {
+; 351  : {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -2074,29 +2357,29 @@ _TEXT	SEGMENT
   0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00021	90		 npad	 1
 
-; 300  :     //Error=  DetourAttach(&_LoadFileResurce     ,  (PVOID)LoadFileResurce);
-; 301  :    // printError(Error, _LoadFileResurce);
-; 302  :     //Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
-; 303  :     //printError(Error, _SetSaveFile);
-; 304  :     //Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
-; 305  :     //printError(Error, _SetPlayerArena);
-; 306  :    // Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
-; 307  :    // printError(Error, _SetSaveFile);
-; 308  :     //Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
-; 309  :     //printError(Error, _SetPlayerArena);
-; 310  :     //Error = DetourAttach(&_SetBonusStage       ,  (PVOID)SetBonusStage);
-; 311  :     //printError(Error, _SetBonusStage);
-; 312  :    // Error = DetourAttach(&_Set_FUN_0045E4B0    ,  (PVOID)Set_FUN_0045E4B0);
-; 313  :     //printError(Error, _Set_FUN_0045E4B0);
-; 314  :     //Error = DetourAttach(&_SetPlayerSlotSave   ,  (PVOID)SetPlayerSlotSave);
-; 315  :     //printError(Error, _SetPlayerSlotSave);
-; 316  :     //Error = DetourAttach(&_SetBonus            ,  (PVOID)SetBonus);
-; 317  :     //printError(Error, _SetBonus);
-; 318  :     return 0;
+; 352  :     //Error=  DetourAttach(&_LoadFileResurce     ,  (PVOID)LoadFileResurce);
+; 353  :    // printError(Error, _LoadFileResurce);
+; 354  :     //Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
+; 355  :     //printError(Error, _SetSaveFile);
+; 356  :     //Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
+; 357  :     //printError(Error, _SetPlayerArena);
+; 358  :    // Error = DetourAttach(&_SetSaveFile         ,  (PVOID)SetSaveFile);
+; 359  :    // printError(Error, _SetSaveFile);
+; 360  :     //Error = DetourAttach(&_SetPlayerArena      ,  (PVOID)SetPlayerArena);
+; 361  :     //printError(Error, _SetPlayerArena);
+; 362  :     //Error = DetourAttach(&_SetBonusStage       ,  (PVOID)SetBonusStage);
+; 363  :     //printError(Error, _SetBonusStage);
+; 364  :    // Error = DetourAttach(&_Set_FUN_0045E4B0    ,  (PVOID)Set_FUN_0045E4B0);
+; 365  :     //printError(Error, _Set_FUN_0045E4B0);
+; 366  :     //Error = DetourAttach(&_SetPlayerSlotSave   ,  (PVOID)SetPlayerSlotSave);
+; 367  :     //printError(Error, _SetPlayerSlotSave);
+; 368  :     //Error = DetourAttach(&_SetBonus            ,  (PVOID)SetBonus);
+; 369  :     //printError(Error, _SetBonus);
+; 370  :     return 0;
 
   00022	33 c0		 xor	 eax, eax
 
-; 319  : };
+; 371  : };
 
   00024	5f		 pop	 edi
   00025	5e		 pop	 esi
@@ -2109,49 +2392,6 @@ _TEXT	SEGMENT
   00036	5d		 pop	 ebp
   00037	c3		 ret	 0
 ?FunMapGM@@YAHXZ ENDP					; FunMapGM
-_TEXT	ENDS
-; Function compile flags: /Odtp /RTCsu /ZI
-; File C:\work\GTA2_RE\dllLoad\dllLoad\cStyle.h
-;	COMDAT ?GetNumberOfCars@@YGEPAX@Z
-_TEXT	SEGMENT
-_pthis$ = 8						; size = 4
-?GetNumberOfCars@@YGEPAX@Z PROC				; GetNumberOfCars, COMDAT
-
-; 14   : {
-
-  00000	55		 push	 ebp
-  00001	8b ec		 mov	 ebp, esp
-  00003	81 ec c0 00 00
-	00		 sub	 esp, 192		; 000000c0H
-  00009	53		 push	 ebx
-  0000a	56		 push	 esi
-  0000b	57		 push	 edi
-  0000c	8b fd		 mov	 edi, ebp
-  0000e	33 c9		 xor	 ecx, ecx
-  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
-  00015	f3 ab		 rep stosd
-  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __41DEB396_cStyle@h
-  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
-  00021	90		 npad	 1
-
-; 15   : 	//�������
-; 16   : 	return 0;
-
-  00022	32 c0		 xor	 al, al
-
-; 17   : }
-
-  00024	5f		 pop	 edi
-  00025	5e		 pop	 esi
-  00026	5b		 pop	 ebx
-  00027	81 c4 c0 00 00
-	00		 add	 esp, 192		; 000000c0H
-  0002d	3b ec		 cmp	 ebp, esp
-  0002f	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00034	8b e5		 mov	 esp, ebp
-  00036	5d		 pop	 ebp
-  00037	c2 04 00	 ret	 4
-?GetNumberOfCars@@YGEPAX@Z ENDP				; GetNumberOfCars
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\string.h

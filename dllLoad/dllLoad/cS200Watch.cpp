@@ -21,26 +21,32 @@
 // Window size in bytes each debug register watches (1/2/4/8).
 #define WATCH_SIZE 8
 
-// Offsets inside the S200 block (relative to Ped base). The live records we
-// have seen are the first 12 (0..11) = bytes 0x00..0x23, so watch that
-// region contiguously with the four 8-byte windows: 0x00, 0x08, 0x10, 0x18.
-#define WATCH_0_OFF 0x000
-#define WATCH_1_OFF 0x008
-#define WATCH_2_OFF 0x010
-#define WATCH_3_OFF 0x018
+// How many bytes of the Ped we want covered, and how the four debug
+// registers are rotated across that range. Four 8-byte windows only cover
+// 32 bytes at any instant, but the interesting S200/anim area is much larger,
+// so the 32-byte window slides through the range over successive refreshes.
+#define WATCH_SPAN      0x0C0   // 0x00..0xBF of the Ped
+#define WATCH_STRIDE    0x20    // step of the sliding window (one full span)
+#define WATCH_N_WINDOWS 4       // Dr0..Dr3
 
 static const void* s_pedBase = NULL;
 static HANDLE      s_vehToken = NULL;
 static volatile LONG s_armed = 0;
 
+// Offsets of the four windows, as a function of the current window phase.
+static unsigned long s_winOff[WATCH_N_WINDOWS];
+static volatile LONG s_winPhase = 0;
+
 // Ring buffer of hits (written from the VEH handler, read by dump).
 #define RING_CAP 512
 typedef struct {
-    unsigned long eip;
+    unsigned long eip;        // address of the storing instruction
     unsigned long drNo;       // which debug reg fired (0..3)
-    unsigned long addr;       // exact address that was written (approx)
-    unsigned long value;      // dword value written (approx)
-    unsigned long pcShown;    // EIP value, also shown
+    unsigned long off;        // exact byte offset inside the Ped that changed
+    unsigned long newVal;     // value stored at that offset (after the write)
+    unsigned long oldVal;     // value that was there before the write
+    unsigned long width;      // how many consecutive bytes changed
+    unsigned long tick;       // GetTickCount() at the moment of the write
     unsigned long long seq;
 } S200Hit;
 
@@ -66,21 +72,20 @@ static unsigned long long s_seqCounter = 0;
 //                              DR7 (drNo comes from the Dr7 bits), clear TF
 //                              and Dr6, continue.
 //
-// The written *value* is not read in the handler at all: ring entries store
-// the window offset (via drNo) and the dump/flush paths read the final value
-// from memory afterwards. That keeps the VEH tiny, reentrant and race-free.
+// The written *value* is captured by diffing memory across the step: the
+// 8 bytes of the fired window are snapshotted during the 1st #DB (the store
+// has NOT been applied yet - x86 faulted with instruction restart) and read
+// again in the 2nd #DB, once the store has retired. Comparing the two gives
+// the exact byte offset that changed plus the value the game actually wrote,
+// with no x86 instruction decoding.
 // ---------------------------------------------------------------------------
 #define EFLAG_TF 0x00000100UL
 
-static unsigned long WatchOffForDr(unsigned long drNo)
-{
-    switch (drNo) {
-    case 0: return WATCH_0_OFF;
-    case 1: return WATCH_1_OFF;
-    case 2: return WATCH_2_OFF;
-    default: return WATCH_3_OFF;
-    }
-}
+// Per-thread: which hardware register we disabled for the one-instruction step,
+// plus the pre-write snapshot of its window and the faulting EIP.
+static __declspec(thread) unsigned long s_tlsDisabledDr = 4;  // 0..3 or 4=none
+static __declspec(thread) unsigned long s_tlsSnap[WATCH_SIZE];
+static __declspec(thread) unsigned long s_tlsEip = 0;
 
 // Local-enable bit for each register in DR7: L0=0x1, L1=0x4, L2=0x10, L3=0x40.
 static unsigned long DrEnableBit(unsigned long drNo)
@@ -88,21 +93,97 @@ static unsigned long DrEnableBit(unsigned long drNo)
     return 1UL << (drNo * 2);
 }
 
-static void RecordHit(unsigned long eip, unsigned long drNo)
+static void SnapWindow(unsigned long winOff)
 {
-    int slot = InterlockedIncrement(&s_ringWrite);
-    int idx = (slot - 1) % RING_CAP;
-    S200Hit* h = &s_ring[idx];
-    h->eip = eip;
-    h->drNo = drNo;
-    h->addr = (unsigned long)(ULONG_PTR)s_pedBase + WatchOffForDr(drNo);
-    h->value = 0;   // filled lazily at dump time (write has landed by then)
-    h->pcShown = eip;
-    h->seq = ++s_seqCounter;
+    const unsigned char* p =
+        (const unsigned char*)s_pedBase + winOff;
+    int i;
+    for (i = 0; i < WATCH_SIZE; i++) {
+        s_tlsSnap[i] = p[i];
+    }
 }
 
-// Per-thread: which hardware register we disabled for the one-instruction step.
-static __declspec(thread) unsigned long s_tlsDisabledDr = 4;  // 0..3 or 4=none
+// Pure diff of an 8-byte watch window across the trap-flag step. Kept free of
+// Win32 and of any shared state so the unit test can drive it directly - the
+// hardware watchpoint path itself needs a machine whose CPU actually delivers
+// #DB, which is not every environment.
+void S200DiffWindow(const unsigned char* before, const unsigned char* after,
+                    unsigned long winOff, struct S200Diff* out)
+{
+    int i, first = -1, last = -1;
+    int start, end, k;
+    unsigned long val = 0, old = 0;
+
+    for (i = 0; i < WATCH_SIZE; i++) {
+        if (before[i] != after[i]) {
+            if (first < 0) {
+                first = i;
+            }
+            last = i;
+        }
+    }
+    // Nothing changed: a read-only access that overlapped the window, or the
+    // store was rolled back. Not a write event.
+    if (first < 0) {
+        out->changed = 0;
+        out->off = winOff;
+        out->width = 0;
+        out->newVal = 0;
+        out->oldVal = 0;
+        return;
+    }
+    // Report the aligned 4-byte group the change belongs to, not the raw byte
+    // range: that is the natural granularity of the game's Ped fields, and it
+    // keeps a single byte store from being logged as a meaningless 1-byte write.
+    start = first & ~3;
+    end = last;
+    if (end - start < 3) {
+        end = start + 3;
+    }
+    if (end > WATCH_SIZE - 1) {
+        end = WATCH_SIZE - 1;
+    }
+    for (k = start; k <= end; k++) {
+        val |= (unsigned long)after[k] << (8 * (k - start));
+        old |= (unsigned long)before[k] << (8 * (k - start));
+    }
+    out->changed = 1;
+    out->off = winOff + (unsigned long)start;
+    out->width = (unsigned long)(end - start + 1);
+    out->newVal = val;
+    out->oldVal = old;
+}
+
+// Read the window back, diff it against the snapshot and push one ring entry
+// describing exactly what changed. Runs in the 2nd #DB, after the store.
+static void RecordHit(unsigned long winOff)
+{
+    const unsigned char* p =
+        (const unsigned char*)s_pedBase + winOff;
+    unsigned char newBuf[WATCH_SIZE];
+    S200Diff d;
+    int i, slot, idx;
+    S200Hit* h;
+
+    for (i = 0; i < WATCH_SIZE; i++) {
+        newBuf[i] = p[i];
+    }
+    S200DiffWindow((const unsigned char*)s_tlsSnap, newBuf, winOff, &d);
+    if (!d.changed) {
+        return;
+    }
+    slot = InterlockedIncrement(&s_ringWrite);
+    idx = (slot - 1) % RING_CAP;
+    h = &s_ring[idx];
+    h->eip = s_tlsEip;
+    h->drNo = s_tlsDisabledDr;
+    h->off = d.off;
+    h->newVal = d.newVal;
+    h->oldVal = d.oldVal;
+    h->width = d.width;
+    h->tick = GetTickCount();
+    h->seq = ++s_seqCounter;
+}
 
 static LONG WINAPI S200Veh(PEXCEPTION_POINTERS ep)
 {
@@ -110,6 +191,7 @@ static LONG WINAPI S200Veh(PEXCEPTION_POINTERS ep)
     unsigned long dr6;
     unsigned long eip;
     unsigned long drNo;
+    unsigned long winOff;
 
     if (ep == NULL || ep->ExceptionRecord == NULL || ep->ContextRecord == NULL) {
         return EXCEPTION_CONTINUE_SEARCH;
@@ -133,7 +215,20 @@ static LONG WINAPI S200Veh(PEXCEPTION_POINTERS ep)
     // set TF, let the instruction complete exactly once.
     if (dr6 & 0x0F) {
         drNo = (dr6 & 1) ? 0 : (dr6 & 2) ? 1 : (dr6 & 4) ? 2 : 3;
-        RecordHit(eip, drNo);
+        if (drNo >= WATCH_N_WINDOWS) {
+            return EXCEPTION_CONTINUE_SEARCH;
+        }
+        winOff = s_winOff[drNo];
+        // Snapshot BEFORE the store retires - this is the "before" snapshot.
+        __try {
+            SnapWindow(winOff);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            s_tlsDisabledDr = 4;
+            ctx->Dr6 = 0;
+            return EXCEPTION_CONTINUE_SEARCH;
+        }
+        s_tlsEip = eip;
         s_tlsDisabledDr = drNo;
         ctx->Dr7 &= ~DrEnableBit(drNo); // disable Ln so restart won't re-trip
         ctx->Dr6 = 0;                   // clear B bits (sticky)
@@ -142,10 +237,19 @@ static LONG WINAPI S200Veh(PEXCEPTION_POINTERS ep)
     }
 
     // --- Case 2: single-step #DB from our Trap Flag (write has landed). ----
-    // Re-enable the register we disabled in Case 1, then clear TF.
-    if ((ctx->EFlags & EFLAG_TF) && s_tlsDisabledDr < 4) {
+    // The storing instruction has now retired, so memory holds the NEW value.
+    // Diff it against the snapshot, record the change, then re-enable the
+    // register and clear TF.
+    if ((ctx->EFlags & EFLAG_TF) && s_tlsDisabledDr < WATCH_N_WINDOWS) {
+        winOff = s_winOff[s_tlsDisabledDr];
+        __try {
+            RecordHit(winOff);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            // watched memory went away; do not take the process down
+        }
         ctx->Dr7 |= DrEnableBit(s_tlsDisabledDr);
-        s_tlsDisabledDr = 4;
+        s_tlsDisabledDr = WATCH_N_WINDOWS;
         ctx->Dr6 = 0;
         ctx->EFlags &= ~EFLAG_TF;
         return EXCEPTION_CONTINUE_EXECUTION;
@@ -197,10 +301,10 @@ static void ArmThreads(void)
             ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
             if (GetThreadContext(hThread, &ctx)) {
                 unsigned long base = (unsigned long)(ULONG_PTR)s_pedBase;
-                ctx.Dr0 = base + WATCH_0_OFF;
-                ctx.Dr1 = base + WATCH_1_OFF;
-                ctx.Dr2 = base + WATCH_2_OFF;
-                ctx.Dr3 = base + WATCH_3_OFF;
+                ctx.Dr0 = base + s_winOff[0];
+                ctx.Dr1 = base + s_winOff[1];
+                ctx.Dr2 = base + s_winOff[2];
+                ctx.Dr3 = base + s_winOff[3];
                 // L0/L1/L2/L3 local enable + write-watch (R/W=10) + 8-byte len.
                 // Dr7 bits: L0=0, L1=2, L2=4, L3=6; RW0..3 at 16/20/24/28.
                 ctx.Dr7 = (1UL << 0) | ((2UL) << 16) | (3UL << 18) |   // Dr0 write 8
@@ -228,19 +332,41 @@ void S200WatchInit(void)
 
 static volatile LONG s_armCounter = 0;
 
+// Recompute the four window offsets for the current phase. The four 8-byte
+// windows form one 0x20-byte band that slides through WATCH_SPAN in
+// WATCH_STRIDE steps, so the whole span is covered over successive arms.
+static void UpdateWindows(void)
+{
+    long base = (InterlockedIncrement(&s_winPhase) - 1) * WATCH_STRIDE;
+    int i;
+    for (i = 0; i < WATCH_N_WINDOWS; i++) {
+        long off = base + i * WATCH_SIZE;
+        long maxOff = WATCH_SPAN - WATCH_SIZE;
+        if (off > maxOff) {
+            off = maxOff;
+        }
+        if (off < 0) {
+            off = 0;
+        }
+        s_winOff[i] = (unsigned long)off;
+    }
+}
+
 void S200WatchSetTarget(const void* pedBase)
 {
-    // Re-arm when the ped moves to a new heap block, and every 30 refreshes
-    // (cosmetic) to catch threads the game spawns after the first arm, without
-    // suspending every thread each second.
+    // Re-arm when the ped moves to a new heap block, and periodically to catch
+    // threads the game spawns after the first arm and to slide the watch band
+    // forward (ArmThreads suspends every thread, so do it every few refreshes
+    // rather than every one).
     int doArm;
     if (pedBase != s_pedBase) {
         s_pedBase = pedBase;
         doArm = 1;
     } else {
-        doArm = (InterlockedIncrement(&s_armCounter) % 30) == 0;
+        doArm = (InterlockedIncrement(&s_armCounter) % 4) == 0;
     }
     if (pedBase != NULL && doArm) {
+        UpdateWindows();
         ArmThreads();
         InterlockedExchange(&s_armed, 1);
     } else if (pedBase == NULL) {
@@ -256,44 +382,52 @@ void S200WatchClear(void)
 }
 
 #define SHOW_N 40
-static void S200FillHitValue(S200Hit* h)
+
+// Render one hit. Both the on-screen dump and the log file want the same
+// "offset: old -> new, written by <fn>" shape.
+static void FormatHit(char* buf, int cap, S200Hit* h, unsigned long tickBase)
 {
-    // The write has landed by the time we dump/flush; grab the dword at the
-    // watched window so the log carries the actual written value.
-    if (h->value != 0 || s_pedBase == NULL) {
-        return;
+    const char* fname = GetFunctionNameAt(h->eip ? h->eip - 1 : 0);
+    _snprintf(buf, cap,
+              "#%llu t+%lums off=0x%03X w=%lu 0x%08X->0x%08X EIP=0x%08X %s",
+              h->seq, (unsigned long)(h->tick - tickBase), h->off, h->width,
+              h->oldVal, h->newVal, h->eip, fname ? fname : "?");
+}
+
+static unsigned long FirstTick(void)
+{
+    LONG wr = s_ringWrite;
+    if (wr <= 0) {
+        return GetTickCount();
     }
-    __try {
-        const unsigned char* p = (const unsigned char*)s_pedBase + WatchOffForDr(h->drNo);
-        h->value = p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) {
-        h->value = 0;
-    }
+    return s_ring[(wr - 1) % RING_CAP].tick;
 }
 
 static void S200WatchDumpRing(DumpBuf* b)
 {
     LONG wr = s_ringWrite;
     LONG num = (wr > SHOW_N) ? SHOW_N : wr;
+    unsigned long t0 = FirstTick();
+    char line[256];
     LONG i;
     for (i = num - 1; i >= 0; i--) {
         S200Hit* h = &s_ring[(wr - num + i) % RING_CAP];
-        const char* fname = GetFunctionNameAt(h->eip ? h->eip - 1 : 0);
-        const char* fname2 = GetFunctionNameAt(h->eip);
-        S200FillHitValue(h);
-        DumpPrintf(b, "  #%llu  EIP=0x%08X [%s] (next=0x%08X [%s])  dr=%lu dword@off=0x%08X\n",
-                   h->seq, h->pcShown, fname ? fname : "?",
-                   h->pcShown + 1, fname2 ? fname2 : "?", h->drNo, h->value);
+        FormatHit(line, sizeof(line), h, t0);
+        DumpPrintf(b, "  %s\n", line);
     }
 }
 
 void S200WatchDump(DumpBuf* b)
 {
-    DumpPrintf(b, "-- S200 write-watch (Dr0..Dr3, size %d, ped 0x%08X):\n",
-               WATCH_SIZE, (unsigned long)(ULONG_PTR)s_pedBase);
+    DumpPrintf(b, "-- S200 write-watch (Dr0..Dr3, %dB each, band 0x%03X..0x%03X, ped 0x%08X):\n",
+               WATCH_SIZE, s_winOff[0], s_winOff[3] + WATCH_SIZE - 1,
+               (unsigned long)(ULONG_PTR)s_pedBase);
     if (!s_armed) {
         DumpPrintf(b, "   (not armed)\n");
+        return;
+    }
+    if (s_ringWrite == s_ringRead) {
+        DumpPrintf(b, "   (no writes recorded)\n");
         return;
     }
     S200WatchDumpRing(b);
@@ -303,23 +437,38 @@ void S200WatchFlushToFile(void)
 {
     FILE* f;
     LONG wr = s_ringWrite;
+    LONG from = s_ringRead;
     LONG i;
+    unsigned long t0;
+    char line[256];
+    LONG lost = 0;
 
-    if (wr <= 0) {
+    if (wr <= from) {
         return;
+    }
+    // The ring holds RING_CAP entries; if more arrived since the last flush the
+    // oldest ones were overwritten and must be reported as lost rather than
+    // silently written out under wrong sequence numbers.
+    if (wr - from > RING_CAP) {
+        lost = (wr - from) - RING_CAP;
+        from = wr - RING_CAP;
     }
     f = fopen(GetLogPath("S200Write.log"), "a");
     if (f == NULL) {
         return;
     }
-    for (i = 0; i < wr; i++) {
+    t0 = s_ring[from % RING_CAP].tick;
+    if (lost > 0) {
+        fprintf(f, "... %ld hit(s) lost, ring wrapped ...\n", lost);
+    }
+    for (i = from; i < wr; i++) {
         S200Hit* h = &s_ring[i % RING_CAP];
-        const char* fname = GetFunctionNameAt(h->eip ? h->eip - 1 : 0);
-        S200FillHitValue(h);
-        fprintf(f, "%llu EIP=0x%08X %-40s dr=%lu dword00=0x%08X\n",
-                h->seq, h->pcShown, fname ? fname : "?", h->drNo, h->value);
+        FormatHit(line, sizeof(line), h, t0);
+        fprintf(f, "%s\n", line);
     }
     fclose(f);
-    // reset counter only for already-flushed entries (crude: reset all).
-    InterlockedExchange(&s_ringWrite, 0);
+    // Advance the read cursor instead of rewinding the write counter: the VEH
+    // may be appending right now, and zeroing s_ringWrite would collide with
+    // its InterlockedIncrement and renumber every later hit.
+    InterlockedExchange(&s_ringRead, wr);
 }

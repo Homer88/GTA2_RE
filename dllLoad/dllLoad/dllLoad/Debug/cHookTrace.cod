@@ -24675,6 +24675,7 @@ __EF56EB8B_mm3dnow@h DB 01H
 __A377BD8C_intrin@h DB 01H
 __917CD9AF_cHookTrace@h DB 01H
 __467ABFE6_AddrToFunc@h DB 01H
+__32EDB418_DebugLogFile@h DB 01H
 __A5FFBC01_cHookTrace@cpp DB 01H
 msvcjmc	ENDS
 ;	COMDAT ??_C@_0L@HJAIKBAI@sub_56DD80@
@@ -172546,26 +172547,41 @@ CONST	ENDS
 PUBLIC	___local_stdio_printf_options
 PUBLIC	__vfprintf_l
 PUBLIC	_fprintf
+PUBLIC	__vsnprintf_l
+PUBLIC	__vsnprintf
+PUBLIC	__snprintf
 PUBLIC	?TraceInit@@YAXXZ				; TraceInit
 PUBLIC	?TraceEvent@@YAXPBD@Z				; TraceEvent
 PUBLIC	?TraceCall@@YAXPBDK@Z				; TraceCall
 PUBLIC	?TraceClose@@YAXXZ				; TraceClose
 PUBLIC	__JustMyCode_Default
 PUBLIC	?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA ; `__local_stdio_printf_options'::`2'::_OptionsStorage
+PUBLIC	??_C@_02MOLJINC@?3?3@				; `string'
+PUBLIC	??_C@_0M@MBDDHIED@call_?$CFs?4log@		; `string'
+PUBLIC	??_C@_01MCMALHOG@a@				; `string'
 PUBLIC	??_C@_01NOFIACDB@w@				; `string'
-PUBLIC	??_C@_0P@FNDAKOIK@hook_trace?4log@		; `string'
+PUBLIC	??_C@_0M@JFCODGOB@callGen?4log@			; `string'
 PUBLIC	??_C@_0BH@GIPDCEEH@GTA2?5hook?5trace?5start?6@	; `string'
 PUBLIC	??_C@_0M@LJONGIKD@?$CF6I64u?5?5?$CFs?6@		; `string'
 PUBLIC	??_C@_01OGPIMHDM@?$DP@				; `string'
 PUBLIC	??_C@_0CJ@DBKFDHFD@?$CF6I64u?5?5?$CF?948s?5?$DM?9?5called?5from?50x@ ; `string'
+EXTRN	_memcpy:PROC
+EXTRN	_strstr:PROC
+EXTRN	_strcmp:PROC
+EXTRN	__imp__strncpy:PROC
 EXTRN	__imp__fclose:PROC
 EXTRN	__imp__fflush:PROC
 EXTRN	__imp__fopen:PROC
 EXTRN	__imp____stdio_common_vfprintf:PROC
+EXTRN	__imp____stdio_common_vsprintf:PROC
+EXTRN	?GetLogPath@@YAPBDPBD@Z:PROC			; GetLogPath
+EXTRN	@_RTC_CheckStackVars@8:PROC
 EXTRN	@__CheckForDebuggerJustMyCode@4:PROC
+EXTRN	@__security_check_cookie@4:PROC
 EXTRN	__RTC_CheckEsp:PROC
 EXTRN	__RTC_InitBase:PROC
 EXTRN	__RTC_Shutdown:PROC
+EXTRN	___security_cookie:DWORD
 ;	COMDAT ?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA
 _BSS	SEGMENT
 ?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA DQ 01H DUP (?) ; `__local_stdio_printf_options'::`2'::_OptionsStorage
@@ -172575,6 +172591,9 @@ _BSS	SEGMENT
 	ALIGN	8
 
 ?s_seq@@3_KA DQ	01H DUP (?)				; s_seq
+?s_classFiles@@3PAPAU_iobuf@@A DD 020H DUP (?)		; s_classFiles
+?s_classNames@@3PAY0EA@DA DB 0800H DUP (?)		; s_classNames
+?s_classCount@@3HA DD 01H DUP (?)			; s_classCount
 _BSS	ENDS
 ;	COMDAT rtc$TMZ
 rtc$TMZ	SEGMENT
@@ -172602,14 +172621,41 @@ CONST	SEGMENT
 ??_C@_0BH@GIPDCEEH@GTA2?5hook?5trace?5start?6@ DB 'GTA2 hook trace start', 0aH
 	DB	00H						; `string'
 CONST	ENDS
-;	COMDAT ??_C@_0P@FNDAKOIK@hook_trace?4log@
+;	COMDAT ??_C@_0M@JFCODGOB@callGen?4log@
 CONST	SEGMENT
-??_C@_0P@FNDAKOIK@hook_trace?4log@ DB 'hook_trace.log', 00H ; `string'
+??_C@_0M@JFCODGOB@callGen?4log@ DB 'callGen.log', 00H	; `string'
 CONST	ENDS
 ;	COMDAT ??_C@_01NOFIACDB@w@
 CONST	SEGMENT
 ??_C@_01NOFIACDB@w@ DB 'w', 00H				; `string'
 CONST	ENDS
+;	COMDAT ??_C@_01MCMALHOG@a@
+CONST	SEGMENT
+??_C@_01MCMALHOG@a@ DB 'a', 00H				; `string'
+CONST	ENDS
+;	COMDAT ??_C@_0M@MBDDHIED@call_?$CFs?4log@
+CONST	SEGMENT
+??_C@_0M@MBDDHIED@call_?$CFs?4log@ DB 'call_%s.log', 00H ; `string'
+CONST	ENDS
+;	COMDAT ??_C@_02MOLJINC@?3?3@
+CONST	SEGMENT
+??_C@_02MOLJINC@?3?3@ DB '::', 00H			; `string'
+CONST	ENDS
+;	COMDAT voltbl
+voltbl	SEGMENT
+_volmd	DW	025H
+	DW	014aH
+voltbl	ENDS
+;	COMDAT voltbl
+voltbl	SEGMENT
+_volmd	DW	022H
+	DW	0172H
+voltbl	ENDS
+;	COMDAT voltbl
+voltbl	SEGMENT
+_volmd	DW	022H
+	DW	0117H
+voltbl	ENDS
 ; Function compile flags: /Odt
 ;	COMDAT __JustMyCode_Default
 _TEXT	SEGMENT
@@ -172619,6 +172665,342 @@ __JustMyCode_Default PROC				; COMDAT
   00003	5d		 pop	 ebp
   00004	c3		 ret	 0
 __JustMyCode_Default ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
+;	COMDAT ?ClassFile@@YAPAU_iobuf@@PBD@Z
+_TEXT	SEGMENT
+_i$ = -128						; size = 4
+_f$ = -116						; size = 4
+_path$ = -104						; size = 96
+__$ArrayPad$ = -4					; size = 4
+_className$ = 8						; size = 4
+?ClassFile@@YAPAU_iobuf@@PBD@Z PROC			; ClassFile, COMDAT
+
+; 43   : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec 44 01 00
+	00		 sub	 esp, 324		; 00000144H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d bd 7c ff ff
+	ff		 lea	 edi, DWORD PTR [ebp-132]
+  00012	b9 21 00 00 00	 mov	 ecx, 33			; 00000021H
+  00017	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  0001c	f3 ab		 rep stosd
+  0001e	a1 00 00 00 00	 mov	 eax, DWORD PTR ___security_cookie
+  00023	33 c5		 xor	 eax, ebp
+  00025	89 45 fc	 mov	 DWORD PTR __$ArrayPad$[ebp], eax
+  00028	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
+  0002d	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00032	90		 npad	 1
+
+; 44   :     char path[96];
+; 45   :     FILE* f;
+; 46   :     int i;
+; 47   :     for (i = 0; i < s_classCount; i++) {
+
+  00033	c7 45 80 00 00
+	00 00		 mov	 DWORD PTR _i$[ebp], 0
+  0003a	eb 09		 jmp	 SHORT $LN4@ClassFile
+$LN2@ClassFile:
+  0003c	8b 45 80	 mov	 eax, DWORD PTR _i$[ebp]
+  0003f	83 c0 01	 add	 eax, 1
+  00042	89 45 80	 mov	 DWORD PTR _i$[ebp], eax
+$LN4@ClassFile:
+  00045	8b 45 80	 mov	 eax, DWORD PTR _i$[ebp]
+  00048	3b 05 00 00 00
+	00		 cmp	 eax, DWORD PTR ?s_classCount@@3HA
+  0004e	7d 2e		 jge	 SHORT $LN3@ClassFile
+
+; 48   :         if (strcmp(s_classNames[i], className) == 0) {
+
+  00050	8b 45 08	 mov	 eax, DWORD PTR _className$[ebp]
+  00053	50		 push	 eax
+  00054	8b 4d 80	 mov	 ecx, DWORD PTR _i$[ebp]
+  00057	c1 e1 06	 shl	 ecx, 6
+  0005a	81 c1 00 00 00
+	00		 add	 ecx, OFFSET ?s_classNames@@3PAY0EA@DA
+  00060	51		 push	 ecx
+  00061	e8 00 00 00 00	 call	 _strcmp
+  00066	83 c4 08	 add	 esp, 8
+  00069	85 c0		 test	 eax, eax
+  0006b	75 0f		 jne	 SHORT $LN5@ClassFile
+
+; 49   :             return s_classFiles[i];
+
+  0006d	8b 45 80	 mov	 eax, DWORD PTR _i$[ebp]
+  00070	8b 04 85 00 00
+	00 00		 mov	 eax, DWORD PTR ?s_classFiles@@3PAPAU_iobuf@@A[eax*4]
+  00077	e9 ba 00 00 00	 jmp	 $LN1@ClassFile
+$LN5@ClassFile:
+
+; 50   :         }
+; 51   :     }
+
+  0007c	eb be		 jmp	 SHORT $LN2@ClassFile
+$LN3@ClassFile:
+
+; 52   :     if (s_classCount >= CALL_CLASS_CACHE) {
+
+  0007e	83 3d 00 00 00
+	00 20		 cmp	 DWORD PTR ?s_classCount@@3HA, 32 ; 00000020H
+  00085	7c 07		 jl	 SHORT $LN6@ClassFile
+
+; 53   :         return NULL;
+
+  00087	33 c0		 xor	 eax, eax
+  00089	e9 a8 00 00 00	 jmp	 $LN1@ClassFile
+$LN6@ClassFile:
+
+; 54   :     }
+; 55   :     _snprintf(path, sizeof(path), "call_%s.log", className);
+
+  0008e	8b 45 08	 mov	 eax, DWORD PTR _className$[ebp]
+  00091	50		 push	 eax
+  00092	68 00 00 00 00	 push	 OFFSET ??_C@_0M@MBDDHIED@call_?$CFs?4log@
+  00097	6a 60		 push	 96			; 00000060H
+  00099	8d 4d 98	 lea	 ecx, DWORD PTR _path$[ebp]
+  0009c	51		 push	 ecx
+  0009d	e8 00 00 00 00	 call	 __snprintf
+  000a2	83 c4 10	 add	 esp, 16			; 00000010H
+
+; 56   :     f = fopen(GetLogPath(path), "a");
+
+  000a5	8b f4		 mov	 esi, esp
+  000a7	68 00 00 00 00	 push	 OFFSET ??_C@_01MCMALHOG@a@
+  000ac	8d 45 98	 lea	 eax, DWORD PTR _path$[ebp]
+  000af	50		 push	 eax
+  000b0	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  000b5	83 c4 04	 add	 esp, 4
+  000b8	50		 push	 eax
+  000b9	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fopen
+  000bf	83 c4 08	 add	 esp, 8
+  000c2	3b f4		 cmp	 esi, esp
+  000c4	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000c9	89 45 8c	 mov	 DWORD PTR _f$[ebp], eax
+
+; 57   :     if (f == NULL) {
+
+  000cc	83 7d 8c 00	 cmp	 DWORD PTR _f$[ebp], 0
+  000d0	75 04		 jne	 SHORT $LN7@ClassFile
+
+; 58   :         return NULL;
+
+  000d2	33 c0		 xor	 eax, eax
+  000d4	eb 60		 jmp	 SHORT $LN1@ClassFile
+$LN7@ClassFile:
+
+; 59   :     }
+; 60   :     s_classNames[s_classCount][0] = 0;
+
+  000d6	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_classCount@@3HA
+  000db	c1 e0 06	 shl	 eax, 6
+  000de	b9 01 00 00 00	 mov	 ecx, 1
+  000e3	6b d1 00	 imul	 edx, ecx, 0
+  000e6	c6 84 10 00 00
+	00 00 00	 mov	 BYTE PTR ?s_classNames@@3PAY0EA@DA[eax+edx], 0
+
+; 61   :     strncpy(s_classNames[s_classCount], className, sizeof(s_classNames[0]) - 1);
+
+  000ee	8b f4		 mov	 esi, esp
+  000f0	6a 3f		 push	 63			; 0000003fH
+  000f2	8b 45 08	 mov	 eax, DWORD PTR _className$[ebp]
+  000f5	50		 push	 eax
+  000f6	8b 0d 00 00 00
+	00		 mov	 ecx, DWORD PTR ?s_classCount@@3HA
+  000fc	c1 e1 06	 shl	 ecx, 6
+  000ff	81 c1 00 00 00
+	00		 add	 ecx, OFFSET ?s_classNames@@3PAY0EA@DA
+  00105	51		 push	 ecx
+  00106	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__strncpy
+  0010c	83 c4 0c	 add	 esp, 12			; 0000000cH
+  0010f	3b f4		 cmp	 esi, esp
+  00111	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00116	90		 npad	 1
+
+; 62   :     s_classFiles[s_classCount] = f;
+
+  00117	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_classCount@@3HA
+  0011c	8b 4d 8c	 mov	 ecx, DWORD PTR _f$[ebp]
+  0011f	89 0c 85 00 00
+	00 00		 mov	 DWORD PTR ?s_classFiles@@3PAPAU_iobuf@@A[eax*4], ecx
+
+; 63   :     s_classCount++;
+
+  00126	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_classCount@@3HA
+  0012b	83 c0 01	 add	 eax, 1
+  0012e	a3 00 00 00 00	 mov	 DWORD PTR ?s_classCount@@3HA, eax
+
+; 64   :     return f;
+
+  00133	8b 45 8c	 mov	 eax, DWORD PTR _f$[ebp]
+$LN1@ClassFile:
+
+; 65   : }
+
+  00136	52		 push	 edx
+  00137	8b cd		 mov	 ecx, ebp
+  00139	50		 push	 eax
+  0013a	8d 15 00 00 00
+	00		 lea	 edx, DWORD PTR $LN11@ClassFile
+  00140	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
+  00145	58		 pop	 eax
+  00146	5a		 pop	 edx
+  00147	5f		 pop	 edi
+  00148	5e		 pop	 esi
+  00149	5b		 pop	 ebx
+  0014a	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
+  0014d	33 cd		 xor	 ecx, ebp
+  0014f	e8 00 00 00 00	 call	 @__security_check_cookie@4
+  00154	81 c4 44 01 00
+	00		 add	 esp, 324		; 00000144H
+  0015a	3b ec		 cmp	 ebp, esp
+  0015c	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00161	8b e5		 mov	 esp, ebp
+  00163	5d		 pop	 ebp
+  00164	c3		 ret	 0
+  00165	0f 1f 00	 npad	 3
+$LN11@ClassFile:
+  00168	01 00 00 00	 DD	 1
+  0016c	00 00 00 00	 DD	 $LN10@ClassFile
+$LN10@ClassFile:
+  00170	98 ff ff ff	 DD	 -104			; ffffff98H
+  00174	60 00 00 00	 DD	 96			; 00000060H
+  00178	00 00 00 00	 DD	 $LN9@ClassFile
+$LN9@ClassFile:
+  0017c	70		 DB	 112			; 00000070H
+  0017d	61		 DB	 97			; 00000061H
+  0017e	74		 DB	 116			; 00000074H
+  0017f	68		 DB	 104			; 00000068H
+  00180	00		 DB	 0
+?ClassFile@@YAPAU_iobuf@@PBD@Z ENDP			; ClassFile
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
+;	COMDAT ?ExtractClassName@@YAHPBDPADH@Z
+_TEXT	SEGMENT
+_n$ = -20						; size = 4
+_sep$ = -8						; size = 4
+_funcName$ = 8						; size = 4
+_out$ = 12						; size = 4
+_outSize$ = 16						; size = 4
+?ExtractClassName@@YAHPBDPADH@Z PROC			; ExtractClassName, COMDAT
+
+; 23   : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec d8 00 00
+	00		 sub	 esp, 216		; 000000d8H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d e8	 lea	 edi, DWORD PTR [ebp-24]
+  0000f	b9 06 00 00 00	 mov	 ecx, 6
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
+  00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00025	90		 npad	 1
+
+; 24   :     const char* sep;
+; 25   :     int n;
+; 26   :     if (funcName == NULL) {
+
+  00026	83 7d 08 00	 cmp	 DWORD PTR _funcName$[ebp], 0
+  0002a	75 04		 jne	 SHORT $LN2@ExtractCla
+
+; 27   :         return FALSE;
+
+  0002c	33 c0		 xor	 eax, eax
+  0002e	eb 5b		 jmp	 SHORT $LN1@ExtractCla
+$LN2@ExtractCla:
+
+; 28   :     }
+; 29   :     sep = strstr(funcName, "::");
+
+  00030	68 00 00 00 00	 push	 OFFSET ??_C@_02MOLJINC@?3?3@
+  00035	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
+  00038	50		 push	 eax
+  00039	e8 00 00 00 00	 call	 _strstr
+  0003e	83 c4 08	 add	 esp, 8
+  00041	89 45 f8	 mov	 DWORD PTR _sep$[ebp], eax
+
+; 30   :     if (sep == NULL) {
+
+  00044	83 7d f8 00	 cmp	 DWORD PTR _sep$[ebp], 0
+  00048	75 04		 jne	 SHORT $LN3@ExtractCla
+
+; 31   :         return FALSE;
+
+  0004a	33 c0		 xor	 eax, eax
+  0004c	eb 3d		 jmp	 SHORT $LN1@ExtractCla
+$LN3@ExtractCla:
+
+; 32   :     }
+; 33   :     n = (int)(sep - funcName);
+
+  0004e	8b 45 f8	 mov	 eax, DWORD PTR _sep$[ebp]
+  00051	2b 45 08	 sub	 eax, DWORD PTR _funcName$[ebp]
+  00054	89 45 ec	 mov	 DWORD PTR _n$[ebp], eax
+
+; 34   :     if (n <= 0 || n >= outSize) {
+
+  00057	83 7d ec 00	 cmp	 DWORD PTR _n$[ebp], 0
+  0005b	7e 08		 jle	 SHORT $LN5@ExtractCla
+  0005d	8b 45 ec	 mov	 eax, DWORD PTR _n$[ebp]
+  00060	3b 45 10	 cmp	 eax, DWORD PTR _outSize$[ebp]
+  00063	7c 04		 jl	 SHORT $LN4@ExtractCla
+$LN5@ExtractCla:
+
+; 35   :         return FALSE;
+
+  00065	33 c0		 xor	 eax, eax
+  00067	eb 22		 jmp	 SHORT $LN1@ExtractCla
+$LN4@ExtractCla:
+
+; 36   :     }
+; 37   :     memcpy(out, funcName, n);
+
+  00069	8b 45 ec	 mov	 eax, DWORD PTR _n$[ebp]
+  0006c	50		 push	 eax
+  0006d	8b 4d 08	 mov	 ecx, DWORD PTR _funcName$[ebp]
+  00070	51		 push	 ecx
+  00071	8b 55 0c	 mov	 edx, DWORD PTR _out$[ebp]
+  00074	52		 push	 edx
+  00075	e8 00 00 00 00	 call	 _memcpy
+  0007a	83 c4 0c	 add	 esp, 12			; 0000000cH
+
+; 38   :     out[n] = 0;
+
+  0007d	8b 45 0c	 mov	 eax, DWORD PTR _out$[ebp]
+  00080	03 45 ec	 add	 eax, DWORD PTR _n$[ebp]
+  00083	c6 00 00	 mov	 BYTE PTR [eax], 0
+
+; 39   :     return TRUE;
+
+  00086	b8 01 00 00 00	 mov	 eax, 1
+$LN1@ExtractCla:
+
+; 40   : }
+
+  0008b	5f		 pop	 edi
+  0008c	5e		 pop	 esi
+  0008d	5b		 pop	 ebx
+  0008e	81 c4 d8 00 00
+	00		 add	 esp, 216		; 000000d8H
+  00094	3b ec		 cmp	 ebp, esp
+  00096	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0009b	8b e5		 mov	 esp, ebp
+  0009d	5d		 pop	 ebp
+  0009e	c3		 ret	 0
+?ExtractClassName@@YAHPBDPADH@Z ENDP			; ExtractClassName
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\work\GTA2_RE\dllLoad\dllLoad\AddrToFunc.h
@@ -172736,9 +173118,546 @@ _TEXT	ENDS
 ; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
 ;	COMDAT ?TraceClose@@YAXXZ
 _TEXT	SEGMENT
+_i$ = -8						; size = 4
 ?TraceClose@@YAXXZ PROC					; TraceClose, COMDAT
 
-; 46   : {
+; 122  : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec cc 00 00
+	00		 sub	 esp, 204		; 000000ccH
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d f4	 lea	 edi, DWORD PTR [ebp-12]
+  0000f	b9 03 00 00 00	 mov	 ecx, 3
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
+  00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00025	90		 npad	 1
+
+; 123  :     int i;
+; 124  :     if (s_trace) {
+
+  00026	83 3d 00 00 00
+	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
+  0002d	74 23		 je	 SHORT $LN5@TraceClose
+
+; 125  :         fclose(s_trace);
+
+  0002f	8b f4		 mov	 esi, esp
+  00031	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  00036	50		 push	 eax
+  00037	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fclose
+  0003d	83 c4 04	 add	 esp, 4
+  00040	3b f4		 cmp	 esi, esp
+  00042	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00047	90		 npad	 1
+
+; 126  :         s_trace = NULL;
+
+  00048	c7 05 00 00 00
+	00 00 00 00 00	 mov	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
+$LN5@TraceClose:
+
+; 127  :     }
+; 128  :     for (i = 0; i < s_classCount; i++) {
+
+  00052	c7 45 f8 00 00
+	00 00		 mov	 DWORD PTR _i$[ebp], 0
+  00059	eb 09		 jmp	 SHORT $LN4@TraceClose
+$LN2@TraceClose:
+  0005b	8b 45 f8	 mov	 eax, DWORD PTR _i$[ebp]
+  0005e	83 c0 01	 add	 eax, 1
+  00061	89 45 f8	 mov	 DWORD PTR _i$[ebp], eax
+$LN4@TraceClose:
+  00064	8b 45 f8	 mov	 eax, DWORD PTR _i$[ebp]
+  00067	3b 05 00 00 00
+	00		 cmp	 eax, DWORD PTR ?s_classCount@@3HA
+  0006d	7d 3b		 jge	 SHORT $LN3@TraceClose
+
+; 129  :         if (s_classFiles[i]) {
+
+  0006f	8b 45 f8	 mov	 eax, DWORD PTR _i$[ebp]
+  00072	83 3c 85 00 00
+	00 00 00	 cmp	 DWORD PTR ?s_classFiles@@3PAPAU_iobuf@@A[eax*4], 0
+  0007a	74 2c		 je	 SHORT $LN6@TraceClose
+
+; 130  :             fclose(s_classFiles[i]);
+
+  0007c	8b f4		 mov	 esi, esp
+  0007e	8b 45 f8	 mov	 eax, DWORD PTR _i$[ebp]
+  00081	8b 0c 85 00 00
+	00 00		 mov	 ecx, DWORD PTR ?s_classFiles@@3PAPAU_iobuf@@A[eax*4]
+  00088	51		 push	 ecx
+  00089	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fclose
+  0008f	83 c4 04	 add	 esp, 4
+  00092	3b f4		 cmp	 esi, esp
+  00094	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00099	90		 npad	 1
+
+; 131  :             s_classFiles[i] = NULL;
+
+  0009a	8b 45 f8	 mov	 eax, DWORD PTR _i$[ebp]
+  0009d	c7 04 85 00 00
+	00 00 00 00 00
+	00		 mov	 DWORD PTR ?s_classFiles@@3PAPAU_iobuf@@A[eax*4], 0
+$LN6@TraceClose:
+
+; 132  :         }
+; 133  :     }
+
+  000a8	eb b1		 jmp	 SHORT $LN2@TraceClose
+$LN3@TraceClose:
+
+; 134  :     s_classCount = 0;
+
+  000aa	c7 05 00 00 00
+	00 00 00 00 00	 mov	 DWORD PTR ?s_classCount@@3HA, 0
+
+; 135  : }
+
+  000b4	5f		 pop	 edi
+  000b5	5e		 pop	 esi
+  000b6	5b		 pop	 ebx
+  000b7	81 c4 cc 00 00
+	00		 add	 esp, 204		; 000000ccH
+  000bd	3b ec		 cmp	 ebp, esp
+  000bf	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000c4	8b e5		 mov	 esp, ebp
+  000c6	5d		 pop	 ebp
+  000c7	c3		 ret	 0
+?TraceClose@@YAXXZ ENDP					; TraceClose
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
+;	COMDAT ?TraceCall@@YAXPBDK@Z
+_TEXT	SEGMENT
+tv71 = -296						; size = 4
+tv87 = -296						; size = 4
+_fromName$ = -96					; size = 4
+_cf$ = -84						; size = 4
+_className$ = -72					; size = 64
+__$ArrayPad$ = -4					; size = 4
+_funcName$ = 8						; size = 4
+_fromAddr$ = 12						; size = 4
+?TraceCall@@YAXPBDK@Z PROC				; TraceCall, COMDAT
+
+; 100  : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec 28 01 00
+	00		 sub	 esp, 296		; 00000128H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d 98	 lea	 edi, DWORD PTR [ebp-104]
+  0000f	b9 1a 00 00 00	 mov	 ecx, 26			; 0000001aH
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	a1 00 00 00 00	 mov	 eax, DWORD PTR ___security_cookie
+  00020	33 c5		 xor	 eax, ebp
+  00022	89 45 fc	 mov	 DWORD PTR __$ArrayPad$[ebp], eax
+  00025	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
+  0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  0002f	90		 npad	 1
+
+; 101  :     char className[64];
+; 102  :     FILE* cf;
+; 103  :     if (s_trace == NULL || funcName == NULL) {
+
+  00030	83 3d 00 00 00
+	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
+  00037	74 06		 je	 SHORT $LN3@TraceCall
+  00039	83 7d 08 00	 cmp	 DWORD PTR _funcName$[ebp], 0
+  0003d	75 05		 jne	 SHORT $LN2@TraceCall
+$LN3@TraceCall:
+
+; 104  :         return;
+
+  0003f	e9 1a 01 00 00	 jmp	 $LN1@TraceCall
+$LN2@TraceCall:
+
+; 105  :     }
+; 106  :     s_seq++;
+
+  00044	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_seq@@3_KA
+  00049	83 c0 01	 add	 eax, 1
+  0004c	8b 0d 04 00 00
+	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
+  00052	83 d1 00	 adc	 ecx, 0
+  00055	a3 00 00 00 00	 mov	 DWORD PTR ?s_seq@@3_KA, eax
+  0005a	89 0d 04 00 00
+	00		 mov	 DWORD PTR ?s_seq@@3_KA+4, ecx
+
+; 107  :     const char* fromName = GetFunctionNameAt(fromAddr);
+
+  00060	8b 45 0c	 mov	 eax, DWORD PTR _fromAddr$[ebp]
+  00063	50		 push	 eax
+  00064	e8 00 00 00 00	 call	 ?GetFunctionNameAt@@YAPBDK@Z ; GetFunctionNameAt
+  00069	83 c4 04	 add	 esp, 4
+  0006c	89 45 a0	 mov	 DWORD PTR _fromName$[ebp], eax
+
+; 108  :     fprintf(s_trace, "%6I64u  %-48s <- called from 0x%08lX %s\n",
+
+  0006f	83 7d a0 00	 cmp	 DWORD PTR _fromName$[ebp], 0
+  00073	74 0b		 je	 SHORT $LN7@TraceCall
+  00075	8b 45 a0	 mov	 eax, DWORD PTR _fromName$[ebp]
+  00078	89 85 d8 fe ff
+	ff		 mov	 DWORD PTR tv71[ebp], eax
+  0007e	eb 0a		 jmp	 SHORT $LN8@TraceCall
+$LN7@TraceCall:
+  00080	c7 85 d8 fe ff
+	ff 00 00 00 00	 mov	 DWORD PTR tv71[ebp], OFFSET ??_C@_01OGPIMHDM@?$DP@
+$LN8@TraceCall:
+  0008a	8b 8d d8 fe ff
+	ff		 mov	 ecx, DWORD PTR tv71[ebp]
+  00090	51		 push	 ecx
+  00091	8b 55 0c	 mov	 edx, DWORD PTR _fromAddr$[ebp]
+  00094	52		 push	 edx
+  00095	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
+  00098	50		 push	 eax
+  00099	8b 0d 04 00 00
+	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
+  0009f	51		 push	 ecx
+  000a0	8b 15 00 00 00
+	00		 mov	 edx, DWORD PTR ?s_seq@@3_KA
+  000a6	52		 push	 edx
+  000a7	68 00 00 00 00	 push	 OFFSET ??_C@_0CJ@DBKFDHFD@?$CF6I64u?5?5?$CF?948s?5?$DM?9?5called?5from?50x@
+  000ac	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  000b1	50		 push	 eax
+  000b2	e8 00 00 00 00	 call	 _fprintf
+  000b7	83 c4 1c	 add	 esp, 28			; 0000001cH
+
+; 109  :             s_seq, funcName, fromAddr, fromName ? fromName : "?");
+; 110  :     if (ExtractClassName(funcName, className, sizeof(className))) {
+
+  000ba	6a 40		 push	 64			; 00000040H
+  000bc	8d 45 b8	 lea	 eax, DWORD PTR _className$[ebp]
+  000bf	50		 push	 eax
+  000c0	8b 4d 08	 mov	 ecx, DWORD PTR _funcName$[ebp]
+  000c3	51		 push	 ecx
+  000c4	e8 00 00 00 00	 call	 ?ExtractClassName@@YAHPBDPADH@Z ; ExtractClassName
+  000c9	83 c4 0c	 add	 esp, 12			; 0000000cH
+  000cc	85 c0		 test	 eax, eax
+  000ce	74 75		 je	 SHORT $LN5@TraceCall
+
+; 111  :         cf = ClassFile(className);
+
+  000d0	8d 45 b8	 lea	 eax, DWORD PTR _className$[ebp]
+  000d3	50		 push	 eax
+  000d4	e8 00 00 00 00	 call	 ?ClassFile@@YAPAU_iobuf@@PBD@Z ; ClassFile
+  000d9	83 c4 04	 add	 esp, 4
+  000dc	89 45 ac	 mov	 DWORD PTR _cf$[ebp], eax
+
+; 112  :         if (cf != NULL) {
+
+  000df	83 7d ac 00	 cmp	 DWORD PTR _cf$[ebp], 0
+  000e3	74 60		 je	 SHORT $LN5@TraceCall
+
+; 113  :             fprintf(cf, "%6I64u  %-48s <- called from 0x%08lX %s\n",
+
+  000e5	83 7d a0 00	 cmp	 DWORD PTR _fromName$[ebp], 0
+  000e9	74 0b		 je	 SHORT $LN9@TraceCall
+  000eb	8b 45 a0	 mov	 eax, DWORD PTR _fromName$[ebp]
+  000ee	89 85 d8 fe ff
+	ff		 mov	 DWORD PTR tv87[ebp], eax
+  000f4	eb 0a		 jmp	 SHORT $LN10@TraceCall
+$LN9@TraceCall:
+  000f6	c7 85 d8 fe ff
+	ff 00 00 00 00	 mov	 DWORD PTR tv87[ebp], OFFSET ??_C@_01OGPIMHDM@?$DP@
+$LN10@TraceCall:
+  00100	8b 8d d8 fe ff
+	ff		 mov	 ecx, DWORD PTR tv87[ebp]
+  00106	51		 push	 ecx
+  00107	8b 55 0c	 mov	 edx, DWORD PTR _fromAddr$[ebp]
+  0010a	52		 push	 edx
+  0010b	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
+  0010e	50		 push	 eax
+  0010f	8b 0d 04 00 00
+	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
+  00115	51		 push	 ecx
+  00116	8b 15 00 00 00
+	00		 mov	 edx, DWORD PTR ?s_seq@@3_KA
+  0011c	52		 push	 edx
+  0011d	68 00 00 00 00	 push	 OFFSET ??_C@_0CJ@DBKFDHFD@?$CF6I64u?5?5?$CF?948s?5?$DM?9?5called?5from?50x@
+  00122	8b 45 ac	 mov	 eax, DWORD PTR _cf$[ebp]
+  00125	50		 push	 eax
+  00126	e8 00 00 00 00	 call	 _fprintf
+  0012b	83 c4 1c	 add	 esp, 28			; 0000001cH
+
+; 114  :                     s_seq, funcName, fromAddr, fromName ? fromName : "?");
+; 115  :             fflush(cf);
+
+  0012e	8b f4		 mov	 esi, esp
+  00130	8b 45 ac	 mov	 eax, DWORD PTR _cf$[ebp]
+  00133	50		 push	 eax
+  00134	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fflush
+  0013a	83 c4 04	 add	 esp, 4
+  0013d	3b f4		 cmp	 esi, esp
+  0013f	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00144	90		 npad	 1
+$LN5@TraceCall:
+
+; 116  :         }
+; 117  :     }
+; 118  :     fflush(s_trace);
+
+  00145	8b f4		 mov	 esi, esp
+  00147	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  0014c	50		 push	 eax
+  0014d	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fflush
+  00153	83 c4 04	 add	 esp, 4
+  00156	3b f4		 cmp	 esi, esp
+  00158	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0015d	90		 npad	 1
+$LN1@TraceCall:
+
+; 119  : }
+
+  0015e	52		 push	 edx
+  0015f	8b cd		 mov	 ecx, ebp
+  00161	50		 push	 eax
+  00162	8d 15 00 00 00
+	00		 lea	 edx, DWORD PTR $LN13@TraceCall
+  00168	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
+  0016d	58		 pop	 eax
+  0016e	5a		 pop	 edx
+  0016f	5f		 pop	 edi
+  00170	5e		 pop	 esi
+  00171	5b		 pop	 ebx
+  00172	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
+  00175	33 cd		 xor	 ecx, ebp
+  00177	e8 00 00 00 00	 call	 @__security_check_cookie@4
+  0017c	81 c4 28 01 00
+	00		 add	 esp, 296		; 00000128H
+  00182	3b ec		 cmp	 ebp, esp
+  00184	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00189	8b e5		 mov	 esp, ebp
+  0018b	5d		 pop	 ebp
+  0018c	c3		 ret	 0
+  0018d	0f 1f 00	 npad	 3
+$LN13@TraceCall:
+  00190	01 00 00 00	 DD	 1
+  00194	00 00 00 00	 DD	 $LN12@TraceCall
+$LN12@TraceCall:
+  00198	b8 ff ff ff	 DD	 -72			; ffffffb8H
+  0019c	40 00 00 00	 DD	 64			; 00000040H
+  001a0	00 00 00 00	 DD	 $LN11@TraceCall
+$LN11@TraceCall:
+  001a4	63		 DB	 99			; 00000063H
+  001a5	6c		 DB	 108			; 0000006cH
+  001a6	61		 DB	 97			; 00000061H
+  001a7	73		 DB	 115			; 00000073H
+  001a8	73		 DB	 115			; 00000073H
+  001a9	4e		 DB	 78			; 0000004eH
+  001aa	61		 DB	 97			; 00000061H
+  001ab	6d		 DB	 109			; 0000006dH
+  001ac	65		 DB	 101			; 00000065H
+  001ad	00		 DB	 0
+?TraceCall@@YAXPBDK@Z ENDP				; TraceCall
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
+;	COMDAT ?TraceEvent@@YAXPBD@Z
+_TEXT	SEGMENT
+_cf$ = -84						; size = 4
+_className$ = -72					; size = 64
+__$ArrayPad$ = -4					; size = 4
+_funcName$ = 8						; size = 4
+?TraceEvent@@YAXPBD@Z PROC				; TraceEvent, COMDAT
+
+; 81   : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec 18 01 00
+	00		 sub	 esp, 280		; 00000118H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d a8	 lea	 edi, DWORD PTR [ebp-88]
+  0000f	b9 16 00 00 00	 mov	 ecx, 22			; 00000016H
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	a1 00 00 00 00	 mov	 eax, DWORD PTR ___security_cookie
+  00020	33 c5		 xor	 eax, ebp
+  00022	89 45 fc	 mov	 DWORD PTR __$ArrayPad$[ebp], eax
+  00025	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
+  0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  0002f	90		 npad	 1
+
+; 82   :     char className[64];
+; 83   :     FILE* cf;
+; 84   :     if (s_trace == NULL || funcName == NULL) {
+
+  00030	83 3d 00 00 00
+	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
+  00037	74 06		 je	 SHORT $LN3@TraceEvent
+  00039	83 7d 08 00	 cmp	 DWORD PTR _funcName$[ebp], 0
+  0003d	75 05		 jne	 SHORT $LN2@TraceEvent
+$LN3@TraceEvent:
+
+; 85   :         return;
+
+  0003f	e9 bf 00 00 00	 jmp	 $LN1@TraceEvent
+$LN2@TraceEvent:
+
+; 86   :     }
+; 87   :     s_seq++;
+
+  00044	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_seq@@3_KA
+  00049	83 c0 01	 add	 eax, 1
+  0004c	8b 0d 04 00 00
+	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
+  00052	83 d1 00	 adc	 ecx, 0
+  00055	a3 00 00 00 00	 mov	 DWORD PTR ?s_seq@@3_KA, eax
+  0005a	89 0d 04 00 00
+	00		 mov	 DWORD PTR ?s_seq@@3_KA+4, ecx
+
+; 88   :     fprintf(s_trace, "%6I64u  %s\n", s_seq, funcName);
+
+  00060	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
+  00063	50		 push	 eax
+  00064	8b 0d 04 00 00
+	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
+  0006a	51		 push	 ecx
+  0006b	8b 15 00 00 00
+	00		 mov	 edx, DWORD PTR ?s_seq@@3_KA
+  00071	52		 push	 edx
+  00072	68 00 00 00 00	 push	 OFFSET ??_C@_0M@LJONGIKD@?$CF6I64u?5?5?$CFs?6@
+  00077	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  0007c	50		 push	 eax
+  0007d	e8 00 00 00 00	 call	 _fprintf
+  00082	83 c4 14	 add	 esp, 20			; 00000014H
+
+; 89   :     if (ExtractClassName(funcName, className, sizeof(className))) {
+
+  00085	6a 40		 push	 64			; 00000040H
+  00087	8d 45 b8	 lea	 eax, DWORD PTR _className$[ebp]
+  0008a	50		 push	 eax
+  0008b	8b 4d 08	 mov	 ecx, DWORD PTR _funcName$[ebp]
+  0008e	51		 push	 ecx
+  0008f	e8 00 00 00 00	 call	 ?ExtractClassName@@YAHPBDPADH@Z ; ExtractClassName
+  00094	83 c4 0c	 add	 esp, 12			; 0000000cH
+  00097	85 c0		 test	 eax, eax
+  00099	74 4f		 je	 SHORT $LN5@TraceEvent
+
+; 90   :         cf = ClassFile(className);
+
+  0009b	8d 45 b8	 lea	 eax, DWORD PTR _className$[ebp]
+  0009e	50		 push	 eax
+  0009f	e8 00 00 00 00	 call	 ?ClassFile@@YAPAU_iobuf@@PBD@Z ; ClassFile
+  000a4	83 c4 04	 add	 esp, 4
+  000a7	89 45 ac	 mov	 DWORD PTR _cf$[ebp], eax
+
+; 91   :         if (cf != NULL) {
+
+  000aa	83 7d ac 00	 cmp	 DWORD PTR _cf$[ebp], 0
+  000ae	74 3a		 je	 SHORT $LN5@TraceEvent
+
+; 92   :             fprintf(cf, "%6I64u  %s\n", s_seq, funcName);
+
+  000b0	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
+  000b3	50		 push	 eax
+  000b4	8b 0d 04 00 00
+	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
+  000ba	51		 push	 ecx
+  000bb	8b 15 00 00 00
+	00		 mov	 edx, DWORD PTR ?s_seq@@3_KA
+  000c1	52		 push	 edx
+  000c2	68 00 00 00 00	 push	 OFFSET ??_C@_0M@LJONGIKD@?$CF6I64u?5?5?$CFs?6@
+  000c7	8b 45 ac	 mov	 eax, DWORD PTR _cf$[ebp]
+  000ca	50		 push	 eax
+  000cb	e8 00 00 00 00	 call	 _fprintf
+  000d0	83 c4 14	 add	 esp, 20			; 00000014H
+
+; 93   :             fflush(cf);
+
+  000d3	8b f4		 mov	 esi, esp
+  000d5	8b 45 ac	 mov	 eax, DWORD PTR _cf$[ebp]
+  000d8	50		 push	 eax
+  000d9	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fflush
+  000df	83 c4 04	 add	 esp, 4
+  000e2	3b f4		 cmp	 esi, esp
+  000e4	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000e9	90		 npad	 1
+$LN5@TraceEvent:
+
+; 94   :         }
+; 95   :     }
+; 96   :     fflush(s_trace);
+
+  000ea	8b f4		 mov	 esi, esp
+  000ec	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  000f1	50		 push	 eax
+  000f2	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fflush
+  000f8	83 c4 04	 add	 esp, 4
+  000fb	3b f4		 cmp	 esi, esp
+  000fd	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00102	90		 npad	 1
+$LN1@TraceEvent:
+
+; 97   : }
+
+  00103	52		 push	 edx
+  00104	8b cd		 mov	 ecx, ebp
+  00106	50		 push	 eax
+  00107	8d 15 00 00 00
+	00		 lea	 edx, DWORD PTR $LN9@TraceEvent
+  0010d	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
+  00112	58		 pop	 eax
+  00113	5a		 pop	 edx
+  00114	5f		 pop	 edi
+  00115	5e		 pop	 esi
+  00116	5b		 pop	 ebx
+  00117	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
+  0011a	33 cd		 xor	 ecx, ebp
+  0011c	e8 00 00 00 00	 call	 @__security_check_cookie@4
+  00121	81 c4 18 01 00
+	00		 add	 esp, 280		; 00000118H
+  00127	3b ec		 cmp	 ebp, esp
+  00129	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0012e	8b e5		 mov	 esp, ebp
+  00130	5d		 pop	 ebp
+  00131	c3		 ret	 0
+  00132	66 90		 npad	 2
+$LN9@TraceEvent:
+  00134	01 00 00 00	 DD	 1
+  00138	00 00 00 00	 DD	 $LN8@TraceEvent
+$LN8@TraceEvent:
+  0013c	b8 ff ff ff	 DD	 -72			; ffffffb8H
+  00140	40 00 00 00	 DD	 64			; 00000040H
+  00144	00 00 00 00	 DD	 $LN7@TraceEvent
+$LN7@TraceEvent:
+  00148	63		 DB	 99			; 00000063H
+  00149	6c		 DB	 108			; 0000006cH
+  0014a	61		 DB	 97			; 00000061H
+  0014b	73		 DB	 115			; 00000073H
+  0014c	73		 DB	 115			; 00000073H
+  0014d	4e		 DB	 78			; 0000004eH
+  0014e	61		 DB	 97			; 00000061H
+  0014f	6d		 DB	 109			; 0000006dH
+  00150	65		 DB	 101			; 00000065H
+  00151	00		 DB	 0
+?TraceEvent@@YAXPBD@Z ENDP				; TraceEvent
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
+;	COMDAT ?TraceInit@@YAXXZ
+_TEXT	SEGMENT
+?TraceInit@@YAXXZ PROC					; TraceInit, COMDAT
+
+; 68   : {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -172755,56 +173674,223 @@ _TEXT	SEGMENT
   0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00021	90		 npad	 1
 
-; 47   :     if (s_trace) {
+; 69   :     s_seq = 0;
 
-  00022	83 3d 00 00 00
+  00022	0f 57 c0	 xorps	 xmm0, xmm0
+  00025	66 0f 13 05 00
+	00 00 00	 movlpd	 QWORD PTR ?s_seq@@3_KA, xmm0
+
+; 70   :     if (s_trace != NULL) {
+
+  0002d	83 3d 00 00 00
 	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
-  00029	74 23		 je	 SHORT $LN2@TraceClose
+  00034	74 02		 je	 SHORT $LN2@TraceInit
 
-; 48   :         fclose(s_trace);
+; 71   :         return;
 
-  0002b	8b f4		 mov	 esi, esp
-  0002d	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  00032	50		 push	 eax
-  00033	ff 15 00 00 00
-	00		 call	 DWORD PTR __imp__fclose
-  00039	83 c4 04	 add	 esp, 4
-  0003c	3b f4		 cmp	 esi, esp
-  0003e	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00043	90		 npad	 1
+  00036	eb 5f		 jmp	 SHORT $LN1@TraceInit
+$LN2@TraceInit:
 
-; 49   :         s_trace = NULL;
+; 72   :     }
+; 73   :     s_trace = fopen(GetLogPath("callGen.log"), "w");
 
-  00044	c7 05 00 00 00
-	00 00 00 00 00	 mov	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
-$LN2@TraceClose:
+  00038	8b f4		 mov	 esi, esp
+  0003a	68 00 00 00 00	 push	 OFFSET ??_C@_01NOFIACDB@w@
+  0003f	68 00 00 00 00	 push	 OFFSET ??_C@_0M@JFCODGOB@callGen?4log@
+  00044	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  00049	83 c4 04	 add	 esp, 4
+  0004c	50		 push	 eax
+  0004d	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fopen
+  00053	83 c4 08	 add	 esp, 8
+  00056	3b f4		 cmp	 esi, esp
+  00058	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0005d	a3 00 00 00 00	 mov	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, eax
 
-; 50   :     }
-; 51   : }
+; 74   :     if (s_trace) {
 
-  0004e	5f		 pop	 edi
-  0004f	5e		 pop	 esi
-  00050	5b		 pop	 ebx
-  00051	81 c4 c0 00 00
+  00062	83 3d 00 00 00
+	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
+  00069	74 2c		 je	 SHORT $LN3@TraceInit
+
+; 75   :         fprintf(s_trace, "GTA2 hook trace start\n");
+
+  0006b	68 00 00 00 00	 push	 OFFSET ??_C@_0BH@GIPDCEEH@GTA2?5hook?5trace?5start?6@
+  00070	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  00075	50		 push	 eax
+  00076	e8 00 00 00 00	 call	 _fprintf
+  0007b	83 c4 08	 add	 esp, 8
+
+; 76   :         fflush(s_trace);
+
+  0007e	8b f4		 mov	 esi, esp
+  00080	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
+  00085	50		 push	 eax
+  00086	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__fflush
+  0008c	83 c4 04	 add	 esp, 4
+  0008f	3b f4		 cmp	 esi, esp
+  00091	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00096	90		 npad	 1
+$LN3@TraceInit:
+$LN1@TraceInit:
+
+; 77   :     }
+; 78   : }
+
+  00097	5f		 pop	 edi
+  00098	5e		 pop	 esi
+  00099	5b		 pop	 ebx
+  0009a	81 c4 c0 00 00
 	00		 add	 esp, 192		; 000000c0H
-  00057	3b ec		 cmp	 ebp, esp
-  00059	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  0005e	8b e5		 mov	 esp, ebp
-  00060	5d		 pop	 ebp
-  00061	c3		 ret	 0
-?TraceClose@@YAXXZ ENDP					; TraceClose
+  000a0	3b ec		 cmp	 ebp, esp
+  000a2	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000a7	8b e5		 mov	 esp, ebp
+  000a9	5d		 pop	 ebp
+  000aa	c3		 ret	 0
+?TraceInit@@YAXXZ ENDP					; TraceInit
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
-; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
-;	COMDAT ?TraceCall@@YAXPBDK@Z
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __snprintf
 _TEXT	SEGMENT
-tv71 = -208						; size = 4
-_fromName$ = -8						; size = 4
-_funcName$ = 8						; size = 4
-_fromAddr$ = 12						; size = 4
-?TraceCall@@YAXPBDK@Z PROC				; TraceCall, COMDAT
+__ArgList$ = -20					; size = 4
+__Result$ = -8						; size = 4
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__snprintf PROC						; COMDAT
 
-; 34   : {
+; 1947 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec e4 00 00
+	00		 sub	 esp, 228		; 000000e4H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d dc	 lea	 edi, DWORD PTR [ebp-36]
+  0000f	b9 09 00 00 00	 mov	 ecx, 9
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00025	90		 npad	 1
+
+; 1948 :         int _Result;
+; 1949 :         va_list _ArgList;
+; 1950 :         __crt_va_start(_ArgList, _Format);
+
+  00026	8d 45 14	 lea	 eax, DWORD PTR __Format$[ebp+4]
+  00029	89 45 ec	 mov	 DWORD PTR __ArgList$[ebp], eax
+
+; 1951 :         _Result = _vsnprintf(_Buffer, _BufferCount, _Format, _ArgList);
+
+  0002c	8b 45 ec	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  0002f	50		 push	 eax
+  00030	8b 4d 10	 mov	 ecx, DWORD PTR __Format$[ebp]
+  00033	51		 push	 ecx
+  00034	8b 55 0c	 mov	 edx, DWORD PTR __BufferCount$[ebp]
+  00037	52		 push	 edx
+  00038	8b 45 08	 mov	 eax, DWORD PTR __Buffer$[ebp]
+  0003b	50		 push	 eax
+  0003c	e8 00 00 00 00	 call	 __vsnprintf
+  00041	83 c4 10	 add	 esp, 16			; 00000010H
+  00044	89 45 f8	 mov	 DWORD PTR __Result$[ebp], eax
+
+; 1952 :         __crt_va_end(_ArgList);
+
+  00047	c7 45 ec 00 00
+	00 00		 mov	 DWORD PTR __ArgList$[ebp], 0
+
+; 1953 :         return _Result;
+
+  0004e	8b 45 f8	 mov	 eax, DWORD PTR __Result$[ebp]
+
+; 1954 :     }
+
+  00051	5f		 pop	 edi
+  00052	5e		 pop	 esi
+  00053	5b		 pop	 ebx
+  00054	81 c4 e4 00 00
+	00		 add	 esp, 228		; 000000e4H
+  0005a	3b ec		 cmp	 ebp, esp
+  0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00061	8b e5		 mov	 esp, ebp
+  00063	5d		 pop	 ebp
+  00064	c3		 ret	 0
+__snprintf ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __vsnprintf
+_TEXT	SEGMENT
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__ArgList$ = 20						; size = 4
+__vsnprintf PROC					; COMDAT
+
+; 1411 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec c0 00 00
+	00		 sub	 esp, 192		; 000000c0H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8b fd		 mov	 edi, ebp
+  0000e	33 c9		 xor	 ecx, ecx
+  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00015	f3 ab		 rep stosd
+  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00021	90		 npad	 1
+
+; 1412 :         return _vsnprintf_l(_Buffer, _BufferCount, _Format, NULL, _ArgList);
+
+  00022	8b 45 14	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  00025	50		 push	 eax
+  00026	6a 00		 push	 0
+  00028	8b 4d 10	 mov	 ecx, DWORD PTR __Format$[ebp]
+  0002b	51		 push	 ecx
+  0002c	8b 55 0c	 mov	 edx, DWORD PTR __BufferCount$[ebp]
+  0002f	52		 push	 edx
+  00030	8b 45 08	 mov	 eax, DWORD PTR __Buffer$[ebp]
+  00033	50		 push	 eax
+  00034	e8 00 00 00 00	 call	 __vsnprintf_l
+  00039	83 c4 14	 add	 esp, 20			; 00000014H
+
+; 1413 :     }
+
+  0003c	5f		 pop	 edi
+  0003d	5e		 pop	 esi
+  0003e	5b		 pop	 ebx
+  0003f	81 c4 c0 00 00
+	00		 add	 esp, 192		; 000000c0H
+  00045	3b ec		 cmp	 ebp, esp
+  00047	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004c	8b e5		 mov	 esp, ebp
+  0004e	5d		 pop	 ebp
+  0004f	c3		 ret	 0
+__vsnprintf ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __vsnprintf_l
+_TEXT	SEGMENT
+tv74 = -208						; size = 4
+__Result$ = -8						; size = 4
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__Locale$ = 20						; size = 4
+__ArgList$ = 24						; size = 4
+__vsnprintf_l PROC					; COMDAT
+
+; 1391 :     {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -172817,291 +173903,67 @@ _fromAddr$ = 12						; size = 4
   0000f	b9 04 00 00 00	 mov	 ecx, 4
   00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
   00019	f3 ab		 rep stosd
-  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 35   :     if (s_trace == NULL || funcName == NULL) {
+; 1392 :         int const _Result = __stdio_common_vsprintf(
 
-  00026	83 3d 00 00 00
-	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
-  0002d	74 06		 je	 SHORT $LN3@TraceCall
-  0002f	83 7d 08 00	 cmp	 DWORD PTR _funcName$[ebp], 0
-  00033	75 05		 jne	 SHORT $LN2@TraceCall
-$LN3@TraceCall:
+  00026	8b f4		 mov	 esi, esp
+  00028	8b 45 18	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  0002b	50		 push	 eax
+  0002c	8b 4d 14	 mov	 ecx, DWORD PTR __Locale$[ebp]
+  0002f	51		 push	 ecx
+  00030	8b 55 10	 mov	 edx, DWORD PTR __Format$[ebp]
+  00033	52		 push	 edx
+  00034	8b 45 0c	 mov	 eax, DWORD PTR __BufferCount$[ebp]
+  00037	50		 push	 eax
+  00038	8b 4d 08	 mov	 ecx, DWORD PTR __Buffer$[ebp]
+  0003b	51		 push	 ecx
+  0003c	e8 00 00 00 00	 call	 ___local_stdio_printf_options
+  00041	8b 10		 mov	 edx, DWORD PTR [eax]
+  00043	83 ca 01	 or	 edx, 1
+  00046	8b 40 04	 mov	 eax, DWORD PTR [eax+4]
+  00049	50		 push	 eax
+  0004a	52		 push	 edx
+  0004b	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp____stdio_common_vsprintf
+  00051	83 c4 1c	 add	 esp, 28			; 0000001cH
+  00054	3b f4		 cmp	 esi, esp
+  00056	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0005b	89 45 f8	 mov	 DWORD PTR __Result$[ebp], eax
 
-; 36   :         return;
+; 1393 :             _CRT_INTERNAL_LOCAL_PRINTF_OPTIONS | _CRT_INTERNAL_PRINTF_LEGACY_VSPRINTF_NULL_TERMINATION,
+; 1394 :             _Buffer, _BufferCount, _Format, _Locale, _ArgList);
+; 1395 : 
+; 1396 :         return _Result < 0 ? -1 : _Result;
 
-  00035	e9 8f 00 00 00	 jmp	 $LN1@TraceCall
-$LN2@TraceCall:
+  0005e	83 7d f8 00	 cmp	 DWORD PTR __Result$[ebp], 0
+  00062	7d 0c		 jge	 SHORT $LN3@vsnprintf_
+  00064	c7 85 30 ff ff
+	ff ff ff ff ff	 mov	 DWORD PTR tv74[ebp], -1
+  0006e	eb 09		 jmp	 SHORT $LN4@vsnprintf_
+$LN3@vsnprintf_:
+  00070	8b 45 f8	 mov	 eax, DWORD PTR __Result$[ebp]
+  00073	89 85 30 ff ff
+	ff		 mov	 DWORD PTR tv74[ebp], eax
+$LN4@vsnprintf_:
+  00079	8b 85 30 ff ff
+	ff		 mov	 eax, DWORD PTR tv74[ebp]
 
-; 37   :     }
-; 38   :     s_seq++;
+; 1397 :     }
 
-  0003a	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_seq@@3_KA
-  0003f	83 c0 01	 add	 eax, 1
-  00042	8b 0d 04 00 00
-	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
-  00048	83 d1 00	 adc	 ecx, 0
-  0004b	a3 00 00 00 00	 mov	 DWORD PTR ?s_seq@@3_KA, eax
-  00050	89 0d 04 00 00
-	00		 mov	 DWORD PTR ?s_seq@@3_KA+4, ecx
-
-; 39   :     const char* fromName = GetFunctionNameAt(fromAddr);
-
-  00056	8b 45 0c	 mov	 eax, DWORD PTR _fromAddr$[ebp]
-  00059	50		 push	 eax
-  0005a	e8 00 00 00 00	 call	 ?GetFunctionNameAt@@YAPBDK@Z ; GetFunctionNameAt
-  0005f	83 c4 04	 add	 esp, 4
-  00062	89 45 f8	 mov	 DWORD PTR _fromName$[ebp], eax
-
-; 40   :     fprintf(s_trace, "%6I64u  %-48s <- called from 0x%08lX %s\n",
-
-  00065	83 7d f8 00	 cmp	 DWORD PTR _fromName$[ebp], 0
-  00069	74 0b		 je	 SHORT $LN5@TraceCall
-  0006b	8b 45 f8	 mov	 eax, DWORD PTR _fromName$[ebp]
-  0006e	89 85 30 ff ff
-	ff		 mov	 DWORD PTR tv71[ebp], eax
-  00074	eb 0a		 jmp	 SHORT $LN6@TraceCall
-$LN5@TraceCall:
-  00076	c7 85 30 ff ff
-	ff 00 00 00 00	 mov	 DWORD PTR tv71[ebp], OFFSET ??_C@_01OGPIMHDM@?$DP@
-$LN6@TraceCall:
-  00080	8b 8d 30 ff ff
-	ff		 mov	 ecx, DWORD PTR tv71[ebp]
-  00086	51		 push	 ecx
-  00087	8b 55 0c	 mov	 edx, DWORD PTR _fromAddr$[ebp]
-  0008a	52		 push	 edx
-  0008b	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
-  0008e	50		 push	 eax
-  0008f	8b 0d 04 00 00
-	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
-  00095	51		 push	 ecx
-  00096	8b 15 00 00 00
-	00		 mov	 edx, DWORD PTR ?s_seq@@3_KA
-  0009c	52		 push	 edx
-  0009d	68 00 00 00 00	 push	 OFFSET ??_C@_0CJ@DBKFDHFD@?$CF6I64u?5?5?$CF?948s?5?$DM?9?5called?5from?50x@
-  000a2	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  000a7	50		 push	 eax
-  000a8	e8 00 00 00 00	 call	 _fprintf
-  000ad	83 c4 1c	 add	 esp, 28			; 0000001cH
-
-; 41   :             s_seq, funcName, fromAddr, fromName ? fromName : "?");
-; 42   :     fflush(s_trace);
-
-  000b0	8b f4		 mov	 esi, esp
-  000b2	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  000b7	50		 push	 eax
-  000b8	ff 15 00 00 00
-	00		 call	 DWORD PTR __imp__fflush
-  000be	83 c4 04	 add	 esp, 4
-  000c1	3b f4		 cmp	 esi, esp
-  000c3	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000c8	90		 npad	 1
-$LN1@TraceCall:
-
-; 43   : }
-
-  000c9	5f		 pop	 edi
-  000ca	5e		 pop	 esi
-  000cb	5b		 pop	 ebx
-  000cc	81 c4 d0 00 00
+  0007f	5f		 pop	 edi
+  00080	5e		 pop	 esi
+  00081	5b		 pop	 ebx
+  00082	81 c4 d0 00 00
 	00		 add	 esp, 208		; 000000d0H
-  000d2	3b ec		 cmp	 ebp, esp
-  000d4	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000d9	8b e5		 mov	 esp, ebp
-  000db	5d		 pop	 ebp
-  000dc	c3		 ret	 0
-?TraceCall@@YAXPBDK@Z ENDP				; TraceCall
-_TEXT	ENDS
-; Function compile flags: /Odtp /RTCsu /ZI
-; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
-;	COMDAT ?TraceEvent@@YAXPBD@Z
-_TEXT	SEGMENT
-_funcName$ = 8						; size = 4
-?TraceEvent@@YAXPBD@Z PROC				; TraceEvent, COMDAT
-
-; 24   : {
-
-  00000	55		 push	 ebp
-  00001	8b ec		 mov	 ebp, esp
-  00003	81 ec c0 00 00
-	00		 sub	 esp, 192		; 000000c0H
-  00009	53		 push	 ebx
-  0000a	56		 push	 esi
-  0000b	57		 push	 edi
-  0000c	8b fd		 mov	 edi, ebp
-  0000e	33 c9		 xor	 ecx, ecx
-  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
-  00015	f3 ab		 rep stosd
-  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
-  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
-  00021	90		 npad	 1
-
-; 25   :     if (s_trace == NULL || funcName == NULL) {
-
-  00022	83 3d 00 00 00
-	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
-  00029	74 06		 je	 SHORT $LN3@TraceEvent
-  0002b	83 7d 08 00	 cmp	 DWORD PTR _funcName$[ebp], 0
-  0002f	75 02		 jne	 SHORT $LN2@TraceEvent
-$LN3@TraceEvent:
-
-; 26   :         return;
-
-  00031	eb 5a		 jmp	 SHORT $LN1@TraceEvent
-$LN2@TraceEvent:
-
-; 27   :     }
-; 28   :     s_seq++;
-
-  00033	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_seq@@3_KA
-  00038	83 c0 01	 add	 eax, 1
-  0003b	8b 0d 04 00 00
-	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
-  00041	83 d1 00	 adc	 ecx, 0
-  00044	a3 00 00 00 00	 mov	 DWORD PTR ?s_seq@@3_KA, eax
-  00049	89 0d 04 00 00
-	00		 mov	 DWORD PTR ?s_seq@@3_KA+4, ecx
-
-; 29   :     fprintf(s_trace, "%6I64u  %s\n", s_seq, funcName);
-
-  0004f	8b 45 08	 mov	 eax, DWORD PTR _funcName$[ebp]
-  00052	50		 push	 eax
-  00053	8b 0d 04 00 00
-	00		 mov	 ecx, DWORD PTR ?s_seq@@3_KA+4
-  00059	51		 push	 ecx
-  0005a	8b 15 00 00 00
-	00		 mov	 edx, DWORD PTR ?s_seq@@3_KA
-  00060	52		 push	 edx
-  00061	68 00 00 00 00	 push	 OFFSET ??_C@_0M@LJONGIKD@?$CF6I64u?5?5?$CFs?6@
-  00066	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  0006b	50		 push	 eax
-  0006c	e8 00 00 00 00	 call	 _fprintf
-  00071	83 c4 14	 add	 esp, 20			; 00000014H
-
-; 30   :     fflush(s_trace);
-
-  00074	8b f4		 mov	 esi, esp
-  00076	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  0007b	50		 push	 eax
-  0007c	ff 15 00 00 00
-	00		 call	 DWORD PTR __imp__fflush
-  00082	83 c4 04	 add	 esp, 4
-  00085	3b f4		 cmp	 esi, esp
-  00087	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  0008c	90		 npad	 1
-$LN1@TraceEvent:
-
-; 31   : }
-
-  0008d	5f		 pop	 edi
-  0008e	5e		 pop	 esi
-  0008f	5b		 pop	 ebx
-  00090	81 c4 c0 00 00
-	00		 add	 esp, 192		; 000000c0H
-  00096	3b ec		 cmp	 ebp, esp
-  00098	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  0009d	8b e5		 mov	 esp, ebp
-  0009f	5d		 pop	 ebp
-  000a0	c3		 ret	 0
-?TraceEvent@@YAXPBD@Z ENDP				; TraceEvent
-_TEXT	ENDS
-; Function compile flags: /Odtp /RTCsu /ZI
-; File C:\work\GTA2_RE\dllLoad\dllLoad\cHookTrace.cpp
-;	COMDAT ?TraceInit@@YAXXZ
-_TEXT	SEGMENT
-?TraceInit@@YAXXZ PROC					; TraceInit, COMDAT
-
-; 11   : {
-
-  00000	55		 push	 ebp
-  00001	8b ec		 mov	 ebp, esp
-  00003	81 ec c0 00 00
-	00		 sub	 esp, 192		; 000000c0H
-  00009	53		 push	 ebx
-  0000a	56		 push	 esi
-  0000b	57		 push	 edi
-  0000c	8b fd		 mov	 edi, ebp
-  0000e	33 c9		 xor	 ecx, ecx
-  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
-  00015	f3 ab		 rep stosd
-  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __A5FFBC01_cHookTrace@cpp
-  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
-  00021	90		 npad	 1
-
-; 12   :     s_seq = 0;
-
-  00022	0f 57 c0	 xorps	 xmm0, xmm0
-  00025	66 0f 13 05 00
-	00 00 00	 movlpd	 QWORD PTR ?s_seq@@3_KA, xmm0
-
-; 13   :     if (s_trace != NULL) {
-
-  0002d	83 3d 00 00 00
-	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
-  00034	74 02		 je	 SHORT $LN2@TraceInit
-
-; 14   :         return;
-
-  00036	eb 56		 jmp	 SHORT $LN1@TraceInit
-$LN2@TraceInit:
-
-; 15   :     }
-; 16   :     s_trace = fopen("hook_trace.log", "w");
-
-  00038	8b f4		 mov	 esi, esp
-  0003a	68 00 00 00 00	 push	 OFFSET ??_C@_01NOFIACDB@w@
-  0003f	68 00 00 00 00	 push	 OFFSET ??_C@_0P@FNDAKOIK@hook_trace?4log@
-  00044	ff 15 00 00 00
-	00		 call	 DWORD PTR __imp__fopen
-  0004a	83 c4 08	 add	 esp, 8
-  0004d	3b f4		 cmp	 esi, esp
-  0004f	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00054	a3 00 00 00 00	 mov	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, eax
-
-; 17   :     if (s_trace) {
-
-  00059	83 3d 00 00 00
-	00 00		 cmp	 DWORD PTR ?s_trace@@3PAU_iobuf@@A, 0
-  00060	74 2c		 je	 SHORT $LN3@TraceInit
-
-; 18   :         fprintf(s_trace, "GTA2 hook trace start\n");
-
-  00062	68 00 00 00 00	 push	 OFFSET ??_C@_0BH@GIPDCEEH@GTA2?5hook?5trace?5start?6@
-  00067	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  0006c	50		 push	 eax
-  0006d	e8 00 00 00 00	 call	 _fprintf
-  00072	83 c4 08	 add	 esp, 8
-
-; 19   :         fflush(s_trace);
-
-  00075	8b f4		 mov	 esi, esp
-  00077	a1 00 00 00 00	 mov	 eax, DWORD PTR ?s_trace@@3PAU_iobuf@@A
-  0007c	50		 push	 eax
-  0007d	ff 15 00 00 00
-	00		 call	 DWORD PTR __imp__fflush
-  00083	83 c4 04	 add	 esp, 4
-  00086	3b f4		 cmp	 esi, esp
-  00088	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  0008d	90		 npad	 1
-$LN3@TraceInit:
-$LN1@TraceInit:
-
-; 20   :     }
-; 21   : }
-
-  0008e	5f		 pop	 edi
-  0008f	5e		 pop	 esi
-  00090	5b		 pop	 ebx
-  00091	81 c4 c0 00 00
-	00		 add	 esp, 192		; 000000c0H
-  00097	3b ec		 cmp	 ebp, esp
-  00099	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  0009e	8b e5		 mov	 esp, ebp
-  000a0	5d		 pop	 ebp
-  000a1	c3		 ret	 0
-?TraceInit@@YAXXZ ENDP					; TraceInit
+  00088	3b ec		 cmp	 ebp, esp
+  0008a	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0008f	8b e5		 mov	 esp, ebp
+  00091	5d		 pop	 ebp
+  00092	c3		 ret	 0
+__vsnprintf_l ENDP
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h

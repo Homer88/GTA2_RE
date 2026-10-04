@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include "dmavideo.h"
 
 #pragma comment(lib, "ddraw.lib")
@@ -181,6 +182,82 @@ static void FreeDDrawInstances(Video* pVideoDriver)
     }
 }
 
+static void AddDisplayMode(Video* pVideoDriver, DWORD deviceId, DWORD width, DWORD height, DWORD bitCount)
+{
+    DisplayMode* pDisplayMode = new DisplayMode();
+    memset(pDisplayMode, 0, sizeof(DisplayMode));
+
+    if (pVideoDriver->DisplayModeArray)
+    {
+        pVideoDriver->DisplayModeArray->NextDisplayMode = pDisplayMode;
+    }
+    else
+    {
+        pVideoDriver->pHead = pDisplayMode;
+    }
+    pVideoDriver->DisplayModeArray = pDisplayMode;
+
+    pDisplayMode->DisplayModeIdx = pVideoDriver->DisplayModeCount_2_q;
+    ++pVideoDriver->DisplayModeCount_2_q;
+    pDisplayMode->field_3C = 1;
+    pDisplayMode->DeviceId = deviceId;
+    pDisplayMode->Width = width;
+    pDisplayMode->Height = height;
+    pDisplayMode->RGBbitCount = bitCount;
+    pDisplayMode->Pitch = width * (bitCount / 8);
+    ++pVideoDriver->NumDisplayModes;
+}
+
+// DirectDraw under a remote/headless session usually reports a single desktop
+// format (e.g. 1920x1080x32) and never the 16-bit modes gta2 asks for, which
+// makes Vid_CheckMode fail with "Videomode WxHx16 is not available". Advertise
+// the standard modes so mode selection succeeds regardless of the host GPU.
+#define modeId_Hardcoded 1
+
+static FILE* g_vlog = 0;
+static void VLog(const char* fmt, ...)
+{
+    if (!g_vlog)
+    {
+        g_vlog = fopen("C:\\games\\GTA2 _old\\vid.log", "a");
+        if (!g_vlog) return;
+    }
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(g_vlog, fmt, ap);
+    va_end(ap);
+    fputc('\n', g_vlog);
+    fflush(g_vlog);
+}
+
+static void AddFallbackModes(Video* pVideoDriver)
+{
+    static const DWORD kSizes[][2] = { {640, 480}, {800, 600}, {1024, 768} };
+    static const DWORD kDepths[] = { 16, 32 };
+    const DWORD deviceId = pVideoDriver->pDeviceInfoHead ? pVideoDriver->pDeviceInfoHead->Id : 0;
+
+    for (int d = 0; d < 2; ++d)
+    {
+        for (int s = 0; s < 3; ++s)
+        {
+            bool present = false;
+            for (DisplayMode* m = pVideoDriver->pHead; m; m = m->NextDisplayMode)
+            {
+                if (m->DeviceId == deviceId && m->Width == kSizes[s][0]
+                    && m->Height == kSizes[s][1] && m->RGBbitCount == kDepths[d])
+                {
+                    present = true;
+                    break;
+                }
+            }
+            if (!present)
+            {
+                AddDisplayMode(pVideoDriver, deviceId, kSizes[s][0], kSizes[s][1], kDepths[d]);
+            }
+        }
+    }
+}
+
 Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 {
     HMODULE hDirectDraw = LoadLibraryA("ddraw.dll");
@@ -218,8 +295,9 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
             pVideoDriver = 0;
         }
 
-        if (param2_flags & 8 || (pVideoDriver && !pVideoDriver->pDeviceInfoHead))
+if (param2_flags & 8 || (pVideoDriver && !pVideoDriver->pDeviceInfoHead))
         {
+            AddFallbackModes(pVideoDriver);
             return pVideoDriver;
         }
         else
@@ -233,7 +311,10 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 
                 FreeDDrawInstances(pVideoDriver);
 
-                pVideoDriver->LastError = DirectDrawCreate(pDeviceInfo->pDeviceGuid, (LPDIRECTDRAW *)&pVideoDriver->DirectDraw7, 0);
+                // hardcode: primary display driver, no adapter/registry probing
+                pVideoDriver->LastError = DirectDrawCreate(0, (LPDIRECTDRAW *)&pVideoDriver->DirectDraw7, 0);
+                VLog("   DirectDrawCreate(primary) hr=0x%08lX -> %p",
+                    (unsigned long)pVideoDriver->LastError, (void*)pVideoDriver->DirectDraw7);
                 if (pVideoDriver->LastError)
                 {
                     break;
@@ -283,8 +364,9 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
                 pNextDevice = pNextDevice->NextDevice;
                 pDeviceInfo = pNextDevice;
 
-                if (!pNextDevice)
+if (!pNextDevice)
                 {
+                    AddFallbackModes(pVideoDriver);
                     return pVideoDriver;
                 }
             }
@@ -296,6 +378,20 @@ Video* CC Vid_Init_SYS(s32 param1, u16 param2_flags)
 
 s32 CC Vid_CheckMode(Video* pVideoDriver, s32 width, s32 height, s32 rgbBitCount)
 {
+    VLog("Vid_CheckMode: req %dx%dx%d pVideo=%p", width, height, rgbBitCount, (void*)pVideoDriver);
+    if (pVideoDriver)
+    {
+        int n = 0;
+        for (DisplayMode* m = pVideoDriver->pHead; m && n < 64; m = m->NextDisplayMode, ++n)
+        {
+            VLog("   mode[%d] idx=%d dev=%u %dx%dx%d", n, m->DisplayModeIdx,
+                (unsigned)m->DeviceId, m->Width, m->Height, m->RGBbitCount);
+        }
+        VLog("   listed=%d activeDev=%u numModes=%u fullscreen=%u", n,
+            (unsigned)pVideoDriver->ActiveDeviceId, (unsigned)pVideoDriver->NumDisplayModes,
+            (unsigned)pVideoDriver->FullScreen);
+    }
+
     if (!pVideoDriver)
     {
         return 0;
@@ -310,6 +406,12 @@ s32 CC Vid_CheckMode(Video* pVideoDriver, s32 width, s32 height, s32 rgbBitCount
         return 0;
     }
 
+if (rgbBitCount == 16)
+    {
+        VLog("   translate 16bpp -> 32bpp (no 16bpp surface under RDP)");
+        rgbBitCount = 32;
+    }
+
     const DWORD deviceId = pVideoDriver->ActiveDeviceId;
     while (pDisplayMode->DeviceId != deviceId && deviceId
         || pDisplayMode->Width != width
@@ -319,10 +421,11 @@ s32 CC Vid_CheckMode(Video* pVideoDriver, s32 width, s32 height, s32 rgbBitCount
         pDisplayMode = pDisplayMode->NextDisplayMode;
         if (!pDisplayMode)
         {
-            pVideoDriver->FoundRGBbitCount = 0;
-            pVideoDriver->FoundWidth = 0;
-            pVideoDriver->FoundHeight = 0;
-            return 0;
+            AddFallbackModes(pVideoDriver);
+            pVideoDriver->FoundRGBbitCount = rgbBitCount;
+            pVideoDriver->FoundWidth = width;
+            pVideoDriver->FoundHeight = height;
+            return modeId_Hardcoded;
         }
     }
     pVideoDriver->FoundRGBbitCount = pDisplayMode->RGBbitCount;
@@ -366,7 +469,7 @@ DisplayMode* CC Vid_FindMode(Video* pVideoDriver, s32 modeId)
     }
 
     const DWORD deviceId = pVideoDriver->ActiveDeviceId;
-    while (result->DeviceId != deviceId && deviceId || result->DisplayModeIdx != modeId)
+    while (result->DeviceId != deviceId && deviceId)
     {
         result = result->NextDisplayMode;
         if (!result)
@@ -596,6 +699,14 @@ static s32 SetDisplayModeFromSurface(Video* pVideoDriver,  DisplayMode* pDisplay
 
 s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
 {
+    VLog("Vid_SetMode: modeId=%d hWnd=%p pVideo=%p", modeId, (void*)hWnd, (void*)pVideoDriver);
+    if (pVideoDriver)
+    {
+        VLog("   before: fullscreen=%u dd7=%p surf=%p surfPri=%p activeDev=%u",
+            (unsigned)pVideoDriver->FullScreen, (void*)pVideoDriver->DirectDraw7,
+            (void*)pVideoDriver->Surface, (void*)pVideoDriver->SurfacePrimary,
+            (unsigned)pVideoDriver->ActiveDeviceId);
+    }
     if (!pVideoDriver)
     {
         return 1;
@@ -654,6 +765,7 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
             }
 
             pVideoDriver->LastError = pVideoDriver->DirectDraw7->QueryInterface(IID_IDirectDraw4, (LPVOID*)&pVideoDriver->IDDraw4);
+            VLog("   QI(IDirectDraw4) hr=0x%08lX IDDraw4=%p", (unsigned long)pVideoDriver->LastError, (void*)pVideoDriver->IDDraw4);
             if (pVideoDriver->LastError)
             {
                 pVideoDriver->DirectDraw7->Release();
@@ -673,10 +785,18 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
         pVideoDriver->DDSurfaceDesc7.dwFlags = 1;
         pVideoDriver->DDSurfaceDesc7.ddsCaps.dwCaps = 512;
 
+VLog("   CreateSurface(SurfacePrimary) desc %dx%d flags=%lu caps=%lu pfFlags=%lu IDDraw4=%p",
+            (int)pVideoDriver->DDSurfaceDesc7.dwWidth, (int)pVideoDriver->DDSurfaceDesc7.dwHeight,
+            (unsigned long)pVideoDriver->DDSurfaceDesc7.dwFlags,
+            (unsigned long)pVideoDriver->DDSurfaceDesc7.ddsCaps.dwCaps,
+            (unsigned long)pVideoDriver->DDSurfaceDesc7.ddpfPixelFormat.dwFlags,
+            (void*)pVideoDriver->IDDraw4);
         if (pVideoDriver->IDDraw4->CreateSurface(&pVideoDriver->DDSurfaceDesc7, &pVideoDriver->SurfacePrimary, 0))
         {
+            VLog("   CreateSurface(SurfacePrimary) FAILED");
             return 1;
         }
+        VLog("   CreateSurface(SurfacePrimary) OK -> %p", (void*)pVideoDriver->SurfacePrimary);
 
         if (pVideoDriver->IDDraw4->CreateClipper(0, &pVideoDriver->Clipper, 0))
         {
@@ -793,8 +913,7 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
         return 1;
     }
 
-    while (pDisplayMode_1->DeviceId  != pVideoDriver->ActiveDeviceId && pVideoDriver->ActiveDeviceId
-        || pDisplayMode_1->DisplayModeIdx != modeId)
+    while (pDisplayMode_1->DeviceId  != pVideoDriver->ActiveDeviceId && pVideoDriver->ActiveDeviceId)
     {
         pDisplayMode_1 = pDisplayMode_1->NextDisplayMode;
         if (!pDisplayMode_1)
@@ -875,6 +994,21 @@ s32 CC Vid_SetMode(Video* pVideoDriver, HWND hWnd, s32 modeId)
 
             pVideoDriver->ActiveDeviceId = deviceId;
         }
+    }
+
+    // windowed stub: -2 must never reach the fullscreen/exclusive path,
+    // SetDisplayMode cannot switch modes under RDP
+    if (modeId == -2)
+    {
+        pVideoDriver->FullScreen = 0;
+        pVideoDriver->FoundWidth = 640;
+        pVideoDriver->FoundHeight = 480;
+        pVideoDriver->FoundRGBbitCount = 32;
+        pVideoDriver->ActiveDeviceId = 0;
+        VLog("   windowed stub: %dx%dx%d -> success (no mode switch)",
+            pVideoDriver->FoundWidth, pVideoDriver->FoundHeight,
+            pVideoDriver->FoundRGBbitCount);
+        return 0;
     }
 
     if (pVideoDriver->DirectDraw7->SetCooperativeLevel(hWnd, DDSCL_ALLOWMODEX | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN))
@@ -1292,3 +1426,4 @@ VidVersion* CC Vid_GetVersion()
 {
     return &gVersionInfo;
 }
+

@@ -182,12 +182,15 @@ PUBLIC	__vfprintf_l
 PUBLIC	_fprintf
 PUBLIC	_printf
 PUBLIC	__vsnprintf_l
+PUBLIC	__vsnprintf
 PUBLIC	__vsprintf_l
 PUBLIC	_sprintf
+PUBLIC	__snprintf
 PUBLIC	?DebugLog@@YAXHPADH@Z				; DebugLog
 PUBLIC	?DebugLog@@YAXPAD@Z				; DebugLog
 PUBLIC	?DebugLog@@YAXPBD@Z				; DebugLog
 PUBLIC	?DebugLog@@YAXPAX0PAD@Z				; DebugLog
+PUBLIC	?GetLogPath@@YAPBDPBD@Z				; GetLogPath
 PUBLIC	?DebugLog@@YAXPA_W@Z				; DebugLog
 PUBLIC	?DebugLog@@YAXPA_N@Z				; DebugLog
 PUBLIC	?DebugLog@@YAXPAE@Z				; DebugLog
@@ -203,6 +206,9 @@ PUBLIC	?writeFileLog@@YAHPADPBD00PAE@Z			; writeFileLog
 PUBLIC	?writeFileLog@@YAHPAD00PA_N@Z			; writeFileLog
 PUBLIC	__JustMyCode_Default
 PUBLIC	?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA ; `__local_stdio_printf_options'::`2'::_OptionsStorage
+PUBLIC	??_C@_0CC@PLGPAPHO@log?2?$CF04u?9?$CF02u?9?$CF02u_?$CF02u?9?$CF02u?9?$CF0@ ; `string'
+PUBLIC	??_C@_03MGHMBJCF@log@				; `string'
+PUBLIC	??_C@_05BMGBEOOC@?$CFs?2?$CFs@			; `string'
 PUBLIC	??_C@_01MCMALHOG@a@				; `string'
 PUBLIC	??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@ ; `string'
 PUBLIC	??_C@_0M@FCOFONDF@?$CFs?0?5?$CFs?0?5?$CFs?6@	; `string'
@@ -221,6 +227,8 @@ PUBLIC	??_C@_05MKDOIIA@False@				; `string'
 PUBLIC	??_C@_02DPKJAMEF@?$CFd@				; `string'
 PUBLIC	??_C@_05PKJIMNJA@?$CFc?$DN?$CFd@		; `string'
 PUBLIC	??_C@_05DNIIFBMG@?$CFs?5?$CFs@			; `string'
+EXTRN	__imp__CreateDirectoryA@8:PROC
+EXTRN	__imp__GetLocalTime@4:PROC
 EXTRN	__imp__MessageBoxA@16:PROC
 EXTRN	__imp__MessageBoxW@16:PROC
 EXTRN	__imp____acrt_iob_func:PROC
@@ -239,6 +247,11 @@ EXTRN	___security_cookie:DWORD
 ;	COMDAT ?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA
 _BSS	SEGMENT
 ?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA DQ 01H DUP (?) ; `__local_stdio_printf_options'::`2'::_OptionsStorage
+_BSS	ENDS
+_BSS	SEGMENT
+?s_logDir@@3PADA DB 0104H DUP (?)			; s_logDir
+?s_logDirInitialized@@3HA DD 01H DUP (?)		; s_logDirInitialized
+?buf@?1??GetLogPath@@YAPBDPBD@Z@4PADA DB 0104H DUP (?)	; `GetLogPath'::`2'::buf
 _BSS	ENDS
 ;	COMDAT rtc$TMZ
 rtc$TMZ	SEGMENT
@@ -330,6 +343,19 @@ CONST	ENDS
 CONST	SEGMENT
 ??_C@_01MCMALHOG@a@ DB 'a', 00H				; `string'
 CONST	ENDS
+;	COMDAT ??_C@_05BMGBEOOC@?$CFs?2?$CFs@
+CONST	SEGMENT
+??_C@_05BMGBEOOC@?$CFs?2?$CFs@ DB '%s\%s', 00H		; `string'
+CONST	ENDS
+;	COMDAT ??_C@_03MGHMBJCF@log@
+CONST	SEGMENT
+??_C@_03MGHMBJCF@log@ DB 'log', 00H			; `string'
+CONST	ENDS
+;	COMDAT ??_C@_0CC@PLGPAPHO@log?2?$CF04u?9?$CF02u?9?$CF02u_?$CF02u?9?$CF02u?9?$CF0@
+CONST	SEGMENT
+??_C@_0CC@PLGPAPHO@log?2?$CF04u?9?$CF02u?9?$CF02u_?$CF02u?9?$CF02u?9?$CF0@ DB 'l'
+	DB	'og\%04u-%02u-%02u_%02u-%02u-%02u', 00H	; `string'
+CONST	ENDS
 ;	COMDAT voltbl
 voltbl	SEGMENT
 _volmd	DB	022H
@@ -359,6 +385,11 @@ voltbl	ENDS
 voltbl	SEGMENT
 _volmd	DB	022H
 	DB	078H
+voltbl	ENDS
+;	COMDAT voltbl
+voltbl	SEGMENT
+_volmd	DB	022H
+	DB	0f7H
 voltbl	ENDS
 ;	COMDAT voltbl
 voltbl	SEGMENT
@@ -401,7 +432,7 @@ _error$ = 16						; size = 4
 _address$ = 20						; size = 4
 ?writeFileLog@@YAHPAD00PA_N@Z PROC			; writeFileLog, COMDAT
 
-; 18   : int writeFileLog(char* FileName, char* str, char* error, bool* address) {
+; 39   : int writeFileLog(char* FileName, char* str, char* error, bool* address) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -418,84 +449,87 @@ _address$ = 20						; size = 4
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 19   : 	
-; 20   : 	FILE* file = fopen(FileName, "a");
+; 40   : 	
+; 41   : 	FILE* file = fopen(GetLogPath(FileName), "a");
 
   00026	8b f4		 mov	 esi, esp
   00028	68 00 00 00 00	 push	 OFFSET ??_C@_01MCMALHOG@a@
   0002d	8b 45 08	 mov	 eax, DWORD PTR _FileName$[ebp]
   00030	50		 push	 eax
-  00031	ff 15 00 00 00
+  00031	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  00036	83 c4 04	 add	 esp, 4
+  00039	50		 push	 eax
+  0003a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fopen
-  00037	83 c4 08	 add	 esp, 8
-  0003a	3b f4		 cmp	 esi, esp
-  0003c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00041	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
+  00040	83 c4 08	 add	 esp, 8
+  00043	3b f4		 cmp	 esi, esp
+  00045	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004a	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
 
-; 21   : 	if (file == NULL) {
+; 42   : 	if (file == NULL) {
 
-  00044	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
-  00048	75 14		 jne	 SHORT $LN2@writeFileL
+  0004d	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
+  00051	75 14		 jne	 SHORT $LN2@writeFileL
 
-; 22   : 		printf("Ошибка при открытии файла!\n");
+; 43   : 		printf("Ошибка при открытии файла!\n");
 
-  0004a	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
-  0004f	e8 00 00 00 00	 call	 _printf
-  00054	83 c4 04	 add	 esp, 4
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
+  00058	e8 00 00 00 00	 call	 _printf
+  0005d	83 c4 04	 add	 esp, 4
 
-; 23   : 		return 1; // Возвращаем код ошибки
+; 44   : 		return 1; // Возвращаем код ошибки
 
-  00057	b8 01 00 00 00	 mov	 eax, 1
-  0005c	eb 36		 jmp	 SHORT $LN1@writeFileL
+  00060	b8 01 00 00 00	 mov	 eax, 1
+  00065	eb 36		 jmp	 SHORT $LN1@writeFileL
 $LN2@writeFileL:
 
-; 24   : 	}
-; 25   : 
-; 26   : 	fprintf(file, "%s, %s, 0x00%x\n", error, str, address);
+; 45   : 	}
+; 46   : 
+; 47   : 	fprintf(file, "%s, %s, 0x00%x\n", error, str, address);
 
-  0005e	8b 45 14	 mov	 eax, DWORD PTR _address$[ebp]
-  00061	50		 push	 eax
-  00062	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
-  00065	51		 push	 ecx
-  00066	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
-  00069	52		 push	 edx
-  0006a	68 00 00 00 00	 push	 OFFSET ??_C@_0BA@MFNOAFIH@?$CFs?0?5?$CFs?0?50x00?$CFx?6@
-  0006f	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00072	50		 push	 eax
-  00073	e8 00 00 00 00	 call	 _fprintf
-  00078	83 c4 14	 add	 esp, 20			; 00000014H
+  00067	8b 45 14	 mov	 eax, DWORD PTR _address$[ebp]
+  0006a	50		 push	 eax
+  0006b	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
+  0006e	51		 push	 ecx
+  0006f	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
+  00072	52		 push	 edx
+  00073	68 00 00 00 00	 push	 OFFSET ??_C@_0BA@MFNOAFIH@?$CFs?0?5?$CFs?0?50x00?$CFx?6@
+  00078	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  0007b	50		 push	 eax
+  0007c	e8 00 00 00 00	 call	 _fprintf
+  00081	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 27   : 
-; 28   : 	fclose(file);
+; 48   : 
+; 49   : 	fclose(file);
 
-  0007b	8b f4		 mov	 esi, esp
-  0007d	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00080	50		 push	 eax
-  00081	ff 15 00 00 00
+  00084	8b f4		 mov	 esi, esp
+  00086	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  00089	50		 push	 eax
+  0008a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fclose
-  00087	83 c4 04	 add	 esp, 4
-  0008a	3b f4		 cmp	 esi, esp
-  0008c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00091	90		 npad	 1
+  00090	83 c4 04	 add	 esp, 4
+  00093	3b f4		 cmp	 esi, esp
+  00095	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0009a	90		 npad	 1
 
-; 29   : 
-; 30   : 	return 0;
+; 50   : 
+; 51   : 	return 0;
 
-  00092	33 c0		 xor	 eax, eax
+  0009b	33 c0		 xor	 eax, eax
 $LN1@writeFileL:
 
-; 31   : }
+; 52   : }
 
-  00094	5f		 pop	 edi
-  00095	5e		 pop	 esi
-  00096	5b		 pop	 ebx
-  00097	81 c4 cc 00 00
+  0009d	5f		 pop	 edi
+  0009e	5e		 pop	 esi
+  0009f	5b		 pop	 ebx
+  000a0	81 c4 cc 00 00
 	00		 add	 esp, 204		; 000000ccH
-  0009d	3b ec		 cmp	 ebp, esp
-  0009f	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000a4	8b e5		 mov	 esp, ebp
-  000a6	5d		 pop	 ebp
-  000a7	c3		 ret	 0
+  000a6	3b ec		 cmp	 ebp, esp
+  000a8	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000ad	8b e5		 mov	 esp, ebp
+  000af	5d		 pop	 ebp
+  000b0	c3		 ret	 0
 ?writeFileLog@@YAHPAD00PA_N@Z ENDP			; writeFileLog
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -510,7 +544,7 @@ _error$ = 20						; size = 4
 _data$ = 24						; size = 4
 ?writeFileLog@@YAHPADPBD00PAE@Z PROC			; writeFileLog, COMDAT
 
-; 62   : int writeFileLog(char* FileName, LPCSTR lpValueName, char* str, char* error, BYTE* data) {
+; 83   : int writeFileLog(char* FileName, LPCSTR lpValueName, char* str, char* error, BYTE* data) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -527,89 +561,92 @@ _data$ = 24						; size = 4
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 63   : 
-; 64   : 	FILE* file = fopen(FileName, "a");
+; 84   : 
+; 85   : 	FILE* file = fopen(GetLogPath(FileName), "a");
 
   00026	8b f4		 mov	 esi, esp
   00028	68 00 00 00 00	 push	 OFFSET ??_C@_01MCMALHOG@a@
   0002d	8b 45 08	 mov	 eax, DWORD PTR _FileName$[ebp]
   00030	50		 push	 eax
-  00031	ff 15 00 00 00
+  00031	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  00036	83 c4 04	 add	 esp, 4
+  00039	50		 push	 eax
+  0003a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fopen
-  00037	83 c4 08	 add	 esp, 8
-  0003a	3b f4		 cmp	 esi, esp
-  0003c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00041	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
+  00040	83 c4 08	 add	 esp, 8
+  00043	3b f4		 cmp	 esi, esp
+  00045	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004a	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
 
-; 65   : 	if (file == NULL) {
+; 86   : 	if (file == NULL) {
 
-  00044	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
-  00048	75 14		 jne	 SHORT $LN2@writeFileL
+  0004d	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
+  00051	75 14		 jne	 SHORT $LN2@writeFileL
 
-; 66   : 		printf("Ошибка при открытии файла!\n");
+; 87   : 		printf("Ошибка при открытии файла!\n");
 
-  0004a	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
-  0004f	e8 00 00 00 00	 call	 _printf
-  00054	83 c4 04	 add	 esp, 4
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
+  00058	e8 00 00 00 00	 call	 _printf
+  0005d	83 c4 04	 add	 esp, 4
 
-; 67   : 		return 1; // Возвращаем код ошибки
+; 88   : 		return 1; // Возвращаем код ошибки
 
-  00057	b8 01 00 00 00	 mov	 eax, 1
-  0005c	eb 46		 jmp	 SHORT $LN1@writeFileL
+  00060	b8 01 00 00 00	 mov	 eax, 1
+  00065	eb 46		 jmp	 SHORT $LN1@writeFileL
 $LN2@writeFileL:
 
-; 68   : 	}
-; 69   : 
-; 70   : 	fprintf(file, "%s %s%s %d\n", error, lpValueName, str, data[0]);
+; 89   : 	}
+; 90   : 
+; 91   : 	fprintf(file, "%s %s%s %d\n", error, lpValueName, str, data[0]);
 
-  0005e	b8 01 00 00 00	 mov	 eax, 1
-  00063	6b c8 00	 imul	 ecx, eax, 0
-  00066	8b 55 18	 mov	 edx, DWORD PTR _data$[ebp]
-  00069	0f b6 04 0a	 movzx	 eax, BYTE PTR [edx+ecx]
-  0006d	50		 push	 eax
-  0006e	8b 4d 10	 mov	 ecx, DWORD PTR _str$[ebp]
-  00071	51		 push	 ecx
-  00072	8b 55 0c	 mov	 edx, DWORD PTR _lpValueName$[ebp]
-  00075	52		 push	 edx
-  00076	8b 45 14	 mov	 eax, DWORD PTR _error$[ebp]
-  00079	50		 push	 eax
-  0007a	68 00 00 00 00	 push	 OFFSET ??_C@_0M@DFLDGBOP@?$CFs?5?$CFs?$CFs?5?$CFd?6@
-  0007f	8b 4d f8	 mov	 ecx, DWORD PTR _file$[ebp]
-  00082	51		 push	 ecx
-  00083	e8 00 00 00 00	 call	 _fprintf
-  00088	83 c4 18	 add	 esp, 24			; 00000018H
+  00067	b8 01 00 00 00	 mov	 eax, 1
+  0006c	6b c8 00	 imul	 ecx, eax, 0
+  0006f	8b 55 18	 mov	 edx, DWORD PTR _data$[ebp]
+  00072	0f b6 04 0a	 movzx	 eax, BYTE PTR [edx+ecx]
+  00076	50		 push	 eax
+  00077	8b 4d 10	 mov	 ecx, DWORD PTR _str$[ebp]
+  0007a	51		 push	 ecx
+  0007b	8b 55 0c	 mov	 edx, DWORD PTR _lpValueName$[ebp]
+  0007e	52		 push	 edx
+  0007f	8b 45 14	 mov	 eax, DWORD PTR _error$[ebp]
+  00082	50		 push	 eax
+  00083	68 00 00 00 00	 push	 OFFSET ??_C@_0M@DFLDGBOP@?$CFs?5?$CFs?$CFs?5?$CFd?6@
+  00088	8b 4d f8	 mov	 ecx, DWORD PTR _file$[ebp]
+  0008b	51		 push	 ecx
+  0008c	e8 00 00 00 00	 call	 _fprintf
+  00091	83 c4 18	 add	 esp, 24			; 00000018H
 
-; 71   : 
-; 72   : 	fclose(file);
+; 92   : 
+; 93   : 	fclose(file);
 
-  0008b	8b f4		 mov	 esi, esp
-  0008d	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00090	50		 push	 eax
-  00091	ff 15 00 00 00
+  00094	8b f4		 mov	 esi, esp
+  00096	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  00099	50		 push	 eax
+  0009a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fclose
-  00097	83 c4 04	 add	 esp, 4
-  0009a	3b f4		 cmp	 esi, esp
-  0009c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000a1	90		 npad	 1
+  000a0	83 c4 04	 add	 esp, 4
+  000a3	3b f4		 cmp	 esi, esp
+  000a5	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000aa	90		 npad	 1
 
-; 73   : 
-; 74   : 	return 0;
+; 94   : 
+; 95   : 	return 0;
 
-  000a2	33 c0		 xor	 eax, eax
+  000ab	33 c0		 xor	 eax, eax
 $LN1@writeFileL:
 
-; 75   : }
+; 96   : }
 
-  000a4	5f		 pop	 edi
-  000a5	5e		 pop	 esi
-  000a6	5b		 pop	 ebx
-  000a7	81 c4 cc 00 00
+  000ad	5f		 pop	 edi
+  000ae	5e		 pop	 esi
+  000af	5b		 pop	 ebx
+  000b0	81 c4 cc 00 00
 	00		 add	 esp, 204		; 000000ccH
-  000ad	3b ec		 cmp	 ebp, esp
-  000af	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000b4	8b e5		 mov	 esp, ebp
-  000b6	5d		 pop	 ebp
-  000b7	c3		 ret	 0
+  000b6	3b ec		 cmp	 ebp, esp
+  000b8	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000bd	8b e5		 mov	 esp, ebp
+  000bf	5d		 pop	 ebp
+  000c0	c3		 ret	 0
 ?writeFileLog@@YAHPADPBD00PAE@Z ENDP			; writeFileLog
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -623,7 +660,7 @@ _error$ = 16						; size = 4
 _data$ = 20						; size = 4
 ?writeFileLog@@YAHPAD00PAE@Z PROC			; writeFileLog, COMDAT
 
-; 47   : int writeFileLog(char* FileName, char* str, char* error, BYTE  *data) {
+; 68   : int writeFileLog(char* FileName, char* str, char* error, BYTE  *data) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -640,84 +677,87 @@ _data$ = 20						; size = 4
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 48   : 
-; 49   : 	FILE* file = fopen(FileName, "a");
+; 69   : 
+; 70   : 	FILE* file = fopen(GetLogPath(FileName), "a");
 
   00026	8b f4		 mov	 esi, esp
   00028	68 00 00 00 00	 push	 OFFSET ??_C@_01MCMALHOG@a@
   0002d	8b 45 08	 mov	 eax, DWORD PTR _FileName$[ebp]
   00030	50		 push	 eax
-  00031	ff 15 00 00 00
+  00031	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  00036	83 c4 04	 add	 esp, 4
+  00039	50		 push	 eax
+  0003a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fopen
-  00037	83 c4 08	 add	 esp, 8
-  0003a	3b f4		 cmp	 esi, esp
-  0003c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00041	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
+  00040	83 c4 08	 add	 esp, 8
+  00043	3b f4		 cmp	 esi, esp
+  00045	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004a	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
 
-; 50   : 	if (file == NULL) {
+; 71   : 	if (file == NULL) {
 
-  00044	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
-  00048	75 14		 jne	 SHORT $LN2@writeFileL
+  0004d	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
+  00051	75 14		 jne	 SHORT $LN2@writeFileL
 
-; 51   : 		printf("Ошибка при открытии файла!\n");
+; 72   : 		printf("Ошибка при открытии файла!\n");
 
-  0004a	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
-  0004f	e8 00 00 00 00	 call	 _printf
-  00054	83 c4 04	 add	 esp, 4
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
+  00058	e8 00 00 00 00	 call	 _printf
+  0005d	83 c4 04	 add	 esp, 4
 
-; 52   : 		return 1; // Возвращаем код ошибки
+; 73   : 		return 1; // Возвращаем код ошибки
 
-  00057	b8 01 00 00 00	 mov	 eax, 1
-  0005c	eb 36		 jmp	 SHORT $LN1@writeFileL
+  00060	b8 01 00 00 00	 mov	 eax, 1
+  00065	eb 36		 jmp	 SHORT $LN1@writeFileL
 $LN2@writeFileL:
 
-; 53   : 	}
-; 54   : 
-; 55   : 	fprintf(file, "%s  %s 0x00%x\n", error, str, data);
+; 74   : 	}
+; 75   : 
+; 76   : 	fprintf(file, "%s  %s 0x00%x\n", error, str, data);
 
-  0005e	8b 45 14	 mov	 eax, DWORD PTR _data$[ebp]
-  00061	50		 push	 eax
-  00062	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
-  00065	51		 push	 ecx
-  00066	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
-  00069	52		 push	 edx
-  0006a	68 00 00 00 00	 push	 OFFSET ??_C@_0P@OJLBJEH@?$CFs?5?5?$CFs?50x00?$CFx?6@
-  0006f	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00072	50		 push	 eax
-  00073	e8 00 00 00 00	 call	 _fprintf
-  00078	83 c4 14	 add	 esp, 20			; 00000014H
+  00067	8b 45 14	 mov	 eax, DWORD PTR _data$[ebp]
+  0006a	50		 push	 eax
+  0006b	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
+  0006e	51		 push	 ecx
+  0006f	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
+  00072	52		 push	 edx
+  00073	68 00 00 00 00	 push	 OFFSET ??_C@_0P@OJLBJEH@?$CFs?5?5?$CFs?50x00?$CFx?6@
+  00078	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  0007b	50		 push	 eax
+  0007c	e8 00 00 00 00	 call	 _fprintf
+  00081	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 56   : 
-; 57   : 	fclose(file);
+; 77   : 
+; 78   : 	fclose(file);
 
-  0007b	8b f4		 mov	 esi, esp
-  0007d	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00080	50		 push	 eax
-  00081	ff 15 00 00 00
+  00084	8b f4		 mov	 esi, esp
+  00086	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  00089	50		 push	 eax
+  0008a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fclose
-  00087	83 c4 04	 add	 esp, 4
-  0008a	3b f4		 cmp	 esi, esp
-  0008c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00091	90		 npad	 1
+  00090	83 c4 04	 add	 esp, 4
+  00093	3b f4		 cmp	 esi, esp
+  00095	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0009a	90		 npad	 1
 
-; 58   : 
-; 59   : 	return 0;
+; 79   : 
+; 80   : 	return 0;
 
-  00092	33 c0		 xor	 eax, eax
+  0009b	33 c0		 xor	 eax, eax
 $LN1@writeFileL:
 
-; 60   : }
+; 81   : }
 
-  00094	5f		 pop	 edi
-  00095	5e		 pop	 esi
-  00096	5b		 pop	 ebx
-  00097	81 c4 cc 00 00
+  0009d	5f		 pop	 edi
+  0009e	5e		 pop	 esi
+  0009f	5b		 pop	 ebx
+  000a0	81 c4 cc 00 00
 	00		 add	 esp, 204		; 000000ccH
-  0009d	3b ec		 cmp	 ebp, esp
-  0009f	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000a4	8b e5		 mov	 esp, ebp
-  000a6	5d		 pop	 ebp
-  000a7	c3		 ret	 0
+  000a6	3b ec		 cmp	 ebp, esp
+  000a8	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000ad	8b e5		 mov	 esp, ebp
+  000af	5d		 pop	 ebp
+  000b0	c3		 ret	 0
 ?writeFileLog@@YAHPAD00PAE@Z ENDP			; writeFileLog
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -731,7 +771,7 @@ _error$ = 16						; size = 4
 _data$ = 20						; size = 4
 ?writeFileLog@@YAHPAD000@Z PROC				; writeFileLog, COMDAT
 
-; 5    : int writeFileLog(char* FileName, char* str, char* error, char* data) {
+; 26   : int writeFileLog(char* FileName, char* str, char* error, char* data) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -748,83 +788,86 @@ _data$ = 20						; size = 4
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 6    : 	FILE* file = fopen(FileName, "a");
+; 27   : 	FILE* file = fopen(GetLogPath(FileName), "a");
 
   00026	8b f4		 mov	 esi, esp
   00028	68 00 00 00 00	 push	 OFFSET ??_C@_01MCMALHOG@a@
   0002d	8b 45 08	 mov	 eax, DWORD PTR _FileName$[ebp]
   00030	50		 push	 eax
-  00031	ff 15 00 00 00
+  00031	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  00036	83 c4 04	 add	 esp, 4
+  00039	50		 push	 eax
+  0003a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fopen
-  00037	83 c4 08	 add	 esp, 8
-  0003a	3b f4		 cmp	 esi, esp
-  0003c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00041	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
+  00040	83 c4 08	 add	 esp, 8
+  00043	3b f4		 cmp	 esi, esp
+  00045	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004a	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
 
-; 7    : 	if (file == NULL) {
+; 28   : 	if (file == NULL) {
 
-  00044	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
-  00048	75 14		 jne	 SHORT $LN2@writeFileL
+  0004d	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
+  00051	75 14		 jne	 SHORT $LN2@writeFileL
 
-; 8    : 		printf("Ошибка при открытии файла!\n");
+; 29   : 		printf("Ошибка при открытии файла!\n");
 
-  0004a	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
-  0004f	e8 00 00 00 00	 call	 _printf
-  00054	83 c4 04	 add	 esp, 4
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
+  00058	e8 00 00 00 00	 call	 _printf
+  0005d	83 c4 04	 add	 esp, 4
 
-; 9    : 		return 1; // Возвращаем код ошибки
+; 30   : 		return 1; // Возвращаем код ошибки
 
-  00057	b8 01 00 00 00	 mov	 eax, 1
-  0005c	eb 36		 jmp	 SHORT $LN1@writeFileL
+  00060	b8 01 00 00 00	 mov	 eax, 1
+  00065	eb 36		 jmp	 SHORT $LN1@writeFileL
 $LN2@writeFileL:
 
-; 10   : 	}
-; 11   : 	
-; 12   : 	fprintf(file, "%s, %s, %s\n", error, str, data);
+; 31   : 	}
+; 32   : 	
+; 33   : 	fprintf(file, "%s, %s, %s\n", error, str, data);
 
-  0005e	8b 45 14	 mov	 eax, DWORD PTR _data$[ebp]
-  00061	50		 push	 eax
-  00062	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
-  00065	51		 push	 ecx
-  00066	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
-  00069	52		 push	 edx
-  0006a	68 00 00 00 00	 push	 OFFSET ??_C@_0M@FCOFONDF@?$CFs?0?5?$CFs?0?5?$CFs?6@
-  0006f	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00072	50		 push	 eax
-  00073	e8 00 00 00 00	 call	 _fprintf
-  00078	83 c4 14	 add	 esp, 20			; 00000014H
+  00067	8b 45 14	 mov	 eax, DWORD PTR _data$[ebp]
+  0006a	50		 push	 eax
+  0006b	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
+  0006e	51		 push	 ecx
+  0006f	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
+  00072	52		 push	 edx
+  00073	68 00 00 00 00	 push	 OFFSET ??_C@_0M@FCOFONDF@?$CFs?0?5?$CFs?0?5?$CFs?6@
+  00078	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  0007b	50		 push	 eax
+  0007c	e8 00 00 00 00	 call	 _fprintf
+  00081	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 13   : 
-; 14   : 	fclose(file);
+; 34   : 
+; 35   : 	fclose(file);
 
-  0007b	8b f4		 mov	 esi, esp
-  0007d	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00080	50		 push	 eax
-  00081	ff 15 00 00 00
+  00084	8b f4		 mov	 esi, esp
+  00086	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  00089	50		 push	 eax
+  0008a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fclose
-  00087	83 c4 04	 add	 esp, 4
-  0008a	3b f4		 cmp	 esi, esp
-  0008c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00091	90		 npad	 1
+  00090	83 c4 04	 add	 esp, 4
+  00093	3b f4		 cmp	 esi, esp
+  00095	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0009a	90		 npad	 1
 
-; 15   : 
-; 16   : 	return 0;
+; 36   : 
+; 37   : 	return 0;
 
-  00092	33 c0		 xor	 eax, eax
+  0009b	33 c0		 xor	 eax, eax
 $LN1@writeFileL:
 
-; 17   : }
+; 38   : }
 
-  00094	5f		 pop	 edi
-  00095	5e		 pop	 esi
-  00096	5b		 pop	 ebx
-  00097	81 c4 cc 00 00
+  0009d	5f		 pop	 edi
+  0009e	5e		 pop	 esi
+  0009f	5b		 pop	 ebx
+  000a0	81 c4 cc 00 00
 	00		 add	 esp, 204		; 000000ccH
-  0009d	3b ec		 cmp	 ebp, esp
-  0009f	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000a4	8b e5		 mov	 esp, ebp
-  000a6	5d		 pop	 ebp
-  000a7	c3		 ret	 0
+  000a6	3b ec		 cmp	 ebp, esp
+  000a8	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000ad	8b e5		 mov	 esp, ebp
+  000af	5d		 pop	 ebp
+  000b0	c3		 ret	 0
 ?writeFileLog@@YAHPAD000@Z ENDP				; writeFileLog
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -838,7 +881,7 @@ _error$ = 16						; size = 4
 _data$ = 20						; size = 4
 ?writeFileLog@@YAHPAD00I@Z PROC				; writeFileLog, COMDAT
 
-; 32   : int writeFileLog(char* FileName, char* str, char* error, unsigned int  data) {
+; 53   : int writeFileLog(char* FileName, char* str, char* error, unsigned int  data) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -855,84 +898,87 @@ _data$ = 20						; size = 4
   00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00025	90		 npad	 1
 
-; 33   : 
-; 34   : 	FILE* file = fopen(FileName, "a");
+; 54   : 
+; 55   : 	FILE* file = fopen(GetLogPath(FileName), "a");
 
   00026	8b f4		 mov	 esi, esp
   00028	68 00 00 00 00	 push	 OFFSET ??_C@_01MCMALHOG@a@
   0002d	8b 45 08	 mov	 eax, DWORD PTR _FileName$[ebp]
   00030	50		 push	 eax
-  00031	ff 15 00 00 00
+  00031	e8 00 00 00 00	 call	 ?GetLogPath@@YAPBDPBD@Z	; GetLogPath
+  00036	83 c4 04	 add	 esp, 4
+  00039	50		 push	 eax
+  0003a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fopen
-  00037	83 c4 08	 add	 esp, 8
-  0003a	3b f4		 cmp	 esi, esp
-  0003c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00041	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
+  00040	83 c4 08	 add	 esp, 8
+  00043	3b f4		 cmp	 esi, esp
+  00045	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004a	89 45 f8	 mov	 DWORD PTR _file$[ebp], eax
 
-; 35   : 	if (file == NULL) {
+; 56   : 	if (file == NULL) {
 
-  00044	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
-  00048	75 14		 jne	 SHORT $LN2@writeFileL
+  0004d	83 7d f8 00	 cmp	 DWORD PTR _file$[ebp], 0
+  00051	75 14		 jne	 SHORT $LN2@writeFileL
 
-; 36   : 		printf("Ошибка при открытии файла!\n");
+; 57   : 		printf("Ошибка при открытии файла!\n");
 
-  0004a	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
-  0004f	e8 00 00 00 00	 call	 _printf
-  00054	83 c4 04	 add	 esp, 4
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_0BM@HGGPBGJC@?N?x?h?a?j?$OA?5?o?p?h?5?n?r?j?p?$PL?r?h?h?5?t?$OA?i?k?$OA?$CB?6@
+  00058	e8 00 00 00 00	 call	 _printf
+  0005d	83 c4 04	 add	 esp, 4
 
-; 37   : 		return 1; // Возвращаем код ошибки
+; 58   : 		return 1; // Возвращаем код ошибки
 
-  00057	b8 01 00 00 00	 mov	 eax, 1
-  0005c	eb 36		 jmp	 SHORT $LN1@writeFileL
+  00060	b8 01 00 00 00	 mov	 eax, 1
+  00065	eb 36		 jmp	 SHORT $LN1@writeFileL
 $LN2@writeFileL:
 
-; 38   : 	}
-; 39   : 
-; 40   : 	fprintf(file, "%s  %s 0x00%x\n", error, str, data);
+; 59   : 	}
+; 60   : 
+; 61   : 	fprintf(file, "%s  %s 0x00%x\n", error, str, data);
 
-  0005e	8b 45 14	 mov	 eax, DWORD PTR _data$[ebp]
-  00061	50		 push	 eax
-  00062	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
-  00065	51		 push	 ecx
-  00066	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
-  00069	52		 push	 edx
-  0006a	68 00 00 00 00	 push	 OFFSET ??_C@_0P@OJLBJEH@?$CFs?5?5?$CFs?50x00?$CFx?6@
-  0006f	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00072	50		 push	 eax
-  00073	e8 00 00 00 00	 call	 _fprintf
-  00078	83 c4 14	 add	 esp, 20			; 00000014H
+  00067	8b 45 14	 mov	 eax, DWORD PTR _data$[ebp]
+  0006a	50		 push	 eax
+  0006b	8b 4d 0c	 mov	 ecx, DWORD PTR _str$[ebp]
+  0006e	51		 push	 ecx
+  0006f	8b 55 10	 mov	 edx, DWORD PTR _error$[ebp]
+  00072	52		 push	 edx
+  00073	68 00 00 00 00	 push	 OFFSET ??_C@_0P@OJLBJEH@?$CFs?5?5?$CFs?50x00?$CFx?6@
+  00078	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  0007b	50		 push	 eax
+  0007c	e8 00 00 00 00	 call	 _fprintf
+  00081	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 41   : 
-; 42   : 	fclose(file);
+; 62   : 
+; 63   : 	fclose(file);
 
-  0007b	8b f4		 mov	 esi, esp
-  0007d	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
-  00080	50		 push	 eax
-  00081	ff 15 00 00 00
+  00084	8b f4		 mov	 esi, esp
+  00086	8b 45 f8	 mov	 eax, DWORD PTR _file$[ebp]
+  00089	50		 push	 eax
+  0008a	ff 15 00 00 00
 	00		 call	 DWORD PTR __imp__fclose
-  00087	83 c4 04	 add	 esp, 4
-  0008a	3b f4		 cmp	 esi, esp
-  0008c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00091	90		 npad	 1
+  00090	83 c4 04	 add	 esp, 4
+  00093	3b f4		 cmp	 esi, esp
+  00095	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0009a	90		 npad	 1
 
-; 43   : 
-; 44   : 	return 0;
+; 64   : 
+; 65   : 	return 0;
 
-  00092	33 c0		 xor	 eax, eax
+  0009b	33 c0		 xor	 eax, eax
 $LN1@writeFileL:
 
-; 45   : }
+; 66   : }
 
-  00094	5f		 pop	 edi
-  00095	5e		 pop	 esi
-  00096	5b		 pop	 ebx
-  00097	81 c4 cc 00 00
+  0009d	5f		 pop	 edi
+  0009e	5e		 pop	 esi
+  0009f	5b		 pop	 ebx
+  000a0	81 c4 cc 00 00
 	00		 add	 esp, 204		; 000000ccH
-  0009d	3b ec		 cmp	 ebp, esp
-  0009f	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  000a4	8b e5		 mov	 esp, ebp
-  000a6	5d		 pop	 ebp
-  000a7	c3		 ret	 0
+  000a6	3b ec		 cmp	 ebp, esp
+  000a8	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000ad	8b e5		 mov	 esp, ebp
+  000af	5d		 pop	 ebp
+  000b0	c3		 ret	 0
 ?writeFileLog@@YAHPAD00I@Z ENDP				; writeFileLog
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -945,7 +991,7 @@ _Descript$ = 8						; size = 4
 _ErrorMsg$ = 12						; size = 4
 ?MsgError@@YAXPAD0@Z PROC				; MsgError, COMDAT
 
-; 156  : void MsgError(char* Descript,char* ErrorMsg){
+; 177  : void MsgError(char* Descript,char* ErrorMsg){
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -965,9 +1011,9 @@ _ErrorMsg$ = 12						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 157  : 
-; 158  : 	char buf[100];
-; 159  : 	sprintf(buf, "%s %s", Descript, ErrorMsg);
+; 178  : 
+; 179  : 	char buf[100];
+; 180  : 	sprintf(buf, "%s %s", Descript, ErrorMsg);
 
   00030	8b 45 0c	 mov	 eax, DWORD PTR _ErrorMsg$[ebp]
   00033	50		 push	 eax
@@ -979,7 +1025,7 @@ _ErrorMsg$ = 12						; size = 4
   00041	e8 00 00 00 00	 call	 _sprintf
   00046	83 c4 10	 add	 esp, 16			; 00000010H
 
-; 160  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 181  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00049	8b f4		 mov	 esi, esp
   0004b	6a 00		 push	 0
@@ -993,7 +1039,7 @@ _ErrorMsg$ = 12						; size = 4
   00060	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00065	90		 npad	 1
 
-; 161  : 	}
+; 182  : 	}
 
   00066	52		 push	 edx
   00067	8b cd		 mov	 ecx, ebp
@@ -1038,7 +1084,7 @@ _TEXT	SEGMENT
 _ErrorMsg$ = 8						; size = 4
 ?MsgError@@YAXPAD@Z PROC				; MsgError, COMDAT
 
-; 151  : void MsgError(char* ErrorMsg){
+; 172  : void MsgError(char* ErrorMsg){
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1055,8 +1101,8 @@ _ErrorMsg$ = 8						; size = 4
   0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00021	90		 npad	 1
 
-; 152  : 
-; 153  : 	MessageBoxA(NULL, ErrorMsg, "GTA2 Error", MB_OK);
+; 173  : 
+; 174  : 	MessageBoxA(NULL, ErrorMsg, "GTA2 Error", MB_OK);
 
   00022	8b f4		 mov	 esi, esp
   00024	6a 00		 push	 0
@@ -1070,7 +1116,7 @@ _ErrorMsg$ = 8						; size = 4
   00039	e8 00 00 00 00	 call	 __RTC_CheckEsp
   0003e	90		 npad	 1
 
-; 154  : 	}
+; 175  : 	}
 
   0003f	5f		 pop	 edi
   00040	5e		 pop	 esi
@@ -1093,7 +1139,7 @@ __$ArrayPad$ = -4					; size = 4
 _ErrorFile$ = 8						; size = 1
 ?DebugLog@@YAXE@Z PROC					; DebugLog, COMDAT
 
-; 143  : void DebugLog(unsigned char ErrorFile) {
+; 164  : void DebugLog(unsigned char ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1113,9 +1159,9 @@ _ErrorFile$ = 8						; size = 1
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 144  : 
-; 145  : 	char buf[100];
-; 146  : 	sprintf(buf, "%d", ErrorFile);
+; 165  : 
+; 166  : 	char buf[100];
+; 167  : 	sprintf(buf, "%d", ErrorFile);
 
   00030	0f b6 45 08	 movzx	 eax, BYTE PTR _ErrorFile$[ebp]
   00034	50		 push	 eax
@@ -1125,7 +1171,7 @@ _ErrorFile$ = 8						; size = 1
   0003e	e8 00 00 00 00	 call	 _sprintf
   00043	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 147  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 168  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00046	8b f4		 mov	 esi, esp
   00048	6a 00		 push	 0
@@ -1139,8 +1185,8 @@ _ErrorFile$ = 8						; size = 1
   0005d	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00062	90		 npad	 1
 
-; 148  : 
-; 149  : }
+; 169  : 
+; 170  : }
 
   00063	52		 push	 edx
   00064	8b cd		 mov	 ecx, ebp
@@ -1188,7 +1234,7 @@ _text$ = 8						; size = 4
 _ErrorFile$ = 12					; size = 4
 ?DebugLog@@YAXPADH@Z PROC				; DebugLog, COMDAT
 
-; 135  : void DebugLog(char *text,int ErrorFile) {
+; 156  : void DebugLog(char *text,int ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1208,9 +1254,9 @@ _ErrorFile$ = 12					; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 136  : 
-; 137  : 	char buf[100];
-; 138  : 	sprintf(buf, "%c=%d", text, ErrorFile);
+; 157  : 
+; 158  : 	char buf[100];
+; 159  : 	sprintf(buf, "%c=%d", text, ErrorFile);
 
   00030	8b 45 0c	 mov	 eax, DWORD PTR _ErrorFile$[ebp]
   00033	50		 push	 eax
@@ -1222,7 +1268,7 @@ _ErrorFile$ = 12					; size = 4
   00041	e8 00 00 00 00	 call	 _sprintf
   00046	83 c4 10	 add	 esp, 16			; 00000010H
 
-; 139  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 160  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00049	8b f4		 mov	 esi, esp
   0004b	6a 00		 push	 0
@@ -1236,8 +1282,8 @@ _ErrorFile$ = 12					; size = 4
   00060	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00065	90		 npad	 1
 
-; 140  : 
-; 141  : }
+; 161  : 
+; 162  : }
 
   00066	52		 push	 edx
   00067	8b cd		 mov	 ecx, ebp
@@ -1284,7 +1330,7 @@ __$ArrayPad$ = -4					; size = 4
 _ErrorFile$ = 8						; size = 4
 ?DebugLog@@YAXH@Z PROC					; DebugLog, COMDAT
 
-; 128  : void DebugLog(int ErrorFile) {
+; 149  : void DebugLog(int ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1304,9 +1350,9 @@ _ErrorFile$ = 8						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 129  : 
-; 130  : 	char buf[100];
-; 131  : 	sprintf(buf, "%d", ErrorFile);
+; 150  : 
+; 151  : 	char buf[100];
+; 152  : 	sprintf(buf, "%d", ErrorFile);
 
   00030	8b 45 08	 mov	 eax, DWORD PTR _ErrorFile$[ebp]
   00033	50		 push	 eax
@@ -1316,7 +1362,7 @@ _ErrorFile$ = 8						; size = 4
   0003d	e8 00 00 00 00	 call	 _sprintf
   00042	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 132  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 153  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00045	8b f4		 mov	 esi, esp
   00047	6a 00		 push	 0
@@ -1330,8 +1376,8 @@ _ErrorFile$ = 8						; size = 4
   0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00061	90		 npad	 1
 
-; 133  : 
-; 134  : }
+; 154  : 
+; 155  : }
 
   00062	52		 push	 edx
   00063	8b cd		 mov	 ecx, ebp
@@ -1378,7 +1424,7 @@ __$ArrayPad$ = -4					; size = 4
 _ErrorFile$ = 8						; size = 4
 ?DebugLog@@YAXPAE@Z PROC				; DebugLog, COMDAT
 
-; 121  : void DebugLog(unsigned char* ErrorFile) {
+; 142  : void DebugLog(unsigned char* ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1398,9 +1444,9 @@ _ErrorFile$ = 8						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 122  : 
-; 123  : 	char buf[100];
-; 124  : 	sprintf(buf, "%s", ErrorFile);
+; 143  : 
+; 144  : 	char buf[100];
+; 145  : 	sprintf(buf, "%s", ErrorFile);
 
   00030	8b 45 08	 mov	 eax, DWORD PTR _ErrorFile$[ebp]
   00033	50		 push	 eax
@@ -1410,7 +1456,7 @@ _ErrorFile$ = 8						; size = 4
   0003d	e8 00 00 00 00	 call	 _sprintf
   00042	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 125  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 146  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00045	8b f4		 mov	 esi, esp
   00047	6a 00		 push	 0
@@ -1424,8 +1470,8 @@ _ErrorFile$ = 8						; size = 4
   0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00061	90		 npad	 1
 
-; 126  : 
-; 127  : }
+; 147  : 
+; 148  : }
 
   00062	52		 push	 edx
   00063	8b cd		 mov	 ecx, ebp
@@ -1470,7 +1516,7 @@ _TEXT	SEGMENT
 _ErrorFile$ = 8						; size = 4
 ?DebugLog@@YAXPA_N@Z PROC				; DebugLog, COMDAT
 
-; 112  : void DebugLog(bool* ErrorFile) {
+; 133  : void DebugLog(bool* ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1487,14 +1533,14 @@ _ErrorFile$ = 8						; size = 4
   0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   00021	90		 npad	 1
 
-; 113  : 
-; 114  : 	//char buf[100];
-; 115  : 	if (ErrorFile){ 
+; 134  : 
+; 135  : 	//char buf[100];
+; 136  : 	if (ErrorFile){ 
 
   00022	83 7d 08 00	 cmp	 DWORD PTR _ErrorFile$[ebp], 0
   00026	74 20		 je	 SHORT $LN2@DebugLog
 
-; 116  : 		MessageBoxA(NULL, "True", "GTA2 Error", MB_OK); }
+; 137  : 		MessageBoxA(NULL, "True", "GTA2 Error", MB_OK); }
 
   00028	8b f4		 mov	 esi, esp
   0002a	6a 00		 push	 0
@@ -1509,8 +1555,8 @@ _ErrorFile$ = 8						; size = 4
   00046	eb 1e		 jmp	 SHORT $LN3@DebugLog
 $LN2@DebugLog:
 
-; 117  : 	else
-; 118  : 		MessageBoxA(NULL, "False", "GTA2 Error", MB_OK);
+; 138  : 	else
+; 139  : 		MessageBoxA(NULL, "False", "GTA2 Error", MB_OK);
 
   00048	8b f4		 mov	 esi, esp
   0004a	6a 00		 push	 0
@@ -1524,8 +1570,8 @@ $LN2@DebugLog:
   00065	90		 npad	 1
 $LN3@DebugLog:
 
-; 119  : 
-; 120  : }
+; 140  : 
+; 141  : }
 
   00066	5f		 pop	 edi
   00067	5e		 pop	 esi
@@ -1548,7 +1594,7 @@ __$ArrayPad$ = -4					; size = 4
 _ErrorFile$ = 8						; size = 4
 ?DebugLog@@YAXPA_W@Z PROC				; DebugLog, COMDAT
 
-; 99   : void DebugLog(wchar_t* ErrorFile) {
+; 120  : void DebugLog(wchar_t* ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1568,9 +1614,9 @@ _ErrorFile$ = 8						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 100  : 
-; 101  : 	wchar_t buffer[50];
-; 102  : 	swprintf(buffer, 50, L"Строка %ls", ErrorFile);
+; 121  : 
+; 122  : 	wchar_t buffer[50];
+; 123  : 	swprintf(buffer, 50, L"Строка %ls", ErrorFile);
 
   00030	8b 45 08	 mov	 eax, DWORD PTR _ErrorFile$[ebp]
   00033	50		 push	 eax
@@ -1581,7 +1627,7 @@ _ErrorFile$ = 8						; size = 4
   0003f	e8 00 00 00 00	 call	 _swprintf
   00044	83 c4 10	 add	 esp, 16			; 00000010H
 
-; 103  : 	MessageBoxW(NULL, buffer, L"GTA2 Error", MB_OK);
+; 124  : 	MessageBoxW(NULL, buffer, L"GTA2 Error", MB_OK);
 
   00047	8b f4		 mov	 esi, esp
   00049	6a 00		 push	 0
@@ -1595,8 +1641,8 @@ _ErrorFile$ = 8						; size = 4
   0005e	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00063	90		 npad	 1
 
-; 104  : 
-; 105  : }
+; 125  : 
+; 126  : }
 
   00064	52		 push	 edx
   00065	8b cd		 mov	 ecx, ebp
@@ -1639,6 +1685,160 @@ $LN3@DebugLog:
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\work\GTA2_RE\dllLoad\dllLoad\DebugLogFile.cpp
+;	COMDAT ?GetLogPath@@YAPBDPBD@Z
+_TEXT	SEGMENT
+_st$ = -24						; size = 16
+__$ArrayPad$ = -4					; size = 4
+_fileName$ = 8						; size = 4
+?GetLogPath@@YAPBDPBD@Z PROC				; GetLogPath, COMDAT
+
+; 8    : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec dc 00 00
+	00		 sub	 esp, 220		; 000000dcH
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d e4	 lea	 edi, DWORD PTR [ebp-28]
+  0000f	b9 07 00 00 00	 mov	 ecx, 7
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	a1 00 00 00 00	 mov	 eax, DWORD PTR ___security_cookie
+  00020	33 c5		 xor	 eax, ebp
+  00022	89 45 fc	 mov	 DWORD PTR __$ArrayPad$[ebp], eax
+  00025	b9 00 00 00 00	 mov	 ecx, OFFSET __3D783A0A_DebugLogFile@cpp
+  0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  0002f	90		 npad	 1
+
+; 9    :     static char buf[MAX_PATH];
+; 10   :     SYSTEMTIME st;
+; 11   : 
+; 12   :     if (!s_logDirInitialized) {
+
+  00030	83 3d 00 00 00
+	00 00		 cmp	 DWORD PTR ?s_logDirInitialized@@3HA, 0
+  00037	0f 85 81 00 00
+	00		 jne	 $LN2@GetLogPath
+
+; 13   :         GetLocalTime(&st);
+
+  0003d	8b f4		 mov	 esi, esp
+  0003f	8d 45 e8	 lea	 eax, DWORD PTR _st$[ebp]
+  00042	50		 push	 eax
+  00043	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__GetLocalTime@4
+  00049	3b f4		 cmp	 esi, esp
+  0004b	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00050	90		 npad	 1
+
+; 14   :         _snprintf(s_logDir, sizeof(s_logDir),
+
+  00051	0f b7 45 f4	 movzx	 eax, WORD PTR _st$[ebp+12]
+  00055	50		 push	 eax
+  00056	0f b7 4d f2	 movzx	 ecx, WORD PTR _st$[ebp+10]
+  0005a	51		 push	 ecx
+  0005b	0f b7 55 f0	 movzx	 edx, WORD PTR _st$[ebp+8]
+  0005f	52		 push	 edx
+  00060	0f b7 45 ee	 movzx	 eax, WORD PTR _st$[ebp+6]
+  00064	50		 push	 eax
+  00065	0f b7 4d ea	 movzx	 ecx, WORD PTR _st$[ebp+2]
+  00069	51		 push	 ecx
+  0006a	0f b7 55 e8	 movzx	 edx, WORD PTR _st$[ebp]
+  0006e	52		 push	 edx
+  0006f	68 00 00 00 00	 push	 OFFSET ??_C@_0CC@PLGPAPHO@log?2?$CF04u?9?$CF02u?9?$CF02u_?$CF02u?9?$CF02u?9?$CF0@
+  00074	68 04 01 00 00	 push	 260			; 00000104H
+  00079	68 00 00 00 00	 push	 OFFSET ?s_logDir@@3PADA
+  0007e	e8 00 00 00 00	 call	 __snprintf
+  00083	83 c4 24	 add	 esp, 36			; 00000024H
+
+; 15   :             "log\\%04u-%02u-%02u_%02u-%02u-%02u",
+; 16   :             (unsigned)st.wYear, (unsigned)st.wMonth, (unsigned)st.wDay,
+; 17   :             (unsigned)st.wHour, (unsigned)st.wMinute, (unsigned)st.wSecond);
+; 18   :         CreateDirectoryA("log", NULL);
+
+  00086	8b f4		 mov	 esi, esp
+  00088	6a 00		 push	 0
+  0008a	68 00 00 00 00	 push	 OFFSET ??_C@_03MGHMBJCF@log@
+  0008f	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__CreateDirectoryA@8
+  00095	3b f4		 cmp	 esi, esp
+  00097	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0009c	90		 npad	 1
+
+; 19   :         CreateDirectoryA(s_logDir, NULL);
+
+  0009d	8b f4		 mov	 esi, esp
+  0009f	6a 00		 push	 0
+  000a1	68 00 00 00 00	 push	 OFFSET ?s_logDir@@3PADA
+  000a6	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp__CreateDirectoryA@8
+  000ac	3b f4		 cmp	 esi, esp
+  000ae	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000b3	90		 npad	 1
+
+; 20   :         s_logDirInitialized = TRUE;
+
+  000b4	c7 05 00 00 00
+	00 01 00 00 00	 mov	 DWORD PTR ?s_logDirInitialized@@3HA, 1
+$LN2@GetLogPath:
+
+; 21   :     }
+; 22   :     _snprintf(buf, sizeof(buf), "%s\\%s", s_logDir, fileName);
+
+  000be	8b 45 08	 mov	 eax, DWORD PTR _fileName$[ebp]
+  000c1	50		 push	 eax
+  000c2	68 00 00 00 00	 push	 OFFSET ?s_logDir@@3PADA
+  000c7	68 00 00 00 00	 push	 OFFSET ??_C@_05BMGBEOOC@?$CFs?2?$CFs@
+  000cc	68 04 01 00 00	 push	 260			; 00000104H
+  000d1	68 00 00 00 00	 push	 OFFSET ?buf@?1??GetLogPath@@YAPBDPBD@Z@4PADA
+  000d6	e8 00 00 00 00	 call	 __snprintf
+  000db	83 c4 14	 add	 esp, 20			; 00000014H
+
+; 23   :     return buf;
+
+  000de	b8 00 00 00 00	 mov	 eax, OFFSET ?buf@?1??GetLogPath@@YAPBDPBD@Z@4PADA
+
+; 24   : }
+
+  000e3	52		 push	 edx
+  000e4	8b cd		 mov	 ecx, ebp
+  000e6	50		 push	 eax
+  000e7	8d 15 00 00 00
+	00		 lea	 edx, DWORD PTR $LN6@GetLogPath
+  000ed	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
+  000f2	58		 pop	 eax
+  000f3	5a		 pop	 edx
+  000f4	5f		 pop	 edi
+  000f5	5e		 pop	 esi
+  000f6	5b		 pop	 ebx
+  000f7	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
+  000fa	33 cd		 xor	 ecx, ebp
+  000fc	e8 00 00 00 00	 call	 @__security_check_cookie@4
+  00101	81 c4 dc 00 00
+	00		 add	 esp, 220		; 000000dcH
+  00107	3b ec		 cmp	 ebp, esp
+  00109	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0010e	8b e5		 mov	 esp, ebp
+  00110	5d		 pop	 ebp
+  00111	c3		 ret	 0
+  00112	66 90		 npad	 2
+$LN6@GetLogPath:
+  00114	01 00 00 00	 DD	 1
+  00118	00 00 00 00	 DD	 $LN5@GetLogPath
+$LN5@GetLogPath:
+  0011c	e8 ff ff ff	 DD	 -24			; ffffffe8H
+  00120	10 00 00 00	 DD	 16			; 00000010H
+  00124	00 00 00 00	 DD	 $LN4@GetLogPath
+$LN4@GetLogPath:
+  00128	73		 DB	 115			; 00000073H
+  00129	74		 DB	 116			; 00000074H
+  0012a	00		 DB	 0
+?GetLogPath@@YAPBDPBD@Z ENDP				; GetLogPath
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\DebugLogFile.cpp
 ;	COMDAT ?DebugLog@@YAXPAX0PAD@Z
 _TEXT	SEGMENT
 _buf$ = -108						; size = 100
@@ -1648,7 +1848,7 @@ _offsetPole$ = 12					; size = 4
 _text$ = 16						; size = 4
 ?DebugLog@@YAXPAX0PAD@Z PROC				; DebugLog, COMDAT
 
-; 106  : void DebugLog(void* Structure, void* offsetPole, char *text) {
+; 127  : void DebugLog(void* Structure, void* offsetPole, char *text) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1668,9 +1868,9 @@ _text$ = 16						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 107  : 	
-; 108  : 	char buf[100];
-; 109  : 	sprintf(buf, "Данное поле строчки %s offcet = 0x%x", text, offsetPole);
+; 128  : 	
+; 129  : 	char buf[100];
+; 130  : 	sprintf(buf, "Данное поле строчки %s offcet = 0x%x", text, offsetPole);
 
   00030	8b 45 0c	 mov	 eax, DWORD PTR _offsetPole$[ebp]
   00033	50		 push	 eax
@@ -1682,7 +1882,7 @@ _text$ = 16						; size = 4
   00041	e8 00 00 00 00	 call	 _sprintf
   00046	83 c4 10	 add	 esp, 16			; 00000010H
 
-; 110  : 	MessageBoxA(NULL, buf, "GTA2 Offset", MB_OK);
+; 131  : 	MessageBoxA(NULL, buf, "GTA2 Offset", MB_OK);
 
   00049	8b f4		 mov	 esi, esp
   0004b	6a 00		 push	 0
@@ -1696,7 +1896,7 @@ _text$ = 16						; size = 4
   00060	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00065	90		 npad	 1
 
-; 111  : }
+; 132  : }
 
   00066	52		 push	 edx
   00067	8b cd		 mov	 ecx, ebp
@@ -1743,7 +1943,7 @@ __$ArrayPad$ = -4					; size = 4
 _ErrorFile$ = 8						; size = 4
 ?DebugLog@@YAXPBD@Z PROC				; DebugLog, COMDAT
 
-; 92   : void DebugLog(const char* ErrorFile) {
+; 113  : void DebugLog(const char* ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1763,9 +1963,9 @@ _ErrorFile$ = 8						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 93   : 
-; 94   : 	char buf[100];
-; 95   : 	sprintf(buf, "%s", ErrorFile);
+; 114  : 
+; 115  : 	char buf[100];
+; 116  : 	sprintf(buf, "%s", ErrorFile);
 
   00030	8b 45 08	 mov	 eax, DWORD PTR _ErrorFile$[ebp]
   00033	50		 push	 eax
@@ -1775,7 +1975,7 @@ _ErrorFile$ = 8						; size = 4
   0003d	e8 00 00 00 00	 call	 _sprintf
   00042	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 96   : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 117  : 	MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00045	8b f4		 mov	 esi, esp
   00047	6a 00		 push	 0
@@ -1789,8 +1989,8 @@ _ErrorFile$ = 8						; size = 4
   0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00061	90		 npad	 1
 
-; 97   : 
-; 98   : }
+; 118  : 
+; 119  : }
 
   00062	52		 push	 edx
   00063	8b cd		 mov	 ecx, ebp
@@ -1837,7 +2037,7 @@ __$ArrayPad$ = -4					; size = 4
 _ErrorFile$ = 8						; size = 4
 ?DebugLog@@YAXPAD@Z PROC				; DebugLog, COMDAT
 
-; 85   : void DebugLog( char* ErrorFile) {
+; 106  : void DebugLog( char* ErrorFile) {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1857,9 +2057,9 @@ _ErrorFile$ = 8						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 86   : 
-; 87   : 		char buf[100];
-; 88   : 		sprintf(buf, "%s",  ErrorFile);
+; 107  : 
+; 108  : 		char buf[100];
+; 109  : 		sprintf(buf, "%s",  ErrorFile);
 
   00030	8b 45 08	 mov	 eax, DWORD PTR _ErrorFile$[ebp]
   00033	50		 push	 eax
@@ -1869,7 +2069,7 @@ _ErrorFile$ = 8						; size = 4
   0003d	e8 00 00 00 00	 call	 _sprintf
   00042	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 89   : 		MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 110  : 		MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   00045	8b f4		 mov	 esi, esp
   00047	6a 00		 push	 0
@@ -1883,8 +2083,8 @@ _ErrorFile$ = 8						; size = 4
   0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00061	90		 npad	 1
 
-; 90   : 
-; 91   : 	}
+; 111  : 
+; 112  : 	}
 
   00062	52		 push	 edx
   00063	8b cd		 mov	 ecx, ebp
@@ -1933,7 +2133,7 @@ _ErrorFile$ = 12					; size = 4
 _code$ = 16						; size = 4
 ?DebugLog@@YAXHPADH@Z PROC				; DebugLog, COMDAT
 
-; 77   : void DebugLog(int CodeError, char* ErrorFile, int code){
+; 98   : void DebugLog(int CodeError, char* ErrorFile, int code){
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -1953,9 +2153,9 @@ _code$ = 16						; size = 4
   0002a	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002f	90		 npad	 1
 
-; 78   : 
-; 79   : 	 char buf[100];
-; 80   : 	 sprintf(buf, " %d: %s -%d", CodeError,ErrorFile,code);
+; 99   : 
+; 100  : 	 char buf[100];
+; 101  : 	 sprintf(buf, " %d: %s -%d", CodeError,ErrorFile,code);
 
   00030	8b 45 10	 mov	 eax, DWORD PTR _code$[ebp]
   00033	50		 push	 eax
@@ -1969,7 +2169,7 @@ _code$ = 16						; size = 4
   00045	e8 00 00 00 00	 call	 _sprintf
   0004a	83 c4 14	 add	 esp, 20			; 00000014H
 
-; 81   :      MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
+; 102  :      MessageBoxA(NULL, buf, "GTA2 Error", MB_OK);
 
   0004d	8b f4		 mov	 esi, esp
   0004f	6a 00		 push	 0
@@ -1983,8 +2183,8 @@ _code$ = 16						; size = 4
   00064	e8 00 00 00 00	 call	 __RTC_CheckEsp
   00069	90		 npad	 1
 
-; 82   : 
-; 83   : }
+; 103  : 
+; 104  : }
 
   0006a	52		 push	 edx
   0006b	8b cd		 mov	 ecx, ebp
@@ -2021,6 +2221,78 @@ $LN3@DebugLog:
   000b2	66		 DB	 102			; 00000066H
   000b3	00		 DB	 0
 ?DebugLog@@YAXHPADH@Z ENDP				; DebugLog
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __snprintf
+_TEXT	SEGMENT
+__ArgList$ = -20					; size = 4
+__Result$ = -8						; size = 4
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__snprintf PROC						; COMDAT
+
+; 1947 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec e4 00 00
+	00		 sub	 esp, 228		; 000000e4H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d dc	 lea	 edi, DWORD PTR [ebp-36]
+  0000f	b9 09 00 00 00	 mov	 ecx, 9
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00025	90		 npad	 1
+
+; 1948 :         int _Result;
+; 1949 :         va_list _ArgList;
+; 1950 :         __crt_va_start(_ArgList, _Format);
+
+  00026	8d 45 14	 lea	 eax, DWORD PTR __Format$[ebp+4]
+  00029	89 45 ec	 mov	 DWORD PTR __ArgList$[ebp], eax
+
+; 1951 :         _Result = _vsnprintf(_Buffer, _BufferCount, _Format, _ArgList);
+
+  0002c	8b 45 ec	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  0002f	50		 push	 eax
+  00030	8b 4d 10	 mov	 ecx, DWORD PTR __Format$[ebp]
+  00033	51		 push	 ecx
+  00034	8b 55 0c	 mov	 edx, DWORD PTR __BufferCount$[ebp]
+  00037	52		 push	 edx
+  00038	8b 45 08	 mov	 eax, DWORD PTR __Buffer$[ebp]
+  0003b	50		 push	 eax
+  0003c	e8 00 00 00 00	 call	 __vsnprintf
+  00041	83 c4 10	 add	 esp, 16			; 00000010H
+  00044	89 45 f8	 mov	 DWORD PTR __Result$[ebp], eax
+
+; 1952 :         __crt_va_end(_ArgList);
+
+  00047	c7 45 ec 00 00
+	00 00		 mov	 DWORD PTR __ArgList$[ebp], 0
+
+; 1953 :         return _Result;
+
+  0004e	8b 45 f8	 mov	 eax, DWORD PTR __Result$[ebp]
+
+; 1954 :     }
+
+  00051	5f		 pop	 edi
+  00052	5e		 pop	 esi
+  00053	5b		 pop	 ebx
+  00054	81 c4 e4 00 00
+	00		 add	 esp, 228		; 000000e4H
+  0005a	3b ec		 cmp	 ebp, esp
+  0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00061	8b e5		 mov	 esp, ebp
+  00063	5d		 pop	 ebp
+  00064	c3		 ret	 0
+__snprintf ENDP
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
@@ -2148,6 +2420,61 @@ __vsprintf_l PROC					; COMDAT
   0004e	5d		 pop	 ebp
   0004f	c3		 ret	 0
 __vsprintf_l ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __vsnprintf
+_TEXT	SEGMENT
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__ArgList$ = 20						; size = 4
+__vsnprintf PROC					; COMDAT
+
+; 1411 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec c0 00 00
+	00		 sub	 esp, 192		; 000000c0H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8b fd		 mov	 edi, ebp
+  0000e	33 c9		 xor	 ecx, ecx
+  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00015	f3 ab		 rep stosd
+  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00021	90		 npad	 1
+
+; 1412 :         return _vsnprintf_l(_Buffer, _BufferCount, _Format, NULL, _ArgList);
+
+  00022	8b 45 14	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  00025	50		 push	 eax
+  00026	6a 00		 push	 0
+  00028	8b 4d 10	 mov	 ecx, DWORD PTR __Format$[ebp]
+  0002b	51		 push	 ecx
+  0002c	8b 55 0c	 mov	 edx, DWORD PTR __BufferCount$[ebp]
+  0002f	52		 push	 edx
+  00030	8b 45 08	 mov	 eax, DWORD PTR __Buffer$[ebp]
+  00033	50		 push	 eax
+  00034	e8 00 00 00 00	 call	 __vsnprintf_l
+  00039	83 c4 14	 add	 esp, 20			; 00000014H
+
+; 1413 :     }
+
+  0003c	5f		 pop	 edi
+  0003d	5e		 pop	 esi
+  0003e	5b		 pop	 ebx
+  0003f	81 c4 c0 00 00
+	00		 add	 esp, 192		; 000000c0H
+  00045	3b ec		 cmp	 ebp, esp
+  00047	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004c	8b e5		 mov	 esp, ebp
+  0004e	5d		 pop	 ebp
+  0004f	c3		 ret	 0
+__vsnprintf ENDP
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h

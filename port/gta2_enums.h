@@ -1,0 +1,672 @@
+enum  SearchType
+{
+  SEARCHTYPE_NO_THREATS = 0u,
+  SEARCHTYPE_LINE_OF_SIGHT = 1u,
+  SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY = 2u,
+  SEARCHTYPE_AREA = 3u,
+  SEARCHTYPE_AREA_PLAYER_ONLY = 4u,
+};
+
+enum  CarModel : __int32
+{
+  ALFA = 0,
+  ALLARD = 1,
+  AMDB4 = 2,
+  APC = 3,
+  BANKVAN = 4,
+  BMW = 5,
+  BOXCAR = 6,
+  BOXTRUCK = 7,
+  BUG = 8,
+  Car10 = 9,
+  BUICK = 10,
+  BUS = 11,
+  COPCAR = 12,
+  DART = 13,
+  EDSEL = 14,
+  Car16 = 15,
+  FIAT = 16,
+  FireTruck = 17,
+  GRAHAM = 18,
+  GT24640 = 19,
+  Car21 = 20,
+  GTRUCK = 21,
+  GunJeep = 22,
+  HOTDOG = 23,
+  HOTDOG_D1 = 24,
+  HOTDOG_D2 = 25,
+  HOTDOG_D3 = 26,
+  ICECREAM = 27,
+  ISETLIMO = 28,
+  ISETTA = 29,
+  JEEP = 30,
+  JEFFREY = 31,
+  LIMO = 32,
+  LIMO2 = 33,
+  MEDICAR = 34,
+  MERC = 35,
+  MESSER = 36,
+  MIURA = 37,
+  MONSTER = 38,
+  MORGAN = 39,
+  MORRIS = 40,
+  PICKUP = 41,
+  RTYPE = 42,
+  SPIDER = 44,
+  SPRITE = 45,
+  STINGRAY = 46,
+  STRATOS = 47,
+  STRATOSB = 48,
+  STRIPETB = 49,
+  STYPE = 50,
+  STYPECAB = 51,
+  SWATVAN = 52,
+  T2000GT = 53,
+  Tank = 54,
+  TANKER = 55,
+  Taxi = 56,
+  TBIRD = 57,
+  TOWTRUCK = 58,
+  TRAIN = 59,
+  TRAINCAB = 60,
+  TRAINFB = 61,
+  TRANCEAM = 62,
+  TRUKCAB1 = 63,
+  TRUKCAB2 = 64,
+  TRUKCONT = 65,
+  TRUKTRNS = 66,
+  TVVAN = 67,
+  VAN = 68,
+  VESPA = 69,
+  VTYPE = 70,
+  WBTWIN = 71,
+  WRECK0 = 72,
+  WRECK1 = 73,
+  WRECK2 = 74,
+  WRECK3 = 75,
+  WRECK4 = 76,
+  WRECK5 = 77,
+  WRECK6 = 78,
+  WRECK7 = 79,
+  WRECK8 = 80,
+  WRECK9 = 81,
+  XK120 = 82,
+  ZCX5 = 83,
+  EDSELFBI = 84,
+  HOTDOG_D4 = 85,
+  KRSNABUS = 86,
+  MODEL_NUM_CAR_MODELS = 87,
+};
+
+enum  DamageType
+{
+  DAMAGE_NONE = 0u,
+  DAMAGE_BY_VEHICLE = 1u,
+  DAMAGE_BY_TRAIN_TRACKS = 2u,
+  DAMAGE_BY_OWN_VEHICLE = 3u,
+  DAMAGE_BY_EXPLOSION = 4u,
+  DAMAGE_BY_DROWNING = 5u,
+  DAMAGE_BY_POLICE = 6u,
+  DAMAGE_BY_DUMMY_CAR = 7u,
+  DAMAGE_BY_PUBLIC_TRANSPORT = 8u,
+  DAMAGE_BY_UNKNOWN_WEAPON = 9u,
+  DAMAGE_BY_PUNCH = 10u,
+  DAMAGE_BY_GUN = 11u,
+  DAMAGE_BY_CAR_BOMB = 12u,
+  DAMAGE_BY_FIRE = 13u,
+  DAMAGE_BY_FLAMETHROWER = 14u,
+  DAMAGE_BY_GRENADE = 15u,
+  DAMAGE_BY_MOLOTOV = 16u,
+  DAMAGE_BY_ROCKET_LAUNCHER = 17u,
+  DAMAGE_BY_ELECTRO_WEAPON = 18u,
+  DAMAGE_BY_SHOTGUN = 19u,
+  DAMAGE_BY_WATER_CANNON = 20u,
+  DAMAGE_BY_CAR_MINE = 21u,
+  DAMAGE_BY_ANY_FOOT_WEAPON = 22u,
+  DAMAGE_BY_ANY_WEAPON = 23u,
+};
+
+enum  CAR_ENGINE_STATE : __int32
+{
+  BROKEN_DOESNT_WORK = 0u,
+  ENGINE_OFF = 1u,
+  TURNING_OFF = 2u,
+  ENGINE_ON = 3u,
+  REL_TO_CAR_SIREN = 4u,
+  TURN_ENGINE_OFF = 5u,
+  ENGINE_OFF2 = 6u,
+  LIGHTS_ON_BUT_ENGINE_OFF_NO_FUEL = 7u,
+};
+
+enum  TRAFFIC_CAR_TYPE : __int32
+{
+  TRAFFIC_0 = 0u,
+  TRAFFIC_REGULAR = 1u,
+  TRAFFIC_PROT_RECYCLED_CAR = 2u,
+  TRAFFIC_3 = 3u,
+  TRAFFIC_4 = 4u,
+  TRAFFIC_5 = 5u,
+  TRAFFIC_6 = 6u,
+  TRAFFIC_7 = 7u,
+  TRAFFIC_MISSION_CAR = 8u,
+  TRAFFIC_9 = 9u,
+  TRAFFIC_10 = 10u,
+};
+
+enum  KeyPlayer : __int16
+{
+  Rotate_Left = 48u,
+  Rotate_Right = 1392u,
+};
+
+enum  FW
+{
+  FW_Forward = 16384u,
+  FW_Backward = 4294950912u,
+};
+
+enum  DEATH_REASON
+{
+  WASTED0 = 0u,
+  WASTED = 1u,
+  FRIED = 2u,
+  NICKED = 3u,
+  SHOCKED = 4u,
+};
+
+enum  POWERUP_TYPE : __int16
+{
+  POWERUP_TYPE_MULTIPLIER = 0u,
+  POWERUP_TYPE_LIFE = 1u,
+  POWERUP_TYPE_HEALTH = 2u,
+  POWERUP_TYPE_ARMOR = 3u,
+  POWERUP_TYPE_GET_OUTTA_JAIL_FREE_CARD = 4u,
+  POWERUP_TYPE_COP_BRIBE = 5u,
+  POWERUP_TYPE_INVULNERABILITY = 6u,
+  POWERUP_TYPE_DOUBLE_DAMAGE = 7u,
+  POWERUP_TYPE_FAST_RELOAD = 8u,
+  POWERUP_TYPE_ELECTROFINGERS = 9u,
+  POWERUP_TYPE_RESPECT = 10u,
+  POWERUP_TYPE_INVISIBILITY = 11u,
+  POWERUP_TYPE_INSTANT_GANG = 12u,
+  POWERUP_TYPE_13 = 13u,
+  POWERUP_TYPE_14 = 14u,
+  POWERUP_TYPE_15 = 15u,
+  POWERUP_TYPE_16 = 16u,
+};
+
+enum  Occupation
+{
+  OCCUPATION_PLAYER = 0u,
+  OCCUPATION_EMPTY = 1u,
+  OCCUPATION_2 = 2u,
+  OCCUPATION_DUMMY = 3u,
+  OCCUPATION_4 = 4u,
+  OCCUPATION_DRIVER = 5u,
+  OCCUPATION_PSYCHO = 14u,
+  OCCUPATION_MUGGER = 15u,
+  OCCUPATION_CARTHIEF = 16u,
+  OCCUPATION_BANK_ROBBER = 17u,
+  OCCUPATION_CRIMINAL = 18u,
+  OCCUPATION_ELVIS = 22u,
+  OCCUPATION_POLICE = 24u,
+  OCCUPATION_SWAT = 25u,
+  OCCUPATION_FBI = 26u,
+  OCCUPATION_ARMY = 27u,
+  OCCUPATION_GUARD = 28u,
+  OCCUPATION_GUARD_AGAINST_PLAYER = 32u,
+  OCCUPATION_CRIMINAL_TYPE1 = 33u,
+  OCCUPATION_CRIMINAL_TYPE2 = 34u,
+  OCCUPATION_SPECIAL_GROUP_MEMBER = 35u,
+  OCCUPATION_TANK_DRIVER = 36u,
+  OCCUPATION_37 = 37u,
+  OCCUPATION_FIREMAN = 38u,
+  OCCUPATION_ROAD_BLOCK_TANK_MAN = 39u,
+  OCCUPATION_DRONE = 41u,
+  OCCUPATION_42 = 42u,
+  OCCUPATION_STAND_STILL_BLOKE = 43u,
+  OCCUPATION_ELVIS_LEADER = 44u,
+  OCCUPATION_REFUGEES = 45u,
+  OCCUPATION_ANY_LAW_ENFORCEMENT = 46u,
+  OCCUPATION_ANY_EMERGENCY_SERVICE_MAN = 47u,
+  OCCUPATION_ANY_GANG_MEMBER = 48u,
+  OCCUPATION_ANY_ELVIS = 49u,
+  OCCUPATION_50 = 50u,
+  OCCUPATION_NONE = 51u,
+};
+
+enum  ALL_PED : __int32
+{
+  PLAYER = 0u,
+  EMPTY = 1u,
+  UNKNOWN_OCUPATION2 = 2u,
+  DUMMY = 3u,
+  UNKNOWN_OCUPATION_DRIVER4 = 4u,
+  DRIVER = 5u,
+  UNKNOWN_OCUPATION6 = 6u,
+  UNKNOWN_OCUPATION7 = 7u,
+  UNKNOWN_OCUPATION8 = 8u,
+  UNKNOWN_OCUPATION9 = 9u,
+  DRIVER2 = 10u,
+  UNKNOWN_OCUPATION_11 = 11u,
+  UNKNOWN_OCUPATION_12 = 12u,
+  UNKNOWN_OCUPATION_13 = 13u,
+  PSYCHO = 14u,
+  MUGGER = 15u,
+  CARTHIEF = 16u,
+  BANK_ROBBER = 17u,
+  CRIMINAL = 18u,
+  UNKNOWN_OCUPATION_19 = 19u,
+  UNKNOWN_OCUPATION_20 = 20u,
+  UNKNOWN_OCUPATION_21 = 21u,
+  ELVIS = 22u,
+  UNKNOWN_OCUPATION_23 = 23u,
+  POLICE = 24u,
+  SWAT = 25u,
+  FBI = 26u,
+  ARMYARMY = 27u,
+  GUARD = 28u,
+  UNK_REL_TO_POLICE_1 = 29u,
+  UNK_REL_TO_POLICE_2 = 30u,
+  UNK_REL_TO_POLICE_3 = 31u,
+  GUARD_AGAINST_PLAYER = 32u,
+  CRIMINAL_TYPE_1 = 33u,
+  CRIMINAL_TYPE_2 = 34u,
+  SPECIAL_GROUP_MEMBER = 35u,
+  TANK_DRIVER = 36u,
+  UNK_REL_TO_POLICE_4 = 37u,
+  FIREMAN = 38u,
+  ROAD_BLOCK_TANK_MAN = 39u,
+  UNKNOWN_OCUPATION_40 = 40u,
+  DRONE = 41u,
+  UNKNOWN_OCUPATION_42 = 42u,
+  STAND_STILL_BLOKE = 43u,
+  ELVIS_LEADER = 44u,
+  REFUGEES = 45u,
+  ANY_LAW_ENFORCEMENT = 46u,
+  ANY_EMERGENCY_SERVICE_MAN = 47u,
+  ANY_GANG_MEMBER = 48u,
+  ANY_ELVIS = 49u,
+  DRIVER3 = 50u,
+  NO_OCCUPATION = 51u,
+};
+
+enum  Remap : __int8
+{
+  REMAP_COP = 0u,
+  REMAP_GREEN_COP = 1u,
+  REMAP_RED_COP = 2u,
+  REMAP_YELLOW_COP = 3u,
+  REMAP_ARMY = 4u,
+  REMAP_REDNECK_1 = 5u,
+  REMAP_REDNECK_2 = 6u,
+  REMAP_SCIENTIST = 7u,
+  REMAP_ZAIBATSU = 8u,
+  REMAP_KRISHNA = 9u,
+  REMAP_RUSSIAN = 10u,
+  REMAP_LOONIE = 11u,
+  REMAP_ELVIS = 12u,
+  REMAP_YAKUZA = 13u,
+  REMAP_FIRE_FIGHTER = 14u,
+  REMAP_CAR_JACKER = 15u,
+  REMAP_MEDIC = 16u,
+  REMAP_PICKPOCKET = 17u,
+  REMAP_BLUE_PEDESTRIAN = 18u,
+  REMAP_LIGHT_BLUE_PEDESTRIAN = 19u,
+  REMAP_RED_PEDESTRIAN = 20u,
+  REMAP_PEDESTRIAN = 21u,
+  REMAP_PRISONER = 22u,
+  REMAP_HULK = 23u,
+  REMAP_HULK_GREEN = 24u,
+  REMAP_PLAYER = 25u,
+  REMAP_NAKED_PEDESTRIAN = 26u,
+};
+
+enum  GraphicType
+{
+  GRAPHIC_DUMMY = 0u,
+  GRAPHIC_EMERG = 1u,
+  GRAPHIC_GANG = 2u,
+};
+
+enum  PedState
+{
+  PEDSTATE_MOVE_TURN = 0u,
+  PEDSTATE_ENTER_CAR = 3u,
+  PEDSTATE_EXIT_CAR = 4u,
+  PEDSTATE_IDLE = 7u,
+  PEDSTATE_FALL = 8u,
+  PEDSTATE_DEAD = 9u,
+  PEDSTATE_IN_CAR = 10u,
+};
+
+enum  GANG : unsigned __int8
+{
+  Yakuza = 0u,
+  Zaibatsu_Corporation = 1u,
+  Loonies = 2u,
+  GANG_3 = 3u,
+  GANG_4 = 4u,
+  GANG_5 = 5u,
+  GANG_6 = 6u,
+  GANG_7 = 7u,
+  GANG_8 = 8u,
+  GANG_9 = 9u,
+  GANG_10 = 10u,
+};
+
+enum  VOCAL
+{
+  VOCAL_0 = 0u,
+  VOCAL_INSANE_STUNT_BONUS = 1u,
+  VOCAL_GRAND_THEFT_AUTO = 2u,
+  VOCAL_WIPEOUT = 3u,
+  VOCAL_EXPEDITIOUS_EXECUTION = 4u,
+  VOCAL_GENOCIDE = 5u,
+  VOCAL_COP_KILLA = 6u,
+  VOCAL_CAR_JACKA = 7u,
+  VOCAL_ELVIS_HAS_LEFT_THE_BUILDING = 8u,
+  VOCAL_ACCURACY_BONUS = 9u,
+  VOCAL_BACK_TO_FRONT_BONUS = 10u,
+  VOCAL_MEDICAL_EMERGENCY = 11u,
+  VOCAL_KILL_FRENZY = 12u,
+  VOCAL_13 = 13u,
+  VOCAL_14 = 14u,
+  VOCAL_15 = 15u,
+  VOCAL_16 = 16u,
+  VOCAL_BUSTED = 17u,
+  VOCAL_FRENZY_FAILED = 18u,
+  VOCAL_FRENZY_PASSED = 19u,
+  VOCAL_FRYING_TONIGHT = 20u,
+  VOCAL_GAME_OVER = 21u,
+  VOCAL_JOB_COMPLETE = 22u,
+  VOCAL_JOB_FAILED = 23u,
+  VOCAL_AND_REMEMBER__RESPECT_IS_EVERYTHING = 24u,
+  VOCAL_SHOCKING = 25u,
+  VOCAL_MMM____SOMETHIN_S_COOKIN = 26u,
+  VOCAL_TIMES_UP__PAL = 27u,
+  VOCAL_TOASTED = 28u,
+  VOCAL_WASTED = 29u,
+  VOCAL_bombarmed = 30u,
+  VOCAL_laugh6 = 31u,
+  VOCAL_LAUGH__changes_each_time_you_play_it = 32u,
+  VOCAL_RACE_OVER = 33u,
+  VOCAL_SECOND_LAP = 34u,
+  VOCAL_FINAL_LAP = 35u,
+  VOCAL_RACE_ON = 36u,
+  VOCAL_HEY__30_PEOPLE_DOWN__MULTIPLIER_X2 = 37u,
+  VOCAL_OOH__60_PEOPLE_DOWN__MULTIPLIER_X3 = 38u,
+  VOCAL_NICE__90_PEOPLE_DOWN__MULTIPLIER_X4 = 39u,
+  VOCAL_GREAT__120_PEOPLE_DOWN__MULTIPLIER_X5 = 40u,
+  VOCAL_OUTSTANDING__150_PEOPLE_DOWN__MULTIPLIER_X6 = 41u,
+  VOCAL_TIME_OUT = 42u,
+  VOCAL_YOUR_TIME_IS_EXTENDED = 43u,
+  VOCAL_TIME_S_UP__PAL___duplicate = 44u,
+  VOCAL_Oh__sorry_about_that____Did_that_hurt = 45u,
+  VOCAL_Nice_work = 46u,
+  VOCAL_CHOCTASTIC = 47u,
+  VOCAL_RASPBERRY_RIPPLE = 48u,
+  VOCAL_YOU_SHOT_YOUR_LOAD = 49u,
+  VOCAL_OOH____DID_THAT_HURT = 50u,
+  VOCAL_DEATH_TO_ICE_CREAM_VANS = 51u,
+  VOCAL_CRISPY_CRITTER = 52u,
+  VOCAL_YOU_RE_TOAST__BUDDY = 53u,
+  VOCAL_EAT_LEADEN_DEATH__PUNK = 54u,
+  VOCAL_THAT_S_GOTTA_HURT = 55u,
+  VOCAL_SORRY_ABOUT_THAT = 56u,
+  VOCAL_XIN_LOI__MY_MAN = 57u,
+  VOCAL_DAMN_SUNDAY_DRIVERS = 58u,
+  VOCAL_SUCK_IT_AND_SEE = 59u,
+  VOCAL_TASTE_MY_WRATH__ICE_CREAM_BOY = 60u,
+  VOCAL_HALLELUJAH__ANOTHER_SOUL_SAVED = 61u,
+  VOCAL_DAMNATION__NO_DONATION__NO_SALVATION = 62u,
+  VOCAL_63 = 63u,
+  VOCAL_64 = 64u,
+};
+
+enum  WeaponType : __int32
+{
+  Pistolet = 0u,
+  SMG = 1u,
+  ROCKET = 2u,
+  ElectorGun = 3u,
+  Molotov = 4u,
+  GRENADE = 5u,
+  DR = 6u,
+  Shoker = 7u,
+  FireGun = 8u,
+  SMG_G = 9u,
+  DoublePistolet = 10u,
+  L = 11u,
+  WeaponType_12 = 12u,
+  WeaponType_13 = 13u,
+  WeaponType_14 = 14u,
+  CAR_BOMB = 15u,
+  CAR_OIL = 16u,
+  CAR_MINE = 17u,
+  CAR_MACHINE_GUN = 18u,
+  TANK_MAIN_GUN = 19u,
+  WATER_CANNON = 20u,
+  FIRE_TRUCK_GUN = 21u,
+  ARMY_GUN_JEEP = 22u,
+  CAR_BOMB_INSTANT = 23u,
+  WEAPON_24 = 24u,
+  WEAPON_25 = 25u,
+  WEAPON_26 = 26u,
+  WEAPON_27 = 27u,
+  NO_WEAPON = 28u,
+};
+
+enum  MenuPic : __int8
+{
+  Options = 0u,
+  Play = 1u,
+  Quit = 2u,
+  MenuPic_3 = 3u,
+  MenuPic_4 = 4u,
+  MenuPic_5 = 5u,
+  VievHigh = 6u,
+  StartLevel1 = 7u,
+  LoadSave = 8u,
+  StartLevel3 = 9u,
+  PlayerName = 10u,
+  Restart = 11u,
+  HighScores = 12u,
+  RIP = 13u,
+  MenuPic_14 = 14u,
+  MenuPic_15 = 15u,
+  ResumSave = 16u,
+  Title = 17u,
+  MenuPic_18 = 18u,
+  MenuPic_19 = 19u,
+};
+
+enum CheatPlayers : __int32
+{
+  CUTIE1 = 0x33A69,                     ///< ???? 99 ??????
+  NEKKID = 0x36F62,                     ///< ???????
+  MADEMAN = 0x41611,                    ///< ???? ?????????
+  DANISGOD = 0x44D2F,                   ///< ???? 20000
+  FYOHZZ0 = 0x45118,
+  FISHFLAP = 0x45AEF,                   ///< Small Cars
+  UKGAMER = 0x45B2C,                    ///< all towns unlocked
+  FLAMEON = 0x45EC2,                    ///< ?ec?o?e??a? Flame Gun
+  DAVEMOON = 0x4639F,                   ///< ??????? ?????? ? ??????????? ???????
+  EATSOUP = 0x4657B,                    ///< ?????????? ????????
+  IAMDAVEJ = 0x4672D,                   ///< ???? 999999
+  LASVEGAS = 0x46BE8,                   ///< ?a???? ?????a
+  NAVARONE = 0x47178,                   ///< All Weapons
+  COCKTART = 0x478A9,                   ///< ?? ?????? ?? ????? ?????????? ????.
+  PSJABBER = 0x478FB,                   ///< ?? ??????????
+  ARSESTAR = 0x47AF1,                   ///< ?oc?e apec?a y ?ac coxpa????c? ?ce ??e???ec? ? ?a????? ?y???
+  GOREFEST = 0x484DF,                   ///< ?????????? ????? ? ???? ??????? ??????????.
+  BUCKFAST = 0x4878D,                   ///< ????? ??????
+  GOURANGA = 0x49362,                   ///< ????????? ?????
+  GODOFGTA = 0x49771,                   ///< ??? ??????
+  SUPZZZ0 = 0x49C76,
+  SEGARULZ = 0x4A98B,                   ///< 10x Point Multiplier
+  ITSALLUP = 0x4A9B8,                   ///< ???op ypo???
+  HUNSRUS = 0x4B28C,                    ///< ?e?????oc??
+  SCHURULZ = 0x4D5C4,                   ///< ??????? ????
+  VOLTFEST = 0x4DA77,                   ///< ?ec?o?e??a? Electrical Gun
+  TUMYFROG = 0x5073D,                   ///< ?ce ?o?yc-ypo???
+};
+
+enum  HORN : __int32
+{
+  HORN_ON = 248u,
+};
+
+enum  CAR_SIREN_STATE : __int32
+{
+  SIREN_UNK0 = 0u,
+  SIREN_UNK1 = 1u,
+  SIREN_OFF = 2u,
+  SIREN_UNK3 = 3u,
+  SIREN_ON = 4u,
+  SIREN_UNK5 = 5u,
+  SIREN_UNK6 = 6u,
+  SIREN_UNK7 = 7u,
+  CAR_ALARM = 8u,
+  SIREN_UNK9 = 9u,
+  SIREN_UNK10 = 10u,
+  SIREN_UNK11 = 11u,
+  SIREN_UNK12 = 12u,
+  SIREN_UNK13 = 13u,
+  SIREN_UNK14 = 14u,
+  SIREN_UNK15 = 15u,
+  SIREN_UNK16 = 16u,
+};
+
+enum  CAR_LIGHTS_AND_DOORS_BITSTATE : __int32
+{
+  UNBROKEN_TURNED_OFF = 0u,
+  RIGHT_REAR_LIGHT_IS_BROKEN = 1u,
+  LEFT_REAR_LIGHT_IS_BROKEN = 2u,
+  LEFT_FRONT_LIGHT_IS_BROKEN = 4u,
+};
+
+enum  PED_REMAP2 : __int32
+{
+  PED_REMAP2_0 = 0u,
+  PED_REMAP2_1 = 1u,
+  PED_REMAP2_HEAVY_ARMOUR = 2u,
+};
+
+enum  PED_STATE3 : __int32
+{
+  PED_STATE3_UNK0 = 0u,
+  PED_STATE3_UNK1 = 1u,
+  PED_STATE3_UNK2 = 2u,
+  PED_STATE3_UNK3 = 3u,
+  PED_STATE3_GANG_MEMBER = 13u,
+  PED_STATE3_ENTERING_TO_CAR = 35u,
+  PED_STATE3_GETTING_OUT_FROM_CAR = 36u,
+  PED_STATE3_COP = 54u,
+  PED_STATE3_UNK3d_REL_TO_MISSION_ARROWS = 61u,
+};
+
+enum  PED_REMAP : __int32
+{
+  PED_REMAP_0 = 0u,
+  PED_REMAP_1 = 1u,
+  PED_REMAP_2 = 2u,
+  PED_REMAP_3 = 3u,
+  PED_REMAP_4 = 4u,
+  PED_REMAP_5 = 5u,
+  PED_REMAP_6 = 6u,
+  PED_REMAP_7 = 7u,
+  PED_REMAP_8 = 8u,
+  PED_REMAP_9 = 9u,
+  PED_REMAP_10 = 10u,
+  PED_REMAP_11 = 11u,
+  PED_REMAP_12 = 12u,
+  PED_REMAP_13 = 13u,
+  PED_REMAP_14 = 14u,
+  PED_REMAP_CARTHIEF = 15u,
+  PED_REMAP_16 = 16u,
+  PED_REMAP_MUGGER = 17u,
+  PED_REMAP_DRIVER_18 = 18u,
+  PED_REMAP_DRIVER_19 = 19u,
+  PED_REMAP_DRIVER_20 = 20u,
+  PED_REMAP_DRIVER_21 = 21u,
+  PED_REMAP_22 = 22u,
+  PED_REMAP_23 = 23u,
+  PED_REMAP_24 = 24u,
+  PED_REMAP_PLAYER = 25u,
+  PED_REMAP_26 = 26u,
+  PED_REMAP_27 = 27u,
+  PED_REMAP_28 = 28u,
+  PED_REMAP_29 = 29u,
+  PED_REMAP_30 = 30u,
+  PED_REMAP_31 = 31u,
+  PED_REMAP_32 = 32u,
+  PED_REMAP_33 = 33u,
+  PED_REMAP_34 = 34u,
+  PED_REMAP_35 = 35u,
+  PED_REMAP_36 = 36u,
+  PED_REMAP_37 = 37u,
+  PED_REMAP_38 = 38u,
+  PED_REMAP_39 = 39u,
+  PED_REMAP_40 = 40u,
+  PED_REMAP_41 = 41u,
+  PED_REMAP_42 = 42u,
+  PED_REMAP_43 = 43u,
+};
+
+enum  CAR_REL_TO_COLOR_ENUM : __int32
+{
+  CAR_REL_TO_COLOR_ENUM_0 = 0u,
+  CAR_REL_TO_COLOR_ENUM_1 = 1u,
+  CAR_REL_TO_COLOR_ENUM_2 = 2u,
+  CAR_REL_TO_COLOR_ENUM_3 = 3u,
+  CAR_REL_TO_COLOR_ENUM_4 = 4u,
+  CAR_REL_TO_COLOR_ENUM_5 = 5u,
+};
+
+enum  GameModeWindow : __int32
+{
+  WindowScreen = 0u,
+  FullScreen = 1u,
+};
+
+enum Sound3DMode : __int32
+{
+  Sound3D_Off = 0x0,
+  Sound3D_ON = 0x1,
+};
+
+enum  TRAFFIC_PHASE : __int8
+{
+  TRAFFIC_PHASE_0 = 0u,
+  TRAFFIC_PHASE_VERTICAL_GREEN = 1u,
+  TRAFFIC_PHASE_VERTICAL_YELLOW = 2u,
+  TRAFFIC_PHASE_VERTICAL_RED = 3u,
+  TRAFFIC_PHASE_HORIZONTAL_GREEN = 4u,
+  TRAFFIC_PHASE_HORIZONTAL_YELLOW = 5u,
+  TRAFFIC_PHASE_HORIZONTAL_RED = 6u,
+  TRAFFIC_PHASE_PEDS_CROSSING = 7u,
+};
+
+enum  StarPolice : __int32
+{
+  StarPolice_0 = 0u,                    ///< 0 ?????
+  StarPolice_1 = 600u,                  ///< ?????? 1
+  StarPolice_2 = 1600u,                 ///< ?????? 2
+  StarPolice_3 = 3000u,
+  StarPolice_4 = 5000u,
+  StarPolice_5 = 8000u,
+  StarPolice_6 = 12000u,
+};
+
+enum  WantedLevel : __int32
+{
+  Level_0 = 0u,
+  Level_1 = 1u,
+  Level_2 = 2u,
+  Level_3 = 3u,
+  Level_4 = 4u,
+  Level_5 = 5u,
+  Level_6 = 6u,
+};
+

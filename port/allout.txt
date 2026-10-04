@@ -1,0 +1,8 @@
+unified: 34309 lines, ida: 408200 lines
+ida struct index: 284 зарегистрировано
+missing blocks извлечено: 44
+enum MenuActions: enum  MenuActions : __int8
+clean zone lines: 7423
+structs parsed: 1, text lines: 15
+toposort order OK, blocks out: 1 (cycles skipped)
+output: C:\work\GTA2_RE\port\gta2_clean.h (9254 строк, structs=1)

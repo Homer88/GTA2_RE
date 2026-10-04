@@ -2619,13 +2619,31 @@ static void RebasePtrs(DWORD baseAddr)
 
 u32 CC gbh_InitDLL(Video* pVideoDriver)
 {
-    HMODULE hOld = LoadLibrary("C:\\Program Files (x86)\\Rockstar Games\\GTA2\\_d3ddll.dll");
+    HMODULE hOld = 0;
+    HMODULE hThis = 0;
+    char selfPath[MAX_PATH];
 
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+        | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        (LPCSTR)&hThis, &hThis);
+
+    if (hThis && GetModuleFileNameA(hThis, selfPath, MAX_PATH))
+    {
+        char* p = strrchr(selfPath, '\\');
+        if (p)
+        {
+            p[1] = 0;
+            lstrcatA(selfPath, "_d3ddll.dll");
+            hOld = LoadLibraryA(selfPath);
+        }
+    }
+
+    if (hOld)
     {
         PopulateS3DFunctions(hOld, gFuncs);
     }
 
-    if (gDetours || gRealPtrs)
+    if (hOld && (gDetours || gRealPtrs))
     {
         pgbh_DrawQuad = (void (CC *)(int, Texture*, Vert*, int))GetProcAddress(hOld, "gbh_DrawQuad");
         RebasePtrs((DWORD)hOld);
@@ -2640,8 +2658,17 @@ u32 CC gbh_InitDLL(Video* pVideoDriver)
 
     if (gProxyOnly)
     {
+        if (!hOld || !gFuncs.pgbh_InitDLL)
+        {
+            return 0;
+        }
         u32 r = gFuncs.pgbh_InitDLL(pVideoDriver);
         return r;
+    }
+
+    if (!pVideoDriver || !pVideoDriver->initDLL)
+    {
+        return 0;
     }
 
     pOldCloseScreen = (*pVideoDriver->initDLL->pVid_CloseScreen);

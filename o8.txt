@@ -1,0 +1,4 @@
+cl: командная строка warning D9024: нераспознанный тип исходных файлов ".", использование объектного файла
+cl: командная строка warning D9027: пропуск исходного файла "."
+ArrowTrace.cpp
+c1xx: fatal error C1083: Не удается открыть файл источник: ..\..\port\out\other\ArrowTrace.cpp: No such file or directory,

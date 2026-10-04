@@ -1,0 +1,45 @@
+openmiles (muzea/openmiles, branch test/windows) vs retail Miles 5.0r
+built: zig 0.16.0, -Dtarget=x86-windows -Doptimize=ReleaseSmall -Dmss-version=5
+generated: 2026-09-30 21:35:20
+
+exports openmiles : 290
+exports retail    : 316
+GTA2 AIL imports  : 52
+
+missing vs retail : 27  (none of these is imported by gta2.exe)
+  _AIL_close_filter@4
+  _AIL_DLS_get_reverb@16
+  _AIL_DLS_set_reverb@16
+  _AIL_enumerate_filter_attributes@12
+  _AIL_enumerate_filter_sample_attributes@12
+  _AIL_enumerate_filters@12
+  _AIL_filter_attribute@12
+  _AIL_filter_DLS_attribute@12
+  _AIL_filter_sample_attribute@12
+  _AIL_filter_stream_attribute@12
+  _AIL_get_timer_highest_delay@0
+  _AIL_input_close@4
+  _AIL_input_info@4
+  _AIL_input_open@12
+  _AIL_open_filter@8
+  _AIL_primary_digital_driver@4
+  _AIL_quick_set_reverb@16
+  _AIL_sample_reverb@16
+  _AIL_set_filter_DLS_preference@12
+  _AIL_set_filter_preference@12
+  _AIL_set_filter_sample_preference@12
+  _AIL_set_filter_stream_preference@12
+  _AIL_set_input_state@8
+  _AIL_set_sample_reverb@16
+  _AIL_set_stream_reverb@16
+  _AIL_stream_reverb@16
+  _RIB_find_provider@12
+
+extra              : 1
+  _DllMainCRTStartup@12
+
+GTA2 imports missing from openmiles: 0
+
+local patch: removed AIL_3D_sample_float_distances / AIL_set_3D_sample_float_distances from the
+never_export list in src/api/digital.zig -- retail 5.0r exports both and gta2.exe
+imports _AIL_set_3D_sample_float_distances@20.

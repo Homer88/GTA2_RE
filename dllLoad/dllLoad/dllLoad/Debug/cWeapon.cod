@@ -169,16 +169,11 @@ __058845F1_mcx@h DB 01H
 __7F16006B_ime_cmodes@h DB 01H
 __0A3AF599_imm@h DB 01H
 __11B87C25_Windows@h DB 01H
-__9FB25DBE_assert@h DB 01H
-__1EC29DB1_cCar@h DB 01H
 __60B45B40_corecrt_stdio_config@h DB 01H
 __CFA3741E_corecrt_wstdio@h DB 01H
 __B3FE3303_stdio@h DB 01H
-__02F2E922_cS200@h DB 01H
-__A8AF3CFB_cGameObject@h DB 01H
-__04FA73B1_cPlayer@h DB 01H
+__9FB25DBE_assert@h DB 01H
 __EC36E77A_cWeapon@h DB 01H
-__AE4B3876_cPed@h DB 01H
 __E70213C7_intrin0@inl@h DB 01H
 __854101FB_setjmp@h DB 01H
 __05386248_mmintrin@h DB 01H
@@ -196,22 +191,47 @@ __2FF1098C_ammintrin@h DB 01H
 __EF56EB8B_mm3dnow@h DB 01H
 __A377BD8C_intrin@h DB 01H
 __917CD9AF_cHookTrace@h DB 01H
+__E9349C2E_cInspector@h DB 01H
 __32EDB418_DebugLogFile@h DB 01H
 __98D1EDBA_cWeapon@cpp DB 01H
 msvcjmc	ENDS
+PUBLIC	___local_stdio_printf_options
+PUBLIC	__vsnprintf_l
+PUBLIC	__vsnprintf
+PUBLIC	__snprintf
 PUBLIC	?SetWeapon@@YIXPAUWeapon@@PAX1@Z		; SetWeapon
 PUBLIC	?SetPed@@YIXPAUWeapon@@PAX1@Z			; SetPed
 PUBLIC	__JustMyCode_Default
+PUBLIC	?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA ; `__local_stdio_printf_options'::`2'::_OptionsStorage
+PUBLIC	??_C@_00CNPNBAHC@@				; `string'
+PUBLIC	??_C@_04EDGKFFPL@?5?$DN?$DN?5@			; `string'
+PUBLIC	??_C@_0O@FLAKMNFL@?$CFs?$DN0x?$CF08X?$CFs?$CFs@	; `string'
+PUBLIC	??_C@_0L@FHPKLDLC@weapon?4txt@			; `string'
 PUBLIC	??_C@_0BO@INABHLE@Weapon?3?3SetWeapon?5?$EA0x00433810@ ; `string'
+PUBLIC	??_C@_07PPFOMMID@pWeapon@			; `string'
+PUBLIC	??_C@_09LJGLIMMG@SetWeapon@			; `string'
+PUBLIC	??_C@_0BF@NJNLBGMK@SetWeapon?5TypeWeapon@	; `string'
 PUBLIC	??_C@_0BL@DPHAMLHB@Weapon?3?3SetPed?5?$EA0x004CCA10@ ; `string'
+PUBLIC	??_C@_06KAEFKDIH@SetPed@			; `string'
+PUBLIC	??_C@_04EEIPEAOH@pPed@				; `string'
+EXTRN	__imp____stdio_common_vsprintf:PROC
 EXTRN	?TraceCall@@YAXPBDK@Z:PROC			; TraceCall
-EXTRN	?DebugLog@@YAXH@Z:PROC				; DebugLog
+EXTRN	?GetGlobalStructName@@YAPBDK@Z:PROC		; GetGlobalStructName
+EXTRN	?writeFileLog@@YAHPAD00I@Z:PROC			; writeFileLog
+EXTRN	?writeFileLog@@YAHPAD000@Z:PROC			; writeFileLog
+EXTRN	@_RTC_CheckStackVars@8:PROC
 EXTRN	@__CheckForDebuggerJustMyCode@4:PROC
+EXTRN	@__security_check_cookie@4:PROC
 EXTRN	__RTC_CheckEsp:PROC
 EXTRN	__RTC_InitBase:PROC
 EXTRN	__RTC_Shutdown:PROC
 EXTRN	?_SetWeapon@@3PAXA:DWORD			; _SetWeapon
 EXTRN	?_SetPed@@3PAXA:DWORD				; _SetPed
+EXTRN	___security_cookie:DWORD
+;	COMDAT ?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA
+_BSS	SEGMENT
+?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA DQ 01H DUP (?) ; `__local_stdio_printf_options'::`2'::_OptionsStorage
+_BSS	ENDS
 ;	COMDAT rtc$TMZ
 rtc$TMZ	SEGMENT
 __RTC_Shutdown.rtc$TMZ DD FLAT:__RTC_Shutdown
@@ -220,16 +240,57 @@ rtc$TMZ	ENDS
 rtc$IMZ	SEGMENT
 __RTC_InitBase.rtc$IMZ DD FLAT:__RTC_InitBase
 rtc$IMZ	ENDS
+;	COMDAT ??_C@_04EEIPEAOH@pPed@
+CONST	SEGMENT
+??_C@_04EEIPEAOH@pPed@ DB 'pPed', 00H			; `string'
+CONST	ENDS
+;	COMDAT ??_C@_06KAEFKDIH@SetPed@
+CONST	SEGMENT
+??_C@_06KAEFKDIH@SetPed@ DB 'SetPed', 00H		; `string'
+CONST	ENDS
 ;	COMDAT ??_C@_0BL@DPHAMLHB@Weapon?3?3SetPed?5?$EA0x004CCA10@
 CONST	SEGMENT
 ??_C@_0BL@DPHAMLHB@Weapon?3?3SetPed?5?$EA0x004CCA10@ DB 'Weapon::SetPed @'
 	DB	'0x004CCA10', 00H				; `string'
+CONST	ENDS
+;	COMDAT ??_C@_0BF@NJNLBGMK@SetWeapon?5TypeWeapon@
+CONST	SEGMENT
+??_C@_0BF@NJNLBGMK@SetWeapon?5TypeWeapon@ DB 'SetWeapon TypeWeapon', 00H ; `string'
+CONST	ENDS
+;	COMDAT ??_C@_09LJGLIMMG@SetWeapon@
+CONST	SEGMENT
+??_C@_09LJGLIMMG@SetWeapon@ DB 'SetWeapon', 00H		; `string'
+CONST	ENDS
+;	COMDAT ??_C@_07PPFOMMID@pWeapon@
+CONST	SEGMENT
+??_C@_07PPFOMMID@pWeapon@ DB 'pWeapon', 00H		; `string'
 CONST	ENDS
 ;	COMDAT ??_C@_0BO@INABHLE@Weapon?3?3SetWeapon?5?$EA0x00433810@
 CONST	SEGMENT
 ??_C@_0BO@INABHLE@Weapon?3?3SetWeapon?5?$EA0x00433810@ DB 'Weapon::SetWea'
 	DB	'pon @0x00433810', 00H			; `string'
 CONST	ENDS
+;	COMDAT ??_C@_0L@FHPKLDLC@weapon?4txt@
+CONST	SEGMENT
+??_C@_0L@FHPKLDLC@weapon?4txt@ DB 'weapon.txt', 00H	; `string'
+CONST	ENDS
+;	COMDAT ??_C@_0O@FLAKMNFL@?$CFs?$DN0x?$CF08X?$CFs?$CFs@
+CONST	SEGMENT
+??_C@_0O@FLAKMNFL@?$CFs?$DN0x?$CF08X?$CFs?$CFs@ DB '%s=0x%08X%s%s', 00H ; `string'
+CONST	ENDS
+;	COMDAT ??_C@_04EDGKFFPL@?5?$DN?$DN?5@
+CONST	SEGMENT
+??_C@_04EDGKFFPL@?5?$DN?$DN?5@ DB ' == ', 00H		; `string'
+CONST	ENDS
+;	COMDAT ??_C@_00CNPNBAHC@@
+CONST	SEGMENT
+??_C@_00CNPNBAHC@@ DB 00H				; `string'
+CONST	ENDS
+;	COMDAT voltbl
+voltbl	SEGMENT
+_volmd	DB	025H
+	DB	0d9H
+voltbl	ENDS
 ; Function compile flags: /Odt
 ;	COMDAT __JustMyCode_Default
 _TEXT	SEGMENT
@@ -239,6 +300,139 @@ __JustMyCode_Default PROC				; COMDAT
   00003	5d		 pop	 ebp
   00004	c3		 ret	 0
 __JustMyCode_Default ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\work\GTA2_RE\dllLoad\dllLoad\cWeapon.cpp
+;	COMDAT ?LogWeaponAddr@@YAXPBD0PAX@Z
+_TEXT	SEGMENT
+tv71 = -384						; size = 4
+tv68 = -380						; size = 4
+_buf$ = -180						; size = 160
+_sname$ = -12						; size = 4
+__$ArrayPad$ = -4					; size = 4
+_call$ = 8						; size = 4
+_what$ = 12						; size = 4
+_ptr$ = 16						; size = 4
+?LogWeaponAddr@@YAXPBD0PAX@Z PROC			; LogWeaponAddr, COMDAT
+
+; 14   : {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec 80 01 00
+	00		 sub	 esp, 384		; 00000180H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d bd 40 ff ff
+	ff		 lea	 edi, DWORD PTR [ebp-192]
+  00012	b9 30 00 00 00	 mov	 ecx, 48			; 00000030H
+  00017	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  0001c	f3 ab		 rep stosd
+  0001e	a1 00 00 00 00	 mov	 eax, DWORD PTR ___security_cookie
+  00023	33 c5		 xor	 eax, ebp
+  00025	89 45 fc	 mov	 DWORD PTR __$ArrayPad$[ebp], eax
+  00028	b9 00 00 00 00	 mov	 ecx, OFFSET __98D1EDBA_cWeapon@cpp
+  0002d	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00032	90		 npad	 1
+
+; 15   :     const char* sname = GetGlobalStructName((unsigned long)ptr);
+
+  00033	8b 45 10	 mov	 eax, DWORD PTR _ptr$[ebp]
+  00036	50		 push	 eax
+  00037	e8 00 00 00 00	 call	 ?GetGlobalStructName@@YAPBDK@Z ; GetGlobalStructName
+  0003c	83 c4 04	 add	 esp, 4
+  0003f	89 45 f4	 mov	 DWORD PTR _sname$[ebp], eax
+
+; 16   :     char buf[160];
+; 17   :     _snprintf(buf, sizeof(buf), "%s=0x%08X%s%s", what, (unsigned long)ptr,
+
+  00042	83 7d f4 00	 cmp	 DWORD PTR _sname$[ebp], 0
+  00046	74 0b		 je	 SHORT $LN3@LogWeaponA
+  00048	8b 45 f4	 mov	 eax, DWORD PTR _sname$[ebp]
+  0004b	89 85 84 fe ff
+	ff		 mov	 DWORD PTR tv68[ebp], eax
+  00051	eb 0a		 jmp	 SHORT $LN4@LogWeaponA
+$LN3@LogWeaponA:
+  00053	c7 85 84 fe ff
+	ff 00 00 00 00	 mov	 DWORD PTR tv68[ebp], OFFSET ??_C@_00CNPNBAHC@@
+$LN4@LogWeaponA:
+  0005d	83 7d f4 00	 cmp	 DWORD PTR _sname$[ebp], 0
+  00061	74 0c		 je	 SHORT $LN5@LogWeaponA
+  00063	c7 85 80 fe ff
+	ff 00 00 00 00	 mov	 DWORD PTR tv71[ebp], OFFSET ??_C@_04EDGKFFPL@?5?$DN?$DN?5@
+  0006d	eb 0a		 jmp	 SHORT $LN6@LogWeaponA
+$LN5@LogWeaponA:
+  0006f	c7 85 80 fe ff
+	ff 00 00 00 00	 mov	 DWORD PTR tv71[ebp], OFFSET ??_C@_00CNPNBAHC@@
+$LN6@LogWeaponA:
+  00079	8b 8d 84 fe ff
+	ff		 mov	 ecx, DWORD PTR tv68[ebp]
+  0007f	51		 push	 ecx
+  00080	8b 95 80 fe ff
+	ff		 mov	 edx, DWORD PTR tv71[ebp]
+  00086	52		 push	 edx
+  00087	8b 45 10	 mov	 eax, DWORD PTR _ptr$[ebp]
+  0008a	50		 push	 eax
+  0008b	8b 4d 0c	 mov	 ecx, DWORD PTR _what$[ebp]
+  0008e	51		 push	 ecx
+  0008f	68 00 00 00 00	 push	 OFFSET ??_C@_0O@FLAKMNFL@?$CFs?$DN0x?$CF08X?$CFs?$CFs@
+  00094	68 a0 00 00 00	 push	 160			; 000000a0H
+  00099	8d 95 4c ff ff
+	ff		 lea	 edx, DWORD PTR _buf$[ebp]
+  0009f	52		 push	 edx
+  000a0	e8 00 00 00 00	 call	 __snprintf
+  000a5	83 c4 1c	 add	 esp, 28			; 0000001cH
+
+; 18   :         sname ? " == " : "", sname ? sname : "");
+; 19   :     writeFileLog((char*)"weapon.txt", buf, (char*)call, (char*)"");
+
+  000a8	68 00 00 00 00	 push	 OFFSET ??_C@_00CNPNBAHC@@
+  000ad	8b 45 08	 mov	 eax, DWORD PTR _call$[ebp]
+  000b0	50		 push	 eax
+  000b1	8d 8d 4c ff ff
+	ff		 lea	 ecx, DWORD PTR _buf$[ebp]
+  000b7	51		 push	 ecx
+  000b8	68 00 00 00 00	 push	 OFFSET ??_C@_0L@FHPKLDLC@weapon?4txt@
+  000bd	e8 00 00 00 00	 call	 ?writeFileLog@@YAHPAD000@Z ; writeFileLog
+  000c2	83 c4 10	 add	 esp, 16			; 00000010H
+
+; 20   : }
+
+  000c5	52		 push	 edx
+  000c6	8b cd		 mov	 ecx, ebp
+  000c8	50		 push	 eax
+  000c9	8d 15 00 00 00
+	00		 lea	 edx, DWORD PTR $LN9@LogWeaponA
+  000cf	e8 00 00 00 00	 call	 @_RTC_CheckStackVars@8
+  000d4	58		 pop	 eax
+  000d5	5a		 pop	 edx
+  000d6	5f		 pop	 edi
+  000d7	5e		 pop	 esi
+  000d8	5b		 pop	 ebx
+  000d9	8b 4d fc	 mov	 ecx, DWORD PTR __$ArrayPad$[ebp]
+  000dc	33 cd		 xor	 ecx, ebp
+  000de	e8 00 00 00 00	 call	 @__security_check_cookie@4
+  000e3	81 c4 80 01 00
+	00		 add	 esp, 384		; 00000180H
+  000e9	3b ec		 cmp	 ebp, esp
+  000eb	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000f0	8b e5		 mov	 esp, ebp
+  000f2	5d		 pop	 ebp
+  000f3	c3		 ret	 0
+$LN9@LogWeaponA:
+  000f4	01 00 00 00	 DD	 1
+  000f8	00 00 00 00	 DD	 $LN8@LogWeaponA
+$LN8@LogWeaponA:
+  000fc	4c ff ff ff	 DD	 -180			; ffffff4cH
+  00100	a0 00 00 00	 DD	 160			; 000000a0H
+  00104	00 00 00 00	 DD	 $LN7@LogWeaponA
+$LN7@LogWeaponA:
+  00108	62		 DB	 98			; 00000062H
+  00109	75		 DB	 117			; 00000075H
+  0010a	66		 DB	 102			; 00000066H
+  0010b	00		 DB	 0
+?LogWeaponAddr@@YAXPBD0PAX@Z ENDP			; LogWeaponAddr
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File C:\work\GTA2_RE\dllLoad\dllLoad\cWeapon.cpp
@@ -252,7 +446,7 @@ _pPed$ = 8						; size = 4
 ; _pWeapon$ = ecx
 ; __EDX$ = edx
 
-; 30   : {
+; 41   : {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -273,8 +467,8 @@ _pPed$ = 8						; size = 4
   00028	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002d	90		 npad	 1
 
-; 31   :     (void)_EDX;
-; 32   :     TraceCall("Weapon::SetPed @0x004CCA10", TRACE_CALLER_ADDR);
+; 42   :     (void)_EDX;
+; 43   :     TraceCall("Weapon::SetPed @0x004CCA10", TRACE_CALLER_ADDR);
 
   0002e	8d 45 04	 lea	 eax, DWORD PTR __$ReturnAddr$[ebp]
   00031	b9 04 00 00 00	 mov	 ecx, 4
@@ -285,56 +479,60 @@ _pPed$ = 8						; size = 4
   00042	e8 00 00 00 00	 call	 ?TraceCall@@YAXPBDK@Z	; TraceCall
   00047	83 c4 08	 add	 esp, 8
 
-; 33   :     DebugLog((int)pWeapon);
+; 44   :     LogWeaponAddr("SetPed", "pWeapon", pWeapon);
 
   0004a	8b 45 f8	 mov	 eax, DWORD PTR _pWeapon$[ebp]
   0004d	50		 push	 eax
-  0004e	e8 00 00 00 00	 call	 ?DebugLog@@YAXH@Z	; DebugLog
-  00053	83 c4 04	 add	 esp, 4
+  0004e	68 00 00 00 00	 push	 OFFSET ??_C@_07PPFOMMID@pWeapon@
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_06KAEFKDIH@SetPed@
+  00058	e8 00 00 00 00	 call	 ?LogWeaponAddr@@YAXPBD0PAX@Z ; LogWeaponAddr
+  0005d	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 34   :     DebugLog((int)pPed);
+; 45   :     LogWeaponAddr("SetPed", "pPed", pPed);
 
-  00056	8b 45 08	 mov	 eax, DWORD PTR _pPed$[ebp]
-  00059	50		 push	 eax
-  0005a	e8 00 00 00 00	 call	 ?DebugLog@@YAXH@Z	; DebugLog
-  0005f	83 c4 04	 add	 esp, 4
+  00060	8b 45 08	 mov	 eax, DWORD PTR _pPed$[ebp]
+  00063	50		 push	 eax
+  00064	68 00 00 00 00	 push	 OFFSET ??_C@_04EEIPEAOH@pPed@
+  00069	68 00 00 00 00	 push	 OFFSET ??_C@_06KAEFKDIH@SetPed@
+  0006e	e8 00 00 00 00	 call	 ?LogWeaponAddr@@YAXPBD0PAX@Z ; LogWeaponAddr
+  00073	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 35   :     if (pWeapon == NULL) {
+; 46   :     if (pWeapon == NULL) {
 
-  00062	83 7d f8 00	 cmp	 DWORD PTR _pWeapon$[ebp], 0
-  00066	75 02		 jne	 SHORT $LN2@SetPed
+  00076	83 7d f8 00	 cmp	 DWORD PTR _pWeapon$[ebp], 0
+  0007a	75 02		 jne	 SHORT $LN2@SetPed
 
-; 36   :         return;
+; 47   :         return;
 
-  00068	eb 17		 jmp	 SHORT $LN1@SetPed
+  0007c	eb 17		 jmp	 SHORT $LN1@SetPed
 $LN2@SetPed:
 
-; 37   :     }
-; 38   :     ((void (__thiscall*)(Weapon*, Ped*))_SetPed)(pWeapon, (Ped*)pPed);
+; 48   :     }
+; 49   :     ((void (__thiscall*)(Weapon*, Ped*))_SetPed)(pWeapon, (Ped*)pPed);
 
-  0006a	8b f4		 mov	 esi, esp
-  0006c	8b 45 08	 mov	 eax, DWORD PTR _pPed$[ebp]
-  0006f	50		 push	 eax
-  00070	8b 4d f8	 mov	 ecx, DWORD PTR _pWeapon$[ebp]
-  00073	ff 15 00 00 00
+  0007e	8b f4		 mov	 esi, esp
+  00080	8b 45 08	 mov	 eax, DWORD PTR _pPed$[ebp]
+  00083	50		 push	 eax
+  00084	8b 4d f8	 mov	 ecx, DWORD PTR _pWeapon$[ebp]
+  00087	ff 15 00 00 00
 	00		 call	 DWORD PTR ?_SetPed@@3PAXA ; _SetPed
-  00079	3b f4		 cmp	 esi, esp
-  0007b	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00080	90		 npad	 1
+  0008d	3b f4		 cmp	 esi, esp
+  0008f	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00094	90		 npad	 1
 $LN1@SetPed:
 
-; 39   : }
+; 50   : }
 
-  00081	5f		 pop	 edi
-  00082	5e		 pop	 esi
-  00083	5b		 pop	 ebx
-  00084	81 c4 d8 00 00
+  00095	5f		 pop	 edi
+  00096	5e		 pop	 esi
+  00097	5b		 pop	 ebx
+  00098	81 c4 d8 00 00
 	00		 add	 esp, 216		; 000000d8H
-  0008a	3b ec		 cmp	 ebp, esp
-  0008c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00091	8b e5		 mov	 esp, ebp
-  00093	5d		 pop	 ebp
-  00094	c2 04 00	 ret	 4
+  0009e	3b ec		 cmp	 ebp, esp
+  000a0	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000a5	8b e5		 mov	 esp, ebp
+  000a7	5d		 pop	 ebp
+  000a8	c2 04 00	 ret	 4
 ?SetPed@@YIXPAUWeapon@@PAX1@Z ENDP			; SetPed
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
@@ -349,7 +547,7 @@ _TypeWeapon$ = 8					; size = 4
 ; _pWeapon$ = ecx
 ; __EDX$ = edx
 
-; 18   : {
+; 29   : {
 
   00000	55		 push	 ebp
   00001	8b ec		 mov	 ebp, esp
@@ -370,8 +568,8 @@ _TypeWeapon$ = 8					; size = 4
   00028	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
   0002d	90		 npad	 1
 
-; 19   :     (void)_EDX;
-; 20   :     TraceCall("Weapon::SetWeapon @0x00433810", TRACE_CALLER_ADDR);
+; 30   :     (void)_EDX;
+; 31   :     TraceCall("Weapon::SetWeapon @0x00433810", TRACE_CALLER_ADDR);
 
   0002e	8d 45 04	 lea	 eax, DWORD PTR __$ReturnAddr$[ebp]
   00031	b9 04 00 00 00	 mov	 ecx, 4
@@ -382,56 +580,318 @@ _TypeWeapon$ = 8					; size = 4
   00042	e8 00 00 00 00	 call	 ?TraceCall@@YAXPBDK@Z	; TraceCall
   00047	83 c4 08	 add	 esp, 8
 
-; 21   :     DebugLog((int)pWeapon);
+; 32   :     LogWeaponAddr("SetWeapon", "pWeapon", pWeapon);
 
   0004a	8b 45 f8	 mov	 eax, DWORD PTR _pWeapon$[ebp]
   0004d	50		 push	 eax
-  0004e	e8 00 00 00 00	 call	 ?DebugLog@@YAXH@Z	; DebugLog
-  00053	83 c4 04	 add	 esp, 4
+  0004e	68 00 00 00 00	 push	 OFFSET ??_C@_07PPFOMMID@pWeapon@
+  00053	68 00 00 00 00	 push	 OFFSET ??_C@_09LJGLIMMG@SetWeapon@
+  00058	e8 00 00 00 00	 call	 ?LogWeaponAddr@@YAXPBD0PAX@Z ; LogWeaponAddr
+  0005d	83 c4 0c	 add	 esp, 12			; 0000000cH
 
-; 22   :     DebugLog((int)TypeWeapon);
+; 33   :     writeFileLog((char*)"weapon.txt", (char*)"SetWeapon TypeWeapon", (char*)"", (unsigned int)TypeWeapon);
 
-  00056	8b 45 08	 mov	 eax, DWORD PTR _TypeWeapon$[ebp]
-  00059	50		 push	 eax
-  0005a	e8 00 00 00 00	 call	 ?DebugLog@@YAXH@Z	; DebugLog
-  0005f	83 c4 04	 add	 esp, 4
+  00060	8b 45 08	 mov	 eax, DWORD PTR _TypeWeapon$[ebp]
+  00063	50		 push	 eax
+  00064	68 00 00 00 00	 push	 OFFSET ??_C@_00CNPNBAHC@@
+  00069	68 00 00 00 00	 push	 OFFSET ??_C@_0BF@NJNLBGMK@SetWeapon?5TypeWeapon@
+  0006e	68 00 00 00 00	 push	 OFFSET ??_C@_0L@FHPKLDLC@weapon?4txt@
+  00073	e8 00 00 00 00	 call	 ?writeFileLog@@YAHPAD00I@Z ; writeFileLog
+  00078	83 c4 10	 add	 esp, 16			; 00000010H
 
-; 23   :     if (pWeapon == NULL) {
+; 34   :     if (pWeapon == NULL) {
 
-  00062	83 7d f8 00	 cmp	 DWORD PTR _pWeapon$[ebp], 0
-  00066	75 02		 jne	 SHORT $LN2@SetWeapon
+  0007b	83 7d f8 00	 cmp	 DWORD PTR _pWeapon$[ebp], 0
+  0007f	75 02		 jne	 SHORT $LN2@SetWeapon
 
-; 24   :         return;
+; 35   :         return;
 
-  00068	eb 17		 jmp	 SHORT $LN1@SetWeapon
+  00081	eb 17		 jmp	 SHORT $LN1@SetWeapon
 $LN2@SetWeapon:
 
-; 25   :     }
-; 26   :     ((void (__thiscall*)(Weapon*, void*))_SetWeapon)(pWeapon, TypeWeapon);
+; 36   :     }
+; 37   :     ((void (__thiscall*)(Weapon*, void*))_SetWeapon)(pWeapon, TypeWeapon);
 
-  0006a	8b f4		 mov	 esi, esp
-  0006c	8b 45 08	 mov	 eax, DWORD PTR _TypeWeapon$[ebp]
-  0006f	50		 push	 eax
-  00070	8b 4d f8	 mov	 ecx, DWORD PTR _pWeapon$[ebp]
-  00073	ff 15 00 00 00
+  00083	8b f4		 mov	 esi, esp
+  00085	8b 45 08	 mov	 eax, DWORD PTR _TypeWeapon$[ebp]
+  00088	50		 push	 eax
+  00089	8b 4d f8	 mov	 ecx, DWORD PTR _pWeapon$[ebp]
+  0008c	ff 15 00 00 00
 	00		 call	 DWORD PTR ?_SetWeapon@@3PAXA ; _SetWeapon
-  00079	3b f4		 cmp	 esi, esp
-  0007b	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00080	90		 npad	 1
+  00092	3b f4		 cmp	 esi, esp
+  00094	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00099	90		 npad	 1
 $LN1@SetWeapon:
 
-; 27   : }
+; 38   : }
 
-  00081	5f		 pop	 edi
-  00082	5e		 pop	 esi
-  00083	5b		 pop	 ebx
-  00084	81 c4 d8 00 00
+  0009a	5f		 pop	 edi
+  0009b	5e		 pop	 esi
+  0009c	5b		 pop	 ebx
+  0009d	81 c4 d8 00 00
 	00		 add	 esp, 216		; 000000d8H
-  0008a	3b ec		 cmp	 ebp, esp
-  0008c	e8 00 00 00 00	 call	 __RTC_CheckEsp
-  00091	8b e5		 mov	 esp, ebp
-  00093	5d		 pop	 ebp
-  00094	c2 04 00	 ret	 4
+  000a3	3b ec		 cmp	 ebp, esp
+  000a5	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  000aa	8b e5		 mov	 esp, ebp
+  000ac	5d		 pop	 ebp
+  000ad	c2 04 00	 ret	 4
 ?SetWeapon@@YIXPAUWeapon@@PAX1@Z ENDP			; SetWeapon
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __snprintf
+_TEXT	SEGMENT
+__ArgList$ = -20					; size = 4
+__Result$ = -8						; size = 4
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__snprintf PROC						; COMDAT
+
+; 1947 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec e4 00 00
+	00		 sub	 esp, 228		; 000000e4H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d dc	 lea	 edi, DWORD PTR [ebp-36]
+  0000f	b9 09 00 00 00	 mov	 ecx, 9
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00025	90		 npad	 1
+
+; 1948 :         int _Result;
+; 1949 :         va_list _ArgList;
+; 1950 :         __crt_va_start(_ArgList, _Format);
+
+  00026	8d 45 14	 lea	 eax, DWORD PTR __Format$[ebp+4]
+  00029	89 45 ec	 mov	 DWORD PTR __ArgList$[ebp], eax
+
+; 1951 :         _Result = _vsnprintf(_Buffer, _BufferCount, _Format, _ArgList);
+
+  0002c	8b 45 ec	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  0002f	50		 push	 eax
+  00030	8b 4d 10	 mov	 ecx, DWORD PTR __Format$[ebp]
+  00033	51		 push	 ecx
+  00034	8b 55 0c	 mov	 edx, DWORD PTR __BufferCount$[ebp]
+  00037	52		 push	 edx
+  00038	8b 45 08	 mov	 eax, DWORD PTR __Buffer$[ebp]
+  0003b	50		 push	 eax
+  0003c	e8 00 00 00 00	 call	 __vsnprintf
+  00041	83 c4 10	 add	 esp, 16			; 00000010H
+  00044	89 45 f8	 mov	 DWORD PTR __Result$[ebp], eax
+
+; 1952 :         __crt_va_end(_ArgList);
+
+  00047	c7 45 ec 00 00
+	00 00		 mov	 DWORD PTR __ArgList$[ebp], 0
+
+; 1953 :         return _Result;
+
+  0004e	8b 45 f8	 mov	 eax, DWORD PTR __Result$[ebp]
+
+; 1954 :     }
+
+  00051	5f		 pop	 edi
+  00052	5e		 pop	 esi
+  00053	5b		 pop	 ebx
+  00054	81 c4 e4 00 00
+	00		 add	 esp, 228		; 000000e4H
+  0005a	3b ec		 cmp	 ebp, esp
+  0005c	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00061	8b e5		 mov	 esp, ebp
+  00063	5d		 pop	 ebp
+  00064	c3		 ret	 0
+__snprintf ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __vsnprintf
+_TEXT	SEGMENT
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__ArgList$ = 20						; size = 4
+__vsnprintf PROC					; COMDAT
+
+; 1411 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec c0 00 00
+	00		 sub	 esp, 192		; 000000c0H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8b fd		 mov	 edi, ebp
+  0000e	33 c9		 xor	 ecx, ecx
+  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00015	f3 ab		 rep stosd
+  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00021	90		 npad	 1
+
+; 1412 :         return _vsnprintf_l(_Buffer, _BufferCount, _Format, NULL, _ArgList);
+
+  00022	8b 45 14	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  00025	50		 push	 eax
+  00026	6a 00		 push	 0
+  00028	8b 4d 10	 mov	 ecx, DWORD PTR __Format$[ebp]
+  0002b	51		 push	 ecx
+  0002c	8b 55 0c	 mov	 edx, DWORD PTR __BufferCount$[ebp]
+  0002f	52		 push	 edx
+  00030	8b 45 08	 mov	 eax, DWORD PTR __Buffer$[ebp]
+  00033	50		 push	 eax
+  00034	e8 00 00 00 00	 call	 __vsnprintf_l
+  00039	83 c4 14	 add	 esp, 20			; 00000014H
+
+; 1413 :     }
+
+  0003c	5f		 pop	 edi
+  0003d	5e		 pop	 esi
+  0003e	5b		 pop	 ebx
+  0003f	81 c4 c0 00 00
+	00		 add	 esp, 192		; 000000c0H
+  00045	3b ec		 cmp	 ebp, esp
+  00047	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0004c	8b e5		 mov	 esp, ebp
+  0004e	5d		 pop	 ebp
+  0004f	c3		 ret	 0
+__vsnprintf ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\stdio.h
+;	COMDAT __vsnprintf_l
+_TEXT	SEGMENT
+tv74 = -208						; size = 4
+__Result$ = -8						; size = 4
+__Buffer$ = 8						; size = 4
+__BufferCount$ = 12					; size = 4
+__Format$ = 16						; size = 4
+__Locale$ = 20						; size = 4
+__ArgList$ = 24						; size = 4
+__vsnprintf_l PROC					; COMDAT
+
+; 1391 :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec d0 00 00
+	00		 sub	 esp, 208		; 000000d0H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8d 7d f0	 lea	 edi, DWORD PTR [ebp-16]
+  0000f	b9 04 00 00 00	 mov	 ecx, 4
+  00014	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00019	f3 ab		 rep stosd
+  0001b	b9 00 00 00 00	 mov	 ecx, OFFSET __B3FE3303_stdio@h
+  00020	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00025	90		 npad	 1
+
+; 1392 :         int const _Result = __stdio_common_vsprintf(
+
+  00026	8b f4		 mov	 esi, esp
+  00028	8b 45 18	 mov	 eax, DWORD PTR __ArgList$[ebp]
+  0002b	50		 push	 eax
+  0002c	8b 4d 14	 mov	 ecx, DWORD PTR __Locale$[ebp]
+  0002f	51		 push	 ecx
+  00030	8b 55 10	 mov	 edx, DWORD PTR __Format$[ebp]
+  00033	52		 push	 edx
+  00034	8b 45 0c	 mov	 eax, DWORD PTR __BufferCount$[ebp]
+  00037	50		 push	 eax
+  00038	8b 4d 08	 mov	 ecx, DWORD PTR __Buffer$[ebp]
+  0003b	51		 push	 ecx
+  0003c	e8 00 00 00 00	 call	 ___local_stdio_printf_options
+  00041	8b 10		 mov	 edx, DWORD PTR [eax]
+  00043	83 ca 01	 or	 edx, 1
+  00046	8b 40 04	 mov	 eax, DWORD PTR [eax+4]
+  00049	50		 push	 eax
+  0004a	52		 push	 edx
+  0004b	ff 15 00 00 00
+	00		 call	 DWORD PTR __imp____stdio_common_vsprintf
+  00051	83 c4 1c	 add	 esp, 28			; 0000001cH
+  00054	3b f4		 cmp	 esi, esp
+  00056	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0005b	89 45 f8	 mov	 DWORD PTR __Result$[ebp], eax
+
+; 1393 :             _CRT_INTERNAL_LOCAL_PRINTF_OPTIONS | _CRT_INTERNAL_PRINTF_LEGACY_VSPRINTF_NULL_TERMINATION,
+; 1394 :             _Buffer, _BufferCount, _Format, _Locale, _ArgList);
+; 1395 : 
+; 1396 :         return _Result < 0 ? -1 : _Result;
+
+  0005e	83 7d f8 00	 cmp	 DWORD PTR __Result$[ebp], 0
+  00062	7d 0c		 jge	 SHORT $LN3@vsnprintf_
+  00064	c7 85 30 ff ff
+	ff ff ff ff ff	 mov	 DWORD PTR tv74[ebp], -1
+  0006e	eb 09		 jmp	 SHORT $LN4@vsnprintf_
+$LN3@vsnprintf_:
+  00070	8b 45 f8	 mov	 eax, DWORD PTR __Result$[ebp]
+  00073	89 85 30 ff ff
+	ff		 mov	 DWORD PTR tv74[ebp], eax
+$LN4@vsnprintf_:
+  00079	8b 85 30 ff ff
+	ff		 mov	 eax, DWORD PTR tv74[ebp]
+
+; 1397 :     }
+
+  0007f	5f		 pop	 edi
+  00080	5e		 pop	 esi
+  00081	5b		 pop	 ebx
+  00082	81 c4 d0 00 00
+	00		 add	 esp, 208		; 000000d0H
+  00088	3b ec		 cmp	 ebp, esp
+  0008a	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  0008f	8b e5		 mov	 esp, ebp
+  00091	5d		 pop	 ebp
+  00092	c3		 ret	 0
+__vsnprintf_l ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\corecrt_stdio_config.h
+;	COMDAT ___local_stdio_printf_options
+_TEXT	SEGMENT
+___local_stdio_printf_options PROC			; COMDAT
+
+; 90   :     {
+
+  00000	55		 push	 ebp
+  00001	8b ec		 mov	 ebp, esp
+  00003	81 ec c0 00 00
+	00		 sub	 esp, 192		; 000000c0H
+  00009	53		 push	 ebx
+  0000a	56		 push	 esi
+  0000b	57		 push	 edi
+  0000c	8b fd		 mov	 edi, ebp
+  0000e	33 c9		 xor	 ecx, ecx
+  00010	b8 cc cc cc cc	 mov	 eax, -858993460		; ccccccccH
+  00015	f3 ab		 rep stosd
+  00017	b9 00 00 00 00	 mov	 ecx, OFFSET __60B45B40_corecrt_stdio_config@h
+  0001c	e8 00 00 00 00	 call	 @__CheckForDebuggerJustMyCode@4
+  00021	90		 npad	 1
+
+; 91   :         static unsigned __int64 _OptionsStorage;
+; 92   :         return &_OptionsStorage;
+
+  00022	b8 00 00 00 00	 mov	 eax, OFFSET ?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA ; `__local_stdio_printf_options'::`2'::_OptionsStorage
+
+; 93   :     }
+
+  00027	5f		 pop	 edi
+  00028	5e		 pop	 esi
+  00029	5b		 pop	 ebx
+  0002a	81 c4 c0 00 00
+	00		 add	 esp, 192		; 000000c0H
+  00030	3b ec		 cmp	 ebp, esp
+  00032	e8 00 00 00 00	 call	 __RTC_CheckEsp
+  00037	8b e5		 mov	 esp, ebp
+  00039	5d		 pop	 ebp
+  0003a	c3		 ret	 0
+___local_stdio_printf_options ENDP
 _TEXT	ENDS
 END

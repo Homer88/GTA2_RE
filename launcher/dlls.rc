@@ -1,0 +1,4 @@
+#define IDR_D3DDLL 1001
+#define IDR_MSS32  1002
+IDR_D3DDLL RCDATA "C:\work\GTA2_RE\build_manual\D3DDLL_gdi.dll"
+IDR_MSS32  RCDATA "C:\work\GTA2_RE\build_manual\mss32\mss32.dll"
