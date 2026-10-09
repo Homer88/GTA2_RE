@@ -9,14 +9,14 @@
 // Ghidra: ---
 void gta2::S17_MatrixTransform3Advanced(struct EntityManager *self, int *a1, int *a2, int *a3, float *a4)
 {
-  struct CameraOrPhysics *v6; // edi
-  struct CameraOrPhysics *v7; // edi
+  CameraOrPhysics *v6; // edi
+  CameraOrPhysics *v7; // edi
   float a3a; // [esp+24h] [ebp+Ch]
   float a3b; // [esp+24h] [ebp+Ch]
   float a4a; // [esp+28h] [ebp+10h]
   float a4b; // [esp+28h] [ebp+10h]
 
-  gta2::sub_46BBF0(*a2, *a1, *a2, (struct S900 *)*a3);
+  gta2::sub_46BBF0(*a2, *a1, *a2, (S900 *)*a3);
   a4a = 8.0 - gta2::Float10_EncodedFloatToRegularFloat(a3);
   a4b = 1.0 / (gta2::Float10_EncodedFloatToRegularFloat(&gCameraOrPhysics->cameraPosTarget_[3].field_24) + a4a);
   a4[2] = a4b;

@@ -8,25 +8,25 @@
 // IDA: sub_4BE870
 // Ghidra: VehiclePool::S46_1_FUN_004be870
 {
-  struct SpriteS1 *this_00;
+  SpriteS1 *this_00;
   undefined4 uVar1;
   undefined4 uVar2;
   undefined4 uVar3;
   char cVar4;
-  struct EventHandler *pS63;
-  struct Car *pCar;
-  struct GameObject *this_01;
+  EventHandler *pS63;
+  Car *pCar;
+  GameObject *this_01;
   undefined2 extraout_var;
   undefined4 uVar5;
   
-  this_00 = (struct SpriteS1 *)self->Head;
+  this_00 = (SpriteS1 *)self->Head;
   pS63 = gta2::SpriteS1_SpriteS1_FUN_0040fec0(this_00);
-  if (pS63 == (struct EventHandler *)0x0) {
-    pCar = (struct Car *)gta2::SpriteS1_GetCar(this_00);
-    if (pCar == (struct Car *)0x0) {
+  if (pS63 == (EventHandler *)0x0) {
+    pCar = (Car *)gta2::SpriteS1_GetCar(this_00);
+    if (pCar == (Car *)0x0) {
       cVar4 = '\0';
       uVar5 = _DAT_006703b0;
-      this_01 = (struct GameObject *)gta2::SpriteS1_SpriteS1_FUN_0040fea0(this_00);
+      this_01 = (GameObject *)gta2::SpriteS1_SpriteS1_FUN_0040fea0(this_00);
       gta2::GameObject_FUN_0049c460(this_01,uVar5);
     }
     else {

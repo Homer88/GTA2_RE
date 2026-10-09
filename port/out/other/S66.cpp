@@ -20,7 +20,7 @@ void gta2::S66_sub_483EF0(undefined4 *param_1)
 // Ghidra: ---
 S67 * gta2::S66_NextElement(struct S66 *self)
 {
-  struct S67 *FirstElement; // esi
+  S67 *FirstElement; // esi
 
   FirstElement = self->FirstElement;
   self->FirstElement = self->FirstElement->NextElement;
@@ -34,7 +34,7 @@ S67 * gta2::S66_NextElement(struct S66 *self)
 // Ghidra: ---
 S67 * gta2::S66_sub_484000(struct S66 *self, S67 *a2)
 {
-  struct S67 *result; // eax
+  S67 *result; // eax
 
   sub_482B80(a2);
   result = self->FirstElement;
@@ -61,13 +61,13 @@ S66 * gta2::S66_S66_des(struct S66 *self, char a2)
 // Ghidra: ---
 S66 * gta2::S66_S66(struct S66 *self)
 {
-  struct S67 *pS67; // esi
-  struct S67 *p_NextElement; // eax
+  S67 *pS67; // esi
+  S67 *p_NextElement; // eax
   int count; // ecx
 
   pS67 = self->S67_;
   gta2::Construct(self->S67_, 60, 385, S67::S67, S67::S67_Des);
-  p_NextElement = (struct S67 *)&pS67->NextElement;
+  p_NextElement = (S67 *)&pS67->NextElement;
   count = 384;
   do
   {

@@ -111,7 +111,7 @@ int gta2::Weapon_InitializeWeapon(struct Weapon *self)
   self->field_2C = 0;
   if ( !SoundWeapon && !skip_audio )
   {
-    result = gta2::DMAudio_sub_410750(&gDMAudio, (struct CameraOrPhysics *)self);
+    result = gta2::DMAudio_sub_410750(&gDMAudio, (CameraOrPhysics *)self);
     self->SoundWeapon = result;
   }
   return result;
@@ -285,7 +285,7 @@ int * gta2::Weapon_Weapon_dec(struct Weapon *self)
   self->field_8 = 0;
   if ( result )
   {
-    result = (int *)gta2::DMAudio_DMAudio_des(&gDMAudio, (struct cameraPosTarget *)result);
+    result = (int *)gta2::DMAudio_DMAudio_des(&gDMAudio, (cameraPosTarget *)result);
     self->SoundWeapon = 0;
   }
   return result;
@@ -297,14 +297,14 @@ int * gta2::Weapon_Weapon_dec(struct Weapon *self)
 // Ghidra: ---
 Weapon * gta2::Weapon_sub_4CCB40(struct Weapon *self)
 {
-  struct Weapon *result; // eax
+  Weapon *result; // eax
 
   gta2::Weapon_InitializeWeapon(self);
-  result = (struct Weapon *)self->SoundWeapon;
+  result = (Weapon *)self->SoundWeapon;
   self->field_8 = 0;
   if ( result )
   {
-    result = (struct Weapon *)gta2::DMAudio_DMAudio_des(&gDMAudio, (struct cameraPosTarget *)result);
+    result = (Weapon *)gta2::DMAudio_DMAudio_des(&gDMAudio, (cameraPosTarget *)result);
     self->SoundWeapon = 0;
   }
   return result;
@@ -364,7 +364,7 @@ void gta2::Weapon_sub_4CD020(struct Weapon *self)
   struct Ped *this_00;
   bool bVar1;
   char cVar2;
-  struct S127 *pSVar3;
+  S127 *pSVar3;
   SpawnPoint *pSVar4;
   undefined4 *puVar5;
   undefined4 *puVar6;
@@ -376,8 +376,8 @@ void gta2::Weapon_sub_4CD020(struct Weapon *self)
   undefined3 extraout_var_00;
   undefined3 extraout_var_01;
   int iVar11;
-  struct SpriteS1 *pSVar12;
-  struct SpriteS1 *pSVar13;
+  SpriteS1 *pSVar12;
+  SpriteS1 *pSVar13;
   uint uVar14;
   struct Player *pPVar15;
   GlassInfo *pGVar16;
@@ -393,36 +393,36 @@ void gta2::Weapon_sub_4CD020(struct Weapon *self)
   int local_c;
   undefined1 local_8 [8];
   struct Ped *pPed;
-  struct SpriteS1 *pS38;
+  SpriteS1 *pS38;
   
   pS38 = gObject->SpriteS1_;
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(local_3c + 4))
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(local_3c + 4))
   ;
   pPed = self->Ped_;
-  pSVar3 = (struct S127 *)gta2::Ped_GetYCoordinate(pPed, (int *)local_30);
+  pSVar3 = (S127 *)gta2::Ped_GetYCoordinate(pPed, (int *)local_30);
   pGVar16 = (GlassInfo *)(local_3c + 8);
   pSVar4 = (SpawnPoint *)gta2::Ped_GetYCoordinate(pPed->ped3,(int)local_3c);
   puVar5 = (undefined4 *)gta2::Player_sub_401B40(pSVar4,pGVar16,pSVar3);
-  pSVar3 = (struct S127 *)gta2::Ped_GetXCoordinate(pPed,(int)local_2c);
+  pSVar3 = (S127 *)gta2::Ped_GetXCoordinate(pPed,(int)local_2c);
   pGVar16 = (GlassInfo *)(local_2c + 4);
   pSVar4 = (SpawnPoint *)gta2::Ped_GetXCoordinate(pPed->ped3,(int)local_24);
   puVar6 = (undefined4 *)gta2::Player_sub_401B40(pSVar4,pGVar16,pSVar3);
   String_ParseLine(local_8,puVar6,puVar5);
   FUN_004637b0(&PTR_005e6874);
   pPed = self->Ped_;
-  pSVar3 = (struct S127 *)gta2::Ped_GetXCoordinate(pPed,(int)local_24);
+  pSVar3 = (S127 *)gta2::Ped_GetXCoordinate(pPed,(int)local_24);
   pGVar16 = (GlassInfo *)(local_24 + 4);
   pSVar4 = (SpawnPoint *)gta2::Ped_GetXCoordinate(pPed->ped3,(int)local_1c);
   piVar7 = (int *)gta2::Player_sub_401B40(pSVar4,pGVar16,pSVar3);
-  pSVar3 = (struct S127 *)gta2::Ped_GetYCoordinate(pPed, (int *)local_18);
+  pSVar3 = (S127 *)gta2::Ped_GetYCoordinate(pPed, (int *)local_18);
   pGVar16 = (GlassInfo *)local_14;
   pSVar4 = (SpawnPoint *)gta2::Ped_GetYCoordinate(pPed->ped3,(int)&local_c);
   pvVar8 = gta2::Player_sub_401B40(pSVar4,pGVar16,pSVar3);
-  puVar9 = gta2::Player_FUN_0040e8d0((struct Player *)local_40,(undefined2 *)local_40,pvVar8,piVar7);
+  puVar9 = gta2::Player_FUN_0040e8d0((Player *)local_40,(undefined2 *)local_40,pvVar8,piVar7);
   local_3c._4_2_ = *puVar9;
-  piVar7 = gta2::Player_sub_41E260((struct Player *)local_8,&local_c);
+  piVar7 = gta2::Player_sub_41E260((Player *)local_8,&local_c);
   local_3c._0_4_ = *piVar7;
-  bVar1 = gta2::Car_sub_403800((struct Car *)local_3c,(int *)&DAT_006739e0);
+  bVar1 = gta2::Car_sub_403800((Car *)local_3c,(int *)&DAT_006739e0);
   if (CONCAT31(extraout_var,bVar1) != 0) {
     self->Ped_->ped3 = NULL;
     return;
@@ -435,26 +435,26 @@ void gta2::Weapon_sub_4CD020(struct Weapon *self)
   ;
   gta2::SpriteS1_SetRotation((Sprite *)pS38,(short)local_3c._4_4_);
   gta2::SpriteS1_sub_4BCB90((Sprite *)pS38,_DAT_0067395c,_DAT_0067395c,_DAT_0067395c);
-  bVar1 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)local_3c,(struct Car *)&DAT_00673a4c);
+  bVar1 = gta2::Car_IsTrainOrTrainCarriage((Car *)local_3c,(Car *)&DAT_00673a4c);
   if (CONCAT31(extraout_var_00,bVar1) == 0) {
     local_40 = (undefined1  [4])_DAT_00673a4c;
     pPVar15 = _DAT_00673a4c;
   }
   else {
-    piVar7 = (int *)gta2::sub_401B90((struct Player *)local_3c,&local_c,(int *)&DAT_0067395c)
+    piVar7 = (int *)gta2::sub_401B90((Player *)local_3c,&local_c,(int *)&DAT_0067395c)
     ;
     local_40 = (undefined1  [4])*piVar7;
-    piVar7 = (int *)gta2::sub_401B90((struct Player *)local_3c,&local_c,(int *)local_40);
-    pPVar15 = (struct Player *)*piVar7;
+    piVar7 = (int *)gta2::sub_401B90((Player *)local_3c,&local_c,(int *)local_40);
+    pPVar15 = (Player *)*piVar7;
   }
-  bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)local_40,(struct SpriteS1 *)&DAT_006739e4);
+  bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)local_40,(SpriteS1 *)&DAT_006739e4);
   if (CONCAT31(extraout_var_01,bVar1) != 0) {
     local_40 = (undefined1  [4])_DAT_006739e4;
-    pPVar15 = (struct Player *)local_3c._0_4_;
+    pPVar15 = (Player *)local_3c._0_4_;
   }
   local_3c._0_4_ = pPVar15;
-  gta2::sub_41FC20((struct CarSystemManager *)local_30,local_3c + 4,(GlassInfo *)local_3c,
-             (struct Ped *)local_30,(struct Ped *)(local_3c + 8));
+  gta2::sub_41FC20((CarSystemManager *)local_30,local_3c + 4,(GlassInfo *)local_3c,
+             (Ped *)local_30,(Ped *)(local_3c + 8));
   local_3c[4] = 1;
   iVar11 = DecoderFloat(local_40);
   if (0 < iVar11) {
@@ -463,9 +463,9 @@ void gta2::Weapon_sub_4CD020(struct Weapon *self)
                    pS38->Matrix3DArray[0].PositionY,
                    pS38->Matrix3DArray[0].PositionZ);
       pSVar12 = gta2::S202_sub_401B20((Point2D *)&pS38->Matrix3DArray[0].PositionY,
-                           (struct SpriteS1 *)local_14,(struct S127 *)(local_3c + 8));
+                           (SpriteS1 *)local_14,(S127 *)(local_3c + 8));
       pSVar13 = gta2::S202_sub_401B20((Point2D *)&pS38->Matrix3DArray[0].PositionX,
-                           (struct SpriteS1 *)local_18,(struct S127 *)local_30);
+                           (SpriteS1 *)local_18,(S127 *)local_30);
       gta2::SpriteS1_sub_420600((Sprite *)pS38,(int)pSVar13->FirstElement,
                           (int)pSVar12->FirstElement,
                           pS38->Matrix3DArray[0].PositionZ);
@@ -481,7 +481,7 @@ void gta2::Weapon_sub_4CD020(struct Weapon *self)
         }
         if (iVar11 == 3) {
           pPed = self->Ped_;
-          this_00 = (struct Ped *)(pSVar12->Matrix3DArray[0].Car)->PhysicsBitmask;
+          this_00 = (Ped *)(pSVar12->Matrix3DArray[0].Car)->PhysicsBitmask;
           if ((this_00 != pPed->ped3) && (this_00 != pPed)) {
             iVar11 = gta2::Ped_GetPedState(this_00);
             if ((iVar11 < 8) || (9 < iVar11)) {
@@ -552,11 +552,11 @@ void gta2::Weapon_sub_4CD460(struct Weapon *self)
 {
   char *v2; // esi
   _DWORD *v3; // edi
-  struct S202 *v4; // eax
-  struct SpriteS1 *v5; // eax
-  struct SpriteS1 *v6; // eax
+  S202 *v4; // eax
+  SpriteS1 *v5; // eax
+  SpriteS1 *v6; // eax
   _DWORD *v7; // eax
-  struct S122 *v8; // eax
+  S122 *v8; // eax
   struct Player **v9; // eax
   int v10; // edi
   int v11; // ebx
@@ -568,30 +568,30 @@ void gta2::Weapon_sub_4CD460(struct Weapon *self)
   int v17[2]; // [esp+20h] [ebp-Ch] BYREF
   int WindowHeight; // [esp+28h] [ebp-4h] BYREF
 
-  v2 = (char *)gta2::Turrel_sub_41FC70((struct Arsenal *)self->Car);
+  v2 = (char *)gta2::Turrel_sub_41FC70((Arsenal *)self->Car);
   v3 = (_DWORD *)*((_DWORD *)v2 + 3);
-  v4 = (struct S202 *)gta2::sub_447E10(v3, &WindowHeight);
-  v5 = gta2::S202_sub_401B20(v4, (struct SpriteS1 *)v17, (struct PublicTransport *)&unk_673BA4);
-  v6 = gta2::JustCopyByPtrAtoC(v5, (struct SpriteS1 *)&a2);
+  v4 = (S202 *)gta2::sub_447E10(v3, &WindowHeight);
+  v5 = gta2::S202_sub_401B20(v4, (SpriteS1 *)v17, (PublicTransport *)&unk_673BA4);
+  v6 = gta2::JustCopyByPtrAtoC(v5, (SpriteS1 *)&a2);
   a3 = *(_DWORD *)gta2::sub_401B90(v6, &pPlayer, &unk_673AC8);
   if ( (gta2::Weapon_GetDisplayAmmo(self) & 1) != 0 )
-    a2 = (int)gta2::JustCopyByPtrAtoC(&dword_673B9C, (struct SpriteS1 *)&WindowHeight)->FirstElement;
+    a2 = (int)gta2::JustCopyByPtrAtoC(&dword_673B9C, (SpriteS1 *)&WindowHeight)->FirstElement;
   else
     a2 = dword_673B9C;
-  gta2::Tango_sub_40F6B0((struct Tango *)&a2, (struct S900 *)v2);
-  v7 = gta2::SpriteS1_sub_4207B0((struct SpriteS1 *)v2, v17);
-  gta2::Tango_sub_40F680((struct Tango *)&a2, (int)v7);
-  pPlayer = (struct Player *)2;
-  v8 = (struct S122 *)gta2::sub_492170(v3, v17);
+  gta2::Tango_sub_40F6B0((Tango *)&a2, (S900 *)v2);
+  v7 = gta2::SpriteS1_sub_4207B0((SpriteS1 *)v2, v17);
+  gta2::Tango_sub_40F680((Tango *)&a2, (int)v7);
+  pPlayer = (Player *)2;
+  v8 = (S122 *)gta2::sub_492170(v3, v17);
   gta2::S122_sub_401BF0(v8, (int)&WindowHeight, (int)&pPlayer);
   pPlayer = *v9;
-  gta2::Player_sub_401B40((struct Player *)(v2 + 28), (struct S202 *)&WindowHeight, (int)&pPlayer);
-  pPlayer = (struct Player *)gta2::S202_sub_401B20((struct S202 *)(v2 + 28), (struct SpriteS1 *)&WindowHeight, (struct PublicTransport *)&pPlayer)->FirstElement;
-  if ( gta2::Player_sub_40CE70((struct Player *)&pPlayer, &unk_673984) )
-    gta2::Player_sub_401B40((struct Player *)&unk_673984, (struct S202 *)&WindowHeight, (int)&unk_6739B4);
+  gta2::Player_sub_401B40((Player *)(v2 + 28), (S202 *)&WindowHeight, (int)&pPlayer);
+  pPlayer = (Player *)gta2::S202_sub_401B20((S202 *)(v2 + 28), (SpriteS1 *)&WindowHeight, (PublicTransport *)&pPlayer)->FirstElement;
+  if ( gta2::Player_sub_40CE70((Player *)&pPlayer, &unk_673984) )
+    gta2::Player_sub_401B40((Player *)&unk_673984, (S202 *)&WindowHeight, (int)&unk_6739B4);
   v10 = a3;
   v11 = a2;
-  if ( gta2::MapRelatedStruct_sub_469DC0(gMapRelatedStruct, (int *)a2, (struct SpriteS1 *)a3) )
+  if ( gta2::MapRelatedStruct_sub_469DC0(gMapRelatedStruct, (int *)a2, (SpriteS1 *)a3) )
   {
     LOWORD(v12) = *(_WORD *)v2;
     gta2::Object_SpawnObject(gObject, 8, v11, v10, a4, v12);
@@ -609,17 +609,17 @@ void gta2::Weapon_sub_4CD5F0(struct Weapon *self)
   struct Car *Car; // esi
   char *v3; // esi
   _DWORD *v4; // ebx
-  struct S202 *v5; // eax
-  struct SpriteS1 *v6; // eax
-  struct S202 *v7; // eax
-  struct SpriteS1 *v8; // eax
+  S202 *v5; // eax
+  SpriteS1 *v6; // eax
+  S202 *v7; // eax
+  SpriteS1 *v8; // eax
   _DWORD *v9; // eax
-  struct S122 *v10; // eax
+  S122 *v10; // eax
   int *v11; // eax
   int v12; // ebx
   int v13; // ebp
   int v14; // eax
-  struct EventHandler *pS63; // esi
+  EventHandler *pS63; // esi
   byte v16; // al
   int WindowWidth[2]; // [esp+10h] [ebp-24h] BYREF
   char v18; // [esp+18h] [ebp-1Ch] BYREF
@@ -631,28 +631,28 @@ void gta2::Weapon_sub_4CD5F0(struct Weapon *self)
 
   Car = self->Car;
   self->Ped_ = gta2::Car_GetDriver(Car);
-  v3 = (char *)gta2::Turrel_sub_41FC70((struct Arsenal *)Car);
+  v3 = (char *)gta2::Turrel_sub_41FC70((Arsenal *)Car);
   v4 = (_DWORD *)*((_DWORD *)v3 + 3);
-  v5 = (struct S202 *)gta2::sub_447E10(v4, v22);
-  v6 = gta2::S202_sub_401B20(v5, (struct SpriteS1 *)&a2, (struct PublicTransport *)&unk_673AD4);
-  v7 = (struct S202 *)gta2::sub_401B90(v6, v19, &unk_673AC8);
-  v8 = gta2::S202_sub_401B20(v7, (struct SpriteS1 *)&v18, (struct PublicTransport *)&unk_673A90);
-  a3 = (int)gta2::JustCopyByPtrAtoC(v8, (struct SpriteS1 *)WindowWidth)->FirstElement;
+  v5 = (S202 *)gta2::sub_447E10(v4, v22);
+  v6 = gta2::S202_sub_401B20(v5, (SpriteS1 *)&a2, (PublicTransport *)&unk_673AD4);
+  v7 = (S202 *)gta2::sub_401B90(v6, v19, &unk_673AC8);
+  v8 = gta2::S202_sub_401B20(v7, (SpriteS1 *)&v18, (PublicTransport *)&unk_673A90);
+  a3 = (int)gta2::JustCopyByPtrAtoC(v8, (SpriteS1 *)WindowWidth)->FirstElement;
   a2 = unk_673A4C;
-  gta2::Tango_sub_40F6B0((struct Tango *)&a2, (struct S900 *)v3);
-  v9 = gta2::SpriteS1_sub_4207B0((struct SpriteS1 *)v3, v22);
-  gta2::Tango_sub_40F680((struct Tango *)&a2, (int)v9);
+  gta2::Tango_sub_40F6B0((Tango *)&a2, (S900 *)v3);
+  v9 = gta2::SpriteS1_sub_4207B0((SpriteS1 *)v3, v22);
+  gta2::Tango_sub_40F680((Tango *)&a2, (int)v9);
   WindowWidth[0] = 2;
-  v10 = (struct S122 *)gta2::sub_492170(v4, v22);
+  v10 = (S122 *)gta2::sub_492170(v4, v22);
   gta2::S122_sub_401BF0(v10, (int)&WindowHeight, (int)WindowWidth);
   WindowWidth[0] = *v11;
-  gta2::Player_sub_401B40((struct Player *)(v3 + 28), (struct S202 *)&WindowHeight, (int)WindowWidth);
-  WindowWidth[0] = (int)gta2::S202_sub_401B20((struct S202 *)(v3 + 28), (struct SpriteS1 *)&WindowHeight, (struct PublicTransport *)WindowWidth)->FirstElement;
-  if ( gta2::Player_sub_40CE70((struct Player *)WindowWidth, &unk_673984) )
-    gta2::Player_sub_401B40((struct Player *)&unk_673984, (struct S202 *)&WindowHeight, (int)&unk_6739B4);
+  gta2::Player_sub_401B40((Player *)(v3 + 28), (S202 *)&WindowHeight, (int)WindowWidth);
+  WindowWidth[0] = (int)gta2::S202_sub_401B20((S202 *)(v3 + 28), (SpriteS1 *)&WindowHeight, (PublicTransport *)WindowWidth)->FirstElement;
+  if ( gta2::Player_sub_40CE70((Player *)WindowWidth, &unk_673984) )
+    gta2::Player_sub_401B40((Player *)&unk_673984, (S202 *)&WindowHeight, (int)&unk_6739B4);
   v12 = a3;
   v13 = a2;
-  if ( gta2::MapRelatedStruct_sub_469DC0(gMapRelatedStruct, (int *)a2, (struct SpriteS1 *)a3) )
+  if ( gta2::MapRelatedStruct_sub_469DC0(gMapRelatedStruct, (int *)a2, (SpriteS1 *)a3) )
   {
     LOWORD(v14) = *(_WORD *)v3;
     pS63 = gta2::Object_SpawnObject(gObject, 10, v13, v12, WindowWidth[1], v14);
@@ -669,24 +669,24 @@ void gta2::Weapon_sub_4CD5F0(struct Weapon *self)
 // Ghidra: ---
 int gta2::Weapon_sub_4CDA90(struct Weapon *self, int a1, void *a2)
 {
-  struct SpriteS1 *S202; // edi
-  struct EventHandler *v5; // eax
+  SpriteS1 *S202; // edi
+  EventHandler *v5; // eax
   struct Ped *Ped; // ebx
-  struct EventHandler *pS63; // esi
+  EventHandler *pS63; // esi
   int XCoordinate; // eax
-  struct SpriteS1 *v9; // eax
-  struct S202 *v10; // eax
+  SpriteS1 *v9; // eax
+  S202 *v10; // eax
   int v11; // eax
-  struct SpriteS1 *v12; // eax
-  struct S202 *v13; // eax
+  SpriteS1 *v12; // eax
+  S202 *v13; // eax
   int *v14; // eax
-  struct CarSystemManager *v15; // ecx
+  CarSystemManager *v15; // ecx
   int SpriteType; // eax
   byte v17; // al
   byte v18; // al
   int result; // eax
-  struct PublicTransport *v20; // [esp-4h] [ebp-2Ch]
-  struct PublicTransport *v21; // [esp-4h] [ebp-2Ch]
+  PublicTransport *v20; // [esp-4h] [ebp-2Ch]
+  PublicTransport *v21; // [esp-4h] [ebp-2Ch]
   _BYTE v22[4]; // [esp+10h] [ebp-18h] BYREF
   char v23; // [esp+14h] [ebp-14h] BYREF
   int X; // [esp+18h] [ebp-10h] BYREF
@@ -695,31 +695,31 @@ int gta2::Weapon_sub_4CDA90(struct Weapon *self, int a1, void *a2)
   int Y; // [esp+24h] [ebp-4h] BYREF
   Player a3; // [esp+34h] [ebp+Ch] BYREF
 
-  S202 = (struct SpriteS1 *)gObject->S63[1].S202;
+  S202 = (SpriteS1 *)gObject->S63[1].S202;
   v5 = gta2::Object_SpawnObject(gObject, a1, (int)a2, (int)a3.CurrentPlayer, (int)a3.Player, *(int *)&a3.Rotate);
   Ped = self->Ped_;
   pS63 = v5;
   XCoordinate = gta2::Ped_GetXCoordinate(Ped, (int)&a3.Rotate);
-  v9 = gta2::Player_sub_401B40((struct Player *)&a2, (struct S202 *)v22, XCoordinate);
-  v20 = (struct PublicTransport *)gta2::sub_401B90(v9, &a2, &unk_673AC8);
-  v10 = (struct S202 *)gta2::Ped_GetXCoordinate(Ped, (int)&X);
-  a2 = gta2::S202_sub_401B20(v10, (struct SpriteS1 *)&v23, v20)->FirstElement;
+  v9 = gta2::Player_sub_401B40((Player *)&a2, (S202 *)v22, XCoordinate);
+  v20 = (PublicTransport *)gta2::sub_401B90(v9, &a2, &unk_673AC8);
+  v10 = (S202 *)gta2::Ped_GetXCoordinate(Ped, (int)&X);
+  a2 = gta2::S202_sub_401B20(v10, (SpriteS1 *)&v23, v20)->FirstElement;
   gta2::Ped_GetYCoordinate(Ped, (int *)&a3.Rotate);
-  v12 = gta2::Player_sub_401B40(&a3, (struct S202 *)v25, v11);
-  v21 = (struct PublicTransport *)gta2::sub_401B90(v12, &a3, &unk_673AC8);
+  v12 = gta2::Player_sub_401B40(&a3, (S202 *)v25, v11);
+  v21 = (PublicTransport *)gta2::sub_401B90(v12, &a3, &unk_673AC8);
   gta2::Ped_GetYCoordinate(Ped, &Y);
-  v14 = (int *)gta2::S202_sub_401B20(v13, (struct SpriteS1 *)&v26, v21);
+  v14 = (int *)gta2::S202_sub_401B20(v13, (SpriteS1 *)&v26, v21);
   gta2::SpriteS1_sub_420600(S202, (int)a2, *v14, (int)a3.Player);
   LOWORD(v15) = pS63->SpriteS1_->FirstElement;
   gta2::SpriteS1_SetRotation(S202, v15);
   gta2::SpriteS1_sub_4BCB90(
     S202,
-    (struct SpriteS1 *)pS63->pEventHandler->NextElement,
-    (struct SpriteS3 *)unk_673BE4.FirstElement,
+    (SpriteS1 *)pS63->pEventHandler->NextElement,
+    (SpriteS3 *)unk_673BE4.FirstElement,
     pS63->pEventHandler->pEventHandler);
   SpriteType = gta2::SpriteS1_getSpriteType(pS63->SpriteS1_);
   gta2::SpriteS1_sub_4206F0(S202, SpriteType);
-  gta2::SpriteS1_SetS63(S202, (struct EventHandler *)pS63->SpriteS1_->S3_arr5031[0].GameObject);
+  gta2::SpriteS1_SetS63(S202, (EventHandler *)pS63->SpriteS1_->S3_arr5031[0].GameObject);
   v17 = gta2::sub_420B50(self->Ped_);
   gta2::S63_sub_482790(pS63, v17);
   if ( a1 == 254 || a1 == 265 )
@@ -752,8 +752,8 @@ char gta2::Weapon_sub_4CDC20(struct Weapon *self)
   int *v3; // eax
   __int16 *v4; // eax
   struct Ped *v5; // ecx
-  struct S900 **v6; // eax
-  struct SpriteS1 *FirstElement; // edi
+  S900 **v6; // eax
+  SpriteS1 *FirstElement; // edi
   char result; // al
   struct Ped *pPed; // esi
   __int16 Rotation; // [esp+10h] [ebp-20h] BYREF
@@ -763,7 +763,7 @@ char gta2::Weapon_sub_4CDC20(struct Weapon *self)
   int a3; // [esp+28h] [ebp-8h] BYREF
   int v15; // [esp+2Ch] [ebp-4h] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&v11);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&v11);
   Ped = self->Ped_;
   v13[0] = *(S900 **)gta2::Ped_GetXCoordinate(Ped, (int)v13);
   gta2::Ped_GetYCoordinate(Ped, &Y);
@@ -776,8 +776,8 @@ char gta2::Weapon_sub_4CDC20(struct Weapon *self)
   v13[1] = *v6;
   v13[2] = v6[1];
   gta2::sub_41E210(&a3, &unk_673BE4, (int)&v11);
-  FirstElement = gta2::S202_sub_401B20((struct S202 *)v13, (struct SpriteS1 *)&Rotation, (struct PublicTransport *)&a3)->FirstElement;
-  gta2::S202_sub_401B20((struct S202 *)&Y, (struct SpriteS1 *)&Rotation, (struct PublicTransport *)&v15);
+  FirstElement = gta2::S202_sub_401B20((S202 *)v13, (SpriteS1 *)&Rotation, (PublicTransport *)&a3)->FirstElement;
+  gta2::S202_sub_401B20((S202 *)&Y, (SpriteS1 *)&Rotation, (PublicTransport *)&v15);
   if ( self->SMG )
     return gta2::Weapon_sub_4CDA90(self, 195, v13[0]);
   gta2::Weapon_Set_4CCA80(self, 1);
@@ -822,7 +822,7 @@ char gta2::Weapon_sub_4CDDA0(struct Weapon *self, __int16 a2, __int16 a3)
   int X; // [esp+18h] [ebp-10h]
   int v20; // [esp+1Ch] [ebp-Ch]
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&v13);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&v13);
   TimeToReload = self->TimeToReload;
   if ( TimeToReload )
   {
@@ -842,27 +842,27 @@ char gta2::Weapon_sub_4CDDA0(struct Weapon *self, __int16 a2, __int16 a3)
     gta2::Weapon_Set_4CCA80(self, 1);
     if ( self->SMG )
     {
-      gta2::sub_40E5A0((struct CarSystemManager *)&v13, (struct CarSystemManager *)&v12, &unk_6739BC);
+      gta2::sub_40E5A0((CarSystemManager *)&v13, (CarSystemManager *)&v12, &unk_6739BC);
       gta2::Weapon_sub_4CDA90(self, 193, v6);
-      gta2::sub_40E5A0((struct CarSystemManager *)&v13, (struct CarSystemManager *)&v12, &unk_673A44);
+      gta2::sub_40E5A0((CarSystemManager *)&v13, (CarSystemManager *)&v12, &unk_673A44);
       gta2::Weapon_sub_4CDA90(self, 193, v6);
       gta2::Weapon_sub_4CDA90(self, 193, v6);
-      gta2::SpriteS1_sub_40E5D0((struct SpriteS1 *)&v13, (struct CarSystemManager *)&v12, &unk_673A44);
+      gta2::SpriteS1_sub_40E5D0((SpriteS1 *)&v13, (CarSystemManager *)&v12, &unk_673A44);
       gta2::Weapon_sub_4CDA90(self, 193, v6);
-      gta2::SpriteS1_sub_40E5D0((struct SpriteS1 *)v15, (struct CarSystemManager *)v14, (__int16 *)&unk_6739BC);
+      gta2::SpriteS1_sub_40E5D0((SpriteS1 *)v15, (CarSystemManager *)v14, (__int16 *)&unk_6739BC);
       gta2::Weapon_sub_4CDA90(self, 193, v6);
       self->TimeToReload = 5;
     }
     else
     {
-      gta2::sub_40E5A0((struct CarSystemManager *)&v13, (struct CarSystemManager *)&v12, &unk_673A44);
+      gta2::sub_40E5A0((CarSystemManager *)&v13, (CarSystemManager *)&v12, &unk_673A44);
       v15[0] = gta2::Weapon_sub_4CDA90(self, 192, v6);
-      gta2::sub_40E5A0((struct CarSystemManager *)&v13, (struct CarSystemManager *)&v12, &unk_673CE4);
+      gta2::sub_40E5A0((CarSystemManager *)&v13, (CarSystemManager *)&v12, &unk_673CE4);
       v15[1] = gta2::Weapon_sub_4CDA90(self, 192, v6);
       v16 = gta2::Weapon_sub_4CDA90(self, 192, v6);
-      gta2::SpriteS1_sub_40E5D0((struct SpriteS1 *)&v13, (struct CarSystemManager *)&v12, &unk_673CE4);
+      gta2::SpriteS1_sub_40E5D0((SpriteS1 *)&v13, (CarSystemManager *)&v12, &unk_673CE4);
       v18 = gta2::Weapon_sub_4CDA90(self, 192, v6);
-      gta2::SpriteS1_sub_40E5D0((struct SpriteS1 *)v15, (struct CarSystemManager *)v14, &unk_673A44);
+      gta2::SpriteS1_sub_40E5D0((SpriteS1 *)v15, (CarSystemManager *)v14, &unk_673A44);
       v8 = gta2::Weapon_sub_4CDA90(self, 192, v6);
       if ( (v16 || v17 || v18 || X || v8) && gta2::Ped_IsSearchType(self->Ped_, SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY) )
         gta2::Weapon_Decrement10Ammo(self);
@@ -892,22 +892,22 @@ char gta2::Weapon_sub_4CE070(struct Weapon *self)
   bool IsSearchType; // al
   struct Ped *v4; // edi
   int v5; // ebx
-  struct S202 **v6; // eax
+  S202 **v6; // eax
   __int16 *v7; // eax
   struct Ped *v8; // ecx
   int *v9; // eax
-  struct SpriteS1 *FirstElement; // edi
+  SpriteS1 *FirstElement; // edi
   struct Ped *v11; // eax
   struct Ped *v12; // edi
   char result; // al
   struct Ped *Ped; // edi
-  struct S202 *v15; // eax
+  S202 *v15; // eax
   void **XCoordinate; // edi
   __int16 Rotation; // [esp+4h] [ebp-28h] BYREF
   int Y; // [esp+8h] [ebp-24h] BYREF
   S202 v19; // [esp+Ch] [ebp-20h] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&Y);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&Y);
   TimeToReload = self->TimeToReload;
   if ( TimeToReload )
   {
@@ -942,11 +942,11 @@ char gta2::Weapon_sub_4CE070(struct Weapon *self)
       v8 = self->Ped_;
       LOWORD(Y) = *v7;
       v9 = gta2::Ped_sub_435C20(v8, (int *)&v19.CarSystemManager);
-      v19.field_10 = (struct Weapon *)*v9;
-      v19.pPlayer = (struct Player *)v9[1];
+      v19.field_10 = (Weapon *)*v9;
+      v19.pPlayer = (Player *)v9[1];
       gta2::sub_41E210(&v19.CarSystemManager, &unk_673BE4, (int)&Y);
-      FirstElement = gta2::S202_sub_401B20(&v19, (struct SpriteS1 *)&Rotation, (struct PublicTransport *)&v19.CarSystemManager)->FirstElement;
-      gta2::S202_sub_401B20((struct S202 *)&v19.S202, (struct SpriteS1 *)&v19, (struct PublicTransport *)&v19.field_C);
+      FirstElement = gta2::S202_sub_401B20(&v19, (SpriteS1 *)&Rotation, (PublicTransport *)&v19.CarSystemManager)->FirstElement;
+      gta2::S202_sub_401B20((S202 *)&v19.S202, (SpriteS1 *)&v19, (PublicTransport *)&v19.field_C);
       if ( gta2::Weapon_sub_4CDA90(self, v5, FirstElement) )
       {
         if ( gta2::Ped_IsSearchType(self->Ped_, SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY) )
@@ -980,8 +980,8 @@ char gta2::Weapon_sub_4CE270(struct Weapon *self, __int16 a2)
   _DWORD *v6; // eax
   __int16 *v7; // eax
   struct Ped *v8; // ecx
-  struct SpriteS1 *FirstElement; // ebp
-  struct SpriteS1 *v10; // edi
+  SpriteS1 *FirstElement; // ebp
+  SpriteS1 *v10; // edi
   int v11; // eax
   struct Ped *v12; // ecx
   struct Ped *v13; // edi
@@ -990,7 +990,7 @@ char gta2::Weapon_sub_4CE270(struct Weapon *self, __int16 a2)
   __int16 Rotation; // [esp+4h] [ebp-20h] BYREF
   _BYTE a4[28]; // [esp+8h] [ebp-1Ch] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&Rotation);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&Rotation);
   TimeToReload = self->TimeToReload;
   if ( TimeToReload )
   {
@@ -1012,23 +1012,23 @@ char gta2::Weapon_sub_4CE270(struct Weapon *self, __int16 a2)
     Rotation = *v7;
     gta2::Ped_sub_435C20(v8, (int *)&a4[16]);
     gta2::sub_41E210(&a4[16], &unk_673BE4, (int)&Rotation);
-    FirstElement = gta2::S202_sub_401B20((struct S202 *)a4, (struct SpriteS1 *)&v15, (struct PublicTransport *)&a4[16])->FirstElement;
-    v10 = gta2::S202_sub_401B20((struct S202 *)&a4[4], (struct SpriteS1 *)a4, (struct PublicTransport *)&a4[20])->FirstElement;
+    FirstElement = gta2::S202_sub_401B20((S202 *)a4, (SpriteS1 *)&v15, (PublicTransport *)&a4[16])->FirstElement;
+    v10 = gta2::S202_sub_401B20((S202 *)&a4[4], (SpriteS1 *)a4, (PublicTransport *)&a4[20])->FirstElement;
     gta2::Weapon_Set_4CCA80(self, 1);
     if ( self->SMG )
     {
-      gta2::SpriteS1_sub_40E5D0((struct SpriteS1 *)&Rotation, (struct CarSystemManager *)&v15, &unk_673A44);
+      gta2::SpriteS1_sub_40E5D0((SpriteS1 *)&Rotation, (CarSystemManager *)&v15, &unk_673A44);
       gta2::Weapon_sub_4CDA90(self, 154, FirstElement);
-      gta2::sub_40E5A0((struct CarSystemManager *)a4, (struct CarSystemManager *)&Rotation, &unk_673A44);
+      gta2::sub_40E5A0((CarSystemManager *)a4, (CarSystemManager *)&Rotation, &unk_673A44);
       gta2::Weapon_sub_4CDA90(self, 154, v10);
       self->TimeToReload = 5;
     }
     else
     {
       *(_DWORD *)a4 = gta2::Ped_IsSearchType(self->Ped_, SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY) ? 265 : 254;
-      gta2::SpriteS1_sub_40E5D0((struct SpriteS1 *)&Rotation, (struct CarSystemManager *)&v15, &unk_673A44);
+      gta2::SpriteS1_sub_40E5D0((SpriteS1 *)&Rotation, (CarSystemManager *)&v15, &unk_673A44);
       *(_DWORD *)&a4[8] = gta2::Weapon_sub_4CDA90(self, *(int *)&a4[4], FirstElement);
-      gta2::sub_40E5A0((struct CarSystemManager *)a4, (struct CarSystemManager *)&Rotation, &unk_673A44);
+      gta2::sub_40E5A0((CarSystemManager *)a4, (CarSystemManager *)&Rotation, &unk_673A44);
       v11 = gta2::Weapon_sub_4CDA90(self, *(int *)&a4[4], FirstElement);
       if ( (*(_DWORD *)&a4[8] || v11) && gta2::Ped_IsSearchType(self->Ped_, SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY) )
         gta2::Weapon_Decrement10Ammo(self);
@@ -1173,17 +1173,17 @@ char gta2::Weapon_sub_4CE6D0(struct Weapon *self)
 // Ghidra: ---
 void gta2::Weapon_sub_4CE970(struct Weapon *self, S900 *arg0, SpriteS1 *pSpriteS1)
 {
-  struct SpriteS1 *v3; // edi
+  SpriteS1 *v3; // edi
   char TimeToReload; // al
   struct Ped *v6; // edi
   _WORD *v7; // ebx
   _DWORD **v8; // ebp
   int *v9; // eax
   void **v10; // edi
-  struct PublicTransport *v11; // eax
+  PublicTransport *v11; // eax
   int v12; // edx
   _DWORD *v13; // eax
-  struct PublicTransport *v14; // edx
+  PublicTransport *v14; // edx
   void *v15; // eax
   struct Ped *v16; // esi
   struct Ped *v17; // edi
@@ -1195,39 +1195,39 @@ void gta2::Weapon_sub_4CE970(struct Weapon *self, S900 *arg0, SpriteS1 *pSpriteS
   struct Ped *v23; // edi
   _DWORD *v24; // eax
   void *v25; // eax
-  struct Tango *v26; // eax
-  struct SpriteS1 *v27; // eax
+  Tango *v26; // eax
+  SpriteS1 *v27; // eax
   _DWORD *v28; // eax
   void *v29; // eax
-  struct Tango *v30; // eax
-  struct SpriteS1 *v31; // eax
+  Tango *v30; // eax
+  SpriteS1 *v31; // eax
   char v32; // al
-  struct SpriteS1 *v33; // eax
+  SpriteS1 *v33; // eax
   struct Ped *v34; // edi
   int *v35; // ebp
   _WORD *v36; // ebx
-  struct S202 *v37; // eax
+  S202 *v37; // eax
   int v38; // eax
   int *v39; // eax
   int v40; // ecx
-  struct S900 *v41; // ebx
-  struct EventHandler *v42; // eax
-  struct EventHandler *pS63; // edi
+  S900 *v41; // ebx
+  EventHandler *v42; // eax
+  EventHandler *pS63; // edi
   struct Ped *pPed; // ecx
   int *v45; // eax
-  struct PublicTransport *v46; // ecx
+  PublicTransport *v46; // ecx
   int v47; // ecx
   int v48; // ecx
-  struct EventHandler *v49; // eax
-  struct PublicTransport *v50; // ecx
-  struct EventHandler *v51; // ebx
+  EventHandler *v49; // eax
+  PublicTransport *v50; // ecx
+  EventHandler *v51; // ebx
   _DWORD *v52; // ecx
   int *v53; // eax
   int *v54; // ebx
   int *v55; // eax
   _DWORD *v56; // edx
   int *v57; // ebp
-  struct PublicTransport *v58; // edx
+  PublicTransport *v58; // edx
   int v59; // ecx
   int v60; // ebx
   _DWORD *v61; // ecx
@@ -1238,14 +1238,14 @@ void gta2::Weapon_sub_4CE970(struct Weapon *self, S900 *arg0, SpriteS1 *pSpriteS
   _DWORD **PositionZ; // ebp
   int *v67; // eax
   void **XCoordinate; // edi
-  struct PublicTransport *v69; // eax
+  PublicTransport *v69; // eax
   _DWORD *v70; // ecx
-  struct PublicTransport *v71; // eax
+  PublicTransport *v71; // eax
   void *v72; // ecx
   char v73; // al
   int v74; // [esp-18h] [ebp-64h] BYREF
   int v75; // [esp-14h] [ebp-60h] BYREF
-  struct PublicTransport *v76; // [esp-10h] [ebp-5Ch] BYREF
+  PublicTransport *v76; // [esp-10h] [ebp-5Ch] BYREF
   int v77; // [esp-Ch] [ebp-58h] BYREF
   int v78; // [esp-8h] [ebp-54h] BYREF
   int ID; // [esp-4h] [ebp-50h]
@@ -1272,12 +1272,12 @@ void gta2::Weapon_sub_4CE970(struct Weapon *self, S900 *arg0, SpriteS1 *pSpriteS
       gta2::Ped_GetYCoordinate(Ped, X);
       pSpriteS1_4 = v67;
       XCoordinate = (void **)gta2::Ped_GetXCoordinate(Ped, (int)&Y);
-      v69 = (struct PublicTransport *)gta2::Ped_sub_435C20(self->Ped_, (int *)&a2.field_1C);
+      v69 = (PublicTransport *)gta2::Ped_sub_435C20(self->Ped_, (int *)&a2.field_1C);
       v70 = *PositionZ;
       ID = (int)v69;
       LOWORD(v69) = *v65;
       v78 = (int)v69;
-      v71 = (struct PublicTransport *)*pSpriteS1_4;
+      v71 = (PublicTransport *)*pSpriteS1_4;
       v77 = (int)v70;
       v72 = *XCoordinate;
       v76 = v71;
@@ -1295,12 +1295,12 @@ void gta2::Weapon_sub_4CE970(struct Weapon *self, S900 *arg0, SpriteS1 *pSpriteS
       gta2::Ped_GetYCoordinate(v6, &a2.field_C);
       pSpriteS1_4 = v9;
       v10 = (void **)gta2::Ped_GetXCoordinate(v6, (int)&a2.CarSystemManager);
-      v11 = (struct PublicTransport *)gta2::Ped_sub_435C20(self->Ped_, X);
+      v11 = (PublicTransport *)gta2::Ped_sub_435C20(self->Ped_, X);
       LOWORD(v12) = *v7;
       ID = (int)v11;
       v13 = *v8;
       v78 = v12;
-      v14 = (struct PublicTransport *)*pSpriteS1_4;
+      v14 = (PublicTransport *)*pSpriteS1_4;
       v77 = (int)v13;
       v15 = *v10;
       v76 = v14;
@@ -1312,7 +1312,7 @@ void gta2::Weapon_sub_4CE970(struct Weapon *self, S900 *arg0, SpriteS1 *pSpriteS
         gta2::S127_HandlePedInteraction(gS127, 2u, v16);
       return;
     }
-    if ( arg0 == (struct S900 *)183 )
+    if ( arg0 == (S900 *)183 )
     {
       if ( pSpriteS1_4 == (int *)96 )
       {
@@ -1340,35 +1340,35 @@ LABEL_29:
         gta2::Weapon_TimeToReload(self);
         return;
       }
-      ID = (int)gta2::S202_sub_401B20(&unk_67395C, (struct SpriteS1 *)&pSpriteS1, (struct PublicTransport *)&unk_673C3C);
-      gta2::S202_sub_41F980((struct S202 *)&a2.CarSystemManager, 60);
+      ID = (int)gta2::S202_sub_401B20(&unk_67395C, (SpriteS1 *)&pSpriteS1, (PublicTransport *)&unk_673C3C);
+      gta2::S202_sub_41F980((S202 *)&a2.CarSystemManager, 60);
       v77 = (int)v24;
       gta2::S202_sub_41F980(&a2, (int)v3);
-      v26 = (struct Tango *)gta2::sub_401B90(v25, &a2.S202, (_DWORD *)v77);
-      v27 = gta2::Radar_AddBlip(v26, (struct SpriteS1 *)&a2.field_C, (struct PublicTransport *)ID);
-      a2.field_0 = (int)gta2::S202_sub_401B20(&unk_673960, (struct SpriteS1 *)&v80, (struct PublicTransport *)v27)->FirstElement;
+      v26 = (Tango *)gta2::sub_401B90(v25, &a2.S202, (_DWORD *)v77);
+      v27 = gta2::Radar_AddBlip(v26, (SpriteS1 *)&a2.field_C, (PublicTransport *)ID);
+      a2.field_0 = (int)gta2::S202_sub_401B20(&unk_673960, (SpriteS1 *)&v80, (PublicTransport *)v27)->FirstElement;
     }
     else
     {
-      gta2::S202_sub_41F980((struct S202 *)&a2.field_C, 60);
+      gta2::S202_sub_41F980((S202 *)&a2.field_C, 60);
       v77 = (int)v28;
-      gta2::S202_sub_41F980((struct S202 *)&a2.S202, (int)v3);
-      v30 = (struct Tango *)gta2::sub_401B90(v29, &a2.CarSystemManager, (_DWORD *)v77);
-      v31 = gta2::Radar_AddBlip(v30, (struct SpriteS1 *)&pSpriteS1, (struct PublicTransport *)&unk_67395C);
-      a2.field_0 = (int)gta2::S202_sub_401B20(&unk_673C3C, (struct SpriteS1 *)&a2, (struct PublicTransport *)v31)->FirstElement;
+      gta2::S202_sub_41F980((S202 *)&a2.S202, (int)v3);
+      v30 = (Tango *)gta2::sub_401B90(v29, &a2.CarSystemManager, (_DWORD *)v77);
+      v31 = gta2::Radar_AddBlip(v30, (SpriteS1 *)&pSpriteS1, (PublicTransport *)&unk_67395C);
+      a2.field_0 = (int)gta2::S202_sub_401B20(&unk_673C3C, (SpriteS1 *)&a2, (PublicTransport *)v31)->FirstElement;
     }
     v32 = gta2::sub_420B50(self->Ped_);
     gta2::Object_sub_482960(gObject, v32);
-    v33 = gta2::JustCopyByPtrAtoC(&unk_673C98, (struct SpriteS1 *)&a2.pPlayer);
+    v33 = gta2::JustCopyByPtrAtoC(&unk_673C98, (SpriteS1 *)&a2.pPlayer);
     v34 = self->Ped_;
     v35 = (int *)v33;
     v36 = sub_4CCA90(v34, &pSpriteS1);
-    a2.S202 = (struct S202 *)sub_4CCA90(v34, &v80);
-    v37 = (struct S202 *)gta2::Ped_GetPositionZ(v34, (int)&a2.field_1C);
-    a2.CarSystemManager = (struct CarSystemManager *)gta2::S202_sub_401B20(
+    a2.S202 = (S202 *)sub_4CCA90(v34, &v80);
+    v37 = (S202 *)gta2::Ped_GetPositionZ(v34, (int)&a2.field_1C);
+    a2.CarSystemManager = (CarSystemManager *)gta2::S202_sub_401B20(
                                                 v37,
-                                                (struct SpriteS1 *)&a2.field_18,
-                                                (struct PublicTransport *)&unk_673BDC);
+                                                (SpriteS1 *)&a2.field_18,
+                                                (PublicTransport *)&unk_673BDC);
     gta2::Ped_GetYCoordinate(v34, &Y);
     a2.field_C = v38;
     v39 = (int *)gta2::Ped_GetXCoordinate(v34, (int)X);
@@ -1385,7 +1385,7 @@ LABEL_29:
       *(_DWORD *)a2.CarSystemManager,
       a2.S202->field_0,
       v40,
-      (struct Ped *)a2.field_0,
+      (Ped *)a2.field_0,
       v78,
       unk_67395C.field_0);
     pS63 = v42;
@@ -1398,36 +1398,36 @@ LABEL_29:
         v84[0] = *v45;
         v84[1] = v45[1];
         gta2::S63_sub_4849B0(pS63, (int)v84);
-        if ( !gta2::SpriteS1_sub_420360((struct SpriteS1 *)v84) )
-          gta2::Player_sub_40E530((struct Player *)pS63->Car->CarDoor_, &unk_673CE0);
+        if ( !gta2::SpriteS1_sub_420360((SpriteS1 *)v84) )
+          gta2::Player_sub_40E530((Player *)pS63->Car->CarDoor_, &unk_673CE0);
       }
-      if ( v41 == (struct S900 *)138 )
+      if ( v41 == (S900 *)138 )
       {
         ID = 255;
         v78 = (int)pPed;
-        arg0 = (struct S900 *)&v78;
+        arg0 = (S900 *)&v78;
         gta2::bitShiftLeft1(&v78, 3);
         v77 = 16744448;
         v76 = v46;
-        arg0 = (struct S900 *)&v76;
+        arg0 = (S900 *)&v76;
         gta2::bitShiftLeft1(&v76, 2);
         v75 = v47;
-        arg0 = (struct S900 *)&v75;
+        arg0 = (S900 *)&v75;
         gta2::bitShiftLeft1(&v75, 138);
         v74 = v48;
-        arg0 = (struct S900 *)&v74;
+        arg0 = (S900 *)&v74;
         gta2::bitShiftLeft1(&v74, 94);
         v49 = gta2::Object_sub_485370(gObject, v74, v75, (int)v76, v77, v78, ID);
         LOWORD(v50) = unk_6739B0.Index;
         v51 = v49;
         ID = (int)v50;
         v78 = (int)v50;
-        arg0 = (struct S900 *)&v78;
+        arg0 = (S900 *)&v78;
         gta2::bitShiftLeft1(&v78, 0);
         v77 = (int)v52;
-        arg0 = (struct S900 *)&v77;
+        arg0 = (S900 *)&v77;
         gta2::bitShiftLeft1(&v77, 0);
-        gta2::SpriteS1_sub_4B9D50(pS63->SpriteS1_, (int)v51->SpriteS1_, (struct SpriteS1 *)v77, v78, ID);
+        gta2::SpriteS1_sub_4B9D50(pS63->SpriteS1_, (int)v51->SpriteS1_, (SpriteS1 *)v77, v78, ID);
         LOWORD(v53) = gta2::bitShiftLeft1(&arg0, 145);
         v54 = v53;
         LOWORD(v55) = gta2::bitShiftLeft1(&pSpriteS1_4, 113);
@@ -1436,7 +1436,7 @@ LABEL_29:
         ID = self->Ped_->Gang1;
         v78 = 5;
         v77 = (int)v56;
-        v76 = (struct PublicTransport *)ID;
+        v76 = (PublicTransport *)ID;
         a2.field_C = (int)&v76;
         gta2::bitShiftLeft1(&v76, 2);
         v60 = gta2::Object_sub_485540(gObject, *v57, *v54, (int)v76, v77, v78, ID);
@@ -1450,7 +1450,7 @@ LABEL_29:
           v77 = (int)v61;
           a2.field_C = (int)&v77;
           gta2::bitShiftLeft1(&v77, 0);
-          gta2::SpriteS1_sub_4B9D50(pS63->SpriteS1_, *(_DWORD *)(v60 + 4), (struct SpriteS1 *)v77, v78, ID);
+          gta2::SpriteS1_sub_4B9D50(pS63->SpriteS1_, *(_DWORD *)(v60 + 4), (SpriteS1 *)v77, v78, ID);
         }
       }
       else
@@ -1491,8 +1491,8 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
   byte bVar5;
   short sVar6;
   undefined4 *puVar7;
-  struct SpriteS1 *pSVar8;
-  struct Weapon *pWVar9;
+  SpriteS1 *pSVar8;
+  Weapon *pWVar9;
   int iVar10;
   undefined4 uVar11;
   int *piVar12;
@@ -1509,7 +1509,7 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
   struct Player *this_00;
   void *this_01;
   undefined4 *pS127;
-  struct SpriteS1 *pSVar16;
+  SpriteS1 *pSVar16;
   undefined2 local_74 [2];
   undefined1 local_70 [20];
   undefined1 local_5c [8];
@@ -1527,43 +1527,43 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
   
   local_70._16_4_ = self;
   gta2::Arsenal_Reset((Turrel *)local_5c);
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(local_70 + 8))
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(local_70 + 8))
   ;
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(local_70 + 0xc));
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(local_70 + 0xc));
   bVar4 = false;
   if (param_1 == '\0') {
     pSpawnPoint = &param_2->Matrix3DArray[0].PositionX;
     puVar7 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)pSpawnPoint,(GlassInfo *)(local_5c + 4),
-                        (struct S127 *)&DAT_00673ac8);
+                        (S127 *)&DAT_00673ac8);
     uVar11 = *puVar7;
-    pSVar8 = gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(struct SpriteS1 *)(local_5c + 4),
-                        (struct S127 *)&DAT_00673ac8);
+    pSVar8 = gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(SpriteS1 *)(local_5c + 4),
+                        (S127 *)&DAT_00673ac8);
     local_70._0_4_ = pSVar8->FirstElement;
     pSpawnPoint = &param_2->Matrix3DArray[0].PositionY;
     puVar7 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)pSpawnPoint,(GlassInfo *)(local_5c + 4),
-                        (struct S127 *)&DAT_00673ac8);
+                        (S127 *)&DAT_00673ac8);
     local_70._4_4_ = *puVar7;
-    pSVar8 = gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(struct SpriteS1 *)(local_5c + 4),
-                        (struct S127 *)&DAT_00673ac8);
+    pSVar8 = gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(SpriteS1 *)(local_5c + 4),
+                        (S127 *)&DAT_00673ac8);
   }
   else {
     pSpawnPoint = &param_2->Matrix3DArray[0].PositionX;
     puVar7 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)pSpawnPoint,(GlassInfo *)(local_5c + 4),
-                        (struct S127 *)&DAT_006739e4);
+                        (S127 *)&DAT_006739e4);
     uVar11 = *puVar7;
-    pSVar8 = gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(struct SpriteS1 *)(local_5c + 4),
-                        (struct S127 *)&DAT_006739e4);
+    pSVar8 = gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(SpriteS1 *)(local_5c + 4),
+                        (S127 *)&DAT_006739e4);
     local_70._0_4_ = pSVar8->FirstElement;
     puVar7 = &param_2->Matrix3DArray[0].PositionY;
     pSpawnPoint = (undefined4 *)
                   gta2::Player_sub_401B40((SpawnPoint *)puVar7,(GlassInfo *)(local_5c + 4),
-                             (struct S127 *)&DAT_006739e4);
+                             (S127 *)&DAT_006739e4);
     local_70._4_4_ = *pSpawnPoint;
-    pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar7,(struct SpriteS1 *)(local_5c + 4),
-                        (struct S127 *)&DAT_006739e4);
+    pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar7,(SpriteS1 *)(local_5c + 4),
+                        (S127 *)&DAT_006739e4);
   }
   pS127 = &param_2->Matrix3DArray[0].PositionX;
   puVar7 = &param_2->Matrix3DArray[0].PositionY;
@@ -1571,16 +1571,16 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
                pSVar8->FirstElement);
   pSpawnPoint = &param_2->Matrix3DArray[0].PositionZ;
   local_5c._4_4_ =
-       gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(struct SpriteS1 *)(local_70 + 4),
-                  (struct S127 *)&DAT_006739e4);
+       gta2::S202_sub_401B20((Point2D *)pSpawnPoint,(SpriteS1 *)(local_70 + 4),
+                  (S127 *)&DAT_006739e4);
   pSpawnPoint = (undefined4 *)
                 gta2::Player_sub_401B40((SpawnPoint *)pSpawnPoint,(GlassInfo *)local_70,
-                           (struct S127 *)&DAT_006739e4);
+                           (S127 *)&DAT_006739e4);
   gta2::Point2D_Set2(&local_18,*pSpawnPoint,*(SpriteS1 **)local_5c._4_4_);
   _DAT_00673cb8 =
        **(undefined2 **)
          &(*(Ped **)(local_70._16_4_ + 0x24))->GameObject_->AIState;
-  pWVar9 = (struct Weapon *)local_70._16_4_;
+  pWVar9 = (Weapon *)local_70._16_4_;
   gta2::Ped_sub_435C20(*(Ped **)(local_70._16_4_ + 0x24),local_40);
   _DAT_00673ad8 = pWVar9->armo;
   unique0x00009682 = pWVar9->TimeToReload;
@@ -1588,10 +1588,10 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
   uVar11 = pWVar9->TypeWeapons;
   _DAT_00673adc = uVar11;
   gta2::Checkpoint_FUN_00447c80(gCheckpoint,&local_18,0,0,param_2,local_5c);
-  if (((char)uVar11 != '\0') && ((struct VehiclePool *)local_5c._0_4_ != NULL)) {
+  if (((char)uVar11 != '\0') && ((VehiclePool *)local_5c._0_4_ != NULL)) {
     do {
-      pSVar8 = (struct SpriteS1 *)
-               gta2::Car_sub_4BEE10((struct VehiclePool *)local_5c);
+      pSVar8 = (SpriteS1 *)
+               gta2::Car_sub_4BEE10((VehiclePool *)local_5c);
       iVar10 = gta2::SpriteS1_getSpriteType(pSVar8);
       if (iVar10 == 2) {
         if (param_2 != pSVar8) {
@@ -1599,11 +1599,11 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
           if ((char)uVar11 == '\0') {
             piVar12 = (int *)gta2::Player_sub_401B40((SpawnPoint *)
                                         &pSVar8->Matrix3DArray[0].PositionX,
-                                        (GlassInfo *)local_48,(struct S127 *)pS127);
+                                        (GlassInfo *)local_48,(S127 *)pS127);
             pvVar13 = gta2::Player_sub_401B40((SpawnPoint *)
                                  &pSVar8->Matrix3DArray[0].PositionY,
-                                 (GlassInfo *)(local_48 + 4),(struct S127 *)puVar7);
-            puVar14 = gta2::Player_FUN_0040e8d0((struct Player *)local_70,(undefined2 *)local_70,
+                                 (GlassInfo *)(local_48 + 4),(S127 *)puVar7);
+            puVar14 = gta2::Player_FUN_0040e8d0((Player *)local_70,(undefined2 *)local_70,
                                  pvVar13,piVar12);
             local_70._12_2_ = *puVar14;
             FUN_0042a6b0(this_01,local_40,
@@ -1611,13 +1611,13 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
                          &pSVar8->Matrix3DArray[0].PositionY,(GlassInfo *)pS127,
                          (GlassInfo *)puVar7);
             puVar14 = (undefined2 *)
-                      gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)(local_70 + 0xc),
-                                 (struct Ped *)(local_70 + 4),(int)&stack0x0000000c);
+                      gta2::SpriteS1_sub_40E5D0((CarSystemManager *)(local_70 + 0xc),
+                                 (Ped *)(local_70 + 4),(int)&stack0x0000000c);
             local_70._8_2_ = *puVar14;
-            bVar2 = gta2::CarSystemManager_less_than((struct CarSystemManager *)(local_70 + 8),
+            bVar2 = gta2::CarSystemManager_less_than((CarSystemManager *)(local_70 + 8),
                                (short *)&DAT_00673a54);
             if (CONCAT31(extraout_var_02,bVar2) == 0) {
-              bVar2 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)(local_70 + 8),
+              bVar2 = gta2::CarSystemManager_greater_than((CarSystemManager *)(local_70 + 8),
                                  (short *)&DAT_00673c50);
               if (CONCAT31(extraout_var_03,bVar2) == 0) goto LAB_004cf981;
             }
@@ -1629,7 +1629,7 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
                                  pSVar8->Matrix3DArray[0].PositionZ);
             if (cVar3 != '\0') {
               DAT_00673940 = param_1;
-              bVar4 = gta2::Car_sub_403800((struct Car *)&pSVar8->Matrix3DArray[0].PositionZ
+              bVar4 = gta2::Car_sub_403800((Car *)&pSVar8->Matrix3DArray[0].PositionZ
                                       ,&param_2->Matrix3DArray[0].PositionZ);
               if (CONCAT31(extraout_var_04,bVar4) == 0) {
                 local_5c._4_4_ = param_2->Matrix3DArray[0].PositionZ;
@@ -1639,7 +1639,7 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
               }
               pSpawnPoint = (undefined4 *)
                             gta2::SpriteS1_sub_4207B0(param_2,local_28);
-              pSVar16 = (struct SpriteS1 *)local_5c._4_4_;
+              pSVar16 = (SpriteS1 *)local_5c._4_4_;
               gta2::SpriteS1_sub_4207B0(pSVar8,local_20);
               FUN_004ccbd0(*pSpawnPoint,pSpawnPoint[1],pSVar16);
               gta2::Turrel_sub_4BEDD0(gTurrel,(Sprite *)pSVar8);
@@ -1647,12 +1647,12 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
               cVar3 = param_1;
               if (param_1 == '\0') {
                 cVar3 = '\x01';
-                gta2::Weapon_sub_4CF380((struct Weapon *)local_70._16_4_,'\x01',pSVar8);
+                gta2::Weapon_sub_4CF380((Weapon *)local_70._16_4_,'\x01',pSVar8);
               }
               gta2::Car_sub_425770(pSVar8->Matrix3DArray[0].Car);
               if (cVar3 == '\0') {
                 (pSVar8->Matrix3DArray[0].Car)->lastDamagingPed =
-                     (struct Ped *)(*(Ped **)(puVar8 + 0x24))->ID;
+                     (Ped *)(*(Ped **)(puVar8 + 0x24))->ID;
                 (pSVar8->Matrix3DArray[0].Car)->DamageType = 0x12;
                 (pSVar8->Matrix3DArray[0].Car)->Mask = 0x32;
                 sVar6 = gta2::Car_CollisionOnCar(pSVar8->Matrix3DArray[0].Car,300,
@@ -1685,9 +1685,9 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
         if ((char)uVar11 == '\0') {
           piVar12 = (int *)gta2::Player_sub_401B40((SpawnPoint *)
                                       &pSVar8->Matrix3DArray[0].PositionX,
-                                      (GlassInfo *)local_54,(struct S127 *)pS127);
+                                      (GlassInfo *)local_54,(S127 *)pS127);
           pvVar13 = gta2::Player_sub_401B40((SpawnPoint *)&pSVar8->Matrix3DArray[0].PositionY
-                               ,(GlassInfo *)(local_54 + 4),(struct S127 *)puVar7);
+                               ,(GlassInfo *)(local_54 + 4),(S127 *)puVar7);
           puVar14 = gta2::Player_FUN_0040e8d0(this_00,local_74,pvVar13,piVar12);
           local_70._12_2_ = *puVar14;
           FUN_0042a6b0(local_4c,(undefined4 *)local_4c,
@@ -1695,13 +1695,13 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
                        &pSVar8->Matrix3DArray[0].PositionY,(GlassInfo *)pS127,
                        (GlassInfo *)puVar7);
           puVar14 = (undefined2 *)
-                    gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)(local_70 + 0xc),
-                               (struct Ped *)(local_74 + 1),(int)&stack0x0000000c);
+                    gta2::SpriteS1_sub_40E5D0((CarSystemManager *)(local_70 + 0xc),
+                               (Ped *)(local_74 + 1),(int)&stack0x0000000c);
           local_70._8_2_ = *puVar14;
-          bVar2 = gta2::CarSystemManager_less_than((struct CarSystemManager *)(local_70 + 8),
+          bVar2 = gta2::CarSystemManager_less_than((CarSystemManager *)(local_70 + 8),
                              (short *)&DAT_00673a54);
           if (CONCAT31(extraout_var,bVar2) == 0) {
-            bVar2 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)(local_70 + 8),
+            bVar2 = gta2::CarSystemManager_greater_than((CarSystemManager *)(local_70 + 8),
                                (short *)&DAT_00673c50);
             if (CONCAT31(extraout_var_00,bVar2) == 0) goto LAB_004cf981;
           }
@@ -1712,7 +1712,7 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
                                pSVar8->Matrix3DArray[0].PositionZ);
           if (cVar3 != '\0') {
             DAT_00673940 = param_1;
-            bVar4 = gta2::Car_sub_403800((struct Car *)&pSVar8->Matrix3DArray[0].PositionZ,
+            bVar4 = gta2::Car_sub_403800((Car *)&pSVar8->Matrix3DArray[0].PositionZ,
                                     &param_2->Matrix3DArray[0].PositionZ);
             if (CONCAT31(extraout_var_01,bVar4) == 0) {
               local_5c._4_4_ = param_2->Matrix3DArray[0].PositionZ;
@@ -1722,15 +1722,15 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
             }
             pSpawnPoint = (undefined4 *)
                           gta2::SpriteS1_sub_4207B0(param_2,local_38);
-            pSVar16 = (struct SpriteS1 *)local_5c._4_4_;
+            pSVar16 = (SpriteS1 *)local_5c._4_4_;
             gta2::SpriteS1_sub_4207B0(pSVar8,local_30);
             FUN_004ccbd0(*pSpawnPoint,pSpawnPoint[1],pSVar16);
             gta2::Turrel_sub_4BEDD0(gTurrel,(Sprite *)pSVar8);
             uVar11 = local_70._16_4_;
             if (param_1 == '\0') {
-              gta2::Weapon_sub_4CF380((struct Weapon *)local_70._16_4_,'\x01',pSVar8);
+              gta2::Weapon_sub_4CF380((Weapon *)local_70._16_4_,'\x01',pSVar8);
             }
-            gta2::sub_433BF0((struct Ped *)(pSVar8->Matrix3DArray[0].Car)->
+            gta2::sub_433BF0((Ped *)(pSVar8->Matrix3DArray[0].Car)->
                                      PhysicsBitmask,*(Ped **)(uVar11 + 0x24));
             *(int *)((pSVar8->Matrix3DArray[0].Car)->PhysicsBitmask + 0x204) =
                  (*(Ped **)(uVar11 + 0x24))->ID;
@@ -1755,15 +1755,15 @@ void gta2::Weapon_sub_4CF380(struct Weapon *self,char param_1,SpriteS1 *param_2)
       }
 LAB_004cf981:
       uVar11 = local_70._16_4_;
-    } while ((struct VehiclePool *)local_5c._0_4_ != NULL);
+    } while ((VehiclePool *)local_5c._0_4_ != NULL);
     if ((bVar4) && (param_1 == '\0')) {
-      gta2::Weapon_Set_4CCA80((struct Weapon *)local_70._16_4_,1);
+      gta2::Weapon_Set_4CCA80((Weapon *)local_70._16_4_,1);
       bVar4 = gta2::Ped_IsSearchType(*(Ped **)(uVar11 + 0x24),
                                  SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY);
       if (bVar4) {
         uVar15 = gta2::General_GetCycle(gGeneral);
         if ((uVar15 & 1) != 0) {
-          gta2::Weapon_Decrement1Ammo((struct Weapon *)uVar11);
+          gta2::Weapon_Decrement1Ammo((Weapon *)uVar11);
         }
       }
     }
@@ -1780,7 +1780,7 @@ void gta2::Weapon_FUN_004cf9e0(struct Weapon *self)
   struct Ped *this_00;
   byte bVar1;
   
-  gta2::Turrel_sub_4BEE80((struct Car *)gTurrel);
+  gta2::Turrel_sub_4BEE80((Car *)gTurrel);
   gta2::Weapon_sub_4CF380(self,'\0',*(SpriteS1 **)&self->Ped_->GameObject_->AIState);
   this_00 = self->Ped_;
   bVar1 = gta2::Ped_IsPlayerControlled(this_00);
@@ -1883,45 +1883,45 @@ char gta2::Weapon_sub_4CFA30(struct Weapon *self)
 void gta2::Weapon_sub_4CFBE0(struct Weapon *self)
 {
   struct Car *Car; // edi
-  struct CarSystemManager **v3; // eax
+  CarSystemManager **v3; // eax
   struct Car *v4; // edi
   _DWORD *v5; // eax
   _DWORD *v6; // eax
   _DWORD *v7; // eax
   _DWORD a2[2]; // [esp+8h] [ebp-2Ch] BYREF
   int v9; // [esp+10h] [ebp-24h] BYREF
-  struct S900 *v10; // [esp+14h] [ebp-20h] BYREF
+  S900 *v10; // [esp+14h] [ebp-20h] BYREF
   _DWORD v11[4]; // [esp+1Ch] [ebp-18h] BYREF
   _DWORD v12[2]; // [esp+2Ch] [ebp-8h] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&v9);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&v9);
   Car = self->Car;
   self->Ped_ = gta2::Car_GetDriver(Car);
   v3 = (CarSystemManager **)gta2::Car_sub_4BE980(Car, 114);
   if ( v3 )
   {
-    LOWORD(v9) = *(_WORD *)gta2::sub_40E5A0(*v3, (struct CarSystemManager *)a2, &unk_673B78);
+    LOWORD(v9) = *(_WORD *)gta2::sub_40E5A0(*v3, (CarSystemManager *)a2, &unk_673B78);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)&v10, a2, &unk_673AD0);
-    gta2::Tango_sub_40F6B0((struct Tango *)&v10, (struct S900 *)&v9);
+    gta2::Weapon_sub_432860((Weapon *)&v10, a2, &unk_673AD0);
+    gta2::Tango_sub_40F6B0((Tango *)&v10, (S900 *)&v9);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)v11, a2, &unk_673B54);
+    gta2::Weapon_sub_432860((Weapon *)v11, a2, &unk_673B54);
   }
   else
   {
     LOWORD(v9) = *(_WORD *)*gta2::Car_sub_4BE980(self->Car, 248);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)&v10, a2, &unk_673A04);
-    gta2::Tango_sub_40F6B0((struct Tango *)&v10, (struct S900 *)&v9);
+    gta2::Weapon_sub_432860((Weapon *)&v10, a2, &unk_673A04);
+    gta2::Tango_sub_40F6B0((Tango *)&v10, (S900 *)&v9);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)v11, a2, &unk_673CB0);
+    gta2::Weapon_sub_432860((Weapon *)v11, a2, &unk_673CB0);
   }
   v4 = self->Car;
-  gta2::Tango_sub_40F6B0((struct Tango *)v11, (struct S900 *)v4->CarSprite);
+  gta2::Tango_sub_40F6B0((Tango *)v11, (S900 *)v4->CarSprite);
   v5 = gta2::SpriteS1_sub_4207B0(v4->CarSprite, a2);
-  v6 = gta2::S103_sub_40F5C0((struct S103 *)v11, v12, v5);
-  gta2::Tango_sub_40F680((struct Tango *)&v10, (int)v6);
-  v7 = gta2::Player_sub_4A0D10(v4->Player_, v12, (struct Ped *)&v10);
+  v6 = gta2::S103_sub_40F5C0((S103 *)v11, v12, v5);
+  gta2::Tango_sub_40F680((Tango *)&v10, (int)v6);
+  v7 = gta2::Player_sub_4A0D10(v4->Player_, v12, (Ped *)&v10);
   v11[2] = *v7;
   v11[3] = v7[1];
   gta2::Weapon_Set_4CCA80(self, 1);
@@ -1938,33 +1938,33 @@ void gta2::Weapon_sub_4CFBE0(struct Weapon *self)
 void gta2::Weapon_sub_4CFD80(struct Weapon *self)
 {
   struct Car *Car; // edi
-  struct CarSystemManager **v3; // eax
+  CarSystemManager **v3; // eax
   struct Car *v4; // edi
   _DWORD *v5; // eax
   _DWORD *v6; // eax
   _DWORD *v7; // eax
   _DWORD a2[2]; // [esp+8h] [ebp-2Ch] BYREF
   int v9; // [esp+10h] [ebp-24h] BYREF
-  struct S900 *v10; // [esp+14h] [ebp-20h] BYREF
+  S900 *v10; // [esp+14h] [ebp-20h] BYREF
   _DWORD v11[4]; // [esp+1Ch] [ebp-18h] BYREF
   _DWORD v12[2]; // [esp+2Ch] [ebp-8h] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&v9);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&v9);
   Car = self->Car;
   self->Ped_ = gta2::Car_GetDriver(Car);
   v3 = (CarSystemManager **)gta2::Car_sub_4BE980(Car, 114);
-  LOWORD(v9) = *(_WORD *)gta2::sub_40E5A0(*v3, (struct CarSystemManager *)a2, &unk_673B78);
+  LOWORD(v9) = *(_WORD *)gta2::sub_40E5A0(*v3, (CarSystemManager *)a2, &unk_673B78);
   gta2::bitShiftLeft1(a2, 0);
-  gta2::Weapon_sub_432860((struct Weapon *)&v10, a2, &unk_673AD0);
-  gta2::Tango_sub_40F6B0((struct Tango *)&v10, (struct S900 *)&v9);
+  gta2::Weapon_sub_432860((Weapon *)&v10, a2, &unk_673AD0);
+  gta2::Tango_sub_40F6B0((Tango *)&v10, (S900 *)&v9);
   gta2::bitShiftLeft1(a2, 0);
-  gta2::Weapon_sub_432860((struct Weapon *)v11, a2, &unk_673B54);
+  gta2::Weapon_sub_432860((Weapon *)v11, a2, &unk_673B54);
   v4 = self->Car;
-  gta2::Tango_sub_40F6B0((struct Tango *)v11, (struct S900 *)v4->CarSprite);
+  gta2::Tango_sub_40F6B0((Tango *)v11, (S900 *)v4->CarSprite);
   v5 = gta2::SpriteS1_sub_4207B0(v4->CarSprite, a2);
-  v6 = gta2::S103_sub_40F5C0((struct S103 *)v11, v12, v5);
-  gta2::Tango_sub_40F680((struct Tango *)&v10, (int)v6);
-  v7 = gta2::Player_sub_4A0D10(v4->Player_, v12, (struct Ped *)&v10);
+  v6 = gta2::S103_sub_40F5C0((S103 *)v11, v12, v5);
+  gta2::Tango_sub_40F680((Tango *)&v10, (int)v6);
+  v7 = gta2::Player_sub_4A0D10(v4->Player_, v12, (Ped *)&v10);
   v11[2] = *v7;
   v11[3] = v7[1];
   gta2::Weapon_Set_4CCA80(self, 1);
@@ -1986,19 +1986,19 @@ char gta2::Weapon_sub_4CFEC0(struct Weapon *self)
   struct Car *v4; // edi
   _DWORD *v5; // eax
   _DWORD *v6; // eax
-  struct S103 **v7; // eax
+  S103 **v7; // eax
   struct Ped *Ped; // ecx
   struct Ped *v9; // edi
   char result; // al
   int v11; // [esp+4h] [ebp-2Ch] BYREF
   S900 *a2[2]; // [esp+8h] [ebp-28h] BYREF
-  struct S900 *v13; // [esp+10h] [ebp-20h] BYREF
-  struct S103 *pS103; // [esp+18h] [ebp-18h] BYREF
-  struct S103 *v15; // [esp+1Ch] [ebp-14h]
+  S900 *v13; // [esp+10h] [ebp-20h] BYREF
+  S103 *pS103; // [esp+18h] [ebp-18h] BYREF
+  S103 *v15; // [esp+1Ch] [ebp-14h]
   _DWORD v16[2]; // [esp+20h] [ebp-10h] BYREF
   _DWORD v17[2]; // [esp+28h] [ebp-8h] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&v11);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&v11);
   TimeToReload = self->TimeToReload;
   if ( TimeToReload )
   {
@@ -2011,24 +2011,24 @@ char gta2::Weapon_sub_4CFEC0(struct Weapon *self)
     self->Ped_ = gta2::Car_GetDriver(Car);
     LOWORD(v11) = *(_WORD *)*gta2::Car_sub_4BE980(Car, 148);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)&v13, a2, &unk_673A64);
-    gta2::Tango_sub_40F6B0((struct Tango *)&v13, (struct S900 *)&v11);
+    gta2::Weapon_sub_432860((Weapon *)&v13, a2, &unk_673A64);
+    gta2::Tango_sub_40F6B0((Tango *)&v13, (S900 *)&v11);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)v16, a2, &unk_6739F8);
+    gta2::Weapon_sub_432860((Weapon *)v16, a2, &unk_6739F8);
     v4 = self->Car;
-    gta2::Tango_sub_40F6B0((struct Tango *)v16, (struct S900 *)v4->CarSprite);
+    gta2::Tango_sub_40F6B0((Tango *)v16, (S900 *)v4->CarSprite);
     v5 = gta2::SpriteS1_sub_4207B0(v4->CarSprite, a2);
-    v6 = gta2::S103_sub_40F5C0((struct S103 *)v16, v17, v5);
-    gta2::Tango_sub_40F680((struct Tango *)&v13, (int)v6);
+    v6 = gta2::S103_sub_40F5C0((S103 *)v16, v17, v5);
+    gta2::Tango_sub_40F680((Tango *)&v13, (int)v6);
     if ( v4->Player_ )
     {
-      v7 = (S103 **)gta2::Player_sub_4A0D10(v4->Player_, v17, (struct Ped *)&v13);
+      v7 = (S103 **)gta2::Player_sub_4A0D10(v4->Player_, v17, (Ped *)&v13);
       pS103 = *v7;
       v15 = v7[1];
     }
     else
     {
-      gta2::S103_sub_41E1E0((struct S103 *)&pS103);
+      gta2::S103_sub_41E1E0((S103 *)&pS103);
     }
     gta2::Weapon_Set_4CCA80(self, 1);
     if ( self->SMG )
@@ -2069,7 +2069,7 @@ char gta2::Weapon_sub_4D0080(struct Weapon *self)
   struct Car *v4; // edi
   _DWORD *v5; // eax
   _DWORD *v6; // eax
-  struct S900 **v7; // eax
+  S900 **v7; // eax
   struct Ped *Ped; // ecx
   struct Ped *v9; // edi
   char result; // al
@@ -2079,7 +2079,7 @@ char gta2::Weapon_sub_4D0080(struct Weapon *self)
   _DWORD v14[2]; // [esp+20h] [ebp-10h] BYREF
   _DWORD v15[2]; // [esp+28h] [ebp-8h] BYREF
 
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&v11);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&v11);
   TimeToReload = self->TimeToReload;
   if ( TimeToReload )
   {
@@ -2092,16 +2092,16 @@ char gta2::Weapon_sub_4D0080(struct Weapon *self)
     self->Ped_ = gta2::Car_GetDriver(Car);
     LOWORD(v11) = *(_WORD *)*gta2::Car_sub_4BE980(Car, 248);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)v13, a2, &unk_673A04);
-    gta2::Tango_sub_40F6B0((struct Tango *)v13, (struct S900 *)&v11);
+    gta2::Weapon_sub_432860((Weapon *)v13, a2, &unk_673A04);
+    gta2::Tango_sub_40F6B0((Tango *)v13, (S900 *)&v11);
     gta2::bitShiftLeft1(a2, 0);
-    gta2::Weapon_sub_432860((struct Weapon *)v14, a2, &unk_673CB0);
+    gta2::Weapon_sub_432860((Weapon *)v14, a2, &unk_673CB0);
     v4 = self->Car;
-    gta2::Tango_sub_40F6B0((struct Tango *)v14, (struct S900 *)v4->CarSprite);
+    gta2::Tango_sub_40F6B0((Tango *)v14, (S900 *)v4->CarSprite);
     v5 = gta2::SpriteS1_sub_4207B0(v4->CarSprite, a2);
-    v6 = gta2::S103_sub_40F5C0((struct S103 *)v14, v15, v5);
-    gta2::Tango_sub_40F680((struct Tango *)v13, (int)v6);
-    v7 = (S900 **)gta2::Player_sub_4A0D10(v4->Player_, v15, (struct Ped *)v13);
+    v6 = gta2::S103_sub_40F5C0((S103 *)v14, v15, v5);
+    gta2::Tango_sub_40F680((Tango *)v13, (int)v6);
+    v7 = (S900 **)gta2::Player_sub_4A0D10(v4->Player_, v15, (Ped *)v13);
     v13[2] = *v7;
     v13[3] = v7[1];
     gta2::Weapon_Set_4CCA80(self, 1);
@@ -2139,54 +2139,54 @@ char gta2::Weapon_sub_4D0080(struct Weapon *self)
 byte gta2::Weapon_sub_4D0230(struct Weapon *self)
 {
   struct Car *pCVar1;
-  struct SpriteS1 *this_00;
+  SpriteS1 *this_00;
   bool bVar2;
   byte bVar3;
   struct Ped *pPVar4;
-  struct Model *pMVar5;
-  struct SpriteS1 *pSVar6;
-  struct SpriteS1 *pSVar7;
+  Model *pMVar5;
+  SpriteS1 *pSVar6;
+  SpriteS1 *pSVar7;
   int iVar8;
   undefined4 *puVar9;
   int *piVar10;
-  struct EventHandler *pEVar11;
-  struct EventHandler *pEVar12;
+  EventHandler *pEVar11;
+  EventHandler *pEVar12;
   struct Ped *pPed;
   SpawnPoint **ppSVar13;
   struct Ped **ppPVar14;
-  struct S127 *pSVar15;
+  S127 *pSVar15;
   GlassInfo local_48;
   int local_18;
   int local_14;
   int local_10;
   int local_c;
   
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&local_48);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&local_48);
   if (self->TimeToReload == 0) {
     pCVar1 = self->Car;
     pPVar4 = gta2::Car_GetDriver(pCVar1);
     self->Ped_ = pPVar4;
-    this_00 = (struct SpriteS1 *)pCVar1->CarSprite;
-    pSVar7 = (struct SpriteS1 *)&local_48.pPed;
-    pSVar15 = (struct S127 *)&DAT_0067397c;
+    this_00 = (SpriteS1 *)pCVar1->CarSprite;
+    pSVar7 = (SpriteS1 *)&local_48.pPed;
+    pSVar15 = (S127 *)&DAT_0067397c;
     ppSVar13 = &local_48.SpawnPoint;
-    local_48.car = (struct Car *)CONCAT22(local_48.car._2_2_,
+    local_48.car = (Car *)CONCAT22(local_48.car._2_2_,
                                    *(undefined2 *)&this_00->FirstElement);
-    pSVar6 = (struct SpriteS1 *)&local_48.field_0xc;
+    pSVar6 = (SpriteS1 *)&local_48.field_0xc;
     local_48.SpawnPoint = (SpawnPoint *)0x2;
-    pMVar5 = (struct Model *)FUN_0048a930(&local_48.field_0x10);
+    pMVar5 = (Model *)FUN_0048a930(&local_48.field_0x10);
     pSVar6 = gta2::S122_sub_401BF0(pMVar5,pSVar6,(int *)ppSVar13);
     pSVar7 = gta2::S202_sub_401B20((Point2D *)pSVar6,pSVar7,pSVar15);
     local_48.SpawnPoint = (SpawnPoint *)pSVar7->FirstElement;
-    pSVar7 = (struct SpriteS1 *)&local_48.field11_0x14;
-    pSVar15 = (struct S127 *)&DAT_00673c64;
+    pSVar7 = (SpriteS1 *)&local_48.field11_0x14;
+    pSVar15 = (S127 *)&DAT_00673c64;
     ppPVar14 = &local_48.pPed;
-    pSVar6 = (struct SpriteS1 *)&local_48.field12_0x18;
-    local_48.pPed = (struct Ped *)0x2;
-    pMVar5 = (struct Model *)FUN_0048a950(&local_48.field_0x10);
+    pSVar6 = (SpriteS1 *)&local_48.field12_0x18;
+    local_48.pPed = (Ped *)0x2;
+    pMVar5 = (Model *)FUN_0048a950(&local_48.field_0x10);
     pSVar6 = gta2::S122_sub_401BF0(pMVar5,pSVar6,(int *)ppPVar14);
     pSVar7 = gta2::S202_sub_401B20((Point2D *)pSVar6,pSVar7,pSVar15);
-    local_48.pPed = (struct Ped *)pSVar7->FirstElement;
+    local_48.pPed = (Ped *)pSVar7->FirstElement;
     FUN_00432860(&local_48.field17_0x20,&local_48.SpawnPoint,&local_48.pPed);
     FUN_0040f6b0(&local_48.field17_0x20,&local_48);
     iVar8 = gta2::SpriteS1_sub_4207B0(this_00,&local_48.field12_0x18);
@@ -2210,10 +2210,10 @@ byte gta2::Weapon_sub_4D0230(struct Weapon *self)
     if (self->TypeWeapons == 0) {
       pEVar11 = gta2::Weapon_sub_4CDA90(self,0xfe,local_48.field17_0x20,local_48.field18_0x24
                            ,this_00->Matrix3DArray[0].PositionZ,
-                           (GlassInfo *)local_48.car,(struct Ped *)&local_18);
+                           (GlassInfo *)local_48.car,(Ped *)&local_18);
       pEVar12 = gta2::Weapon_sub_4CDA90(self,0xfe,local_48.field19_0x28,local_48._44_4_,
                            this_00->Matrix3DArray[0].PositionZ,
-                           (GlassInfo *)pCVar1,(struct Ped *)&local_10);
+                           (GlassInfo *)pCVar1,(Ped *)&local_10);
       if ((pEVar11 != NULL) || (pEVar12 != NULL)) {
         bVar2 = gta2::Ped_IsSearchType(self->Ped_,
                                    SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY);
@@ -2221,7 +2221,7 @@ byte gta2::Weapon_sub_4D0230(struct Weapon *self)
           gta2::Weapon_Decrement1Ammo(self);
         }
       }
-      FUN_0048cd10((struct SpriteS1 *)self->Car->CarSprite);
+      FUN_0048cd10((SpriteS1 *)self->Car->CarSprite);
       self->TimeToReload = 2;
       gta2::Ped_sub_4350A0(self->Ped_);
       pPVar4 = self->Ped_;
@@ -2233,13 +2233,13 @@ byte gta2::Weapon_sub_4D0230(struct Weapon *self)
     else {
       gta2::Weapon_sub_4CDA90(self,0x9a,local_48.field17_0x20,local_48.field18_0x24,
                  this_00->Matrix3DArray[0].PositionZ,(GlassInfo *)local_48.car,
-                 (struct Ped *)&local_18);
+                 (Ped *)&local_18);
       gta2::Weapon_sub_4CDA90(self,0x9a,local_48.field19_0x28,local_48._44_4_,
                  this_00->Matrix3DArray[0].PositionZ,(GlassInfo *)pCVar1,
-                 (struct Ped *)&local_10);
+                 (Ped *)&local_10);
       self->TimeToReload = 1;
     }
-    pPed = (struct Ped *)gta2::Weapon_TimeToReload(self);
+    pPed = (Ped *)gta2::Weapon_TimeToReload(self);
     pPed._0_1_ = (byte)pPed;
     gta2::Weapon_Set_4CCA80(self,1);
     return (byte)pPed;
@@ -2256,8 +2256,8 @@ byte gta2::Weapon_sub_4D0230(struct Weapon *self)
 byte gta2::Weapon_FUN_004d04b0(struct Weapon *self)
 {
   byte ptImer;
-  struct SpriteS1 *pSVar1;
-  struct SpriteS1 *pSVar2;
+  SpriteS1 *pSVar1;
+  SpriteS1 *pSVar2;
   struct Ped *pPed;
   struct Player *pPlayer;
   
@@ -2268,14 +2268,14 @@ byte gta2::Weapon_FUN_004d04b0(struct Weapon *self)
   }
   pPed = self->Ped_;
   if (((pPed != NULL) && (pPlayer = pPed->isPlayer, pPlayer != NULL)) &&
-     ((pPed = (struct Ped *)self->TypeWeapon, pPed == (struct Ped *)0x4 ||
-      (pPed == (struct Ped *)0x5)))) {
+     ((pPed = (Ped *)self->TypeWeapon, pPed == (Ped *)0x4 ||
+      (pPed == (Ped *)0x5)))) {
     ptImer = gta2::Player_FUN_004ccb00(pPlayer);
     if (ptImer != 0) {
-      pSVar1 = (struct SpriteS1 *)gta2::Player_sub_4CCAE0(pPlayer);
-      pSVar2 = (struct SpriteS1 *)gta2::Player_sub_4CCAD0(pPlayer);
+      pSVar1 = (SpriteS1 *)gta2::Player_sub_4CCAE0(pPlayer);
+      pSVar2 = (SpriteS1 *)gta2::Player_sub_4CCAD0(pPlayer);
       gta2::Weapon_sub_4CE970(self,(undefined1 *)
-                      ((-(uint)(pPed != (struct Ped *)0x4) & 0x2d) + 0x8a),pSVar2,
+                      ((-(uint)(pPed != (Ped *)0x4) & 0x2d) + 0x8a),pSVar2,
                  pSVar1);
     }
     pPed = self->Ped_;
@@ -2293,12 +2293,12 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
 {
   undefined4 uVar1;
   bool bVar2;
-  struct SpriteS1 *pSVar4;
+  SpriteS1 *pSVar4;
   undefined3 extraout_var;
-  struct SpriteS1 *pSVar5;
+  SpriteS1 *pSVar5;
   Point2D *pPVar6;
   int iVar7;
-  struct Model *pMVar8;
+  Model *pMVar8;
   undefined4 *puVar9;
   undefined3 extraout_var_00;
   short *psVar10;
@@ -2307,12 +2307,12 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
   uint uVar12;
   byte bVar3;
   undefined2 *puVar13;
-  struct SpriteS1 *pSVar14;
+  SpriteS1 *pSVar14;
   struct Car *pCVar15;
   int *piVar16;
-  struct SpriteS1 *pSVar17;
+  SpriteS1 *pSVar17;
   void *pvVar18;
-  struct EventHandler *pEVar19;
+  EventHandler *pEVar19;
   WeaponType pSecond;
   int minut;
   undefined2 extraout_var_02;
@@ -2331,36 +2331,36 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
   undefined2 extraout_var_14;
   undefined2 extraout_var_15;
   undefined2 extraout_var_16;
-  struct SpriteS1 *unaff_EBP;
-  struct SpriteS1 *unaff_ESI;
-  struct SpriteS1 *unaff_EDI;
-  struct S127 *pSVar21;
-  struct SpriteS1 **ppSVar22;
-  struct S127 *pS127;
+  SpriteS1 *unaff_EBP;
+  SpriteS1 *unaff_ESI;
+  SpriteS1 *unaff_EDI;
+  S127 *pSVar21;
+  SpriteS1 **ppSVar22;
+  S127 *pS127;
   undefined1 *puVar23;
   undefined4 uVar24;
   undefined4 *puVar25;
-  struct SpriteS1 *pSpriteS1;
+  SpriteS1 *pSpriteS1;
   undefined4 in_stack_ffffffcc;
   undefined2 uVar26;
-  struct SpriteS1 *in_stack_ffffffd4;
+  SpriteS1 *in_stack_ffffffd4;
   ushort uVar27;
-  struct SpriteS1 *in_stack_ffffffdc;
+  SpriteS1 *in_stack_ffffffdc;
   undefined2 uVar28;
-  struct SpriteS1 *in_stack_ffffffe0;
+  SpriteS1 *in_stack_ffffffe0;
   undefined4 uStack_1c;
-  struct SpriteS1 *pSStack_18;
+  SpriteS1 *pSStack_18;
   struct Ped *pPed;
   struct Player *pPlayer;
   
   uVar27 = (ushort)((uint)in_stack_ffffffdc >> 0x10);
   uVar28 = (undefined2)((uint)in_stack_ffffffcc >> 0x10);
   uVar26 = (undefined2)((uint)in_stack_ffffffd4 >> 0x10);
-  pSVar17 = (struct SpriteS1 *)&stack0xfffffff8;
+  pSVar17 = (SpriteS1 *)&stack0xfffffff8;
   pSecond = self->TypeWeapon;
   switch(pSecond) {
   case Pistol:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&stack0xffffffdc);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&stack0xffffffdc);
     if (self->TimeToReload != 0) {
       bVar3 = self->TimeToReload - 1;
       self->TimeToReload = bVar3;
@@ -2373,22 +2373,22 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
       pPed = self->Ped_;
       gta2::Ped_GetXCoordinate(pPed,(int)&uStack_1c);
       piVar16 = (int *)gta2::Ped_GetYCoordinate(pPed, &uStack_1c);
-      uStack_1c = (struct SpriteS1 *)*piVar16;
+      uStack_1c = (SpriteS1 *)*piVar16;
       puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffd8);
       uVar24 = *puVar25;
       psVar10 = gta2::Ped_GetRotation(pPed,(short *)&stack0xffffffd8);
-      pSVar4 = (struct SpriteS1 *)CONCAT22(uVar27,*psVar10);
+      pSVar4 = (SpriteS1 *)CONCAT22(uVar27,*psVar10);
       gta2::Ped_sub_435C20(self->Ped_,&pSStack_18);
       FUN_0041e210(&pSStack_18,(GlassInfo *)&DAT_00673be4,
-                   (struct Ped *)&stack0xffffffdc);
+                   (Ped *)&stack0xffffffdc);
       pSVar17 = gta2::S202_sub_401B20((Point2D *)&stack0xffffffe0,
-                           (struct SpriteS1 *)&stack0xffffffd8,(struct S127 *)&pSStack_18);
+                           (SpriteS1 *)&stack0xffffffd8,(S127 *)&pSStack_18);
       pSVar17 = pSVar17->FirstElement;
-      pSVar14 = gta2::S202_sub_401B20((Point2D *)&uStack_1c,(struct SpriteS1 *)&stack0xffffffe0,
-                           (struct S127 *)&stack0xffffffec);
+      pSVar14 = gta2::S202_sub_401B20((Point2D *)&uStack_1c,(SpriteS1 *)&stack0xffffffe0,
+                           (S127 *)&stack0xffffffec);
       pEVar19 = gta2::Weapon_sub_4CDA90(self,(-(uint)bVar2 & 0xb) + 0xfe,pSVar17,
                            pSVar14->FirstElement,uVar24,(GlassInfo *)pSVar4,
-                           (struct Ped *)&stack0xfffffff0);
+                           (Ped *)&stack0xfffffff0);
       if ((pEVar19 != NULL) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
                                      SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY),
@@ -2411,8 +2411,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
       puVar13 = (undefined2 *)&stack0xffffffd8;
       gta2::Ped_FUN_004cca90(pPed,puVar13);
       puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffe0);
-      uStack_1c = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xffffffdc);
-      pPVar11 = (struct Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&pSStack_18);
+      uStack_1c = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xffffffdc);
+      pPVar11 = (Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&pSStack_18);
       pPed = pPVar11;
       gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
       gta2::Weapon_sub_4CDA90(self,0x9a,*(void **)pPVar11->S200_,uStack_1c->FirstElement,
@@ -2434,30 +2434,30 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
       gta2::Ped_ComputeFacingRotation(self->Ped_,puVar13);
       pGVar20 = (GlassInfo *)CONCAT22(uVar28,*puVar13);
       piVar16 = (int *)gta2::JustCopyByPtrAtoC(&DAT_00673c6c,&stack0xffffffd0);
-      pSStack_18 = (struct SpriteS1 *)*piVar16;
-      gta2::S202_sub_401B20((Point2D *)&DAT_0067395c,(struct SpriteS1 *)&stack0xffffffd0,
-                 (struct S127 *)&DAT_00673c3c);
+      pSStack_18 = (SpriteS1 *)*piVar16;
+      gta2::S202_sub_401B20((Point2D *)&DAT_0067395c,(SpriteS1 *)&stack0xffffffd0,
+                 (S127 *)&DAT_00673c3c);
       pPed = self->Ped_;
-      pSVar17 = (struct SpriteS1 *)pPed->GameObject_;
+      pSVar17 = (SpriteS1 *)pPed->GameObject_;
       FUN_0040f6b0(&pSStack_18,(GlassInfo *)pSVar17->Matrix3DArray[2].Car);
       gta2::Ped_sub_435C20(pPed,(undefined4 *)&stack0xffffffd0);
       puVar25 = (undefined4 *)FUN_0040f5c0(&pSStack_18,&stack0xfffffff0,pSVar17)
       ;
-      pSStack_18 = (struct SpriteS1 *)*puVar25;
+      pSStack_18 = (SpriteS1 *)*puVar25;
       pPed = self->Ped_;
       puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffd0);
-      pSVar21 = (struct S127 *)&stack0xffffffec;
-      pSVar17 = (struct SpriteS1 *)&stack0xffffffd8;
+      pSVar21 = (S127 *)&stack0xffffffec;
+      pSVar17 = (SpriteS1 *)&stack0xffffffd8;
       pPVar6 = (Point2D *)gta2::Ped_GetYCoordinate(pPed, &stack0xffffffdc);
       pSVar14 = gta2::S202_sub_401B20(pPVar6,pSVar17,pSVar21);
-      pSVar21 = (struct S127 *)&pSStack_18;
-      pSVar17 = (struct SpriteS1 *)&stack0xffffffe0;
+      pSVar21 = (S127 *)&pSStack_18;
+      pSVar17 = (SpriteS1 *)&stack0xffffffe0;
       pPVar6 = (Point2D *)gta2::Ped_GetXCoordinate(pPed,(int)&uStack_1c);
       pSVar4 = gta2::S202_sub_401B20(pPVar6,pSVar17,pSVar21);
       pSVar17 = pSVar4;
       gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0xfe,pSVar4->FirstElement,pSVar14->FirstElement,
-                           *puVar25,pGVar20,(struct Ped *)pSVar17);
+                           *puVar25,pGVar20,(Ped *)pSVar17);
       if ((pEVar19 != NULL) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
                                      SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY),
@@ -2481,8 +2481,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
       pPed = self->Ped_;
       gta2::Ped_FUN_004cca90(pPed,puVar13);
       puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&uStack_1c);
-      pSVar17 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xffffffe0);
-      pPVar11 = (struct Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffdc);
+      pSVar17 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xffffffe0);
+      pPVar11 = (Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffdc);
       pPed = pPVar11;
       gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
       gta2::Weapon_sub_4CDA90(self,0x9a,*(void **)pPVar11->S200_,pSVar17->FirstElement,
@@ -2518,8 +2518,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
         puVar13 = (undefined2 *)((int)&uStack_1c + 2);
         gta2::Ped_FUN_004cca90(pPed,puVar13);
         puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffec);
-        pSStack_18 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
-        pSVar4 = (struct SpriteS1 *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xfffffff4);
+        pSStack_18 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
+        pSVar4 = (SpriteS1 *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xfffffff4);
         pSVar17 = pSVar4;
         gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
         pGVar20 = (GlassInfo *)CONCAT22(extraout_var_14,*puVar13);
@@ -2532,9 +2532,9 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
         if (self->field12_0x20 == '\0') {
           gta2::Ped_FUN_004cca90(pPed,(undefined2 *)((int)&uStack_1c + 2));
           puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xfffffff4);
-          pSStack_18 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0)
+          pSStack_18 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0)
           ;
-          pPVar11 = (struct Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
+          pPVar11 = (Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
           pPed = pPVar11;
           gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
           pEVar19 = gta2::Weapon_sub_4CDA90(self,0x9f,*(void **)pPVar11->S200_,
@@ -2548,7 +2548,7 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
         }
         gta2::Ped_FUN_004cca90(pPed,(undefined2 *)((int)&uStack_1c + 2));
         puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xfffffff4);
-        pSStack_18 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
+        pSStack_18 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
         puVar9 = (undefined4 *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
         gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
         pGVar20 = (GlassInfo *)CONCAT22(extraout_var_02,*puVar13);
@@ -2557,7 +2557,7 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
         pvVar18 = (void *)*puVar9;
       }
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0x80,pvVar18,pSVar14,uVar24,pGVar20,
-                           (struct Ped *)pSVar17);
+                           (Ped *)pSVar17);
       gta2::Ped_sub_4350A0(self->Ped_);
       if ((pEVar19 != NULL) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
@@ -2581,8 +2581,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
       puVar13 = (undefined2 *)((int)&uStack_1c + 2);
       gta2::Ped_FUN_004cca90(pPed,puVar13);
       puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xfffffff4);
-      pSStack_18 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
-      pPVar11 = (struct Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
+      pSStack_18 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
+      pPVar11 = (Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
       pPed = pPVar11;
       gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
       gta2::Weapon_sub_4CDA90(self,0x9f,*(void **)pPVar11->S200_,pSStack_18->FirstElement,
@@ -2596,36 +2596,36 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     bVar3 = gta2::Weapon_FUN_004cf9e0(self);
     return bVar3;
   case Molotov:
-    pPlayer = (struct Player *)self->Ped_;
+    pPlayer = (Player *)self->Ped_;
     if ((pPlayer != NULL) && (pPlayer = pPlayer->Player2, pPlayer != NULL)) {
       gta2::Player_sub_4CCAB0(pPlayer);
       return (byte)pPlayer;
     }
     bVar3 = (byte)pPlayer;
-    pSStack_18 = (struct SpriteS1 *)0x4d05ce;
-    gta2::Weapon_sub_4CE970(self,(undefined1 *)0x8a,(struct SpriteS1 *)0x1e,(struct SpriteS1 *)0x2d);
+    pSStack_18 = (SpriteS1 *)0x4d05ce;
+    gta2::Weapon_sub_4CE970(self,(undefined1 *)0x8a,(SpriteS1 *)0x1e,(SpriteS1 *)0x2d);
     return bVar3;
   case Granata:
     pPed = self->Ped_;
     if ((pPed == NULL) || (pPed->isPlayer == NULL)) {
-      pSStack_18 = (struct SpriteS1 *)0x4d0638;
-      gta2::Weapon_sub_4CE970(self,(undefined1 *)0xb7,(struct SpriteS1 *)0x1e,(struct SpriteS1 *)0x2d);
+      pSStack_18 = (SpriteS1 *)0x4d0638;
+      gta2::Weapon_sub_4CE970(self,(undefined1 *)0xb7,(SpriteS1 *)0x1e,(SpriteS1 *)0x2d);
       return (byte)pPed;
     }
     gta2::Player_sub_4CCAB0(pPed->isPlayer);
     pPlayer = self->Ped_->isPlayer;
     pSecond = gta2::Player_sub_4CCAE0(pPlayer);
     if (pSecond == 0x60) {
-      pSVar17 = (struct SpriteS1 *)gta2::Player_sub_4CCAE0(pPlayer);
+      pSVar17 = (SpriteS1 *)gta2::Player_sub_4CCAE0(pPlayer);
       minut = gta2::Player_sub_4CCAD0(pPlayer);
-      pSStack_18 = (struct SpriteS1 *)0x4d0618;
-      gta2::Weapon_sub_4CE970(self,(undefined1 *)183,(struct SpriteS1 *)minut,pSVar17);
+      pSStack_18 = (SpriteS1 *)0x4d0618;
+      gta2::Weapon_sub_4CE970(self,(undefined1 *)183,(SpriteS1 *)minut,pSVar17);
       self->Ped_->isPlayer->timeSecond = -1;
       return (byte)minut;
     }
     break;
   case ShotGun:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&stack0xffffffe0);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&stack0xffffffe0);
     uVar28 = (undefined2)((uint)in_stack_ffffffe0 >> 0x10);
     if (self->TimeToReload != 0) {
       bVar3 = self->TimeToReload - 1;
@@ -2640,42 +2640,42 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xfffffff0);
     uVar1 = *puVar25;
     psVar10 = gta2::Ped_GetRotation(self->Ped_,(short *)&stack0xffffffde);
-    pSVar17 = (struct SpriteS1 *)CONCAT22(uVar28,*psVar10);
+    pSVar17 = (SpriteS1 *)CONCAT22(uVar28,*psVar10);
     gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff0);
     gta2::Weapon_Set_4CCA80(self,1);
     if (self->TypeWeapons == 0) {
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,(short *)&DAT_00673a44,
+                gta2::sub_40E5A0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,(short *)&DAT_00673a44,
                            unaff_EDI,(short *)unaff_EBP);
-      uStack_1c = (struct SpriteS1 *)
+      uStack_1c = (SpriteS1 *)
                   gta2::Weapon_sub_4CDA90(self,0xc0,pvVar18,uVar24,uVar1,
                              (GlassInfo *)CONCAT22(extraout_var_03,*puVar13),
-                             (struct Ped *)&stack0xfffffff8);
+                             (Ped *)&stack0xfffffff8);
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,(short *)&DAT_00673ce4,
+                gta2::sub_40E5A0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,(short *)&DAT_00673ce4,
                            unaff_EDI,(short *)unaff_EBP);
-      pSStack_18 = (struct SpriteS1 *)
+      pSStack_18 = (SpriteS1 *)
                    gta2::Weapon_sub_4CDA90(self,0xc0,pvVar18,uVar24,uVar1,
                               (GlassInfo *)CONCAT22(extraout_var_04,*puVar13),
-                              (struct Ped *)&stack0xfffffff8);
-      pSVar17 = (struct SpriteS1 *)
+                              (Ped *)&stack0xfffffff8);
+      pSVar17 = (SpriteS1 *)
                 gta2::Weapon_sub_4CDA90(self,0xc0,pvVar18,uVar24,uVar1,(GlassInfo *)pSVar17,
-                           (struct Ped *)&stack0xfffffff8);
+                           (Ped *)&stack0xfffffff8);
       puVar13 = (undefined2 *)
-                gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,0x673ce4);
-      pSVar14 = (struct SpriteS1 *)
+                gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,0x673ce4);
+      pSVar14 = (SpriteS1 *)
                 gta2::Weapon_sub_4CDA90(self,0xc0,pvVar18,uVar24,uVar1,
                            (GlassInfo *)CONCAT22(extraout_var_05,*puVar13),
-                           (struct Ped *)&stack0xfffffff8);
+                           (Ped *)&stack0xfffffff8);
       puVar13 = (undefined2 *)
-                gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,0x673a44);
+                gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,0x673a44);
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0xc0,pvVar18,uVar24,uVar1,
                            (GlassInfo *)CONCAT22(extraout_var_06,*puVar13),
-                           (struct Ped *)&stack0xfffffff8);
+                           (Ped *)&stack0xfffffff8);
       if (((((uStack_1c != NULL) || (pSStack_18 != NULL)) || (pSVar17 != NULL))
           || ((pSVar14 != NULL || (pEVar19 != NULL)))) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
@@ -2696,33 +2696,33 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     }
     else {
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,(short *)&DAT_006739bc,
+                gta2::sub_40E5A0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,(short *)&DAT_006739bc,
                            unaff_EDI,(short *)unaff_EBP);
       gta2::Weapon_sub_4CDA90(self,0xc1,pvVar18,uVar24,uVar1,
                  (GlassInfo *)CONCAT22(extraout_var_07,*puVar13),
-                 (struct Ped *)&stack0xfffffff8);
+                 (Ped *)&stack0xfffffff8);
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,(short *)&DAT_00673a44,
+                gta2::sub_40E5A0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,(short *)&DAT_00673a44,
                            unaff_EDI,(short *)unaff_EBP);
       gta2::Weapon_sub_4CDA90(self,0xc1,pvVar18,uVar24,uVar1,
                  (GlassInfo *)CONCAT22(extraout_var_08,*puVar13),
-                 (struct Ped *)&stack0xfffffff8);
+                 (Ped *)&stack0xfffffff8);
       gta2::Weapon_sub_4CDA90(self,0xc1,pvVar18,uVar24,uVar1,(GlassInfo *)pSVar17,
-                 (struct Ped *)&stack0xfffffff8);
+                 (Ped *)&stack0xfffffff8);
       puVar13 = (undefined2 *)
-                gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,0x673a44);
+                gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,0x673a44);
       gta2::Weapon_sub_4CDA90(self,0xc1,pvVar18,uVar24,uVar1,
                  (GlassInfo *)CONCAT22(extraout_var_09,*puVar13),
-                 (struct Ped *)&stack0xfffffff8);
+                 (Ped *)&stack0xfffffff8);
       puVar13 = (undefined2 *)
-                gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&stack0xffffffe0,
-                           (struct Ped *)&stack0xffffffde,0x6739bc);
+                gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&stack0xffffffe0,
+                           (Ped *)&stack0xffffffde,0x6739bc);
       gta2::Weapon_sub_4CDA90(self,0xc1,pvVar18,uVar24,uVar1,
                  (GlassInfo *)CONCAT22(extraout_var_10,*puVar13),
-                 (struct Ped *)&stack0xfffffff8);
+                 (Ped *)&stack0xfffffff8);
       self->TimeToReload = 5;
     }
     pvVar18 = gta2::Weapon_TimeToReload(self);
@@ -2760,8 +2760,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     if (puVar13 != NULL) {
       gta2::Ped_FUN_004cca90(pPed,(undefined2 *)((int)&uStack_1c + 2));
       puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xfffffff4);
-      pSStack_18 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
-      pPVar11 = (struct Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
+      pSStack_18 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
+      pPVar11 = (Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
       pPed = pPVar11;
       gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
       gta2::Weapon_sub_4CDA90(self,0x9a,*(void **)pPVar11->S200_,pSStack_18->FirstElement,
@@ -2774,8 +2774,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     puVar13 = (undefined2 *)((int)&uStack_1c + 2);
     gta2::Ped_FUN_004cca90(pPed,puVar13);
     puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffec);
-    pSStack_18 = (struct SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
-    pPVar11 = (struct Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xfffffff4);
+    pSStack_18 = (SpriteS1 *)gta2::Ped_GetYCoordinate(pPed, &stack0xfffffff0);
+    pPVar11 = (Ped *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xfffffff4);
     pPed = pPVar11;
     gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
     pEVar19 = gta2::Weapon_sub_4CDA90(self,0x115,*(void **)pPVar11->S200_,
@@ -2791,29 +2791,29 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     pvVar18 = gta2::Weapon_TimeToReload(self);
     return (byte)pvVar18;
   case FireGun:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&uStack_1c);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&uStack_1c);
     pPed = self->Ped_;
     puVar25 = (undefined4 *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
-    pSVar17 = (struct SpriteS1 *)*puVar25;
+    pSVar17 = (SpriteS1 *)*puVar25;
     piVar16 = (int *)gta2::Ped_GetYCoordinate(pPed, &pSStack_18);
-    pSStack_18 = (struct SpriteS1 *)*piVar16;
+    pSStack_18 = (SpriteS1 *)*piVar16;
     puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffe0);
     uVar24 = *puVar25;
     psVar10 = gta2::Ped_GetRotation(pPed,(short *)&stack0xffffffe0);
-    uStack_1c = (struct SpriteS1 *)CONCAT22(uStack_1c._2_2_,*psVar10);
+    uStack_1c = (SpriteS1 *)CONCAT22(uStack_1c._2_2_,*psVar10);
     gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
-    FUN_0041e210(&stack0xfffffff8,(GlassInfo *)&DAT_00673be4,(struct Ped *)&uStack_1c);
+    FUN_0041e210(&stack0xfffffff8,(GlassInfo *)&DAT_00673be4,(Ped *)&uStack_1c);
     pSVar14 = gta2::S202_sub_401B20((Point2D *)&stack0xffffffec,
-                         (struct SpriteS1 *)&stack0xffffffe0,(struct S127 *)&stack0xfffffff8);
+                         (SpriteS1 *)&stack0xffffffe0,(S127 *)&stack0xfffffff8);
     pSVar14 = pSVar14->FirstElement;
-    pSVar4 = gta2::S202_sub_401B20((Point2D *)&pSStack_18,(struct SpriteS1 *)&stack0xffffffe0,
-                        (struct S127 *)&stack0xfffffffc);
+    pSVar4 = gta2::S202_sub_401B20((Point2D *)&pSStack_18,(SpriteS1 *)&stack0xffffffe0,
+                        (S127 *)&stack0xfffffffc);
     pSVar4 = pSVar4->FirstElement;
     if (self->TypeWeapons == 0) {
       gta2::Weapon_Set_4CCA80(self,1);
       DAT_00673941 = 0;
       gta2::Weapon_sub_4CDA90(self,0x9a,pSVar14,pSVar4,uVar24,(GlassInfo *)uStack_1c,
-                 (struct Ped *)&stack0xfffffff0);
+                 (Ped *)&stack0xfffffff0);
       bVar3 = DAT_00673941;
       if (DAT_00673941 != 0) {
         gta2::Particles_sub_48D4E0(gParticles,*(GlassInfo **)&self->Ped_->GameObject_->AIState);
@@ -2833,12 +2833,12 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     }
     else {
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0xc3,pSVar17,pSStack_18,uVar24,
-                           (GlassInfo *)uStack_1c,(struct Ped *)&stack0xfffffff0);
+                           (GlassInfo *)uStack_1c,(Ped *)&stack0xfffffff0);
       bVar3 = (byte)pEVar19;
     }
     return bVar3;
   case DualPistol:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&uStack_1c);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&uStack_1c);
     if (self->TimeToReload != 0) {
       bVar3 = self->TimeToReload - 1;
       self->TimeToReload = bVar3;
@@ -2847,40 +2847,40 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
     pPed = self->Ped_;
     piVar16 = (int *)gta2::Ped_GetXCoordinate(pPed,(int)&stack0xffffffec);
-    pSStack_18 = (struct SpriteS1 *)*piVar16;
+    pSStack_18 = (SpriteS1 *)*piVar16;
     gta2::Ped_GetYCoordinate(pPed, &stack0xffffffec);
     puVar25 = (undefined4 *)gta2::Ped_GetPositionZ(pPed,(int)&stack0xffffffe0);
     uVar24 = *puVar25;
     psVar10 = gta2::Ped_GetRotation(pPed,(short *)&stack0xffffffe0);
-    uStack_1c = (struct SpriteS1 *)CONCAT22(uStack_1c._2_2_,*psVar10);
+    uStack_1c = (SpriteS1 *)CONCAT22(uStack_1c._2_2_,*psVar10);
     gta2::Ped_sub_435C20(self->Ped_,(undefined4 *)&stack0xfffffff8);
-    FUN_0041e210(&stack0xfffffff8,(GlassInfo *)&DAT_00673be4,(struct Ped *)&uStack_1c);
-    pSVar17 = gta2::S202_sub_401B20((Point2D *)&pSStack_18,(struct SpriteS1 *)&stack0xffffffe0,
-                         (struct S127 *)&stack0xfffffff8);
+    FUN_0041e210(&stack0xfffffff8,(GlassInfo *)&DAT_00673be4,(Ped *)&uStack_1c);
+    pSVar17 = gta2::S202_sub_401B20((Point2D *)&pSStack_18,(SpriteS1 *)&stack0xffffffe0,
+                         (S127 *)&stack0xfffffff8);
     pSVar17 = pSVar17->FirstElement;
-    pSVar14 = gta2::S202_sub_401B20((Point2D *)&stack0xffffffec,(struct SpriteS1 *)&pSStack_18,
-                         (struct S127 *)&stack0xfffffffc);
+    pSVar14 = gta2::S202_sub_401B20((Point2D *)&stack0xffffffec,(SpriteS1 *)&pSStack_18,
+                         (S127 *)&stack0xfffffffc);
     pSVar14 = pSVar14->FirstElement;
     gta2::Weapon_Set_4CCA80(self,1);
     if (self->TypeWeapons == 0) {
       bVar2 = gta2::Ped_IsSearchType(self->Ped_,SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY)
       ;
-      pSStack_18 = (struct SpriteS1 *)((-(uint)bVar2 & 0xb) + 0xfe);
+      pSStack_18 = (SpriteS1 *)((-(uint)bVar2 & 0xb) + 0xfe);
       puVar13 = (undefined2 *)
-                gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&uStack_1c,
-                           (struct Ped *)&stack0xffffffe0,0x673a44);
-      pSVar4 = (struct SpriteS1 *)
+                gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&uStack_1c,
+                           (Ped *)&stack0xffffffe0,0x673a44);
+      pSVar4 = (SpriteS1 *)
                gta2::Weapon_sub_4CDA90(self,(int)pSStack_18,pSVar17,pSVar14,uVar24,
                           (GlassInfo *)
                           CONCAT22((short)((uint)puVar13 >> 0x10),*puVar13),
-                          (struct Ped *)&stack0xfffffff0);
+                          (Ped *)&stack0xfffffff0);
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)&uStack_1c,
-                           (struct Ped *)&stack0xffffffe0,(short *)&DAT_00673a44,
+                gta2::sub_40E5A0((CarSystemManager *)&uStack_1c,
+                           (Ped *)&stack0xffffffe0,(short *)&DAT_00673a44,
                            unaff_EDI,(short *)unaff_EBP);
       pEVar19 = gta2::Weapon_sub_4CDA90(self,(int)pSStack_18,pSVar17,pSVar14,uVar24,
                            (GlassInfo *)CONCAT22(extraout_var_12,*puVar13),
-                           (struct Ped *)&stack0xfffffff0);
+                           (Ped *)&stack0xfffffff0);
       if (((pSVar4 != NULL) || (pEVar19 != NULL)) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
                                      SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY),
@@ -2900,18 +2900,18 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     }
     else {
       puVar13 = (undefined2 *)
-                gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&uStack_1c,
-                           (struct Ped *)&stack0xffffffe0,0x673a44);
+                gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&uStack_1c,
+                           (Ped *)&stack0xffffffe0,0x673a44);
       gta2::Weapon_sub_4CDA90(self,0x9a,pSVar17,pSVar14,uVar24,
                  (GlassInfo *)CONCAT22((short)((uint)puVar13 >> 0x10),*puVar13),
-                 (struct Ped *)&stack0xfffffff0);
+                 (Ped *)&stack0xfffffff0);
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)&uStack_1c,
-                           (struct Ped *)&stack0xffffffe0,(short *)&DAT_00673a44,
+                gta2::sub_40E5A0((CarSystemManager *)&uStack_1c,
+                           (Ped *)&stack0xffffffe0,(short *)&DAT_00673a44,
                            unaff_EDI,(short *)unaff_EBP);
       gta2::Weapon_sub_4CDA90(self,0x9a,pSVar14,pSVar14,uVar24,
                  (GlassInfo *)CONCAT22((short)((uint)puVar13 >> 0x10),*puVar13),
-                 (struct Ped *)&stack0xfffffff0);
+                 (Ped *)&stack0xfffffff0);
       self->TimeToReload = 5;
     }
     pvVar18 = gta2::Weapon_TimeToReload(self);
@@ -2920,45 +2920,45 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     gta2::Weapon_sub_4CD400(self,'\0');
     return (byte)pSecond;
   case CAR_OIL:
-    pSVar4 = (struct SpriteS1 *)gta2::Turrel_sub_41FC70(self->Car);
+    pSVar4 = (SpriteS1 *)gta2::Turrel_sub_41FC70(self->Car);
     puVar25 = &uStack_1c;
-    pSVar14 = (struct SpriteS1 *)&DAT_00673ac8;
+    pSVar14 = (SpriteS1 *)&DAT_00673ac8;
     puVar23 = &stack0xffffffec;
-    pSVar17 = (struct SpriteS1 *)&stack0xfffffff4;
-    pSVar21 = (struct S127 *)&DAT_00673ba4;
+    pSVar17 = (SpriteS1 *)&stack0xfffffff4;
+    pSVar21 = (S127 *)&DAT_00673ba4;
     pPVar6 = (Point2D *)&stack0xfffffffc;
     FUN_00447e10(pSVar4->Matrix3DArray[0].SpriteS3,(undefined4 *)pPVar6);
     pSVar17 = gta2::S202_sub_401B20(pPVar6,pSVar17,pSVar21);
-    pPlayer = (struct Player *)gta2::JustCopyByPtrAtoC(pSVar17,puVar23);
+    pPlayer = (Player *)gta2::JustCopyByPtrAtoC(pSVar17,puVar23);
     piVar16 = (int *)gta2::sub_401B90(pPlayer,puVar25,(int *)pSVar14);
-    pSVar17 = (struct SpriteS1 *)*piVar16;
+    pSVar17 = (SpriteS1 *)*piVar16;
     bVar3 = gta2::Weapon_GetDisplayAmmo(self);
     pSVar14 = _DAT_00673b9c;
     if ((bVar3 & 1) != 0) {
       piVar16 = (int *)gta2::JustCopyByPtrAtoC(&DAT_00673b9c,&stack0xfffffffc);
-      pSVar14 = (struct SpriteS1 *)*piVar16;
+      pSVar14 = (SpriteS1 *)*piVar16;
     }
     FUN_0040f6b0(&stack0xffffffec,(GlassInfo *)pSVar4);
     iVar7 = gta2::SpriteS1_sub_4207B0(pSVar4,&stack0xfffffff4);
     FUN_0040f680(&stack0xffffffec,iVar7);
-    pSVar5 = (struct SpriteS1 *)&uStack_1c;
-    pSpriteS1 = (struct SpriteS1 *)&stack0xfffffffc;
-    uStack_1c = (struct SpriteS1 *)0x2;
-    pMVar8 = (struct Model *)FUN_00492170(&stack0xfffffff4);
+    pSVar5 = (SpriteS1 *)&uStack_1c;
+    pSpriteS1 = (SpriteS1 *)&stack0xfffffffc;
+    uStack_1c = (SpriteS1 *)0x2;
+    pMVar8 = (Model *)FUN_00492170(&stack0xfffffff4);
     pSVar5 = gta2::S122_sub_401BF0(pMVar8,pSpriteS1,(int *)pSVar5);
     uStack_1c = pSVar5->FirstElement;
     puVar25 = &pSVar4->Matrix3DArray[0].PositionZ;
     puVar9 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)puVar25,(GlassInfo *)&stack0xfffffffc,
-                        (struct S127 *)&uStack_1c);
+                        (S127 *)&uStack_1c);
     uVar24 = *puVar9;
-    pSVar5 = gta2::S202_sub_401B20((Point2D *)puVar25,(struct SpriteS1 *)&stack0xfffffffc,
-                        (struct S127 *)&uStack_1c);
+    pSVar5 = gta2::S202_sub_401B20((Point2D *)puVar25,(SpriteS1 *)&stack0xfffffffc,
+                        (S127 *)&uStack_1c);
     uStack_1c = pSVar5->FirstElement;
-    bVar2 = gta2::Player_sub_40CE70((struct Player *)&uStack_1c,(struct Player *)&DAT_00673984);
+    bVar2 = gta2::Player_sub_40CE70((Player *)&uStack_1c,(Player *)&DAT_00673984);
     if (CONCAT31(extraout_var,bVar2) != 0) {
       gta2::Player_sub_401B40((SpawnPoint *)&DAT_00673984,(GlassInfo *)&stack0xfffffffc,
-                 (struct S127 *)&DAT_006739b4);
+                 (S127 *)&DAT_006739b4);
     }
     bVar3 = FUN_00469dc0(pSVar14,pSVar17,uVar24);
     if (bVar3 != 0) {
@@ -2974,49 +2974,49 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     pCVar15 = self->Car;
     pPed = gta2::Car_GetDriver(pCVar15);
     self->Ped_ = pPed;
-    pSVar5 = (struct SpriteS1 *)gta2::Turrel_sub_41FC70(pCVar15);
+    pSVar5 = (SpriteS1 *)gta2::Turrel_sub_41FC70(pCVar15);
     puVar23 = &stack0xffffffdc;
-    pSVar17 = (struct SpriteS1 *)&uStack_1c;
-    pS127 = (struct S127 *)&DAT_00673a90;
+    pSVar17 = (SpriteS1 *)&uStack_1c;
+    pS127 = (S127 *)&DAT_00673a90;
     ppSVar22 = &pSStack_18;
     piVar16 = (int *)&DAT_00673ac8;
-    pSVar14 = (struct SpriteS1 *)&stack0xffffffec;
-    pSVar21 = (struct S127 *)&DAT_00673ad4;
+    pSVar14 = (SpriteS1 *)&stack0xffffffec;
+    pSVar21 = (S127 *)&DAT_00673ad4;
     pSVar4 = pSVar14;
     FUN_00447e10(pSVar5->Matrix3DArray[0].SpriteS3,
                  (undefined4 *)&stack0xfffffff4);
     pSVar14 = gta2::S202_sub_401B20((Point2D *)pSVar14,pSVar4,pSVar21);
     pPVar6 = (Point2D *)
-             gta2::sub_401B90((struct Player *)pSVar14,ppSVar22,piVar16);
+             gta2::sub_401B90((Player *)pSVar14,ppSVar22,piVar16);
     pSVar17 = gta2::S202_sub_401B20(pPVar6,pSVar17,pS127);
     piVar16 = (int *)gta2::JustCopyByPtrAtoC(pSVar17,puVar23);
-    pSVar14 = (struct SpriteS1 *)*piVar16;
+    pSVar14 = (SpriteS1 *)*piVar16;
     pSVar4 = _DAT_00673a4c;
     FUN_0040f6b0(&stack0xffffffec,(GlassInfo *)pSVar5);
     iVar7 = gta2::SpriteS1_sub_4207B0(pSVar5,&stack0xfffffff4);
     FUN_0040f680(&stack0xffffffec,iVar7);
     piVar16 = (int *)&stack0xffffffdc;
-    pSVar17 = (struct SpriteS1 *)&stack0xfffffffc;
-    pMVar8 = (struct Model *)FUN_00492170(&stack0xfffffff4);
+    pSVar17 = (SpriteS1 *)&stack0xfffffffc;
+    pMVar8 = (Model *)FUN_00492170(&stack0xfffffff4);
     gta2::S122_sub_401BF0(pMVar8,pSVar17,piVar16);
     puVar25 = &pSVar5->Matrix3DArray[0].PositionZ;
     puVar9 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)puVar25,(GlassInfo *)&stack0xfffffffc,
-                        (struct S127 *)&stack0xffffffdc);
+                        (S127 *)&stack0xffffffdc);
     uVar24 = *puVar9;
-    pSVar17 = gta2::S202_sub_401B20((Point2D *)puVar25,(struct SpriteS1 *)&stack0xfffffffc,
-                         (struct S127 *)&stack0xffffffdc);
+    pSVar17 = gta2::S202_sub_401B20((Point2D *)puVar25,(SpriteS1 *)&stack0xfffffffc,
+                         (S127 *)&stack0xffffffdc);
     pSVar17 = pSVar17->FirstElement;
-    bVar2 = gta2::Player_sub_40CE70((struct Player *)&stack0xffffffdc,(struct Player *)&DAT_00673984);
+    bVar2 = gta2::Player_sub_40CE70((Player *)&stack0xffffffdc,(Player *)&DAT_00673984);
     if (CONCAT31(extraout_var_00,bVar2) != 0) {
       puVar25 = (undefined4 *)
                 gta2::Player_sub_401B40((SpawnPoint *)&DAT_00673984,
-                           (GlassInfo *)&stack0xfffffffc,(struct S127 *)&DAT_006739b4);
-      pSVar17 = (struct SpriteS1 *)*puVar25;
+                           (GlassInfo *)&stack0xfffffffc,(S127 *)&DAT_006739b4);
+      pSVar17 = (SpriteS1 *)*puVar25;
     }
     bVar3 = FUN_00469dc0(pSVar4,pSVar14,uVar24,pSVar17,&stack0xffffffe0);
     if (bVar3 != 0) {
-      pEVar19 = (struct EventHandler *)
+      pEVar19 = (EventHandler *)
                 gta2::Object_SpawnObject(gObject,10,(int)pSVar4,(int)pSVar14,
                                     (int)in_stack_ffffffe0,
                                     *(short *)&pSVar5->FirstElement);
@@ -3030,7 +3030,7 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     bVar3 = gta2::Weapon_sub_4D0230(self);
     return bVar3;
   case TANK_MAIN_GUN:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&stack0xffffffd4);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&stack0xffffffd4);
     if (self->TimeToReload != 0) {
       bVar3 = self->TimeToReload - 1;
       self->TimeToReload = bVar3;
@@ -3040,7 +3040,7 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     pPed = gta2::Car_GetDriver(pCVar15);
     self->Ped_ = pPed;
     piVar16 = gta2::Car_sub_4BE980(pCVar15,0x94);
-    pSVar14 = (struct SpriteS1 *)CONCAT22(uVar26,*(undefined2 *)*piVar16);
+    pSVar14 = (SpriteS1 *)CONCAT22(uVar26,*(undefined2 *)*piVar16);
     gta2::bitShiftLeft1(&stack0xffffffd8,NULL);
     FUN_00432860(&stack0xffffffe0,(undefined4 *)&stack0xffffffd8,
                  (undefined4 *)&DAT_00673a64);
@@ -3050,8 +3050,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
                  (undefined4 *)&DAT_006739f8);
     pCVar15 = self->Car;
     FUN_0040f6b0(&stack0xfffffff0,(GlassInfo *)pCVar15->CarSprite);
-    pSVar17 = (struct SpriteS1 *)
-              gta2::SpriteS1_sub_4207B0((struct SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd8);
+    pSVar17 = (SpriteS1 *)
+              gta2::SpriteS1_sub_4207B0((SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd8);
     pvVar18 = FUN_0040f5c0(&stack0xfffffff0,&stack0xfffffff8,pSVar17);
     FUN_0040f680(&stack0xffffffe0,(int)pvVar18);
     if (pCVar15->Player_ == NULL) {
@@ -3061,13 +3061,13 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
       puVar25 = (undefined4 *)
                 gta2::Player_sub_4A0D10(pCVar15->Player_,&stack0xfffffff8,
                            (GlassInfo *)&stack0xffffffe0);
-      pSStack_18 = (struct SpriteS1 *)*puVar25;
+      pSStack_18 = (SpriteS1 *)*puVar25;
     }
     gta2::Weapon_Set_4CCA80(self,1);
     if (self->TypeWeapons == 0) {
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0x80,in_stack_ffffffe0,uStack_1c,
                            self->Car->CarSprite->Point2D,(GlassInfo *)pSVar14,
-                           (struct Ped *)&pSStack_18);
+                           (Ped *)&pSStack_18);
       if ((pEVar19 != NULL) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
                                      SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY),
@@ -3087,21 +3087,21 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     else {
       gta2::Weapon_sub_4CDA90(self,0x9f,in_stack_ffffffe0,uStack_1c,
                  self->Car->CarSprite->Point2D,(GlassInfo *)pSVar14,
-                 (struct Ped *)&pSStack_18);
+                 (Ped *)&pSStack_18);
       self->TimeToReload = 5;
     }
     pvVar18 = gta2::Weapon_TimeToReload(self);
     return (byte)pvVar18;
   case WATER_CANNON:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&stack0xffffffdc);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&stack0xffffffdc);
     pCVar15 = self->Car;
     pPed = gta2::Car_GetDriver(pCVar15);
     self->Ped_ = pPed;
     piVar16 = gta2::Car_sub_4BE980(pCVar15,0x72);
     puVar13 = (undefined2 *)
-              gta2::sub_40E5A0((struct CarSystemManager *)*piVar16,(struct Ped *)&stack0xffffffd4,
+              gta2::sub_40E5A0((CarSystemManager *)*piVar16,(Ped *)&stack0xffffffd4,
                          (short *)&DAT_00673b78,unaff_EDI,(short *)unaff_ESI);
-    pSVar14 = (struct SpriteS1 *)CONCAT22(uVar27,*puVar13);
+    pSVar14 = (SpriteS1 *)CONCAT22(uVar27,*puVar13);
     gta2::bitShiftLeft1(&stack0xffffffd4,NULL);
     FUN_00432860(&stack0xffffffe0,(undefined4 *)&stack0xffffffd4,
                  (undefined4 *)&DAT_00673ad0);
@@ -3111,8 +3111,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
                  (undefined4 *)&DAT_00673b54);
     pCVar15 = self->Car;
     FUN_0040f6b0(&pSStack_18,(GlassInfo *)pCVar15->CarSprite);
-    pSVar17 = (struct SpriteS1 *)
-              gta2::SpriteS1_sub_4207B0((struct SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd4);
+    pSVar17 = (SpriteS1 *)
+              gta2::SpriteS1_sub_4207B0((SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd4);
     pvVar18 = FUN_0040f5c0(&pSStack_18,&stack0xfffffff8,pSVar17);
     FUN_0040f680(&stack0xffffffe0,(int)pvVar18);
     gta2::Player_sub_4A0D10(pCVar15->Player_,&stack0xfffffff8,(GlassInfo *)&stack0xffffffe0);
@@ -3121,20 +3121,20 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     if (self->TypeWeapons != 0) {
       pEVar19 = gta2::Weapon_sub_4CDA90(self,199,in_stack_ffffffe0,uStack_1c,
                            self->Car->CarSprite->Point2D,(GlassInfo *)pSVar14,
-                           (struct Ped *)&stack0xfffffff0);
+                           (Ped *)&stack0xfffffff0);
       return (byte)pEVar19;
     }
     bVar3 = FUN_0048d8b0(self->Car->CarSprite);
     return bVar3;
   case FIRE_TRUCK_GUN:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&stack0xffffffdc);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&stack0xffffffdc);
     pCVar15 = self->Car;
     pPed = gta2::Car_GetDriver(pCVar15);
     self->Ped_ = pPed;
     piVar16 = gta2::Car_sub_4BE980(pCVar15,0x72);
     if (piVar16 == NULL) {
       piVar16 = gta2::Car_sub_4BE980(self->Car,0xf8);
-      pSVar17 = (struct SpriteS1 *)CONCAT22(uVar27,*(undefined2 *)*piVar16);
+      pSVar17 = (SpriteS1 *)CONCAT22(uVar27,*(undefined2 *)*piVar16);
       gta2::bitShiftLeft1(&stack0xffffffd4,NULL);
       FUN_00432860(&stack0xffffffe0,(undefined4 *)&stack0xffffffd4,
                    (undefined4 *)&DAT_00673a04);
@@ -3144,9 +3144,9 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     }
     else {
       puVar13 = (undefined2 *)
-                gta2::sub_40E5A0((struct CarSystemManager *)*piVar16,(struct Ped *)&stack0xffffffd4,
+                gta2::sub_40E5A0((CarSystemManager *)*piVar16,(Ped *)&stack0xffffffd4,
                            (short *)&DAT_00673b78,unaff_EDI,(short *)unaff_ESI);
-      pSVar17 = (struct SpriteS1 *)CONCAT22(uVar27,*puVar13);
+      pSVar17 = (SpriteS1 *)CONCAT22(uVar27,*puVar13);
       gta2::bitShiftLeft1(&stack0xffffffd4,NULL);
       FUN_00432860(&stack0xffffffe0,(undefined4 *)&stack0xffffffd4,
                    (undefined4 *)&DAT_00673ad0);
@@ -3157,8 +3157,8 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     FUN_00432860(&pSStack_18,(undefined4 *)&stack0xffffffd4,puVar25);
     pCVar15 = self->Car;
     FUN_0040f6b0(&pSStack_18,(GlassInfo *)pCVar15->CarSprite);
-    pSVar14 = (struct SpriteS1 *)
-              gta2::SpriteS1_sub_4207B0((struct SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd4);
+    pSVar14 = (SpriteS1 *)
+              gta2::SpriteS1_sub_4207B0((SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd4);
     pvVar18 = FUN_0040f5c0(&pSStack_18,&stack0xfffffff8,pSVar14);
     FUN_0040f680(&stack0xffffffe0,(int)pvVar18);
     gta2::Player_sub_4A0D10(pCVar15->Player_,&stack0xfffffff8,(GlassInfo *)&stack0xffffffe0);
@@ -3166,14 +3166,14 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     if (self->TypeWeapons != 0) {
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0xc3,in_stack_ffffffe0,uStack_1c,
                            self->Car->CarSprite->Point2D,(GlassInfo *)pSVar17,
-                           (struct Ped *)&stack0xfffffff0);
+                           (Ped *)&stack0xfffffff0);
       return (byte)pEVar19;
     }
     pCVar15 = self->Car;
     gta2::Particles_sub_48D4E0(gParticles,(GlassInfo *)pCVar15->CarSprite);
     return (byte)pCVar15;
   case ARMY_GUN_JEEP:
-    gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&stack0xffffffd4);
+    gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&stack0xffffffd4);
     if (self->TimeToReload != 0) {
       bVar3 = self->TimeToReload - 1;
       self->TimeToReload = bVar3;
@@ -3183,7 +3183,7 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     pPed = gta2::Car_GetDriver(pCVar15);
     self->Ped_ = pPed;
     piVar16 = gta2::Car_sub_4BE980(pCVar15,0xf8);
-    pSVar14 = (struct SpriteS1 *)CONCAT22(uVar26,*(undefined2 *)*piVar16);
+    pSVar14 = (SpriteS1 *)CONCAT22(uVar26,*(undefined2 *)*piVar16);
     gta2::bitShiftLeft1(&stack0xffffffd8,NULL);
     FUN_00432860(&stack0xffffffe0,(undefined4 *)&stack0xffffffd8,
                  (undefined4 *)&DAT_00673a04);
@@ -3193,18 +3193,18 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
                  (undefined4 *)&DAT_00673cb0);
     pCVar15 = self->Car;
     FUN_0040f6b0(&stack0xfffffff0,(GlassInfo *)pCVar15->CarSprite);
-    pSVar17 = (struct SpriteS1 *)
-              gta2::SpriteS1_sub_4207B0((struct SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd8);
+    pSVar17 = (SpriteS1 *)
+              gta2::SpriteS1_sub_4207B0((SpriteS1 *)pCVar15->CarSprite,&stack0xffffffd8);
     pvVar18 = FUN_0040f5c0(&stack0xfffffff0,&stack0xfffffff8,pSVar17);
     FUN_0040f680(&stack0xffffffe0,(int)pvVar18);
     piVar16 = (int *)gta2::Player_sub_4A0D10(pCVar15->Player_,&stack0xfffffff8,
                                 (GlassInfo *)&stack0xffffffe0);
-    pSStack_18 = (struct SpriteS1 *)*piVar16;
+    pSStack_18 = (SpriteS1 *)*piVar16;
     gta2::Weapon_Set_4CCA80(self,1);
     if (self->TypeWeapons == 0) {
       pEVar19 = gta2::Weapon_sub_4CDA90(self,0xfe,in_stack_ffffffe0,uStack_1c,
                            self->Car->CarSprite->Point2D,(GlassInfo *)pSVar14,
-                           (struct Ped *)&pSStack_18);
+                           (Ped *)&pSStack_18);
       if ((pEVar19 != NULL) &&
          (bVar2 = gta2::Ped_IsSearchType(self->Ped_,
                                      SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY),
@@ -3224,7 +3224,7 @@ byte gta2::Weapon_FUN_004d0530(struct Weapon *self)
     else {
       gta2::Weapon_sub_4CDA90(self,0x9a,in_stack_ffffffe0,uStack_1c,
                  self->Car->CarSprite->Point2D,(GlassInfo *)pSVar14,
-                 (struct Ped *)&pSStack_18);
+                 (Ped *)&pSStack_18);
       self->TimeToReload = 1;
     }
     pvVar18 = gta2::Weapon_TimeToReload(self);

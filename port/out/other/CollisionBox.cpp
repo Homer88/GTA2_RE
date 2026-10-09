@@ -43,13 +43,13 @@ undefined4 gta2::CollisionBox_FUN_00482e80(struct CollisionBox *self,SpriteS1 *p
 // Ghidra: CollisionBox::FUN_00483570
 byte gta2::CollisionBox_FUN_00483570(struct CollisionBox *self,SpriteS1 *pSpriteS1)
 {
-  struct EventHandler *this_00;
+  EventHandler *this_00;
   char cVar1;
   bool bVar2;
   void *this_01;
   undefined3 extraout_var;
   undefined3 extraout_var_00;
-  struct TrafficLigthStruct *pS90;
+  TrafficLigthStruct *pS90;
   
   this_01 = (void *)gta2::SpriteS1_GetCar(pSpriteS1);
   if ((this_01 == NULL) || (cVar1 = FUN_00482d00(this_01), cVar1 == '\0')) {

@@ -60,6 +60,25 @@ if (Test-Path 'port\gta2_clean.h') {
   }
   foreach ($n in $defined) { if ($elabParams -notcontains $n) { $elabParams += $n } }
 }
+# forward-only структуры (тела нет в clean.h, объявлены как "struct X;" в shim) -
+# тоже квалифицируем: Police, MissionManager, Movie, Keybord, GlassInfo и т.п.
+# Берём ТОЛЬКО явные "struct X;" из shim: там гарантированно структуры, в отличие
+# от gta2_protos.h, где "struct Y *" встречается у typedef/enum (SearchType).
+if (Test-Path 'port\gta2_shim.h') {
+  $shimAll = Get-Content -LiteralPath 'port\gta2_shim.h' -Raw
+  $fwdBlock = [regex]::Match($shimAll, '(?s)//\s*forward-объявления.*?(?=#include|\r?\n\s*//\s*---\s*системные)')
+  $fwdSrc = if ($fwdBlock.Success) { $fwdBlock.Value } else { $shimAll }
+  foreach ($m in [regex]::Matches($fwdSrc, '(?m)^\s*struct\s+(?<n>[A-Za-z_]\w*)\s*;')) {
+    if ($elabParams -notcontains $m.Groups['n'].Value) { $elabParams += $m.Groups['n'].Value }
+  }
+  # Типы, уже видимые в gta2 через "using ::X;" в shim, квалифицировать НЕЛЬЗЯ:
+  # "struct X *self" конфликтует с using-декларацией -> C7624 ("definition of X
+  # hides existing declaration"). Их резолвинг уже работает.
+  foreach ($m in [regex]::Matches($shimAll, 'using\s+::(?<n>[A-Za-z_]\w*)\s*;')) {
+    $n = $m.Groups['n'].Value
+    $elabParams = $elabParams | Where-Object { $_ -ne $n }
+  }
+}
 # известные переименования имён членов: Ghidra-имя -> unified-имя
 # (каждый парой явных regex: массив @(,@(a,b)) шлетов схлопывает вложенность)
 
@@ -93,7 +112,7 @@ function Convert-Text([string]$txt) {
     # параметр "X *self" для неполных (forward-only) типов должен совпадать
     # с объявлением прото ("struct Police *self"); иначе MSVC видит другой тип
     foreach ($et in $elabParams) {
-      $params = [regex]::Replace($params, '(?<![A-Za-z0-9_])' + $et + '(\s*\*\s*)self\b', 'struct ' + $et + '$1self')
+      $params = [regex]::Replace($params, '(?<![A-Za-z0-9_])(?<!struct )(?<!\bstruct )' + $et + '(\s*\*\s*)self\b', 'struct ' + $et + '$1self')
     }
     $q = if ($cls) { "$cls" + "_" } else { "" }
     return "$ret gta2::$q$name($params)"

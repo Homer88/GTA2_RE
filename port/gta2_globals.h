@@ -20383,4 +20383,5 @@ extern char *gTextLabel;
 extern char gTextUse[0x80];
 extern void *gTileAnim1;
 extern void *gTimer;
+extern unsigned char loc_4E39AE;
 

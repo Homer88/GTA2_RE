@@ -9,7 +9,7 @@
 // Ghidra: ---
 S86_3 * gta2::S86_3_S86_3(struct S86_3 *self)
 {
-  struct S86_3 *result; // eax
+  S86_3 *result; // eax
 
   result = self;
   self->field_0 = 0;

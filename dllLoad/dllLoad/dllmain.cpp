@@ -1,4 +1,4 @@
-// dllmain.cpp : Определяет точку входа для приложения DLL.
+﻿// dllmain.cpp : Определяет точку входа для приложения DLL.
 #include <iostream>
 //#include <cstdlib>
 #include <Windows.h>
@@ -15,6 +15,7 @@
 //#include "InitS20Fun.h"
 #include "DebugLogFile.h"
 #include "cHookTrace.h"
+#include "cClassProbe.h"
 #include "cInspector.h"
 
 #include "cDirectX.h"
@@ -34,6 +35,7 @@
 //#include "cWeapon.h"
 #include "cWindow.h"
 #include "cGang.h"
+#include "cPed.h"
 #include "cWeapon.h"
 #include "cGame.h"
 #include "cSaveLog.h"
@@ -52,12 +54,24 @@ unsigned int Error;
 // calls through it so the retail code still builds every menu page / reads .gxt text.
 LPVOID _LoadTextMenu = (LPVOID)0x00453E20;
 
+// Trampoline to the retail menu text resolver (0x00452200). DetourAttach
+// rewrites this variable to the trampoline; HookMenuResolveText calls through
+// it first and then overrides the string only for our own selector pages.
+// (AddrToFunc.h labels this address "Menu::ApplyMoneyCheatIfApplicable" - the
+// label is wrong: the function resolves menu entry text, page1/page5 special
+// cases included.)
+LPVOID _MenuResolveText = (LPVOID)0x00452200;
+
 
 LPVOID _InitDefautValue = (LPVOID)0x00461AF0;        // InitDefautValue
 LPVOID _InitGraphicsAndInput = (LPVOID)0x004031C0;     // InitGraphicsAndInput
 LPVOID _SetWeapon = (LPVOID)0x00433810;               // Weapon::SetWeapon
 LPVOID _SetPed = (LPVOID)0x004CCA10;                  // Weapon::SetPed
 LPVOID _CopyNameGang = (LPVOID)0x0045DB40;             // Gang::SetName
+LPVOID _PedSetSearchType = (LPVOID)0x00403920;         // Ped::SetSearchType
+LPVOID _PedSetS169 = (LPVOID)0x00403930;               // Ped::SetS169
+LPVOID _PedSetCarId = (LPVOID)0x00403940;              // Ped::SetCarId
+LPVOID _PedSetHealth = (LPVOID)0x004039A0;             // Ped::SetHealth
 LPVOID _LoadGame = (LPVOID)0x00455C20;                // Menu::LoadGame
 LPVOID _SaveGame = (LPVOID)0x00455C90;                // Menu::SaveGame
 LPVOID _MultiplayerMenu = (LPVOID)0x004565E0;         // Menu::MultiplayerMenu
@@ -70,12 +84,19 @@ LPVOID _sub_45B5F0 = (LPVOID)0x0045B5F0;               // Game::sub_45B5F0 (init
 LPVOID _Sub465390 = (LPVOID)0x00465390;                // MapRelatedStruct::sub_465390 (gangs/zone)
 LPVOID _Sub481890 = (LPVOID)0x00481890;                // MissionManager::sub_481890 (missions)
 LPVOID _StartGames = (LPVOID)0x004A6DA0;               // Player::StartGames (starts player)
-LPVOID _UpdateWrapper = (LPVOID)0x004CAC30;            // Hud::UpdateWrapper
+LPVOID _UpdateWrapper = (LPVOID)0x004CAC30;
 
 // --- save-file writers (see cSaveLog.h): trampolines used by cSaveLog.cpp ---
 LPVOID _WriteFileSvg = (LPVOID)0x0047EF40;  // MissionManager::SaveFile
 LPVOID _WriteFileDat = (LPVOID)0x004A89E0;  // PlayerData::WriteFileNamePlayer
 LPVOID _WriteFileHsc = (LPVOID)0x004A8D80;  // PlayerData::sub_4A8D80 (hiscores)
+LPVOID _UpdateBestScores = (LPVOID)0x004A90A0; // PlayerData::UpdateBestScores
+LPVOID _MapGmSetScores = (LPVOID)0x0045EC20;   // MapGm::sub_45EC20 (выбор мира: очки уровня)
+LPVOID _SaveLevelRecord = (LPVOID)0x004A8F90;  // PlayerData::sub_4A8F90 (запись рекорда слота)
+
+// --- text-draw observer (cMenu.cpp): trampoline to retail DrawGTATextRaw.
+// Only reads: pushes every call into a 512-entry ring dumped by CrashFilter.
+LPVOID _DrawGTATextRaw = (LPVOID)0x004CC100; // DrawGTATextRaw
 
 // ---- strlen emulator ---------------------------------------------------
 // The game hands ucrtbase's bounded strlen a bogus pointer: 0x7263694D, which is
@@ -103,6 +124,20 @@ static const BYTE kStrlenPat[] = {
 
 static int g_lenPatched = 0;
 static int g_lenBudget  = 256;
+
+// ---- low-rate draw-tape thread --------------------------------------------
+// Appends the newest DrawGTATextRaw ring entries to C:\games\gta2\draw_ring.log
+// every ~2 s so that a "hang" (no crash) still shows what the frontend was
+// drawing just before it froze. Never touches the hot path.
+static DWORD WINAPI DrawRingThreadProc(LPVOID)
+{
+    extern void DumpDrawRingFile(void);
+    for (;;) {
+        Sleep(2000);
+        DumpDrawRingFile();
+    }
+    return 0;
+}
 
 static int PatchStrlen(EXCEPTION_RECORD* r, CONTEXT* c)
 {
@@ -348,6 +383,46 @@ static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* ep) {
             }
             if (snap != INVALID_HANDLE_VALUE) CloseHandle(snap);
         }
+
+        // ---- name-typing / text-draw forensics added for the menu crash ----
+        {
+            __try {
+                fprintf(f, "GLOW dword_67358C = 0x%08lX (lighting flag 0/0x8000)\r\n",
+                        (unsigned long)(*(DWORD*)0x0067358C));
+                fprintf(f, "GLOW 673400/673420/673440/673460 = 0x%08lX/0x%08lX/0x%08lX/0x%08lX\r\n",
+                        (unsigned long)(*(DWORD*)0x00673400),
+                        (unsigned long)(*(DWORD*)0x00673420),
+                        (unsigned long)(*(DWORD*)0x00673440),
+                        (unsigned long)(*(DWORD*)0x00673460));
+                fprintf(f, "GLOW 673400..: ");
+                for (int k = 0; k < 16; ++k) {
+                    fprintf(f, "%02X ", *(unsigned char*)(0x0067357C + k));
+                }
+                fprintf(f, "\r\n");
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER) {
+                fprintf(f, "GLOW: <unreadable>\r\n");
+            }
+            __try {
+                Menu* m = GetGameMenu();
+                if (m) {
+                    fprintf(f, "MENU: Page=%u State=%d Frontend=%d FontStyle=%u "
+                               "Length=%d Key=%d CurIdx=%d\r\n",
+                            (unsigned)m->Page, m->State, m->FrontendState,
+                            (unsigned)m->FontStyle, (int)m->Length, (int)m->Key,
+                            (int)m->CurrentMenuItemsIndex);
+                    fprintf(f, "MENU name: \"%.9ls\"\r\n", m->pPlayerName);
+                }
+                else {
+                    fprintf(f, "MENU: NULL (menu not created yet)\r\n");
+                }
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER) {
+                fprintf(f, "MENU: <unreadable>\r\n");
+            }
+            extern void DumpDrawRing(FILE* f);
+            DumpDrawRing(f);
+        }
         fclose(f);
     }
     return EXCEPTION_CONTINUE_SEARCH;
@@ -429,8 +504,18 @@ case DLL_PROCESS_ATTACH:
          TraceEvent("DllMain: DLL_PROCESS_ATTACH");
          StartInspector();
          SaveDebugStartHotkeys();
+         // DrawGTATextRaw tape thread (see DrawRingThreadProc above). Reads
+         // only our own ring; killed with the process (no cancel needed).
+         {
+             HANDLE h = CreateThread(NULL, 0, DrawRingThreadProc, NULL, 0, NULL);
+             if (h) CloseHandle(h);
+         }
 
-        DetourRestoreAfterWith();
+DetourRestoreAfterWith();
+
+        // CSV создаётся сразу: если fopen не сработает, ClassProbe.log
+        // расскажет об этом на старте, а не молча потеряет данные.
+        ProbeThisInit();
 
         // Isolation switch: set GTA2_NOHOOK=1 to load this DLL for tracing only,
         // with every detour left detached. Any crash that still happens then
@@ -491,6 +576,8 @@ case DLL_PROCESS_ATTACH:
         //FunS20();
         //FunMapGM();
         DetourAttach(&_LoadTextMenu, (PVOID)LoadTextMenu);
+        Error = DetourAttach(&_MenuResolveText, (PVOID)HookMenuResolveText);
+        printError(Error, _MenuResolveText);
 
         // --- Menu load/save series + setter hooks (trace + chain to original) ---
         Error = DetourAttach(&_LoadGame, (PVOID)LoadGame);
@@ -503,6 +590,21 @@ case DLL_PROCESS_ATTACH:
         printError(Error, _ProcessInput);
         Error = DetourAttach(&_CopyNameGang, (PVOID)HookSetName);
         printError(Error, _CopyNameGang);
+
+        // --- Ped setters: single-store retail stubs, fully re-implemented ---
+        // 1 = attach our replacements, 0 = leave retail code untouched.
+        // Flip to 0 for a control run when bisecting a crash.
+#define HOOK_PED_SETTERS 1
+#if HOOK_PED_SETTERS
+        Error = DetourAttach(&_PedSetSearchType, (PVOID)HookSetSearchType);
+        printError(Error, _PedSetSearchType);
+        Error = DetourAttach(&_PedSetS169, (PVOID)HookSetS169);
+        printError(Error, _PedSetS169);
+        Error = DetourAttach(&_PedSetCarId, (PVOID)HookSetCarId);
+        printError(Error, _PedSetCarId);
+        Error = DetourAttach(&_PedSetHealth, (PVOID)HookSetHealth);
+        printError(Error, _PedSetHealth);
+#endif
 
         // ---------------- risky REPLACEMENT hooks: 0 = NOT attached -------------
         // They replace the real video / input init; the re-implemented bodies are
@@ -547,6 +649,24 @@ case DLL_PROCESS_ATTACH:
         printError(Error, _WriteFileDat);
         Error = DetourAttach(&_WriteFileHsc, (PVOID)HookWriteHiscores);
         printError(Error, _WriteFileHsc);
+        Error = DetourAttach(&_UpdateBestScores, (PVOID)HookUpdateBestScores);
+        printError(Error, _UpdateBestScores);
+        // Выбор мира -> инструментальные хуки (cSaveLog.cpp): retail делает
+        // работу, мы пишем в Save.log что именно загрузилось/записалось.
+        Error = DetourAttach(&_MapGmSetScores, (PVOID)HookMapGmSetScores);
+        printError(Error, _MapGmSetScores);
+        Error = DetourAttach(&_SaveLevelRecord, (PVOID)HookSaveLevelRecord);
+        printError(Error, _SaveLevelRecord);
+        // DrawGTATextRaw observer (cMenu.cpp trace ring). Flip GTA2_NOTEXTTRACE=1
+        // to prove whether this observers hook can freeze menu rendering at all.
+        if (!getenv("GTA2_NOTEXTTRACE")) {
+            Error = DetourAttach(&_DrawGTATextRaw, (PVOID)HookDrawGTATextRaw);
+            printError(Error, _DrawGTATextRaw);
+        }
+        else {
+            extern void VideoTrace(const char* fmt, ...);
+            VideoTrace("[dllLoad] GTA2_NOTEXTTRACE set - DrawGTATextRaw detour skipped");
+        }
         if (DetourTransactionCommit() != NO_ERROR)
         {
             printf("error DetourTransactionCommit");
@@ -562,8 +682,9 @@ case DLL_PROCESS_ATTACH:
        break;
     case DLL_PROCESS_DETACH:
         TraceEvent("DllMain: DLL_PROCESS_DETACH (unload)");
-        StopInspector();
-        TraceClose();
+StopInspector();
+      ProbeThisClose();
+      TraceClose();
         break;
     }
     //DetourRestoreAfterWith();

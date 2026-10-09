@@ -50,7 +50,7 @@ undefined4 gta2::Style_sub_49E570(int param_1,uint param_2)
 // 0x004b9f20: Style::sub_4B9F20
 // IDA: Style::sub_4B9F20
 // Ghidra: ---
-int gta2::Style_sub_4B9F20(struct Style *self, void *a2)
+int gta2::Style_sub_4B9F20(Style *self, void *a2)
 {
   int v2; // eax
 
@@ -62,7 +62,7 @@ int gta2::Style_sub_4B9F20(struct Style *self, void *a2)
 // 0x004bf1f0: Style::GetCarModelById
 // IDA: Style::GetCarModelById
 // Ghidra: ---
-int gta2::Style_GetCarModelById(struct Style *self, unsigned __int8 CarType)
+int gta2::Style_GetCarModelById(Style *self, unsigned __int8 CarType)
 {
   return self->pCar_5C->Car[CarType];
 }
@@ -71,7 +71,7 @@ int gta2::Style_GetCarModelById(struct Style *self, unsigned __int8 CarType)
 // 0x004bf210: Style::sub_4BF210
 // IDA: Style::sub_4BF210
 // Ghidra: ---
-int gta2::Style_sub_4BF210(struct Style *self, unsigned __int8 a2)
+int gta2::Style_sub_4BF210(Style *self, unsigned __int8 a2)
 {
   int v2; // eax
 
@@ -101,7 +101,7 @@ uint gta2::Style_sub_4BF230(int param_1,ushort param_2,byte param_3)
 // 0x004bf280: Style::GetSprite
 // IDA: Style::GetSprite
 // Ghidra: ---
-int gta2::Style_GetSprite(struct Style *self, unsigned __int16 a2)
+int gta2::Style_GetSprite(Style *self, unsigned __int16 a2)
 {
   return self->field_20 + 8 * a2;
 }
@@ -110,7 +110,7 @@ int gta2::Style_GetSprite(struct Style *self, unsigned __int16 a2)
 // 0x004bf2a0: Style::GetGlobalSpriteId
 // IDA: Style::GetGlobalSpriteId
 // Ghidra: ---
-unsigned __int16 gta2::Style_GetGlobalSpriteId(struct Style *self, int sprite_type, __int16 spriteId)
+unsigned __int16 gta2::Style_GetGlobalSpriteId(Style *self, int sprite_type, __int16 spriteId)
 {
   unsigned __int16 result; // ax
 
@@ -146,7 +146,7 @@ unsigned __int16 gta2::Style_GetGlobalSpriteId(struct Style *self, int sprite_ty
 // 0x004bf330: Style::sub_4BF330
 // IDA: Style::sub_4BF330
 // Ghidra: ---
-__int16 gta2::Style_sub_4BF330(struct Style *self, int a2)
+__int16 gta2::Style_sub_4BF330(Style *self, int a2)
 {
   __int16 result; // ax
 
@@ -182,7 +182,7 @@ __int16 gta2::Style_sub_4BF330(struct Style *self, int a2)
 // 0x004bf3a0: Style::sub_4BF3A0
 // IDA: Style::sub_4BF3A0
 // Ghidra: ---
-__int16 gta2::Style_sub_4BF3A0(struct Style *self, int a2)
+__int16 gta2::Style_sub_4BF3A0(Style *self, int a2)
 {
   __int16 result; // ax
 
@@ -223,7 +223,7 @@ __int16 gta2::Style_sub_4BF3A0(struct Style *self, int a2)
 // 0x004bf430: Style::get_global_palette_id
 // IDA: Style::get_global_palette_id
 // Ghidra: ---
-__int16 gta2::Style_get_global_palette_id(struct Style *self, int palette_type, __int16 palette_id)
+__int16 gta2::Style_get_global_palette_id(Style *self, int palette_type, __int16 palette_id)
 {
   __int16 result; // ax
 
@@ -264,7 +264,7 @@ __int16 gta2::Style_get_global_palette_id(struct Style *self, int palette_type, 
 // 0x004bf4e0: Style::GetColourBank
 // IDA: Style::GetColourBank
 // Ghidra: ---
-int gta2::Style_GetColourBank(struct Style *self, __int16 a2)
+int gta2::Style_GetColourBank(Style *self, __int16 a2)
 {
   return self->field_2C + 4 * ((a2 & 0x3F) + ((a2 & 0xFFC0) << 8));
 }
@@ -273,7 +273,7 @@ int gta2::Style_GetColourBank(struct Style *self, __int16 a2)
 // 0x004bf530: Style::get_physical_palette
 // IDA: Style::get_physical_palette
 // Ghidra: ---
-__int16 gta2::Style_get_physical_palette(struct Style *self, unsigned __int16 a2)
+__int16 gta2::Style_get_physical_palette(Style *self, unsigned __int16 a2)
 {
   return *((_WORD *)&self->field_28->_Placeholder + a2);
 }
@@ -282,7 +282,7 @@ __int16 gta2::Style_get_physical_palette(struct Style *self, unsigned __int16 a2
 // 0x004bf550: Style::GetSpriteID
 // IDA: Style::GetSpriteID
 // Ghidra: ---
-__int16 gta2::Style_GetSpriteID(struct Style *self, unsigned __int16 a2, __int16 a3)
+__int16 gta2::Style_GetSpriteID(Style *self, unsigned __int16 a2, __int16 a3)
 {
   return a3 + *((_WORD *)&self->Car->Car + a2 + 1);
 }
@@ -291,7 +291,7 @@ __int16 gta2::Style_GetSpriteID(struct Style *self, unsigned __int16 a2, __int16
 // 0x004bf570: Style::sub_4BF570
 // IDA: Style::sub_4BF570
 // Ghidra: ---
-ushort gta2::Style_sub_4BF570(struct Style *self, wchar_t *style, unsigned __int16 *a3)
+ushort gta2::Style_sub_4BF570(Style *self, wchar_t *style, unsigned __int16 *a3)
 {
   if ( *style == word_67065C[0] )
     return 16;
@@ -309,7 +309,7 @@ ushort gta2::Style_sub_4BF570(struct Style *self, wchar_t *style, unsigned __int
 // 0x004bf5d0: Style::sub_4BF5D0
 // IDA: Style::sub_4BF5D0
 // Ghidra: ---
-__int16 gta2::Style_sub_4BF5D0(struct Style *self, _WORD *a2)
+__int16 gta2::Style_sub_4BF5D0(Style *self, _WORD *a2)
 {
   if ( *a2 == word_67065C[0] )
     return 16;
@@ -326,7 +326,7 @@ __int16 gta2::Style_sub_4BF5D0(struct Style *self, _WORD *a2)
 // 0x004bf630: Style::sub_4BF630
 // IDA: Style::sub_4BF630
 // Ghidra: ---
-__int16 gta2::Style_sub_4BF630(struct Style *self, _WORD *style)
+__int16 gta2::Style_sub_4BF630(Style *self, _WORD *style)
 {
   if ( *style == word_67065C[0] )
     return 17;
@@ -382,7 +382,7 @@ uint gta2::Style_sub_4BF6D0(int param_1)
 // 0x004bf740: Style::GetPalitrePal
 // IDA: Style::GetPalitrePal
 // Ghidra: ---
-unsigned __int16 gta2::Style_GetPalitrePal(struct Style *self)
+unsigned __int16 gta2::Style_GetPalitrePal(Style *self)
 {
   return self->PalitrePal;
 }
@@ -391,7 +391,7 @@ unsigned __int16 gta2::Style_GetPalitrePal(struct Style *self)
 // 0x004bf750: Style::get_obji_by_idx
 // IDA: Style::get_obji_by_idx
 // Ghidra: ---
-int gta2::Style_get_obji_by_idx(struct Style *self, unsigned __int16 a2)
+int gta2::Style_get_obji_by_idx(Style *self, unsigned __int16 a2)
 {
   if ( a2 < self->field_6 )
     return self->field_24 + 2 * a2;
@@ -403,7 +403,7 @@ int gta2::Style_get_obji_by_idx(struct Style *self, unsigned __int16 a2)
 // 0x004bf770: Style::ChangeTileByIdx
 // IDA: Style::ChangeTileByIdx
 // Ghidra: ---
-void gta2::Style_ChangeTileByIdx(struct Style *self, unsigned __int16 a2, __int16 a3)
+void gta2::Style_ChangeTileByIdx(Style *self, unsigned __int16 a2, __int16 a3)
 {
   *((_WORD *)&self->S1501_->field + a2) = a3;
 }
@@ -412,14 +412,14 @@ void gta2::Style_ChangeTileByIdx(struct Style *self, unsigned __int16 a2, __int1
 // 0x004bf7f0: Style::sub_4BF7F0
 // IDA: Style::sub_4BF7F0
 // Ghidra: ---
-int gta2::Style_sub_4BF7F0(struct Style *self)
+int gta2::Style_sub_4BF7F0(Style *self)
 {
   int v2; // eax
   int v3; // ecx
   int result; // eax
   int v5; // ecx
 
-  self->S1501_ = (struct S1501 *)gta2::operator_new(2048u);
+  self->S1501_ = (S1501 *)gta2::operator_new(2048u);
   v2 = 0;
   v3 = 0;
   do
@@ -444,7 +444,7 @@ int gta2::Style_sub_4BF7F0(struct Style *self)
 // 0x004bf840: Style::sub_4BF840
 // IDA: Style::sub_4BF840
 // Ghidra: ---
-char * gta2::Style_sub_4BF840(struct Style *self, unsigned int a2)
+char * gta2::Style_sub_4BF840(Style *self, unsigned int a2)
 {
   unsigned int v3; // ebp
   int v4; // ebx
@@ -508,7 +508,7 @@ char * gta2::Style_sub_4BF840(struct Style *self, unsigned int a2)
 // 0x004bf900: Style::sub_4BF900
 // IDA: Style::sub_4BF900
 // Ghidra: ---
-int gta2::Style_sub_4BF900(struct Style *self)
+int gta2::Style_sub_4BF900(Style *self)
 {
   unsigned int v1; // ebp
   int result; // eax
@@ -548,7 +548,7 @@ int gta2::Style_sub_4BF900(struct Style *self)
 // 0x004bf980: Style::sub_4BF980
 // IDA: Style::sub_4BF980
 // Ghidra: ---
-int gta2::Style_sub_4BF980(struct Style *self)
+int gta2::Style_sub_4BF980(Style *self)
 {
   unsigned int v2; // ebx
   unsigned int v3; // edx
@@ -609,7 +609,7 @@ int gta2::Style_sub_4BF980(struct Style *self)
 // 0x004bfa60: Style::read_delx_records_REAL
 // IDA: Style::read_delx_records_REAL
 // Ghidra: ---
-void gta2::Style_read_delx_records_REAL(struct Style *self, FileMgr *dwBytes)
+void gta2::Style_read_delx_records_REAL(Style *self, FileMgr *dwBytes)
 {
   FILE *Buffer; // eax
 
@@ -626,7 +626,7 @@ void gta2::Style_read_delx_records_REAL(struct Style *self, FileMgr *dwBytes)
 // 0x004bfab0: Style::read_dels_records_REAL
 // IDA: Style::read_dels_records_REAL
 // Ghidra: ---
-int gta2::Style_read_dels_records_REAL(struct Style *self, FileMgr *dwBytes)
+int gta2::Style_read_dels_records_REAL(Style *self, FileMgr *dwBytes)
 {
   FILE *Buffer; // eax
 
@@ -639,7 +639,7 @@ int gta2::Style_read_dels_records_REAL(struct Style *self, FileMgr *dwBytes)
 // 0x004bfad0: Style::read_tile_chunk_REAL
 // IDA: Style::read_tile_chunk_REAL
 // Ghidra: ---
-int gta2::Style_read_tile_chunk_REAL(struct Style *self, SIZE_T a2)
+int gta2::Style_read_tile_chunk_REAL(Style *self, SIZE_T a2)
 {
   FILE *v3; // eax
 
@@ -653,25 +653,25 @@ int gta2::Style_read_tile_chunk_REAL(struct Style *self, SIZE_T a2)
 // 0x004bfb00: Style::read_ovly_records_REAL_
 // IDA: Style::read_ovly_records_REAL_
 // Ghidra: ---
-int gta2::Style_read_ovly_records_REAL_(struct Style *self, LONG size)
+int gta2::Style_read_ovly_records_REAL_(Style *self, LONG size)
 {
-  return gta2::FileMgr_SeekPosition((struct FileMgr *)self, (int)&size);
+  return gta2::FileMgr_SeekPosition((FileMgr *)self, (int)&size);
 }
 
 
 // 0x004bfb10: Style::read_psxt_records_REAL
 // IDA: Style::read_psxt_records_REAL
 // Ghidra: ---
-int gta2::Style_read_psxt_records_REAL(struct Style *self, LONG size)
+int gta2::Style_read_psxt_records_REAL(Style *self, LONG size)
 {
-  return gta2::FileMgr_SeekPosition((struct FileMgr *)self, (int)&size);
+  return gta2::FileMgr_SeekPosition((FileMgr *)self, (int)&size);
 }
 
 
 // 0x004bfb20: Style::read_sprg_records_REAL
 // IDA: Style::read_sprg_records_REAL
 // Ghidra: ---
-int gta2::Style_read_sprg_records_REAL(struct Style *self, int a2)
+int gta2::Style_read_sprg_records_REAL(Style *self, int a2)
 {
   FILE *v3; // eax
 
@@ -684,7 +684,7 @@ int gta2::Style_read_sprg_records_REAL(struct Style *self, int a2)
 // 0x004bfb50: Style::read_ppal_records_REAL
 // IDA: Style::read_ppal_records_REAL
 // Ghidra: ---
-unsigned int gta2::Style_read_ppal_records_REAL(struct Style *self, unsigned int a2)
+unsigned int gta2::Style_read_ppal_records_REAL(Style *self, unsigned int a2)
 {
   FILE *v3; // eax
   unsigned int result; // eax
@@ -701,7 +701,7 @@ unsigned int gta2::Style_read_ppal_records_REAL(struct Style *self, unsigned int
 // 0x004bfb80: Style::read_palx_records_REAL
 // IDA: Style::read_palx_records_REAL
 // Ghidra: ---
-int gta2::Style_read_palx_records_REAL(struct Style *self, int a2)
+int gta2::Style_read_palx_records_REAL(Style *self, int a2)
 {
   FILE *v3; // eax
   int v5; // [esp-10h] [ebp-14h]
@@ -719,13 +719,13 @@ int gta2::Style_read_palx_records_REAL(struct Style *self, int a2)
 // 0x004bfbe0: Style::read_obji_records_REAL
 // IDA: Style::read_obji_records_REAL
 // Ghidra: Style::FUN_004bfbe0
-void gta2::Style_read_obji_records_REAL(struct Style *self,size_t size,int param_2,undefined4 param_3, uint pSize)
+void gta2::Style_read_obji_records_REAL(Style *self,size_t size,int param_2,undefined4 param_3, uint pSize)
 {
   void *size_00;
   
   size_00 = CreateBuffer(size);
   self->Size = size_00;
-  gta2::FileMgr_Read((struct FileMgr *)&size,(size_t)size_00);
+  gta2::FileMgr_Read((FileMgr *)&size,(size_t)size_00);
   if (0xffff < size >> 1) {
     gta2::DebugLog(0x3fc,"style.cpp",0x49d);
     size = pSize;
@@ -743,13 +743,13 @@ void gta2::Style_read_obji_records_REAL(struct Style *self,size_t size,int param
 // 0x004bfc60: Style::read_sprx_records_REAL
 // IDA: Style::read_sprx_records_REAL
 // Ghidra: Style::FUN_004bfc60
-void gta2::Style_read_sprx_records_REAL(struct Style *self,size_t siZe,undefined4 param_2, undefined4 param_3,uint param_4)
+void gta2::Style_read_sprx_records_REAL(Style *self,size_t siZe,undefined4 param_2, undefined4 param_3,uint param_4)
 {
   void *size;
   
   size = CreateBuffer(siZe + 8);
   self->SPRX = (int)size;
-  gta2::FileMgr_Read((struct FileMgr *)&siZe,(size_t)size);
+  gta2::FileMgr_Read((FileMgr *)&siZe,(size_t)size);
   if (0xffff < siZe >> 3) {
     gta2::DebugLog(0x3ed,"style.cpp",0x4b2);
     siZe = param_4;
@@ -762,7 +762,7 @@ void gta2::Style_read_sprx_records_REAL(struct Style *self,size_t siZe,undefined
 // 0x004bfdd0: Style::read_fonb_chunk_REAL
 // IDA: Style::read_fonb_chunk_REAL
 // Ghidra: Style::FUN_004bfdd0
-void gta2::Style_read_fonb_chunk_REAL(struct Style *self,size_t size,undefined4 param_2, undefined4 param_3,size_t pSize)
+void gta2::Style_read_fonb_chunk_REAL(Style *self,size_t size,undefined4 param_2, undefined4 param_3,size_t pSize)
 {
   short sVar1;
   struct Car *pCVar2;
@@ -774,9 +774,9 @@ void gta2::Style_read_fonb_chunk_REAL(struct Style *self,size_t size,undefined4 
     gta2::DebugLog(0x409,"style.cpp",0x4f8);
     size = pSize;
   }
-  pCVar2 = (struct Car *)CreateBuffer(size);
+  pCVar2 = (Car *)CreateBuffer(size);
   self->ColorCar = pCVar2;
-  gta2::FileMgr_Read((struct FileMgr *)&pSize,(size_t)pCVar2);
+  gta2::FileMgr_Read((FileMgr *)&pSize,(size_t)pCVar2);
   this_00 = (void *)((uint)*(ushort *)&self->ColorCar->Turret * 2 + 2);
   if ((void *)pSize != this_00) {
     gta2::DebugLog(0x409,"style.cpp",0x4fb);
@@ -794,10 +794,10 @@ void gta2::Style_read_fonb_chunk_REAL(struct Style *self,size_t size,undefined4 
 // 0x004bfe70: Style::read_sprb_records_REAL
 // IDA: Style::read_sprb_records_REAL
 // Ghidra: ---
-int gta2::Style_read_sprb_records_REAL(struct Style *self, int a2)
+int gta2::Style_read_sprb_records_REAL(Style *self, int a2)
 {
   _DWORD *v3; // eax
-  struct S15_001 *v4; // eax
+  S15_001 *v4; // eax
   int v6; // [esp-1Ch] [ebp-20h]
   int v7; // [esp+0h] [ebp-4h]
 
@@ -807,12 +807,12 @@ int gta2::Style_read_sprb_records_REAL(struct Style *self, int a2)
   self->field_18 = (int)v3;
   if ( !v3 )
     gta2::debug_log(0x20u, "style.cpp", 1295);
-  v4 = (struct S15_001 *)gta2::operator_new(0xCu);
+  v4 = (S15_001 *)gta2::operator_new(0xCu);
   self->field_14 = v4;
   if ( !v4 )
     gta2::debug_log(0x20u, "style.cpp", 1297);
   gta2::FileMgr_Read((FILE *)self->field_18, (SIZE_T *)&a2);
-  *self->field_14 = *(struct S15_001 *)self->field_18;
+  *self->field_14 = *(S15_001 *)self->field_18;
   return gta2::sub_4BF7B0(self->field_14, v7);
 }
 
@@ -820,7 +820,7 @@ int gta2::Style_read_sprb_records_REAL(struct Style *self, int a2)
 // 0x004bff20: Style::read_palb_chunk_REAL
 // IDA: Style::read_palb_chunk_REAL
 // Ghidra: ---
-void gta2::Style_read_palb_chunk_REAL(struct Style *self, int chunk_size)
+void gta2::Style_read_palb_chunk_REAL(Style *self, int chunk_size)
 {
   struct S15_0002 *v3; // eax
   _DWORD *v4; // eax
@@ -832,7 +832,7 @@ void gta2::Style_read_palb_chunk_REAL(struct Style *self, int chunk_size)
 
   if ( v8 != 16 )
     gta2::debug_log(0x409u, "style.cpp", 1315);
-  v3 = (struct S15_0002 *)gta2::operator_new(0x10u);
+  v3 = (S15_0002 *)gta2::operator_new(0x10u);
   self->S15_0002_ = v3;
   if ( !v3 )
     gta2::debug_log(0x20u, "style.cpp", 1317);
@@ -856,7 +856,7 @@ void gta2::Style_read_palb_chunk_REAL(struct Style *self, int chunk_size)
 // 0x004bffe0: Style::isCarRecyclable
 // IDA: Style::isCarRecyclable
 // Ghidra: ---
-bool gta2::Style_isCarRecyclable(struct Style *self, CarModel CarModel)
+bool gta2::Style_isCarRecyclable(Style *self, CarModel CarModel)
 {
   char *recy; // eax
   int v3; // edx
@@ -879,7 +879,7 @@ bool gta2::Style_isCarRecyclable(struct Style *self, CarModel CarModel)
 // 0x004c0010: Style::read_recy_chunk_REAL_
 // IDA: Style::read_recy_chunk_REAL_
 // Ghidra: ---
-int gta2::Style_read_recy_chunk_REAL_(struct Style *self, SIZE_T dwBytes)
+int gta2::Style_read_recy_chunk_REAL_(Style *self, SIZE_T dwBytes)
 {
   char *Buffer; // eax
   __int16 v4; // cx
@@ -895,17 +895,17 @@ int gta2::Style_read_recy_chunk_REAL_(struct Style *self, SIZE_T dwBytes)
 // 0x004c0040: Style::sub_4C0040
 // IDA: Style::sub_4C0040
 // Ghidra: Style::FUN_004c0040
-void gta2::Style_sub_4C0040(struct Style *self,int param_1)
+void gta2::Style_sub_4C0040(Style *self,int param_1)
 {
-  struct FileMgr *this_00;
+  FileMgr *this_00;
   short sVar1;
-  struct FileMgr *extraout_ECX;
-  struct FileMgr *extraout_ECX_00;
+  FileMgr *extraout_ECX;
+  FileMgr *extraout_ECX_00;
   uint local_8;
   int local_4;
   
   local_4 = 2;
-  gta2::FileMgr_Read((struct FileMgr *)&local_8,(size_t)&local_8);
+  gta2::FileMgr_Read((FileMgr *)&local_8,(size_t)&local_8);
   sVar1 = (short)local_8;
   this_00 = extraout_ECX;
   while (sVar1 != 0) {
@@ -921,7 +921,7 @@ void gta2::Style_sub_4C0040(struct Style *self,int param_1)
 // 0x004c00a0: Style::read_spec_records_REAL
 // IDA: Style::read_spec_records_REAL
 // Ghidra: ---
-int gta2::Style_read_spec_records_REAL(struct Style *self)
+int gta2::Style_read_spec_records_REAL(Style *self)
 {
   gta2::Style_sub_4C0040(self, 2);
   gta2::Style_sub_4C0040(self, 3);
@@ -938,7 +938,7 @@ int gta2::Style_read_spec_records_REAL(struct Style *self)
 // 0x004c0100: Style::sub_4C0100
 // IDA: Style::sub_4C0100
 // Ghidra: ---
-unsigned int gta2::Style_sub_4C0100(struct Style *self)
+unsigned int gta2::Style_sub_4C0100(Style *self)
 {
   int v1; // edx
   int v2; // edi
@@ -968,9 +968,9 @@ unsigned int gta2::Style_sub_4C0100(struct Style *self)
 // 0x004c0130: Style::Style_Des
 // IDA: Style::Style_Des
 // Ghidra: ---
-void gta2::Style_Style_Des(struct Style *self)
+void gta2::Style_Style_Des(Style *self)
 {
-  struct S15_001 *v2; // eax
+  S15_001 *v2; // eax
   void *v3; // ecx
   void *v4; // edx
   struct S15_0002 *S15_0002; // eax
@@ -984,7 +984,7 @@ void gta2::Style_Style_Des(struct Style *self)
   void *v13; // eax
   void *v14; // eax
   void *v15; // eax
-  struct S284 *pCar_5C; // edx
+  S284 *pCar_5C; // edx
   void *v17; // eax
   void *v18; // eax
   struct S1501 *S1501; // eax
@@ -1066,7 +1066,7 @@ void gta2::Style_Style_Des(struct Style *self)
 // 0x004c03d0: Style::InitSpecArray
 // IDA: Style::InitSpecArray
 // Ghidra: ---
-Style * gta2::Style_InitSpecArray(struct Style *self)
+Style * gta2::Style_InitSpecArray(Style *self)
 {
   memset32(self, 1, 0x400u);
   return self;
@@ -1076,7 +1076,7 @@ Style * gta2::Style_InitSpecArray(struct Style *self)
 // 0x004c0410: Style::sub_4C0410
 // IDA: Style::sub_4C0410
 // Ghidra: Style::FUN_004c0410
-void gta2::Style_sub_4C0410(struct Style *self,size_t size,int param_2,undefined4 param_3, uint pSize)
+void gta2::Style_sub_4C0410(Style *self,size_t size,int param_2,undefined4 param_3, uint pSize)
 {
   char cVar1;
   S371 *pS371;
@@ -1130,7 +1130,7 @@ void gta2::Style_sub_4C0410(struct Style *self,size_t size,int param_2,undefined
       uVar5 = uVar5 + iVar3;
       pS372 = (S372 *)((int)&pS372[1].Next + iVar3 + -0xc);
       uVar4 = uVar4 + 1;
-      self = (struct Style *)param_2;
+      self = (Style *)param_2;
     } while (uVar5 < pSize);
     *(char *)(*(int *)(param_2 + 0x5c) + 0x400) = (char)uVar4;
     return;
@@ -1143,7 +1143,7 @@ void gta2::Style_sub_4C0410(struct Style *self,size_t size,int param_2,undefined
 // 0x004c0580: Style::read_cari_records_REAL
 // IDA: Style::read_cari_records_REAL
 // Ghidra: ---
-_DWORD * gta2::Style_read_cari_records_REAL(struct Style *self, FileMgr *dwBytes)
+_DWORD * gta2::Style_read_cari_records_REAL(Style *self, FileMgr *dwBytes)
 {
   FILE *Buffer; // eax
 
@@ -1157,9 +1157,9 @@ _DWORD * gta2::Style_read_cari_records_REAL(struct Style *self, FileMgr *dwBytes
 // 0x004c05b0: Style::parse_chunk
 // IDA: Style::parse_chunk
 // Ghidra: ---
-void gta2::Style_parse_chunk(struct Style *self, char *chunk_type, int chunk_size)
+void gta2::Style_parse_chunk(Style *self, char *chunk_type, int chunk_size)
 {
-  struct FileMgr *v4; // ecx
+  FileMgr *v4; // ecx
 
   if ( !gta2::_strncmp(chunk_type, "PALB", 4) )
   {
@@ -1199,15 +1199,15 @@ void gta2::Style_parse_chunk(struct Style *self, char *chunk_type, int chunk_siz
   }
   else if ( !gta2::_strncmp(chunk_type, "DELS", 4) )
   {
-    gta2::Style_read_dels_records_REAL(self, (struct FileMgr *)chunk_size);
+    gta2::Style_read_dels_records_REAL(self, (FileMgr *)chunk_size);
   }
   else if ( !gta2::_strncmp(chunk_type, "DELX", 4) )
   {
-    gta2::Style_read_delx_records_REAL(self, (struct FileMgr *)chunk_size);
+    gta2::Style_read_delx_records_REAL(self, (FileMgr *)chunk_size);
   }
   else if ( !gta2::_strncmp(chunk_type, "CARI", 4) )
   {
-    gta2::Style_read_cari_records_REAL(self, (struct FileMgr *)chunk_size);
+    gta2::Style_read_cari_records_REAL(self, (FileMgr *)chunk_size);
   }
   else if ( !gta2::_strncmp(chunk_type, "PSXT", 4) )
   {
@@ -1235,9 +1235,9 @@ void gta2::Style_parse_chunk(struct Style *self, char *chunk_type, int chunk_siz
 // 0x004c0820: Style::LoadFstyle
 // IDA: Style::LoadFstyle
 // Ghidra: ---
-unsigned int gta2::Style_LoadFstyle(struct Style *self, LPCSTR lpFileName)
+unsigned int gta2::Style_LoadFstyle(Style *self, LPCSTR lpFileName)
 {
-  struct FileMgr *v3; // ecx
+  FileMgr *v3; // ecx
   unsigned int size; // [esp+4h] [ebp-14h] BYREF
   FILE v6[2]; // [esp+8h] [ebp-10h] BYREF
   char a1[4]; // [esp+10h] [ebp-8h] BYREF
@@ -1248,7 +1248,7 @@ unsigned int gta2::Style_LoadFstyle(struct Style *self, LPCSTR lpFileName)
   gta2::FileMgr_Read(v6, &size);
   gta2::Chunk1(v6, "GBST");
   gta2::Chunk(v6, 700);
-  for ( size = 8; gta2::FileMgr_ReadLine((struct FileMgr *)a1, a1, (SIZE_T)&size); size = 8 )
+  for ( size = 8; gta2::FileMgr_ReadLine((FileMgr *)a1, a1, (SIZE_T)&size); size = 8 )
   {
     if ( chunk_size )
       gta2::Style_parse_chunk(self, a1, chunk_size);
@@ -1261,9 +1261,9 @@ unsigned int gta2::Style_LoadFstyle(struct Style *self, LPCSTR lpFileName)
 // 0x004c08d0: Style::Style
 // IDA: Style::Style
 // Ghidra: ---
-Style * gta2::Style_Style(struct Style *self)
+Style * gta2::Style_Style(Style *self)
 {
-  gta2::Style_InitSpecArray((struct Style *)self->arr1024);
+  gta2::Style_InitSpecArray((Style *)self->arr1024);
   self->recy = 0;
   self->n_recy = 0;
   self->field_14 = 0;
@@ -1301,7 +1301,7 @@ Style * gta2::Style_Style(struct Style *self)
 // 0x004c2eb0: Style::sub_4C2EB0
 // IDA: Style::sub_4C2EB0
 // Ghidra: ---
-int gta2::Style_sub_4C2EB0(struct Style *self, unsigned __int16 a2)
+int gta2::Style_sub_4C2EB0(Style *self, unsigned __int16 a2)
 {
   int v2; // eax
 
@@ -1314,7 +1314,7 @@ int gta2::Style_sub_4C2EB0(struct Style *self, unsigned __int16 a2)
 // 0x004c2ee0: Style::has_tiles
 // IDA: Style::has_tiles
 // Ghidra: ---
-bool gta2::Style_has_tiles(struct Style *self)
+bool gta2::Style_has_tiles(Style *self)
 {
   return self->Tiles != 0;
 }

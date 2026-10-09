@@ -44,14 +44,31 @@ $typeNames = @(
   'arg0','dest','this_00','this_01','code','int3','MEMORY','Len','uint32_t','uint3','ulonglong',
   'retaddr','ReturnedString','local_20','local_44','nullsub_76','a5','p1S371','param_3',
   'self','skilPolice','v1','v51','partOfLoadScrip','gGraeme','SNG','FontEnglish','FontJapan',
-  'ExceptionList','DestructorS801','FileName','PCM_FORMAT','PedModel','PlayerSlotSave_des',
+  'ExceptionList','FileName','PCM_FORMAT','PedModel','PlayerSlotSave_des',
   'S101_des','S125_Dec','S151_des','S152','S200_des','S371','S372','S40_Des','S41_Dec',
   'S46_Des','S58_Des','S63_dec','S65_dec','S67_Des','S71_Dec','S82_Des','S83_des','S94_Des',
-  'Weapon_dec','stru_669B70','stru_66AC54','stru_66AD3C','stru_66ADE0','stru_66B76C',
-  'log_random','log_routefinder','do_kill_phones_on_answer','do_show_imaginary',
-  'do_show_traffic_lights_info','do_text_id_test','show_brief_number','skip_audio',
-  'skip_buses','skip_dummies','skip_trains','skip_user','do_free','findFilePis'
+  'Weapon_dec','stru_669B70','stru_66AC54','stru_66AD3C','stru_66ADE0','stru_66B76C'
 )
+
+# Имена существующих типов собираются из заголовков, а не хардкодом: любое
+# "int X();" внутри namespace gta2 затенивает глобальный тип X, и все
+# последующие определения с таким параметром падают с C2061 ("syntax error:
+# missing ')'"). Примеры: SearchType (enum в gta2_enums.h), GlassInfo.
+$declaredTypes = New-Object 'System.Collections.Generic.HashSet[string]'
+foreach ($hdr in @('port\gta2_enums.h')) {
+  if (-not (Test-Path -LiteralPath $hdr)) { continue }
+  foreach ($ln in Get-Content -LiteralPath $hdr) {
+    $m = [regex]::Match($ln, '^\s*enum\s+(?<n>[A-Za-z_]\w*)\s*$')
+    if ($m.Success) { [void]$declaredTypes.Add($m.Groups['n'].Value) }
+  }
+}
+foreach ($hdr in @('port\gta2_protos.h', 'port\gta2_shim.h')) {
+  if (-not (Test-Path -LiteralPath $hdr)) { continue }
+  $all = Get-Content -LiteralPath $hdr -Raw
+  foreach ($m in [regex]::Matches($all, '\bstruct\s+(?<n>[A-Za-z_]\w*)\b')) {
+    [void]$declaredTypes.Add($m.Groups['n'].Value)
+  }
+}
 
 $sb = New-Object System.Text.StringBuilder
 [void]$sb.AppendLine('// missing_protos.h - авто-генерация: gen_missing_protos.ps1 <log>')
@@ -75,6 +92,7 @@ foreach ($n in ($names | Sort-Object)) {
   if ($known.Contains($n)) { continue }
   if ($typeNames -contains $n) { continue }
   if ($structNames.Contains($n)) { $typeClash += $n; continue }
+  if ($declaredTypes.Contains($n)) { $typeClash += $n; continue }
   [void]$sb.AppendLine("int $n();")
   $emitted++
 }

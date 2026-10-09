@@ -24,7 +24,7 @@ int gta2::S34_S34_sub_474F90(struct Viewport *self)
 // Ghidra: FUN_00476e00
 Viewport * gta2::S34_sub_476E00(void *self,Viewport *pS34)
 {
-  struct Viewport *pVVar1;
+  Viewport *pVVar1;
   
   pVVar1 = gta2::S33_S33_sub_476780(gCamera,pS34);
   return pVVar1;

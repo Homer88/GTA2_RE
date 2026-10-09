@@ -9,8 +9,8 @@
 // Ghidra: ---
 EventHandler * gta2::S61_sub_4829A0(struct CollisionBox *self)
 {
-  struct EventHandler *pS63; // edx
-  struct EventHandler *FirstElement; // esi
+  EventHandler *pS63; // edx
+  EventHandler *FirstElement; // esi
 
   pS63 = self->pS63;
   FirstElement = self->FirstElement;
@@ -27,7 +27,7 @@ EventHandler * gta2::S61_sub_4829A0(struct CollisionBox *self)
 // Ghidra: ---
 EventHandler * gta2::S61_sub_4829C0(struct CollisionBox *self)
 {
-  struct EventHandler *FirstElement; // esi
+  EventHandler *FirstElement; // esi
 
   FirstElement = self->FirstElement;
   self->FirstElement = self->FirstElement->NextElement;
@@ -42,7 +42,7 @@ EventHandler * gta2::S61_sub_4829C0(struct CollisionBox *self)
 // Ghidra: ---
 EventHandler * gta2::S61_sub_4829E0(struct CollisionBox *self, EventHandler *a2)
 {
-  struct EventHandler *result; // eax
+  EventHandler *result; // eax
 
   result = a2;
   a2->NextElement = self->pS63;
@@ -56,7 +56,7 @@ EventHandler * gta2::S61_sub_4829E0(struct CollisionBox *self, EventHandler *a2)
 // Ghidra: ---
 EventHandler * gta2::S61_sub_4829F0(struct CollisionBox *self, EventHandler *a2)
 {
-  struct EventHandler *v2; // eax
+  EventHandler *v2; // eax
 
   *(_QWORD *)&v2 = (unsigned int)self->pS63;
   if ( v2 )
@@ -94,8 +94,8 @@ int gta2::S61_sub_483EA0(struct CollisionBox *self)
 // Ghidra: ---
 CollisionBox * gta2::S61_S61(struct CollisionBox *self)
 {
-  struct EventHandler *S63; // edi
-  struct EventHandler *pS63; // eax
+  EventHandler *S63; // edi
+  EventHandler *pS63; // eax
   int count; // edx
 
   S63 = self->S63;
@@ -134,12 +134,12 @@ CollisionBox * gta2::S61_S61_Des(struct CollisionBox *self, char a2)
 // Ghidra: ---
 SpriteS1 * gta2::S61_sub_484D60(struct CollisionBox *self, SpriteS1 *a2)
 {
-  struct SpriteS1 *pS63; // esi
-  struct SpriteS1 *v4; // edi
-  struct SpriteS1 *result; // eax
-  struct EventHandler *FirstElement; // edx
+  SpriteS1 *pS63; // esi
+  SpriteS1 *v4; // edi
+  SpriteS1 *result; // eax
+  EventHandler *FirstElement; // edx
 
-  pS63 = (struct SpriteS1 *)self->pS63;
+  pS63 = (SpriteS1 *)self->pS63;
   v4 = 0;
   if ( pS63 )
   {
@@ -151,20 +151,20 @@ SpriteS1 * gta2::S61_sub_484D60(struct CollisionBox *self, SpriteS1 *a2)
       if ( !pS63 )
         return result;
     }
-    result = gta2::S63_sub_484910((struct EventHandler *)pS63);
+    result = gta2::S63_sub_484910((EventHandler *)pS63);
     if ( v4 )
     {
       result = pS63->FirstElement;
       v4->FirstElement = pS63->FirstElement;
-      pS63->FirstElement = (struct SpriteS1 *)self->FirstElement;
+      pS63->FirstElement = (SpriteS1 *)self->FirstElement;
     }
     else
     {
       FirstElement = self->FirstElement;
-      self->pS63 = (struct EventHandler *)pS63->FirstElement;
-      pS63->FirstElement = (struct SpriteS1 *)FirstElement;
+      self->pS63 = (EventHandler *)pS63->FirstElement;
+      pS63->FirstElement = (SpriteS1 *)FirstElement;
     }
-    self->FirstElement = (struct EventHandler *)pS63;
+    self->FirstElement = (EventHandler *)pS63;
   }
   return result;
 }
@@ -175,7 +175,7 @@ SpriteS1 * gta2::S61_sub_484D60(struct CollisionBox *self, SpriteS1 *a2)
 // Ghidra: ---
 EventHandler * gta2::S61_sub_484DB0(struct CollisionBox *self, EventHandler *a2)
 {
-  struct EventHandler *result; // eax
+  EventHandler *result; // eax
 
   gta2::S63_sub_484910(a2);
   result = self->FirstElement;

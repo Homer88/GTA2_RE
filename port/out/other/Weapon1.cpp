@@ -9,10 +9,10 @@
 // Ghidra: ---
 Weapon * gta2::Weapon1_sub_4A4F20(struct WeaponDatabase *self, Weapon *pWeapon)
 {
-  struct Weapon *NextWeapon; // esi
-  struct Weapon *v4; // edi
-  struct Weapon *result; // eax
-  struct Weapon *sWeapon; // edx
+  Weapon *NextWeapon; // esi
+  Weapon *v4; // edi
+  Weapon *result; // eax
+  Weapon *sWeapon; // edx
 
   NextWeapon = self->NextWeapon;
   v4 = 0;
@@ -59,8 +59,8 @@ Weapon * gta2::Weapon1_GetNextWeapon(struct WeaponDatabase *self)
 // Ghidra: ---
 Weapon * gta2::Weapon1_MoveWeaponToNextList(struct WeaponDatabase *self)
 {
-  struct Weapon *NextWeapon; // edx
-  struct Weapon *sWeapon; // esi
+  Weapon *NextWeapon; // edx
+  Weapon *sWeapon; // esi
 
   NextWeapon = self->NextWeapon;
   sWeapon = self->sWeapon;
@@ -77,7 +77,7 @@ Weapon * gta2::Weapon1_MoveWeaponToNextList(struct WeaponDatabase *self)
 // Ghidra: ---
 Weapon * gta2::Weapon1_sub_4CC9E0(struct WeaponDatabase *self)
 {
-  struct Weapon *sWeapon; // esi
+  Weapon *sWeapon; // esi
 
   sWeapon = self->sWeapon;
   self->sWeapon = self->sWeapon->NextWeapon;

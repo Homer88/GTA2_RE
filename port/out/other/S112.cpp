@@ -211,7 +211,7 @@ int gta2::S112_sub_4A9930(struct S112 *self)
 // Ghidra: ---
 int gta2::S112_sub_4AADD0(struct S112 *self)
 {
-  struct S169 *v2; // ebx
+  S169 *v2; // ebx
   struct Ped *Ped; // esi
   int WantedLevel; // eax
   struct Ped *v5; // edi
@@ -219,17 +219,17 @@ int gta2::S112_sub_4AADD0(struct S112 *self)
   struct Ped *v7; // [esp+10h] [ebp-8h] BYREF
   int v8; // [esp+14h] [ebp-4h] BYREF
 
-  v2 = gta2::Medical_sub_404C40((struct Medical *)self);
+  v2 = gta2::Medical_sub_404C40((Medical *)self);
   Ped = gta2::Character_CreatePed(gCharacter);
   gta2::Ped_SetSearchType(Ped, SEARCHTYPE_AREA_PLAYER_ONLY);
   gta2::Ped_SetCurrentOccupation(Ped, POLICE);
   gta2::Ped_PutPedInCarRelated(Ped, self->S110_->Car);
   gta2::Ped_PedSetObjective(Ped, 14, 0);
-  gta2::S202_sub_40CE30((struct S202 *)&v7, self->X);
+  gta2::S202_sub_40CE30((S202 *)&v7, self->X);
   Ped->Weapon2 = (int)v7;
-  gta2::S202_sub_40CE30((struct S202 *)&v7, self->Y);
+  gta2::S202_sub_40CE30((S202 *)&v7, self->Y);
   Ped->Gang_ = v7;
-  gta2::S202_sub_40CE30((struct S202 *)&v7, self->Z);
+  gta2::S202_sub_40CE30((S202 *)&v7, self->Z);
   Ped->DriverPed = (int)v7;
   gta2::Ped_SetRemap(Ped, 0);
   Ped->Invulnerability = GRAPHIC_GANG;
@@ -241,14 +241,14 @@ int gta2::S112_sub_4AADD0(struct S112 *self)
       Ped->WeaponSelect = 0;
       gta2::Ped_sub_43AD10(Ped, Pistolet);
       gta2::Ped_SetHealth(Ped, 50);
-      Ped->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v8, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+      Ped->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v8, (PublicTransport *)&unk_66B93C)->FirstElement;
       goto LABEL_7;
     }
     if ( WantedLevel == 2 )
     {
       gta2::Ped_sub_43AD10(Ped, Pistolet);
       gta2::Ped_SetHealth(Ped, 100);
-      Ped->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v7, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+      Ped->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v7, (PublicTransport *)&unk_66B93C)->FirstElement;
       goto LABEL_7;
     }
   }
@@ -268,13 +268,13 @@ LABEL_7:
     v5->WeaponSelect = 0;
     gta2::Ped_sub_43AD10(v5, Pistolet);
     gta2::Ped_SetHealth(v5, 50);
-    v5->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v7, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+    v5->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v7, (PublicTransport *)&unk_66B93C)->FirstElement;
   }
   else if ( self->S113_->field_4 == (void *)2 )
   {
     gta2::Ped_sub_43AD10(v5, Pistolet);
     gta2::Ped_SetHealth(v5, 100);
-    v5->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v8, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+    v5->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v8, (PublicTransport *)&unk_66B93C)->FirstElement;
   }
   else
   {
@@ -304,24 +304,24 @@ LABEL_7:
 // Ghidra: ---
 int gta2::S112_sub_4AB060(struct S112 *self)
 {
-  struct S169 *v2; // ebx
+  S169 *v2; // ebx
   struct Ped *Ped; // edi
   struct Ped *v4; // esi
   int result; // eax
   unsigned __int8 v6; // [esp-4h] [ebp-18h]
   unsigned __int8 Id[4]; // [esp+10h] [ebp-4h] BYREF
 
-  v2 = gta2::Medical_sub_404C40((struct Medical *)self);
+  v2 = gta2::Medical_sub_404C40((Medical *)self);
   Ped = gta2::Character_CreatePed(gCharacter);
   gta2::Ped_SetSearchType(Ped, SEARCHTYPE_AREA_PLAYER_ONLY);
   gta2::Ped_SetCurrentOccupation(Ped, SWAT);
   gta2::Ped_PutPedInCarRelated(Ped, self->S110_->Car);
   gta2::Ped_PedSetObjective(Ped, 14, 0);
-  gta2::S202_sub_40CE30((struct S202 *)Id, self->X);
+  gta2::S202_sub_40CE30((S202 *)Id, self->X);
   Ped->Weapon2 = *(_DWORD *)Id;
-  gta2::S202_sub_40CE30((struct S202 *)Id, self->Y);
+  gta2::S202_sub_40CE30((S202 *)Id, self->Y);
   Ped->Gang_ = *(Ped **)Id;
-  gta2::S202_sub_40CE30((struct S202 *)Id, self->Z);
+  gta2::S202_sub_40CE30((S202 *)Id, self->Z);
   Ped->DriverPed = *(_DWORD *)Id;
   gta2::Ped_SetRemap(Ped, -1);
   gta2::Ped_SetNPCWeapon(Ped, Pistolet);
@@ -369,14 +369,14 @@ void gta2::S112_sub_4AB400(struct S112 *self)
 {
   struct S110 *S110; // esi
   struct Car *Car; // ebx
-  struct S169 *v4; // ebp
+  S169 *v4; // ebp
   struct Ped *j; // esi
-  struct S169 *v6; // eax
+  S169 *v6; // eax
   int v7; // edx
   struct Ped *v8; // esi
-  struct S169 *NPC; // ecx
+  S169 *NPC; // ecx
   struct Ped *i; // esi
-  struct S169 *v11; // eax
+  S169 *v11; // eax
   int v12; // edx
   struct Ped *Ped; // ebx
   unsigned __int8 v14; // [esp+10h] [ebp-4h]
@@ -482,23 +482,23 @@ void gta2::S112_sub_4AB610(struct S112 *self)
 {
   struct Car *CurrentCar; // eax
   struct S110 *S110; // eax
-  struct S169 *NPC; // edi
+  S169 *NPC; // edi
   struct Ped *i; // edi
-  struct S169 *v6; // eax
+  S169 *v6; // eax
   int v7; // edx
   struct S110 *v8; // ebp
   char v9; // bl
-  struct S169 *v10; // edi
+  S169 *v10; // edi
   struct Ped *v11; // ecx
   unsigned __int8 v12; // bl
   struct Ped *j; // edi
   struct Car *Car; // edi
   struct S110 *v15; // edi
-  struct S169 *v16; // ecx
+  S169 *v16; // ecx
   struct S110 *v17; // edi
   struct Car *v18; // ebx
   struct Ped *Ped; // edi
-  struct S169 *v20; // eax
+  S169 *v20; // eax
   struct S110 *v21; // eax
   struct Car *v22; // ebx
   char v23; // [esp+13h] [ebp-5h]
@@ -631,9 +631,9 @@ LABEL_21:
 void gta2::S112_sub_4AB8C0(struct S112 *self)
 {
   struct S110 *S110; // eax
-  struct S169 *NPC; // ecx
+  S169 *NPC; // ecx
   struct Ped *i; // esi
-  struct S169 *v5; // eax
+  S169 *v5; // eax
   int v6; // edx
   struct Ped *Ped; // esi
   char Count; // al
@@ -846,7 +846,7 @@ void gta2::S112_sub_4AC080(struct S112 *self)
   int v14; // eax
   struct S113 *v15; // edx
   struct Ped *v16; // edi
-  struct S169 *NPC; // eax
+  S169 *NPC; // eax
   unsigned __int8 v18; // [esp+8h] [ebp-28h]
   unsigned __int8 a2[4]; // [esp+Ch] [ebp-24h] BYREF
   unsigned __int8 v20[4]; // [esp+10h] [ebp-20h] BYREF
@@ -946,21 +946,21 @@ LABEL_15:
               gta2::S112_sub_4ABA90(self);
               S113 = self->S113_;
               v12 = unk_66B794;
-              LOWORD(v13) = gta2::Car_sub_403820((struct Car *)&unk_66B794->Weapon2, &S113->field_10);
-              if ( v13 || (LOWORD(v14) = gta2::Car_sub_403820((struct Car *)&v12->Gang_, &S113->field_14), v14) )
+              LOWORD(v13) = gta2::Car_sub_403820((Car *)&unk_66B794->Weapon2, &S113->field_10);
+              if ( v13 || (LOWORD(v14) = gta2::Car_sub_403820((Car *)&v12->Gang_, &S113->field_14), v14) )
               {
-                a2[0] = gta2::Weapon_sub_41C1E0((struct Weapon *)&S113->field_10);
-                v20[0] = gta2::Weapon_sub_41C1E0((struct Weapon *)&S113->field_14);
-                v21[0] = gta2::Weapon_sub_41C1E0((struct Weapon *)&S113->field_18);
+                a2[0] = gta2::Weapon_sub_41C1E0((Weapon *)&S113->field_10);
+                v20[0] = gta2::Weapon_sub_41C1E0((Weapon *)&S113->field_14);
+                v21[0] = gta2::Weapon_sub_41C1E0((Weapon *)&S113->field_18);
                 if ( gta2::S95_sub_49D7A0(gS95, 1, a2, v20, v21, 0) )
                 {
-                  gta2::S202_sub_40CE30((struct S202 *)&v25, a2[0]);
+                  gta2::S202_sub_40CE30((S202 *)&v25, a2[0]);
                   unk_66B794->Weapon2 = v25;
                   *(_DWORD *)&self->S113_->field_10 = unk_66B794->Weapon2;
-                  gta2::S202_sub_40CE30((struct S202 *)&v26, v20[0]);
+                  gta2::S202_sub_40CE30((S202 *)&v26, v20[0]);
                   unk_66B794->Gang_ = v26;
                   *(_DWORD *)&self->S113_->field_14 = unk_66B794->Gang_;
-                  gta2::S202_sub_40CE30((struct S202 *)&v27, v21[0]);
+                  gta2::S202_sub_40CE30((S202 *)&v27, v21[0]);
                   unk_66B794->DriverPed = v27;
                   *(_DWORD *)&self->S113_->field_18 = unk_66B794->DriverPed;
                 }
@@ -1000,14 +1000,14 @@ LABEL_40:
               break;
             case 52:
               gta2::Ped_PedSetObjective(pPed, 14, 9999);
-              v8 = gta2::Weapon_sub_41C1E0((struct Weapon *)&self->S113_->field_10);
-              gta2::S202_sub_40CE30((struct S202 *)&v22, v8);
+              v8 = gta2::Weapon_sub_41C1E0((Weapon *)&self->S113_->field_10);
+              gta2::S202_sub_40CE30((S202 *)&v22, v8);
               unk_66B794->Weapon2 = v22;
-              v9 = gta2::Weapon_sub_41C1E0((struct Weapon *)&self->S113_->field_14);
-              gta2::S202_sub_40CE30((struct S202 *)&v23, v9);
+              v9 = gta2::Weapon_sub_41C1E0((Weapon *)&self->S113_->field_14);
+              gta2::S202_sub_40CE30((S202 *)&v23, v9);
               unk_66B794->Gang_ = v23;
-              v10 = gta2::Weapon_sub_41C1E0((struct Weapon *)&self->S113_->field_18);
-              gta2::S202_sub_40CE30((struct S202 *)&v24, v10);
+              v10 = gta2::Weapon_sub_41C1E0((Weapon *)&self->S113_->field_18);
+              gta2::S202_sub_40CE30((S202 *)&v24, v10);
               unk_66B794->DriverPed = v24;
               break;
             default:
@@ -1046,12 +1046,12 @@ void gta2::S112_sub_4AC580(struct S112 *self)
   _DWORD *v14; // eax
   struct S113 *v15; // edi
   struct S110 *v16; // eax
-  struct S169 *v17; // eax
+  S169 *v17; // eax
   struct S110 *v18; // eax
-  struct S169 *v19; // eax
+  S169 *v19; // eax
   struct Ped *v20; // ecx
   struct S110 *v21; // eax
-  struct S169 *NPC; // eax
+  S169 *NPC; // eax
   struct Ped *LinkedPed; // ebp
   struct Ped *Passenger; // eax
   struct S113 *v25; // ecx
@@ -1059,14 +1059,14 @@ void gta2::S112_sub_4AC580(struct S112 *self)
   void *v27; // ecx
   int *v28; // edi
   struct Car *CurrentCar; // ecx
-  struct SpriteS1 *v30; // eax
+  SpriteS1 *v30; // eax
   char v31; // al
   struct Ped *v32; // edi
   struct Ped *pPed; // edi
-  struct S169 *v34; // ecx
-  struct SpriteS1 *v35; // eax
+  S169 *v34; // ecx
+  SpriteS1 *v35; // eax
   int v36; // eax
-  struct S169 *v37; // eax
+  S169 *v37; // eax
   char v38; // [esp+Bh] [ebp-25h]
   unsigned __int8 v39; // [esp+Ch] [ebp-24h]
   char v40[4]; // [esp+10h] [ebp-20h] BYREF
@@ -1240,7 +1240,7 @@ LABEL_52:
               self->field_35 = 0;
             }
           }
-          else if ( gta2::Ped_GetLinkedPed(Ped) == (struct Ped *)self->field_30 && gta2::Ped_GetLinkedPed(Ped) )
+          else if ( gta2::Ped_GetLinkedPed(Ped) == (Ped *)self->field_30 && gta2::Ped_GetLinkedPed(Ped) )
           {
             gta2::Ped_SetPed2(Ped, self->S113_->Ped_);
           }
@@ -1317,17 +1317,17 @@ LABEL_71:
           else
           {
             v28 = &self->field_8;
-            self->field_8 = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66BB2C, (struct SpriteS1 *)&v45, &unk_66BAB0)->FirstElement;
+            self->field_8 = (int)gta2::Radar_AddBlip((Tango *)&unk_66BB2C, (SpriteS1 *)&v45, &unk_66BAB0)->FirstElement;
           }
           if ( self->S110_->field_24 != 1 )
             goto LABEL_87;
-          if ( gta2::Car_sub_403800((struct Car *)v28, (int)&unk_66BB2C) )
+          if ( gta2::Car_sub_403800((Car *)v28, (int)&unk_66BB2C) )
             goto LABEL_81;
           CurrentCar = v26->Ped_->field_10B;
           if ( !CurrentCar )
             goto LABEL_87;
-          v30 = gta2::Car_sub_421D90(CurrentCar, (struct SpriteS1 *)v46);
-          if ( gta2::Car_sub_403800((struct Car *)v30, (int)&unk_66B7BC) )
+          v30 = gta2::Car_sub_421D90(CurrentCar, (SpriteS1 *)v46);
+          if ( gta2::Car_sub_403800((Car *)v30, (int)&unk_66B7BC) )
           {
             v31 = self->field_35 + 1;
             self->field_35 = v31;
@@ -1336,7 +1336,7 @@ LABEL_71:
           }
           else
           {
-            if ( gta2::Car_sub_403800((struct Car *)v28, (int)&unk_66B840) )
+            if ( gta2::Car_sub_403800((Car *)v28, (int)&unk_66B840) )
             {
 LABEL_81:
               v32 = unk_66B794;
@@ -1374,8 +1374,8 @@ LABEL_87:
           }
           break;
         case 27:
-          v35 = gta2::Car_sub_421D90(self->S110_->Car, (struct SpriteS1 *)v47);
-          LOBYTE(v36) = gta2::Player_CheckCondition((struct Player *)v35, &unk_66BA64);
+          v35 = gta2::Car_sub_421D90(self->S110_->Car, (SpriteS1 *)v47);
+          LOBYTE(v36) = gta2::Player_CheckCondition((Player *)v35, &unk_66BA64);
           if ( v36 )
           {
             gta2::Ped_PedSetObjective(unk_66B794, 36, 9999);
@@ -1462,13 +1462,13 @@ void gta2::S112_sub_4ACE80(struct S112 *self)
   struct S113 *v17; // esi
   struct Ped *pPed_1; // esi
   struct S110 *v19; // eax
-  struct S169 *NPC; // eax
-  struct S169 *v21; // eax
+  S169 *NPC; // eax
+  S169 *v21; // eax
   struct Car *Car; // eax
   struct EngineStruct *v23; // eax
   char v24; // al
   char v25; // al
-  struct S112 *v26; // ecx
+  S112 *v26; // ecx
   int X; // [esp+10h] [ebp-4h] BYREF
 
   unk_66B79C = 1;
@@ -1674,7 +1674,7 @@ LABEL_52:
 char gta2::S112_sub_4AD310(struct S112 *self)
 {
   struct S110 *S110; // ecx
-  struct S169 *NPC; // eax
+  S169 *NPC; // eax
   struct Car *Car; // ecx
   struct S110 *v5; // ebp
   struct EngineStruct *EngineStruct; // eax
@@ -1691,8 +1691,8 @@ char gta2::S112_sub_4AD310(struct S112 *self)
   unk_66B79C = 1;
   LOBYTE(X) = 0;
   S110 = self->S110_;
-  NPC = (struct S169 *)S110->field_24;
-  if ( NPC == (struct S169 *)2 || !NPC || (Car = S110->Car, Car->field_76 > 80) )
+  NPC = (S169 *)S110->field_24;
+  if ( NPC == (S169 *)2 || !NPC || (Car = S110->Car, Car->field_76 > 80) )
   {
     self->State = 6;
   }
@@ -1817,7 +1817,7 @@ void gta2::S112_sub_4AD600(struct S112 *self)
 {
   struct S110 *S110; // eax
   struct Ped *Ped; // esi
-  struct S169 *pS169; // ecx
+  S169 *pS169; // ecx
   struct Ped *v5; // esi
 
   S110 = self->S110_;

@@ -7,7 +7,7 @@
 // 0x00472fd0: Ped::sub_472FD0
 // IDA: Ped::sub_472FD0
 // Ghidra: ---
-bool gta2::Ped_sub_472FD0(struct Ped *self)
+bool gta2::Ped_sub_472FD0(Ped *self)
 {
   return self->field_1D8 == 99;
 }
@@ -16,7 +16,7 @@ bool gta2::Ped_sub_472FD0(struct Ped *self)
 // 0x00482080: Ped::SetMoneyValue
 // IDA: Ped::SetMoneyValue
 // Ghidra: ---
-void gta2::Ped_SetMoneyValue(struct Ped *self)
+void gta2::Ped_SetMoneyValue(Ped *self)
 {
   self->PositionX1 &= 0xFBFFFFFF;
 }
@@ -25,7 +25,7 @@ void gta2::Ped_SetMoneyValue(struct Ped *self)
 // 0x00493040: Ped::FUN_00493040
 // IDA: sub_493040
 // Ghidra: Ped::FUN_00493040
-byte gta2::Ped_FUN_00493040(struct Ped *self,GameObject *pGameObject)
+byte gta2::Ped_FUN_00493040(Ped *self,GameObject *pGameObject)
 {
   int iVar1;
   
@@ -44,7 +44,7 @@ byte gta2::Ped_FUN_00493040(struct Ped *self,GameObject *pGameObject)
 // 0x004a5010: Ped::sub_4A5010
 // IDA: Ped::sub_4A5010
 // Ghidra: Ped::FUN_004a5010
-void gta2::Ped_sub_4A5010(struct Ped *self)
+void gta2::Ped_sub_4A5010(Ped *self)
 {
   uint uVar1;
   
@@ -64,7 +64,7 @@ void gta2::Ped_sub_4A5010(struct Ped *self)
 // 0x004a5020: Ped::sub_4A5020
 // IDA: Ped::sub_4A5020
 // Ghidra: ---
-int gta2::Ped_sub_4A5020(struct Ped *self)
+int gta2::Ped_sub_4A5020(Ped *self)
 {
   return (int)self->GameObject2;
 }
@@ -73,7 +73,7 @@ int gta2::Ped_sub_4A5020(struct Ped *self)
 // 0x004a5040: Ped::IsTargetCarDoor
 // IDA: Ped::IsTargetCarDoor
 // Ghidra: ---
-bool gta2::Ped_IsTargetCarDoor(struct Ped *self)
+bool gta2::Ped_IsTargetCarDoor(Ped *self)
 {
   return self->PositionZ1 != 1;
 }
@@ -82,7 +82,7 @@ bool gta2::Ped_IsTargetCarDoor(struct Ped *self)
 // 0x004a5050: Ped::SetHealthFull
 // IDA: Ped::SetHealthFull
 // Ghidra: ---
-__int16 gta2::Ped_SetHealthFull(struct Ped *self)
+__int16 gta2::Ped_SetHealthFull(Ped *self)
 {
   __int16 result; // ax
 
@@ -94,7 +94,7 @@ __int16 gta2::Ped_SetHealthFull(struct Ped *self)
 // 0x004a5060: Ped::sub_4A5060
 // IDA: Ped::sub_4A5060
 // Ghidra: ---
-void gta2::Ped_sub_4A5060(struct Ped *self)
+void gta2::Ped_sub_4A5060(Ped *self)
 {
   self->PositionX1 |= 0x4000000u;
 }
@@ -112,7 +112,7 @@ undefined4 gta2::Ped_GetID(int param_1)
 // 0x004cca90: Ped::FUN_004cca90
 // IDA: sub_4CCA90
 // Ghidra: Ped::FUN_004cca90
-void gta2::Ped_FUN_004cca90(struct Ped *self,undefined2 *param_1)
+void gta2::Ped_FUN_004cca90(Ped *self,undefined2 *param_1)
 {
   *param_1 = self->field4_0x12e;
   return;

@@ -49,13 +49,13 @@ int gta2::MapRelatedStruct_sub_464060(struct MapRelatedStruct *self, int a2, int
 S16_01 * gta2::MapRelatedStruct_sub_464110(struct MapRelatedStruct *self, int a2, int a3, int a4, char a5)
 {
   unsigned int *v6; // eax
-  struct S16_01 *result; // eax
-  struct S16_01 *v8; // edi
+  S16_01 *result; // eax
+  S16_01 *v8; // edi
 
   v6 = (unsigned int *)gta2::Map_sub_42A830(self->Map_, a3, a2);
-  result = (struct S16_01 *)gta2::MapRelatedStruct_sub_463C30(self, *v6, a4, a5);
+  result = (S16_01 *)gta2::MapRelatedStruct_sub_463C30(self, *v6, a4, a5);
   v8 = result;
-  if ( result != (struct S16_01 *)-1 )
+  if ( result != (S16_01 *)-1 )
   {
     *(_DWORD *)gta2::Map_sub_42A830(self->Map_, a3, a2) = result;
     return gta2::S16_01_sub_463990(&self->S16_01_, a2, a3, (int)v8);
@@ -131,9 +131,9 @@ unsigned int gta2::MapRelatedStruct_sub_464250(Map **self, unsigned int a2, unsi
   struct Map *v4; // esi
 
   v4 = *self;
-  self[216] = (struct Map *)((char *)(*self)->File + (a2 >> 2));
-  self[213] = (struct Map *)(v4->field_40004 + a3 / 0xC);
-  self[201] = (struct Map *)(a4 >> 3);
+  self[216] = (Map *)((char *)(*self)->File + (a2 >> 2));
+  self[213] = (Map *)(v4->field_40004 + a3 / 0xC);
+  self[201] = (Map *)(a4 >> 3);
   return sub_463940(v4, (int)(self + 1));
 }
 
@@ -430,7 +430,7 @@ int gta2::MapRelatedStruct_sub_4646A0(struct MapRelatedStruct *self, int a2)
   int v22; // [esp-4h] [ebp-14h] BYREF
   int v23; // [esp+8h] [ebp-8h]
 
-  pMap = (struct Map *)gta2::operator_new(0x40010u);
+  pMap = (Map *)gta2::operator_new(0x40010u);
   if ( pMap )
     pMap1 = gta2::Map_Map(pMap);
   else
@@ -488,10 +488,10 @@ int gta2::MapRelatedStruct_sub_4646A0(struct MapRelatedStruct *self, int a2)
 // Ghidra: ---
 unsigned __int8 gta2::MapRelatedStruct_sub_464880(struct MapRelatedStruct *self)
 {
-  struct JuncIds *pJuncIds; // esi
+  JuncIds *pJuncIds; // esi
   unsigned __int8 result; // al
   int v3; // edi
-  struct Data16 *v4; // esi
+  Data16 *v4; // esi
   unsigned __int16 v5; // ax
   unsigned __int16 v6; // ax
   unsigned __int16 v7; // ax
@@ -519,16 +519,16 @@ unsigned __int8 gta2::MapRelatedStruct_sub_464880(struct MapRelatedStruct *self)
   if ( log_routefinder )
   {
     v3 = 0;
-    v4 = (struct Data16 *)((char *)&pJuncIds->Arr_316_Data16[0].field_4 + 2);
+    v4 = (Data16 *)((char *)&pJuncIds->Arr_316_Data16[0].field_4 + 2);
     do
     {
-      LOBYTE(v5) = gta2::Data16_sub_40CE90((struct Data16 *)((char *)v4 - 2));
+      LOBYTE(v5) = gta2::Data16_sub_40CE90((Data16 *)((char *)v4 - 2));
       v11 = v5;
       LOBYTE(v6) = gta2::Data16_sub_40CE90(v4);
       v10 = v6;
-      LOBYTE(v7) = gta2::Data16_sub_40CE90((struct Data16 *)((char *)v4 - 4));
+      LOBYTE(v7) = gta2::Data16_sub_40CE90((Data16 *)((char *)v4 - 4));
       v9 = v7;
-      LOBYTE(v8) = gta2::Data16_sub_40CE90((struct Data16 *)((char *)v4 - 6));
+      LOBYTE(v8) = gta2::Data16_sub_40CE90((Data16 *)((char *)v4 - 6));
       strcpy(
         gStr,
         "Junc: %d (%d, %d) n %d s %d w %d e %d",
@@ -557,7 +557,7 @@ unsigned __int8 gta2::MapRelatedStruct_sub_464880(struct MapRelatedStruct *self)
 // Ghidra: ---
 unsigned __int8 gta2::MapRelatedStruct_sub_464890(struct MapRelatedStruct *self, _BYTE *a2, FileMgr *dwBytes)
 {
-  struct FileMgr *v5; // ecx
+  FileMgr *v5; // ecx
 
   if ( !gta2::_strncmp(a2, "DMAP", 4) )
     return gta2::MapRelatedStruct_sub_4646A0(self, (int)dwBytes);
@@ -580,7 +580,7 @@ unsigned __int8 gta2::MapRelatedStruct_sub_464890(struct MapRelatedStruct *self,
 // Ghidra: ---
 _WORD * gta2::MapRelatedStruct_LoadMap(struct MapRelatedStruct *self, LPCSTR lpFileName)
 {
-  struct FileMgr *v3; // ecx
+  FileMgr *v3; // ecx
   _WORD *result; // eax
   unsigned int size; // [esp+4h] [ebp-14h] BYREF
   FILE v6[2]; // [esp+8h] [ebp-10h] BYREF
@@ -590,10 +590,10 @@ _WORD * gta2::MapRelatedStruct_LoadMap(struct MapRelatedStruct *self, LPCSTR lpF
   gta2::FileMgr_FileOpen(self, lpFileName);
   size = 6;
   gta2::FileMgr_Read(v6, &size);
-  for ( size = 8; gta2::FileMgr_ReadLine((struct FileMgr *)a1, a1, (SIZE_T)&size); size = 8 )
+  for ( size = 8; gta2::FileMgr_ReadLine((FileMgr *)a1, a1, (SIZE_T)&size); size = 8 )
   {
     if ( dwBytes )
-      gta2::MapRelatedStruct_sub_464890(self, a1, (struct FileMgr *)dwBytes);
+      gta2::MapRelatedStruct_sub_464890(self, a1, (FileMgr *)dwBytes);
   }
   gta2::FileMgr_CloseFile(v3);
   result = gta2::MapRelatedStruct_sub_464980(self);
@@ -608,7 +608,7 @@ _WORD * gta2::MapRelatedStruct_LoadMap(struct MapRelatedStruct *self, LPCSTR lpF
 // Ghidra: ---
 MapRelatedStruct * gta2::MapRelatedStruct_MapRelatedStruct(struct MapRelatedStruct *self)
 {
-  struct MapRelatedStruct *result; // eax
+  MapRelatedStruct *result; // eax
 
   gta2::S16_01_S16_01(&self->S16_01_);
   self->Len = -1;
@@ -707,7 +707,7 @@ void gta2::MapRelatedStruct_FUN_00464b30(struct MapRelatedStruct *self)
 // Ghidra: ---
 int gta2::MapRelatedStruct_sub_464C70(struct MapRelatedStruct *self, const char *a2)
 {
-  struct MapRelatedStruct *v2; // edx
+  MapRelatedStruct *v2; // edx
   unsigned int v3; // esi
   int result; // eax
   _WORD *count; // eax
@@ -750,7 +750,7 @@ uint gta2::MapRelatedStruct_sub_464D00(MapRelatedStruct *param_1,char *param_2,b
 {
   void *pvVar1;
   int iVar2;
-  struct MapRelatedStruct *pMVar3;
+  MapRelatedStruct *pMVar3;
   undefined2 extraout_var;
   undefined2 extraout_var_00;
   undefined2 uVar4;
@@ -771,7 +771,7 @@ uint gta2::MapRelatedStruct_sub_464D00(MapRelatedStruct *param_1,char *param_2,b
         return (uint)(ushort)param_1->field17_0x364;
       }
       param_1->field17_0x364 = param_1->field17_0x364 + 1;
-      pMVar3 = (struct MapRelatedStruct *)CONCAT22(uVar4,param_1->field17_0x364);
+      pMVar3 = (MapRelatedStruct *)CONCAT22(uVar4,param_1->field17_0x364);
     } while ((ushort)param_1->field17_0x364 < *(ushort *)param_1->count);
   }
   return 0xffffffff;
@@ -783,7 +783,7 @@ uint gta2::MapRelatedStruct_sub_464D00(MapRelatedStruct *param_1,char *param_2,b
 // Ghidra: ---
 char * gta2::MapRelatedStruct_sub_464DA0(struct MapRelatedStruct *self, char a2)
 {
-  struct MapRelatedStruct *v2; // edx
+  MapRelatedStruct *v2; // edx
   _WORD *count; // eax
   unsigned __int16 v5; // si
   unsigned __int16 v6; // di
@@ -833,7 +833,7 @@ char * gta2::MapRelatedStruct_sub_464DA0(struct MapRelatedStruct *self, char a2)
 // Ghidra: ---
 char * gta2::MapRelatedStruct_sub_464E70(struct MapRelatedStruct *self, char a2)
 {
-  struct MapRelatedStruct *v2; // edx
+  MapRelatedStruct *v2; // edx
   char *result; // eax
   _WORD *count; // ecx
   unsigned __int16 v5; // si
@@ -1070,7 +1070,7 @@ Gang * gta2::MapRelatedStruct_sub_465350(MapRelatedStruct *param_1)
   int iVar2;
   int iVar3;
   undefined3 extraout_var;
-  struct Gang *pGVar4;
+  Gang *pGVar4;
   
   bVar1 = 0xe;
   iVar2 = DecoderFloat(&stack0x00000008);
@@ -1212,13 +1212,13 @@ int gta2::MapRelatedStruct_sub_465510(MapRelatedStruct *param_1)
   void *self;
   int iVar4;
   ushort *puVar5;
-  struct MapRelatedStruct *local_4;
+  MapRelatedStruct *local_4;
   
   local_4 = param_1;
   iVar2 = DecoderFloat(&stack0x0000000c);
   iVar3 = DecoderFloat(&stack0x00000008);
   self = gta2::Player_sub_401B40((SpawnPoint *)&stack0x00000004,(GlassInfo *)&local_4,
-                    (struct S127 *)&DAT_00662c98);
+                    (S127 *)&DAT_00662c98);
   iVar4 = DecoderFloat(self);
   iVar2 = gta2::MapRelatedStruct_sub_4653C0(param_1,iVar4,iVar3,iVar2);
   if ((iVar2 == 0) || (uVar1 = *(ushort *)(iVar2 + 2), uVar1 == 0)) {
@@ -1245,12 +1245,12 @@ int gta2::MapRelatedStruct_sub_4655B0(MapRelatedStruct *param_1)
   void *self;
   int iVar3;
   int iVar4;
-  struct MapRelatedStruct *local_4;
+  MapRelatedStruct *local_4;
   
   local_4 = param_1;
   iVar2 = DecoderFloat(&stack0x0000000c);
   self = gta2::Player_sub_401B40((SpawnPoint *)&stack0x00000008,(GlassInfo *)&local_4,
-                    (struct S127 *)&DAT_00662c98);
+                    (S127 *)&DAT_00662c98);
   iVar3 = DecoderFloat(self);
   iVar4 = DecoderFloat(&stack0x00000004);
   iVar2 = gta2::MapRelatedStruct_sub_4653C0(param_1,iVar4,iVar3,iVar2);
@@ -1280,9 +1280,9 @@ int gta2::MapRelatedStruct_sub_465650(void)
   int iVar3;
   int iVar4;
   
-  bVar1 = gta2::Player_sub_40CE70((struct Player *)&stack0x0000000c,(struct Player *)&DAT_00662cfc);
+  bVar1 = gta2::Player_sub_40CE70((Player *)&stack0x0000000c,(Player *)&DAT_00662cfc);
   if (CONCAT31(extraout_var,bVar1) != 0) {
-    bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)&stack0x0000000c,(struct SpriteS1 *)&DAT_00662c3c);
+    bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)&stack0x0000000c,(SpriteS1 *)&DAT_00662c3c);
     if (CONCAT31(extraout_var_00,bVar1) != 0) {
       iVar2 = DecoderFloat(&stack0x0000000c);
       iVar3 = DecoderFloat(&stack0x00000008);
@@ -1766,21 +1766,21 @@ LABEL_15:
       {
         if ( v7 == 180 || v7 == 192 || v7 == 196 || v7 == 208 )
         {
-          gta2::S202_sub_41F980((struct S202 *)&a2.field_10, v3 + 1);
-          gta2::S202_sub_41F980((struct S202 *)&a2.pPlayer, v4);
-          gta2::Weapon_sub_432860((struct Weapon *)v13, &a2.pPlayer, &a2.field_10);
-          gta2::S202_sub_41F980((struct S202 *)&a2.field_18, v3);
-          gta2::S202_sub_41F980((struct S202 *)&a2.field_1C, v5);
-          gta2::Weapon_sub_432860((struct Weapon *)v12, &a2.field_1C, &a2.field_18);
+          gta2::S202_sub_41F980((S202 *)&a2.field_10, v3 + 1);
+          gta2::S202_sub_41F980((S202 *)&a2.pPlayer, v4);
+          gta2::Weapon_sub_432860((Weapon *)v13, &a2.pPlayer, &a2.field_10);
+          gta2::S202_sub_41F980((S202 *)&a2.field_18, v3);
+          gta2::S202_sub_41F980((S202 *)&a2.field_1C, v5);
+          gta2::Weapon_sub_432860((Weapon *)v12, &a2.field_1C, &a2.field_18);
         }
         else
         {
           gta2::S202_sub_41F980(&a2, v3);
-          gta2::S202_sub_41F980((struct S202 *)&a2.S202, v4);
-          gta2::Weapon_sub_432860((struct Weapon *)v13, &a2.S202, &a2);
-          gta2::S202_sub_41F980((struct S202 *)&a2.CarSystemManager, v3 + 1);
-          gta2::S202_sub_41F980((struct S202 *)&a2.field_C, v5);
-          gta2::Weapon_sub_432860((struct Weapon *)v12, &a2.field_C, &a2.CarSystemManager);
+          gta2::S202_sub_41F980((S202 *)&a2.S202, v4);
+          gta2::Weapon_sub_432860((Weapon *)v13, &a2.S202, &a2);
+          gta2::S202_sub_41F980((S202 *)&a2.CarSystemManager, v3 + 1);
+          gta2::S202_sub_41F980((S202 *)&a2.field_C, v5);
+          gta2::Weapon_sub_432860((Weapon *)v12, &a2.field_C, &a2.CarSystemManager);
         }
         if ( sub_463690(arg0, (int)v13, (int)v12) )
           return 1;
@@ -1802,29 +1802,29 @@ byte gta2::MapRelatedStruct_sub_466170(int param_1)
   byte bVar1;
   int iVar2;
   Point2D *self;
-  struct SpriteS1 *pSVar3;
-  struct SpriteS1 *pSVar4;
-  struct MapRelatedStruct *in_ECX;
+  SpriteS1 *pSVar3;
+  SpriteS1 *pSVar4;
+  MapRelatedStruct *in_ECX;
   undefined4 *puVar5;
-  struct SpriteS1 *extraout_ECX;
+  SpriteS1 *extraout_ECX;
   uint select;
-  struct SpriteS1 **ppSVar6;
+  SpriteS1 **ppSVar6;
   int iVar7;
   int iVar8;
-  struct SpriteS1 *pSVar9;
-  struct SpriteS1 *pS127;
+  SpriteS1 *pSVar9;
+  SpriteS1 *pS127;
   int local_40;
   undefined4 local_38;
   undefined4 local_34;
   undefined4 local_30;
-  struct SpriteS1 *local_2c;
+  SpriteS1 *local_2c;
   undefined4 local_28;
   undefined4 local_24;
   undefined4 local_20;
-  struct SpriteS1 *local_1c;
+  SpriteS1 *local_1c;
   undefined1 local_18 [8];
   undefined1 local_10 [12];
-  struct SpriteS1 *pS38;
+  SpriteS1 *pS38;
   
   iVar7 = _DAT_00662bac;
   if (_DAT_00662bac <= _DAT_00662bfc) {
@@ -1840,20 +1840,20 @@ byte gta2::MapRelatedStruct_sub_466170(int param_1)
              (select < 0xd1)) {
             if (((select == 0xb4) || (select == 0xc0)) ||
                ((select == 0xc4 || (select == 0xd0)))) {
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_28,iVar7 + 1);
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_24,iVar8);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_28,iVar7 + 1);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_24,iVar8);
               FUN_00432860(local_10,&local_24,&local_28);
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_20,iVar7);
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_1c,local_40);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_20,iVar7);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_1c,local_40);
               puVar5 = &local_20;
               ppSVar6 = &local_1c;
             }
             else {
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_38,iVar7);
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_34,iVar8);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_38,iVar7);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_34,iVar8);
               FUN_00432860(local_10,&local_34,&local_38);
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_30,iVar7 + 1);
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_2c,local_40);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_30,iVar7 + 1);
+              gta2::S202_sub_41F980((SpriteS1 *)&local_2c,local_40);
               puVar5 = &local_30;
               ppSVar6 = &local_2c;
             }
@@ -1862,18 +1862,18 @@ byte gta2::MapRelatedStruct_sub_466170(int param_1)
             if (bVar1 != 0) {
               self = (Point2D *)gta2::sub_4828F0(gObject,select);
               pS38 = *(SpriteS1 **)(self->Array_24 + 4);
-              pSVar4 = (struct SpriteS1 *)&local_1c;
-              pSVar9 = (struct SpriteS1 *)&DAT_00663164;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_20,iVar7);
-              pSVar3 = gta2::S202_sub_401B20(self,pSVar4,(struct S127 *)pSVar9);
-              pSVar4 = (struct SpriteS1 *)&local_24;
-              pS127 = (struct SpriteS1 *)&DAT_00663164;
+              pSVar4 = (SpriteS1 *)&local_1c;
+              pSVar9 = (SpriteS1 *)&DAT_00663164;
+              gta2::S202_sub_41F980((SpriteS1 *)&local_20,iVar7);
+              pSVar3 = gta2::S202_sub_401B20(self,pSVar4,(S127 *)pSVar9);
+              pSVar4 = (SpriteS1 *)&local_24;
+              pS127 = (SpriteS1 *)&DAT_00663164;
               pSVar9 = pSVar4;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&local_28,iVar8);
-              pSVar9 = gta2::S202_sub_401B20((Point2D *)pSVar4,pSVar9,(struct S127 *)pS127);
-              local_2c = (struct SpriteS1 *)&stack0xffffffac;
+              gta2::S202_sub_41F980((SpriteS1 *)&local_28,iVar8);
+              pSVar9 = gta2::S202_sub_401B20((Point2D *)pSVar4,pSVar9,(S127 *)pS127);
+              local_2c = (SpriteS1 *)&stack0xffffffac;
               pSVar4 = extraout_ECX;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffac,param_1);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffac,param_1);
               gta2::SpriteS1_sub_420600((Sprite *)pS38,(int)pSVar9->FirstElement,
                                   (int)pSVar3->FirstElement,(int)pSVar4);
               gta2::SpriteS1_sub_4BCB40((Sprite *)pS38);
@@ -1947,23 +1947,23 @@ uint gta2::MapRelatedStruct_sub_466430(void *param_1,int param_2,int param_3,int
   undefined3 extraout_var_01;
   undefined3 extraout_var_02;
   undefined3 uVar6;
-  struct SpriteS1 *extraout_ECX;
-  struct SpriteS1 *extraout_ECX_00;
-  struct SpriteS1 *extraout_ECX_01;
-  struct SpriteS1 *extraout_ECX_02;
-  struct SpriteS1 *extraout_ECX_03;
-  struct SpriteS1 *extraout_ECX_04;
-  struct SpriteS1 *extraout_ECX_05;
-  struct SpriteS1 *extraout_ECX_06;
-  struct SpriteS1 *extraout_ECX_07;
-  struct SpriteS1 *extraout_ECX_08;
-  struct SpriteS1 *extraout_ECX_09;
-  struct SpriteS1 *extraout_ECX_10;
+  SpriteS1 *extraout_ECX;
+  SpriteS1 *extraout_ECX_00;
+  SpriteS1 *extraout_ECX_01;
+  SpriteS1 *extraout_ECX_02;
+  SpriteS1 *extraout_ECX_03;
+  SpriteS1 *extraout_ECX_04;
+  SpriteS1 *extraout_ECX_05;
+  SpriteS1 *extraout_ECX_06;
+  SpriteS1 *extraout_ECX_07;
+  SpriteS1 *extraout_ECX_08;
+  SpriteS1 *extraout_ECX_09;
+  SpriteS1 *extraout_ECX_10;
   int iVar7;
   bool bVar8;
-  struct SpriteS1 *pSVar9;
-  struct SpriteS1 *pSVar10;
-  struct SpriteS1 *pSVar11;
+  SpriteS1 *pSVar9;
+  SpriteS1 *pSVar10;
+  SpriteS1 *pSVar11;
   
   if (param_4 <= (int)param_5) {
     do {
@@ -1979,12 +1979,12 @@ uint gta2::MapRelatedStruct_sub_466430(void *param_1,int param_2,int param_3,int
               cVar2 = FUN_004634b0();
               if (cVar2 == '\0') {
                 pSVar11 = extraout_ECX;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffec,iVar7 + 1);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffec,iVar7 + 1);
                 pSVar10 = extraout_ECX_00;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_4 + 1)
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_4 + 1)
                 ;
                 pSVar9 = extraout_ECX_01;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_4);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_4);
                 bVar8 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar9,(int)pSVar10,
                                      (int)pSVar11);
                 uVar6 = extraout_var;
@@ -1996,12 +1996,12 @@ uint gta2::MapRelatedStruct_sub_466430(void *param_1,int param_2,int param_3,int
               cVar2 = FUN_004634b0();
               if (cVar2 == '\0') {
                 pSVar11 = extraout_ECX_02;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffec,iVar7 + 1);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffec,iVar7 + 1);
                 pSVar10 = extraout_ECX_03;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_4 + 1)
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_4 + 1)
                 ;
                 pSVar9 = extraout_ECX_04;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_4);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_4);
                 bVar8 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar9,(int)pSVar10,
                                      (int)pSVar11);
                 uVar6 = extraout_var_00;
@@ -2016,12 +2016,12 @@ uint gta2::MapRelatedStruct_sub_466430(void *param_1,int param_2,int param_3,int
               cVar2 = FUN_00463480();
               if (cVar2 == '\0') {
                 pSVar11 = extraout_ECX_05;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffec,param_4 + 1)
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffec,param_4 + 1)
                 ;
                 pSVar10 = extraout_ECX_06;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar7 + 1);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar7 + 1);
                 pSVar9 = extraout_ECX_07;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,iVar7);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,iVar7);
                 bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar9,pSVar10,pSVar11);
                 uVar6 = extraout_var_01;
                 if (bVar3 != 0) goto LAB_00466610;
@@ -2033,12 +2033,12 @@ uint gta2::MapRelatedStruct_sub_466430(void *param_1,int param_2,int param_3,int
               cVar2 = FUN_00463480();
               if (cVar2 == '\0') {
                 pSVar11 = extraout_ECX_08;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffec,param_4 + 1)
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffec,param_4 + 1)
                 ;
                 pSVar10 = extraout_ECX_09;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar7 + 1);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar7 + 1);
                 pSVar9 = extraout_ECX_10;
-                gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,iVar7);
+                gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,iVar7);
                 bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar9,pSVar10,pSVar11);
                 uVar6 = extraout_var_02;
                 if (bVar3 != 0) {
@@ -2068,19 +2068,19 @@ undefined1 gta2::MapRelatedStruct_sub_466620(MapRelatedStruct *param_1,char para
   byte bVar1;
   bool bVar2;
   int iVar3;
-  struct Car *self;
+  Car *self;
   undefined3 extraout_var;
   uint uVar4;
   int iVar5;
   int iVar6;
-  struct Car *pCVar7;
+  Car *pCVar7;
   undefined1 local_5;
   undefined1 local_4 [4];
   
   iVar3 = DecoderFloat(&param_2);
-  pCVar7 = (struct Car *)&DAT_00662cfc;
+  pCVar7 = (Car *)&DAT_00662cfc;
   local_5 = 0;
-  self = (struct Car *)FUN_0042a630(local_4,&param_2);
+  self = (Car *)FUN_0042a630(local_4,&param_2);
   bVar2 = gta2::Car_IsTrainOrTrainCarriage(self,pCVar7);
   param_2 = CONCAT31(extraout_var,bVar2) != 0;
   iVar6 = _DAT_00662bac;
@@ -2262,11 +2262,11 @@ undefined4 gta2::MapRelatedStruct_sub_466AF0(MapRelatedStruct *param_1)
   int iVar3;
   int iVar4;
   int iVar5;
-  struct MapRelatedStruct *local_4;
+  MapRelatedStruct *local_4;
   
   local_4 = param_1;
   pvVar2 = gta2::Player_sub_401B40((SpawnPoint *)&stack0x0000000c,(GlassInfo *)&local_4,
-                      (struct S127 *)&DAT_00662c98);
+                      (S127 *)&DAT_00662c98);
   iVar3 = DecoderFloat(pvVar2);
   iVar4 = DecoderFloat(&stack0x00000008);
   iVar5 = DecoderFloat(&stack0x00000004);
@@ -2292,7 +2292,7 @@ uint gta2::MapRelatedStruct_sub_466B70(MapRelatedStruct *param_1,undefined4 para
 {
   undefined *puVar1;
   byte bVar2;
-  struct SpriteS1 *pSVar3;
+  SpriteS1 *pSVar3;
   bool bVar4;
   int iVar5;
   int iVar6;
@@ -2300,9 +2300,9 @@ uint gta2::MapRelatedStruct_sub_466B70(MapRelatedStruct *param_1,undefined4 para
   undefined4 *puVar8;
   void *pvVar9;
   Point2D *self;
-  struct SpriteS1 *pSVar10;
+  SpriteS1 *pSVar10;
   undefined3 extraout_var;
-  struct S127 *pSVar11;
+  S127 *pSVar11;
   undefined1 *pS110;
   int *piVar12;
   undefined1 local_8 [8];
@@ -2329,18 +2329,18 @@ switchD_00466bdc_caseD_0:
   case NULL:
     goto switchD_00466bdc_caseD_0;
   case (void *)0x1:
-    pSVar11 = (struct S127 *)FUN_0042a630(&param_2,&param_3);
+    pSVar11 = (S127 *)FUN_0042a630(&param_2,&param_3);
     puVar8 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&DAT_00662c98,(GlassInfo *)&param_3,
                         pSVar11);
-    param_3 = (struct SpriteS1 *)*puVar8;
+    param_3 = (SpriteS1 *)*puVar8;
     break;
   case (void *)0x2:
     puVar8 = (undefined4 *)FUN_0042a630(&param_4,&param_3);
-    param_3 = (struct SpriteS1 *)*puVar8;
+    param_3 = (SpriteS1 *)*puVar8;
     break;
   case (void *)0x3:
-    pSVar11 = (struct S127 *)FUN_0042a630(local_8,&param_2);
+    pSVar11 = (S127 *)FUN_0042a630(local_8,&param_2);
     puVar8 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&DAT_00662c98,(GlassInfo *)(local_8 + 4),
                         pSVar11);
@@ -2348,10 +2348,10 @@ switchD_00466bdc_caseD_0:
   case (void *)0x4:
     puVar8 = (undefined4 *)FUN_0042a630(&param_4,&param_2);
 LAB_00466c51:
-    param_3 = (struct SpriteS1 *)*puVar8;
+    param_3 = (SpriteS1 *)*puVar8;
   }
-  pSVar11 = (struct S127 *)(iVar5 + 0x662db4);
-  pSVar10 = (struct SpriteS1 *)&param_3;
+  pSVar11 = (S127 *)(iVar5 + 0x662db4);
+  pSVar10 = (SpriteS1 *)&param_3;
   piVar12 = (int *)&param_3;
   pS110 = (undefined1 *)&param_2;
   pvVar9 = (void *)FUN_004634e0(&param_4,CONCAT31((int3)((uint)pSVar10 >> 8),
@@ -2359,12 +2359,12 @@ LAB_00466c51:
   self = (Point2D *)gta2::WorldCoordinateToScreenCoord(pvVar9,pS110,piVar12);
   pSVar10 = gta2::S202_sub_401B20(self,pSVar10,pSVar11);
   param_3 = pSVar10->FirstElement;
-  bVar4 = gta2::Player_IsCurrentPlayer((struct Player *)&param_3,(struct Player *)&DAT_00662cfc);
+  bVar4 = gta2::Player_IsCurrentPlayer((Player *)&param_3,(Player *)&DAT_00662cfc);
   if (CONCAT31(extraout_var,bVar4) != 0) {
     param_3 = _DAT_006631ec;
   }
-  pSVar11 = (struct S127 *)FUN_00462ea0(&param_2,&param_2,(uint *)pSVar3);
-  pSVar10 = gta2::S202_sub_401B20((Point2D *)&param_3,(struct SpriteS1 *)&param_4,pSVar11);
+  pSVar11 = (S127 *)FUN_00462ea0(&param_2,&param_2,(uint *)pSVar3);
+  pSVar10 = gta2::S202_sub_401B20((Point2D *)&param_3,(SpriteS1 *)&param_4,pSVar11);
   pSVar10 = pSVar10->FirstElement;
   *(SpriteS1 **)&pSVar3->FirstElement = pSVar10;
   return CONCAT31((int3)((uint)pSVar10 >> 8),*puVar1);
@@ -2397,9 +2397,9 @@ bool gta2::MapRelatedStruct_sub_466CF0(struct MapRelatedStruct *self, int a2, in
 // Ghidra: ---
 _DWORD * gta2::MapRelatedStruct_sub_466E20(struct MapRelatedStruct *self, _DWORD *arg0, int *arg4, SpriteS1 *a3, int a2)
 {
-  struct SpriteS1 *v6; // eax
+  SpriteS1 *v6; // eax
   int v7; // eax
-  struct SpriteS1 *v8; // edi
+  SpriteS1 *v8; // edi
   int *v9; // ebx
   int v10; // eax
   int v11; // eax
@@ -2407,25 +2407,25 @@ _DWORD * gta2::MapRelatedStruct_sub_466E20(struct MapRelatedStruct *self, _DWORD
   int v13; // eax
   int v14; // eax
   char v15; // cl
-  struct SpriteS1 **v16; // eax
+  SpriteS1 **v16; // eax
   _DWORD *v17; // eax
   int v18; // [esp-8h] [ebp-18h]
   int v19; // [esp-8h] [ebp-18h]
   int v20; // [esp-4h] [ebp-14h]
-  struct SpriteS1 *FirstElement; // [esp+Ch] [ebp-4h] BYREF
+  SpriteS1 *FirstElement; // [esp+Ch] [ebp-4h] BYREF
 
-  v6 = sub_42A630((struct SpriteS1 *)&FirstElement, (struct S202 *)&a2);
-  LOWORD(v7) = gta2::Car_sub_403820((struct Car *)v6, &unk_662CFC);
+  v6 = sub_42A630((SpriteS1 *)&FirstElement, (S202 *)&a2);
+  LOWORD(v7) = gta2::Car_sub_403820((Car *)v6, &unk_662CFC);
   v8 = a3;
   v9 = arg4;
   if ( v7
-    && (v20 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a2),
-        v18 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a3),
-        v10 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&arg4),
+    && (v20 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a2),
+        v18 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a3),
+        v10 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&arg4),
         gta2::MapRelatedStruct_sub_466CF0(self, v10, v18, v20))
-    && (FirstElement = gta2::sub_462EA0((struct SpriteS1 *)&FirstElement, &a2)->FirstElement,
-        gta2::MapRelatedStruct_sub_466B70(self, v9, (struct S202 *)v8),
-        LOBYTE(v11) = gta2::Player_CheckCondition((struct Player *)&FirstElement, &a2),
+    && (FirstElement = gta2::sub_462EA0((SpriteS1 *)&FirstElement, &a2)->FirstElement,
+        gta2::MapRelatedStruct_sub_466B70(self, v9, (S202 *)v8),
+        LOBYTE(v11) = gta2::Player_CheckCondition((Player *)&FirstElement, &a2),
         v11) )
   {
     result = arg0;
@@ -2433,9 +2433,9 @@ _DWORD * gta2::MapRelatedStruct_sub_466E20(struct MapRelatedStruct *self, _DWORD
   }
   else
   {
-    a2 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a2) - 1;
-    v19 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a3);
-    v13 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&arg4);
+    a2 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a2) - 1;
+    v19 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a3);
+    v13 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&arg4);
     v14 = gta2::MapRelatedStruct_sub_4635F0(self, v13, v19, &a2);
     dword_662B90 = (_WORD *)v14;
     if ( v14 )
@@ -2443,15 +2443,15 @@ _DWORD * gta2::MapRelatedStruct_sub_466E20(struct MapRelatedStruct *self, _DWORD
       v15 = *(_BYTE *)(v14 + 11);
       if ( (v15 & 0xFC) != 0 && (v15 & 0xFCu) < 0xB4 && (v15 & 3) != 0 )
       {
-        gta2::S202_sub_41F980((struct S202 *)&a2, a2);
+        gta2::S202_sub_41F980((S202 *)&a2, a2);
         FirstElement = *v16;
-        gta2::MapRelatedStruct_sub_466B70(self, v9, (struct S202 *)v8);
+        gta2::MapRelatedStruct_sub_466B70(self, v9, (S202 *)v8);
         *arg0 = FirstElement;
         return arg0;
       }
       else
       {
-        gta2::S202_sub_41F980((struct S202 *)&a2, a2 + 1);
+        gta2::S202_sub_41F980((S202 *)&a2, a2 + 1);
         *arg0 = *v17;
         return arg0;
       }
@@ -2480,8 +2480,8 @@ _DWORD * gta2::MapRelatedStruct_sub_466F70(struct MapRelatedStruct *self, _DWORD
   int v11; // [esp+4h] [ebp-4h] BYREF
   S202 a3; // [esp+14h] [ebp+Ch] BYREF
 
-  v10 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a3);
-  v4 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a2);
+  v10 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a3);
+  v4 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a2);
   v5 = gta2::MapRelatedStruct_sub_463570(self, v4, v10, &v11);
   dword_662B90 = (_WORD *)v5;
   if ( v5 )
@@ -2489,9 +2489,9 @@ _DWORD * gta2::MapRelatedStruct_sub_466F70(struct MapRelatedStruct *self, _DWORD
     v7 = *(_BYTE *)(v5 + 11);
     if ( (v7 & 0xFC) != 0 && (v7 & 0xFCu) < 0xB4 && (v7 & 3) != 0 )
     {
-      gta2::S202_sub_41F980((struct S202 *)&v11, v11);
+      gta2::S202_sub_41F980((S202 *)&v11, v11);
       v11 = *v8;
-      gta2::MapRelatedStruct_sub_466B70(self, &a2->field_0, (struct S202 *)a3.field_0);
+      gta2::MapRelatedStruct_sub_466B70(self, &a2->field_0, (S202 *)a3.field_0);
       *arg0 = v11;
       return arg0;
     }
@@ -2517,80 +2517,80 @@ int gta2::MapRelatedStruct_sub_467110(struct MapRelatedStruct *self, int *arg0, 
 {
   int *field; // ebp
   int v7; // eax
-  struct SpriteS1 *FirstElement; // ebx
-  struct SpriteS1 *v9; // eax
+  SpriteS1 *FirstElement; // ebx
+  SpriteS1 *v9; // eax
   int v10; // eax
   int v11; // edi
   int v12; // eax
-  struct CarSystemManager *v13; // eax
+  CarSystemManager *v13; // eax
   int v14; // eax
-  struct CarSystemManager *v15; // edx
-  struct SpriteS1 *v16; // ebp
-  struct CarSystemManager *v17; // ebx
+  CarSystemManager *v15; // edx
+  SpriteS1 *v16; // ebp
+  CarSystemManager *v17; // ebx
   int v18; // ebp
-  struct SpriteS1 *v19; // edi
-  struct SpriteS1 *v20; // eax
+  SpriteS1 *v19; // edi
+  SpriteS1 *v20; // eax
   int v21; // eax
   int v22; // eax
   int v23; // eax
   BOOL v24; // eax
-  struct SpriteS1 *v25; // eax
-  struct SpriteS1 *v26; // eax
+  SpriteS1 *v25; // eax
+  SpriteS1 *v26; // eax
   int v27; // eax
   int v28; // eax
-  struct SpriteS1 *v29; // eax
+  SpriteS1 *v29; // eax
   int v30; // eax
   int v31; // eax
-  struct CarSystemManager *v32; // edx
+  CarSystemManager *v32; // edx
   int v33; // ebx
-  struct CarSystemManager *v34; // eax
-  struct SpriteS1 *v35; // eax
-  struct SpriteS1 *v36; // eax
-  struct SpriteS1 *v37; // eax
+  CarSystemManager *v34; // eax
+  SpriteS1 *v35; // eax
+  SpriteS1 *v36; // eax
+  SpriteS1 *v37; // eax
   int v38; // eax
   int v39; // eax
   int v40; // eax
   BOOL v41; // eax
-  struct SpriteS1 *v42; // eax
+  SpriteS1 *v42; // eax
   int v43; // eax
   int v44; // eax
-  struct SpriteS1 *v45; // eax
+  SpriteS1 *v45; // eax
   int v46; // eax
   int v47; // eax
   int v48; // ebx
   BOOL v49; // eax
-  struct SpriteS1 *v50; // eax
+  SpriteS1 *v50; // eax
   int v51; // eax
   int v52; // eax
-  struct SpriteS1 *v53; // eax
+  SpriteS1 *v53; // eax
   int v54; // eax
   int v55; // eax
-  struct CarSystemManager *v56; // ecx
-  struct CarSystemManager *v57; // eax
-  struct SpriteS1 *v58; // eax
-  struct SpriteS1 *v59; // eax
-  struct SpriteS1 *v60; // eax
+  CarSystemManager *v56; // ecx
+  CarSystemManager *v57; // eax
+  SpriteS1 *v58; // eax
+  SpriteS1 *v59; // eax
+  SpriteS1 *v60; // eax
   int v61; // eax
   int v62; // eax
-  struct SpriteS1 *v63; // eax
+  SpriteS1 *v63; // eax
   int v64; // eax
   int v65; // eax
   int v66; // ebx
-  struct SpriteS1 *v67; // eax
+  SpriteS1 *v67; // eax
   int v68; // eax
   int v69; // eax
   int v70; // eax
-  struct SpriteS1 *v71; // eax
+  SpriteS1 *v71; // eax
   int v72; // eax
   int v73; // eax
-  struct SpriteS1 *v74; // eax
+  SpriteS1 *v74; // eax
   int v75; // eax
   bool v76; // zf
-  struct SpriteS1 *v77; // eax
+  SpriteS1 *v77; // eax
   int v78; // eax
   int v79; // eax
-  struct S202 *v80; // eax
-  struct SpriteS1 *v81; // eax
+  S202 *v80; // eax
+  SpriteS1 *v81; // eax
   int v82; // eax
   int v83; // eax
   int v84; // eax
@@ -2612,26 +2612,26 @@ int gta2::MapRelatedStruct_sub_467110(struct MapRelatedStruct *self, int *arg0, 
   v90.AudioSourceParams = (int)FirstElement;
   v90.AudioSourceParams1 = v7;
   gta2::MapRelatedStruct_sub_467020(self, (int *)v90.field, FirstElement, &v90.AudioSourceParams1, (void *)1, 0);
-  v9 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-  v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v9);
-  v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+  v9 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+  v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v9);
+  v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
   v10 = gta2::AudioSourceParams_sub_41F9D0(&v90);
   v11 = gta2::MapRelatedStruct_sub_4653C0(self, v10, (int)v87.S202, (int)v87.CarSystemManager);
   if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
   {
-    v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-    v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+    v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+    v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
     v12 = gta2::AudioSourceParams_sub_41F9D0(&v90);
     v11 = gta2::MapRelatedStruct_sub_4653C0(self, v12, (int)v87.S202, (int)v87.CarSystemManager);
   }
   v90.AudioSourceParams2 = gta2::MapRelatedStruct_sub_4633A0(self, v11, 1);
-  v13 = (struct CarSystemManager *)gta2::sub_4725B0((unsigned __int16 *)&v87.field_1E, &v90.AudioSourceParams2);
+  v13 = (CarSystemManager *)gta2::sub_4725B0((unsigned __int16 *)&v87.field_1E, &v90.AudioSourceParams2);
   LOWORD(v13) = v13->Index;
   v87.CarSystemManager = v13;
-  v87.S202 = (struct S202 *)FirstElement;
+  v87.S202 = (S202 *)FirstElement;
   v87.field_0 = (int)field;
   v90.field_10 = (int)*gta2::sub_463150((SpriteS1 **)&pS202, v87);
-  if ( gta2::Car_sub_403800((struct Car *)&v90.field_10, (int)&unk_6630B0) )
+  if ( gta2::Car_sub_403800((Car *)&v90.field_10, (int)&unk_6630B0) )
   {
     switch ( v90.AudioSourceParams2 )
     {
@@ -2649,7 +2649,7 @@ int gta2::MapRelatedStruct_sub_467110(struct MapRelatedStruct *self, int *arg0, 
   }
   else
   {
-    v87.CarSystemManager = (struct CarSystemManager *)&unk_6630B0;
+    v87.CarSystemManager = (CarSystemManager *)&unk_6630B0;
     if ( gta2::sub_4037E0(&v90.field_10) )
     {
       switch ( v90.AudioSourceParams2 )
@@ -2675,57 +2675,57 @@ LABEL_6:
       }
     }
   }
-  LOWORD(v14) = gta2::Car_sub_403820((struct Car *)&v90.field_10, &unk_6630B0);
-  v87.CarSystemManager = (struct CarSystemManager *)&v90.AudioSourceParams2;
-  v87.S202 = (struct S202 *)&v87.field_1E;
+  LOWORD(v14) = gta2::Car_sub_403820((Car *)&v90.field_10, &unk_6630B0);
+  v87.CarSystemManager = (CarSystemManager *)&v90.AudioSourceParams2;
+  v87.S202 = (S202 *)&v87.field_1E;
   if ( v14 )
   {
     LOWORD(v15) = *gta2::sub_4725B0((unsigned __int16 *)v87.S202, &v87.CarSystemManager->Index);
     v87.CarSystemManager = v15;
-    v87.S202 = (struct S202 *)FirstElement;
+    v87.S202 = (S202 *)FirstElement;
     v87.field_0 = (int)field;
     v90.field_10 = (int)*gta2::sub_463210((SpriteS1 **)&pS202, v87);
-    v90.field_10 = (int)gta2::Player_sub_401B40((struct Player *)&v90.field_10, &pS202, (int)&unk_6630B0)->FirstElement;
-    if ( !gta2::Car_sub_403800((struct Car *)&v90.field_10, (int)&unk_662CFC) )
+    v90.field_10 = (int)gta2::Player_sub_401B40((Player *)&v90.field_10, &pS202, (int)&unk_6630B0)->FirstElement;
+    if ( !gta2::Car_sub_403800((Car *)&v90.field_10, (int)&unk_662CFC) )
       goto LABEL_46;
-    if ( !gta2::Player_sub_40CE70((struct Player *)&pPlayer, &v90.field_10) )
+    if ( !gta2::Player_sub_40CE70((Player *)&pPlayer, &v90.field_10) )
     {
-      v87.CarSystemManager = (struct CarSystemManager *)v90.AudioSourceParams2;
-      v87.S202 = (struct S202 *)pPlayer;
-      sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
+      v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
+      v87.S202 = (S202 *)pPlayer;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
       field = (int *)v90.field;
-      FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
-      pPlayer = (struct Player *)unk_662CFC;
+      FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+      pPlayer = (Player *)unk_662CFC;
       goto LABEL_46;
     }
-    sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-    v16 = gta2::Player_sub_401B40((struct Player *)&pPlayer, &pS202, (int)&v90.field_10)->FirstElement;
-    pPlayer = (struct Player *)v16;
-    v17 = (struct CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v11, 1);
+    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+    v16 = gta2::Player_sub_401B40((Player *)&pPlayer, &pS202, (int)&v90.field_10)->FirstElement;
+    pPlayer = (Player *)v16;
+    v17 = (CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v11, 1);
     v90.AudioSourceParams2 = (int)v17;
-    if ( !gta2::Player_sub_40CE70((struct Player *)&pPlayer, &unk_6630B0) )
+    if ( !gta2::Player_sub_40CE70((Player *)&pPlayer, &unk_6630B0) )
     {
-      v87.CarSystemManager = (struct CarSystemManager *)v90.AudioSourceParams2;
-      v87.S202 = (struct S202 *)v16;
-      sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
+      v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
+      v87.S202 = (S202 *)v16;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
       field = (int *)v90.field;
-      FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
-      pPlayer = (struct Player *)unk_662CFC;
+      FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+      pPlayer = (Player *)unk_662CFC;
       goto LABEL_46;
     }
     v18 = v11;
-    sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-    v19 = gta2::Player_sub_401B40((struct Player *)&pPlayer, &pS202, (int)&unk_6630B0)->FirstElement;
-    pPlayer = (struct Player *)v19;
-    v20 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v20);
-    v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+    v19 = gta2::Player_sub_401B40((Player *)&pPlayer, &pS202, (int)&unk_6630B0)->FirstElement;
+    pPlayer = (Player *)v19;
+    v20 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+    v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v20);
+    v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
     v21 = gta2::AudioSourceParams_sub_41F9D0(&v90);
     v22 = gta2::MapRelatedStruct_sub_4653C0(self, v21, (int)v87.S202, (int)v87.CarSystemManager);
     if ( (*(_BYTE *)(v22 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+      v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+      v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
       v23 = gta2::AudioSourceParams_sub_41F9D0(&v90);
       v22 = gta2::MapRelatedStruct_sub_4653C0(self, v23, (int)v87.S202, (int)v87.CarSystemManager);
     }
@@ -2733,36 +2733,36 @@ LABEL_6:
     {
       if ( gta2::MapRelatedStruct_sub_4632E0(self, v22, (int)v17, 1) )
         goto LABEL_24;
-      v17 = (struct CarSystemManager *)v90.AudioSourceParams2;
+      v17 = (CarSystemManager *)v90.AudioSourceParams2;
     }
-    v24 = gta2::Player_sub_40CE70((struct Player *)&pPlayer, &unk_662C98);
+    v24 = gta2::Player_sub_40CE70((Player *)&pPlayer, &unk_662C98);
     v87.CarSystemManager = v17;
     if ( v24 )
     {
-      sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-      v25 = gta2::Player_sub_401B40((struct Player *)&pPlayer, &pS202, (int)&unk_662C98)->FirstElement;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+      v25 = gta2::Player_sub_401B40((Player *)&pPlayer, &pS202, (int)&unk_662C98)->FirstElement;
     }
     else
     {
-      v87.S202 = (struct S202 *)v19;
-      sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-      v25 = (struct SpriteS1 *)unk_662CFC;
+      v87.S202 = (S202 *)v19;
+      sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+      v25 = (SpriteS1 *)unk_662CFC;
     }
-    pPlayer = (struct Player *)v25;
+    pPlayer = (Player *)v25;
 LABEL_24:
-    v26 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v26);
-    v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+    v26 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+    v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v26);
+    v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
     v27 = gta2::AudioSourceParams_sub_41F9D0(&v90);
     v11 = gta2::MapRelatedStruct_sub_4653C0(self, v27, (int)v87.S202, (int)v87.CarSystemManager);
     if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+      v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+      v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
       v28 = gta2::AudioSourceParams_sub_41F9D0(&v90);
       v11 = gta2::MapRelatedStruct_sub_4653C0(self, v28, (int)v87.S202, (int)v87.CarSystemManager);
     }
-    FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
+    FirstElement = (SpriteS1 *)v90.AudioSourceParams;
     v76 = v11 == v18;
     field = (int *)v90.field;
     if ( !v76 )
@@ -2770,13 +2770,13 @@ LABEL_24:
       gta2::MapRelatedStruct_sub_467020(
         self,
         (int *)v90.field,
-        (struct SpriteS1 *)v90.AudioSourceParams,
+        (SpriteS1 *)v90.AudioSourceParams,
         &v90.AudioSourceParams1,
         (void *)1,
         0);
-      v29 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-      v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v29);
-      v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+      v29 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+      v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v29);
+      v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
       v30 = gta2::AudioSourceParams_sub_41F9D0(&v90);
       v11 = gta2::MapRelatedStruct_sub_4653C0(self, v30, (int)v87.S202, (int)v87.CarSystemManager);
       if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
@@ -2786,75 +2786,75 @@ LABEL_24:
   }
   LOWORD(v32) = *gta2::sub_4725B0((unsigned __int16 *)v87.S202, &v87.CarSystemManager->Index);
   v87.CarSystemManager = v32;
-  v87.S202 = (struct S202 *)FirstElement;
+  v87.S202 = (S202 *)FirstElement;
   v87.field_0 = (int)field;
   v90.field_10 = (int)*gta2::sub_463210((SpriteS1 **)&pS202, v87);
-  if ( gta2::Car_sub_403800((struct Car *)&v90.field_10, (int)&unk_662CFC) )
+  if ( gta2::Car_sub_403800((Car *)&v90.field_10, (int)&unk_662CFC) )
   {
     gta2::MapRelatedStruct_sub_467020(self, field, FirstElement, &v90.AudioSourceParams1, (void *)1, (void *)1);
     v33 = v11;
-    gta2::Player_sub_401B40((struct Player *)&unk_662C98, &pS202, (int)&v90.field_10);
-    v34 = (struct CarSystemManager *)gta2::sub_4725B0(&v88, &v90.AudioSourceParams2);
-    v35 = (struct SpriteS1 *)gta2::sub_40E5A0(v34, (struct CarSystemManager *)&v87.field_1E, &unk_663108);
+    gta2::Player_sub_401B40((Player *)&unk_662C98, &pS202, (int)&v90.field_10);
+    v34 = (CarSystemManager *)gta2::sub_4725B0(&v88, &v90.AudioSourceParams2);
+    v35 = (SpriteS1 *)gta2::sub_40E5A0(v34, (CarSystemManager *)&v87.field_1E, &unk_663108);
     gta2::SpriteS1_sub_472C00(v35);
-    sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-    v36 = gta2::Player_sub_401B40((struct Player *)&unk_662C98, &pS202, (int)&v90.field_10);
-    pPlayer = (struct Player *)gta2::S202_sub_401B20((struct S202 *)&pPlayer, (struct SpriteS1 *)&v90.field_14, (struct PublicTransport *)v36)->FirstElement;
-    v37 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v37);
-    v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+    sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+    v36 = gta2::Player_sub_401B40((Player *)&unk_662C98, &pS202, (int)&v90.field_10);
+    pPlayer = (Player *)gta2::S202_sub_401B20((S202 *)&pPlayer, (SpriteS1 *)&v90.field_14, (PublicTransport *)v36)->FirstElement;
+    v37 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+    v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v37);
+    v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
     v38 = gta2::AudioSourceParams_sub_41F9D0(&v90);
     v39 = gta2::MapRelatedStruct_sub_4653C0(self, v38, (int)v87.S202, (int)v87.CarSystemManager);
     if ( !v39 )
       goto LABEL_37;
     if ( (*(_BYTE *)(v39 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+      v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+      v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
       v40 = gta2::AudioSourceParams_sub_41F9D0(&v90);
       v39 = gta2::MapRelatedStruct_sub_4653C0(self, v40, (int)v87.S202, (int)v87.CarSystemManager);
     }
     if ( !v39 || !gta2::MapRelatedStruct_sub_4632E0(self, v39, v90.AudioSourceParams2, 1) )
     {
 LABEL_37:
-      v41 = gta2::Player_sub_40CE70((struct Player *)&pPlayer, &unk_662C98);
-      v87.CarSystemManager = (struct CarSystemManager *)v90.AudioSourceParams2;
+      v41 = gta2::Player_sub_40CE70((Player *)&pPlayer, &unk_662C98);
+      v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
       if ( v41 )
       {
-        sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-        pPlayer = (struct Player *)gta2::Player_sub_401B40((struct Player *)&pPlayer, &pS202, (int)&unk_662C98)->FirstElement;
+        sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+        pPlayer = (Player *)gta2::Player_sub_401B40((Player *)&pPlayer, &pS202, (int)&unk_662C98)->FirstElement;
       }
       else
       {
-        v87.S202 = (struct S202 *)pPlayer;
-        sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-        pPlayer = (struct Player *)unk_662CFC;
+        v87.S202 = (S202 *)pPlayer;
+        sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+        pPlayer = (Player *)unk_662CFC;
       }
     }
-    v42 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-    v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v42);
-    v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+    v42 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+    v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v42);
+    v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
     v43 = gta2::AudioSourceParams_sub_41F9D0(&v90);
     v11 = gta2::MapRelatedStruct_sub_4653C0(self, v43, (int)v87.S202, (int)v87.CarSystemManager);
     if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
     {
-      v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-      v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+      v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+      v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
       v44 = gta2::AudioSourceParams_sub_41F9D0(&v90);
       v11 = gta2::MapRelatedStruct_sub_4653C0(self, v44, (int)v87.S202, (int)v87.CarSystemManager);
     }
     field = (int *)v90.field;
     v87.CarSystemManager = 0;
     v76 = v11 == v33;
-    FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
-    v87.S202 = (struct S202 *)1;
+    FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+    v87.S202 = (S202 *)1;
     v87.field_0 = (int)&v90.AudioSourceParams1;
     if ( v76 )
     {
       gta2::MapRelatedStruct_sub_467020(
         self,
         (int *)v90.field,
-        (struct SpriteS1 *)v90.AudioSourceParams,
+        (SpriteS1 *)v90.AudioSourceParams,
         (void *)v87.field_0,
         v87.S202,
         v87.CarSystemManager);
@@ -2864,27 +2864,27 @@ LABEL_37:
       gta2::MapRelatedStruct_sub_467020(
         self,
         (int *)v90.field,
-        (struct SpriteS1 *)v90.AudioSourceParams,
+        (SpriteS1 *)v90.AudioSourceParams,
         (void *)v87.field_0,
         v87.S202,
         v87.CarSystemManager);
-      v45 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
-      v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v45);
-      v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+      v45 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &pS202, (int)&unk_662C98);
+      v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v45);
+      v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
       v46 = gta2::AudioSourceParams_sub_41F9D0(&v90);
       v11 = gta2::MapRelatedStruct_sub_4653C0(self, v46, (int)v87.S202, (int)v87.CarSystemManager);
       if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
       {
 LABEL_28:
-        v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-        v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+        v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+        v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
         v31 = gta2::AudioSourceParams_sub_41F9D0(&v90);
         v11 = gta2::MapRelatedStruct_sub_4653C0(self, v31, (int)v87.S202, (int)v87.CarSystemManager);
       }
     }
   }
 LABEL_46:
-  LOWORD(v47) = gta2::Car_sub_403820((struct Car *)&pPlayer, &unk_662CFC);
+  LOWORD(v47) = gta2::Car_sub_403820((Car *)&pPlayer, &unk_662CFC);
   if ( v47 )
   {
     do
@@ -2893,106 +2893,106 @@ LABEL_46:
       {
         v87.field_1D = 0;
         v66 = v11;
-        if ( gta2::Player_sub_40CE70((struct Player *)&pPlayer, &unk_662C98) )
+        if ( gta2::Player_sub_40CE70((Player *)&pPlayer, &unk_662C98) )
         {
-          sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-          v67 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&v92.CarSystemManager, (int)&unk_662C98);
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v67);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          v67 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.CarSystemManager, (int)&unk_662C98);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v67);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v68 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v69 = gta2::MapRelatedStruct_sub_4653C0(self, v68, (int)v87.S202, (int)v87.CarSystemManager);
           if ( (*(_BYTE *)(v69 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+            v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+            v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
             v70 = gta2::AudioSourceParams_sub_41F9D0(&v90);
             v69 = gta2::MapRelatedStruct_sub_4653C0(self, v70, (int)v87.S202, (int)v87.CarSystemManager);
           }
           v90.AudioSourceParams2 = gta2::MapRelatedStruct_sub_4633A0(self, v69, 1);
-          sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-          pPlayer = (struct Player *)gta2::Player_sub_401B40((struct Player *)&pPlayer, (struct S202 *)&v92.field_C, (int)&unk_662C98)->FirstElement;
-          v71 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&v92.field_10, (int)&unk_662C98);
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v71);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          pPlayer = (Player *)gta2::Player_sub_401B40((Player *)&pPlayer, (S202 *)&v92.field_C, (int)&unk_662C98)->FirstElement;
+          v71 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.field_10, (int)&unk_662C98);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v71);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v72 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v72, (int)v87.S202, (int)v87.CarSystemManager);
           if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+            v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+            v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
             v73 = gta2::AudioSourceParams_sub_41F9D0(&v90);
             v11 = gta2::MapRelatedStruct_sub_4653C0(self, v73, (int)v87.S202, (int)v87.CarSystemManager);
           }
           field = (int *)v90.field;
           v76 = v11 == v66;
-          FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
+          FirstElement = (SpriteS1 *)v90.AudioSourceParams;
           if ( v76 )
             goto LABEL_80;
           gta2::MapRelatedStruct_sub_467020(
             self,
             (int *)v90.field,
-            (struct SpriteS1 *)v90.AudioSourceParams,
+            (SpriteS1 *)v90.AudioSourceParams,
             &v90.AudioSourceParams1,
             (void *)1,
             0);
-          v74 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&v92.pPlayer, (int)&unk_662C98);
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v74);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          v74 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.pPlayer, (int)&unk_662C98);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v74);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v75 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v75, (int)v87.S202, (int)v87.CarSystemManager);
           v76 = (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC;
         }
         else
         {
-          if ( gta2::Car_sub_403800((struct Car *)&pPlayer, (int)&unk_6630B0) )
+          if ( gta2::Car_sub_403800((Car *)&pPlayer, &unk_6630B0) )
           {
-            sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-            v77 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&v92.field_18, (int)&unk_662C98);
-            v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v77);
-            v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+            sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+            v77 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.field_18, (int)&unk_662C98);
+            v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v77);
+            v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
             v78 = gta2::AudioSourceParams_sub_41F9D0(&v90);
             v11 = gta2::MapRelatedStruct_sub_4653C0(self, v78, (int)v87.S202, (int)v87.CarSystemManager);
             if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
             {
-              v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-              v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+              v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+              v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
               v79 = gta2::AudioSourceParams_sub_41F9D0(&v90);
               v11 = gta2::MapRelatedStruct_sub_4653C0(self, v79, (int)v87.S202, (int)v87.CarSystemManager);
             }
             v90.AudioSourceParams2 = gta2::MapRelatedStruct_sub_4633A0(self, v11, 1);
-            v80 = (struct S202 *)gta2::Player_sub_401B40((struct Player *)&pPlayer, (struct S202 *)&v92.field_1C, (int)&unk_6630B0)->FirstElement;
+            v80 = (S202 *)gta2::Player_sub_401B40((Player *)&pPlayer, (S202 *)&v92.field_1C, (int)&unk_6630B0)->FirstElement;
           }
           else
           {
-            v80 = (struct S202 *)pPlayer;
+            v80 = (S202 *)pPlayer;
           }
           v87.S202 = v80;
-          sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
           gta2::bitShiftLeft1(&pS202, 0);
           field = (int *)v90.field;
           v76 = v11 == v66;
-          FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
-          pPlayer = (struct Player *)pS202.field_0;
+          FirstElement = (SpriteS1 *)v90.AudioSourceParams;
+          pPlayer = (Player *)pS202.field_0;
           if ( v76 )
             goto LABEL_80;
           gta2::MapRelatedStruct_sub_467020(
             self,
             (int *)v90.field,
-            (struct SpriteS1 *)v90.AudioSourceParams,
+            (SpriteS1 *)v90.AudioSourceParams,
             &v90.AudioSourceParams1,
             (void *)1,
             0);
-          v81 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)v93, (int)&unk_662C98);
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v81);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          v81 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)v93, (int)&unk_662C98);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v81);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v82 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v82, (int)v87.S202, (int)v87.CarSystemManager);
           v76 = (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC;
         }
         if ( v76 )
         {
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v83 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v83, (int)v87.S202, (int)v87.CarSystemManager);
         }
@@ -3000,52 +3000,52 @@ LABEL_46:
       else
       {
         v48 = v11;
-        v49 = gta2::Player_sub_40CE70((struct Player *)&pPlayer, &unk_662C98);
-        v87.CarSystemManager = (struct CarSystemManager *)v90.AudioSourceParams2;
+        v49 = gta2::Player_sub_40CE70((Player *)&pPlayer, &unk_662C98);
+        v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams2;
         if ( v49 )
         {
-          sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-          pPlayer = (struct Player *)gta2::Player_sub_401B40((struct Player *)&pPlayer, (struct S202 *)&pS202.S202, (int)&unk_662C98)->FirstElement;
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          pPlayer = (Player *)gta2::Player_sub_401B40((Player *)&pPlayer, (S202 *)&pS202.S202, (int)&unk_662C98)->FirstElement;
         }
         else
         {
-          v87.S202 = (struct S202 *)pPlayer;
-          sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-          pPlayer = (struct Player *)unk_662CFC;
+          v87.S202 = (S202 *)pPlayer;
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          pPlayer = (Player *)unk_662CFC;
         }
-        v50 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&pS202.CarSystemManager, (int)&unk_662C98);
-        v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v50);
-        v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+        v50 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&pS202.CarSystemManager, (int)&unk_662C98);
+        v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v50);
+        v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
         v51 = gta2::AudioSourceParams_sub_41F9D0(&v90);
         v11 = gta2::MapRelatedStruct_sub_4653C0(self, v51, (int)v87.S202, (int)v87.CarSystemManager);
         if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
         {
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v52 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v52, (int)v87.S202, (int)v87.CarSystemManager);
         }
         field = (int *)v90.field;
         v76 = v11 == v48;
-        FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
+        FirstElement = (SpriteS1 *)v90.AudioSourceParams;
         if ( !v76 )
         {
           gta2::MapRelatedStruct_sub_467020(
             self,
             (int *)v90.field,
-            (struct SpriteS1 *)v90.AudioSourceParams,
+            (SpriteS1 *)v90.AudioSourceParams,
             &v90.AudioSourceParams1,
             (void *)1,
             0);
-          v53 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&pS202.field_C, (int)&unk_662C98);
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v53);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          v53 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&pS202.field_C, (int)&unk_662C98);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v53);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v54 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v54, (int)v87.S202, (int)v87.CarSystemManager);
           if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+            v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+            v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
             v55 = gta2::AudioSourceParams_sub_41F9D0(&v90);
             v11 = gta2::MapRelatedStruct_sub_4653C0(self, v55, (int)v87.S202, (int)v87.CarSystemManager);
           }
@@ -3055,48 +3055,48 @@ LABEL_46:
           v90.field_14 = v11;
           LOWORD(v56) = *gta2::sub_4725B0(&v88, &v90.AudioSourceParams2);
           v87.CarSystemManager = v56;
-          v87.S202 = (struct S202 *)FirstElement;
+          v87.S202 = (S202 *)FirstElement;
           v87.field_0 = (int)field;
           v90.field_10 = (int)*gta2::sub_463210((SpriteS1 **)&pS202.field_10, v87);
-          gta2::Player_sub_401B40((struct Player *)&unk_662C98, (struct S202 *)&pS202.pPlayer, (int)&v90.field_10);
-          v57 = (struct CarSystemManager *)gta2::sub_4725B0(&v89, &v90.AudioSourceParams2);
-          v58 = (struct SpriteS1 *)gta2::sub_40E5A0(v57, (struct CarSystemManager *)&v87.field_1E, &unk_663108);
+          gta2::Player_sub_401B40((Player *)&unk_662C98, (S202 *)&pS202.pPlayer, (int)&v90.field_10);
+          v57 = (CarSystemManager *)gta2::sub_4725B0(&v89, &v90.AudioSourceParams2);
+          v58 = (SpriteS1 *)gta2::sub_40E5A0(v57, (CarSystemManager *)&v87.field_1E, &unk_663108);
           gta2::SpriteS1_sub_472C00(v58);
-          sub_4630D0((struct SpriteS1 *)&v90, (struct SpriteS1 *)&v90.AudioSourceParams);
-          v59 = gta2::Player_sub_401B40((struct Player *)&unk_662C98, (struct S202 *)&pS202.field_18, (int)&v90.field_10);
-          pPlayer = (struct Player *)gta2::S202_sub_401B20((struct S202 *)&pPlayer, (struct SpriteS1 *)&pS202.field_1C, (struct PublicTransport *)v59)->FirstElement;
-          v60 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, &v92, (int)&unk_662C98);
-          v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v60);
-          v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+          sub_4630D0((SpriteS1 *)&v90, (SpriteS1 *)&v90.AudioSourceParams);
+          v59 = gta2::Player_sub_401B40((Player *)&unk_662C98, (S202 *)&pS202.field_18, (int)&v90.field_10);
+          pPlayer = (Player *)gta2::S202_sub_401B20((S202 *)&pPlayer, (SpriteS1 *)&pS202.field_1C, (PublicTransport *)v59)->FirstElement;
+          v60 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, &v92, (int)&unk_662C98);
+          v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v60);
+          v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
           v61 = gta2::AudioSourceParams_sub_41F9D0(&v90);
           v11 = gta2::MapRelatedStruct_sub_4653C0(self, v61, (int)v87.S202, (int)v87.CarSystemManager);
           if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
           {
-            v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-            v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+            v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+            v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
             v62 = gta2::AudioSourceParams_sub_41F9D0(&v90);
             v11 = gta2::MapRelatedStruct_sub_4653C0(self, v62, (int)v87.S202, (int)v87.CarSystemManager);
           }
           field = (int *)v90.field;
-          FirstElement = (struct SpriteS1 *)v90.AudioSourceParams;
+          FirstElement = (SpriteS1 *)v90.AudioSourceParams;
           if ( v11 != v90.field_14 )
           {
             gta2::MapRelatedStruct_sub_467020(
               self,
               (int *)v90.field,
-              (struct SpriteS1 *)v90.AudioSourceParams,
+              (SpriteS1 *)v90.AudioSourceParams,
               &v90.AudioSourceParams1,
               (void *)1,
               0);
-            v63 = gta2::Player_sub_401B40((struct Player *)&v90.AudioSourceParams1, (struct S202 *)&v92.S202, (int)&unk_662C98);
-            v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v63);
-            v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+            v63 = gta2::Player_sub_401B40((Player *)&v90.AudioSourceParams1, (S202 *)&v92.S202, (int)&unk_662C98);
+            v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v63);
+            v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
             v64 = gta2::AudioSourceParams_sub_41F9D0(&v90);
             v11 = gta2::MapRelatedStruct_sub_4653C0(self, v64, (int)v87.S202, (int)v87.CarSystemManager);
             if ( (*(_BYTE *)(v11 + 11) & 0xFC) == 0xFC )
             {
-              v87.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams1);
-              v87.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v90.AudioSourceParams);
+              v87.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams1);
+              v87.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v90.AudioSourceParams);
               v65 = gta2::AudioSourceParams_sub_41F9D0(&v90);
               v11 = gta2::MapRelatedStruct_sub_4653C0(self, v65, (int)v87.S202, (int)v87.CarSystemManager);
             }
@@ -3105,11 +3105,11 @@ LABEL_46:
         }
       }
 LABEL_80:
-      LOWORD(v84) = gta2::Car_sub_403820((struct Car *)&pPlayer, &unk_662CFC);
+      LOWORD(v84) = gta2::Car_sub_403820((Car *)&pPlayer, &unk_662CFC);
     }
     while ( v84 );
   }
-  v87.CarSystemManager = (struct CarSystemManager *)v90.AudioSourceParams1;
+  v87.CarSystemManager = (CarSystemManager *)v90.AudioSourceParams1;
   *arg0 = (int)field;
   a3->FirstElement = FirstElement;
   v85 = *gta2::MapRelatedStruct_sub_466E20(self, &pPlayer, field, FirstElement, (int)v87.CarSystemManager);
@@ -3125,100 +3125,100 @@ LABEL_80:
 int gta2::MapRelatedStruct_sub_467F80(struct MapRelatedStruct *self, int **arg0, SpriteS1 **a3, int *a4, Player *a5)
 {
   int *field; // ebp
-  struct SpriteS1 *v7; // ebx
-  struct SpriteS1 *v8; // eax
+  SpriteS1 *v7; // ebx
+  SpriteS1 *v8; // eax
   int v9; // eax
   int v10; // edi
   int v11; // eax
-  struct CarSystemManager *v12; // edx
+  CarSystemManager *v12; // edx
   int v13; // eax
-  struct CarSystemManager *v14; // ecx
+  CarSystemManager *v14; // ecx
   BOOL v15; // eax
-  struct SpriteS1 *v16; // eax
+  SpriteS1 *v16; // eax
   int v17; // eax
   int v18; // eax
   int v19; // eax
   char v20; // al
-  struct CarSystemManager *v21; // edi
+  CarSystemManager *v21; // edi
   BOOL v22; // eax
-  struct SpriteS1 *v23; // eax
+  SpriteS1 *v23; // eax
   int v24; // eax
   int v25; // eax
-  struct SpriteS1 *v26; // eax
+  SpriteS1 *v26; // eax
   int v27; // eax
   int v28; // eax
-  struct CarSystemManager *v29; // ecx
+  CarSystemManager *v29; // ecx
   int v30; // ebx
-  struct CarSystemManager *v31; // eax
-  struct SpriteS1 *v32; // eax
-  struct SpriteS1 *v33; // eax
-  struct SpriteS1 *v34; // eax
+  CarSystemManager *v31; // eax
+  SpriteS1 *v32; // eax
+  SpriteS1 *v33; // eax
+  SpriteS1 *v34; // eax
   int v35; // eax
   int v36; // eax
   int v37; // eax
   BOOL v38; // eax
-  struct SpriteS1 *v39; // eax
+  SpriteS1 *v39; // eax
   int v40; // eax
   int v41; // eax
-  struct SpriteS1 *v42; // eax
+  SpriteS1 *v42; // eax
   int v43; // eax
   int v44; // eax
   BOOL v45; // eax
-  struct SpriteS1 *v46; // eax
+  SpriteS1 *v46; // eax
   int v47; // eax
   int v48; // eax
   int v49; // eax
-  struct SpriteS1 *v50; // eax
+  SpriteS1 *v50; // eax
   int v51; // eax
   int v52; // eax
   int v53; // eax
-  struct CarSystemManager *v54; // edx
-  struct CarSystemManager *v55; // eax
-  struct SpriteS1 *v56; // eax
-  struct CarSystemManager *v57; // eax
-  struct SpriteS1 *v58; // eax
-  struct SpriteS1 *v59; // eax
-  struct SpriteS1 *v60; // eax
+  CarSystemManager *v54; // edx
+  CarSystemManager *v55; // eax
+  SpriteS1 *v56; // eax
+  CarSystemManager *v57; // eax
+  SpriteS1 *v58; // eax
+  SpriteS1 *v59; // eax
+  SpriteS1 *v60; // eax
   int v61; // eax
   int v62; // eax
-  struct SpriteS1 *v63; // eax
+  SpriteS1 *v63; // eax
   int v64; // eax
   int v65; // eax
-  struct CarSystemManager *v66; // ebp
-  struct SpriteS1 *v67; // eax
-  struct SpriteS1 *v68; // eax
+  CarSystemManager *v66; // ebp
+  SpriteS1 *v67; // eax
+  SpriteS1 *v68; // eax
   int v69; // eax
   int v70; // eax
-  struct SpriteS1 *v71; // eax
-  struct SpriteS1 *v72; // ecx
-  struct SpriteS1 *v73; // eax
-  struct SpriteS1 *v74; // eax
+  SpriteS1 *v71; // eax
+  SpriteS1 *v72; // ecx
+  SpriteS1 *v73; // eax
+  SpriteS1 *v74; // eax
   int v75; // eax
   int v76; // eax
-  struct SpriteS1 *v77; // eax
-  struct SpriteS1 *v78; // eax
+  SpriteS1 *v77; // eax
+  SpriteS1 *v78; // eax
   int v79; // eax
   int v80; // ebx
-  struct SpriteS1 *FirstElement; // edi
+  SpriteS1 *FirstElement; // edi
   BOOL v82; // eax
-  struct SpriteS1 *v83; // eax
-  struct SpriteS1 *v84; // eax
+  SpriteS1 *v83; // eax
+  SpriteS1 *v84; // eax
   int v85; // eax
   int v86; // eax
-  struct SpriteS1 *v87; // eax
+  SpriteS1 *v87; // eax
   int v88; // eax
   bool v89; // zf
-  struct SpriteS1 *v90; // eax
+  SpriteS1 *v90; // eax
   int v91; // eax
   int v92; // eax
-  struct S202 *v93; // eax
-  struct SpriteS1 *v94; // eax
+  S202 *v93; // eax
+  SpriteS1 *v94; // eax
   int v95; // eax
   int v96; // eax
   int v97; // eax
   S202 v99; // [esp-Ch] [ebp-BCh] BYREF
   AudioSourceParams v100; // [esp+14h] [ebp-9Ch] BYREF
-  struct SpriteS1 *v101; // [esp+2Ch] [ebp-84h] BYREF
+  SpriteS1 *v101; // [esp+2Ch] [ebp-84h] BYREF
   CarSystemManager pCarSystemManager; // [esp+32h] [ebp-7Eh] BYREF
   char v103; // [esp+A0h] [ebp-10h] BYREF
   _BYTE v104[4]; // [esp+A4h] [ebp-Ch] BYREF
@@ -3231,29 +3231,29 @@ int gta2::MapRelatedStruct_sub_467F80(struct MapRelatedStruct *self, int **arg0,
   v7 = *a3;
   HIBYTE(v100.field_10) = 0;
   v100.field = (int)field;
-  *(Weapon **)((char *)&pCarSystemManager.Weapon_ + 2) = (struct Weapon *)field;
+  *(Weapon **)((char *)&pCarSystemManager.Weapon_ + 2) = (Weapon *)field;
   *(_DWORD *)&v99.field_1C = v7;
   *(int *)((char *)&pCarSystemManager.field_4 + 2) = (int)v7;
   gta2::MapRelatedStruct_sub_467020(self, field, v7, &v100.AudioSourceParams, 0, 0);
-  v8 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-  v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v8);
-  v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+  v8 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+  v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v8);
+  v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
   v9 = gta2::AudioSourceParams_sub_41F9D0(&v100);
   v10 = gta2::MapRelatedStruct_sub_4653C0(self, v9, (int)v99.S202, (int)v99.CarSystemManager);
   if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
   {
-    v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-    v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+    v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+    v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
     v11 = gta2::AudioSourceParams_sub_41F9D0(&v100);
     v10 = gta2::MapRelatedStruct_sub_4653C0(self, v11, (int)v99.S202, (int)v99.CarSystemManager);
   }
   v100.AudioSourceParams1 = gta2::MapRelatedStruct_sub_4633A0(self, v10, 0);
   LOWORD(v12) = *gta2::sub_4725B0(&pCarSystemManager.Index, &v100.AudioSourceParams1);
   v99.CarSystemManager = v12;
-  v99.S202 = (struct S202 *)v7;
+  v99.S202 = (S202 *)v7;
   v99.field_0 = (int)field;
   v101 = *gta2::sub_463150((SpriteS1 **)&v100.AudioSourceParams2, v99);
-  if ( gta2::Car_sub_403800((struct Car *)&v101, (int)&unk_6630B0) )
+  if ( gta2::Car_sub_403800((Car *)&v101, &unk_6630B0) )
   {
     switch ( v100.AudioSourceParams1 )
     {
@@ -3271,7 +3271,7 @@ int gta2::MapRelatedStruct_sub_467F80(struct MapRelatedStruct *self, int **arg0,
   }
   else
   {
-    v99.CarSystemManager = (struct CarSystemManager *)&unk_6630B0;
+    v99.CarSystemManager = (CarSystemManager *)&unk_6630B0;
     if ( gta2::sub_4037E0(&v101) )
     {
       switch ( v100.AudioSourceParams1 )
@@ -3297,85 +3297,85 @@ LABEL_6:
       }
     }
   }
-  LOWORD(v13) = gta2::Car_sub_403820((struct Car *)&v101, &unk_6630B0);
-  v99.CarSystemManager = (struct CarSystemManager *)&v100.AudioSourceParams1;
-  v99.S202 = (struct S202 *)&pCarSystemManager;
+  LOWORD(v13) = gta2::Car_sub_403820((Car *)&v101, &unk_6630B0);
+  v99.CarSystemManager = (CarSystemManager *)&v100.AudioSourceParams1;
+  v99.S202 = (S202 *)&pCarSystemManager;
   if ( v13 )
   {
-    v101 = (struct SpriteS1 *)v10;
+    v101 = (SpriteS1 *)v10;
     LOWORD(v14) = *gta2::sub_4725B0((unsigned __int16 *)v99.S202, &v99.CarSystemManager->Index);
     v99.CarSystemManager = v14;
-    v99.S202 = (struct S202 *)v7;
+    v99.S202 = (S202 *)v7;
     v99.field_0 = (int)field;
     v100.field_14 = (int)*gta2::sub_463210((SpriteS1 **)&v100.AudioSourceParams2, v99);
-    if ( gta2::Car_sub_403800((struct Car *)&v100.field_14, (int)&unk_662CFC) )
+    if ( gta2::Car_sub_403800((Car *)&v100.field_14, (int)&unk_662CFC) )
     {
-      v15 = gta2::Player_sub_40CE70((struct Player *)&a5, &v100.field_14);
-      v99.CarSystemManager = (struct CarSystemManager *)v100.AudioSourceParams1;
+      v15 = gta2::Player_sub_40CE70((Player *)&a5, &v100.field_14);
+      v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams1;
       if ( v15 )
       {
-        sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-        a5 = (struct Player *)gta2::Player_sub_401B40((struct Player *)&a5, (struct S202 *)&v100.AudioSourceParams2, (int)&v100.field_14)->FirstElement;
+        sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+        a5 = (Player *)gta2::Player_sub_401B40((Player *)&a5, (S202 *)&v100.AudioSourceParams2, (int)&v100.field_14)->FirstElement;
       }
       else
       {
-        v99.S202 = (struct S202 *)a5;
-        sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-        a5 = (struct Player *)unk_662CFC;
+        v99.S202 = (S202 *)a5;
+        sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+        a5 = (Player *)unk_662CFC;
       }
       field = (int *)v100.field;
       v7 = *(SpriteS1 **)&v99.field_1C;
     }
-    v16 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-    v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v16);
-    v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+    v16 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+    v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v16);
+    v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
     v17 = gta2::AudioSourceParams_sub_41F9D0(&v100);
     v18 = gta2::MapRelatedStruct_sub_4653C0(self, v17, (int)v99.S202, (int)v99.CarSystemManager);
     if ( (*(_BYTE *)(v18 + 11) & 0xFC) == 0xFC )
     {
-      v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-      v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+      v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+      v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v19 = gta2::AudioSourceParams_sub_41F9D0(&v100);
       v18 = gta2::MapRelatedStruct_sub_4653C0(self, v19, (int)v99.S202, (int)v99.CarSystemManager);
     }
     v20 = gta2::MapRelatedStruct_sub_4632E0(self, v18, v100.AudioSourceParams1, 0);
-    v21 = (struct CarSystemManager *)v100.AudioSourceParams1;
+    v21 = (CarSystemManager *)v100.AudioSourceParams1;
     if ( !v20 )
     {
-      v22 = gta2::Player_sub_40CE70((struct Player *)&a5, &unk_662C98);
+      v22 = gta2::Player_sub_40CE70((Player *)&a5, &unk_662C98);
       v99.CarSystemManager = v21;
       if ( v22 )
       {
-        sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-        a5 = (struct Player *)gta2::Player_sub_401B40((struct Player *)&a5, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98)->FirstElement;
+        sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+        a5 = (Player *)gta2::Player_sub_401B40((Player *)&a5, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98)->FirstElement;
       }
       else
       {
-        v99.S202 = (struct S202 *)a5;
-        sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-        a5 = (struct Player *)unk_662CFC;
+        v99.S202 = (S202 *)a5;
+        sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+        a5 = (Player *)unk_662CFC;
       }
       field = (int *)v100.field;
       v7 = *(SpriteS1 **)&v99.field_1C;
     }
-    v23 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-    v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v23);
-    v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+    v23 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+    v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v23);
+    v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
     v24 = gta2::AudioSourceParams_sub_41F9D0(&v100);
     v10 = gta2::MapRelatedStruct_sub_4653C0(self, v24, (int)v99.S202, (int)v99.CarSystemManager);
     if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
     {
-      v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-      v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+      v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+      v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v25 = gta2::AudioSourceParams_sub_41F9D0(&v100);
       v10 = gta2::MapRelatedStruct_sub_4653C0(self, v25, (int)v99.S202, (int)v99.CarSystemManager);
     }
-    if ( (struct SpriteS1 *)v10 != v101 )
+    if ( (SpriteS1 *)v10 != v101 )
     {
       gta2::MapRelatedStruct_sub_467020(self, field, v7, &v100.AudioSourceParams, 0, 0);
-      v26 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-      v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v26);
-      v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+      v26 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+      v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v26);
+      v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v27 = gta2::AudioSourceParams_sub_41F9D0(&v100);
       v10 = gta2::MapRelatedStruct_sub_4653C0(self, v27, (int)v99.S202, (int)v99.CarSystemManager);
       if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
@@ -3386,60 +3386,60 @@ LABEL_6:
   {
     LOWORD(v29) = *gta2::sub_4725B0((unsigned __int16 *)v99.S202, &v99.CarSystemManager->Index);
     v99.CarSystemManager = v29;
-    v99.S202 = (struct S202 *)v7;
+    v99.S202 = (S202 *)v7;
     v99.field_0 = (int)field;
     v100.field_14 = (int)*gta2::sub_463210((SpriteS1 **)&v100.AudioSourceParams2, v99);
-    if ( gta2::Car_sub_403800((struct Car *)&v100.field_14, (int)&unk_662CFC) )
+    if ( gta2::Car_sub_403800((Car *)&v100.field_14, (int)&unk_662CFC) )
     {
       gta2::MapRelatedStruct_sub_467020(self, field, v7, &v100.AudioSourceParams, 0, (void *)1);
       v30 = v10;
-      gta2::Player_sub_401B40((struct Player *)&unk_662C98, (struct S202 *)&v100.AudioSourceParams2, (int)&v100.field_14);
-      v31 = (struct CarSystemManager *)gta2::sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.AudioSourceParams1);
-      v32 = (struct SpriteS1 *)gta2::sub_40E5A0(v31, &pCarSystemManager, &unk_663108);
+      gta2::Player_sub_401B40((Player *)&unk_662C98, (S202 *)&v100.AudioSourceParams2, (int)&v100.field_14);
+      v31 = (CarSystemManager *)gta2::sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.AudioSourceParams1);
+      v32 = (SpriteS1 *)gta2::sub_40E5A0(v31, &pCarSystemManager, &unk_663108);
       gta2::SpriteS1_sub_472C00(v32);
-      sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-      v33 = gta2::Player_sub_401B40((struct Player *)&unk_662C98, (struct S202 *)&v100.AudioSourceParams2, (int)&v100.field_14);
-      a5 = (struct Player *)gta2::S202_sub_401B20((struct S202 *)&a5, (struct SpriteS1 *)&v101, (struct PublicTransport *)v33)->FirstElement;
-      v34 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-      v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v34);
-      v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+      sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+      v33 = gta2::Player_sub_401B40((Player *)&unk_662C98, (S202 *)&v100.AudioSourceParams2, (int)&v100.field_14);
+      a5 = (Player *)gta2::S202_sub_401B20((S202 *)&a5, (SpriteS1 *)&v101, (PublicTransport *)v33)->FirstElement;
+      v34 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+      v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v34);
+      v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v35 = gta2::AudioSourceParams_sub_41F9D0(&v100);
       v36 = gta2::MapRelatedStruct_sub_4653C0(self, v35, (int)v99.S202, (int)v99.CarSystemManager);
       if ( !v36 )
         goto LABEL_35;
       if ( (*(_BYTE *)(v36 + 11) & 0xFC) == 0xFC )
       {
-        v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-        v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+        v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+        v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v37 = gta2::AudioSourceParams_sub_41F9D0(&v100);
         v36 = gta2::MapRelatedStruct_sub_4653C0(self, v37, (int)v99.S202, (int)v99.CarSystemManager);
       }
       if ( !v36 || !gta2::MapRelatedStruct_sub_4632E0(self, v36, v100.AudioSourceParams1, 0) )
       {
 LABEL_35:
-        v38 = gta2::Player_sub_40CE70((struct Player *)&a5, &unk_662C98);
-        v99.CarSystemManager = (struct CarSystemManager *)v100.AudioSourceParams1;
+        v38 = gta2::Player_sub_40CE70((Player *)&a5, &unk_662C98);
+        v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams1;
         if ( v38 )
         {
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-          a5 = (struct Player *)gta2::Player_sub_401B40((struct Player *)&a5, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98)->FirstElement;
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+          a5 = (Player *)gta2::Player_sub_401B40((Player *)&a5, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98)->FirstElement;
         }
         else
         {
-          v99.S202 = (struct S202 *)a5;
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-          a5 = (struct Player *)unk_662CFC;
+          v99.S202 = (S202 *)a5;
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+          a5 = (Player *)unk_662CFC;
         }
       }
-      v39 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-      v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v39);
-      v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+      v39 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+      v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v39);
+      v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
       v40 = gta2::AudioSourceParams_sub_41F9D0(&v100);
       v10 = gta2::MapRelatedStruct_sub_4653C0(self, v40, (int)v99.S202, (int)v99.CarSystemManager);
       if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
       {
-        v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-        v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+        v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+        v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v41 = gta2::AudioSourceParams_sub_41F9D0(&v100);
         v10 = gta2::MapRelatedStruct_sub_4653C0(self, v41, (int)v99.S202, (int)v99.CarSystemManager);
       }
@@ -3468,23 +3468,23 @@ LABEL_35:
           (void *)v99.field_0,
           v99.S202,
           v99.CarSystemManager);
-        v42 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
-        v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v42);
-        v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+        v42 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)&v100.AudioSourceParams2, (int)&unk_662C98);
+        v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v42);
+        v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v43 = gta2::AudioSourceParams_sub_41F9D0(&v100);
         v10 = gta2::MapRelatedStruct_sub_4653C0(self, v43, (int)v99.S202, (int)v99.CarSystemManager);
         if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
         {
 LABEL_28:
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v28 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v28, (int)v99.S202, (int)v99.CarSystemManager);
         }
       }
     }
   }
-  LOWORD(v44) = gta2::Car_sub_403820((struct Car *)&a5, &unk_662CFC);
+  LOWORD(v44) = gta2::Car_sub_403820((Car *)&a5, &unk_662CFC);
   if ( v44 )
   {
     do
@@ -3498,31 +3498,31 @@ LABEL_28:
           case 1:
           case 2:
             v67 = gta2::Player_sub_401B40(
-                    (struct Player *)&pCarSystemManager.field_2,
-                    (struct S202 *)((char *)&pCarSystemManager.field_44 + 2),
+                    (Player *)&pCarSystemManager.field_2,
+                    (S202 *)((char *)&pCarSystemManager.field_44 + 2),
                     (int)&unk_662C98);
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v67);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)((char *)&pCarSystemManager.field_4 + 2));
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v67);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.field_4 + 2));
             v68 = gta2::S202_sub_401B20(
-                    (struct S202 *)((char *)&pCarSystemManager.Weapon_ + 2),
-                    (struct SpriteS1 *)&v103,
-                    (struct PublicTransport *)&unk_662C98);
-            v69 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v68);
+                    (S202 *)((char *)&pCarSystemManager.Weapon_ + 2),
+                    (SpriteS1 *)&v103,
+                    (PublicTransport *)&unk_662C98);
+            v69 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v68);
             v70 = gta2::MapRelatedStruct_sub_4653C0(gMapRelatedStruct, v69, (int)v99.S202, (int)v99.CarSystemManager);
             v10 = v70;
             if ( !v70
-              || (v66 = (struct CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v70, 0), v66 != (struct CarSystemManager *)3) )
+              || (v66 = (CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v70, 0), v66 != (CarSystemManager *)3) )
             {
               v71 = gta2::Player_sub_401B40(
-                      (struct Player *)&pCarSystemManager.field_2,
-                      (struct S202 *)((char *)&pCarSystemManager.Player + 2),
+                      (Player *)&pCarSystemManager.field_2,
+                      (S202 *)((char *)&pCarSystemManager.Player + 2),
                       (int)&unk_662C98);
-              v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v71);
-              v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)((char *)&pCarSystemManager.field_4
+              v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v71);
+              v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.field_4
                                                                                    + 2));
               v72 = gta2::Player_sub_401B40(
-                      (struct Player *)((char *)&pCarSystemManager.Weapon_ + 2),
-                      (struct S202 *)((char *)&pCarSystemManager.field_20 + 2),
+                      (Player *)((char *)&pCarSystemManager.Weapon_ + 2),
+                      (S202 *)((char *)&pCarSystemManager.field_20 + 2),
                       (int)&unk_662C98);
               goto LABEL_72;
             }
@@ -3530,78 +3530,78 @@ LABEL_28:
           case 3:
           case 4:
             v73 = gta2::Player_sub_401B40(
-                    (struct Player *)&pCarSystemManager.field_2,
-                    (struct S202 *)((char *)&pCarSystemManager.RecycledCars + 2),
+                    (Player *)&pCarSystemManager.field_2,
+                    (S202 *)((char *)&pCarSystemManager.RecycledCars + 2),
                     (int)&unk_662C98);
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v73);
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v73);
             v74 = gta2::S202_sub_401B20(
-                    (struct S202 *)((char *)&pCarSystemManager.field_4 + 2),
-                    (struct SpriteS1 *)((char *)&pCarSystemManager.field_30 + 2),
-                    (struct PublicTransport *)&unk_662C98);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v74);
-            v75 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)((char *)&pCarSystemManager.Weapon_ + 2));
+                    (S202 *)((char *)&pCarSystemManager.field_4 + 2),
+                    (SpriteS1 *)((char *)&pCarSystemManager.field_30 + 2),
+                    (PublicTransport *)&unk_662C98);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v74);
+            v75 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)((char *)&pCarSystemManager.Weapon_ + 2));
             v76 = gta2::MapRelatedStruct_sub_4653C0(gMapRelatedStruct, v75, (int)v99.S202, (int)v99.CarSystemManager);
             v10 = v76;
             if ( !v76
-              || (v66 = (struct CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v76, 0), v66 != (struct CarSystemManager *)2) )
+              || (v66 = (CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v76, 0), v66 != (CarSystemManager *)2) )
             {
               v77 = gta2::Player_sub_401B40(
-                      (struct Player *)&pCarSystemManager.field_2,
-                      (struct S202 *)((char *)&pCarSystemManager.field_38 + 2),
+                      (Player *)&pCarSystemManager.field_2,
+                      (S202 *)((char *)&pCarSystemManager.field_38 + 2),
                       (int)&unk_662C98);
-              v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v77);
+              v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v77);
               v78 = gta2::Player_sub_401B40(
-                      (struct Player *)((char *)&pCarSystemManager.field_4 + 2),
-                      (struct S202 *)((char *)&pCarSystemManager.RecycledCars_1 + 2),
+                      (Player *)((char *)&pCarSystemManager.field_4 + 2),
+                      (S202 *)((char *)&pCarSystemManager.RecycledCars_1 + 2),
                       (int)&unk_662C98);
-              v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v78);
-              v72 = (struct SpriteS1 *)((char *)&pCarSystemManager.Weapon_ + 2);
+              v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v78);
+              v72 = (SpriteS1 *)((char *)&pCarSystemManager.Weapon_ + 2);
 LABEL_72:
-              v79 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v72);
+              v79 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v72);
               v10 = gta2::MapRelatedStruct_sub_4653C0(gMapRelatedStruct, v79, (int)v99.S202, (int)v99.CarSystemManager);
-              v66 = (struct CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v10, 0);
+              v66 = (CarSystemManager *)gta2::MapRelatedStruct_sub_4633A0(self, v10, 0);
             }
             break;
           default:
             break;
         }
         v80 = v10;
-        if ( gta2::Player_sub_40CE70((struct Player *)&a5, &unk_662C98) )
+        if ( gta2::Player_sub_40CE70((Player *)&a5, &unk_662C98) )
         {
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           v100.AudioSourceParams1 = (int)v66;
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           FirstElement = gta2::Player_sub_401B40(
-                           (struct Player *)&a5,
-                           (struct S202 *)((char *)&pCarSystemManager.field_48 + 2),
+                           (Player *)&a5,
+                           (S202 *)((char *)&pCarSystemManager.field_48 + 2),
                            (int)&unk_662C98)->FirstElement;
-          a5 = (struct Player *)FirstElement;
-          v82 = gta2::Player_sub_40CE70((struct Player *)&a5, &unk_662C98);
+          a5 = (Player *)FirstElement;
+          v82 = gta2::Player_sub_40CE70((Player *)&a5, &unk_662C98);
           v99.CarSystemManager = v66;
           if ( v82 )
           {
-            sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-            v83 = gta2::Player_sub_401B40((struct Player *)&a5, (struct S202 *)&pCarSystemManager.field_52, (int)&unk_662C98)->FirstElement;
+            sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+            v83 = gta2::Player_sub_401B40((Player *)&a5, (S202 *)&pCarSystemManager.field_52, (int)&unk_662C98)->FirstElement;
           }
           else
           {
-            v99.S202 = (struct S202 *)FirstElement;
-            sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-            v83 = (struct SpriteS1 *)unk_662CFC;
+            v99.S202 = (S202 *)FirstElement;
+            sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+            v83 = (SpriteS1 *)unk_662CFC;
           }
-          a5 = (struct Player *)v83;
+          a5 = (Player *)v83;
           v84 = gta2::Player_sub_401B40(
-                  (struct Player *)&v100.AudioSourceParams,
-                  (struct S202 *)((char *)&pCarSystemManager.CarType + 2),
+                  (Player *)&v100.AudioSourceParams,
+                  (S202 *)((char *)&pCarSystemManager.CarType + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v84);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v84);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v85 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v85, (int)v99.S202, (int)v99.CarSystemManager);
           if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
           {
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v86 = gta2::AudioSourceParams_sub_41F9D0(&v100);
             v10 = gta2::MapRelatedStruct_sub_4653C0(self, v86, (int)v99.S202, (int)v99.CarSystemManager);
           }
@@ -3618,49 +3618,49 @@ LABEL_72:
             0,
             0);
           v87 = gta2::Player_sub_401B40(
-                  (struct Player *)&v100.AudioSourceParams,
-                  (struct S202 *)((char *)&pCarSystemManager.field_60 + 2),
+                  (Player *)&v100.AudioSourceParams,
+                  (S202 *)((char *)&pCarSystemManager.field_60 + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v87);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v87);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v88 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v88, (int)v99.S202, (int)v99.CarSystemManager);
           v89 = (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC;
         }
         else
         {
-          if ( gta2::Car_sub_403800((struct Car *)&a5, (int)&unk_6630B0) )
+          if ( gta2::Car_sub_403800((Car *)&a5, &unk_6630B0) )
           {
-            sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
+            sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
             v90 = gta2::Player_sub_401B40(
-                    (struct Player *)&v100.AudioSourceParams,
-                    (struct S202 *)&pCarSystemManager.field_6A,
+                    (Player *)&v100.AudioSourceParams,
+                    (S202 *)&pCarSystemManager.field_6A,
                     (int)&unk_662C98);
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v90);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v90);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v91 = gta2::AudioSourceParams_sub_41F9D0(&v100);
             v10 = gta2::MapRelatedStruct_sub_4653C0(self, v91, (int)v99.S202, (int)v99.CarSystemManager);
             if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
             {
-              v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-              v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+              v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+              v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
               v92 = gta2::AudioSourceParams_sub_41F9D0(&v100);
               v10 = gta2::MapRelatedStruct_sub_4653C0(self, v92, (int)v99.S202, (int)v99.CarSystemManager);
             }
             v100.AudioSourceParams1 = (int)v66;
-            v93 = (struct S202 *)gta2::Player_sub_401B40((struct Player *)&a5, (struct S202 *)v104, (int)&unk_6630B0)->FirstElement;
+            v93 = (S202 *)gta2::Player_sub_401B40((Player *)&a5, (S202 *)v104, (int)&unk_6630B0)->FirstElement;
           }
           else
           {
-            v93 = (struct S202 *)a5;
+            v93 = (S202 *)a5;
           }
           v99.S202 = v93;
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           gta2::bitShiftLeft1(&v100.AudioSourceParams2, 0);
           field = (int *)v100.field;
           v89 = v10 == v80;
           v7 = *(SpriteS1 **)&v99.field_1C;
-          a5 = (struct Player *)v100.AudioSourceParams2;
+          a5 = (Player *)v100.AudioSourceParams2;
           if ( v89 )
             goto LABEL_90;
           gta2::MapRelatedStruct_sub_467020(
@@ -3671,48 +3671,48 @@ LABEL_72:
             0,
             0);
           v94 = gta2::Player_sub_401B40(
-                  (struct Player *)&v100.AudioSourceParams,
-                  (struct S202 *)((char *)&pCarSystemManager.ID + 2),
+                  (Player *)&v100.AudioSourceParams,
+                  (S202 *)((char *)&pCarSystemManager.ID + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v94);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v94);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v95 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v95, (int)v99.S202, (int)v99.CarSystemManager);
           v89 = (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC;
         }
         if ( v89 )
         {
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v96 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v96, (int)v99.S202, (int)v99.CarSystemManager);
         }
       }
       else
       {
-        v101 = (struct SpriteS1 *)v10;
-        *(Weapon **)((char *)&pCarSystemManager.Weapon_ + 2) = (struct Weapon *)field;
+        v101 = (SpriteS1 *)v10;
+        *(Weapon **)((char *)&pCarSystemManager.Weapon_ + 2) = (Weapon *)field;
         *(int *)((char *)&pCarSystemManager.field_4 + 2) = (int)v7;
         *(_DWORD *)&pCarSystemManager.field_2 = v100.AudioSourceParams;
-        v45 = gta2::Player_sub_40CE70((struct Player *)&a5, &unk_662C98);
-        v99.CarSystemManager = (struct CarSystemManager *)v100.AudioSourceParams1;
+        v45 = gta2::Player_sub_40CE70((Player *)&a5, &unk_662C98);
+        v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams1;
         if ( v45 )
         {
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-          a5 = (struct Player *)gta2::Player_sub_401B40(
-                           (struct Player *)&a5,
-                           (struct S202 *)((char *)&pCarSystemManager.field_2C + 2),
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+          a5 = (Player *)gta2::Player_sub_401B40(
+                           (Player *)&a5,
+                           (S202 *)((char *)&pCarSystemManager.field_2C + 2),
                            (int)&unk_662C98)->FirstElement;
         }
         else
         {
-          v99.S202 = (struct S202 *)a5;
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-          a5 = (struct Player *)unk_662CFC;
+          v99.S202 = (S202 *)a5;
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+          a5 = (Player *)unk_662CFC;
         }
-        v46 = gta2::Player_sub_401B40((struct Player *)&v100.AudioSourceParams, (struct S202 *)v106, (int)&unk_662C98);
-        v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v46);
-        v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+        v46 = gta2::Player_sub_401B40((Player *)&v100.AudioSourceParams, (S202 *)v106, (int)&unk_662C98);
+        v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v46);
+        v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
         v47 = gta2::AudioSourceParams_sub_41F9D0(&v100);
         v48 = gta2::MapRelatedStruct_sub_4653C0(self, v47, (int)v99.S202, (int)v99.CarSystemManager);
         field = (int *)v100.field;
@@ -3722,20 +3722,20 @@ LABEL_72:
           goto LABEL_59;
         if ( (*(_BYTE *)(v48 + 11) & 0xFC) == 0xFC )
         {
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v49 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v49, (int)v99.S202, (int)v99.CarSystemManager);
         }
-        if ( (struct SpriteS1 *)v10 != v101 )
+        if ( (SpriteS1 *)v10 != v101 )
         {
           gta2::MapRelatedStruct_sub_467020(self, field, v7, &v100.AudioSourceParams, 0, 0);
           v50 = gta2::Player_sub_401B40(
-                  (struct Player *)&v100.AudioSourceParams,
-                  (struct S202 *)((char *)&pCarSystemManager.field_24 + 2),
+                  (Player *)&v100.AudioSourceParams,
+                  (S202 *)((char *)&pCarSystemManager.field_24 + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v50);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v50);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v51 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v52 = gta2::MapRelatedStruct_sub_4653C0(self, v51, (int)v99.S202, (int)v99.CarSystemManager);
           v10 = v52;
@@ -3743,8 +3743,8 @@ LABEL_72:
             goto LABEL_59;
           if ( (*(_BYTE *)(v52 + 11) & 0xFC) == 0xFC )
           {
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v53 = gta2::AudioSourceParams_sub_41F9D0(&v100);
             v10 = gta2::MapRelatedStruct_sub_4653C0(self, v53, (int)v99.S202, (int)v99.CarSystemManager);
           }
@@ -3752,54 +3752,54 @@ LABEL_72:
         if ( !v10 || !gta2::MapRelatedStruct_sub_4632E0(self, v10, v100.AudioSourceParams1, 0) )
         {
 LABEL_59:
-          v101 = (struct SpriteS1 *)v10;
+          v101 = (SpriteS1 *)v10;
           LOWORD(v54) = *gta2::sub_4725B0((unsigned __int16 *)&pCarSystemManager.field_10, &v100.AudioSourceParams1);
           v99.CarSystemManager = v54;
-          v99.S202 = (struct S202 *)v7;
+          v99.S202 = (S202 *)v7;
           v99.field_0 = (int)field;
           v100.field_14 = (int)*gta2::sub_463210((SpriteS1 **)((char *)&pCarSystemManager.SpriteS1_0 + 2), v99);
-          v55 = (struct CarSystemManager *)gta2::sub_4725B0(
+          v55 = (CarSystemManager *)gta2::sub_4725B0(
                                       (unsigned __int16 *)&pCarSystemManager.field_1C,
                                       &v100.AudioSourceParams1);
-          v56 = (struct SpriteS1 *)gta2::sub_40E5A0(v55, &pCarSystemManager, &unk_663108);
+          v56 = (SpriteS1 *)gta2::sub_40E5A0(v55, &pCarSystemManager, &unk_663108);
           gta2::SpriteS1_sub_472C00(v56);
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
           gta2::Player_sub_401B40(
-            (struct Player *)&unk_662C98,
-            (struct S202 *)((char *)&pCarSystemManager.field_1C + 2),
+            (Player *)&unk_662C98,
+            (S202 *)((char *)&pCarSystemManager.field_1C + 2),
             (int)&v100.field_14);
-          v57 = (struct CarSystemManager *)gta2::sub_4725B0((unsigned __int16 *)&pCarSystemManager.ID, &v100.AudioSourceParams1);
-          v58 = (struct SpriteS1 *)gta2::sub_40E5A0(v57, (struct CarSystemManager *)&pCarSystemManager.field_12, &unk_663108);
+          v57 = (CarSystemManager *)gta2::sub_4725B0((unsigned __int16 *)&pCarSystemManager.ID, &v100.AudioSourceParams1);
+          v58 = (SpriteS1 *)gta2::sub_40E5A0(v57, (CarSystemManager *)&pCarSystemManager.field_12, &unk_663108);
           gta2::SpriteS1_sub_472C00(v58);
-          sub_4630D0((struct SpriteS1 *)&v100, (struct SpriteS1 *)&v99.field_1C);
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::Player_sub_401B40(
-                                                       (struct Player *)&unk_662C98,
-                                                       (struct S202 *)&pCarSystemManager.field_56,
+          sub_4630D0((SpriteS1 *)&v100, (SpriteS1 *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::Player_sub_401B40(
+                                                       (Player *)&unk_662C98,
+                                                       (S202 *)&pCarSystemManager.field_56,
                                                        (int)&v100.field_14);
-          v59 = gta2::S202_sub_401B20((struct S202 *)&a5, (struct SpriteS1 *)&v105, (struct PublicTransport *)&unk_662C98);
-          a5 = (struct Player *)gta2::S202_sub_401B20(
-                           (struct S202 *)v59,
-                           (struct SpriteS1 *)((char *)&pCarSystemManager.UnitCars + 2),
-                           (struct PublicTransport *)v99.CarSystemManager)->FirstElement;
+          v59 = gta2::S202_sub_401B20((S202 *)&a5, (SpriteS1 *)&v105, (PublicTransport *)&unk_662C98);
+          a5 = (Player *)gta2::S202_sub_401B20(
+                           (S202 *)v59,
+                           (SpriteS1 *)((char *)&pCarSystemManager.UnitCars + 2),
+                           (PublicTransport *)v99.CarSystemManager)->FirstElement;
           v100.AudioSourceParams = *(_DWORD *)&pCarSystemManager.field_2;
           v60 = gta2::Player_sub_401B40(
-                  (struct Player *)&v100.AudioSourceParams,
-                  (struct S202 *)((char *)&pCarSystemManager.MissionCars + 2),
+                  (Player *)&v100.AudioSourceParams,
+                  (S202 *)((char *)&pCarSystemManager.MissionCars + 2),
                   (int)&unk_662C98);
-          v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v60);
-          v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+          v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v60);
+          v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
           v61 = gta2::AudioSourceParams_sub_41F9D0(&v100);
           v10 = gta2::MapRelatedStruct_sub_4653C0(self, v61, (int)v99.S202, (int)v99.CarSystemManager);
           if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
           {
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v62 = gta2::AudioSourceParams_sub_41F9D0(&v100);
             v10 = gta2::MapRelatedStruct_sub_4653C0(self, v62, (int)v99.S202, (int)v99.CarSystemManager);
           }
           field = (int *)v100.field;
           v7 = *(SpriteS1 **)&v99.field_1C;
-          if ( (struct SpriteS1 *)v10 != v101 )
+          if ( (SpriteS1 *)v10 != v101 )
           {
             gta2::MapRelatedStruct_sub_467020(
               self,
@@ -3809,17 +3809,17 @@ LABEL_59:
               0,
               0);
             v63 = gta2::Player_sub_401B40(
-                    (struct Player *)&v100.AudioSourceParams,
-                    (struct S202 *)&pCarSystemManager.field_5E,
+                    (Player *)&v100.AudioSourceParams,
+                    (S202 *)&pCarSystemManager.field_5E,
                     (int)&unk_662C98);
-            v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)v63);
-            v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+            v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)v63);
+            v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
             v64 = gta2::AudioSourceParams_sub_41F9D0(&v100);
             v10 = gta2::MapRelatedStruct_sub_4653C0(self, v64, (int)v99.S202, (int)v99.CarSystemManager);
             if ( (*(_BYTE *)(v10 + 11) & 0xFC) == 0xFC )
             {
-              v99.CarSystemManager = (struct CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v100.AudioSourceParams);
-              v99.S202 = (struct S202 *)gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&v99.field_1C);
+              v99.CarSystemManager = (CarSystemManager *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v100.AudioSourceParams);
+              v99.S202 = (S202 *)gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&v99.field_1C);
               v65 = gta2::AudioSourceParams_sub_41F9D0(&v100);
               v10 = gta2::MapRelatedStruct_sub_4653C0(self, v65, (int)v99.S202, (int)v99.CarSystemManager);
             }
@@ -3828,11 +3828,11 @@ LABEL_59:
         }
       }
 LABEL_90:
-      LOWORD(v97) = gta2::Car_sub_403820((struct Car *)&a5, &unk_662CFC);
+      LOWORD(v97) = gta2::Car_sub_403820((Car *)&a5, &unk_662CFC);
     }
     while ( v97 );
   }
-  v99.CarSystemManager = (struct CarSystemManager *)v100.AudioSourceParams;
+  v99.CarSystemManager = (CarSystemManager *)v100.AudioSourceParams;
   *arg0 = field;
   *a3 = v7;
   *a4 = *gta2::MapRelatedStruct_sub_466E20(
@@ -3888,14 +3888,14 @@ char * gta2::MapRelatedStruct_sub_469110(
     v10 = v9;
     if ( *v9 == a4 && !gta2::sub_4690B0(v9) )
     {
-      gta2::S202_sub_40CE30((struct S202 *)&v19, a2);
-      gta2::S202_sub_40CE30((struct S202 *)&v20, arg0);
-      gta2::S202_sub_40CE30((struct S202 *)&v21, v10[2]);
-      gta2::S202_sub_40CE30((struct S202 *)&v22, v10[1]);
+      gta2::S202_sub_40CE30((S202 *)&v19, a2);
+      gta2::S202_sub_40CE30((S202 *)&v20, arg0);
+      gta2::S202_sub_40CE30((S202 *)&v21, v10[2]);
+      gta2::S202_sub_40CE30((S202 *)&v22, v10[1]);
       Car = gta2::sub_42A6B0(&v22, v23)->Car;
       if ( gta2::sub_4037E0(&Car) )
       {
-        if ( gta2::Car_sub_403800((struct Car *)&Car, (int)&unk_662CF8) )
+        if ( gta2::Car_sub_403800((Car *)&Car, &unk_662CF8) )
         {
           v5 = v16;
           if ( !v16 )
@@ -3943,15 +3943,15 @@ unsigned int gta2::MapRelatedStruct_sub_4692B0(struct MapRelatedStruct *self)
 {
   unsigned int result; // eax
   FILE *Buffer_LGHT; // esi
-  struct SpriteS1 *FirstElement; // edi
-  struct SpriteS1 *v4; // ebx
-  struct SpriteS1 *v5; // ebp
+  SpriteS1 *FirstElement; // edi
+  SpriteS1 *v4; // ebx
+  SpriteS1 *v5; // ebp
   int v6; // eax
   char v7; // cl
   unsigned int v8; // edx
   int v9; // [esp+0h] [ebp-1Ch] BYREF
   unsigned int v10; // [esp+4h] [ebp-18h]
-  struct MapRelatedStruct *v11; // [esp+8h] [ebp-14h]
+  MapRelatedStruct *v11; // [esp+8h] [ebp-14h]
   char v12[4]; // [esp+Ch] [ebp-10h] BYREF
   char v13[4]; // [esp+10h] [ebp-Ch] BYREF
   char v14[4]; // [esp+14h] [ebp-8h] BYREF
@@ -3965,12 +3965,12 @@ unsigned int gta2::MapRelatedStruct_sub_4692B0(struct MapRelatedStruct *self)
     v10 = 0;
     do
     {
-      FirstElement = sub_462ED0((struct SpriteS1 *)v12, (__int16 *)&Buffer_LGHT[1])->FirstElement;
-      v4 = sub_462ED0((struct SpriteS1 *)v13, (__int16 *)&Buffer_LGHT[1]._Placeholder + 1)->FirstElement;
-      v5 = sub_462ED0((struct SpriteS1 *)v14, (__int16 *)&Buffer_LGHT[2])->FirstElement;
-      v9 = (int)sub_462ED0((struct SpriteS1 *)v15, (__int16 *)&Buffer_LGHT[2]._Placeholder + 1)->FirstElement;
-      if ( gta2::Player_IsCurrentPlayer((struct Player *)&v9, (struct Player *)&unk_662C3C) )
-        gta2::Weapon_UseAmmo((struct Weapon *)&v9, &unk_6630B8);
+      FirstElement = sub_462ED0((SpriteS1 *)v12, (__int16 *)&Buffer_LGHT[1])->FirstElement;
+      v4 = sub_462ED0((SpriteS1 *)v13, (__int16 *)&Buffer_LGHT[1]._Placeholder + 1)->FirstElement;
+      v5 = sub_462ED0((SpriteS1 *)v14, (__int16 *)&Buffer_LGHT[2])->FirstElement;
+      v9 = (int)sub_462ED0((SpriteS1 *)v15, (__int16 *)&Buffer_LGHT[2]._Placeholder + 1)->FirstElement;
+      if ( gta2::Player_IsCurrentPlayer((Player *)&v9, (Player *)&unk_662C3C) )
+        gta2::Weapon_UseAmmo((Weapon *)&v9, &unk_6630B8);
       v6 = gta2::S115_sub_469010(
              gS115,
              (int)FirstElement,
@@ -4118,7 +4118,7 @@ undefined4 * gta2::MapRelatedStruct_sub_469570(Player *param_1,undefined4 *param
   undefined4 uVar2;
   bool bVar3;
   byte bVar4;
-  struct Car *self;
+  Car *self;
   undefined3 extraout_var;
   int iVar5;
   int iVar6;
@@ -4126,13 +4126,13 @@ undefined4 * gta2::MapRelatedStruct_sub_469570(Player *param_1,undefined4 *param
   undefined4 *puVar8;
   undefined3 extraout_var_00;
   void *this_00;
-  struct Car *pCVar9;
+  Car *pCVar9;
   int *piVar10;
-  struct Player *local_4;
+  Player *local_4;
   
-  pCVar9 = (struct Car *)&DAT_00662cfc;
+  pCVar9 = (Car *)&DAT_00662cfc;
   local_4 = param_1;
-  self = (struct Car *)FUN_0042a630(&local_4,&param_5);
+  self = (Car *)FUN_0042a630(&local_4,&param_5);
   bVar3 = gta2::Car_IsTrainOrTrainCarriage(self,pCVar9);
   uVar2 = param_4;
   uVar1 = param_3;
@@ -4140,13 +4140,13 @@ undefined4 * gta2::MapRelatedStruct_sub_469570(Player *param_1,undefined4 *param
     iVar5 = DecoderFloat(&param_5);
     iVar6 = DecoderFloat(&param_4);
     iVar7 = DecoderFloat(&param_3);
-    bVar4 = gta2::MapRelatedStruct_sub_466CF0((struct MapRelatedStruct *)param_1,iVar7,iVar6,iVar5);
+    bVar4 = gta2::MapRelatedStruct_sub_466CF0((MapRelatedStruct *)param_1,iVar7,iVar6,iVar5);
     if (bVar4 != 0) {
       puVar8 = (undefined4 *)
                FUN_00462ea0(this_00,(uint *)&local_4,(uint *)&param_5);
-      local_4 = (struct Player *)*puVar8;
+      local_4 = (Player *)*puVar8;
       FUN_00466b70(uVar1,uVar2,&local_4);
-      bVar3 = gta2::Player_CheckCondition((struct Player *)&local_4,(int *)&param_5);
+      bVar3 = gta2::Player_CheckCondition((Player *)&local_4,(int *)&param_5);
       if (CONCAT31(extraout_var_00,bVar3) != 0) {
         *param_2 = local_4;
         return param_2;
@@ -4155,10 +4155,10 @@ undefined4 * gta2::MapRelatedStruct_sub_469570(Player *param_1,undefined4 *param
   }
   iVar5 = DecoderFloat(&param_5);
   piVar10 = (int *)&param_5;
-  param_5 = (struct SpriteS1 *)(iVar5 - 1);
+  param_5 = (SpriteS1 *)(iVar5 - 1);
   iVar5 = DecoderFloat(&param_4);
   iVar6 = DecoderFloat(&param_3);
-  gMaxZForTile = (void *)gta2::MapRelatedStruct_sub_466A00((struct MapRelatedStruct *)param_1,iVar6,iVar5,
+  gMaxZForTile = (void *)gta2::MapRelatedStruct_sub_466A00((MapRelatedStruct *)param_1,iVar6,iVar5,
                                     piVar10);
   if (gMaxZForTile == NULL) {
     *param_2 = _DAT_00662c98;
@@ -4169,13 +4169,13 @@ undefined4 * gta2::MapRelatedStruct_sub_469570(Player *param_1,undefined4 *param
            (CONCAT31((int3)((uint)gMaxZForTile >> 8),bVar4) & 0xfffffffc);
   if ((((bVar4 & 0xfc) != 0) && ((bVar4 & 0xfc) < 0xb4)) && ((bVar4 & 3) != 0))
   {
-    gta2::S202_sub_41F980((struct SpriteS1 *)&param_5,(int)param_5);
-    local_4 = (struct Player *)*puVar8;
+    gta2::S202_sub_41F980((SpriteS1 *)&param_5,(int)param_5);
+    local_4 = (Player *)*puVar8;
     FUN_00466b70(uVar1,uVar2,&local_4);
     *param_2 = local_4;
     return param_2;
   }
-  gta2::S202_sub_41F980((struct SpriteS1 *)&param_5,(int)((int)&param_5->FirstElement + 1));
+  gta2::S202_sub_41F980((SpriteS1 *)&param_5,(int)((int)&param_5->FirstElement + 1));
   *param_2 = *puVar8;
   return param_2;
 }
@@ -4190,7 +4190,7 @@ void gta2::MapRelatedStruct_sub_4696C0(MapRelatedStruct *param_1,char *param_2,u
   undefined4 uVar2;
   bool bVar3;
   byte bVar4;
-  struct SpriteS1 *pSVar5;
+  SpriteS1 *pSVar5;
   undefined3 extraout_var;
   int iVar6;
   int iVar7;
@@ -4199,9 +4199,9 @@ void gta2::MapRelatedStruct_sub_4696C0(MapRelatedStruct *param_1,char *param_2,u
   undefined3 extraout_var_00;
   void *self;
   Point2D *this_00;
-  struct SpriteS1 *pSVar10;
+  SpriteS1 *pSVar10;
   undefined3 extraout_var_01;
-  struct S127 *pS127;
+  S127 *pS127;
   undefined1 local_1c [4];
   Player *local_18 [2];
   uint local_10 [3];
@@ -4209,8 +4209,8 @@ void gta2::MapRelatedStruct_sub_4696C0(MapRelatedStruct *param_1,char *param_2,u
   
   pSVar10 = param_5;
   local_1c = (undefined1  [4])param_5;
-  pSVar5 = gta2::S202_sub_401B20((Point2D *)&param_5,(struct SpriteS1 *)(local_18 + 1),
-                      (struct S127 *)&DAT_00662c98);
+  pSVar5 = gta2::S202_sub_401B20((Point2D *)&param_5,(SpriteS1 *)(local_18 + 1),
+                      (S127 *)&DAT_00662c98);
   bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)local_1c,pSVar5);
   uVar2 = param_4;
   uVar1 = param_3;
@@ -4227,7 +4227,7 @@ void gta2::MapRelatedStruct_sub_4696C0(MapRelatedStruct *param_1,char *param_2,u
     if ((gMaxZForTile == NULL) ||
        ((*(byte *)((int)gMaxZForTile + 0xb) & 3) == 0)) {
       self = gta2::Player_sub_401B40((SpawnPoint *)local_1c,(GlassInfo *)(local_10 + 1),
-                        (struct S127 *)&DAT_00662c98);
+                        (S127 *)&DAT_00662c98);
       iVar6 = DecoderFloat(self);
       iVar7 = DecoderFloat(&param_4);
       iVar8 = DecoderFloat(&param_3);
@@ -4246,21 +4246,21 @@ void gta2::MapRelatedStruct_sub_4696C0(MapRelatedStruct *param_1,char *param_2,u
         pcVar9 = (char *)FUN_00462ea0(local_1c,local_10,(uint *)local_1c);
         local_18[0] = *(Player **)pcVar9;
         FUN_00466b70(uVar1,uVar2,local_18);
-        bVar3 = gta2::Player_sub_40CE70((struct Player *)local_18,(struct Player *)local_1c);
+        bVar3 = gta2::Player_sub_40CE70((Player *)local_18,(Player *)local_1c);
         if (CONCAT31(extraout_var_00,bVar3) != 0) {
           *(Player **)param_2 = local_18[0];
           return;
         }
       }
     }
-    pSVar10 = (struct SpriteS1 *)(local_10 + 2);
-    pS127 = (struct S127 *)&DAT_00662c98;
+    pSVar10 = (SpriteS1 *)(local_10 + 2);
+    pS127 = (S127 *)&DAT_00662c98;
     this_00 = (Point2D *)FUN_00462ea0(pSVar10,&local_4,(uint *)local_1c);
     pSVar10 = gta2::S202_sub_401B20(this_00,pSVar10,pS127);
     pSVar10 = pSVar10->FirstElement;
     local_1c = (undefined1  [4])pSVar10;
-    pSVar5 = gta2::S202_sub_401B20((Point2D *)&param_5,(struct SpriteS1 *)(local_18 + 1),
-                        (struct S127 *)&DAT_00662c98);
+    pSVar5 = gta2::S202_sub_401B20((Point2D *)&param_5,(SpriteS1 *)(local_18 + 1),
+                        (S127 *)&DAT_00662c98);
     bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)local_1c,pSVar5);
     iVar6 = CONCAT31(extraout_var_01,bVar3);
   } while( true );
@@ -4276,7 +4276,7 @@ undefined4 * gta2::MapRelatedStruct_sub_469850(Player *param_1,undefined4 *param
   undefined4 uVar2;
   bool bVar3;
   byte bVar4;
-  struct Car *self;
+  Car *self;
   undefined3 extraout_var;
   int iVar5;
   int iVar6;
@@ -4284,13 +4284,13 @@ undefined4 * gta2::MapRelatedStruct_sub_469850(Player *param_1,undefined4 *param
   undefined4 *puVar8;
   undefined3 extraout_var_00;
   void *this_00;
-  struct Car *pCVar9;
+  Car *pCVar9;
   int *piVar10;
-  struct Player *local_4;
+  Player *local_4;
   
-  pCVar9 = (struct Car *)&DAT_00662cfc;
+  pCVar9 = (Car *)&DAT_00662cfc;
   local_4 = param_1;
-  self = (struct Car *)FUN_0042a630(&local_4,&param_5);
+  self = (Car *)FUN_0042a630(&local_4,&param_5);
   bVar3 = gta2::Car_IsTrainOrTrainCarriage(self,pCVar9);
   uVar2 = param_4;
   uVar1 = param_3;
@@ -4298,13 +4298,13 @@ undefined4 * gta2::MapRelatedStruct_sub_469850(Player *param_1,undefined4 *param
     iVar5 = DecoderFloat(&param_5);
     iVar6 = DecoderFloat(&param_4);
     iVar7 = DecoderFloat(&param_3);
-    bVar4 = gta2::MapRelatedStruct_sub_466CF0((struct MapRelatedStruct *)param_1,iVar7,iVar6,iVar5);
+    bVar4 = gta2::MapRelatedStruct_sub_466CF0((MapRelatedStruct *)param_1,iVar7,iVar6,iVar5);
     if (bVar4 != 0) {
       puVar8 = (undefined4 *)
                FUN_00462ea0(this_00,(uint *)&local_4,(uint *)&param_5);
-      local_4 = (struct Player *)*puVar8;
+      local_4 = (Player *)*puVar8;
       FUN_00466b70(uVar1,uVar2,&local_4);
-      bVar3 = gta2::Player_CheckCondition((struct Player *)&local_4,(int *)&param_5);
+      bVar3 = gta2::Player_CheckCondition((Player *)&local_4,(int *)&param_5);
       if (CONCAT31(extraout_var_00,bVar3) != 0) {
         *param_2 = local_4;
         return param_2;
@@ -4313,10 +4313,10 @@ undefined4 * gta2::MapRelatedStruct_sub_469850(Player *param_1,undefined4 *param
   }
   iVar5 = DecoderFloat(&param_5);
   piVar10 = (int *)&param_5;
-  param_5 = (struct SpriteS1 *)(iVar5 - 1);
+  param_5 = (SpriteS1 *)(iVar5 - 1);
   iVar5 = DecoderFloat(&param_4);
   iVar6 = DecoderFloat(&param_3);
-  gMaxZForTile = (void *)gta2::MapRelatedStruct_sub_466A00((struct MapRelatedStruct *)param_1,iVar6,iVar5,
+  gMaxZForTile = (void *)gta2::MapRelatedStruct_sub_466A00((MapRelatedStruct *)param_1,iVar6,iVar5,
                                     piVar10);
   if (gMaxZForTile == NULL) {
     *param_2 = _DAT_00662cfc;
@@ -4327,13 +4327,13 @@ undefined4 * gta2::MapRelatedStruct_sub_469850(Player *param_1,undefined4 *param
            (CONCAT31((int3)((uint)gMaxZForTile >> 8),bVar4) & 0xfffffffc);
   if ((((bVar4 & 0xfc) != 0) && ((bVar4 & 0xfc) < 0xb4)) && ((bVar4 & 3) != 0))
   {
-    gta2::S202_sub_41F980((struct SpriteS1 *)&param_5,(int)param_5);
-    local_4 = (struct Player *)*puVar8;
+    gta2::S202_sub_41F980((SpriteS1 *)&param_5,(int)param_5);
+    local_4 = (Player *)*puVar8;
     FUN_00466b70(uVar1,uVar2,&local_4);
     *param_2 = local_4;
     return param_2;
   }
-  gta2::S202_sub_41F980((struct SpriteS1 *)&param_5,(int)((int)&param_5->FirstElement + 1));
+  gta2::S202_sub_41F980((SpriteS1 *)&param_5,(int)((int)&param_5->FirstElement + 1));
   *param_2 = *puVar8;
   return param_2;
 }
@@ -4346,10 +4346,10 @@ uint * gta2::MapRelatedStruct_sub_4699A0(MapRelatedStruct *param_1,uint *param_2
 {
   undefined4 uVar1;
   undefined4 uVar2;
-  struct SpriteS1 *pSVar3;
+  SpriteS1 *pSVar3;
   bool bVar4;
   byte bVar5;
-  struct Car *self;
+  Car *self;
   undefined3 extraout_var;
   int iVar6;
   int iVar7;
@@ -4357,13 +4357,13 @@ uint * gta2::MapRelatedStruct_sub_4699A0(MapRelatedStruct *param_1,uint *param_2
   uint *puVar9;
   undefined3 extraout_var_00;
   void *this_00;
-  struct Car *pCVar10;
+  Car *pCVar10;
   int *piVar11;
   
   pSVar3 = param_6;
-  pCVar10 = (struct Car *)&DAT_00662cfc;
+  pCVar10 = (Car *)&DAT_00662cfc;
   *(undefined1 *)&param_6->FirstElement = 0;
-  self = (struct Car *)FUN_0042a630(&param_6,&param_5);
+  self = (Car *)FUN_0042a630(&param_6,&param_5);
   bVar4 = gta2::Car_IsTrainOrTrainCarriage(self,pCVar10);
   uVar2 = param_4;
   uVar1 = param_3;
@@ -4374,9 +4374,9 @@ uint * gta2::MapRelatedStruct_sub_4699A0(MapRelatedStruct *param_1,uint *param_2
     bVar5 = gta2::MapRelatedStruct_sub_466CF0(param_1,iVar8,iVar7,iVar6);
     if (bVar5 != 0) {
       puVar9 = (uint *)FUN_00462ea0(this_00,(uint *)&param_6,(uint *)&param_5);
-      param_6 = (struct SpriteS1 *)*puVar9;
+      param_6 = (SpriteS1 *)*puVar9;
       FUN_00466b70(uVar1,uVar2,&param_6);
-      bVar4 = gta2::Player_CheckCondition((struct Player *)&param_6,(int *)&param_5);
+      bVar4 = gta2::Player_CheckCondition((Player *)&param_6,(int *)&param_5);
       if (CONCAT31(extraout_var_00,bVar4) != 0) {
         *param_2 = (uint)param_6;
         return param_2;
@@ -4386,7 +4386,7 @@ uint * gta2::MapRelatedStruct_sub_4699A0(MapRelatedStruct *param_1,uint *param_2
   }
   iVar6 = DecoderFloat(&param_5);
   piVar11 = (int *)&param_5;
-  param_5 = (struct SpriteS1 *)(iVar6 - 1);
+  param_5 = (SpriteS1 *)(iVar6 - 1);
   iVar6 = DecoderFloat(&param_4);
   iVar7 = DecoderFloat(&param_3);
   gMaxZForTile = (void *)gta2::MapRelatedStruct_sub_466A00(param_1,iVar7,iVar6,piVar11);
@@ -4398,13 +4398,13 @@ uint * gta2::MapRelatedStruct_sub_4699A0(MapRelatedStruct *param_1,uint *param_2
   puVar9 = (uint *)CONCAT31((int3)((uint)gMaxZForTile >> 8),bVar5);
   if ((((bVar5 & 0xfc) != 0) && ((bVar5 & 0xfc) < 0xb4)) && ((bVar5 & 3) != 0))
   {
-    gta2::S202_sub_41F980((struct SpriteS1 *)&param_5,(int)param_5);
-    param_6 = (struct SpriteS1 *)*puVar9;
+    gta2::S202_sub_41F980((SpriteS1 *)&param_5,(int)param_5);
+    param_6 = (SpriteS1 *)*puVar9;
     FUN_00466b70(uVar1,uVar2,&param_6);
     *param_2 = (uint)param_6;
     return param_2;
   }
-  gta2::S202_sub_41F980((struct SpriteS1 *)&param_5,(int)((int)&param_5->FirstElement + 1));
+  gta2::S202_sub_41F980((SpriteS1 *)&param_5,(int)((int)&param_5->FirstElement + 1));
   *param_2 = *puVar9;
   return param_2;
 }
@@ -4429,12 +4429,12 @@ uint gta2::MapRelatedStruct_sub_469C20(MapRelatedStruct *param_1,undefined4 para
   undefined3 extraout_var_01;
   undefined3 extraout_var_02;
   void *self;
-  struct Player *local_8;
-  struct Player *local_4;
+  Player *local_8;
+  Player *local_4;
   
   FUN_00462ea0(&local_4,(uint *)&local_4,(uint *)&stack0x0000000c);
   FUN_00462ea0(self,(uint *)&local_8,(uint *)&stack0x00000010);
-  bVar3 = gta2::Player_IsCurrentPlayer((struct Player *)&local_4,(struct Player *)&local_8);
+  bVar3 = gta2::Player_IsCurrentPlayer((Player *)&local_4,(Player *)&local_8);
   if (CONCAT31(extraout_var,bVar3) == 0) {
     iVar5 = DecoderFloat(&local_8);
     iVar6 = DecoderFloat(&param_3);
@@ -4447,7 +4447,7 @@ uint gta2::MapRelatedStruct_sub_469C20(MapRelatedStruct *param_1,undefined4 para
         (bVar4 = *(byte *)((int)gMaxZForTile + 0xb) & 0xfc, bVar4 != 0)) &&
        (bVar4 < 0xb4)) {
       FUN_00466b70(param_2,param_3,&local_8);
-      bVar3 = gta2::Player_sub_40CE70((struct Player *)&stack0x00000010,(struct Player *)&local_8);
+      bVar3 = gta2::Player_sub_40CE70((Player *)&stack0x00000010,(Player *)&local_8);
       pvVar8 = (void *)CONCAT31(extraout_var_01,bVar3);
       if (pvVar8 != NULL) goto LAB_00469db2;
     }
@@ -4481,12 +4481,12 @@ uint gta2::MapRelatedStruct_sub_469C20(MapRelatedStruct *param_1,undefined4 para
     if (((bVar4 & 0xfc) == 0) || (0xb3 < (bVar4 & 0xfc))) goto LAB_00469cc9;
     local_8 = local_4;
     FUN_00466b70(param_2,param_3,&local_8);
-    bVar3 = gta2::Player_sub_40CE70((struct Player *)&stack0x00000010,(struct Player *)&local_8)
+    bVar3 = gta2::Player_sub_40CE70((Player *)&stack0x00000010,(Player *)&local_8)
     ;
     pvVar8 = (void *)CONCAT31(extraout_var_00,bVar3);
     if ((void *)CONCAT31(extraout_var_00,bVar3) == NULL) goto LAB_00469cc9;
   }
-  bVar3 = gta2::Player_CheckCondition((struct Player *)&stack0x0000000c,(int *)&local_8);
+  bVar3 = gta2::Player_CheckCondition((Player *)&stack0x0000000c,(int *)&local_8);
   pvVar8 = (void *)CONCAT31(extraout_var_02,bVar3);
   if (pvVar8 != NULL) {
 LAB_00469db2:
@@ -4503,7 +4503,7 @@ LAB_00469cc9:
 undefined4 gta2::MapRelatedStruct_sub_469DC0(MapRelatedStruct *param_1,undefined4 param_2,SpriteS1 *param_3, undefined4 param_4,undefined4 param_5,Player *param_6)
 {
   undefined4 uVar1;
-  struct Player *pPVar2;
+  Player *pPVar2;
   bool bVar3;
   byte bVar4;
   undefined3 extraout_var;
@@ -4514,14 +4514,14 @@ undefined4 gta2::MapRelatedStruct_sub_469DC0(MapRelatedStruct *param_1,undefined
   undefined3 extraout_var_01;
   undefined3 extraout_var_02;
   undefined3 extraout_var_03;
-  struct SpriteS1 *pSVar8;
+  SpriteS1 *pSVar8;
   void *self;
-  struct Player *local_8;
-  struct Player *local_4;
+  Player *local_8;
+  Player *local_4;
   
   FUN_00462ea0(&local_8,(uint *)&local_8,&param_4);
   FUN_00462ea0(self,(uint *)&local_4,&param_5);
-  bVar3 = gta2::Player_IsCurrentPlayer((struct Player *)&local_8,(struct Player *)&local_4);
+  bVar3 = gta2::Player_IsCurrentPlayer((Player *)&local_8,(Player *)&local_4);
   if (CONCAT31(extraout_var,bVar3) == 0) {
     iVar5 = DecoderFloat(&local_4);
     iVar6 = DecoderFloat(&param_3);
@@ -4536,7 +4536,7 @@ undefined4 gta2::MapRelatedStruct_sub_469DC0(MapRelatedStruct *param_1,undefined
        (bVar4 < 0xb4)) {
       param_6->CurrentPlayer = local_4;
       FUN_00466b70(param_2,param_3,param_6);
-      bVar3 = gta2::Player_sub_40CE70((struct Player *)&param_5,pPVar2);
+      bVar3 = gta2::Player_sub_40CE70((Player *)&param_5,pPVar2);
       if (CONCAT31(extraout_var_02,bVar3) != 0) {
         return 1;
       }
@@ -4549,14 +4549,14 @@ undefined4 gta2::MapRelatedStruct_sub_469DC0(MapRelatedStruct *param_1,undefined
        ((*(byte *)((int)gMaxZForTile + 0xb) & 3) != 0)) {
       bVar4 = *(byte *)((int)gMaxZForTile + 0xb) & 0xfc;
       if ((bVar4 == 0) || (0xb3 < bVar4)) {
-        pSVar8 = gta2::S202_sub_401B20((Point2D *)&local_8,(struct SpriteS1 *)&param_3,
-                            (struct S127 *)&DAT_00662c98);
-        pPVar2->CurrentPlayer = (struct Player *)pSVar8->FirstElement;
+        pSVar8 = gta2::S202_sub_401B20((Point2D *)&local_8,(SpriteS1 *)&param_3,
+                            (S127 *)&DAT_00662c98);
+        pPVar2->CurrentPlayer = (Player *)pSVar8->FirstElement;
       }
       else {
         pPVar2->CurrentPlayer = local_8;
         FUN_00466b70(uVar1,pSVar8,pPVar2);
-        bVar3 = gta2::Player_CheckCondition((struct Player *)&param_4,(int *)pPVar2);
+        bVar3 = gta2::Player_CheckCondition((Player *)&param_4,(int *)pPVar2);
         if (CONCAT31(extraout_var_03,bVar3) == 0) {
           return 0;
         }
@@ -4576,9 +4576,9 @@ undefined4 gta2::MapRelatedStruct_sub_469DC0(MapRelatedStruct *param_1,undefined
         (bVar4 < 0xb4)))) {
       param_6->CurrentPlayer = local_8;
       FUN_00466b70(param_2,param_3,param_6);
-      bVar3 = gta2::Player_sub_40CE70((struct Player *)&param_5,pPVar2);
+      bVar3 = gta2::Player_sub_40CE70((Player *)&param_5,pPVar2);
       if ((CONCAT31(extraout_var_00,bVar3) != 0) &&
-         (bVar3 = gta2::Player_CheckCondition((struct Player *)&param_4,(int *)pPVar2),
+         (bVar3 = gta2::Player_CheckCondition((Player *)&param_4,(int *)pPVar2),
          CONCAT31(extraout_var_01,bVar3) != 0)) {
         return CONCAT31(extraout_var_01,1);
       }
@@ -4594,7 +4594,7 @@ undefined4 gta2::MapRelatedStruct_sub_469DC0(MapRelatedStruct *param_1,undefined
 undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,SpriteS1 *param_3,SpriteS1 *param_4 ,SpriteS1 *param_5,int param_6,SpriteS1 *param_7,undefined4 param_8, SpriteS1 *param_9)
 {
   undefined4 *self;
-  struct SpriteS1 *this_00;
+  SpriteS1 *this_00;
   bool bVar1;
   byte bVar2;
   char cVar3;
@@ -4607,7 +4607,7 @@ undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,Spr
   undefined3 extraout_var_00;
   int iVar9;
   undefined3 extraout_var_01;
-  struct SpriteS1 *pSVar10;
+  SpriteS1 *pSVar10;
   undefined3 extraout_var_02;
   undefined3 extraout_var_03;
   undefined3 extraout_var_04;
@@ -4615,56 +4615,56 @@ undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,Spr
   int iVar12;
   undefined3 extraout_var_05;
   undefined3 extraout_var_06;
-  struct Player *this_01;
-  struct SpriteS1 *pSVar13;
+  Player *this_01;
+  SpriteS1 *pSVar13;
   GlassInfo local_30;
   
   this_00 = gObject->SpriteS1_;
-  gta2::Player_sub_401B40((SpawnPoint *)&param_9,&local_30,(struct S127 *)&param_6);
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&param_9);
+  gta2::Player_sub_401B40((SpawnPoint *)&param_9,&local_30,(S127 *)&param_6);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&param_9);
   puVar4 = (undefined4 *)
            gta2::Player_sub_401B40((SpawnPoint *)&param_8,(GlassInfo *)&local_30.pPed,
-                      (struct S127 *)&param_5);
+                      (S127 *)&param_5);
   puVar5 = (undefined4 *)
            gta2::Player_sub_401B40((SpawnPoint *)&param_7,(GlassInfo *)&local_30.SpawnPoint,
-                      (struct S127 *)&param_4);
+                      (S127 *)&param_4);
   String_ParseLine(&local_30.field19_0x28,puVar5,puVar4);
   FUN_004637b0(&PTR_005e6874);
   piVar6 = (int *)gta2::Player_sub_401B40((SpawnPoint *)&param_7,
-                             (GlassInfo *)&local_30.SpawnPoint,(struct S127 *)&param_4)
+                             (GlassInfo *)&local_30.SpawnPoint,(S127 *)&param_4)
   ;
   pvVar7 = gta2::Player_sub_401B40((SpawnPoint *)&param_8,(GlassInfo *)&local_30.pPed,
-                      (struct S127 *)&param_5);
+                      (S127 *)&param_5);
   puVar8 = gta2::Player_FUN_0040e8d0(this_01,(undefined2 *)&param_7,pvVar7,piVar6);
-  param_9 = (struct SpriteS1 *)CONCAT22(param_9._2_2_,*puVar8);
-  piVar6 = gta2::Player_sub_41E260((struct Player *)&local_30.field19_0x28,(int *)&param_7);
-  pSVar10 = (struct SpriteS1 *)*piVar6;
+  param_9 = (SpriteS1 *)CONCAT22(param_9._2_2_,*puVar8);
+  piVar6 = gta2::Player_sub_41E260((Player *)&local_30.field19_0x28,(int *)&param_7);
+  pSVar10 = (SpriteS1 *)*piVar6;
   param_7 = pSVar10;
   gta2::SpriteS1_sub_420600((Sprite *)this_00,(int)param_4,(int)param_5,param_6);
   gta2::SpriteS1_SetRotation((Sprite *)this_00,(short)param_9);
   gta2::SpriteS1_sub_4BCB90((Sprite *)this_00,param_1,param_2,param_3);
-  bVar1 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&param_7,(struct Car *)&DAT_00662cfc);
+  bVar1 = gta2::Car_IsTrainOrTrainCarriage((Car *)&param_7,(Car *)&DAT_00662cfc);
   if (CONCAT31(extraout_var,bVar1) == 0) {
     param_5 = _DAT_00662cfc;
     pSVar13 = _DAT_00662cfc;
   }
   else {
-    piVar6 = (int *)gta2::sub_401B90((struct Player *)&param_7,&param_5,(int *)&param_2);
-    param_5 = (struct SpriteS1 *)*piVar6;
-    piVar6 = (int *)gta2::sub_401B90((struct Player *)&param_7,&param_4,(int *)&param_5);
-    pSVar13 = (struct SpriteS1 *)*piVar6;
-    piVar6 = (int *)gta2::sub_401B90((struct Player *)&local_30,&param_4,(int *)&param_5);
-    param_4 = (struct SpriteS1 *)*piVar6;
+    piVar6 = (int *)gta2::sub_401B90((Player *)&param_7,&param_5,(int *)&param_2);
+    param_5 = (SpriteS1 *)*piVar6;
+    piVar6 = (int *)gta2::sub_401B90((Player *)&param_7,&param_4,(int *)&param_5);
+    pSVar13 = (SpriteS1 *)*piVar6;
+    piVar6 = (int *)gta2::sub_401B90((Player *)&local_30,&param_4,(int *)&param_5);
+    param_4 = (SpriteS1 *)*piVar6;
   }
-  bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)&param_5,(struct SpriteS1 *)&DAT_00662c98);
+  bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)&param_5,(SpriteS1 *)&DAT_00662c98);
   param_7 = pSVar13;
   if (CONCAT31(extraout_var_00,bVar1) != 0) {
     param_5 = _DAT_00662c98;
-    param_4 = (struct SpriteS1 *)local_30.car;
+    param_4 = (SpriteS1 *)local_30.car;
     param_7 = pSVar10;
   }
-  gta2::sub_41FC20((struct CarSystemManager *)&param_9,(struct CarSystemManager *)&param_9,
-             (GlassInfo *)&param_7,(struct Ped *)&param_6,(struct Ped *)&param_8);
+  gta2::sub_41FC20((CarSystemManager *)&param_9,(CarSystemManager *)&param_9,
+             (GlassInfo *)&param_7,(Ped *)&param_6,(Ped *)&param_8);
   param_2 = CONCAT31(param_2._1_3_,1);
   iVar9 = DecoderFloat(&param_5);
   if (0 < iVar9) {
@@ -4673,19 +4673,19 @@ undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,Spr
     self = &this_00->Matrix3DArray[0].PositionZ;
     do {
       piVar6 = (int *)FUN_00469570(&param_1,*puVar5,*puVar4,*self);
-      param_7 = (struct SpriteS1 *)*piVar6;
-      bVar1 = gta2::Player_IsCurrentPlayer((struct Player *)&param_4,(struct Player *)&DAT_00662cfc);
+      param_7 = (SpriteS1 *)*piVar6;
+      bVar1 = gta2::Player_IsCurrentPlayer((Player *)&param_4,(Player *)&DAT_00662cfc);
       if (CONCAT31(extraout_var_01,bVar1) == 0) {
-        bVar1 = gta2::Car_sub_403800((struct Car *)&param_4,(int *)&DAT_00662cfc);
+        bVar1 = gta2::Car_sub_403800((Car *)&param_4,(int *)&DAT_00662cfc);
         if (CONCAT31(extraout_var_02,bVar1) == 0) {
-          param_9 = gta2::S202_sub_401B20((Point2D *)self,(struct SpriteS1 *)&local_30.count,
-                               (struct S127 *)&param_4);
+          param_9 = gta2::S202_sub_401B20((Point2D *)self,(SpriteS1 *)&local_30.count,
+                               (S127 *)&param_4);
           param_3 = gta2::S202_sub_401B20((Point2D *)puVar4,
-                               (struct SpriteS1 *)&local_30.field17_0x20,
-                               (struct S127 *)&param_8);
+                               (SpriteS1 *)&local_30.field17_0x20,
+                               (S127 *)&param_8);
           pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar5,
-                               (struct SpriteS1 *)&local_30.field18_0x24,
-                               (struct S127 *)&param_6);
+                               (SpriteS1 *)&local_30.field18_0x24,
+                               (S127 *)&param_6);
           gta2::SpriteS1_sub_420600((Sprite *)this_00,(int)pSVar10->FirstElement,
                               (int)param_3->FirstElement,
                               (int)param_9->FirstElement);
@@ -4694,7 +4694,7 @@ undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,Spr
           iVar12 = DecoderFloat(puVar5);
           bVar2 = gta2::MapRelatedStruct_sub_466CF0(gMapRelatedStruct,iVar12,iVar11,iVar9);
           if (bVar2 == 0) {
-            bVar1 = gta2::Car_sub_403800((struct Car *)&param_7,self);
+            bVar1 = gta2::Car_sub_403800((Car *)&param_7,self);
             if (CONCAT31(extraout_var_06,bVar1) != 0) {
               gta2::SpriteS1_sub_420600((Sprite *)this_00,*puVar5,*puVar4,(int)param_7
                                  );
@@ -4709,8 +4709,8 @@ undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,Spr
             if (bVar2 != 0) {
               piVar6 = (int *)FUN_00469570(&local_30.field19_0x28,*puVar5,
                                            *puVar4,*self);
-              param_7 = (struct SpriteS1 *)*piVar6;
-              bVar1 = gta2::Car_sub_403800((struct Car *)&param_7,self);
+              param_7 = (SpriteS1 *)*piVar6;
+              bVar1 = gta2::Car_sub_403800((Car *)&param_7,self);
               if (CONCAT31(extraout_var_05,bVar1) != 0) {
                 return 0;
               }
@@ -4718,23 +4718,23 @@ undefined4 gta2::MapRelatedStruct_sub_469F90(undefined4 param_1,uint param_2,Spr
           }
         }
         else {
-          param_7 = gta2::S202_sub_401B20((Point2D *)self,(struct SpriteS1 *)&local_30.field_0xc,
-                               (struct S127 *)&param_4);
+          param_7 = gta2::S202_sub_401B20((Point2D *)self,(SpriteS1 *)&local_30.field_0xc,
+                               (S127 *)&param_4);
           param_9 = gta2::S202_sub_401B20((Point2D *)puVar4,
-                               (struct SpriteS1 *)&local_30.field_0x10,(struct S127 *)&param_8
+                               (SpriteS1 *)&local_30.field_0x10,(S127 *)&param_8
                               );
           pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar5,
-                               (struct SpriteS1 *)&local_30.field11_0x14,
-                               (struct S127 *)&param_6);
+                               (SpriteS1 *)&local_30.field11_0x14,
+                               (S127 *)&param_6);
           gta2::SpriteS1_sub_420600((Sprite *)this_00,(int)pSVar10->FirstElement,
                               (int)param_9->FirstElement,
                               (int)param_7->FirstElement);
-          param_7 = (struct SpriteS1 *)*self;
-          bVar1 = gta2::Car_sub_403800((struct Car *)&param_7,(int *)&DAT_00662c50);
+          param_7 = (SpriteS1 *)*self;
+          bVar1 = gta2::Car_sub_403800((Car *)&param_7,(int *)&DAT_00662c50);
           if (CONCAT31(extraout_var_03,bVar1) != 0) {
             return 0;
           }
-          bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)self,(struct SpriteS1 *)&DAT_00662c50);
+          bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)self,(SpriteS1 *)&DAT_00662c50);
           if (CONCAT31(extraout_var_04,bVar1) == 0) {
 LAB_0046a297:
             iVar9 = DecoderFloat(self);
@@ -4747,8 +4747,8 @@ LAB_0046a297:
           }
           else {
             pSVar10 = gta2::S202_sub_401B20((Point2D *)self,
-                                 (struct SpriteS1 *)&local_30.field12_0x18,
-                                 (struct S127 *)&DAT_00663164);
+                                 (SpriteS1 *)&local_30.field12_0x18,
+                                 (S127 *)&DAT_00663164);
             iVar9 = DecoderFloat(pSVar10);
             iVar11 = DecoderFloat(puVar4);
             iVar12 = DecoderFloat(puVar5);
@@ -4759,12 +4759,12 @@ LAB_0046a297:
         }
       }
       else {
-        param_7 = gta2::S202_sub_401B20((Point2D *)self,(struct SpriteS1 *)&local_30.SpawnPoint,
-                             (struct S127 *)&param_4);
-        param_9 = gta2::S202_sub_401B20((Point2D *)puVar4,(struct SpriteS1 *)&local_30.pPed,
-                             (struct S127 *)&param_8);
-        pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar5,(struct SpriteS1 *)&local_30,
-                             (struct S127 *)&param_6);
+        param_7 = gta2::S202_sub_401B20((Point2D *)self,(SpriteS1 *)&local_30.SpawnPoint,
+                             (S127 *)&param_4);
+        param_9 = gta2::S202_sub_401B20((Point2D *)puVar4,(SpriteS1 *)&local_30.pPed,
+                             (S127 *)&param_8);
+        pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar5,(SpriteS1 *)&local_30,
+                             (S127 *)&param_6);
         gta2::SpriteS1_sub_420600((Sprite *)this_00,(int)pSVar10->FirstElement,
                             (int)param_9->FirstElement,
                             (int)param_7->FirstElement);
@@ -4794,8 +4794,8 @@ int * gta2::MapRelatedStruct_FindMaxZForLocation(struct MapRelatedStruct *self, 
   int v11; // [esp-8h] [ebp-10h]
   int a4; // [esp+4h] [ebp-4h] BYREF
 
-  v11 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&pS202);
-  v5 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a2);
+  v11 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&pS202);
+  v5 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a2);
   MaxZForTile = gta2::MapRelatedStruct_FindMaxZForTile(self, v5, v11, &a4);
   dword_662B90 = MaxZForTile;
   if ( MaxZForTile )
@@ -4803,7 +4803,7 @@ int * gta2::MapRelatedStruct_FindMaxZForLocation(struct MapRelatedStruct *self, 
     v8 = *((_BYTE *)MaxZForTile + 11);
     if ( (v8 & 0xFC) != 0 && (v8 & 0xFCu) < 0xB4 && (v8 & 3) != 0 )
     {
-      gta2::S202_sub_41F980((struct S202 *)&a4, a4);
+      gta2::S202_sub_41F980((S202 *)&a4, a4);
       a4 = *v9;
       gta2::MapRelatedStruct_sub_466B70(self, a2, pS202);
       *arg0 = a4;
@@ -4811,7 +4811,7 @@ int * gta2::MapRelatedStruct_FindMaxZForLocation(struct MapRelatedStruct *self, 
     }
     else
     {
-      gta2::S202_sub_41F980((struct S202 *)&pS202, a4 + 1);
+      gta2::S202_sub_41F980((S202 *)&pS202, a4 + 1);
       *arg0 = *v10;
       return arg0;
     }
@@ -4832,7 +4832,7 @@ int gta2::MapRelatedStruct_sub_46A4D0(struct MapRelatedStruct *self)
   int result; // eax
   FILE *Buffer_MOBJ; // esi
   int *FirstElement; // edi
-  struct SpriteS1 *v5; // ebx
+  SpriteS1 *v5; // ebx
   int *MaxZForLocation; // eax
   unsigned int v7; // ecx
   char v8[2]; // [esp+Ah] [ebp-16h] BYREF
@@ -4849,10 +4849,10 @@ int gta2::MapRelatedStruct_sub_46A4D0(struct MapRelatedStruct *self)
   {
     do
     {
-      FirstElement = (int *)sub_462ED0((struct SpriteS1 *)v11, (__int16 *)Buffer_MOBJ)->FirstElement;
-      v5 = sub_462ED0((struct SpriteS1 *)v12, (__int16 *)&Buffer_MOBJ->_Placeholder + 1)->FirstElement;
-      LOWORD(a5) = *(_WORD *)&sub_462EF0((struct Ped *)v8, (struct SpriteS1 *)v8)->S200_[0].A;
-      MaxZForLocation = gta2::MapRelatedStruct_FindMaxZForLocation(self, (int *)v13, FirstElement, (struct S202 *)v5);
+      FirstElement = (int *)sub_462ED0((SpriteS1 *)v11, (__int16 *)Buffer_MOBJ)->FirstElement;
+      v5 = sub_462ED0((SpriteS1 *)v12, (__int16 *)&Buffer_MOBJ->_Placeholder + 1)->FirstElement;
+      LOWORD(a5) = *(_WORD *)&sub_462EF0((Ped *)v8, (SpriteS1 *)v8)->S200_[0].A;
+      MaxZForLocation = gta2::MapRelatedStruct_FindMaxZForLocation(self, (int *)v13, FirstElement, (S202 *)v5);
       gta2::Object_SpawnObject(gObject, BYTE1(Buffer_MOBJ[1]._Placeholder), (int)FirstElement, (int)v5, *MaxZForLocation, a5);
       v7 = self->field_344;
       result = v9 + 1;
@@ -4876,8 +4876,8 @@ undefined4 gta2::MapRelatedStruct_sub_46A570(void *self,int param_1,int param_2,
   bool bVar4;
   byte puVar10;
   undefined4 uVar5;
-  struct SpriteS1 *pSVar6;
-  struct SpriteS1 *pSVar7;
+  SpriteS1 *pSVar6;
+  SpriteS1 *pSVar7;
   int iVar8;
   uint uVar9;
   undefined2 *puVar11;
@@ -4909,94 +4909,94 @@ undefined4 gta2::MapRelatedStruct_sub_46A570(void *self,int param_1,int param_2,
   undefined3 extraout_var_24;
   undefined3 extraout_var_25;
   undefined3 extraout_var_26;
-  struct SpriteS1 *extraout_ECX;
-  struct SpriteS1 *extraout_ECX_00;
-  struct SpriteS1 *extraout_ECX_01;
-  struct SpriteS1 *extraout_ECX_02;
-  struct SpriteS1 *extraout_ECX_03;
-  struct SpriteS1 *extraout_ECX_04;
-  struct SpriteS1 *extraout_ECX_05;
+  SpriteS1 *extraout_ECX;
+  SpriteS1 *extraout_ECX_00;
+  SpriteS1 *extraout_ECX_01;
+  SpriteS1 *extraout_ECX_02;
+  SpriteS1 *extraout_ECX_03;
+  SpriteS1 *extraout_ECX_04;
+  SpriteS1 *extraout_ECX_05;
   undefined2 uVar14;
-  struct SpriteS1 *extraout_ECX_06;
-  struct SpriteS1 *extraout_ECX_07;
-  struct SpriteS1 *extraout_ECX_08;
-  struct SpriteS1 *extraout_ECX_09;
-  struct SpriteS1 *extraout_ECX_10;
-  struct SpriteS1 *extraout_ECX_11;
-  struct SpriteS1 *extraout_ECX_12;
-  struct SpriteS1 *extraout_ECX_13;
-  struct SpriteS1 *extraout_ECX_14;
-  struct SpriteS1 *extraout_ECX_15;
-  struct SpriteS1 *extraout_ECX_16;
-  struct SpriteS1 *extraout_ECX_17;
-  struct SpriteS1 *extraout_ECX_18;
-  struct SpriteS1 *extraout_ECX_19;
-  struct SpriteS1 *extraout_ECX_20;
-  struct SpriteS1 *extraout_ECX_21;
-  struct SpriteS1 *extraout_ECX_22;
-  struct SpriteS1 *extraout_ECX_23;
+  SpriteS1 *extraout_ECX_06;
+  SpriteS1 *extraout_ECX_07;
+  SpriteS1 *extraout_ECX_08;
+  SpriteS1 *extraout_ECX_09;
+  SpriteS1 *extraout_ECX_10;
+  SpriteS1 *extraout_ECX_11;
+  SpriteS1 *extraout_ECX_12;
+  SpriteS1 *extraout_ECX_13;
+  SpriteS1 *extraout_ECX_14;
+  SpriteS1 *extraout_ECX_15;
+  SpriteS1 *extraout_ECX_16;
+  SpriteS1 *extraout_ECX_17;
+  SpriteS1 *extraout_ECX_18;
+  SpriteS1 *extraout_ECX_19;
+  SpriteS1 *extraout_ECX_20;
+  SpriteS1 *extraout_ECX_21;
+  SpriteS1 *extraout_ECX_22;
+  SpriteS1 *extraout_ECX_23;
   undefined2 extraout_var_27;
-  struct SpriteS1 *extraout_ECX_24;
-  struct SpriteS1 *extraout_ECX_25;
-  struct SpriteS1 *extraout_ECX_26;
-  struct SpriteS1 *extraout_ECX_27;
-  struct SpriteS1 *extraout_ECX_28;
-  struct SpriteS1 *extraout_ECX_29;
-  struct SpriteS1 *extraout_ECX_30;
-  struct SpriteS1 *extraout_ECX_31;
-  struct SpriteS1 *extraout_ECX_32;
+  SpriteS1 *extraout_ECX_24;
+  SpriteS1 *extraout_ECX_25;
+  SpriteS1 *extraout_ECX_26;
+  SpriteS1 *extraout_ECX_27;
+  SpriteS1 *extraout_ECX_28;
+  SpriteS1 *extraout_ECX_29;
+  SpriteS1 *extraout_ECX_30;
+  SpriteS1 *extraout_ECX_31;
+  SpriteS1 *extraout_ECX_32;
   undefined2 extraout_var_28;
-  struct SpriteS1 *extraout_ECX_33;
-  struct SpriteS1 *extraout_ECX_34;
-  struct SpriteS1 *extraout_ECX_35;
-  struct SpriteS1 *extraout_ECX_36;
-  struct SpriteS1 *extraout_ECX_37;
-  struct SpriteS1 *extraout_ECX_38;
-  struct SpriteS1 *extraout_ECX_39;
-  struct SpriteS1 *extraout_ECX_40;
-  struct SpriteS1 *extraout_ECX_41;
+  SpriteS1 *extraout_ECX_33;
+  SpriteS1 *extraout_ECX_34;
+  SpriteS1 *extraout_ECX_35;
+  SpriteS1 *extraout_ECX_36;
+  SpriteS1 *extraout_ECX_37;
+  SpriteS1 *extraout_ECX_38;
+  SpriteS1 *extraout_ECX_39;
+  SpriteS1 *extraout_ECX_40;
+  SpriteS1 *extraout_ECX_41;
   undefined2 extraout_var_29;
-  struct SpriteS1 *extraout_ECX_42;
-  struct SpriteS1 *extraout_ECX_43;
-  struct SpriteS1 *extraout_ECX_44;
-  struct SpriteS1 *extraout_ECX_45;
-  struct SpriteS1 *extraout_ECX_46;
-  struct SpriteS1 *extraout_ECX_47;
+  SpriteS1 *extraout_ECX_42;
+  SpriteS1 *extraout_ECX_43;
+  SpriteS1 *extraout_ECX_44;
+  SpriteS1 *extraout_ECX_45;
+  SpriteS1 *extraout_ECX_46;
+  SpriteS1 *extraout_ECX_47;
   undefined2 extraout_var_30;
-  struct SpriteS1 *extraout_ECX_48;
-  struct SpriteS1 *extraout_ECX_49;
-  struct SpriteS1 *extraout_ECX_50;
-  struct SpriteS1 *extraout_ECX_51;
-  struct SpriteS1 *extraout_ECX_52;
-  struct SpriteS1 *extraout_ECX_53;
-  struct SpriteS1 *extraout_ECX_54;
-  struct SpriteS1 *extraout_ECX_55;
-  struct SpriteS1 *extraout_ECX_56;
+  SpriteS1 *extraout_ECX_48;
+  SpriteS1 *extraout_ECX_49;
+  SpriteS1 *extraout_ECX_50;
+  SpriteS1 *extraout_ECX_51;
+  SpriteS1 *extraout_ECX_52;
+  SpriteS1 *extraout_ECX_53;
+  SpriteS1 *extraout_ECX_54;
+  SpriteS1 *extraout_ECX_55;
+  SpriteS1 *extraout_ECX_56;
   undefined2 extraout_var_31;
-  struct SpriteS1 *extraout_ECX_57;
-  struct SpriteS1 *extraout_ECX_58;
-  struct SpriteS1 *extraout_ECX_59;
-  struct SpriteS1 *extraout_ECX_60;
-  struct SpriteS1 *extraout_ECX_61;
+  SpriteS1 *extraout_ECX_57;
+  SpriteS1 *extraout_ECX_58;
+  SpriteS1 *extraout_ECX_59;
+  SpriteS1 *extraout_ECX_60;
+  SpriteS1 *extraout_ECX_61;
   ushort *puVar15;
   ushort *puVar16;
-  struct SpriteS1 *pSVar17;
+  SpriteS1 *pSVar17;
   ushort *puVar13;
   undefined3 extraout_var;
   
-  _DAT_00662bf4 = (struct SpriteS1 *)param_7;
-  _DAT_00662bd8 = (struct SpriteS1 *)param_7;
-  _DAT_00662bd0 = (struct SpriteS1 *)param_7;
-  _DAT_00662bbc = (struct SpriteS1 *)param_7;
+  _DAT_00662bf4 = (SpriteS1 *)param_7;
+  _DAT_00662bd8 = (SpriteS1 *)param_7;
+  _DAT_00662bd0 = (SpriteS1 *)param_7;
+  _DAT_00662bbc = (SpriteS1 *)param_7;
   puVar15 = _DAT_00662bf0;
   if ((_DAT_00662bf0 != NULL) &&
      (uVar5 = gta2::FUN_00469b00(self,*(undefined4 *)(_DAT_00662bf0 + 10),
                            *(undefined4 *)(_DAT_00662bf0 + 0xc)),
      puVar15 = _DAT_00662bf0, (char)uVar5 == '\0')) {
-    pSVar6 = (struct SpriteS1 *)DecoderFloat(_DAT_00662bf0 + 0xe);
-    pSVar7 = (struct SpriteS1 *)DecoderFloat(puVar15 + 0xc);
+    pSVar6 = (SpriteS1 *)DecoderFloat(_DAT_00662bf0 + 0xe);
+    pSVar7 = (SpriteS1 *)DecoderFloat(puVar15 + 0xc);
     iVar8 = DecoderFloat(puVar15 + 10);
-    bVar3 = gta2::MapRelatedStruct_sub_466CF0((struct MapRelatedStruct *)self,iVar8,(int)pSVar7,(int)pSVar6);
+    bVar3 = gta2::MapRelatedStruct_sub_466CF0((MapRelatedStruct *)self,iVar8,(int)pSVar7,(int)pSVar6);
     if (bVar3 == 0) {
       uVar5 = FUN_00466430(param_1,param_2);
       return uVar5;
@@ -5016,20 +5016,20 @@ undefined4 gta2::MapRelatedStruct_sub_46A570(void *self,int param_1,int param_2,
   else {
     switch(cVar2) {
     case '\x01':
-      _DAT_00662bf4 = (struct SpriteS1 *)((int)&_DAT_00662bf4->FirstElement + 1);
+      _DAT_00662bf4 = (SpriteS1 *)((int)&_DAT_00662bf4->FirstElement + 1);
       break;
     case '\x02':
-      _DAT_00662bd8 = (struct SpriteS1 *)((int)&_DAT_00662bd8->FirstElement + 1);
+      _DAT_00662bd8 = (SpriteS1 *)((int)&_DAT_00662bd8->FirstElement + 1);
       break;
     case '\x03':
-      _DAT_00662bbc = (struct SpriteS1 *)((int)&_DAT_00662bbc->FirstElement + 1);
+      _DAT_00662bbc = (SpriteS1 *)((int)&_DAT_00662bbc->FirstElement + 1);
       break;
     case '\x04':
-      _DAT_00662bd0 = (struct SpriteS1 *)((int)&_DAT_00662bd0->FirstElement + 1);
+      _DAT_00662bd0 = (SpriteS1 *)((int)&_DAT_00662bd0->FirstElement + 1);
     }
     _DAT_00662be8 =
          (undefined2 *)
-         gta2::MapRelatedStruct_sub_4653C0((struct MapRelatedStruct *)self,param_5,param_6,param_7 + 1);
+         gta2::MapRelatedStruct_sub_4653C0((MapRelatedStruct *)self,param_5,param_6,param_7 + 1);
     param_7._0_1_ = cVar2;
   }
   uVar9 = _DAT_00662bec;
@@ -5042,12 +5042,12 @@ undefined4 gta2::MapRelatedStruct_sub_46A570(void *self,int param_1,int param_2,
 LAB_0046a71a:
           return CONCAT31((int3)((uint)puVar11 >> 8),1);
         }
-        pSVar17 = (struct SpriteS1 *)param_6;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+        pSVar17 = (SpriteS1 *)param_6;
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
         pSVar7 = extraout_ECX;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 1);
         pSVar6 = extraout_ECX_00;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar6,pSVar7,pSVar17);
         puVar11 = (undefined2 *)CONCAT31(extraout_var,bVar3);
         puVar15 = _DAT_00662bf0;
@@ -5055,7 +5055,7 @@ LAB_0046a71a:
       }
     }
     else {
-      pSVar6 = (struct SpriteS1 *)
+      pSVar6 = (SpriteS1 *)
                (CONCAT22((short)((uint)param_6 >> 0x10),
                          *(undefined2 *)((int)gMaxZForTile + 4)) & _DAT_00662bec
                );
@@ -5064,11 +5064,11 @@ LAB_0046a71a:
         puVar13 = (ushort *)CONCAT31((int3)((uint)gMaxZForTile >> 8),cVar2);
         if ((cVar2 != '\x03') && (cVar2 != '\x04')) {
           if (puVar15 == NULL) goto LAB_0046af57;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
           pSVar17 = extraout_ECX_01;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 1);
           pSVar7 = extraout_ECX_02;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5);
           bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
           puVar13 = (ushort *)CONCAT31(extraout_var_00,bVar3);
           puVar15 = _DAT_00662bf0;
@@ -5084,11 +5084,11 @@ LAB_0046a71a:
         puVar13 = _DAT_00662b84;
         if (puVar15 == NULL) goto LAB_0046af57;
         pSVar17 = extraout_ECX_03;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
         pSVar7 = extraout_ECX_04;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 1);
         pSVar6 = extraout_ECX_05;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar6,pSVar7,pSVar17);
         puVar13 = (ushort *)CONCAT31(extraout_var_01,bVar3);
         puVar15 = _DAT_00662bf0;
@@ -5096,28 +5096,28 @@ LAB_0046a71a:
         if (bVar3 != 0) goto LAB_0046af57;
       }
       _DAT_00662ba4 =
-           (struct SpriteS1 *)
+           (SpriteS1 *)
            (&DAT_00662db0 +
            (uint)(*(byte *)((int)_DAT_00662b84 + 0xb) >> 2) * 0xc);
     }
   }
-  pSVar6 = (struct SpriteS1 *)param_4;
+  pSVar6 = (SpriteS1 *)param_4;
   if (param_6 < param_4) {
     uVar14 = (undefined2)((uint)param_4 >> 0x10);
     if ((char)param_7 == '\x02') {
       if ((_DAT_00662be8 != NULL) &&
-         (pSVar6 = (struct SpriteS1 *)(CONCAT22(uVar14,_DAT_00662be8[3]) & uVar9),
+         (pSVar6 = (SpriteS1 *)(CONCAT22(uVar14,_DAT_00662be8[3]) & uVar9),
          (short)pSVar6 != 0)) {
         puVar11 = _DAT_00662be8;
         if (puVar15 == NULL) {
 LAB_0046a881:
           return CONCAT31((int3)((uint)puVar11 >> 8),1);
         }
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6 + 1);
         pSVar17 = extraout_ECX_06;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 1);
         pSVar7 = extraout_ECX_07;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
         puVar11 = (undefined2 *)CONCAT31(extraout_var_02,bVar3);
         puVar15 = _DAT_00662bf0;
@@ -5126,7 +5126,7 @@ LAB_0046a881:
       }
     }
     else {
-      pSVar6 = (struct SpriteS1 *)
+      pSVar6 = (SpriteS1 *)
                (CONCAT22(uVar14,*(undefined2 *)((int)gMaxZForTile + 6)) & uVar9)
       ;
       if ((short)pSVar6 != 0) {
@@ -5134,11 +5134,11 @@ LAB_0046a881:
         puVar13 = (ushort *)CONCAT31((int3)((uint)gMaxZForTile >> 8),cVar2);
         if ((cVar2 != '\x03') && (cVar2 != '\x04')) {
           if (puVar15 == NULL) goto LAB_0046af57;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6 + 1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6 + 1);
           pSVar17 = extraout_ECX_08;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 1);
           pSVar7 = extraout_ECX_09;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5);
           bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
           puVar13 = (ushort *)CONCAT31(extraout_var_03,bVar3);
           puVar15 = _DAT_00662bf0;
@@ -5155,11 +5155,11 @@ LAB_0046a881:
         puVar13 = _DAT_00662b8c;
         if (puVar15 == NULL) goto LAB_0046af57;
         pSVar17 = extraout_ECX_10;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6 + 1);
         pSVar7 = extraout_ECX_11;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 1);
         pSVar6 = extraout_ECX_12;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar6,pSVar7,pSVar17);
         puVar13 = (ushort *)CONCAT31(extraout_var_04,bVar3);
         puVar15 = _DAT_00662bf0;
@@ -5175,7 +5175,7 @@ LAB_0046a881:
   if (param_1 < param_5) {
     if ((char)param_7 == '\x03') {
       if ((_DAT_00662be8 != NULL) &&
-         (pSVar6 = (struct SpriteS1 *)
+         (pSVar6 = (SpriteS1 *)
                    (CONCAT22((short)((uint)pSVar6 >> 0x10),*_DAT_00662be8) &
                    uVar9), (short)pSVar6 != 0)) {
         puVar11 = _DAT_00662be8;
@@ -5183,11 +5183,11 @@ LAB_0046a881:
 LAB_0046a9e4:
           return CONCAT31((int3)((uint)puVar11 >> 8),1);
         }
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
         pSVar17 = extraout_ECX_13;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 1);
         pSVar7 = extraout_ECX_14;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6);
         bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar7,(int)pSVar17,(int)pSVar6)
         ;
         puVar11 = (undefined2 *)CONCAT31(extraout_var_05,bVar4);
@@ -5203,12 +5203,12 @@ LAB_0046a9e4:
         puVar13 = (ushort *)CONCAT31((int3)((uint)_DAT_00662be0 >> 8),cVar2);
         if ((cVar2 != '\x01') && (cVar2 != '\x02')) {
           if (puVar15 == NULL) goto LAB_0046af57;
-          pSVar17 = (struct SpriteS1 *)gMaxZForTile;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+          pSVar17 = (SpriteS1 *)gMaxZForTile;
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
           pSVar7 = extraout_ECX_15;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 1);
           pSVar6 = extraout_ECX_16;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6);
           bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,
                                (int)pSVar17);
           puVar13 = (ushort *)CONCAT31(extraout_var_06,bVar4);
@@ -5225,11 +5225,11 @@ LAB_0046a9e4:
         puVar13 = _DAT_00662b88;
         if (puVar15 == NULL) goto LAB_0046af57;
         pSVar17 = extraout_ECX_17;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
         pSVar7 = extraout_ECX_18;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 1);
         pSVar6 = extraout_ECX_19;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6);
         bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,(int)pSVar17)
         ;
         puVar13 = (ushort *)CONCAT31(extraout_var_07,bVar4);
@@ -5238,7 +5238,7 @@ LAB_0046a9e4:
         if (bVar4) goto LAB_0046af57;
       }
       _DAT_00662bcc =
-           (struct SpriteS1 *)
+           (SpriteS1 *)
            (&DAT_00662db0 +
            (uint)(*(byte *)((int)_DAT_00662b88 + 0xb) >> 2) * 0xc);
     }
@@ -5253,11 +5253,11 @@ LAB_0046a9e4:
           puVar13 = (ushort *)CONCAT31((int3)(uVar12 >> 8),cVar2);
           if (puVar15 == NULL) goto LAB_0046af57;
           pSVar17 = _DAT_00662ba4;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
           pSVar7 = extraout_ECX_20;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6);
           pSVar6 = extraout_ECX_21;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6 + -1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6 + -1);
           bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,
                                (int)pSVar17);
           puVar13 = (ushort *)CONCAT31(extraout_var_08,bVar4);
@@ -5284,11 +5284,11 @@ LAB_0046ac02:
               puVar13 = (ushort *)CONCAT31((int3)(uVar12 >> 8),cVar2);
               if (puVar15 == NULL) goto LAB_0046af57;
               pSVar17 = _DAT_00662bcc;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
               pSVar7 = extraout_ECX_22;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5);
               pSVar6 = extraout_ECX_23;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5 + -1);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5 + -1);
               bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar6,pSVar7,pSVar17);
               puVar13 = (ushort *)CONCAT31(extraout_var_09,bVar3);
               puVar15 = _DAT_00662bf0;
@@ -5303,16 +5303,16 @@ LAB_0046ac02:
       _DAT_00662c00 =
            (ushort *)FUN_00465410(self,param_5 + -1,param_6 + -1,(int)pSVar6);
       if (_DAT_00662c00 != NULL) {
-        pSVar6 = (struct SpriteS1 *)
+        pSVar6 = (SpriteS1 *)
                  (CONCAT22(extraout_var_27,_DAT_00662c00[1]) & uVar9);
         if ((short)pSVar6 != 0) {
           puVar13 = _DAT_00662c00;
           if (puVar15 == NULL) goto LAB_0046af57;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
           pSVar17 = extraout_ECX_24;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6);
           pSVar7 = extraout_ECX_25;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6 + -1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6 + -1);
           bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar7,(int)pSVar17,
                                (int)pSVar6);
           puVar13 = (ushort *)CONCAT31(extraout_var_10,bVar4);
@@ -5323,16 +5323,16 @@ LAB_0046ac02:
           if (bVar4) goto LAB_0046af57;
         }
         if ((_DAT_00662c00 != NULL) &&
-           (pSVar6 = (struct SpriteS1 *)
+           (pSVar6 = (SpriteS1 *)
                      (CONCAT22((short)((uint)pSVar6 >> 0x10),_DAT_00662c00[3]) &
                      uVar9), (short)pSVar6 != 0)) {
           puVar13 = _DAT_00662c00;
           if (puVar15 == NULL) goto LAB_0046af57;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
           pSVar17 = extraout_ECX_27;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5);
           pSVar7 = extraout_ECX_28;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5 + -1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5 + -1);
           bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
           puVar13 = (ushort *)CONCAT31(extraout_var_11,bVar3);
           puVar15 = _DAT_00662bf0;
@@ -5350,11 +5350,11 @@ LAB_0046ac02:
         if ((cVar2 != '\x01') && (cVar2 != '\x02')) {
           if (puVar15 == NULL) goto LAB_0046af57;
           pSVar17 = _DAT_00662bbc;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
           pSVar7 = extraout_ECX_29;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 2);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 2);
           pSVar6 = extraout_ECX_30;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6 + 1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6 + 1);
           bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,
                                (int)pSVar17);
           puVar13 = (ushort *)CONCAT31(extraout_var_12,bVar4);
@@ -5374,7 +5374,7 @@ LAB_0046ae0a:
       else {
         pSVar6 = _DAT_00662bd8;
         if ((int)_DAT_00662bd8 <= (int)_DAT_00662bbc) {
-          pSVar6 = (struct SpriteS1 *)
+          pSVar6 = (SpriteS1 *)
                    (CONCAT22((short)((uint)_DAT_00662bbc >> 0x10),puVar16[3]) &
                    uVar9);
           if ((short)pSVar6 != 0) {
@@ -5383,11 +5383,11 @@ LAB_0046ae0a:
             ;
             if ((cVar2 != '\x03') && (cVar2 != '\x04')) {
               if (puVar15 == NULL) goto LAB_0046af57;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6 + 1);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6 + 1);
               pSVar17 = extraout_ECX_31;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5);
               pSVar7 = extraout_ECX_32;
-              gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5 + -1);
+              gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5 + -1);
               bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
               puVar13 = (ushort *)CONCAT31(extraout_var_13,bVar3);
               puVar15 = _DAT_00662bf0;
@@ -5402,14 +5402,14 @@ LAB_0046ae0a:
       puVar13 = (ushort *)FUN_00465410(self,param_5 + -1,iVar8,(int)pSVar6);
       _DAT_00662ba8 = puVar13;
       if (puVar13 != NULL) {
-        pSVar6 = (struct SpriteS1 *)(CONCAT22(extraout_var_28,puVar13[1]) & uVar9);
+        pSVar6 = (SpriteS1 *)(CONCAT22(extraout_var_28,puVar13[1]) & uVar9);
         if ((short)pSVar6 != 0) {
           if (puVar15 == NULL) goto LAB_0046af57;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5);
           pSVar17 = extraout_ECX_33;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 2);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 2);
           pSVar7 = extraout_ECX_34;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,iVar8);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,iVar8);
           bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar7,(int)pSVar17,
                                (int)pSVar6);
           puVar13 = (ushort *)CONCAT31(extraout_var_14,bVar4);
@@ -5419,16 +5419,16 @@ LAB_0046ae0a:
           if (bVar4) goto LAB_0046af57;
         }
         if ((_DAT_00662ba8 != NULL) &&
-           (pSVar6 = (struct SpriteS1 *)
+           (pSVar6 = (SpriteS1 *)
                      (CONCAT22((short)((uint)pSVar6 >> 0x10),_DAT_00662ba8[2]) &
                      uVar9), (short)pSVar6 != 0)) {
           puVar13 = _DAT_00662ba8;
           if (puVar15 == NULL) goto LAB_0046af57;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar8);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar8);
           pSVar17 = extraout_ECX_36;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5);
           pSVar7 = extraout_ECX_37;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_5 + -1);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_5 + -1);
           bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
           puVar13 = (ushort *)CONCAT31(extraout_var_15,bVar3);
           puVar15 = _DAT_00662bf0;
@@ -5446,12 +5446,12 @@ LAB_0046ae0a:
                   (CONCAT22((short)((uint)_DAT_00662be8 >> 0x10),
                             _DAT_00662be8[1]) & uVar9), (short)puVar13 != 0)) {
       if (puVar15 == NULL) goto LAB_0046af57;
-      pSVar17 = (struct SpriteS1 *)param_5;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5 + 1);
+      pSVar17 = (SpriteS1 *)param_5;
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5 + 1);
       pSVar7 = extraout_ECX_38;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 1);
       pSVar6 = extraout_ECX_39;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6);
       bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,(int)pSVar17);
       puVar13 = (ushort *)CONCAT31(extraout_var_16,bVar4);
       uVar9 = _DAT_00662bec;
@@ -5466,12 +5466,12 @@ LAB_0046ae0a:
       puVar13 = (ushort *)CONCAT31((int3)(uVar12 >> 8),cVar2);
       if ((cVar2 != '\x01') && (cVar2 != '\x02')) {
         if (puVar15 == NULL) goto LAB_0046af57;
-        pSVar17 = (struct SpriteS1 *)param_5;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_5 + 1);
+        pSVar17 = (SpriteS1 *)param_5;
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_5 + 1);
         pSVar7 = extraout_ECX_40;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 1);
         pSVar6 = extraout_ECX_41;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6);
         bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,(int)pSVar17)
         ;
         puVar13 = (ushort *)CONCAT31(extraout_var_17,bVar4);
@@ -5484,15 +5484,15 @@ LAB_0046ae0a:
   _DAT_00662c04 =
        (undefined2 *)FUN_00465410(self,iVar8,param_6,(int)_DAT_00662bd0);
   if (_DAT_00662c04 != NULL) {
-    pSVar6 = (struct SpriteS1 *)(CONCAT22(extraout_var_29,*_DAT_00662c04) & uVar9);
+    pSVar6 = (SpriteS1 *)(CONCAT22(extraout_var_29,*_DAT_00662c04) & uVar9);
     if ((short)pSVar6 != 0) {
       puVar13 = _DAT_00662bf0;
       if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar8);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar8);
       pSVar17 = extraout_ECX_42;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 1);
       pSVar7 = extraout_ECX_43;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6);
       bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar7,(int)pSVar17,(int)pSVar6);
       puVar13 = (ushort *)CONCAT31(extraout_var_18,bVar4);
       uVar9 = _DAT_00662bec;
@@ -5510,11 +5510,11 @@ LAB_0046ae0a:
       puVar13 = _DAT_00662bf0;
       if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
       pSVar17 = _DAT_00662ba4;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar8);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar8);
       pSVar7 = extraout_ECX_44;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6);
       pSVar6 = extraout_ECX_45;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6 + -1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6 + -1);
       bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,(int)pSVar17);
       puVar13 = (ushort *)CONCAT31(extraout_var_19,bVar4);
       uVar9 = _DAT_00662bec;
@@ -5535,11 +5535,11 @@ LAB_0046b15b:
           puVar13 = _DAT_00662bf0;
           if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
           pSVar17 = _DAT_00662bd0;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
           pSVar7 = extraout_ECX_46;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 2);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 2);
           pSVar6 = extraout_ECX_47;
-          gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,iVar8);
+          gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,iVar8);
           bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar6,pSVar7,pSVar17);
           puVar13 = (ushort *)CONCAT31(extraout_var_20,bVar3);
           uVar9 = _DAT_00662bec;
@@ -5552,15 +5552,15 @@ LAB_0046b15b:
     _DAT_00662be4 =
          (undefined2 *)FUN_00465410(self,iVar8,param_6 + -1,(int)pSVar6);
     if (_DAT_00662be4 != NULL) {
-      pSVar6 = (struct SpriteS1 *)(CONCAT22(extraout_var_30,*_DAT_00662be4) & uVar9);
+      pSVar6 = (SpriteS1 *)(CONCAT22(extraout_var_30,*_DAT_00662be4) & uVar9);
       if ((short)pSVar6 != 0) {
         puVar13 = _DAT_00662bf0;
         if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar8);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar8);
         pSVar17 = extraout_ECX_48;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6);
         pSVar7 = extraout_ECX_49;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6 + -1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6 + -1);
         bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar7,(int)pSVar17,(int)pSVar6)
         ;
         puVar13 = (ushort *)CONCAT31(extraout_var_21,bVar4);
@@ -5573,11 +5573,11 @@ LAB_0046b15b:
       {
         puVar13 = _DAT_00662bf0;
         if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6);
         pSVar17 = extraout_ECX_51;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 2);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 2);
         pSVar7 = extraout_ECX_52;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,iVar8);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,iVar8);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
         puVar13 = (ushort *)CONCAT31(extraout_var_22,bVar3);
         uVar9 = _DAT_00662bec;
@@ -5594,11 +5594,11 @@ LAB_0046b15b:
     puVar13 = _DAT_00662bf0;
     if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
     pSVar17 = _DAT_00662bd0;
-    gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar8);
+    gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar8);
     pSVar7 = extraout_ECX_53;
-    gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 2);
+    gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 2);
     pSVar6 = extraout_ECX_54;
-    gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,param_6 + 1);
+    gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,param_6 + 1);
     bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar6,(int)pSVar7,(int)pSVar17);
     puVar13 = (ushort *)CONCAT31(extraout_var_23,bVar4);
     uVar9 = _DAT_00662bec;
@@ -5615,18 +5615,18 @@ LAB_0046b34c:
   else {
     pSVar6 = _DAT_00662bd8;
     if ((int)_DAT_00662bd8 <= (int)_DAT_00662bd0) {
-      pSVar6 = (struct SpriteS1 *)
+      pSVar6 = (SpriteS1 *)
                (CONCAT22((short)((uint)_DAT_00662bd0 >> 0x10),puVar11[3]) &
                uVar9);
       if ((((short)pSVar6 != 0) && (*_DAT_00662bdc != '\x03')) &&
          (*_DAT_00662bdc != '\x04')) {
         puVar13 = _DAT_00662bf0;
         if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,param_6 + 1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,param_6 + 1);
         pSVar17 = extraout_ECX_55;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 2);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 2);
         pSVar7 = extraout_ECX_56;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,iVar8);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,iVar8);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
         puVar13 = (ushort *)CONCAT31(extraout_var_24,bVar3);
         uVar9 = _DAT_00662bec;
@@ -5639,15 +5639,15 @@ LAB_0046b34c:
   _DAT_00662bb0 = (ushort *)FUN_00465410(self,iVar8,iVar1,(int)pSVar6);
   puVar13 = _DAT_00662bb0;
   if (_DAT_00662bb0 != NULL) {
-    pSVar6 = (struct SpriteS1 *)(CONCAT22(extraout_var_31,*_DAT_00662bb0) & uVar9);
+    pSVar6 = (SpriteS1 *)(CONCAT22(extraout_var_31,*_DAT_00662bb0) & uVar9);
     if ((short)pSVar6 != 0) {
       puVar13 = _DAT_00662bf0;
       if (_DAT_00662bf0 == NULL) goto LAB_0046af57;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar8);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar8);
       pSVar17 = extraout_ECX_57;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_6 + 2);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_6 + 2);
       pSVar7 = extraout_ECX_58;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,iVar1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,iVar1);
       bVar4 = gta2::FUN_004bb910(_DAT_00662bf0,(int)pSVar7,(int)pSVar17,(int)pSVar6);
       puVar13 = (ushort *)CONCAT31(extraout_var_25,bVar4);
       pSVar6 = extraout_ECX_59;
@@ -5658,11 +5658,11 @@ LAB_0046b34c:
     if ((_DAT_00662bb0 != NULL) && ((_DAT_00662bb0[2] & (ushort)uVar9) != 0)) {
       puVar13 = _DAT_00662bf0;
       if (_DAT_00662bf0 != NULL) {
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe8,iVar1);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe8,iVar1);
         pSVar17 = extraout_ECX_60;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe4,param_5 + 2);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe4,param_5 + 2);
         pSVar7 = extraout_ECX_61;
-        gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffe0,iVar8);
+        gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffe0,iVar8);
         bVar3 = gta2::FUN_004bb860(_DAT_00662bf0,pSVar7,pSVar17,pSVar6);
         puVar13 = (ushort *)CONCAT31(extraout_var_26,bVar3);
         if (bVar3 == 0) goto LAB_0046b421;

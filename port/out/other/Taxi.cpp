@@ -28,13 +28,13 @@ Taxi * gta2::Taxi_sub_4C09B0(struct Taxi *self)
 // Ghidra: ---
 Taxi * gta2::Taxi_Taxi(struct Taxi *self)
 {
-  struct S85 *pS85; // eax
-  struct S85 *pS85_1; // eax
+  S85 *pS85; // eax
+  S85 *pS85_1; // eax
 
   gta2::Taxi_sub_4C09B0(self);
   if ( !gS85 )
   {
-    pS85 = (struct S85 *)gta2::operator_new(0x324u);
+    pS85 = (S85 *)gta2::operator_new(0x324u);
     if ( pS85 )
       pS85_1 = gta2::S85_S85(pS85);
     else

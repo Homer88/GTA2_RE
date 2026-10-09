@@ -9,7 +9,7 @@
 // Ghidra: ---
 Bus * gta2::S83_S83(struct Bus *self)
 {
-  struct Bus *result; // eax
+  Bus *result; // eax
   void *v2; // esi
   void *v3; // edx
   int count; // edi

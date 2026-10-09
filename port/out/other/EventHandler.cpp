@@ -34,7 +34,7 @@ void * gta2::EventHandler_FUN_00484710(struct EventHandler *self)
   pvVar1 = *(void **)(self->Struc___ + 0x34);
   if ((-1 < (int)pvVar1) && ((int)pvVar1 < 2)) {
     if (self->DamageType != 0x94) {
-      gta2::S63_sub_4827B0((struct CollisionBox *)self);
+      gta2::S63_sub_4827B0((CollisionBox *)self);
       return pvVar1;
     }
     pvVar1 = gta2::S63_sub_483C20(self,1);

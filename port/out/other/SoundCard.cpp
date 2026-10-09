@@ -519,7 +519,7 @@ void gta2::SoundCard_SetStreamVolume(struct SoundCard *self, unsigned __int8 a2)
   {
     v2 = self->stream_volume[0];
     if ( v2 )
-      AIL_set_stream_volume((struct SoundCard *)a2, v2, a2);
+      AIL_set_stream_volume((SoundCard *)a2, v2, a2);
   }
 }
 
@@ -591,7 +591,7 @@ void gta2::SoundCard_CloseStream(struct SoundCard *self)
 char gta2::SoundCard_FadeOutAndCloseStream(struct SoundCard *self)
 {
   int v2; // eax
-  struct SoundCard *v3; // ecx
+  SoundCard *v3; // ecx
   unsigned __int8 v4; // si
   int v5; // ebx
   unsigned __int8 v7; // [esp+4h] [ebp-4h]
@@ -656,7 +656,7 @@ int gta2::SoundCard_CloseStreamByIndex(struct SoundCard *self, int streamIndex)
 void gta2::SoundCard_SetStreamVolume_0(struct SoundCard *self, int a2, unsigned __int8 Value)
 {
   if ( self->stream_volume[a2] )
-    AIL_set_stream_volume((struct SoundCard *)Value, self->stream_volume[a2], Value);
+    AIL_set_stream_volume((SoundCard *)Value, self->stream_volume[a2], Value);
 }
 
 
@@ -739,7 +739,7 @@ void gta2::SoundCard_SetSampleVolume_0(struct SoundCard *self, unsigned __int8 a
 
   SampleStatus = self->SampleStatus;
   if ( SampleStatus )
-    AIL_set_sample_volume((struct SoundCard *)a2, SampleStatus, a2);
+    AIL_set_sample_volume((SoundCard *)a2, SampleStatus, a2);
 }
 
 
@@ -771,8 +771,8 @@ int gta2::SoundCard_sub_4B6A60(struct SoundCard *self)
 // Ghidra: ---
 void gta2::SoundCard_sub_4B6A80(struct SoundCard *self, unsigned int a2, unsigned int a3)
 {
-  struct SoundCard *v4; // ecx
-  struct SoundCard *v5; // ecx
+  SoundCard *v4; // ecx
+  SoundCard *v5; // ecx
 
   if ( a2 < a3 && self->SampleStatus && !gta2::SoundCard_GetSampleStatus(self) )
   {
@@ -782,10 +782,10 @@ void gta2::SoundCard_sub_4B6A80(struct SoundCard *self, unsigned int a2, unsigne
         self->SampleStatus,
         self->memoryBuffer + *((_DWORD *)&self->field_A8 + 6 * a2),
         *((_DWORD *)&self->field_A8 + 6 * a3) - *((_DWORD *)&self->field_A8 + 6 * a2));
-      AIL_set_sample_playback_rate((struct SoundCard *)self->SampleStatus, self->SampleStatus, 18050);
+      AIL_set_sample_playback_rate((SoundCard *)self->SampleStatus, self->SampleStatus, 18050);
       AIL_set_sample_pan(v4, self->SampleStatus, 64);
       AIL_set_sample_loop_count(v5, self->SampleStatus, 1);
-      AIL_start_sample((struct SoundCard *)self->SampleStatus, self->SampleStatus);
+      AIL_start_sample((SoundCard *)self->SampleStatus, self->SampleStatus);
     }
   }
 }
@@ -816,10 +816,10 @@ char gta2::SoundCard_LoadSounds(struct SoundCard *self, const char *buffer)
   FILE *v5; // eax
   FILE *v6; // esi
   size_t v7; // edi
-  struct SoundCard *v9; // ebx
+  SoundCard *v9; // ebx
   FILE *v10; // edi
   int v11; // [esp+0h] [ebp-B4h] BYREF
-  struct SoundCard *v12; // [esp+10h] [ebp-A4h]
+  SoundCard *v12; // [esp+10h] [ebp-A4h]
   CHAR FileName[8]; // [esp+14h] [ebp-A0h] BYREF
   _BYTE v14[7]; // [esp+1Ch] [ebp-98h] BYREF
   const unsigned __int16 *v15; // [esp+23h] [ebp-91h]
@@ -1050,7 +1050,7 @@ char gta2::SoundCard_ReinitializeAudioSystem(struct SoundCard *self)
 int gta2::SoundCard_CloseAudioSystem(struct SoundCard *self)
 {
   unsigned int i; // ebx
-  struct SoundCard *v3; // ecx
+  SoundCard *v3; // ecx
   unsigned __int8 v4; // si
   int v5; // ebp
   int AudioStream; // edx

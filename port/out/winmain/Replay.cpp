@@ -20,7 +20,7 @@ int gta2::Replay_PlayReplay(void *self, LPCSTR lpFileName)
 // 0x003f1574: Replay::StartPlayReplay
 // IDA: Replay::StartPlayReplay
 // Ghidra: ---
-int gta2::Replay_StartPlayReplay(Replay *self)
+int gta2::Replay_StartPlayReplay(struct Replay *self)
 {
   void *v1; // ecx
 

@@ -20,7 +20,7 @@ void gta2::S89_sub_4C2710(struct S89 *self, __int16 a2, __int16 a3, int a4, int 
       self->field_10 = 1;
       self->sprite_type = a4;
       self->field_C = a5;
-      self->S89_2_ = (struct S89_2 *)gta2::createBuffer(4 * (unsigned __int16)(a3 * a2));
+      self->S89_2_ = (S89_2 *)gta2::createBuffer(4 * (unsigned __int16)(a3 * a2));
       for ( i = 0; i < self->Count; self->S89_2_->field_0[i++] = 0 )
         ;
     }
@@ -145,7 +145,7 @@ int gta2::S89_sub_4C2950(struct S89 *self, __int16 spriteId, __int16 a3)
 // Ghidra: ---
 S89 * gta2::S89_S89(struct S89 *self)
 {
-  struct S89 *result; // eax
+  S89 *result; // eax
 
   result = self;
   self->S89_2_ = 0;

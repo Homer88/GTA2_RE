@@ -20,8 +20,8 @@ void gta2::S64_sub_483ED0(undefined4 *param_1)
 // Ghidra: ---
 TriggerVolume * gta2::S64_S64(struct TriggerVolume *self)
 {
-  struct S65 *pS65; // edi
-  struct S65 *v3; // eax
+  S65 *pS65; // edi
+  S65 *v3; // eax
   int count; // edx
 
   pS65 = self->S65_;
@@ -46,7 +46,7 @@ TriggerVolume * gta2::S64_S64(struct TriggerVolume *self)
 // Ghidra: ---
 S65 * gta2::S64_sub_483FA0(struct TriggerVolume *self)
 {
-  struct S65 *FirstElement; // esi
+  S65 *FirstElement; // esi
 
   FirstElement = self->FirstElement;
   self->FirstElement = self->FirstElement->NextElement;
@@ -60,7 +60,7 @@ S65 * gta2::S64_sub_483FA0(struct TriggerVolume *self)
 // Ghidra: ---
 S65 * gta2::S64_sub_483FC0(struct TriggerVolume *self, S65 *a2)
 {
-  struct S65 *result; // eax
+  S65 *result; // eax
 
   sub_482AF0();
   result = self->FirstElement;

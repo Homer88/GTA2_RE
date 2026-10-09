@@ -2,10 +2,14 @@
 // See cSaveLog.h for the three hooked entry points.
 #include <windows.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
 #include "cSaveLog.h"
 #include "cGame.h"
+#include "cClassProbe.h"
+#include "cMapGm.h"
+#include "cPlayerData.h"
 #include "DebugLogFile.h"
 
 // ============================================================================
@@ -36,6 +40,10 @@
 // Суммы живут в cSaveLog.h, чтобы кнопки в cInspector.cpp совпадали.
 // #define SAVE_HOTKEYS_ENABLED    1
 
+// [ПОРТ] 1 = выбор мира идёт через НАШ нативный код (SetScoresNative +
+// SaveLevelRecordNative), 0 = гоняем ретейл через трaмполины (сверка).
+#define WORLD_SELECT_NATIVE     1
+
 // ============================================================================
 
 // Trampoline pointers; DetourAttach rewrites them to the retail originals.
@@ -43,6 +51,9 @@
 extern LPVOID _WriteFileSvg; // MissionManager::SaveFile        @0x0047EF40
 extern LPVOID _WriteFileDat; // PlayerData::WriteFileNamePlayer @0x004A89E0
 extern LPVOID _WriteFileHsc; // PlayerData::sub_4A8D80          @0x004A8D80
+extern LPVOID _UpdateBestScores; // PlayerData::UpdateBestScores @0x004A90A0
+extern LPVOID _MapGmSetScores;   // MapGm::sub_45EC20      @0x0045EC20
+extern LPVOID _SaveLevelRecord;  // PlayerData::sub_4A8F90 @0x004A8F90
 
 #define SAVE_BLOCK0 1864        // unk_664590, built by MissionManager::sub_475CA0
 #define SAVE_MAX    (16 * 1024)
@@ -648,6 +659,7 @@ static void LogCityNow(FILE* f, const char* stage)
 
 int __fastcall HookSaveFile(void* thisp, void* _EDX, char* pSaveFileName)
 {
+    ProbeThis(0x0047EF40u, "MissionManager::SaveFile", thisp);
     FILETIME before[8];
     FILE* f;
     int result;
@@ -704,6 +716,7 @@ int __fastcall HookSaveFile(void* thisp, void* _EDX, char* pSaveFileName)
 
 int __fastcall HookWriteFileNamePlayer(void* thisp, void* _EDX, unsigned short slot)
 {
+    ProbeThis(0x004A89E0u, "PlayerData::WriteFileNamePlayer", thisp);
     FILE* f;
     int result;
     char path[64];
@@ -749,5 +762,274 @@ int __fastcall HookWriteHiscores(void* thisp, void* _EDX)
     (void)_EDX;
     result = ((int(__thiscall*)(void*))_WriteFileHsc)(thisp);
     DumpHiscores();
+    return result;
+}
+
+// PlayerData::UpdateBestScores @0x004A90A0. Runs when the game leaves a world
+// back to the frontend (world-select dispatch, callers 0x4D1680/0x4D16D3/
+// 0x4D1727). Retail picks the bests ROW by the caller's stack slot
+// (esi = [esp+0x18] -> row base +0x1800+arena*0x28), bumps the 10 per-area
+// bests plus two per-arena dwords (+0x1878/+0x1884) and calls WriteHiscores
+// (hiscores.hsc) when anything rose. Diff the WHOLE 0x1800..0x1890 range so a
+// non-zero row cannot slip through unnoticed.
+// Диапазон дампа: 0x1800..0x24C0. Раньше был только 0x1800..0x1890, из-за
+// чего в лог не попадали изменения самих таблиц рекордов S151_arr[12]
+// (+0x1890..0x23D0) и S151_a (+0x23D0..0x24C0), хотя hiscores.hsc писался.
+#define UBS_BEGIN 0x1800UL
+#define UBS_END   0x24C0UL
+#define UBS_BYTES (UBS_END - UBS_BEGIN)          // 0xCC0
+#define UBS_DWORDS (UBS_BYTES / 4)
+
+void __fastcall HookUpdateBestScores(void* thisp, void* _EDX)
+{
+    unsigned char* pd;
+    unsigned long* before;
+    unsigned long* after;
+    int i, changed = 0;
+    FILE* f;
+
+    (void)_EDX;
+    if (thisp == NULL) return;
+    pd = (unsigned char*)thisp;
+    before = (unsigned long*)malloc(UBS_BYTES);
+    after = (unsigned long*)malloc(UBS_BYTES);
+    if (before == NULL || after == NULL) {
+        if (before) free(before);
+        if (after) free(after);
+        return;
+    }
+    for (i = 0; i < UBS_DWORDS; i++) {
+        before[i] = *(unsigned long*)(pd + UBS_BEGIN + i * 4);
+    }
+
+    #if WORLD_SELECT_NATIVE
+    UpdateBestScoresNative((PlayerData*)thisp);
+    #else
+    ((void(__thiscall*)(void*))_UpdateBestScores)(thisp);
+    #endif
+
+    for (i = 0; i < UBS_DWORDS; i++) {
+        after[i] = *(unsigned long*)(pd + UBS_BEGIN + i * 4);
+        if (after[i] != before[i]) changed = 1;
+    }
+    if (!changed) {
+        free(before);
+        free(after);
+        return;
+    }
+    f = fopen(GetLogPath("Save.log"), "ab");
+    if (f == NULL) {
+        free(before);
+        free(after);
+        return;
+    }
+    fprintf(f, "\n== UpdateBestScores (новая запись в таблицу) [%s] ==",
+            WORLD_SELECT_NATIVE ? "native" : "retail");
+    SaveLogStamp(f);
+    for (i = 0; i < UBS_DWORDS; i++) {
+        if (after[i] != before[i]) {
+            unsigned long off = UBS_BEGIN + (unsigned long)i * 4;
+            // 0x1800..0x1877 три ряда best'ов по 0x28 (area = row/0x28),
+            // 0x1878..0x1883 и 0x1884..0x188F два dword-массива по арене,
+            // 0x1890..0x23CF S151_arr[12] (по 0xF0), 0x23D0..0x24BF S151_a.
+            if (off < 0x1878UL) {
+                fprintf(f, "  bests row=%lu area=%lu  [+0x%04lX] %lu -> %lu\n",
+                        (off - 0x1800UL) / 0x28UL, ((off - 0x1800UL) % 0x28UL) / 4UL,
+                        off, before[i], after[i]);
+            }
+            else if (off < 0x1884UL) {
+                fprintf(f, "  arena dword A[arena=%lu]  [+0x%04lX] %lu -> %lu\n",
+                        (off - 0x1878UL) / 4UL, off, before[i], after[i]);
+            }
+            else if (off < 0x1890UL) {
+                fprintf(f, "  arena dword B[arena=%lu]  [+0x%04lX] %lu -> %lu\n",
+                        (off - 0x1884UL) / 4UL, off, before[i], after[i]);
+            }
+            else {
+                unsigned long base, tblend;
+                unsigned long row, fld;
+                char tbl[24];
+                if (off < 0x23D0UL) {
+                    base = 0x1890UL;
+                    tblend = 0x23D0UL;
+                    _snprintf(tbl, sizeof(tbl), "S151_arr[%lu]", (off - base) / 0xF0UL);
+                }
+                else {
+                    base = 0x23D0UL;
+                    tblend = 0x24C0UL;
+                    _snprintf(tbl, sizeof(tbl), "S151_a");
+                }
+                (void)tblend;
+                row = ((off - base) % 0xF0UL) / 0x18UL;
+                fld = ((off - base) % 0xF0UL) % 0x18UL;
+                if (fld < 0x14UL) {
+                    fprintf(f, "  %s row=%lu name[+%lu]  [+0x%04lX] %lu -> %lu\n",
+                            tbl, row, fld / 2UL, off, before[i], after[i]);
+                }
+                else {
+                    fprintf(f, "  %s row=%lu score  [+0x%04lX] %lu -> %lu\n",
+                            tbl, row, off, before[i], after[i]);
+                }
+            }
+        }
+    }
+    fclose(f);
+    free(before);
+    free(after);
+}
+
+// ---------------------------------------------------------------------------
+// Выбор мира: MapGm::sub_45EC20 @0x0045EC20 (загрузка очков уровня).
+// Retail: thiscall MapGm::sub_45EC20(area*), ret 4. Копирует 10 dword из
+// area+0x644 в MapGm.Arr10i[10] (+0x408), area+0x678 -> +0x430,
+// area+0x67C -> +0x434. Диспетчер выбора мира (0x4D1658/0x4D16AB/0x4D16FF)
+// зовёт это ПЕРЕД sub_4A8F90/sub_4A90A0 при входе в город.
+// Инструментальный хук: снимаем что в источнике и что было в MapGm, гоняем
+// retail, печатаем дельту. Событие редкое - логируем всегда.
+// ---------------------------------------------------------------------------
+void __fastcall HookMapGmSetScores(void* thisp, void* _EDX, void* srcArea)
+{
+    unsigned char* g = (unsigned char*)thisp;
+    unsigned char* src = (unsigned char*)srcArea;
+    unsigned long pre[10], post[10], srcv[10];
+    unsigned long pre430, post430, pre434, post434;
+    unsigned long src430, src434;
+    int i, changed = 0;
+    FILE* f;
+
+    (void)_EDX;
+    if (g == NULL) return;
+    for (i = 0; i < 10; i++) pre[i] = *(unsigned long*)(g + 0x408 + i * 4);
+    pre430 = *(unsigned long*)(g + 0x430);
+    pre434 = *(unsigned long*)(g + 0x434);
+
+    if (src != NULL) {
+        for (i = 0; i < 10; i++) srcv[i] = *(unsigned long*)(src + 0x644 + i * 4);
+        src430 = *(unsigned long*)(src + 0x678);
+        src434 = *(unsigned long*)(src + 0x67C);
+    }
+
+    #if WORLD_SELECT_NATIVE
+    SetScoresNative((MapGm*)thisp, srcArea);
+#else
+    ((void(__thiscall*)(void*, void*))_MapGmSetScores)(thisp, srcArea);
+#endif
+
+    for (i = 0; i < 10; i++) {
+        post[i] = *(unsigned long*)(g + 0x408 + i * 4);
+        if (post[i] != pre[i]) changed = 1;
+    }
+    post430 = *(unsigned long*)(g + 0x430);
+    post434 = *(unsigned long*)(g + 0x434);
+    if (post430 != pre430 || post434 != pre434) changed = 1;
+
+    f = fopen(GetLogPath("Save.log"), "ab");
+    if (f == NULL) return;
+    fprintf(f, "\n== [Выбор мира] MapGm::sub_45EC20 загрузка очков уровня ==");
+    SaveLogStamp(f);
+    fprintf(f, "  arena=0x400:%u bonus=0x401:%u gang=0x402:%u slot=0x403:%u  src=%p\n",
+            (unsigned)g[0x400], (unsigned)g[0x401], (unsigned)g[0x402],
+            (unsigned)g[0x403], src);
+    if (src != NULL) {
+        fprintf(f, "  src+0x644[10]:");
+        for (i = 0; i < 10; i++) fprintf(f, " %lu", srcv[i]);
+        fprintf(f, "   +0x678=%lu +0x67C=%lu\n", src430, src434);
+    }
+    fprintf(f, "  MapGm.Arr10i[10]:");
+    for (i = 0; i < 10; i++) {
+        if (post[i] != pre[i]) fprintf(f, " %lu->%lu", pre[i], post[i]);
+        else fprintf(f, " %lu", post[i]);
+    }
+    fprintf(f, "\n  +0x430 %lu -> %lu   +0x434 %lu -> %lu   [%s]%s\n",
+            pre430, post430, pre434, post434, changed ? "ИЗМЕНЕНО" : "без изменений",
+            WORLD_SELECT_NATIVE ? "  [native]" : "   [retail]");
+    fclose(f);
+}
+
+// ---------------------------------------------------------------------------
+// Выбор мира: PlayerData::sub_4A8F90 @0x004A8F90 (запись рекорда слота).
+// Retail: thiscall PlayerData::sub_4A8F90(cityBlock*), ret 4.
+// Вычисление записи (сверено по дизассемблу):
+//   arena   = MapGm[+0x403];
+//   gang    = MapGm[+0x402];
+//   gang!=0 -> area = bonusStage(+0x401)>>4, sub = bonusStage&0xF
+//   gang==0 -> area = +0x400, sub = 0;
+//   rec     = pd+0x26A0 + arena*0xA4 + (sub + area*4)*3*4;
+//   rec+4   = best (max), rec+8 = last (score = widget cityBlock+0x2D4
+//             через 0x4B75A0/0x41DC30);
+//   затем WriteFileNamePlayer(arena) пишет plyslot%d.dat.
+// Хук снимает ВЕСЬ блок arena (0xA4) до/после - авторитетный поиск реально
+// изменённых dword'ов плюс сверка расчётного rec с фактом.
+// ---------------------------------------------------------------------------
+int __fastcall HookSaveLevelRecord(void* thisp, void* _EDX, void* cityBlock)
+{
+    unsigned char* pd = (unsigned char*)thisp;
+    unsigned char* g = (unsigned char*)gMapGm;
+    unsigned char pre[0xA4], post[0xA4];
+    unsigned char* block;
+    int arena, gang, area, sub, off, i, result, mism;
+    FILE* f;
+
+    (void)_EDX;
+    if (pd == NULL || g == NULL) return 0;
+
+    arena = g[0x403];
+    gang = g[0x402];
+    if (gang != 0) { area = g[0x401] >> 4; sub = g[0x401] & 0x0F; }
+    else { area = g[0x400]; sub = 0; }
+    // pPlayerSlotSave[8]: если байт 0x403 мусорный (не 0..7), блок уехал бы
+    // за пределы PlayerData (0x2BC0) - копируем только валидный диапазон.
+    if (arena < 0 || arena > 7) {
+        block = NULL;
+        memset(pre, 0, 0xA4);
+        memset(post, 0, 0xA4);
+        off = -1;
+    }
+    else {
+        block = pd + 0x26A0 + arena * 0xA4;
+        off = (sub + area * 4) * 3 * 4;
+        memcpy(pre, block, 0xA4);
+    }
+
+    #if WORLD_SELECT_NATIVE
+    result = SaveLevelRecordNative((PlayerData*)thisp, cityBlock);
+#else
+    result = ((int(__thiscall*)(void*, void*))_SaveLevelRecord)(thisp, cityBlock);
+#endif
+
+    if (block != NULL) memcpy(post, block, 0xA4);
+
+    f = fopen(GetLogPath("Save.log"), "ab");
+    if (f == NULL) return result;
+    fprintf(f, "\n== [Выбор мира] PlayerData::sub_4A8F90 запись рекорда слота ==");
+    SaveLogStamp(f);
+    fprintf(f, "  arena=%d gang=%d area=%d sub=%d rec_off=0x%X cityBlock=%p block=%p%s\n",
+            arena, gang, area, sub, off, cityBlock, block,
+            WORLD_SELECT_NATIVE ? "  [native]" : "   [retail]");
+    mism = 1;
+    for (i = 0; i + 3 < 0xA4; i += 4) {
+        unsigned long b = *(unsigned long*)(pre + i);
+        unsigned long a = *(unsigned long*)(post + i);
+        if (b != a) {
+            const char* tag = (i >= off && i < off + 12) ? "rec" : "другой";
+            if (i >= off && i < off + 12) mism = 0;
+            fprintf(f, "  [%s] block+0x%03X  %lu -> %lu%s\n",
+                    tag, i, b, a,
+                    (i == off + 4) ? "   (best)" : (i == off + 8) ? "   (last=score)" : "");
+        }
+    }
+    if (block == NULL) {
+        fprintf(f, "  !! arena=%d вне 0..7 - блок pPlayerSlotSave не читали\n", arena);
+    }
+    else if (off + 12 > 0xA4) {
+        fprintf(f, "  !! расчётный rec выходит за блок 0xA4 - формула неверна?\n");
+    }
+    else if (memcmp(pre, post, 0xA4) == 0) {
+        fprintf(f, "  блок не изменился (score не бьёт рекорд и last не двигается?)\n");
+    }
+    else if (mism) {
+        fprintf(f, "  !! расчётный rec+0x%X не совпал с реально тронутым dword'ом\n", off);
+    }
+    fclose(f);
     return result;
 }

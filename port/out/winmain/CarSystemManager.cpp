@@ -7,7 +7,7 @@
 // 0x00401c10: CarSystemManager::Clamp
 // IDA: CarSystemManager::Clamp
 // Ghidra: ---
-void gta2::CarSystemManager_Clamp(CarSystemManager *self)
+void gta2::CarSystemManager_Clamp(struct CarSystemManager *self)
 {
   __int16 Index; // ax
   __int16 v2; // ax
@@ -34,7 +34,7 @@ void gta2::CarSystemManager_Clamp(CarSystemManager *self)
 // 0x00401c40: CarSystemManager::sub_401C40
 // IDA: CarSystemManager::sub_401C40
 // Ghidra: ---
-CarSystemManager * gta2::CarSystemManager_sub_401C40(CarSystemManager *self, Game *pGame)
+CarSystemManager * gta2::CarSystemManager_sub_401C40(struct CarSystemManager *self, Game *pGame)
 {
   self->Index = gta2::Game_ShiftId(pGame);
   gta2::CarSystemManager_Clamp(self);
@@ -45,7 +45,7 @@ CarSystemManager * gta2::CarSystemManager_sub_401C40(CarSystemManager *self, Gam
 // 0x00401c60: CarSystemManager::sub_401C60
 // IDA: CarSystemManager::sub_401C60
 // Ghidra: ---
-Ped * gta2::CarSystemManager_sub_401C60(CarSystemManager *self, __int16 *a2)
+Ped * gta2::CarSystemManager_sub_401C60(struct CarSystemManager *self, __int16 *a2)
 {
   self->Index = *a2;
   gta2::CarSystemManager_Clamp(self);

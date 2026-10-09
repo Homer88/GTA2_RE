@@ -108,3 +108,5 @@ extern char *gTextLabel;
 extern char gTextUse[0x80];
 extern void *gTileAnim1;
 extern void *gTimer;
+// Ghidra-метка данных: "v62 = &loc_4E39AE" (_ReadFile1 buffer marker в _global.cpp)
+extern unsigned char loc_4E39AE;

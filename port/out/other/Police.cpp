@@ -7,7 +7,7 @@
 // 0x004a9430: Police::sub_4A9430
 // IDA: Police::sub_4A9430
 // Ghidra: ---
-int gta2::Police_sub_4A9430(Police *self)
+int gta2::Police_sub_4A9430(struct Police *self)
 {
   int v2; // ebp
   int *v3; // edx
@@ -64,7 +64,7 @@ int gta2::Police_sub_4A9430(Police *self)
 // 0x004a9500: Police::sub_4A9500
 // IDA: Police::sub_4A9500
 // Ghidra: ---
-char gta2::Police_sub_4A9500(Police *self, Ped *pPed)
+char gta2::Police_sub_4A9500(struct Police *self, Ped *pPed)
 {
   unsigned __int8 v2; // dl
   struct S112 *v3; // esi
@@ -117,7 +117,7 @@ char gta2::Police_sub_4A9500(Police *self, Ped *pPed)
 // 0x004a9590: Police::sub_4A9590
 // IDA: Police::sub_4A9590
 // Ghidra: ---
-bool gta2::Police_sub_4A9590(Police *self, Ped *a2)
+bool gta2::Police_sub_4A9590(struct Police *self, Ped *a2)
 {
   unsigned __int8 v2; // bl
   char *v4; // eax
@@ -139,7 +139,7 @@ bool gta2::Police_sub_4A9590(Police *self, Ped *a2)
 // 0x004a9610: Police::sub_4A9610
 // IDA: Police::sub_4A9610
 // Ghidra: ---
-bool gta2::Police_sub_4A9610(Police *self, Ped *a2)
+bool gta2::Police_sub_4A9610(struct Police *self, Ped *a2)
 {
   unsigned __int8 v2; // bl
   unsigned __int8 v4; // [esp+Ch] [ebp-4h]
@@ -159,7 +159,7 @@ bool gta2::Police_sub_4A9610(Police *self, Ped *a2)
 // 0x004a9670: Police::sub_4A9670
 // IDA: Police::sub_4A9670
 // Ghidra: ---
-int gta2::Police_sub_4A9670(Police *self, Ped *a2, Ped *a3)
+int gta2::Police_sub_4A9670(struct Police *self, Ped *a2, Ped *a3)
 {
   unsigned __int8 v3; // bl
   int result; // eax
@@ -185,7 +185,7 @@ int gta2::Police_sub_4A9670(Police *self, Ped *a2, Ped *a3)
 // 0x004a9a90: Police::sub_4A9A90
 // IDA: Police::sub_4A9A90
 // Ghidra: ---
-char gta2::Police_sub_4A9A90(Police *self)
+char gta2::Police_sub_4A9A90(struct Police *self)
 {
   if ( self->WantedLevel < 3 || LOBYTE(self->PoliceRoadblock) || self->field_7AC )
     return 0;
@@ -197,7 +197,7 @@ char gta2::Police_sub_4A9A90(Police *self)
 // 0x004a9ae0: Police::sub_4A9AE0
 // IDA: Police::sub_4A9AE0
 // Ghidra: ---
-S112 * gta2::Police_sub_4A9AE0(Police *self)
+S112 * gta2::Police_sub_4A9AE0(struct Police *self)
 {
   unsigned __int8 v1; // bl
   struct S112 *v3; // ecx
@@ -258,7 +258,7 @@ Ped * gta2::Police_sub_4A9B40(undefined4 param_1,undefined4 param_2,undefined4 p
 // 0x004a9c50: Police::sub_4A9C50
 // IDA: Police::sub_4A9C50
 // Ghidra: Police::FUN_004a9c50
-void gta2::Police_sub_4A9C50(Police *self,int param_1)
+void gta2::Police_sub_4A9C50(struct Police *self,int param_1)
 {
   GlassInfo *pGVar1;
   SpawnPoint *pSVar2;
@@ -274,7 +274,7 @@ void gta2::Police_sub_4A9C50(Police *self,int param_1)
   do {
     if (self->Array_DecalInfo[local_4].field15_0x1c != 0) {
       pGVar1 = self->Array_DecalInfo[local_4].s110;
-      if ((pGVar1 != NULL) && (pGVar1->car == (struct Car *)param_1)) {
+      if ((pGVar1 != NULL) && (pGVar1->car == (Car *)param_1)) {
         pSVar2 = (self->Array_DecalInfo[local_4].s110)->SpawnPoint;
         if ((pSVar2 == NULL) ||
            (bVar4 = gta2::S169_sub_404840(pSVar2), bVar4)) {
@@ -329,7 +329,7 @@ void gta2::Police_sub_4A9C50(Police *self,int param_1)
 // 0x004a9d60: Police::sub_4A9D60
 // IDA: Police::sub_4A9D60
 // Ghidra: ---
-char gta2::Police_sub_4A9D60(Police *self, Ped *a2)
+char gta2::Police_sub_4A9D60(struct Police *self, Ped *a2)
 {
   struct Ped *Ped; // eax
   unsigned __int8 v5; // cl
@@ -392,7 +392,7 @@ LABEL_10:
 // 0x004a9e80: Police::sub_4A9E80
 // IDA: Police::sub_4A9E80
 // Ghidra: ---
-void gta2::Police_sub_4A9E80(Police *self)
+void gta2::Police_sub_4A9E80(struct Police *self)
 {
   struct Ped *Ped; // edi
   __int16 v3; // ax
@@ -419,7 +419,7 @@ void gta2::Police_sub_4A9E80(Police *self)
 // 0x004a9ef0: Police::sub_4A9EF0
 // IDA: Police::sub_4A9EF0
 // Ghidra: ---
-char gta2::Police_sub_4A9EF0(Police *self, int a2)
+char gta2::Police_sub_4A9EF0(struct Police *self, int a2)
 {
   int v2; // ebp
   struct S112 *pS112; // esi
@@ -431,9 +431,9 @@ char gta2::Police_sub_4A9EF0(Police *self, int a2)
   int v11; // [esp+14h] [ebp-4h] BYREF
 
   v2 = a2;
-  LOBYTE(a2) = gta2::Weapon_sub_41C1E0((struct Weapon *)(a2 + 16));
-  v9[0] = gta2::Weapon_sub_41C1E0((struct Weapon *)(v2 + 20));
-  v10[0] = gta2::Weapon_sub_41C1E0((struct Weapon *)(v2 + 24));
+  LOBYTE(a2) = gta2::Weapon_sub_41C1E0((Weapon *)(a2 + 16));
+  v9[0] = gta2::Weapon_sub_41C1E0((Weapon *)(v2 + 20));
+  v10[0] = gta2::Weapon_sub_41C1E0((Weapon *)(v2 + 24));
   if ( !gta2::S95_sub_49D7A0(gS95, 1, &a2, v9, v10, 0) )
     return 0;
   pS112 = gta2::Police_sub_4A9AE0(self);
@@ -449,7 +449,7 @@ char gta2::Police_sub_4A9EF0(Police *self, int a2)
     return 0;
   }
   v7 = unk_66B7A8;
-  pS112->S113_ = (struct S113 *)v2;
+  pS112->S113_ = (S113 *)v2;
   pS112->field = v7;
   unk_66B7A8 = v7 + 1;
   pS112->State = *(_DWORD *)&stru_66B76C.field_24;
@@ -460,11 +460,11 @@ char gta2::Police_sub_4A9EF0(Police *self, int a2)
   pS110->field_20 = (int)Car;
   pS110->field_28 = 3;
   pS110->field_18 = (__int16)stru_66B76C.Ped;
-  gta2::S202_sub_40CE30((struct S202 *)&v11, a2);
+  gta2::S202_sub_40CE30((S202 *)&v11, a2);
   pS110->field_C = v11;
-  gta2::S202_sub_40CE30((struct S202 *)&v11, v9[0]);
+  gta2::S202_sub_40CE30((S202 *)&v11, v9[0]);
   pS110->field_10 = v11;
-  gta2::S202_sub_40CE30((struct S202 *)&v11, v10[0]);
+  gta2::S202_sub_40CE30((S202 *)&v11, v10[0]);
   pS110->field_14 = v11;
   gta2::S112_sub_4A9720(pS112);
   return 1;
@@ -474,11 +474,11 @@ char gta2::Police_sub_4A9EF0(Police *self, int a2)
 // 0x004aa030: Police::sub_4AA030
 // IDA: Police::sub_4AA030
 // Ghidra: ---
-char gta2::Police_sub_4AA030(Police *self)
+char gta2::Police_sub_4AA030(struct Police *self)
 {
   Police *v1; // ebx
   struct Ped *Ped; // eax
-  struct S113 *S113_arr; // esi
+  S113 *S113_arr; // esi
   struct Ped *v4; // edi
   char v5; // al
   bool v6; // cf
@@ -623,7 +623,7 @@ LABEL_18:
             if ( !v1->Count )
             {
               LOWORD(stru_66B76C.Ped) = 200;
-              stru_66B76C.Car = (struct Car *)3;
+              stru_66B76C.Car = (Car *)3;
               *(_DWORD *)&stru_66B76C.field_24 = 3;
               unk_66B798 = 1;
               if ( gta2::Police_sub_4A9EF0(gPolice, (int)S113_arr) )
@@ -662,7 +662,7 @@ LABEL_18:
               v1->field_659 = 0;
               if ( S113_arr->field_70 < (unsigned int)S113_arr->field_71 )
               {
-                stru_66B76C.Car = (struct Car *)3;
+                stru_66B76C.Car = (Car *)3;
                 LOWORD(stru_66B76C.Ped) = 50;
                 *(_DWORD *)&stru_66B76C.field_24 = 5;
                 unk_66B798 = 1;
@@ -672,7 +672,7 @@ LABEL_18:
             case 4:
               if ( S113_arr->field_70 < (unsigned int)S113_arr->field_71 )
               {
-                stru_66B76C.Car = (struct Car *)3;
+                stru_66B76C.Car = (Car *)3;
                 LOWORD(stru_66B76C.Ped) = 50;
                 *(_DWORD *)&stru_66B76C.field_24 = 5;
                 unk_66B798 = 1;
@@ -681,7 +681,7 @@ LABEL_18:
               if ( !S113_arr->field_72 )
               {
                 LOWORD(stru_66B76C.Ped) = 50;
-                stru_66B76C.Car = (struct Car *)5;
+                stru_66B76C.Car = (Car *)5;
                 *(_DWORD *)&stru_66B76C.field_24 = 5;
                 unk_66B798 = 2;
                 if ( gta2::Police_sub_4A9EF0(gPolice, (int)S113_arr) )
@@ -769,7 +769,7 @@ LABEL_18:
               else if ( S113_arr->Count )
               {
                 v28 = (unsigned __int8)S113_arr->Count;
-                S113_arr->S112_[0] = (struct S112 *)*((_DWORD *)&S113_arr->field_1C + v28);
+                S113_arr->S112_[0] = (S112 *)*((_DWORD *)&S113_arr->field_1C + v28);
                 *((_DWORD *)&S113_arr->field_1C + v28) = 0;
                 --S113_arr->Count;
               }
@@ -838,7 +838,7 @@ LABEL_104:
               if ( !v1->Count )
               {
                 LOWORD(stru_66B76C.Ped) = 200;
-                stru_66B76C.Car = (struct Car *)3;
+                stru_66B76C.Car = (Car *)3;
                 *(_DWORD *)&stru_66B76C.field_24 = 3;
                 unk_66B798 = 1;
                 gta2::Police_sub_4A9EF0(gPolice, (int)S113_arr);
@@ -866,7 +866,7 @@ LABEL_96:
 // 0x004aa710: Police::sub_4AA710
 // IDA: Police::sub_4AA710
 // Ghidra: ---
-SpriteS1 * gta2::Police_sub_4AA710(Police *self, Ped *pPed, Ped *a1, int a2, int a3, __int16 a6)
+SpriteS1 * gta2::Police_sub_4AA710(struct Police *self, Ped *pPed, Ped *a1, int a2, int a3, __int16 a6)
 {
   Remap Remap; // al
 
@@ -896,7 +896,7 @@ SpriteS1 * gta2::Police_sub_4AA710(Police *self, Ped *pPed, Ped *a1, int a2, int
 // 0x004aa7b0: Police::sub_4AA7B0
 // IDA: Police::sub_4AA7B0
 // Ghidra: ---
-char gta2::Police_sub_4AA7B0(Police *self, int a2)
+char gta2::Police_sub_4AA7B0(struct Police *self, int a2)
 {
   struct S112 *pS112; // ebx
   struct S110 *pS110; // ebp
@@ -934,8 +934,8 @@ char gta2::Police_sub_4AA7B0(Police *self, int a2)
   unk_66B7A8 = v5 + 1;
   pS110->field_20 = v7;
   pS110->field_24 = 1;
-  pS110->Car = (struct Car *)a2;
-  v17 = gta2::Medical_sub_404C40((struct Medical *)pMedical);
+  pS110->Car = (Car *)a2;
+  v17 = gta2::Medical_sub_404C40((Medical *)pMedical);
   Ped = gta2::Character_CreatePed(gCharacter);
   gta2::Ped_SetSearchType(Ped, SEARCHTYPE_AREA_PLAYER_ONLY);
   gta2::Ped_SetCurrentOccupation(Ped, POLICE);
@@ -991,11 +991,11 @@ char gta2::Police_sub_4AA7B0(Police *self, int a2)
     Ped->WeaponSelect = 0;
     gta2::Ped_sub_43AD10(Ped, Pistolet);
     gta2::Ped_SetHealth(Ped, 50);
-    Ped->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v15, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+    Ped->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v15, (PublicTransport *)&unk_66B93C)->FirstElement;
     v9->WeaponSelect = 0;
     gta2::Ped_sub_43AD10(v9, Pistolet);
     gta2::Ped_SetHealth(v9, 50);
-    v9->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v16, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+    v9->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v16, (PublicTransport *)&unk_66B93C)->FirstElement;
     goto LABEL_16;
   }
   if ( WantedLevel != 2 )
@@ -1009,10 +1009,10 @@ LABEL_15:
   }
   gta2::Ped_sub_43AD10(Ped, Pistolet);
   gta2::Ped_SetHealth(Ped, 100);
-  Ped->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v13, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+  Ped->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v13, (PublicTransport *)&unk_66B93C)->FirstElement;
   gta2::Ped_sub_43AD10(v9, Pistolet);
   gta2::Ped_SetHealth(v9, 100);
-  v9->field_18C = (int)gta2::Radar_AddBlip((struct Tango *)&unk_66B8C4, (struct SpriteS1 *)&v14, (struct PublicTransport *)&unk_66B93C)->FirstElement;
+  v9->field_18C = (int)gta2::Radar_AddBlip((Tango *)&unk_66B8C4, (SpriteS1 *)&v14, (PublicTransport *)&unk_66B93C)->FirstElement;
 LABEL_16:
   gta2::Ped_SetCurrentOccupation(Ped, POLICE);
   gta2::Ped_SetRemap(Ped, 0);
@@ -1040,11 +1040,11 @@ LABEL_17:
 // 0x004aabb0: Police::CriminalTakesPoliceCar
 // IDA: Police::CriminalTakesPoliceCar
 // Ghidra: ---
-bool gta2::Police_CriminalTakesPoliceCar(Police *self, Car *pCar, Ped *a3)
+bool gta2::Police_CriminalTakesPoliceCar(struct Police *self, Car *pCar, Ped *a3)
 {
   bool result; // al
   unsigned __int8 v6; // dl
-  struct S113 *v7; // ecx
+  S113 *v7; // ecx
   unsigned __int8 v8; // dl
   struct S110 *S110; // esi
   unsigned __int8 v10; // [esp+10h] [ebp+8h]
@@ -1095,7 +1095,7 @@ bool gta2::Police_CriminalTakesPoliceCar(Police *self, Car *pCar, Ped *a3)
 // 0x004aaca0: Police::sub_4AACA0
 // IDA: Police::sub_4AACA0
 // Ghidra: Police::FUN_004aaca0
-void gta2::Police_sub_4AACA0(Police *self,Ped *pPed)
+void gta2::Police_sub_4AACA0(struct Police *self,Ped *pPed)
 {
   struct Ped *pPVar1;
   undefined4 *puVar2;
@@ -1110,9 +1110,9 @@ void gta2::Police_sub_4AACA0(Police *self,Ped *pPed)
       puVar2 = (undefined4 *)gta2::Ped_GetXCoordinate(pPed,(int)&pPed);
       self->Array_StainInfo[local_4].S110 = (GlassInfo *)*puVar2;
       puVar2 = (undefined4 *)gta2::Ped_GetYCoordinate(pPVar1, &pPed);
-      self->Array_StainInfo[local_4].ped2 = (struct Ped *)*puVar2;
+      self->Array_StainInfo[local_4].ped2 = (Ped *)*puVar2;
       puVar2 = (undefined4 *)gta2::Ped_GetPositionZ(pPVar1,(int)&pPed);
-      pPVar1 = (struct Ped *)*puVar2;
+      pPVar1 = (Ped *)*puVar2;
       self->Array_StainInfo[local_4].field3_0xc = 0xfa;
       self->Array_StainInfo[local_4].ped1 = pPVar1;
       return;
@@ -1127,7 +1127,7 @@ void gta2::Police_sub_4AACA0(Police *self,Ped *pPed)
 // 0x004aad40: Police::sub_4AAD40
 // IDA: Police::sub_4AAD40
 // Ghidra: ---
-int gta2::Police_sub_4AAD40(Police *self, Ped *pPed)
+int gta2::Police_sub_4AAD40(struct Police *self, Ped *pPed)
 {
   unsigned __int8 count; // cl
   struct Ped *v4; // edi
@@ -1161,13 +1161,13 @@ int gta2::Police_sub_4AAD40(Police *self, Ped *pPed)
 // 0x004aee70: Police::sub_4AEE70
 // IDA: Police::sub_4AEE70
 // Ghidra: ---
-char gta2::Police_sub_4AEE70(Police *self, unsigned __int8 a2, unsigned __int8 a3, int a4)
+char gta2::Police_sub_4AEE70(struct Police *self, unsigned __int8 a2, unsigned __int8 a3, int a4)
 {
   char v5; // bl
   int *v6; // ecx
   int *MaxZForLocation; // eax
   char v8; // al
-  struct PoliceRoadblock **p_PoliceRoadblock; // ecx
+  PoliceRoadblock **p_PoliceRoadblock; // ecx
   char PoliceRoadblock; // al
   char result; // al
   int *v12; // [esp-8h] [ebp-18h] BYREF
@@ -1192,35 +1192,35 @@ char gta2::Police_sub_4AEE70(Police *self, unsigned __int8 a2, unsigned __int8 a
   if ( a4 > 0 && a4 <= 2 )
     v5 = 1;
   v13 = 1;
-  gta2::S202_sub_40CE30((struct S202 *)&v13, a3);
+  gta2::S202_sub_40CE30((S202 *)&v13, a3);
   v12 = v6;
-  gta2::S202_sub_40CE30((struct S202 *)&v12, a2);
-  MaxZForLocation = gta2::MapRelatedStruct_FindMaxZForLocation(gMapRelatedStruct, &a4, v12, (struct S202 *)v13);
-  v8 = gta2::Weapon_sub_41C1E0((struct Weapon *)MaxZForLocation);
+  gta2::S202_sub_40CE30((S202 *)&v12, a2);
+  MaxZForLocation = gta2::MapRelatedStruct_FindMaxZForLocation(gMapRelatedStruct, &a4, v12, (S202 *)v13);
+  v8 = gta2::Weapon_sub_41C1E0((Weapon *)MaxZForLocation);
   p_PoliceRoadblock = &self->PoliceRoadblock;
   LOBYTE(a4) = v8;
   PoliceRoadblock = (char)self->PoliceRoadblock;
   if ( !v5 )
   {
     if ( !PoliceRoadblock )
-      return gta2::PoliceRoadblock_sub_4ADB70((struct PoliceRoadblock *)p_PoliceRoadblock, a2, a3, a4, 2);
+      return gta2::PoliceRoadblock_sub_4ADB70((PoliceRoadblock *)p_PoliceRoadblock, a2, a3, a4, 2);
 LABEL_13:
     result = (char)self->PoliceRoadblock1;
     p_PoliceRoadblock = &self->PoliceRoadblock1;
     if ( result )
       return result;
-    return gta2::PoliceRoadblock_sub_4ADB70((struct PoliceRoadblock *)p_PoliceRoadblock, a2, a3, a4, 3);
+    return gta2::PoliceRoadblock_sub_4ADB70((PoliceRoadblock *)p_PoliceRoadblock, a2, a3, a4, 3);
   }
   if ( PoliceRoadblock )
     goto LABEL_13;
-  return gta2::PoliceRoadblock_sub_4ADB70((struct PoliceRoadblock *)p_PoliceRoadblock, a2, a3, a4, 3);
+  return gta2::PoliceRoadblock_sub_4ADB70((PoliceRoadblock *)p_PoliceRoadblock, a2, a3, a4, 3);
 }
 
 
 // 0x004aef70: Police::sub_4AEF70
 // IDA: Police::sub_4AEF70
 // Ghidra: ---
-char gta2::Police_sub_4AEF70(Police *self)
+char gta2::Police_sub_4AEF70(struct Police *self)
 {
   bool v2; // zf
   struct S112 *S112; // edi
@@ -1245,8 +1245,8 @@ char gta2::Police_sub_4AEF70(Police *self)
   while ( v4 );
   if ( unk_66B7A4 == 1 )
     gta2::Police_sub_4A9E80(self);
-  gta2::PoliceRoadblock_sub_4AD6C0((struct PoliceRoadblock *)&self->PoliceRoadblock);
-  gta2::PoliceRoadblock_sub_4AD6C0((struct PoliceRoadblock *)&self->PoliceRoadblock1);
+  gta2::PoliceRoadblock_sub_4AD6C0((PoliceRoadblock *)&self->PoliceRoadblock);
+  gta2::PoliceRoadblock_sub_4AD6C0((PoliceRoadblock *)&self->PoliceRoadblock1);
   LOBYTE(PedState) = self->field_7AC;
   if ( (_BYTE)PedState )
   {

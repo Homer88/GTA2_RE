@@ -2996,13 +2996,13 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         CreateWindowExA(0, "BUTTON", "S200 write-watch",
                         WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX | BS_LEFTTEXT,
                         496, 14, 108, 20, hwnd, (HMENU)IDC_INSP_S200WATCH, hInst, NULL);
-        CreateWindowExA(0, "BUTTON", "+ДЕНЬГИ",
+        CreateWindowExA(0, "BUTTON", "+MONEY",
                         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                         10, 48, 110, 26, hwnd, (HMENU)IDC_INSP_ADDMONEY, hInst, NULL);
-        CreateWindowExA(0, "BUTTON", "+РОЗЫСК",
+        CreateWindowExA(0, "BUTTON", "+WANTED",
                         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                         126, 48, 110, 26, hwnd, (HMENU)IDC_INSP_ADDWANTED, hInst, NULL);
-        CreateWindowExA(0, "BUTTON", "Где я?",
+        CreateWindowExA(0, "BUTTON", "WHERE AM I",
                         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                         242, 48, 110, 26, hwnd, (HMENU)IDC_INSP_WHEREAMI, hInst, NULL);
         SetTimer(hwnd, 1, 1000, NULL);

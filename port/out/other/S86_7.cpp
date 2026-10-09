@@ -107,15 +107,15 @@ void gta2::S86_7_sub_4C8BE0(struct S86_7 *self, wchar_t *a2)
 // Ghidra: ---
 int gta2::S86_7_PrintText(struct S86_7 *self, unsigned __int16 *a2, __int16 a3, __int16 a4, __int16 a5, int a6)
 {
-  struct S86_7 **v7; // esi
+  S86_7 **v7; // esi
   int v8; // ecx
 
   v7 = (S86_7 **)self->field_16FC;
   v8 = self->field_16F8;
   self->field_16FC = v7[48];
-  v7[48] = (struct S86_7 *)v8;
+  v7[48] = (S86_7 *)v8;
   self->field_16F8 = (int)v7;
-  gta2::Font_sub_4C8AA0(v7, (struct HudBrief *)a2, a3, a4, a5, a6);
+  gta2::Font_sub_4C8AA0(v7, (HudBrief *)a2, a3, a4, a5, a6);
   gta2::S86_7_sub_4C8BE0(self, (wchar_t *)v7);
   return (int)v7;
 }

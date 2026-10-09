@@ -7,7 +7,7 @@
 // 0x003f13cc: Registry::GetReplayNum
 // IDA: Registry::GetReplayNum
 // Ghidra: ---
-int gta2::Registry_GetReplayNum(Registry *self, LPCSTR lpValueName)
+int gta2::Registry_GetReplayNum(struct Registry *self, LPCSTR lpValueName)
 {
   int result; // eax
   HKEY hKey; // [esp+0h] [ebp-Ch] BYREF
@@ -29,7 +29,7 @@ int gta2::Registry_GetReplayNum(Registry *self, LPCSTR lpValueName)
 // 0x003f1458: Registry::SetDebugByteValue
 // IDA: Registry::SetDebugByteValue
 // Ghidra: ---
-LSTATUS gta2::Registry_SetDebugByteValue(Registry *self, LPCSTR lpValueName, BYTE Data)
+LSTATUS gta2::Registry_SetDebugByteValue(struct Registry *self, LPCSTR lpValueName, BYTE Data)
 {
   HKEY hKey; // [esp+0h] [ebp-4h] BYREF
 

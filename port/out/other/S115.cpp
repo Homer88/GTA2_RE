@@ -62,7 +62,7 @@ void gta2::S115_sub_47F450(struct S115 *self, _DWORD *a2)
 {
   int v3; // esi
   int v4; // edi
-  struct S116 *FirstElement; // edx
+  S116 *FirstElement; // edx
 
   v3 = self->field_4;
   v4 = 0;
@@ -87,7 +87,7 @@ void gta2::S115_sub_47F450(struct S115 *self, _DWORD *a2)
       self->field_4 = *(_DWORD *)(v3 + 28);
       *(_DWORD *)(v3 + 28) = FirstElement;
     }
-    self->FirstElement = (struct S116 *)v3;
+    self->FirstElement = (S116 *)v3;
   }
 }
 
@@ -97,7 +97,7 @@ void gta2::S115_sub_47F450(struct S115 *self, _DWORD *a2)
 // Ghidra: ---
 S116 * gta2::S115_sub_47F4B0(struct S115 *self, S116 *a2)
 {
-  struct S116 *result; // eax
+  S116 *result; // eax
 
   gta2::sub_45B320(a2);
   result = self->FirstElement;
@@ -116,7 +116,7 @@ void gta2::S115_sub_47F4F0(struct S115 *self, S65 *a2)
   if ( LOBYTE(a2[2].field_4) )
     gta2::S115_sub_47F450(self, a2);
   else
-    gta2::S115_sub_47F4B0(self, (struct S116 *)a2);
+    gta2::S115_sub_47F4B0(self, (S116 *)a2);
 }
 
 

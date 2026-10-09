@@ -9,8 +9,8 @@
 // Ghidra: ---
 MissionScriptObjectData * gta2::MissionScriptObjects_RemoveFirstElement(struct MissionScriptObjects *self)
 {
-  struct MissionScriptObjectData *FirstElement; // ecx
-  struct MissionScriptObjectData *v3; // ecx
+  MissionScriptObjectData *FirstElement; // ecx
+  MissionScriptObjectData *v3; // ecx
 
   FirstElement = self->FirstElement;
   self->FirstElement = FirstElement->NextElement;
@@ -37,7 +37,7 @@ int gta2::MissionScriptObjects_MissionScriptObjectsDes(struct MissionScriptObjec
 // Ghidra: ---
 MissionScriptObjects * gta2::MissionScriptObjects_MissionScriptObjects(struct MissionScriptObjects *self)
 {
-  struct MissionScriptObjectData *pS28; // esi
+  MissionScriptObjectData *pS28; // esi
 
   pS28 = self->MissionScriptObjectData_;
   gta2::Construct(
@@ -66,11 +66,11 @@ MissionScriptObjects * gta2::MissionScriptObjects_MissionScriptObjects(struct Mi
 // Ghidra: ---
 void gta2::MissionScriptObjects_sub_481380(struct MissionScriptObjects *self)
 {
-  struct MissionScriptObjectData *MissionScriptObjectDataNextElement; // esi
-  struct MissionScriptObjectData *v3; // edi
-  struct MissionScriptObjectData *NextElement; // ebp
-  struct MissionScriptObjectData *v5; // eax
-  struct MissionScriptObjectData *FirstElement; // eax
+  MissionScriptObjectData *MissionScriptObjectDataNextElement; // esi
+  MissionScriptObjectData *v3; // edi
+  MissionScriptObjectData *NextElement; // ebp
+  MissionScriptObjectData *v5; // eax
+  MissionScriptObjectData *FirstElement; // eax
 
   MissionScriptObjectDataNextElement = self->MissionScriptObjectDataNextElement;
   v3 = 0;

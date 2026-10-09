@@ -13,13 +13,13 @@
   byte bVar3;
   ushort uVar4;
   uint uVar5;
-  struct Ped *pS49;
+  Ped *pS49;
   
   pGVar1 = self->s110;
   self->select = 2;
   if (pGVar1->S169_ == (SpawnPoint *)0x0) {
     pS49 = pGVar1->pPed;
-    if (pS49 == (struct Ped *)0x0) {
+    if (pS49 == (Ped *)0x0) {
       pGVar1->field22_0x28 = 5;
       self->s110->field23_0x2c = 1;
     }
@@ -38,7 +38,7 @@
     if (bVar3 != 0) {
       bVar3 = 0;
       pS49 = self->s110->pPed;
-      while (pS49 != (struct Ped *)0x0) {
+      while (pS49 != (Ped *)0x0) {
         gta2::Ped_SetDefault(pS49);
         gta2::Ped_FUN_0043e650(pS49);
         pSVar2 = self->s110->S169_;

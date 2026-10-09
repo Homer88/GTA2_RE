@@ -143,11 +143,11 @@ wchar_t * gta2::PlayerData_sub_4A8B80(struct PlayerData *self)
 // Ghidra: ---
 int gta2::PlayerData_sub_4A8D80(struct PlayerData *self)
 {
-  struct S151 *pS151; // eax
+  S151 *pS151; // eax
   int *v3; // ebx
-  struct S151 *S151_arr; // edx
-  struct S151 *p1S151; // edi
-  struct S151 *arr0x28; // edi
+  S151 *S151_arr; // edx
+  S151 *p1S151; // edi
+  S151 *arr0x28; // edi
   wchar_t *v7; // eax
   byte *v8; // esi
   int v9; // ecx
@@ -186,7 +186,7 @@ int gta2::PlayerData_sub_4A8D80(struct PlayerData *self)
     v7 += 2;
     ++v3;
     *(_DWORD *)v7 = v9;
-    pS151 = (struct S151 *)(v7 + 2);
+    pS151 = (S151 *)(v7 + 2);
     Index += 48;
     v10 = v15 == 1;
     arr_0x28 = v8 + 40;
@@ -215,7 +215,7 @@ int gta2::PlayerData_sub_4A8F90(struct PlayerData *self, Player *pPlayer)
 {
   byte PlayerSlotSave; // bl
   unsigned __int8 BonusStage; // al
-  struct SubSlots *v5; // esi
+  SubSlots *v5; // esi
   unsigned int Health; // eax
   _BYTE PlayerArena[4]; // [esp+Ch] [ebp-8h] BYREF
   unsigned __int8 a4[4]; // [esp+10h] [ebp-4h] BYREF
@@ -233,7 +233,7 @@ int gta2::PlayerData_sub_4A8F90(struct PlayerData *self, Player *pPlayer)
     a4[0] = 0;
   }
   v5 = &self->PlayerSlotSave_[PlayerSlotSave].ArenaSlots[PlayerArena[0]].SubSlot[a4[0]];
-  Health = gta2::PlayerStats_GetHealth((struct PlayerStats *)&pPlayer->Money);
+  Health = gta2::PlayerStats_GetHealth((PlayerStats *)&pPlayer->Money);
   if ( Health > *(_DWORD *)&v5->BonusStage[1][0] )
     *(_DWORD *)&v5->BonusStage[1][0] = Health;
   *(_DWORD *)&v5->BonusStage[2][0] = Health;
@@ -249,7 +249,7 @@ char gta2::PlayerData_sub_4A90A0(struct PlayerData *self)
   unsigned __int8 BonusStage; // al
   byte PlayerSlotSave; // al
   int v4; // esi
-  struct PlayerSlotSave *pPlayerSlotSave; // edi
+  PlayerSlotSave *pPlayerSlotSave; // edi
   unsigned __int16 *PlayerName; // ebx
   char *v7; // eax
   unsigned __int8 v8; // bl

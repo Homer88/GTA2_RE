@@ -51,8 +51,8 @@ undefined4 gta2::Turrel_sub_4BEA60(undefined4 *param_1,int param_2)
 // Ghidra: FUN_004bec60
 void gta2::Turrel_sub_4BEC60(void *self,VehiclePool *param_1)
 {
-  struct VehiclePool *pVVar1;
-  struct VehiclePool *pS46_;
+  VehiclePool *pVVar1;
+  VehiclePool *pS46_;
   
                               // WARNING: Load size is inaccurate
   pS46_ = *self;
@@ -96,7 +96,7 @@ _DWORD * gta2::Turrel_sub_4BECB0(struct Arsenal *self, int a2)
       v3[1] = result[1];
     else
       self->Sprite = (void *)result[1];
-    gta2::SpriteS4_sub_4BEC50(gSpriteS4, (struct Arsenal *)result);
+    gta2::SpriteS4_sub_4BEC50(gSpriteS4, (Arsenal *)result);
   }
   return result;
 }
@@ -107,12 +107,12 @@ _DWORD * gta2::Turrel_sub_4BECB0(struct Arsenal *self, int a2)
 // Ghidra: ---
 Arsenal * gta2::Turrel_sub_4BED00(struct Arsenal *self, int a2)
 {
-  struct Arsenal *v3; // edi
-  struct Arsenal *result; // eax
-  struct Arsenal *v5; // esi
+  Arsenal *v3; // edi
+  Arsenal *result; // eax
+  Arsenal *v5; // esi
 
   v3 = 0;
-  result = (struct Arsenal *)self->Sprite;
+  result = (Arsenal *)self->Sprite;
   if ( self->Sprite )
   {
     do
@@ -193,10 +193,10 @@ LABEL_4:
 // Ghidra: ---
 void gta2::Turrel_sub_4BEE80(struct Arsenal *self)
 {
-  struct Arsenal *Sprite; // esi
-  struct Arsenal *v3; // eax
+  Arsenal *Sprite; // esi
+  Arsenal *v3; // eax
 
-  Sprite = (struct Arsenal *)self->Sprite;
+  Sprite = (Arsenal *)self->Sprite;
   if ( self->Sprite )
   {
     do
@@ -216,18 +216,18 @@ void gta2::Turrel_sub_4BEE80(struct Arsenal *self)
 // Ghidra: FUN_004beeb0
 VehiclePool * gta2::Turrel_sub_4BEEB0(void *self,int *param_1,undefined *param_2)
 {
-  struct SpriteS1 *pSVar1;
+  SpriteS1 *pSVar1;
   byte bVar2;
   bool bVar3;
   undefined3 extraout_var;
   undefined3 extraout_var_00;
-  struct SpriteS1 *pSVar4;
-  struct SpriteS1 *pSVar5;
-  struct SpriteS1 *pS46_;
-  struct SpriteS1 *local_14;
-  struct SpriteS1 *local_10;
-  struct SpriteS1 *local_c;
-  struct SpriteS3 *local_8;
+  SpriteS1 *pSVar4;
+  SpriteS1 *pSVar5;
+  SpriteS1 *pS46_;
+  SpriteS1 *local_14;
+  SpriteS1 *local_10;
+  SpriteS1 *local_c;
+  SpriteS3 *local_8;
   undefined1 local_4 [4];
   
                               // WARNING: Load size is inaccurate
@@ -235,7 +235,7 @@ VehiclePool * gta2::Turrel_sub_4BEEB0(void *self,int *param_1,undefined *param_2
   pS46_ = NULL;
   pSVar4 = NULL;
   local_10 = NULL;
-  local_8 = (struct SpriteS3 *)self;
+  local_8 = (SpriteS3 *)self;
   gta2::bitShiftLeft1(&local_14,(void *)0x1869f);
   if (pSVar5 != NULL) {
     do {
@@ -247,7 +247,7 @@ VehiclePool * gta2::Turrel_sub_4BEEB0(void *self,int *param_1,undefined *param_2
                            &pSVar5->FirstElement->Matrix3DArray[0].PositionY);
       pSVar1 = *(SpriteS1 **)CONCAT31(extraout_var,bVar2);
       local_c = pSVar1;
-      bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_c,(struct SpriteS1 *)&local_14);
+      bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_c,(SpriteS1 *)&local_14);
       if (CONCAT31(extraout_var_00,bVar3) != 0) {
         pS46_ = pSVar5;
         local_14 = pSVar1;
@@ -265,8 +265,8 @@ VehiclePool * gta2::Turrel_sub_4BEEB0(void *self,int *param_1,undefined *param_2
       else {
         local_10->Matrix3DArray[0].SpriteS1 = pS46_->Matrix3DArray[0].SpriteS1;
       }
-      gta2::SpriteS4_sub_4BEC50(gSpriteS4,(struct VehiclePool *)pS46_);
-      return (struct VehiclePool *)pSVar5;
+      gta2::SpriteS4_sub_4BEC50(gSpriteS4,(VehiclePool *)pS46_);
+      return (VehiclePool *)pSVar5;
     }
   }
   return NULL;
@@ -298,8 +298,8 @@ char gta2::Turrel_GetWeapon(struct Arsenal *self, WeaponType ID_Weapon)
 // Ghidra: ---
 Weapon * gta2::Turrel_sub_4CD770(struct Arsenal *self, WeaponType TypeWeapon, Ped *pPed, byte pAmmo)
 {
-  struct Weapon *pWeapon; // eax
-  struct Weapon *pWeapon1; // esi
+  Weapon *pWeapon; // eax
+  Weapon *pWeapon1; // esi
 
   pWeapon = gta2::Weapon1_sub_4CC9E0(gWeaponDatabase);
   ++self->Count;
@@ -316,7 +316,7 @@ Weapon * gta2::Turrel_sub_4CD770(struct Arsenal *self, WeaponType TypeWeapon, Pe
 // Ghidra: ---
 Weapon * gta2::Turrel_CreateWeaponForTurret(struct Arsenal *self, WeaponType pWeaponType, Car *pCar, int pAmmo)
 {
-  struct Weapon *pWeapon; // esi
+  Weapon *pWeapon; // esi
 
   pWeapon = gta2::Weapon1_MoveWeaponToNextList(gWeaponDatabase);
   gta2::Weapon_SetTypeWeapon_0(pWeapon, pWeaponType);
@@ -331,7 +331,7 @@ Weapon * gta2::Turrel_CreateWeaponForTurret(struct Arsenal *self, WeaponType pWe
 // Ghidra: ---
 Weapon * gta2::Turrel_FindWeaponInPool(struct Arsenal *self, Car *pCar, WeaponType pWeaponType)
 {
-  struct Weapon *result; // eax
+  Weapon *result; // eax
 
   result = gta2::Weapon1_GetNextWeapon(gWeaponDatabase);
   if ( !result )
@@ -351,9 +351,9 @@ Weapon * gta2::Turrel_FindWeaponInPool(struct Arsenal *self, Car *pCar, WeaponTy
 // Ghidra: ---
 char gta2::Turrel_CarAddWeapon(struct Arsenal *self, WeaponType pWeaponType, unsigned __int8 pAmmo, Car *pCar)
 {
-  struct Weapon *pWeapon; // edi
+  Weapon *pWeapon; // edi
   char v6; // bl
-  struct Ped *Driver; // eax
+  Ped *Driver; // eax
   struct Player *Player; // ecx
 
   pWeapon = gta2::Turrel_FindWeaponInPool(self, pCar, pWeaponType);
@@ -402,9 +402,9 @@ void gta2::Turrel_sub_4D06E0(struct Arsenal *self, Weapon *a2)
 // Ghidra: ---
 Weapon * gta2::Turrel_sub_4D0700(struct Arsenal *self, Car *pCar)
 {
-  struct Weapon *result; // eax
-  struct Weapon *pWeapon; // esi
-  struct Weapon *pWeapon4; // eax
+  Weapon *result; // eax
+  Weapon *pWeapon; // esi
+  Weapon *pWeapon4; // eax
 
   result = gta2::Weapon1_GetNextWeapon(gWeaponDatabase);
   pWeapon = result;

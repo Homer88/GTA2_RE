@@ -9,7 +9,7 @@
 // Ghidra: ---
 S29 * gta2::S29_S29(struct S29 *self)
 {
-  struct S29 *result; // eax
+  S29 *result; // eax
 
   result = self;
   self->S34 = 0;
@@ -23,7 +23,7 @@ S29 * gta2::S29_S29(struct S29 *self)
 // Ghidra: ---
 Viewport * gta2::S29_sub_474FB0(struct S29 *self, Viewport *a2)
 {
-  struct Viewport *result; // eax
+  Viewport *result; // eax
 
   result = a2;
   a2->NextElement = self->S34;
@@ -74,8 +74,8 @@ void gta2::S29_sub_474FF0(void *self,byte param_1)
 // Ghidra: ---
 Viewport * gta2::S29_S29_DEs(struct S29 *self)
 {
-  struct Viewport *result; // eax
-  struct Viewport *pS34; // [esp-4h] [ebp-8h]
+  Viewport *result; // eax
+  Viewport *pS34; // [esp-4h] [ebp-8h]
 
   for ( ; self->S34; result = self->S34 )
   {

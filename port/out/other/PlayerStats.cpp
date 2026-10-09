@@ -45,7 +45,7 @@ int gta2::PlayerStats_SetMonyeLives(struct PlayerStats *self, int a2)
 PlayerStats * gta2::PlayerStats_Money(struct PlayerStats *self)
 {
   gta2::PlayerStats_Lives(self);
-  gta2::PlayerStats_Lives((struct PlayerStats *)&self->PlayerStats1);
+  gta2::PlayerStats_Lives((PlayerStats *)&self->PlayerStats1);
   gta2::S165_S165(&self->S165_);
   self->field_74 = 1;
   self->field_75 = 1;
@@ -85,7 +85,7 @@ int gta2::PlayerStats_sub_4B7490(
 
   self->sPlayer = pPlayer;
   gta2::PlayerStats_sub_44B220(self, a3, a4, a5);
-  LOBYTE(result) = gta2::PlayerStats_sub_44B220((struct PlayerStats *)&self->PlayerStats1, a3, a6, a5);
+  LOBYTE(result) = gta2::PlayerStats_sub_44B220((PlayerStats *)&self->PlayerStats1, a3, a6, a5);
   return result;
 }
 
@@ -127,7 +127,7 @@ uint gta2::PlayerStats_sub_4B7500(void *self,byte param_1,char param_2)
 // Ghidra: ---
 PlayerStats * gta2::PlayerStats_sub_4B7570(struct PlayerStats *self)
 {
-  return (struct PlayerStats *)&self->PlayerStats1;
+  return (PlayerStats *)&self->PlayerStats1;
 }
 
 
@@ -136,7 +136,7 @@ PlayerStats * gta2::PlayerStats_sub_4B7570(struct PlayerStats *self)
 // Ghidra: ---
 int gta2::PlayerStats_sub_4B7580(struct PlayerStats *self, int a2)
 {
-  return gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)&self->PlayerStats1, a2);
+  return gta2::PlayerStats_SetMultiPlayer((PlayerStats *)&self->PlayerStats1, a2);
 }
 
 
@@ -148,10 +148,10 @@ char gta2::PlayerStats_sub_4B75B0(struct PlayerStats *self, char a2)
   char result; // al
   CarModel v4; // edi
   byte *Arr_int_64; // esi
-  struct Style *pStyle_1; // ebp
+  Style *pStyle_1; // ebp
   byte *v7; // esi
   CarModel v8; // edi
-  struct Style *pStyle; // ebp
+  Style *pStyle; // ebp
   BYTE ModelID; // cl
   byte v11; // al
 
@@ -229,7 +229,7 @@ unsigned int gta2::PlayerStats_sub_4B7770(struct PlayerStats *self)
 {
   struct Ped *Ped; // ebp
   unsigned int v3; // edx
-  struct Car *CarPlayers; // edi
+  Car *CarPlayers; // edi
   unsigned __int8 CopStars; // al
   struct Player *sPlayer; // ecx
   wchar_t *v7; // eax
@@ -245,13 +245,13 @@ unsigned int gta2::PlayerStats_sub_4B7770(struct PlayerStats *self)
   wchar_t *v17; // eax
   struct Player *pPlayer2; // ecx
   wchar_t *v19; // eax
-  struct Car *v20; // eax
+  Car *v20; // eax
   struct Player *v21; // eax
   struct Player *pPlayer1; // ecx
   wchar_t *v23; // eax
-  struct Car *PCar1; // edi
+  Car *PCar1; // edi
   struct Player *v25; // ecx
-  struct Car *pCar; // eax
+  Car *pCar; // eax
   unsigned int fly_car; // eax
   struct Player *v28; // ecx
   wchar_t *v29; // eax
@@ -276,7 +276,7 @@ unsigned int gta2::PlayerStats_sub_4B7770(struct PlayerStats *self)
     if ( gta2::Ped_IsInCar(Ped) && gta2::Ped_IsTargetCarDoor(Ped) )
     {
       CarPlayers = gta2::Ped_GetCarPlayers(Ped);
-      if ( gta2::Car_has_for_hire_lights(CarPlayers) && !gta2::Passenger_Passenger_des((struct Passenger *)&CarPlayers->Passenger_) )
+      if ( gta2::Car_has_for_hire_lights(CarPlayers) && !gta2::Passenger_Passenger_des((Passenger *)&CarPlayers->Passenger_) )
         gta2::Player_AddMoney(self->sPlayer, 1);
     }
     if ( gta2::Ped_GetPoliceStar(Ped) >= 5000 )
@@ -467,7 +467,7 @@ LABEL_64:
 char gta2::PlayerStats_sub_4B7D50(struct PlayerStats *self)
 {
   gta2::PlayerStats_sub_44B260(self);
-  gta2::PlayerStats_sub_44B260((struct PlayerStats *)&self->PlayerStats1);
+  gta2::PlayerStats_sub_44B260((PlayerStats *)&self->PlayerStats1);
   gta2::S165_sub_41D930(&self->S165_, self);
   return gta2::PlayerStats_sub_4B75B0(self, 3);
 }
@@ -544,16 +544,16 @@ void gta2::PlayerStats_sub_4B7E90(void *self,byte param_1,int param_2)
 // Ghidra: ---
 bool gta2::PlayerStats_sub_4B7EB0(struct PlayerStats *self, Ped *pPed1, Ped *a3)
 {
-  struct PlayerStats *MultiPlayer; // eax
+  PlayerStats *MultiPlayer; // eax
   struct Ped *pPed; // ebx
-  struct Weapon *v6; // eax
-  struct Weapon *XCoordinate; // eax
+  Weapon *v6; // eax
+  Weapon *XCoordinate; // eax
   unsigned __int8 v8; // al
   char *v9; // edi
   int v10; // eax
   __int16 v11; // si
-  struct GameObject *GameObject1; // eax
-  struct Car *CarPlayers; // eax
+  GameObject *GameObject1; // eax
+  Car *CarPlayers; // eax
   CarModel CarType; // eax
   ALL_PED CurrentOccupation; // eax
   unsigned int Cycle; // eax
@@ -561,7 +561,7 @@ bool gta2::PlayerStats_sub_4B7EB0(struct PlayerStats *self, Ped *pPed1, Ped *a3)
   int v18; // esi
   struct Ped **pPed2; // ebx
   struct Ped *v20; // edi
-  struct PlayerStats *v21; // ebp
+  PlayerStats *v21; // ebp
   int v22; // edi
   int *PositionZ; // esi
   int *v24; // eax
@@ -571,8 +571,8 @@ bool gta2::PlayerStats_sub_4B7EB0(struct PlayerStats *self, Ped *pPed1, Ped *a3)
   bool result; // al
   int v29; // ecx
   int v30; // eax
-  struct GameObject *v31; // ecx
-  struct GameObject *v32; // eax
+  GameObject *v31; // ecx
+  GameObject *v32; // eax
   char v33; // cl
   char v34; // al
   unsigned int v35; // edx
@@ -590,7 +590,7 @@ bool gta2::PlayerStats_sub_4B7EB0(struct PlayerStats *self, Ped *pPed1, Ped *a3)
   char v47; // [esp+15h] [ebp-17h]
   char v48; // [esp+16h] [ebp-16h]
   bool v49; // [esp+17h] [ebp-15h]
-  struct PlayerStats *v51; // [esp+1Ch] [ebp-10h]
+  PlayerStats *v51; // [esp+1Ch] [ebp-10h]
   int X; // [esp+20h] [ebp-Ch] BYREF
   int Y; // [esp+24h] [ebp-8h] BYREF
   int v54; // [esp+28h] [ebp-4h] BYREF
@@ -600,7 +600,7 @@ bool gta2::PlayerStats_sub_4B7EB0(struct PlayerStats *self, Ped *pPed1, Ped *a3)
   v51 = MultiPlayer;
   gta2::Ped_GetYCoordinate(a3, (int *)&a3);
   v40 = gta2::Weapon_sub_41C1E0(v6);
-  XCoordinate = (struct Weapon *)gta2::Ped_GetXCoordinate(pPed, (int)&X);
+  XCoordinate = (Weapon *)gta2::Ped_GetXCoordinate(pPed, (int)&X);
   v8 = gta2::Weapon_sub_41C1E0(XCoordinate);
   v9 = gta2::MapRelatedStruct_sub_465130(gMapRelatedStruct, v8, v40);
   v10 = *(_DWORD *)&pPed1->field_11B;
@@ -983,13 +983,13 @@ LABEL_36:
 // Ghidra: ---
 char gta2::PlayerStats_sub_4B85B0(struct PlayerStats *self, Car *pCar, Ped *pPed)
 {
-  struct PlayerStats *MultiPlayer; // eax
+  PlayerStats *MultiPlayer; // eax
   struct Ped *pPed1; // esi
-  struct Weapon *v6; // eax
-  struct Weapon *XCoordinate; // eax
+  Weapon *v6; // eax
+  Weapon *XCoordinate; // eax
   unsigned __int8 v8; // al
   char *v9; // ebx
-  struct Car *CarPlayers; // eax
+  Car *CarPlayers; // eax
   char GangByCarModel; // al
   __int16 v13; // bp
   __int16 remap; // ax
@@ -1005,7 +1005,7 @@ char gta2::PlayerStats_sub_4B85B0(struct PlayerStats *self, Car *pCar, Ped *pPed
   DamageType DamageType; // [esp-Ch] [ebp-30h]
   struct Ped *v26; // [esp-8h] [ebp-2Ch]
   unsigned __int8 v27; // [esp-4h] [ebp-28h]
-  struct PlayerStats *v28; // [esp+10h] [ebp-14h]
+  PlayerStats *v28; // [esp+10h] [ebp-14h]
   int X; // [esp+14h] [ebp-10h] BYREF
   int a2; // [esp+18h] [ebp-Ch] BYREF
   int v31; // [esp+1Ch] [ebp-8h] BYREF
@@ -1017,14 +1017,14 @@ char gta2::PlayerStats_sub_4B85B0(struct PlayerStats *self, Car *pCar, Ped *pPed
   v28 = MultiPlayer;
   gta2::Ped_GetYCoordinate(pPed, (int *)&pPed);
   v27 = gta2::Weapon_sub_41C1E0(v6);
-  XCoordinate = (struct Weapon *)gta2::Ped_GetXCoordinate(pPed1, (int)&X);
+  XCoordinate = (Weapon *)gta2::Ped_GetXCoordinate(pPed1, (int)&X);
   v8 = gta2::Weapon_sub_41C1E0(XCoordinate);
   v9 = gta2::MapRelatedStruct_sub_465130(gMapRelatedStruct, v8, v27);
   CarPlayers = gta2::Ped_GetCarPlayers(pPed1);
   if ( CarPlayers )
-    pPed = (struct Ped *)CarPlayers->CarType;
+    pPed = (Ped *)CarPlayers->CarType;
   else
-    pPed = (struct Ped *)87;
+    pPed = (Ped *)87;
   GangByCarModel = gta2::Gangs_FindGangByCarModel(gGangs, pCar->CarType);
   v26 = pPed;
   DamageType = pCar->DamageType;
@@ -1106,8 +1106,8 @@ LABEL_32:
 // Ghidra: ---
 char gta2::PlayerStats_sub_4B8870(struct PlayerStats *self, Car *pCar, int *a3)
 {
-  struct PlayerStats *MultiPlayer; // eax
-  struct Car *pCar_1; // ebp
+  PlayerStats *MultiPlayer; // eax
+  Car *pCar_1; // ebp
   char result; // al
   int v7; // esi
   int *v8; // eax
@@ -1116,7 +1116,7 @@ char gta2::PlayerStats_sub_4B8870(struct PlayerStats *self, Car *pCar, int *a3)
   int *v11; // eax
   struct Ped *CurrentPed; // eax
   bool v13; // [esp+Bh] [ebp-Dh]
-  struct PlayerStats *v14; // [esp+Ch] [ebp-Ch]
+  PlayerStats *v14; // [esp+Ch] [ebp-Ch]
   int v15; // [esp+10h] [ebp-8h] BYREF
   int v16; // [esp+14h] [ebp-4h] BYREF
 
@@ -1171,7 +1171,7 @@ LABEL_13:
 char gta2::PlayerStats_sub_4B89B0(struct PlayerStats *self, Car *pCar, __int16 pPed)
 {
   char result; // al
-  struct PlayerStats *MultiPlayer; // ebx
+  PlayerStats *MultiPlayer; // ebx
   int pMoney; // esi
   struct Ped *CurrentPed; // eax
 
@@ -1212,8 +1212,8 @@ int gta2::PlayerStats_sub_4B8A60(struct PlayerStats *self)
 char gta2::PlayerStats_sub_4B8A70(struct PlayerStats *self, Car *a2)
 {
   struct Player *sPlayer; // edi
-  struct Weapon *v4; // eax
-  struct Weapon *XCoordinate; // eax
+  Weapon *v4; // eax
+  Weapon *XCoordinate; // eax
   unsigned __int8 v6; // al
   char *v8; // ebx
   __int16 GangByCarModel; // bp
@@ -1225,7 +1225,7 @@ char gta2::PlayerStats_sub_4B8A70(struct PlayerStats *self, Car *a2)
   int *v15; // eax
   struct Ped *CurrentPed; // eax
   unsigned __int8 v18; // [esp-4h] [ebp-24h]
-  struct PlayerStats *MultiPlayer; // [esp+10h] [ebp-10h]
+  PlayerStats *MultiPlayer; // [esp+10h] [ebp-10h]
   int Y; // [esp+14h] [ebp-Ch] BYREF
   int X; // [esp+18h] [ebp-8h] BYREF
   int v22; // [esp+1Ch] [ebp-4h] BYREF
@@ -1235,7 +1235,7 @@ char gta2::PlayerStats_sub_4B8A70(struct PlayerStats *self, Car *a2)
   MultiPlayer = gta2::Player_GetMultiPlayer(sPlayer);
   gta2::Ped_GetYCoordinate(sPlayer->MainPed, &Y);
   v18 = gta2::Weapon_sub_41C1E0(v4);
-  XCoordinate = (struct Weapon *)gta2::Ped_GetXCoordinate(sPlayer->MainPed, (int)&X);
+  XCoordinate = (Weapon *)gta2::Ped_GetXCoordinate(sPlayer->MainPed, (int)&X);
   v6 = gta2::Weapon_sub_41C1E0(XCoordinate);
   v8 = gta2::MapRelatedStruct_sub_465130(gMapRelatedStruct, v6, v18);
   GangByCarModel = gta2::Gangs_FindGangByCarModel(gGangs, a2->CarType);
@@ -1264,16 +1264,16 @@ char gta2::PlayerStats_sub_4B8A70(struct PlayerStats *self, Car *a2)
 // Ghidra: ---
 bool gta2::PlayerStats_sub_4B8BD0(struct PlayerStats *self, Car *pCar)
 {
-  struct PlayerStats *v2; // esi
+  PlayerStats *v2; // esi
   struct Player *sPlayer; // ebp
-  struct Car *pCar1; // esi
+  Car *pCar1; // esi
   int *v5; // eax
   int *v6; // edi
   int *v7; // eax
   int *v8; // ebx
   int *v9; // eax
   int *v10; // esi
-  struct PlayerStats *MultiPlayer; // eax
+  PlayerStats *MultiPlayer; // eax
   struct Ped *CurrentPed; // eax
   int v15; // [esp+8h] [ebp-8h] BYREF
   int v16; // [esp+Ch] [ebp-4h] BYREF
@@ -1308,7 +1308,7 @@ bool gta2::PlayerStats_sub_4B8BD0(struct PlayerStats *self, Car *pCar)
 char gta2::PlayerStats_sub_4B8C80(struct PlayerStats *self, Car *pCar)
 {
   struct Player *sPlayer; // ebp
-  struct PlayerStats *MultiPlayer; // esi
+  PlayerStats *MultiPlayer; // esi
   int *v6; // eax
   int *v7; // ebp
   int *v8; // eax

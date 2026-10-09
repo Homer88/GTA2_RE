@@ -336,7 +336,7 @@ char gta2::TextureManager_sub_4C3040(struct TextureManager *self)
 {
   void *v2; // eax
   unsigned __int16 i; // si
-  struct Style *pStyle; // ebx
+  Style *pStyle; // ebx
   int v5; // ebp
 
   LOBYTE(v2) = gta2::Style_has_tiles(gStyle);
@@ -350,7 +350,7 @@ char gta2::TextureManager_sub_4C3040(struct TextureManager *self)
       gta2::Style_get_physical_palette(pStyle, i);
       v2 = (void *)gta2::gbh_RegisterTexture(64, 64, v5);
       self->BufferTexture4M[0] = v2;
-      self = (struct TextureManager *)((char *)self + 4);
+      self = (TextureManager *)((char *)self + 4);
     }
   }
   return (char)v2;

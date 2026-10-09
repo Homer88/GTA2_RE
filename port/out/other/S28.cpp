@@ -136,7 +136,7 @@ char gta2::S28_sub_475460(struct MissionScriptObjectData *self, int a2)
   if ( *(_BYTE *)(a2 + 25) )
     v2 = gta2::Object_sub_485320(
            gObject,
-           (struct S900 *)0x117,
+           (S900 *)0x117,
            *(_BYTE *)(a2 + 24),
            *(_DWORD *)(a2 + 12),
            *(_DWORD *)(a2 + 16),
@@ -144,7 +144,7 @@ char gta2::S28_sub_475460(struct MissionScriptObjectData *self, int a2)
   else
     v2 = gta2::Object_sub_485320(
            gObject,
-           (struct S900 *)0x116,
+           (S900 *)0x116,
            *(_BYTE *)(a2 + 24),
            *(_DWORD *)(a2 + 12),
            *(_DWORD *)(a2 + 16),
@@ -162,10 +162,10 @@ char gta2::S28_sub_477A00(struct MissionScriptObjectData *self, int a2)
   unsigned __int8 *v2; // esi
   _DWORD *v3; // eax
   unsigned __int8 v4; // dl
-  struct S202 *v5; // eax
+  S202 *v5; // eax
   int *v6; // edi
-  struct S202 *v7; // eax
-  struct SpriteS1 *v8; // eax
+  S202 *v7; // eax
+  SpriteS1 *v8; // eax
   unsigned __int8 v9; // dl
   int *v10; // ebx
   int v11; // ecx
@@ -181,14 +181,14 @@ char gta2::S28_sub_477A00(struct MissionScriptObjectData *self, int a2)
     v4 = v2[19];
     a2 = 2;
     v13.field_18 = 4;
-    gta2::S202_sub_40CE30((struct S202 *)&v14, v4);
-    v6 = (int *)gta2::S202_sub_401B20(v5, (struct SpriteS1 *)&v13.field_1C, (struct PublicTransport *)&unk_664E08);
-    gta2::S202_sub_40CE30((struct S202 *)&v16, v2[18]);
-    v8 = gta2::S202_sub_401B20(v7, (struct SpriteS1 *)&v15, (struct PublicTransport *)&unk_664E08);
+    gta2::S202_sub_40CE30((S202 *)&v14, v4);
+    v6 = (int *)gta2::S202_sub_401B20(v5, (SpriteS1 *)&v13.field_1C, (PublicTransport *)&unk_664E08);
+    gta2::S202_sub_40CE30((S202 *)&v16, v2[18]);
+    v8 = gta2::S202_sub_401B20(v7, (SpriteS1 *)&v15, (PublicTransport *)&unk_664E08);
     v9 = v2[20];
     v10 = (int *)v8;
-    v13.CarSystemManager = (struct CarSystemManager *)unk_664E08.field_0;
-    v13.S202 = (struct S202 *)unk_664E08.field_0;
+    v13.CarSystemManager = (CarSystemManager *)unk_664E08.field_0;
+    v13.S202 = (S202 *)unk_664E08.field_0;
     v13.field_0 = v11;
     gta2::S202_sub_40CE30(&v13, v9);
     LOBYTE(v3) = gta2::MissionObjective_sub_4C4F30(
@@ -218,7 +218,7 @@ char gta2::S28_sub_477B70(struct MissionScriptObjectData *self, int a2)
   MissionManager *v4; // ecx
   void *v5; // edi
   int v6; // eax
-  struct EventHandler *v7; // ecx
+  EventHandler *v7; // ecx
   int v8; // eax
   int v10; // [esp-8h] [ebp-10h]
   __int16 v11; // [esp-4h] [ebp-Ch]
@@ -229,7 +229,7 @@ char gta2::S28_sub_477B70(struct MissionScriptObjectData *self, int a2)
   v6 = *((_DWORD *)v3 + 2);
   if ( v6 )
   {
-    v7 = (struct EventHandler *)*((_DWORD *)v5 + 2);
+    v7 = (EventHandler *)*((_DWORD *)v5 + 2);
     if ( v7 )
     {
       gta2::S63_sub_483C50(v7);
@@ -263,10 +263,10 @@ char gta2::S28_sub_47F550(struct MissionScriptObjectData *self)
   LOBYTE(MissionPtrMaybe) = (_BYTE)gMissionManager;
   if ( gMissionManager->field_355 )
   {
-    MissionPtrMaybe = (struct Player *)gMissionManager->MissionPtrMaybe;
+    MissionPtrMaybe = (Player *)gMissionManager->MissionPtrMaybe;
     if ( MissionPtrMaybe )
     {
-      if ( MissionPtrMaybe->CurrentPlayer == (struct Player *)1 )
+      if ( MissionPtrMaybe->CurrentPlayer == (Player *)1 )
       {
         Player = gGame->PlayerMain;
         if ( gta2::Player_sub_476700(Player)
@@ -278,7 +278,7 @@ char gta2::S28_sub_47F550(struct MissionScriptObjectData *self)
           LOBYTE(v4) = v4 & 0xFB;
           v5 = v4 + 5;
           v13 = 5;
-          v6 = gta2::Random_PauseGame((struct Game *)&gRandom, (S410 *)&v13);
+          v6 = gta2::Random_PauseGame((Game *)&gRandom, (S410 *)&v13);
           v7 = (_DWORD *)gMissionManager->field_348;
           if ( v7 && *v7 == 1 )
           {

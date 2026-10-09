@@ -36,7 +36,7 @@ void gta2::Gang_SetWeapon2(struct Gang *self, Weapon *a2)
 // Ghidra: ---
 void gta2::Gang_SetWeapon3(struct Gang *self, int a2)
 {
-  self->Weapon3 = (struct Weapon *)a2;
+  self->Weapon3 = (Weapon *)a2;
 }
 
 

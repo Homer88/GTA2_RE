@@ -44,19 +44,19 @@ int __stdcall LoadFileResurce(MapGm* pMapGm) {
 	size_t dataLen = strlen(Data);
 
 	if (dataLen > 0) {
-		// Проверяем, поместится ли строка в буфер
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
 		if (currentLen + dataLen < BUFFER_SIZE - 1) {
 			strcat(buffer, Data);
 		}
 		else {
-			// Обработка переполнения: обрезаем до доступного размера
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			size_t copyLen = BUFFER_SIZE - currentLen - 1;
 			strncat(buffer, Data, copyLen);
 			buffer[BUFFER_SIZE - 1] = '\0';
 		}
 	}
 
-	// 4. Проверка и установка значения по умолчанию
+	// 4. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	if (strcmp(buffer, basePath) == 0) {
 		strncpy(buffer, "data\\jointmap.gmp", BUFFER_SIZE - 1);
 		buffer[BUFFER_SIZE - 1] = '\0';
@@ -76,12 +76,12 @@ int __stdcall LoadFileResurce(MapGm* pMapGm) {
 	currentLen = strlen(buffer);
 	dataLen = strlen(Data);
 	if (dataLen > 0) {
-		// Проверяем, поместится ли строка в буфер
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
 		if (currentLen + dataLen < BUFFER_SIZE - 1) {
 			strcat(buffer, Data);
 		}
 		else {
-			// Обработка переполнения: обрезаем до доступного размера
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			size_t copyLen = BUFFER_SIZE - currentLen - 1;
 			strncat(buffer, Data, copyLen);
 			buffer[BUFFER_SIZE - 1] = '\0';
@@ -104,12 +104,12 @@ int __stdcall LoadFileResurce(MapGm* pMapGm) {
 	currentLen = strlen(buffer);
 	dataLen = strlen(Data);
 	if (dataLen > 0) {
-		// Проверяем, поместится ли строка в буфер
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
 		if (currentLen + dataLen < BUFFER_SIZE - 1) {
 			strcat(buffer, Data);
 		}
 		else {
-			// Обработка переполнения: обрезаем до доступного размера
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			size_t copyLen = BUFFER_SIZE - currentLen - 1;
 			strncat(buffer, Data, copyLen);
 			buffer[BUFFER_SIZE - 1] = '\0';
@@ -243,4 +243,20 @@ void  __stdcall SetBonus (MapGm* pMapGm, int Param) {
 }
 void __stdcall Set_FUN_0045E630(MapGm* pMapGm) {
 
+}
+
+// retail 0x0045EC20  MapGm::sub_45EC20(area*), thiscall, ret 4.
+// Р¦РёРєР»: Arr10i[i] = *(area+0x644+i*4) (i=0..9) С‡РµСЂРµР· СЃРµС‚С‚РµСЂ 0x45E570
+// ([this+idx*4+0x408]=val, idx&0xFF), Р·Р°С‚РµРј +0x678 -> field_430
+// (СЃРµС‚С‚РµСЂ 0x45E5B0), +0x67C -> field_434 (tail-jmp СЃРµС‚С‚РµСЂСѓ 0x45E5D0).
+// area РЅР° РґРµР»Рµ = СЌРєР·РµРјРїР»СЏСЂ Player (РґРёСЃРїРµС‚С‡РµСЂ РїРµСЂРµРґР°С‘С‚ Game+0x38).
+void __stdcall SetScoresNative(MapGm* pMapGm, void* area) {
+	unsigned char* src = (unsigned char*)area;
+	int i;
+
+	for (i = 0; i < 10; i++) {
+		pMapGm->Arr10i[i] = *(int*)(src + 0x644 + i * 4);
+	}
+	pMapGm->field_430 = *(int*)(src + 0x678);
+	pMapGm->field_434 = *(int*)(src + 0x67C);
 }

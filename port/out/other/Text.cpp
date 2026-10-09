@@ -17,7 +17,7 @@ void gta2::Text_sub_4C2060(size_t *param_1,uint param_2)
   if (pvVar1 == NULL) {
     gta2::DebugLog(0x20,"text.cpp",0x7a);
   }
-  gta2::FileMgr_Read((struct FileMgr *)&stack0x00000010,*param_1);
+  gta2::FileMgr_Read((FileMgr *)&stack0x00000010,*param_1);
   return;
 }
 
@@ -25,7 +25,7 @@ void gta2::Text_sub_4C2060(size_t *param_1,uint param_2)
 // 0x004c20b0: Text::sub_4C20B0
 // IDA: Text::sub_4C20B0
 // Ghidra: ---
-int gta2::Text_sub_4C20B0(struct Text *self, int a2)
+int gta2::Text_sub_4C20B0(Text *self, int a2)
 {
   int result; // eax
   size_t i; // edx
@@ -45,7 +45,7 @@ int gta2::Text_sub_4C20B0(struct Text *self, int a2)
 // 0x004c2120: Text::_Bsearch
 // IDA: Text::_Bsearch
 // Ghidra: ---
-void * gta2::Text__Bsearch(struct Text *self, const void *pKey)
+void * gta2::Text__Bsearch(Text *self, const void *pKey)
 {
   void *v2; // eax
 
@@ -60,7 +60,7 @@ void * gta2::Text__Bsearch(struct Text *self, const void *pKey)
 // 0x004c21a0: Text::ConvertToUpper
 // IDA: Text::ConvertToUpper
 // Ghidra: ---
-wchar_t gta2::Text_ConvertToUpper(struct Text *self, wchar_t CodeByte)
+wchar_t gta2::Text_ConvertToUpper(Text *self, wchar_t CodeByte)
 {
   wchar_t result; // ax
 
@@ -100,7 +100,7 @@ LABEL_4:
 // 0x004c2250: Text::ConvertWordsToBig
 // IDA: Text::ConvertWordsToBig
 // Ghidra: ---
-wchar_t * gta2::Text_ConvertWordsToBig(struct Text *self, wchar_t *a2)
+wchar_t * gta2::Text_ConvertWordsToBig(Text *self, wchar_t *a2)
 {
   wchar_t *i; // esi
 
@@ -113,9 +113,9 @@ wchar_t * gta2::Text_ConvertWordsToBig(struct Text *self, wchar_t *a2)
 // 0x004c2330: Text::sub_4C2330
 // IDA: Text::sub_4C2330
 // Ghidra: ---
-int gta2::Text_sub_4C2330(struct Text *self, char *a2, int size)
+int gta2::Text_sub_4C2330(Text *self, char *a2, int size)
 {
-  struct FileMgr *v5; // ecx
+  FileMgr *v5; // ecx
 
   if ( !gta2::_strncmp(a2, "TKEY", 4) )
     return gta2::Text_sub_4C2060(self, size);
@@ -128,7 +128,7 @@ int gta2::Text_sub_4C2330(struct Text *self, char *a2, int size)
 // 0x004c23b0: Text::NetWorkNameShow
 // IDA: Text::NetWorkNameShow
 // Ghidra: ---
-char * gta2::Text_NetWorkNameShow(struct Text *self, char *PlayerName)
+char * gta2::Text_NetWorkNameShow(Text *self, char *PlayerName)
 {
   wchar_t *v2; // eax
 
@@ -140,7 +140,7 @@ char * gta2::Text_NetWorkNameShow(struct Text *self, char *PlayerName)
 // 0x004c23f0: Text::Clear
 // IDA: Text::Clear
 // Ghidra: ---
-void gta2::Text_Clear(struct Text *self)
+void gta2::Text_Clear(Text *self)
 {
   self->Base = 0;
   self->Num = 0;
@@ -150,7 +150,7 @@ void gta2::Text_Clear(struct Text *self)
 // 0x004c2400: Text::Base_Des
 // IDA: Text::Base_Des
 // Ghidra: ---
-void gta2::Text_Base_Des(struct Text *self)
+void gta2::Text_Base_Des(Text *self)
 {
   if ( self->Base )
     j__free(self->Base);
@@ -161,11 +161,11 @@ void gta2::Text_Base_Des(struct Text *self)
 // 0x004c2540: Text::Load
 // IDA: Text::Load
 // Ghidra: ---
-int gta2::Text_Load(struct Text *self)
+int gta2::Text_Load(Text *self)
 {
   void *v2; // ecx
-  struct FileMgr *v3; // ecx
-  struct FileMgr *v4; // ecx
+  FileMgr *v3; // ecx
+  FileMgr *v4; // ecx
   int v6; // ecx
   _BYTE *v7; // edi
   bool v8; // zf
@@ -236,7 +236,7 @@ int gta2::Text_Load(struct Text *self)
 // 0x004c2620: Text::Text
 // IDA: Text::Text
 // Ghidra: ---
-Text * gta2::Text_Text(struct Text *self)
+Text * gta2::Text_Text(Text *self)
 {
   gta2::Text_Clear(self);
   gta2::AutoClass4_AutoClass4(&self->AutoClass4);
@@ -257,7 +257,7 @@ Text * gta2::Text_Text(struct Text *self)
 // 0x004c26c0: Text::Text_des_0
 // IDA: Text::Text_des_0
 // Ghidra: ---
-void gta2::Text_Text_des_0(struct Text *self)
+void gta2::Text_Text_des_0(Text *self)
 {
   gta2::sub_4C2430(&self->AutoClass4);
   gta2::Text_Base_Des(self);

@@ -9,7 +9,7 @@
 // Ghidra: ---
 TileAnim2 * gta2::S71_S71(struct TileAnim2 *self)
 {
-  struct TileAnim2 *result; // eax
+  TileAnim2 *result; // eax
 
   result = self;
   self->field = 0;

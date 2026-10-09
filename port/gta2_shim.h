@@ -135,6 +135,7 @@ struct IDirectDraw;
 typedef struct IDirectDraw *LPDIRECTDRAW;
 
 // forward-объявления недостающих типов из прото
+struct GlassInfo;
 struct MissionManager;
 struct Movie;
 struct Keybord;

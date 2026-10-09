@@ -9,12 +9,12 @@
 // Ghidra: ---
 cameraPosTarget * gta2::S3_sub_4BBD10(struct CarTransforms *self)
 {
-  struct cameraPosTarget *result; // eax
+  cameraPosTarget *result; // eax
 
-  result = (struct cameraPosTarget *)self->PositionX;
+  result = (cameraPosTarget *)self->PositionX;
   if ( result )
   {
-    result = gta2::DMAudio_DMAudio_des(&gDMAudio, (struct cameraPosTarget *)self->PositionX);
+    result = gta2::DMAudio_DMAudio_des(&gDMAudio, (cameraPosTarget *)self->PositionX);
     self->PositionX = 0;
   }
   return result;
@@ -26,19 +26,19 @@ cameraPosTarget * gta2::S3_sub_4BBD10(struct CarTransforms *self)
 // Ghidra: ---
 int gta2::S3_sub_4BCCC0(struct CarTransforms *self)
 {
-  struct CarTransforms *NextElement; // eax
+  CarTransforms *NextElement; // eax
   int result; // eax
 
   NextElement = self->NextElement;
   if ( NextElement )
   {
-    gta2::SpriteS2_sub_4BCA10(gSpriteS2, (struct SpriteS3 *)NextElement);
+    gta2::SpriteS2_sub_4BCA10(gSpriteS2, (SpriteS3 *)NextElement);
     self->NextElement = 0;
   }
   result = (int)self->GameObject_;
   if ( result )
   {
-    result = (int)gta2::SpriteS2_sub_4BCA10(gSpriteS2, (struct SpriteS3 *)self->GameObject_);
+    result = (int)gta2::SpriteS2_sub_4BCA10(gSpriteS2, (SpriteS3 *)self->GameObject_);
     self->GameObject_ = 0;
   }
   return result;
@@ -50,9 +50,9 @@ int gta2::S3_sub_4BCCC0(struct CarTransforms *self)
 // Ghidra: ---
 cameraPosTarget * gta2::S3_sub_4BDC40(void *self)
 {
-  gta2::S3_sub_4BCCC0((struct CarTransforms *)self);
+  gta2::S3_sub_4BCCC0((CarTransforms *)self);
   *((_WORD *)self + 16) = 0;
-  return gta2::S3_sub_4BBD10((struct CarTransforms *)self);
+  return gta2::S3_sub_4BBD10((CarTransforms *)self);
 }
 
 

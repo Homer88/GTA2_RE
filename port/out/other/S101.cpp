@@ -12,9 +12,9 @@ void gta2::S101_S101(int self)
   unsigned __int16 *v2; // edi
 
   v2 = (unsigned __int16 *)(self + 12);
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(self + 12));
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(self + 32));
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(self + 34));
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(self + 12));
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(self + 32));
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(self + 34));
   *(_BYTE *)(self + 4) = 0;
   *(_DWORD *)(self + 16) = 0;
   *(_DWORD *)(self + 20) = 0;

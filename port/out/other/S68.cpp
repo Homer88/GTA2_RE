@@ -44,8 +44,8 @@ char gta2::S68_sub_4B9940(struct ScriptThread *self, unsigned __int8 a2)
 // Ghidra: ---
 ScriptThread * gta2::S68_S68(struct ScriptThread *self)
 {
-  struct ScriptThread *result; // eax
-  struct ScriptThread *v2; // edx
+  ScriptThread *result; // eax
+  ScriptThread *v2; // edx
   int count; // esi
 
   result = self;
@@ -55,7 +55,7 @@ ScriptThread * gta2::S68_S68(struct ScriptThread *self)
   {
     v2->field[0].field_0[0] = 0;
     LOBYTE(v2->field[0].field_0[1]) = 0;
-    v2 = (struct ScriptThread *)((char *)v2 + 8);
+    v2 = (ScriptThread *)((char *)v2 + 8);
     --count;
   }
   while ( count );

@@ -8,7 +8,7 @@
 // IDA: ---
 // Ghidra: Camera::S33_FUN_00476760
 {
-  struct Viewport *this_00;
+  Viewport *this_00;
   byte extraout_CL;
   
   this_00 = self->Viewport;

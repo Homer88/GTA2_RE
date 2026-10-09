@@ -14,7 +14,7 @@ int gta2::S150_sub_4A8910(struct PlayerData *self, unsigned __int16 a2)
   int v4; // edi
   FILE *v5; // esi
   int v6; // edi
-  struct FileMgr *v7; // ecx
+  FileMgr *v7; // ecx
   FileMgr v9; // [esp+10h] [ebp-16Ch] BYREF
 
   v2 = (FILE *)((char *)self + 164 * a2);
@@ -61,7 +61,7 @@ byte gta2::S150_sub_4A8B00(struct PlayerData *self)
 {
   byte pPlayerSlotSave; // al
   int v3; // esi
-  struct PlayerSlotSave *v4; // ecx
+  PlayerSlotSave *v4; // ecx
   int v5; // edx
 
   pPlayerSlotSave = gta2::MapGm_GetPlayerSlotSave(&gMapGm);
@@ -73,7 +73,7 @@ byte gta2::S150_sub_4A8B00(struct PlayerData *self)
     do
     {
       v4->ArenaSlots_[0].SubSlot[0].BonusStage[0][0] = 1;
-      v4 = (struct PlayerSlotSave *)((char *)v4 + 12);
+      v4 = (PlayerSlotSave *)((char *)v4 + 12);
       --v5;
     }
     while ( v5 );
@@ -93,9 +93,9 @@ int gta2::S150_sub_4A8CB0(struct PlayerData *self)
 {
   int *v2; // edi
   byte *arr_0x28; // ebx
-  struct S151 *S151_arr; // esi
+  S151 *S151_arr; // esi
   int v5; // ebp
-  struct FileMgr *v6; // ecx
+  FileMgr *v6; // ecx
   FileMgr v8; // [esp+10h] [ebp-108h] BYREF
 
   gta2::PlayerData_ReadHiscores(self, (char *)&v8.field_8);
@@ -162,7 +162,7 @@ PlayerData * gta2::S150_cFile(struct PlayerData *self)
   gta2::Construct(self->S151_arr, 240, 12, S151::S151, S151::S151_des);
   gta2::S151_S151(&self->S151_);
   gta2::S151_S151(&self->S151_1);
-  gta2::S151_S151((struct S151 *)&self->S151_2);
+  gta2::S151_S151((S151 *)&self->S151_2);
   gta2::Construct(self->PlayerSlotSave_, 164, 8, S152::S152, PlayerSlotSave::PlayerSlotSave_des);
   v2 = self->field_1884;
   arr_0x28 = self->arr_0x28;

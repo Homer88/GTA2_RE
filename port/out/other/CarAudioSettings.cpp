@@ -9,7 +9,7 @@
 // Ghidra: ---
 CarAudioSettings * gta2::CarAudioSettings_CarAudioSettings(struct CarAudioSettings *self)
 {
-  struct AudioSourceParams *pS9; // eax
+  AudioSourceParams *pS9; // eax
   void *v3; // ecx
 
   self->field_9 = 0;
@@ -18,7 +18,7 @@ CarAudioSettings * gta2::CarAudioSettings_CarAudioSettings(struct CarAudioSettin
   *(_DWORD *)&self->Flag = 0;
   self->Player_ = 0;
   self->int_ = 0;
-  pS9 = (struct AudioSourceParams *)gta2::operator_new(24u);
+  pS9 = (AudioSourceParams *)gta2::operator_new(24u);
   if ( pS9 )
     self->AudioSourceParams_ = gta2::AudioSourceParams_AudioSourceParams(pS9);
   else

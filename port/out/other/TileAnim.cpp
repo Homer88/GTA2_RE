@@ -38,7 +38,7 @@ void gta2::TileAnim_sub_4C3470(struct TileAnim *self,undefined2 *param_1)
 // Ghidra: ---
 void gta2::TileAnim_sub_4C3590(struct TileAnim *self)
 {
-  struct TileAnim1 *pS70; // ebx
+  TileAnim1 *pS70; // ebx
   struct TileAnim2 *NextTileAnim2_1; // esi
   struct TileAnim2 *v3; // edi
   struct TileAnim2 *NextTileAnim2; // ebp
@@ -107,12 +107,12 @@ LABEL_13:
 // Ghidra: ---
 TileAnim * gta2::TileAnim_TileAnim(struct TileAnim *self)
 {
-  struct TileAnim1 *_pS70; // eax
-  struct TileAnim1 *pS70; // eax
+  TileAnim1 *_pS70; // eax
+  TileAnim1 *pS70; // eax
 
   if ( !gTileAnim1 )
   {
-    _pS70 = (struct TileAnim1 *)gta2::operator_new(1212u);
+    _pS70 = (TileAnim1 *)gta2::operator_new(1212u);
     if ( _pS70 )
       pS70 = gta2::TileAnim1_TileAnim1(_pS70);
     else
@@ -131,7 +131,7 @@ TileAnim * gta2::TileAnim_TileAnim(struct TileAnim *self)
 // Ghidra: ---
 TileAnim1 * gta2::TileAnim_TileAnimDes(struct TileAnim *self)
 {
-  struct TileAnim1 *result; // eax
+  TileAnim1 *result; // eax
 
   if ( gTileAnim1 )
   {

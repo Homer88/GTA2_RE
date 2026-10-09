@@ -9,7 +9,7 @@
 // Ghidra: ---
 S86_2_1 * gta2::S86_2_1_S86_2_1(struct S86_2_1 *self)
 {
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&self->m_nPointRotation);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&self->m_nPointRotation);
   self->Gang_ = 0;
   self->m_bVisible = 0;
   self->ArrowVisible = 0;

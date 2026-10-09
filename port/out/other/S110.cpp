@@ -62,8 +62,8 @@ undefined4 gta2::S110_sub_4C5510(void *self)
 {
   byte index;
   int iVar1;
-  struct Ped *pPed;
-  struct Ped *pPed1;
+  Ped *pPed;
+  Ped *pPed1;
   SpawnPoint *pS169;
   
   pS169 = *(SpawnPoint **)((int)self + 8);

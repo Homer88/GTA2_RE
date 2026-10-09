@@ -9,7 +9,7 @@
 // Ghidra: LoadScreen::FUN_004af290
 {
   if (!gSkipTrains) {
-    self->field60_0x50 = (self->Car->Driver != (struct Ped *)0x0) + 2;
+    self->field60_0x50 = (self->Car->Driver != (Ped *)0x0) + 2;
   }
   return;
 }
@@ -19,9 +19,9 @@
 // IDA: sub_4AF2B0
 // Ghidra: LoadScreen::FUN_004af2b0
 {
-  struct Car *pCVar1;
+  Car *pCVar1;
   char cVar2;
-  struct Car *this_00;
+  Car *this_00;
   byte bVar3;
   short *psVar4;
   uint local_4;
@@ -97,9 +97,9 @@
 // IDA: sub_4AF8A0
 // Ghidra: LoadScreen::FUN_004af8a0
 {
-  struct Car *pCVar1;
-  struct Car *pCVar2;
-  struct Player *this_00;
+  Car *pCVar1;
+  Car *pCVar2;
+  Player *this_00;
   byte bVar3;
   undefined4 uVar4;
   
@@ -111,18 +111,18 @@
     gta2::CarsPrefabs_S5_FUN_00420f30(gCarsPrefabs,
                self->trainComponents[self->field53_0x43 - 1].linkedCar);
     pCVar2 = self->trainComponents[self->field53_0x43 - 1].linkedCar;
-    if (pCVar2->Player_ != (struct Player *)0x0) {
+    if (pCVar2->Player_ != (Player *)0x0) {
       gta2::Car_Car_FUN_00423a50(pCVar2);
     }
     gta2::LinkedList_S1_FUN_004a1be0((LinkedList *)
                (self->trainComponents[self->field53_0x43 - 1].linkedCar)->Player_
               );
-    if (self->Car->Player_ != (struct Player *)0x0) {
+    if (self->Car->Player_ != (Player *)0x0) {
       gta2::Car_Car_FUN_00423a50(self->Car);
     }
     gta2::Player_FUN_0049ee10(self->Car->Player_,self->Car->CarSprite);
     self->Car->Driver = pCVar1->Driver;
-    if (self->Car->Player_ != (struct Player *)0x0) {
+    if (self->Car->Player_ != (Player *)0x0) {
       gta2::Car_Car_FUN_00423a50(self->Car);
     }
     pCVar2 = self->Car;
@@ -134,9 +134,9 @@
     else {
       gta2::Player_Player_FUN_004212b0(this_00);
     }
-    pCVar1->Driver = (struct Ped *)0x0;
+    pCVar1->Driver = (Ped *)0x0;
     gta2::Car_CarMakeDriveable2(self->Car);
-    gta2::Car_CarMakeDriveable3((struct Car *)self->Car->EngineStruct_,self->Car);
+    gta2::Car_CarMakeDriveable3((Car *)self->Car->EngineStruct_,self->Car);
     gta2::Car_Car_FUN_004266f0(pCVar1);
     pCVar1 = self->Car;
     uVar4 = gta2::Ped_sub_420B70(pCVar1->Driver);
@@ -219,7 +219,7 @@
 // IDA: sub_4AFAF0
 // Ghidra: LoadScreen::FUN_004afaf0
 {
-  struct Car *this_00;
+  Car *this_00;
   int iVar1;
   int iVar2;
   TrainComponent *pTVar3;
@@ -229,7 +229,7 @@
     iVar2 = 2;
     do {
       this_00 = pTVar3->linkedCar;
-      if ((this_00 != (struct Car *)0x0) &&
+      if ((this_00 != (Car *)0x0) &&
          (iVar1 = gta2::Car_GetModelCar(this_00), iVar1 == 0x3b)) {
         FUN_0041f8a0(this_00);
       }

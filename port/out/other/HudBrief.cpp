@@ -7,7 +7,7 @@
 // 0x004768a0: HudBrief::IsMessageVisible
 // IDA: HudBrief::IsMessageVisible
 // Ghidra: ---
-bool gta2::HudBrief_IsMessageVisible(struct HudBrief *self)
+bool gta2::HudBrief_IsMessageVisible(HudBrief *self)
 {
   struct HudBrief_S2 *HudBrief_S2; // eax
 
@@ -105,7 +105,7 @@ short gta2::HudBrief_sub_4C2450(void *self,short *param_1,short *param_2,int par
 // 0x004c62d0: HudBrief::ShowMessageToPlayer_0
 // IDA: HudBrief::ShowMessageToPlayer_0
 // Ghidra: ---
-void gta2::HudBrief_ShowMessageToPlayer_0(struct HudBrief *self)
+void gta2::HudBrief_ShowMessageToPlayer_0(HudBrief *self)
 {
   struct HudBrief_S2 *pHudBrief_S2; // eax
 
@@ -119,7 +119,7 @@ void gta2::HudBrief_ShowMessageToPlayer_0(struct HudBrief *self)
 // 0x004c6340: HudBrief::sub_4C6340
 // IDA: HudBrief::sub_4C6340
 // Ghidra: ---
-HudBrief_S2 * gta2::HudBrief_sub_4C6340(struct HudBrief *self)
+HudBrief_S2 * gta2::HudBrief_sub_4C6340(HudBrief *self)
 {
   struct HudBrief_S2 *i; // eax
   struct HudBrief_S2 *result; // eax
@@ -138,14 +138,14 @@ HudBrief_S2 * gta2::HudBrief_sub_4C6340(struct HudBrief *self)
 // 0x004c6380: HudBrief::sub_4C6380
 // IDA: HudBrief::sub_4C6380
 // Ghidra: ---
-HudBrief_S2 * gta2::HudBrief_sub_4C6380(struct HudBrief *self)
+HudBrief_S2 * gta2::HudBrief_sub_4C6380(HudBrief *self)
 {
   struct HudBrief_S2 *result; // eax
   struct HudBrief_S2 *nextHudBrief_S2; // edx
   struct HudBrief_S2 *v3; // esi
   struct HudBrief_S2 *v4; // edx
 
-  result = (struct HudBrief_S2 *)self->field_6FC;
+  result = (HudBrief_S2 *)self->field_6FC;
   if ( result )
   {
     self->field_6FC = (int)result->nextHudBrief_S2;
@@ -198,19 +198,19 @@ LABEL_11:
 // 0x004c6470: HudBrief::MainLogic
 // IDA: HudBrief::MainLogic
 // Ghidra: ---
-size_t gta2::HudBrief_MainLogic(struct HudBrief *self, wchar_t *a2)
+size_t gta2::HudBrief_MainLogic(HudBrief *self, wchar_t *a2)
 {
   __int16 v2; // di
   struct HudBrief_S2 *HudBrief_S2; // eax
   char *v5; // eax
   char v6; // al
-  struct HudBrief *v7; // ecx
+  HudBrief *v7; // ecx
   wchar_t *v8; // eax
   size_t v9; // edi
   char *v10; // eax
   char v11; // al
   char v12; // al
-  struct HudBrief *v13; // ecx
+  HudBrief *v13; // ecx
   char v14; // al
   wchar_t *v15; // ecx
   void *v16; // eax
@@ -230,7 +230,7 @@ size_t gta2::HudBrief_MainLogic(struct HudBrief *self, wchar_t *a2)
       v12 = gta2::sub_4C63F0(v2);
       self->field_502 = v12;
       if ( v12 )
-        v13 = (struct HudBrief *)((char *)v13 + 2);
+        v13 = (HudBrief *)((char *)v13 + 2);
       else
         self->field_502 = 8;
       self->field_508 = (void *)gta2::HudBrief_sub_4C2450(v13, &self->field_0, (int)v13, (__int16)dword_595004);
@@ -294,7 +294,7 @@ size_t gta2::HudBrief_MainLogic(struct HudBrief *self, wchar_t *a2)
 // 0x004c6640: HudBrief::sub_4C6640
 // IDA: HudBrief::sub_4C6640
 // Ghidra: ---
-int gta2::HudBrief_sub_4C6640(struct HudBrief *self)
+int gta2::HudBrief_sub_4C6640(HudBrief *self)
 {
   struct HudBrief_S2 *HudBrief_S2; // edx
   int result; // eax
@@ -314,7 +314,7 @@ int gta2::HudBrief_sub_4C6640(struct HudBrief *self)
 // 0x004c6690: HudBrief::ShowMessageWithParam
 // IDA: HudBrief::ShowMessageWithParam
 // Ghidra: ---
-int gta2::HudBrief_ShowMessageWithParam(struct HudBrief *self, int timeInSeconds, const char *messageCode, int a4)
+int gta2::HudBrief_ShowMessageWithParam(HudBrief *self, int timeInSeconds, const char *messageCode, int a4)
 {
   int v4; // ecx
   struct HudBrief_S2 *v5; // esi
@@ -336,7 +336,7 @@ int gta2::HudBrief_ShowMessageWithParam(struct HudBrief *self, int timeInSeconds
         gta2::sub_4C6310((void *)v4);
       v5->nextHudBrief_S2 = *(HudBrief_S2 **)(v4 + 1784);
       *(_DWORD *)(v4 + 1784) = v5;
-      return gta2::HudBrief_sub_4C6640((struct HudBrief *)v4);
+      return gta2::HudBrief_sub_4C6640((HudBrief *)v4);
     }
     else
     {
@@ -368,7 +368,7 @@ int gta2::HudBrief_ShowMessageWithParam(struct HudBrief *self, int timeInSeconds
   {
     *(_DWORD *)(v4 + 1784) = v5;
     v5->nextHudBrief_S2 = 0;
-    return gta2::HudBrief_sub_4C6640((struct HudBrief *)v4);
+    return gta2::HudBrief_sub_4C6640((HudBrief *)v4);
   }
   return result;
 }
@@ -377,7 +377,7 @@ int gta2::HudBrief_ShowMessageWithParam(struct HudBrief *self, int timeInSeconds
 // 0x004c6750: HudBrief::ShowMessageToPlayer
 // IDA: HudBrief::ShowMessageToPlayer
 // Ghidra: ---
-int gta2::HudBrief_ShowMessageToPlayer(struct HudBrief *self, int timeInSeconds, const char *messageCode)
+int gta2::HudBrief_ShowMessageToPlayer(HudBrief *self, int timeInSeconds, const char *messageCode)
 {
   return gta2::HudBrief_ShowMessageWithParam(self, timeInSeconds, messageCode, -1);
 }
@@ -395,7 +395,7 @@ int gta2::HudBrief_sub_4C6770(void *self)
   int v5; // edx
   int v6; // eax
   int v7; // esi
-  struct HudBrief *v8; // ecx
+  HudBrief *v8; // ecx
 
   v1 = *((_DWORD *)self + 446);
   if ( v1 )
@@ -433,11 +433,11 @@ int gta2::HudBrief_sub_4C6770(void *self)
 // 0x004c6830: HudBrief::CheckQueue
 // IDA: HudBrief::CheckQueue
 // Ghidra: ---
-HudBrief_S2 * gta2::HudBrief_CheckQueue(struct HudBrief *self)
+HudBrief_S2 * gta2::HudBrief_CheckQueue(HudBrief *self)
 {
   struct HudBrief_S2 *result; // eax
   struct HudBrief_S2 *HudBrief_S2; // eax
-  struct HudBrief *v3; // ecx
+  HudBrief *v3; // ecx
 
   result = self->pHudBrief_S2;
   if ( result )
@@ -449,7 +449,7 @@ HudBrief_S2 * gta2::HudBrief_CheckQueue(struct HudBrief *self)
         gta2::HudBrief_sub_4C6340(self);
     }
     gta2::HudBrief_ShowMessageToPlayer_0(self);
-    return (struct HudBrief_S2 *)gta2::HudBrief_sub_4C6640(v3);
+    return (HudBrief_S2 *)gta2::HudBrief_sub_4C6640(v3);
   }
   return result;
 }
@@ -458,7 +458,7 @@ HudBrief_S2 * gta2::HudBrief_CheckQueue(struct HudBrief *self)
 // 0x004c6860: HudBrief::Clear
 // IDA: HudBrief::Clear
 // Ghidra: ---
-HudBrief_S2 * gta2::HudBrief_Clear(struct HudBrief *self, void *a2)
+HudBrief_S2 * gta2::HudBrief_Clear(HudBrief *self, void *a2)
 {
   struct HudBrief_S2 *v3; // ebx
   struct HudBrief_S2 *HudBrief_S2; // esi
@@ -474,20 +474,20 @@ HudBrief_S2 * gta2::HudBrief_Clear(struct HudBrief *self, void *a2)
       {
         result = HudBrief_S2->nextHudBrief_S2;
         v3->nextHudBrief_S2 = result;
-        HudBrief_S2->nextHudBrief_S2 = (struct HudBrief_S2 *)self->field_6FC;
+        HudBrief_S2->nextHudBrief_S2 = (HudBrief_S2 *)self->field_6FC;
         self->field_6FC = (int)HudBrief_S2;
         HudBrief_S2 = v3->nextHudBrief_S2;
       }
       else
       {
         if ( self->HudBrief_S2_->field_10 )
-          result = (struct HudBrief_S2 *)gta2::sub_4C6310(self);
+          result = (HudBrief_S2 *)gta2::sub_4C6310(self);
         else
-          result = (struct HudBrief_S2 *)gta2::sub_4C62F0(self);
+          result = (HudBrief_S2 *)gta2::sub_4C62F0(self);
         HudBrief_S2 = self->HudBrief_S2_;
         if ( !HudBrief_S2 )
           return result;
-        result = (struct HudBrief_S2 *)gta2::HudBrief_sub_4C6640(self);
+        result = (HudBrief_S2 *)gta2::HudBrief_sub_4C6640(self);
       }
     }
     else
@@ -503,7 +503,7 @@ HudBrief_S2 * gta2::HudBrief_Clear(struct HudBrief *self, void *a2)
 // 0x004c68e0: HudBrief::HudBrief
 // IDA: HudBrief::HudBrief
 // Ghidra: ---
-void gta2::HudBrief_HudBrief(struct HudBrief *self)
+void gta2::HudBrief_HudBrief(HudBrief *self)
 {
   int v2; // ecx
   int v3; // edx
@@ -533,11 +533,11 @@ void gta2::HudBrief_HudBrief(struct HudBrief *self)
 // Ghidra: ---
 void gta2::HudBrief_sub_4C9430(HudBrief *a1)
 {
-  struct HudBrief *v1; // esi
+  HudBrief *v1; // esi
   int v2; // ecx
   int v3; // eax
   int v4; // edx
-  struct Hud *v5; // ecx
+  Hud *v5; // ecx
   int v6; // ecx
   int v7; // eax
   int v8; // ecx
@@ -549,8 +549,8 @@ void gta2::HudBrief_sub_4C9430(HudBrief *a1)
   {
     LOWORD(a1) = unk_672F98.Index;
     memset(&v10.field_C, 0, 12);
-    v10.CarSystemManager = (struct CarSystemManager *)&v10.field_1C;
-    v10.S202 = (struct S202 *)a1;
+    v10.CarSystemManager = (CarSystemManager *)&v10.field_1C;
+    v10.S202 = (S202 *)a1;
     v10.field_0 = (int)a1;
     *(_DWORD *)&v10.field_1C = 2;
     gta2::bitShiftLeft1(&v10, 443);
@@ -574,14 +574,14 @@ void gta2::HudBrief_sub_4C9430(HudBrief *a1)
     v7 = 480 - v6;
     LOWORD(v6) = (_WORD)unk_672F3C;
     memset(&v10.field_C, 0, 12);
-    v10.CarSystemManager = (struct CarSystemManager *)&v10.field_1C;
-    v10.S202 = (struct S202 *)v6;
+    v10.CarSystemManager = (CarSystemManager *)&v10.field_1C;
+    v10.S202 = (S202 *)v6;
     v10.field_0 = v6;
     *(_DWORD *)&v10.field_1C = 2;
     gta2::S202_sub_41F980(&v10, v7);
     v9 = v8;
     gta2::bitShiftLeft1(&v9, 64);
-    sub_4C7280(&v1->field_0, v9, (struct SpriteS1 *)v10.field_0);
+    sub_4C7280(&v1->field_0, v9, (SpriteS1 *)v10.field_0);
   }
 }
 

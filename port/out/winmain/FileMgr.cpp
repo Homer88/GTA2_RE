@@ -7,7 +7,7 @@
 // 0x00402eb0: FileMgr::CloseFile
 // IDA: FileMgr::CloseFile
 // Ghidra: ---
-int gta2::FileMgr_CloseFile(FileMgr *self)
+int gta2::FileMgr_CloseFile(struct FileMgr *self)
 {
   int result; // eax
 
@@ -26,7 +26,7 @@ int gta2::FileMgr_CloseFile(FileMgr *self)
 // 0x00402f60: FileMgr::Seek
 // IDA: FileMgr::Seek
 // Ghidra: ---
-int gta2::FileMgr_Seek(FileMgr *self, int size)
+int gta2::FileMgr_Seek(struct FileMgr *self, int size)
 {
   int result; // eax
 

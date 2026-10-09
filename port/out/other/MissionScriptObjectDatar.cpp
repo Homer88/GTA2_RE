@@ -32,7 +32,7 @@ LABEL_4:
       break;
   }
   if ( !self->field_118 )
-    gta2::TrafficManager_sub_476D50(gTrafficManager, (struct S32 *)started->arr_96[1], 0);
+    gta2::TrafficManager_sub_476D50(gTrafficManager, (S32 *)started->arr_96[1], 0);
   gta2::MissionScriptObjectData_sub_476E50(self, v1);
 }
 
@@ -50,7 +50,7 @@ char * gta2::MissionScriptObjectDatar_sub_481400(struct MissionScriptObjectData 
   unsigned __int16 i; // di
   MissionManager *started; // eax
   int v9; // ecx
-  struct S107 *pS107; // ecx
+  S107 *pS107; // ecx
 
   for ( i = 1; i < 0x1770u; ++i )
   {

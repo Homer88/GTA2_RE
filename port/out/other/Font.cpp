@@ -15,7 +15,7 @@ int gta2::Font_sub_4C8AA0(void *self, HudBrief *a2, __int16 a3, __int16 a4, __in
   size_t v10; // eax
 
   *((_WORD *)self + 86) = a5;
-  gta2::HudBrief_sub_4C2450((struct HudBrief *)self, (wchar_t *)self, (int)a2, 640);
+  gta2::HudBrief_sub_4C2450((HudBrief *)self, (wchar_t *)self, (int)a2, 640);
   v7 = *((_WORD *)self + 86);
   if ( v7 == unk_670674 || v7 == unk_670678 )
     gta2::Text_ConvertWordsToBig(gText, (wchar_t *)self);

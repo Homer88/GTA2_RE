@@ -9,7 +9,7 @@
 // Ghidra: ---
 void gta2::TileAnim2_sub_4C3240(struct TileAnim2 *self)
 {
-  *(struct TileAnim *)&self->TileAnim = *gTileAnim;
+  *(TileAnim *)&self->TileAnim = *gTileAnim;
   ++*(_WORD *)gTileAnim;
 }
 

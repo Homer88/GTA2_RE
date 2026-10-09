@@ -9,10 +9,10 @@
 // Ghidra: ---
 CameraManager * gta2::CameraManager_Push(struct CameraManager *self, int a2)
 {
-  struct CameraManager *result; // eax
+  CameraManager *result; // eax
 
   *(_DWORD *)self->CameraManager_ = a2;
-  result = (struct CameraManager *)&self->CameraManager_->gap1[3];
+  result = (CameraManager *)&self->CameraManager_->gap1[3];
   self->CameraManager_ = result;
   return result;
 }
@@ -23,9 +23,9 @@ CameraManager * gta2::CameraManager_Push(struct CameraManager *self, int a2)
 // Ghidra: ---
 int gta2::CameraManager_Pop(struct CameraManager *self)
 {
-  struct CameraManager *v1; // eax
+  CameraManager *v1; // eax
 
-  v1 = (struct CameraManager *)((char *)self->CameraManager_ - 4);
+  v1 = (CameraManager *)((char *)self->CameraManager_ - 4);
   self->CameraManager_ = v1;
   return *(_DWORD *)&v1->field;
 }
@@ -45,7 +45,7 @@ bool gta2::CameraManager_IsEmpty(struct CameraManager *self)
 // Ghidra: ---
 CameraManager * gta2::CameraManager_CameraManager(struct CameraManager *self)
 {
-  struct CameraManager *result; // eax
+  CameraManager *result; // eax
 
   result = self;
   self->CameraManager_ = self;

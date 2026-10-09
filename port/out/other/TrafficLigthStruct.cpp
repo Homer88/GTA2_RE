@@ -45,9 +45,9 @@ GameObject * gta2::TrafficLigthStruct_sub_4C4A30(
         int a4,
         SpriteS1 *a5)
 {
-  struct S202 *pS202; // eax
+  S202 *pS202; // eax
 
-  pS202 = (struct S202 *)gta2::operator_new(0x20u);
+  pS202 = (S202 *)gta2::operator_new(0x20u);
   *(&self->S202_[0].field_0 + self->index++) = (int)pS202;
   return gta2::S202_sub_4C3C70(pS202, a2, a3, a4, a5);
 }
@@ -107,7 +107,7 @@ int gta2::TrafficLigthStruct_sub_4C4B00(struct TrafficLigthStruct *self)
   int result; // eax
   int v3; // edx
   int *v4; // ecx
-  struct SpriteS1 *v5; // [esp-4h] [ebp-8h]
+  SpriteS1 *v5; // [esp-4h] [ebp-8h]
 
   for ( result = (int)gta2::MapRelatedStruct_sub_464E70(gMapRelatedStruct, 2);
         result;
@@ -115,7 +115,7 @@ int gta2::TrafficLigthStruct_sub_4C4B00(struct TrafficLigthStruct *self)
   {
     LOBYTE(v4) = *(_BYTE *)(result + 4);
     LOBYTE(v3) = *(_BYTE *)(result + 3);
-    v5 = (struct SpriteS1 *)v4;
+    v5 = (SpriteS1 *)v4;
     LOBYTE(v4) = *(_BYTE *)(result + 2);
     gta2::TrafficLigthStruct_sub_4C4A30(self, *(_BYTE *)(result + 1), v4, v3, v5);
   }

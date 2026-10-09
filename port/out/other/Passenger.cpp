@@ -7,7 +7,7 @@
 // 0x00505cc0: Passenger::sub_425450
 // IDA: Passenger::sub_425450
 // Ghidra: ---
-  return gta2::Passenger_sub_425450((struct Passenger *)&gPassenger);
+  return gta2::Passenger_sub_425450((Passenger *)&gPassenger);
 }
 
 

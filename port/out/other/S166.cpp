@@ -34,7 +34,7 @@ int gta2::S166_sub_4C62B0(S166 *a1)
   do
   {
     result = gta2::S166_sub_4C6290(a1);
-    a1 = (struct S166 *)(v2 + 12);
+    a1 = (S166 *)(v2 + 12);
   }
   while ( v3 != 1 );
   return result;
@@ -97,35 +97,35 @@ void gta2::S166_sub_4C9040(GarageInfo *self,byte param_1,byte param_2)
   int3 extraout_var_05;
   GarageInfo *pGVar4;
   GarageInfo *this_00;
-  struct SpriteS1 *extraout_ECX;
-  struct SpriteS1 *extraout_ECX_00;
-  struct Hud *pHud1;
+  SpriteS1 *extraout_ECX;
+  SpriteS1 *extraout_ECX_00;
+  Hud *pHud1;
   undefined2 extraout_var_06;
-  struct SpriteS1 *pSVar5;
-  struct SpriteS1 *extraout_ECX_01;
-  struct Hud *pHud;
+  SpriteS1 *pSVar5;
+  SpriteS1 *extraout_ECX_01;
+  Hud *pHud;
   GarageInfo *this_01;
   GarageInfo *this_02;
   undefined2 extraout_var_07;
-  struct SpriteS1 *extraout_ECX_02;
-  struct Hud *this_03;
+  SpriteS1 *extraout_ECX_02;
+  Hud *this_03;
   undefined2 extraout_var_08;
-  struct SpriteS1 *extraout_ECX_03;
-  struct Hud *this_04;
-  struct SpriteS1 *extraout_ECX_04;
-  struct SpriteS1 *extraout_ECX_05;
-  struct Hud *this_05;
+  SpriteS1 *extraout_ECX_03;
+  Hud *this_04;
+  SpriteS1 *extraout_ECX_04;
+  SpriteS1 *extraout_ECX_05;
+  Hud *this_05;
   GarageInfo *this_06;
-  struct SpriteS1 *extraout_ECX_06;
-  struct SpriteS1 *extraout_ECX_07;
-  struct Hud *this_07;
+  SpriteS1 *extraout_ECX_06;
+  SpriteS1 *extraout_ECX_07;
+  Hud *this_07;
   undefined2 extraout_var_09;
-  struct SpriteS1 *extraout_ECX_08;
-  struct Hud *this_08;
+  SpriteS1 *extraout_ECX_08;
+  Hud *this_08;
   int iVar6;
   undefined3 in_stack_00000005;
   undefined3 in_stack_00000009;
-  struct SpriteS1 *pSVar7;
+  SpriteS1 *pSVar7;
   
   iVar6 = self->CarGenerator[0].field0_0x0;
   if (iVar6 < 0) {
@@ -140,33 +140,33 @@ void gta2::S166_sub_4C9040(GarageInfo *self,byte param_1,byte param_2)
       uVar1 = gta2::S166_sub_4C7250(pGVar4,0x75);
       uVar2 = gta2::S166_sub_4C7250(this_01,0x76);
       uVar3 = gta2::S166_sub_4C7250(this_02,0x77);
-      pSVar5 = (struct SpriteS1 *)CONCAT22(extraout_var_07,_DAT_00672f98);
+      pSVar5 = (SpriteS1 *)CONCAT22(extraout_var_07,_DAT_00672f98);
       iVar6 = CONCAT31(extraout_var_03,uVar3) - ((int)extraout_var_03 >> 0x17)
               >> 1;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,
                  (int)_param_2 +
                  (-iVar6 - (CONCAT31(extraout_var_01,uVar1) -
                             ((int)extraout_var_01 >> 0x17) >> 1)));
       pSVar7 = extraout_ECX_02;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
       gta2::Hud_DrawSprite(this_03,6,(void *)0x75,pSVar7,pSVar5);
-      pSVar5 = (struct SpriteS1 *)CONCAT22(extraout_var_08,_DAT_00672f98);
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,(int)_param_2);
+      pSVar5 = (SpriteS1 *)CONCAT22(extraout_var_08,_DAT_00672f98);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,(int)_param_2);
       pSVar7 = extraout_ECX_03;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
       gta2::Hud_DrawSprite(this_04,6,(void *)0x77,pSVar7,pSVar5);
       pSVar5 = extraout_ECX_04;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,
                  (int)_param_2->Matrix3DArray +
                  CONCAT31(extraout_var_02,uVar2) / 2 + iVar6 + -4);
       pSVar7 = extraout_ECX_05;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
       gta2::Hud_DrawSprite(this_05,6,(void *)0x76,pSVar7,pSVar5);
       gta2::Hud_DrawSprite(self,_param_1,
                  (int)((int)&_param_2[-1].Matrix3DArray[0x13a6].field19_0x34 + 2
                       ));
       gta2::GarageInfo_FUN_004c8e30(self,_param_1,
-                 (struct SpriteS1 *)((int)&_param_2->Matrix3DArray[0].SpriteS1 + 2));
+                 (SpriteS1 *)((int)&_param_2->Matrix3DArray[0].SpriteS1 + 2));
       return;
     }
     pGVar4 = NULL;
@@ -174,20 +174,20 @@ void gta2::S166_sub_4C9040(GarageInfo *self,byte param_1,byte param_2)
       uVar1 = gta2::S166_sub_4C7250(NULL,0x75);
       uVar2 = gta2::S166_sub_4C7250(this_06,0x76);
       pSVar5 = extraout_ECX_06;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,
                  (int)_param_2 -
                  (CONCAT31(extraout_var_04,uVar1) -
                   ((int)extraout_var_04 >> 0x17) >> 1));
       pSVar7 = extraout_ECX_07;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
       gta2::Hud_DrawSprite(this_07,6,(void *)0x75,pSVar7,pSVar5);
-      pSVar5 = (struct SpriteS1 *)CONCAT22(extraout_var_09,_DAT_00672f98);
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,
+      pSVar5 = (SpriteS1 *)CONCAT22(extraout_var_09,_DAT_00672f98);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,
                  (int)_param_2->Matrix3DArray +
                  (CONCAT31(extraout_var_05,uVar2) -
                   ((int)extraout_var_05 >> 0x17) >> 1) + -4);
       pSVar7 = extraout_ECX_08;
-      gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+      gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
       gta2::Hud_DrawSprite(this_08,6,(void *)0x76,pSVar7,pSVar5);
       gta2::GarageInfo_FUN_004c8e30(self,_param_1,_param_2);
       return;
@@ -196,19 +196,19 @@ void gta2::S166_sub_4C9040(GarageInfo *self,byte param_1,byte param_2)
   uVar1 = gta2::S166_sub_4C7250(pGVar4,0x75);
   uVar2 = gta2::S166_sub_4C7250(this_00,0x76);
   pSVar5 = extraout_ECX;
-  gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,
+  gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,
              (int)_param_2 -
              (CONCAT31(extraout_var,uVar1) - ((int)extraout_var >> 0x17) >> 1));
   pSVar7 = extraout_ECX_00;
-  gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+  gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
   gta2::Hud_DrawSprite(pHud1,6,(void *)0x75,pSVar7,pSVar5);
-  pSVar5 = (struct SpriteS1 *)CONCAT22(extraout_var_06,_DAT_00672f98);
-  gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffd0,
+  pSVar5 = (SpriteS1 *)CONCAT22(extraout_var_06,_DAT_00672f98);
+  gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffd0,
              (int)_param_2->Matrix3DArray +
              (CONCAT31(extraout_var_00,uVar2) - ((int)extraout_var_00 >> 0x17)
              >> 1) + -4);
   pSVar7 = extraout_ECX_01;
-  gta2::S202_sub_41F980((struct SpriteS1 *)&stack0xffffffcc,(int)_param_1);
+  gta2::S202_sub_41F980((SpriteS1 *)&stack0xffffffcc,(int)_param_1);
   gta2::Hud_DrawSprite(pHud,6,(void *)0x76,pSVar7,pSVar5);
   gta2::Hud_DrawSprite(self,_param_1,(int)_param_2);
   return;
@@ -221,9 +221,9 @@ void gta2::S166_sub_4C9040(GarageInfo *self,byte param_1,byte param_2)
 int gta2::S166_sub_4C92A0(struct S166 *self)
 {
   int v2; // esi
-  struct S166 *v3; // ecx
+  S166 *v3; // ecx
   int v4; // esi
-  struct S166 *v5; // ecx
+  S166 *v5; // ecx
   int v6; // esi
   int v7; // kr00_4
   int v8; // eax
@@ -241,9 +241,9 @@ int gta2::S166_sub_4C92A0(struct S166 *self)
   v9 = v8 + 104;
   do
   {
-    gta2::S166_sub_4C9040(self, (struct SpriteS1 *)(v7 / 2 + 3), v9);
+    gta2::S166_sub_4C9040(self, (SpriteS1 *)(v7 / 2 + 3), v9);
     v9 += v6;
-    self = (struct S166 *)((char *)self + 12);
+    self = (S166 *)((char *)self + 12);
     result = --v11;
   }
   while ( v11 );
@@ -262,7 +262,7 @@ int gta2::S166_sub_4C9310(struct S166 *self, int a2)
   while ( !gta2::S166_sub_4C7170(self) || !gta2::S166_sub_4C7160(self) )
   {
     ++v2;
-    self = (struct S166 *)((char *)self + 12);
+    self = (S166 *)((char *)self + 12);
     if ( v2 >= 4 )
       return -1;
   }

@@ -9,13 +9,13 @@
 // Ghidra: ---
 Arsenal * gta2::Arsenal_Arsenal(struct Arsenal *self)
 {
-  struct WeaponDatabase *v2; // eax
-  struct WeaponDatabase *v3; // eax
+  WeaponDatabase *v2; // eax
+  WeaponDatabase *v3; // eax
 
   gta2::Arsenal_Reset(self);
   if ( !gWeaponDatabase )
   {
-    v2 = (struct WeaponDatabase *)gta2::operator_new(0x2FDCu);
+    v2 = (WeaponDatabase *)gta2::operator_new(0x2FDCu);
     if ( v2 )
       v3 = gta2::WeaponDatabase_WeaponDatabase(v2);
     else
@@ -43,7 +43,7 @@ void gta2::Arsenal_Reset(void)
 // 0x004ffc60: Arsenal::Reset
 // IDA: Arsenal::Reset
 // Ghidra: ---
-  return gta2::Arsenal_Reset((struct Arsenal *)&gTurrel_0);
+  return gta2::Arsenal_Reset((Arsenal *)&gTurrel_0);
 }
 
 

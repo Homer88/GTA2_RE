@@ -55,17 +55,17 @@ void gta2::SoundInfo_sub_4797A0(struct MissionScriptObjectData *self)
   {
     if ( v2->field_2 == 138 )
     {
-      gta2::Ped_GiveWeapon((struct Ped *)v5[2], (WeaponType)SHIWORD(v2->arr_96[1]), 100);
+      gta2::Ped_GiveWeapon((Ped *)v5[2], (WeaponType)SHIWORD(v2->arr_96[1]), 100);
 LABEL_7:
       gta2::MissionScriptObjectData_sub_476E50(self, dword_6644CC);
       return;
     }
-    gta2::Ped_GiveWeapon((struct Ped *)v5[2], (WeaponType)SHIWORD(v2->arr_96[1]), v2->arr_96[2]);
+    gta2::Ped_GiveWeapon((Ped *)v5[2], (WeaponType)SHIWORD(v2->arr_96[1]), v2->arr_96[2]);
     gta2::MissionScriptObjectData_sub_476E50(self, dword_6644CC);
   }
   else
   {
-    gta2::Turrel_CarAddWeapon(gArsenal, (WeaponType)SHIWORD(v2->arr_96[1]), 0x32u, (struct Car *)v5[2]);
+    gta2::Turrel_CarAddWeapon(gArsenal, (WeaponType)SHIWORD(v2->arr_96[1]), 0x32u, (Car *)v5[2]);
     gta2::MissionScriptObjectData_sub_476E50(self, dword_6644CC);
   }
 }

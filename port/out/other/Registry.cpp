@@ -92,7 +92,7 @@ LSTATUS gta2::Registry_sub_4B5110(HKEY self, LPCSTR lpValueName, BYTE Data)
   HKEY v5; // [esp-Ch] [ebp-10h] BYREF
 
   v4[0] = self;
-  if ( gta2::Registry_OpenOrCreateSoundKey((struct Registry *)self, v4)
+  if ( gta2::Registry_OpenOrCreateSoundKey((Registry *)self, v4)
     && RegSetValueExA(v4[0], (LPCSTR)v4[2], 0, 4u, (const BYTE *)&v5, 4u) )
   {
     gta2::debug_log(0x2Eu, "registry.cpp", 169);

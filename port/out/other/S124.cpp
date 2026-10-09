@@ -18,11 +18,11 @@ Game * gta2::S124_GetGame(struct S124 *self)
 // Ghidra: ---
 Game * gta2::S124_sub_4B8FE0(struct S124 *self)
 {
-  struct Game *result; // eax
+  Game *result; // eax
 
-  result = (struct Game *)self->S125_1;
-  self->S125_1 = (struct S125 *)self->S125_1->field_44;
-  result[1].ArrayPlayer[0] = (struct Player *)self->Game_;
+  result = (Game *)self->S125_1;
+  self->S125_1 = (S125 *)self->S125_1->field_44;
+  result[1].ArrayPlayer[0] = (Player *)self->Game_;
   self->Game_ = result;
   return result;
 }

@@ -19,52 +19,52 @@ void gta2::S86_10_S86_10(struct S86_10 *self)
 // Ghidra: ---
 void gta2::S86_10_sub_4C9FA0(struct S86_10 *self)
 {
-  struct Game *pGame; // edi
+  Game *pGame; // edi
   int v2; // esi
-  struct CarSystemManager *v3; // edx
+  CarSystemManager *v3; // edx
   int v4; // ecx
-  struct Hud *v5; // ecx
-  struct CarSystemManager *v6; // ecx
+  Hud *v5; // ecx
+  CarSystemManager *v6; // ecx
   int v7; // ecx
-  struct Hud *v8; // ecx
-  struct CarSystemManager *v9; // eax
-  struct S202 *v10; // ecx
+  Hud *v8; // ecx
+  CarSystemManager *v9; // eax
+  S202 *v10; // ecx
   int v11; // ecx
-  struct Hud *v12; // ecx
+  Hud *v12; // ecx
   wchar_t *v13; // edi
-  struct CarSystemManager *v14; // eax
-  struct CarSystemManager *v15; // ebx
-  struct S202 *v16; // ecx
+  CarSystemManager *v14; // eax
+  CarSystemManager *v15; // ebx
+  S202 *v16; // ecx
   int v17; // ecx
   char *pscore; // eax
   int v19; // ebx
   int v20; // eax
-  struct S202 *v21; // ecx
+  S202 *v21; // ecx
   int v22; // edi
   unsigned __int16 GlobalSpriteId; // ax
   unsigned __int8 sprite_width; // al
-  struct CarSystemManager *v25; // ecx
+  CarSystemManager *v25; // ecx
   int v26; // ebp
   int v27; // edi
   int v28; // ecx
-  struct Hud *v29; // ecx
-  struct CarSystemManager *v30; // eax
+  Hud *v29; // ecx
+  CarSystemManager *v30; // eax
   int v31; // edi
   unsigned __int8 *FirstUsedGang; // esi
-  struct Player **v33; // eax
-  struct Player *v34; // eax
+  Player **v33; // eax
+  Player *v34; // eax
   int v35; // ecx
   unsigned __int8 *NextUsedGang; // esi
-  struct Player **v37; // eax
-  struct Player *v38; // eax
+  Player **v37; // eax
+  Player *v38; // eax
   char *pgmiss; // eax
-  struct Player **v40; // eax
+  Player **v40; // eax
   char *pgmiss_1; // eax
-  struct Player **v42; // eax
-  struct Player *v43; // eax
+  Player **v42; // eax
+  Player *v43; // eax
   char *pmiss; // eax
-  struct Player **v45; // eax
-  struct Player *v46; // eax
+  Player **v45; // eax
+  Player *v46; // eax
   char *psec; // eax
   int v48; // eax
   char *pbon; // eax
@@ -84,7 +84,7 @@ void gta2::S86_10_sub_4C9FA0(struct S86_10 *self)
     memset(&v53.field_10, 0, 12);
     v53.field_C = (int)&a2;
     v53.CarSystemManager = v3;
-    v53.S202 = (struct S202 *)&a2;
+    v53.S202 = (S202 *)&a2;
     a2 = 2;
     gta2::bitShiftLeft1(&v53.S202, 180);
     v53.field_0 = v4;
@@ -103,12 +103,12 @@ void gta2::S86_10_sub_4C9FA0(struct S86_10 *self)
     memset(&v53.field_10, 0, 12);
     v53.field_C = (int)&a2;
     v53.CarSystemManager = v6;
-    v53.S202 = (struct S202 *)v6;
+    v53.S202 = (S202 *)v6;
     a2 = 2;
     gta2::bitShiftLeft1(&v53.S202, 180);
     v53.field_0 = v7;
     gta2::bitShiftLeft1(&v53, 320);
-    v9 = (struct CarSystemManager *)gta2::Hud_DrawSprite(
+    v9 = (CarSystemManager *)gta2::Hud_DrawSprite(
                                v8,
                                6,
                                136,
@@ -149,7 +149,7 @@ void gta2::S86_10_sub_4C9FA0(struct S86_10 *self)
     gta2::bitShiftLeft1(&v53.S202, 158);
     v53.field_0 = v17;
     gta2::S202_sub_41F980(&v53, (640 - (int)v15) / 2);
-    sub_4C7280(v13, v53.field_0, (struct SpriteS1 *)v53.S202);
+    sub_4C7280(v13, v53.field_0, (SpriteS1 *)v53.S202);
     if ( !gta2::MapGm_GetGang(&gMapGm) )
     {
       switch ( *(_BYTE *)mode )
@@ -183,7 +183,7 @@ void gta2::S86_10_sub_4C9FA0(struct S86_10 *self)
             v38 = 0;
           v53.field_18 = gMissionManager->field_320;
           v53.pPlayer = v38;
-          v53.field_10 = (struct Weapon *)gta2::sub_45DD20(NextUsedGang);
+          v53.field_10 = (Weapon *)gta2::sub_45DD20(NextUsedGang);
           pgmiss = (char *)gta2::Text__Bsearch(gText, "pgmiss");
           ShowTextDisplay(&TextWcharT, pgmiss);
           LOWORD(NextUsedGang) = NextUsedGang[312];
@@ -203,7 +203,7 @@ void gta2::S86_10_sub_4C9FA0(struct S86_10 *self)
 LABEL_20:
           v53.field_18 = v35;
           v53.pPlayer = v34;
-          v53.field_10 = (struct Weapon *)gta2::sub_45DD20(FirstUsedGang);
+          v53.field_10 = (Weapon *)gta2::sub_45DD20(FirstUsedGang);
           pgmiss_1 = (char *)gta2::Text__Bsearch(gText, "pgmiss");
           ShowTextDisplay(&TextWcharT, pgmiss_1);
           LOWORD(FirstUsedGang) = FirstUsedGang[312];
@@ -232,16 +232,16 @@ LABEL_20:
           psec = (char *)gta2::Text__Bsearch(gText, "psec");
           ShowTextDisplay(&TextWcharT, psec);
           v19 = 4;
-          LOWORD(v48) = gta2::S57_sub_4C6E30((struct PathNode *)gCarSystemManager2.field_24, 286);
+          LOWORD(v48) = gta2::S57_sub_4C6E30((PathNode *)gCarSystemManager2.field_24, 286);
           v2 = v48;
           goto LABEL_7;
         case 6:
           v53.field_18 = 50;
-          v53.pPlayer = (struct Player *)gta2::MapGm_GetSpecialTokens(&gMapGm);
+          v53.pPlayer = (Player *)gta2::MapGm_GetSpecialTokens(&gMapGm);
           pbon = (char *)gta2::Text__Bsearch(gText, "pbon");
           ShowTextDisplay(&TextWcharT, pbon);
           v19 = 4;
-          LOWORD(v50) = gta2::S57_sub_4C6E30((struct PathNode *)gCarSystemManager2.field_24, 266);
+          LOWORD(v50) = gta2::S57_sub_4C6E30((PathNode *)gCarSystemManager2.field_24, 266);
           v2 = v50;
           goto LABEL_7;
         default:
@@ -260,12 +260,12 @@ LABEL_7:
             mode = 2;
             v53.field_C = (int)&mode;
             v53.CarSystemManager = v25;
-            v53.S202 = (struct S202 *)v25;
+            v53.S202 = (S202 *)v25;
             v27 = (640 - v26 - v22) / 2;
             gta2::bitShiftLeft1(&v53.S202, 235);
             v53.field_0 = v28;
             gta2::S202_sub_41F980(&v53, v27 + v26 / 2);
-            v30 = (struct CarSystemManager *)gta2::Hud_DrawSprite(
+            v30 = (CarSystemManager *)gta2::Hud_DrawSprite(
                                         v29,
                                         v19,
                                         v2,
@@ -280,13 +280,13 @@ LABEL_7:
           else
           {
             v51 = 640 - v20;
-            v30 = (struct CarSystemManager *)(640 - v20 - ((640 - v20) >> 31));
+            v30 = (CarSystemManager *)(640 - v20 - ((640 - v20) >> 31));
             v31 = v51 / 2;
           }
           LOWORD(v30) = Len;
           v53.field_18 = 0;
           v53.pPlayer = 0;
-          v53.field_10 = (struct Weapon *)6;
+          v53.field_10 = (Weapon *)6;
           v53.field_C = (int)&mode;
           v53.CarSystemManager = v30;
           v53.S202 = v21;
@@ -294,7 +294,7 @@ LABEL_7:
           gta2::bitShiftLeft1(&v53.S202, 220);
           v53.field_0 = v52;
           gta2::S202_sub_41F980(&v53, v31);
-          sub_4C7280(&TextWcharT, v53.field_0, (struct SpriteS1 *)v53.S202);
+          sub_4C7280(&TextWcharT, v53.field_0, (SpriteS1 *)v53.S202);
           break;
       }
     }

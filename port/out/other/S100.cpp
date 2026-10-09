@@ -12,7 +12,7 @@ S100 * gta2::S100_S100(struct S100 *self)
   char v2; // al
   char *v3; // edx
   char *v4; // ecx
-  struct S100 *result; // eax
+  S100 *result; // eax
 
   gta2::Construct(self, 48, 20, S101::S101, S101::S101_des);
   v2 = 0;

@@ -93,7 +93,7 @@ byte gta2::S169_sub_403650(void *self)
 // 0x004037a0: S169::AreAnyPedActive
 // IDA: S169::AreAnyPedActive
 // Ghidra: ---
-char gta2::S169_AreAnyPedActive(S169 *self)
+char gta2::S169_AreAnyPedActive(struct S169 *self)
 {
   unsigned __int8 Index; // dl
   unsigned __int8 v2; // al
@@ -135,7 +135,7 @@ char gta2::S169_GetInUse(struct S169 *self)
 // 0x00403be0: S169::sub_403BE0
 // IDA: S169::sub_403BE0
 // Ghidra: ---
-int gta2::S169_sub_403BE0(S169 *self)
+int gta2::S169_sub_403BE0(struct S169 *self)
 {
   struct Ped *Ped; // ecx
   int result; // eax
@@ -172,7 +172,7 @@ int gta2::S169_sub_403BE0(S169 *self)
 // 0x00403c40: S169::sub_403C40
 // IDA: S169::sub_403C40
 // Ghidra: ---
-char gta2::S169_sub_403C40(S169 *self)
+char gta2::S169_sub_403C40(struct S169 *self)
 {
   struct Ped *Ped; // ecx
   unsigned __int8 v3; // bl
@@ -233,7 +233,7 @@ undefined4 gta2::S169_sub_403D20(int param_1)
 // 0x00403da0: S169::sub_403DA0
 // IDA: S169::sub_403DA0
 // Ghidra: ---
-void gta2::S169_sub_403DA0(S169 *self)
+void gta2::S169_sub_403DA0(struct S169 *self)
 {
   unsigned __int8 v2; // bl
   struct Ped *v3; // edi
@@ -286,7 +286,7 @@ void gta2::S169_sub_403DA0(S169 *self)
 // 0x00403e90: S169::ManageGroupPedObjectives
 // IDA: S169::ManageGroupPedObjectives
 // Ghidra: ---
-void gta2::S169_ManageGroupPedObjectives(S169 *self)
+void gta2::S169_ManageGroupPedObjectives(struct S169 *self)
 {
   struct Ped *Ped; // esi
   unsigned __int8 v3; // bl
@@ -341,7 +341,7 @@ void gta2::S169_ManageGroupPedObjectives(S169 *self)
 // 0x00403fb0: S169::sub_403FB0
 // IDA: S169::sub_403FB0
 // Ghidra: ---
-void gta2::S169_sub_403FB0(S169 *self, Ped *a2)
+void gta2::S169_sub_403FB0(struct S169 *self, Ped *a2)
 {
   int v4; // edi
   struct Ped *v5; // ebp
@@ -403,7 +403,7 @@ void gta2::S169_sub_403FB0(S169 *self, Ped *a2)
 // 0x00404120: S169::sub_404120
 // IDA: S169::sub_404120
 // Ghidra: ---
-void gta2::S169_sub_404120(S169 *self, unsigned __int8 Index_1)
+void gta2::S169_sub_404120(struct S169 *self, unsigned __int8 Index_1)
 {
   struct Ped *pPed; // edi
   struct Ped *pPed_2; // ecx
@@ -537,7 +537,7 @@ void gta2::S169_sub_404120(S169 *self, unsigned __int8 Index_1)
 // 0x00404400: S169::sub_404400
 // IDA: S169::sub_404400
 // Ghidra: ---
-void gta2::S169_sub_404400(S169 *self, Ped *pPed)
+void gta2::S169_sub_404400(struct S169 *self, Ped *pPed)
 {
   self->Ped_ = pPed;
   gta2::Ped_sub_403930(pPed, self);
@@ -548,7 +548,7 @@ void gta2::S169_sub_404400(S169 *self, Ped *pPed)
 // 0x00404420: S169::AddPedtoList
 // IDA: S169::AddPedtoList
 // Ghidra: ---
-void gta2::S169_AddPedtoList(S169 *self, Ped *a2, unsigned __int8 Id)
+void gta2::S169_AddPedtoList(struct S169 *self, Ped *a2, unsigned __int8 Id)
 {
   self->Ped_Arr9[Id] = a2;
   gta2::Ped_sub_403930(a2, self);
@@ -559,7 +559,7 @@ void gta2::S169_AddPedtoList(S169 *self, Ped *a2, unsigned __int8 Id)
 // 0x00404450: S169::sub_404450
 // IDA: S169::sub_404450
 // Ghidra: ---
-Ped * gta2::S169_sub_404450(S169 *self)
+Ped * gta2::S169_sub_404450(struct S169 *self)
 {
   char v2; // bl
 
@@ -578,7 +578,7 @@ Ped * gta2::S169_sub_404450(S169 *self)
 // 0x00404480: S169::sub_404480
 // IDA: S169::sub_404480
 // Ghidra: ---
-int gta2::S169_sub_404480(S169 *self)
+int gta2::S169_sub_404480(struct S169 *self)
 {
   int result; // eax
 
@@ -590,7 +590,7 @@ int gta2::S169_sub_404480(S169 *self)
 // 0x00404490: S169::sub_404490
 // IDA: S169::sub_404490
 // Ghidra: ---
-Ped * gta2::S169_sub_404490(S169 *self, int *arg0)
+Ped * gta2::S169_sub_404490(struct S169 *self, int *arg0)
 {
   unsigned __int8 v2; // bl
   S169 *v3; // ebp
@@ -672,7 +672,7 @@ Ped * gta2::S169_sub_404490(S169 *self, int *arg0)
 // 0x004045d0: S169::sub_4045D0
 // IDA: S169::sub_4045D0
 // Ghidra: ---
-char gta2::S169_sub_4045D0(S169 *self)
+char gta2::S169_sub_4045D0(struct S169 *self)
 {
   struct Ped *Ped; // eax
   unsigned __int8 v3; // bl
@@ -745,7 +745,7 @@ LABEL_21:
 // 0x004046f0: S169::sub_4046F0
 // IDA: S169::sub_4046F0
 // Ghidra: ---
-void gta2::S169_sub_4046F0(S169 *self, unsigned __int8 XIdx)
+void gta2::S169_sub_4046F0(struct S169 *self, unsigned __int8 XIdx)
 {
   struct Ped *Ped; // edi
   struct Ped *v4; // esi
@@ -802,7 +802,7 @@ void gta2::S169_sub_4046F0(S169 *self, unsigned __int8 XIdx)
 // 0x00404840: S169::sub_404840
 // IDA: S169::sub_404840
 // Ghidra: ---
-bool gta2::S169_sub_404840(S169 *self)
+bool gta2::S169_sub_404840(struct S169 *self)
 {
   unsigned __int8 Index; // bl
   unsigned __int8 v4; // [esp+8h] [ebp-4h]
@@ -1046,7 +1046,7 @@ undefined4 gta2::S169_sub_404AD0(int param_1,byte param_2)
 // 0x00404c90: S169::AddPedToEndOfList
 // IDA: S169::AddPedToEndOfList
 // Ghidra: ---
-void gta2::S169_AddPedToEndOfList(S169 *self, Ped *pPed)
+void gta2::S169_AddPedToEndOfList(struct S169 *self, Ped *pPed)
 {
   char v3; // al
 
@@ -1086,7 +1086,7 @@ void gta2::S169_sub_404CE0(void *self,Ped *param_1)
 // 0x00404d40: S169::sub_404D40
 // IDA: S169::sub_404D40
 // Ghidra: ---
-void gta2::S169_sub_404D40(S169 *self, Ped *pPed)
+void gta2::S169_sub_404D40(struct S169 *self, Ped *pPed)
 {
   struct Ped *Ped; // ecx
   struct Ped *v5; // ebx
@@ -1187,7 +1187,7 @@ LABEL_15:
 // 0x00404ef0: S169::sub_404EF0
 // IDA: S169::sub_404EF0
 // Ghidra: ---
-void gta2::S169_sub_404EF0(S169 *self, Ped *a2)
+void gta2::S169_sub_404EF0(struct S169 *self, Ped *a2)
 {
   S169 *pS169Link; // ebx
   char v5; // bl

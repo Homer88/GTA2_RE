@@ -11,7 +11,7 @@ int gta2::S102_sub_48A5A0(struct S102 *self)
 {
   unsigned __int8 v2; // dl
   unsigned __int8 v3; // cl
-  struct S101 *v4; // eax
+  S101 *v4; // eax
   int result; // eax
   unsigned __int8 v6; // [esp+13h] [ebp-9h]
   unsigned __int8 v7; // [esp+14h] [ebp-8h]
@@ -104,8 +104,8 @@ LABEL_17:
 S101 * gta2::S102_sub_48A6C0(struct S102 *self)
 {
   char v1; // bl
-  struct S101 *result; // eax
-  struct S101 *v4; // edi
+  S101 *result; // eax
+  S101 *v4; // edi
   __int16 v5; // ax
   unsigned __int8 v6; // [esp+10h] [ebp-4h]
 
@@ -149,7 +149,7 @@ S102 * gta2::S102_S102(struct S102 *self)
   char v2; // al
   char *v3; // edx
   char *v4; // ecx
-  struct S102 *result; // eax
+  S102 *result; // eax
 
   gta2::Construct(self, 48, 40, S101::S101, S101::S101_des);
   v2 = 0;

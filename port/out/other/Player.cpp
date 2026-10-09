@@ -7,34 +7,34 @@
 // 0x004766a0: Player::GetMultiPlayer
 // IDA: Player::GetMultiPlayer
 // Ghidra: ---
-PlayerStats * gta2::Player_GetMultiPlayer(struct Player *self)
+PlayerStats * gta2::Player_GetMultiPlayer(Player *self)
 {
-  return (struct PlayerStats *)gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->MultiPlayer);
+  return (PlayerStats *)gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->MultiPlayer);
 }
 
 
 // 0x004766b0: Player::SetMultiPlayer
 // IDA: Player::SetMultiPlayer
 // Ghidra: ---
-int gta2::Player_SetMultiPlayer(struct Player *self, int a2)
+int gta2::Player_SetMultiPlayer(Player *self, int a2)
 {
-  return gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)&self->MultiPlayer, a2);
+  return gta2::PlayerStats_SetMultiPlayer((PlayerStats *)&self->MultiPlayer, a2);
 }
 
 
 // 0x004766c0: Player::getMoney
 // IDA: Player::getMoney
 // Ghidra: ---
-PlayerStats * gta2::Player_getMoney(struct Player *self)
+PlayerStats * gta2::Player_getMoney(Player *self)
 {
-  return (struct PlayerStats *)gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives);
+  return (PlayerStats *)gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives);
 }
 
 
 // 0x004766d0: Player::GetRespect
 // IDA: Player::GetRespect
 // Ghidra: ---
-Gang * gta2::Player_GetRespect(struct Player *self)
+Gang * gta2::Player_GetRespect(Player *self)
 {
   return self->RESPECT->Gang_;
 }
@@ -43,7 +43,7 @@ Gang * gta2::Player_GetRespect(struct Player *self)
 // 0x00476700: Player::sub_476700
 // IDA: Player::sub_476700
 // Ghidra: ---
-bool gta2::Player_sub_476700(struct Player *self)
+bool gta2::Player_sub_476700(Player *self)
 {
   struct Ped *MainPed; // ecx
   bool result; // al
@@ -65,7 +65,7 @@ bool gta2::Player_sub_476700(struct Player *self)
 // 0x00476730: Player::sub_476730
 // IDA: Player::sub_476730
 // Ghidra: ---
-bool gta2::Player_sub_476730(struct Player *self)
+bool gta2::Player_sub_476730(Player *self)
 {
   struct Ped *MainPed; // ecx
   bool result; // al
@@ -94,7 +94,7 @@ void gta2::Player_sub_4821C0(struct Network *self)
 {
   byte bVar1;
   struct Ped *pPVar2;
-  struct Car *this_00;
+  Car *this_00;
   int iVar3;
   struct Player *this_01;
   undefined4 uVar4;
@@ -136,15 +136,15 @@ LAB_00482235:
     if (iVar3 == 0) {
       return;
     }
-    pPVar2 = (struct Ped *)gta2::Player_GetPed(this_01);
+    pPVar2 = (Ped *)gta2::Player_GetPed(this_01);
     iVar3 = gta2::Ped_GetCarPlayers(pPVar2);
     if (iVar3 == 0) {
       return;
     }
     puVar5 = &DAT_006653dc;
     iVar3 = 0x11;
-    pPVar2 = (struct Ped *)gta2::Player_GetPed(this_01);
-    this_00 = (struct Car *)gta2::Ped_GetCarPlayers(pPVar2);
+    pPVar2 = (Ped *)gta2::Player_GetPed(this_01);
+    this_00 = (Car *)gta2::Ped_GetCarPlayers(pPVar2);
     gta2::Car_CollisionOnCar(this_00,iVar3,puVar5);
     return;
   default:
@@ -159,7 +159,7 @@ switchD_004821d7_caseD_1:
 // 0x00482cc0: Player::sub_482CC0
 // IDA: Player::sub_482CC0
 // Ghidra: ---
-int gta2::Player_sub_482CC0(struct Player *self, EventHandler *pS63, _DWORD *arg4, int a3)
+int gta2::Player_sub_482CC0(Player *self, EventHandler *pS63, _DWORD *arg4, int a3)
 {
   int result; // eax
 
@@ -190,7 +190,7 @@ void * gta2::Player_sub_49DD10(void *self)
 // 0x0049dd20: Player::sub_49DD20
 // IDA: Player::sub_49DD20
 // Ghidra: ---
-void gta2::Player_sub_49DD20(struct Player *self, _DWORD *a2)
+void gta2::Player_sub_49DD20(Player *self, _DWORD *a2)
 {
   self->field_A0 = *a2;
 }
@@ -199,7 +199,7 @@ void gta2::Player_sub_49DD20(struct Player *self, _DWORD *a2)
 // 0x0049dd30: Player::sub_49DD30
 // IDA: Player::sub_49DD30
 // Ghidra: Player::FUN_0049dd30
-void gta2::Player_sub_49DD30(struct Player *self)
+void gta2::Player_sub_49DD30(Player *self)
 {
   if (self->CarPlayerPre->Driver != NULL) {
     if (*(int *)&self->field_0xa0 == 1) {
@@ -221,7 +221,7 @@ void gta2::Player_sub_49DD30(struct Player *self)
 // 0x0049dd80: Player::sub_49DD80
 // IDA: Player::sub_49DD80
 // Ghidra: ---
-bool gta2::Player_sub_49DD80(struct Player *self)
+bool gta2::Player_sub_49DD80(Player *self)
 {
   _DWORD *TrailerCtrl; // eax
   int v2; // eax
@@ -239,7 +239,7 @@ bool gta2::Player_sub_49DD80(struct Player *self)
 // 0x0049ddc0: Player::FUN_0049ddc0
 // IDA: sub_49DDC0
 // Ghidra: Player::FUN_0049ddc0
-byte gta2::Player_FUN_0049ddc0(struct Player *self)
+byte gta2::Player_FUN_0049ddc0(Player *self)
 {
   void *pvVar1;
   int iVar2;
@@ -259,7 +259,7 @@ byte gta2::Player_FUN_0049ddc0(struct Player *self)
 // 0x0049ddf0: Player::sub_49DDF0
 // IDA: Player::sub_49DDF0
 // Ghidra: Player::FUN_0049ddf0
-byte gta2::Player_sub_49DDF0(struct Player *self)
+byte gta2::Player_sub_49DDF0(Player *self)
 {
   char cVar1;
   void *pvVar2;
@@ -292,16 +292,16 @@ byte gta2::Player_sub_49DDF0(struct Player *self)
 // 0x0049de40: Player::sub_49DE40
 // IDA: Player::sub_49DE40
 // Ghidra: ---
-_DWORD * gta2::Player_sub_49DE40(struct Player *self)
+_DWORD * gta2::Player_sub_49DE40(Player *self)
 {
-  struct Car *sCar1; // eax
+  Car *sCar1; // eax
   _DWORD *result; // eax
 
-  self->S103_5 = (struct S103 *)unk_66ACD0;
-  self->RESPECT = (struct Gangs *)unk_66ACD4;
+  self->S103_5 = (S103 *)unk_66ACD0;
+  self->RESPECT = (Gangs *)unk_66ACD4;
   self->field_6C = MEMORY[0x66AC88];
   LOWORD(self->field_58) = stru_66AC54;
-  self->field_38 = (struct S103 *)MEMORY[0x66AC8C];
+  self->field_38 = (S103 *)MEMORY[0x66AC8C];
   self->field_3C = MEMORY[0x66AC90];
   *(_DWORD *)&self->Up = unk_66ABC4;
   sCar1 = self->sCar1;
@@ -326,7 +326,7 @@ _DWORD * gta2::Player_sub_49DE40(struct Player *self)
 // 0x0049def0: Player::sub_49DEF0
 // IDA: Player::sub_49DEF0
 // Ghidra: ---
-_DWORD * gta2::Player_sub_49DEF0(struct Player *self)
+_DWORD * gta2::Player_sub_49DEF0(Player *self)
 {
   _DWORD *result; // eax
   int v2; // eax
@@ -391,7 +391,7 @@ void gta2::Player_sub_49DF90(int param_1)
 // 0x0049e040: Player::sub_49E040
 // IDA: Player::sub_49E040
 // Ghidra: ---
-_DWORD * gta2::Player_sub_49E040(struct Player *self)
+_DWORD * gta2::Player_sub_49E040(Player *self)
 {
   _DWORD *result; // eax
   int v2; // eax
@@ -425,7 +425,7 @@ _DWORD * gta2::Player_sub_49E040(struct Player *self)
 // 0x0049e270: Player::sub_49E270
 // IDA: Player::sub_49E270
 // Ghidra: ---
-char gta2::Player_sub_49E270(struct Player *self)
+char gta2::Player_sub_49E270(Player *self)
 {
   char v2; // bl
   _DWORD *TrailerCtrl; // eax
@@ -442,7 +442,7 @@ char gta2::Player_sub_49E270(struct Player *self)
 // 0x0049e330: Player::sub_49E330
 // IDA: Player::sub_49E330
 // Ghidra: Player::FUN_0049e330
-void gta2::Player_sub_49E330(struct Player *self,undefined4 param_1)
+void gta2::Player_sub_49E330(Player *self,undefined4 param_1)
 {
   int *piVar1;
   struct Player *local_4;
@@ -457,15 +457,15 @@ void gta2::Player_sub_49E330(struct Player *self,undefined4 param_1)
 // 0x0049e450: Player::FUN_0049e450
 // IDA: sub_49E450
 // Ghidra: Player::FUN_0049e450
-byte gta2::Player_FUN_0049e450(struct Player *self)
+byte gta2::Player_FUN_0049e450(Player *self)
 {
   bool bVar1;
   undefined3 extraout_var;
   undefined3 extraout_var_00;
   
-  bVar1 = gta2::Player_IsCurrentPlayer(self,(struct Player *)&DAT_0066acdc);
+  bVar1 = gta2::Player_IsCurrentPlayer(self,(Player *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar1) == 0) {
-    bVar1 = gta2::Player_IsCurrentPlayer((struct Player *)&self->Player_,(struct Player *)&DAT_0066acdc);
+    bVar1 = gta2::Player_IsCurrentPlayer((Player *)&self->Player_,(Player *)&DAT_0066acdc);
     if (CONCAT31(extraout_var_00,bVar1) == 0) {
       return 0;
     }
@@ -477,7 +477,7 @@ byte gta2::Player_FUN_0049e450(struct Player *self)
 // 0x0049e480: Player::FUN_0049e480
 // IDA: sub_49E480
 // Ghidra: Player::FUN_0049e480
-void gta2::Player_FUN_0049e480(struct Player *self,SpriteS1 *param_1)
+void gta2::Player_FUN_0049e480(Player *self,SpriteS1 *param_1)
 {
   bool bVar1;
   undefined3 extraout_var;
@@ -489,32 +489,32 @@ void gta2::Player_FUN_0049e480(struct Player *self,SpriteS1 *param_1)
   struct Player **this_00;
   Matrix3D *pSpriteS1;
   
-  bVar1 = gta2::Player_sub_40CE70(self,(struct Player *)&DAT_0066acdc);
+  bVar1 = gta2::Player_sub_40CE70(self,(Player *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar1) == 0) {
     bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)self,param_1);
     if (CONCAT31(extraout_var_01,bVar1) != 0) {
-      self->CurrentPlayer = (struct Player *)param_1->FirstElement;
+      self->CurrentPlayer = (Player *)param_1->FirstElement;
     }
   }
   else {
-    bVar1 = gta2::Car_sub_403800((struct Car *)self,(int *)param_1);
+    bVar1 = gta2::Car_sub_403800((Car *)self,(int *)param_1);
     if (CONCAT31(extraout_var_00,bVar1) != 0) {
-      self->CurrentPlayer = (struct Player *)param_1->FirstElement;
+      self->CurrentPlayer = (Player *)param_1->FirstElement;
     }
   }
   this_00 = &self->Player_;
-  bVar1 = gta2::Player_sub_40CE70((struct Player *)this_00,(struct Player *)&DAT_0066acdc);
+  bVar1 = gta2::Player_sub_40CE70((Player *)this_00,(Player *)&DAT_0066acdc);
   pSpriteS1 = param_1->Matrix3DArray;
   if (CONCAT31(extraout_var_02,bVar1) == 0) {
-    bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)this_00,(struct SpriteS1 *)pSpriteS1);
+    bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)this_00,(SpriteS1 *)pSpriteS1);
     if (CONCAT31(extraout_var_04,bVar1) != 0) {
-      *this_00 = (struct Player *)pSpriteS1->SpriteS1_;
+      *this_00 = (Player *)pSpriteS1->SpriteS1_;
     }
   }
   else {
-    bVar1 = gta2::Car_sub_403800((struct Car *)this_00,(int *)pSpriteS1);
+    bVar1 = gta2::Car_sub_403800((Car *)this_00,(int *)pSpriteS1);
     if (CONCAT31(extraout_var_03,bVar1) != 0) {
-      *this_00 = (struct Player *)pSpriteS1->SpriteS1_;
+      *this_00 = (Player *)pSpriteS1->SpriteS1_;
       return;
     }
   }
@@ -533,14 +533,14 @@ void * gta2::Player_sub_49E650(int param_1,void *param_2,void *param_3)
   void *pvVar4;
   short *unaff_ESI;
   void *unaff_EDI;
-  struct Car *local_18;
+  Car *local_18;
   struct Ped *local_14;
   SpawnPoint *local_10 [2];
   undefined1 local_8 [8];
   
   puVar1 = (undefined4 *)
            FUN_0040f600(param_3,local_8,(GlassInfo *)(_DAT_0066ab78 + 0xc));
-  local_18 = (struct Car *)*puVar1;
+  local_18 = (Car *)*puVar1;
   local_14 = *(Ped **)(puVar1 + 1);
   FUN_0040f6b0(&local_18,(GlassInfo *)(param_1 + 0x58));
   FUN_0040f680(&local_18,param_1 + 0x30);
@@ -548,11 +548,11 @@ void * gta2::Player_sub_49E650(int param_1,void *param_2,void *param_3)
   local_10[1] = (SpawnPoint *)puVar1[1];
   psVar2 = (short *)FUN_0040f540(&param_3,param_1 + 0x74);
   pGVar3 = (GlassInfo *)
-           gta2::sub_40E5A0((struct CarSystemManager *)(param_1 + 0x58),
-                      (struct Ped *)&stack0xffffffe6,psVar2,unaff_EDI,unaff_ESI);
+           gta2::sub_40E5A0((CarSystemManager *)(param_1 + 0x58),
+                      (Ped *)&stack0xffffffe6,psVar2,unaff_EDI,unaff_ESI);
   FUN_0040f6b0(local_10,pGVar3);
   pvVar4 = FUN_0040f5c0((void *)(param_1 + 0x30),local_8,
-                        (struct SpriteS1 *)(param_1 + 0x40));
+                        (SpriteS1 *)(param_1 + 0x40));
   FUN_0040f680(local_10,(int)pvVar4);
   FUN_0040f600(local_10,param_2,(GlassInfo *)&local_18);
   return param_2;
@@ -562,9 +562,9 @@ void * gta2::Player_sub_49E650(int param_1,void *param_2,void *param_3)
 // 0x0049e820: Player::sub_49E820
 // IDA: Player::sub_49E820
 // Ghidra: ---
-bool gta2::Player_sub_49E820(struct Player *self)
+bool gta2::Player_sub_49E820(Player *self)
 {
-  return *(_BYTE *)(unk_66AB70 + 1) && gta2::Player_sub_40CE70((struct Player *)&self->field_60, &unk_66AFBC);
+  return *(_BYTE *)(unk_66AB70 + 1) && gta2::Player_sub_40CE70((Player *)&self->field_60, &unk_66AFBC);
 }
 
 
@@ -591,7 +591,7 @@ void gta2::Player_sub_49E950(void *self)
 // Ghidra: FUN_0049e980
 void gta2::Player_sub_49E980(int param_1)
 {
-  struct Car *self;
+  Car *self;
   bool bVar1;
   undefined3 extraout_var;
   undefined4 *puVar2;
@@ -599,7 +599,7 @@ void gta2::Player_sub_49E980(int param_1)
   
   if (((*(char *)(param_1 + 0x91) != '\0') && (*(int *)(param_1 + 0x98) != 7))
      && (*(int *)(param_1 + 0x98) != 8)) {
-    self = (struct Car *)(param_1 + 100);
+    self = (Car *)(param_1 + 100);
     local_4 = param_1;
     gta2::Player_sub_40E530((Point2D *)self,(int *)&DAT_0066af48);
     bVar1 = gta2::Car_sub_403800(self,(int *)&DAT_0066ad88);
@@ -621,7 +621,7 @@ void gta2::Player_sub_49E980(int param_1)
 // 0x0049ea00: Player::FUN_0049ea00
 // IDA: sub_49EA00
 // Ghidra: Player::FUN_0049ea00
-void * gta2::Player_FUN_0049ea00(struct Player *self,Player *pPlayer)
+void * gta2::Player_FUN_0049ea00(Player *self,Player *pPlayer)
 {
   if (self->CarPlayerPre->PhysicsBitmask == 2) {
     pPlayer->CurrentPlayer = _DAT_0066ad5c;
@@ -635,89 +635,89 @@ void * gta2::Player_FUN_0049ea00(struct Player *self,Player *pPlayer)
 // 0x0049ea60: Player::sub_49EA60
 // IDA: Player::sub_49EA60
 // Ghidra: ---
-void gta2::Player_sub_49EA60(struct Player *self)
+void gta2::Player_sub_49EA60(Player *self)
 {
-  gta2::Weapon_UseAmmo((struct Weapon *)&self->prevWeapon, &stru_66ADE0.field_2C);
+  gta2::Weapon_UseAmmo((Weapon *)&self->prevWeapon, &stru_66ADE0.field_2C);
 }
 
 
 // 0x0049ea70: Player::sub_49EA70
 // IDA: Player::sub_49EA70
 // Ghidra: ---
-Tango * gta2::Player_sub_49EA70(struct Player *self)
+Tango * gta2::Player_sub_49EA70(Player *self)
 {
   void *v2; // ecx
   struct Player *v3; // eax
   int v4; // eax
   struct Player *v5; // eax
   int v6; // eax
-  struct Tango *result; // eax
-  struct S900 *v8; // eax
-  struct Tango *p_DeathReason; // ecx
-  struct Tango *p_prevWeapon; // esi
+  Tango *result; // eax
+  S900 *v8; // eax
+  Tango *p_DeathReason; // ecx
+  Tango *p_prevWeapon; // esi
   struct Player *v11; // eax
   int v12; // eax
   void *v13; // ecx
   struct Player *v14; // eax
   int v15; // eax
-  struct S900 *v16; // eax
-  struct Tango *v17; // ecx
-  struct Tango *v18; // esi
-  struct S103 **p_S103_4; // [esp-8h] [ebp-18h]
+  S900 *v16; // eax
+  Tango *v17; // ecx
+  Tango *v18; // esi
+  S103 **p_S103_4; // [esp-8h] [ebp-18h]
   int v20; // [esp+Ch] [ebp-4h] BYREF
 
   p_S103_4 = &self->S103_4;
   if ( gta2::Player_sub_49DD80(self) )
   {
-    v3 = (struct Player *)gta2::sub_403840(v2, (struct Player *)&v20, p_S103_4);
+    v3 = (Player *)gta2::sub_403840(v2, (Player *)&v20, p_S103_4);
     LOBYTE(v4) = gta2::Player_CheckCondition(v3, &unk_66AF84);
     if ( v4
-      && (v5 = (struct Player *)gta2::sub_403840(&self->DeathReason, (struct Player *)&v20, &self->DeathReason),
+      && (v5 = (Player *)gta2::sub_403840(&self->DeathReason, (Player *)&v20, &self->DeathReason),
           LOBYTE(v6) = gta2::Player_CheckCondition(v5, &unk_66AF84),
           v6) )
     {
-      return gta2::Tango_sub_49E3A0((struct Tango *)&self->S103_4, (int *)&stru_66AD3C.CarType);
+      return gta2::Tango_sub_49E3A0((Tango *)&self->S103_4, (int *)&stru_66AD3C.CarType);
     }
     else
     {
-      v8 = (struct S900 *)gta2::sub_401C80(&self->field_58, (struct Ped *)&v20);
-      gta2::Tango_sub_40F6B0((struct Tango *)&self->S103_4, v8);
-      gta2::Tango_sub_41E0D0((struct Tango *)&self->S103_4, (int *)&stru_66AD3C.CarType);
-      p_DeathReason = (struct Tango *)&self->DeathReason;
+      v8 = (S900 *)gta2::sub_401C80(&self->field_58, (Ped *)&v20);
+      gta2::Tango_sub_40F6B0((Tango *)&self->S103_4, v8);
+      gta2::Tango_sub_41E0D0((Tango *)&self->S103_4, (int *)&stru_66AD3C.CarType);
+      p_DeathReason = (Tango *)&self->DeathReason;
       if ( self->sCar1->TrailerCtrl )
         gta2::Tango_sub_41E0D0(p_DeathReason, &stru_66ADE0.field_38);
       else
         gta2::Tango_sub_41E0D0(p_DeathReason, &dword_66ABC0);
-      gta2::Tango_sub_40F6B0((struct Tango *)&self->S103_4, (struct S900 *)&self->field_58);
-      p_prevWeapon = (struct Tango *)&self->prevWeapon;
-      result = (struct Tango *)gta2::Radar_AddBlip(p_prevWeapon, (struct SpriteS1 *)&v20, (struct PublicTransport *)&unk_66AF50)->FirstElement;
+      gta2::Tango_sub_40F6B0((Tango *)&self->S103_4, (S900 *)&self->field_58);
+      p_prevWeapon = (Tango *)&self->prevWeapon;
+      result = (Tango *)gta2::Radar_AddBlip(p_prevWeapon, (SpriteS1 *)&v20, (PublicTransport *)&unk_66AF50)->FirstElement;
       p_prevWeapon->field = (int)result;
     }
   }
   else
   {
-    v11 = (struct Player *)gta2::sub_403840(&v20, (struct Player *)&v20, p_S103_4);
+    v11 = (Player *)gta2::sub_403840(&v20, (Player *)&v20, p_S103_4);
     LOBYTE(v12) = gta2::Player_CheckCondition(v11, &unk_66AF84);
     if ( v12
-      && (v14 = (struct Player *)gta2::sub_403840(v13, (struct Player *)&v20, &self->DeathReason),
+      && (v14 = (Player *)gta2::sub_403840(v13, (Player *)&v20, &self->DeathReason),
           LOBYTE(v15) = gta2::Player_CheckCondition(v14, &unk_66AF84),
           v15) )
     {
-      return gta2::Tango_sub_49E3A0((struct Tango *)&self->S103_4, &dword_66B014);
+      return gta2::Tango_sub_49E3A0((Tango *)&self->S103_4, &dword_66B014);
     }
     else
     {
-      v16 = (struct S900 *)gta2::sub_401C80(&self->field_58, (struct Ped *)&v20);
-      gta2::Tango_sub_40F6B0((struct Tango *)&self->S103_4, v16);
-      gta2::Tango_sub_41E0D0((struct Tango *)&self->S103_4, &dword_66B014);
-      v17 = (struct Tango *)&self->DeathReason;
+      v16 = (S900 *)gta2::sub_401C80(&self->field_58, (Ped *)&v20);
+      gta2::Tango_sub_40F6B0((Tango *)&self->S103_4, v16);
+      gta2::Tango_sub_41E0D0((Tango *)&self->S103_4, &dword_66B014);
+      v17 = (Tango *)&self->DeathReason;
       if ( self->sCar1->TrailerCtrl )
         gta2::Tango_sub_41E0D0(v17, &dword_66AD04);
       else
         gta2::Tango_sub_41E0D0(v17, &dword_66AFF0);
-      gta2::Tango_sub_40F6B0((struct Tango *)&self->S103_4, (struct S900 *)&self->field_58);
-      v18 = (struct Tango *)&self->prevWeapon;
-      result = (struct Tango *)gta2::Radar_AddBlip(v18, (struct SpriteS1 *)&v20, (struct PublicTransport *)&unk_66AD10);
+      gta2::Tango_sub_40F6B0((Tango *)&self->S103_4, (S900 *)&self->field_58);
+      v18 = (Tango *)&self->prevWeapon;
+      result = (Tango *)gta2::Radar_AddBlip(v18, (SpriteS1 *)&v20, (PublicTransport *)&unk_66AD10);
       v18->field = result->field;
     }
   }
@@ -741,7 +741,7 @@ void gta2::Player_sub_49EC80(void *self)
 // 0x0049eca0: Player::sub_49ECA0
 // IDA: Player::sub_49ECA0
 // Ghidra: Player::FUN_0049eca0
-void gta2::Player_sub_49ECA0(struct Player *self)
+void gta2::Player_sub_49ECA0(Player *self)
 {
   byte index;
   
@@ -754,9 +754,9 @@ void gta2::Player_sub_49ECA0(struct Player *self)
 // 0x0049ecc0: Player::sub_49ECC0
 // IDA: Player::sub_49ECC0
 // Ghidra: ---
-Car * gta2::Player_sub_49ECC0(struct Player *self)
+Car * gta2::Player_sub_49ECC0(Player *self)
 {
-  struct Car *result; // eax
+  Car *result; // eax
   char Index; // [esp+0h] [ebp-4h]
 
   Index = gta2::Car_sub_4220A0(self->sCar1);
@@ -770,19 +770,19 @@ Car * gta2::Player_sub_49ECC0(struct Player *self)
 // 0x0049ed00: Player::sub_49ED00
 // IDA: Player::sub_49ED00
 // Ghidra: ---
-S103 ** gta2::Player_sub_49ED00(struct Player *self)
+S103 ** gta2::Player_sub_49ED00(Player *self)
 {
   int v2; // edx
-  struct S103 **result; // eax
+  S103 **result; // eax
   int a3[2]; // [esp+4h] [ebp-10h] BYREF
   char v5[8]; // [esp+Ch] [ebp-8h] BYREF
 
   v2 = *(_DWORD *)(unk_66AB78 + 16);
   a3[0] = *(_DWORD *)(unk_66AB78 + 12);
   a3[1] = v2;
-  gta2::Tango_sub_40F760((struct Tango *)a3);
-  gta2::Tango_sub_40F6B0((struct Tango *)a3, (struct S900 *)&self->field_58);
-  result = (S103 **)gta2::S103_sub_40F5C0((struct S103 *)&self->S103_5, v5, a3);
+  gta2::Tango_sub_40F760((Tango *)a3);
+  gta2::Tango_sub_40F6B0((Tango *)a3, (S900 *)&self->field_58);
+  result = (S103 **)gta2::S103_sub_40F5C0((S103 *)&self->S103_5, v5, a3);
   self->field_38 = *result;
   self->field_3C = (int)result[1];
   return result;
@@ -792,7 +792,7 @@ S103 ** gta2::Player_sub_49ED00(struct Player *self)
 // 0x0049ed60: Player::sub_49ED60
 // IDA: Player::sub_49ED60
 // Ghidra: ---
-_DWORD * gta2::Player_sub_49ED60(struct Player *self)
+_DWORD * gta2::Player_sub_49ED60(Player *self)
 {
   char pIndex; // al
   int EngineState; // eax
@@ -806,10 +806,10 @@ _DWORD * gta2::Player_sub_49ED60(struct Player *self)
   v4 = *(_DWORD *)(EngineState + 16);
   a3[0] = *(_DWORD *)(EngineState + 12);
   a3[1] = v4;
-  gta2::Tango_sub_40F6B0((struct Tango *)a3, (struct S900 *)&self->field_58);
-  result = gta2::S103_sub_40F5C0((struct S103 *)&self->field_38, v7, a3);
-  self->S103_5 = (struct S103 *)*result;
-  self->RESPECT = (struct Gangs *)result[1];
+  gta2::Tango_sub_40F6B0((Tango *)a3, (S900 *)&self->field_58);
+  result = gta2::S103_sub_40F5C0((S103 *)&self->field_38, v7, a3);
+  self->S103_5 = (S103 *)*result;
+  self->RESPECT = (Gangs *)result[1];
   return result;
 }
 
@@ -817,21 +817,21 @@ _DWORD * gta2::Player_sub_49ED60(struct Player *self)
 // 0x0049edc0: Player::sub_49EDC0
 // IDA: Player::sub_49EDC0
 // Ghidra: ---
-S103 ** gta2::Player_sub_49EDC0(struct Player *self)
+S103 ** gta2::Player_sub_49EDC0(Player *self)
 {
   int v2; // edx
-  struct S103 **result; // eax
-  struct Tango *pTango; // [esp+4h] [ebp-10h] BYREF
+  S103 **result; // eax
+  Tango *pTango; // [esp+4h] [ebp-10h] BYREF
   int v5; // [esp+8h] [ebp-Ch]
   char v6[8]; // [esp+Ch] [ebp-8h] BYREF
 
   v2 = *(_DWORD *)(unk_66AB78 + 16);
   pTango = *(Tango **)(unk_66AB78 + 12);
   v5 = v2;
-  gta2::Tango_sub_40F6B0((struct Tango *)&pTango, (struct S900 *)&self->field_58);
-  result = (S103 **)gta2::S103_sub_40F5C0((struct S103 *)&self->field_38, v6, &pTango);
+  gta2::Tango_sub_40F6B0((Tango *)&pTango, (S900 *)&self->field_58);
+  result = (S103 **)gta2::S103_sub_40F5C0((S103 *)&self->field_38, v6, &pTango);
   self->S103_5 = *result;
-  self->RESPECT = (struct Gangs *)result[1];
+  self->RESPECT = (Gangs *)result[1];
   return result;
 }
 
@@ -839,12 +839,12 @@ S103 ** gta2::Player_sub_49EDC0(struct Player *self)
 // 0x0049ee10: Player::sub_49EE10
 // IDA: Player::sub_49EE10
 // Ghidra: ---
-_DWORD * gta2::Player_sub_49EE10(struct Player *self, SpriteS1 *pSpriteS1)
+_DWORD * gta2::Player_sub_49EE10(Player *self, SpriteS1 *pSpriteS1)
 {
-  struct SpriteS1 *v2; // eax
+  SpriteS1 *v2; // eax
 
   v2 = pSpriteS1;
-  self->field_38 = (struct S103 *)pSpriteS1->S3_arr5031[0].PositionX;
+  self->field_38 = (S103 *)pSpriteS1->S3_arr5031[0].PositionX;
   self->field_3C = v2->S3_arr5031[0].PositionY;
   self->field_6C = v2->S3_arr5031[0].PositionZ;
   LOWORD(self->field_58) = v2->FirstElement;
@@ -857,10 +857,10 @@ _DWORD * gta2::Player_sub_49EE10(struct Player *self, SpriteS1 *pSpriteS1)
 // 0x0049ee80: Player::sub_49EE80
 // IDA: Player::sub_49EE80
 // Ghidra: ---
-SpriteS3 * gta2::Player_sub_49EE80(struct Player *self)
+SpriteS3 * gta2::Player_sub_49EE80(Player *self)
 {
-  struct SpriteS1 *CarSprite; // edi
-  struct CarSystemManager *v3; // ecx
+  SpriteS1 *CarSprite; // edi
+  CarSystemManager *v3; // ecx
 
   CarSprite = self->sCar1->CarSprite;
   gta2::SpriteS1_sub_420600(CarSprite, (int)self->field_38, self->field_3C, self->field_6C);
@@ -872,14 +872,14 @@ SpriteS3 * gta2::Player_sub_49EE80(struct Player *self)
 // 0x0049eeb0: Player::sub_49EEB0
 // IDA: Player::sub_49EEB0
 // Ghidra: ---
-SpriteS1 * gta2::Player_sub_49EEB0(struct Player *self)
+SpriteS1 * gta2::Player_sub_49EEB0(Player *self)
 {
-  struct SpriteS1 *result; // eax
+  SpriteS1 *result; // eax
 
   gta2::Player_sub_49EE80(self);
-  result = (struct SpriteS1 *)self->sCar1->TrailerCtrl;
+  result = (SpriteS1 *)self->sCar1->TrailerCtrl;
   if ( result )
-    return gta2::Player_sub_49EE80((struct Player *)result->S3_arr5031[0].SpriteS3->S39_Arr48[4].field_8);
+    return gta2::Player_sub_49EE80((Player *)result->S3_arr5031[0].SpriteS3->S39_Arr48[4].field_8);
   return result;
 }
 
@@ -887,18 +887,18 @@ SpriteS1 * gta2::Player_sub_49EEB0(struct Player *self)
 // 0x0049eed0: Player::FUN_0049eed0
 // IDA: ---
 // Ghidra: Player::FUN_0049eed0
-byte gta2::Player_FUN_0049eed0(struct Player *self)
+byte gta2::Player_FUN_0049eed0(Player *self)
 {
   bool bVar1;
   Point2D *this_00;
   undefined3 extraout_var;
-  struct SpriteS1 *pSpriteS1;
+  SpriteS1 *pSpriteS1;
   struct Player *local_4;
   
-  pSpriteS1 = (struct SpriteS1 *)&DAT_0066afc8;
+  pSpriteS1 = (SpriteS1 *)&DAT_0066afc8;
   local_4 = self;
   this_00 = (Point2D *)
-            gta2::Player_sub_41E260((struct Player *)&self->S103_,(int *)&local_4);
+            gta2::Player_sub_41E260((Player *)&self->S103_,(int *)&local_4);
   bVar1 = gta2::Point2D_FUN_004037e0(this_00,pSpriteS1);
   return CONCAT31(extraout_var,bVar1) != 0;
 }
@@ -907,7 +907,7 @@ byte gta2::Player_FUN_0049eed0(struct Player *self)
 // 0x0049ef50: Player::sub_49EF50
 // IDA: Player::sub_49EF50
 // Ghidra: ---
-unsigned int gta2::Player_sub_49EF50(struct Player *self, int a2)
+unsigned int gta2::Player_sub_49EF50(Player *self, int a2)
 {
   unsigned int result; // eax
 
@@ -921,7 +921,7 @@ unsigned int gta2::Player_sub_49EF50(struct Player *self, int a2)
 // 0x0049ef80: Player::sub_49EF80
 // IDA: Player::sub_49EF80
 // Ghidra: Player::FUN_0049ef80
-byte gta2::Player_sub_49EF80(struct Player *self)
+byte gta2::Player_sub_49EF80(Player *self)
 {
   bool bVar1;
   int iVar2;
@@ -929,7 +929,7 @@ byte gta2::Player_sub_49EF80(struct Player *self)
   
   iVar2 = FUN_00420360(&self->S103_);
   if (iVar2 != 0) {
-    bVar1 = gta2::Player_IsCurrentPlayer((struct Player *)&self->DeathReason,(struct Player *)&DAT_0066acdc);
+    bVar1 = gta2::Player_IsCurrentPlayer((Player *)&self->DeathReason,(Player *)&DAT_0066acdc);
     if (CONCAT31(extraout_var,bVar1) != 0) {
       return 1;
     }
@@ -941,7 +941,7 @@ byte gta2::Player_sub_49EF80(struct Player *self)
 // 0x0049f010: Player::sub_49F010
 // IDA: Player::sub_49F010
 // Ghidra: ---
-char gta2::Player_sub_49F010(struct Player *self)
+char gta2::Player_sub_49F010(Player *self)
 {
   char result; // al
   int v3; // edi
@@ -957,12 +957,12 @@ char gta2::Player_sub_49F010(struct Player *self)
   if ( do_show_instruments )
   {
     gta2::Player_sub_49ECC0(self);
-    gta2::Player_sub_41E260((struct Player *)&self->S103_4, (int)v10);
+    gta2::Player_sub_41E260((Player *)&self->S103_4, (int)v10);
     v3 = unk_66AB70;
-    if ( gta2::Car_sub_403800((struct Car *)v10, unk_66AB70 + 68) )
+    if ( gta2::Car_sub_403800((Car *)v10, unk_66AB70 + 68) )
       v4 = 3;
     else
-      v4 = (gta2::Car_sub_403800((struct Car *)v10, v3 + 64) != 0) + 1;
+      v4 = (gta2::Car_sub_403800((Car *)v10, v3 + 64) != 0) + 1;
     v8 = v4;
     gta2::Player_sub_4211A0(self, v10);
     v6 = gta2::FloatDecoder(v5);
@@ -982,7 +982,7 @@ char gta2::Player_sub_49F010(struct Player *self)
 // 0x0049f170: Player::sub_49F170
 // IDA: Player::sub_49F170
 // Ghidra: Player::FUN_0049f170
-byte gta2::Player_sub_49F170(struct Player *self)
+byte gta2::Player_sub_49F170(Player *self)
 {
   void *pvVar1;
   byte bVar2;
@@ -1006,7 +1006,7 @@ byte gta2::Player_sub_49F170(struct Player *self)
 // 0x0049f1b0: Player::sub_49F1B0
 // IDA: Player::sub_49F1B0
 // Ghidra: Player::FUN_0049f1b0
-void gta2::Player_sub_49F1B0(struct Player *self)
+void gta2::Player_sub_49F1B0(Player *self)
 {
   int iVar1;
   int *piVar2;
@@ -1022,7 +1022,7 @@ void gta2::Player_sub_49F1B0(struct Player *self)
   
   pvVar3 = self->CarPlayerPre->S___;
   if (pvVar3 != NULL) {
-    piVar2 = (int *)gta2::sub_401B90((struct Player *)&DAT_0066ac4c,&local_14,
+    piVar2 = (int *)gta2::sub_401B90((Player *)&DAT_0066ac4c,&local_14,
                                (int *)&DAT_0066afc0);
     local_14 = *piVar2;
     piVar2 = &local_14;
@@ -1035,7 +1035,7 @@ void gta2::Player_sub_49F1B0(struct Player *self)
     piVar2 = &local_14;
     *(undefined4 *)(iVar1 + 0x44) = puVar4[1];
     this_00 = (Sprite *)local_10;
-    puVar5 = gta2::sub_40EAB0(this_00,&local_16,(struct CarSystemManager *)&DAT_0066ae44,
+    puVar5 = gta2::sub_40EAB0(this_00,&local_16,(CarSystemManager *)&DAT_0066ae44,
                         iVar1 + 0x58);
     pvVar3 = (void *)FUN_0040f580(local_8,puVar5);
     puVar4 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(pvVar3,this_00,piVar2);
@@ -1043,7 +1043,7 @@ void gta2::Player_sub_49F1B0(struct Player *self)
     puVar6 = local_8;
     *(undefined4 *)(iVar1 + 0x74) = *puVar4;
     pvVar3 = gta2::Player_sub_401B40((SpawnPoint *)(iVar1 + 0x6c),(GlassInfo *)local_10,
-                        (struct S127 *)&DAT_0066ab98);
+                        (S127 *)&DAT_0066ab98);
     puVar4 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(pvVar3,puVar6,piVar2);
     *(undefined4 *)(iVar1 + 0x70) = *puVar4;
   }
@@ -1054,7 +1054,7 @@ void gta2::Player_sub_49F1B0(struct Player *self)
 // 0x0049f280: Player::sub_49F280
 // IDA: Player::sub_49F280
 // Ghidra: Player::FUN_0049f280
-void gta2::Player_sub_49F280(struct Player *self)
+void gta2::Player_sub_49F280(Player *self)
 {
   char cVar1;
   
@@ -1077,7 +1077,7 @@ void gta2::Player_sub_49F280(struct Player *self)
 // 0x0049f2d0: Player::sub_49F2D0
 // IDA: Player::sub_49F2D0
 // Ghidra: ---
-char gta2::Player_sub_49F2D0(struct Player *self)
+char gta2::Player_sub_49F2D0(Player *self)
 {
   char result; // al
   int v3; // eax
@@ -1106,31 +1106,31 @@ char gta2::Player_sub_49F2D0(struct Player *self)
 // 0x0049f350: Player::sub_49F350
 // IDA: Player::sub_49F350
 // Ghidra: ---
-char gta2::Player_sub_49F350(struct Player *self)
+char gta2::Player_sub_49F350(Player *self)
 {
   int v2; // eax
   int v3; // eax
   int v4; // eax
   char v5; // al
-  struct Car *sCar1; // edi
+  Car *sCar1; // edi
   struct Ped *Driver; // ebx
-  struct Car *v8; // eax
+  Car *v8; // eax
   int v9; // eax
   int v11; // [esp-8h] [ebp-1Ch]
   int v12; // [esp-8h] [ebp-1Ch]
   int v13; // [esp-4h] [ebp-18h]
   int v14; // [esp-4h] [ebp-18h]
-  struct SpriteS1 *a2; // [esp+10h] [ebp-4h] BYREF
+  SpriteS1 *a2; // [esp+10h] [ebp-4h] BYREF
 
-  a2 = (struct SpriteS1 *)self->field_6C;
-  v13 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a2);
-  v11 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&self->field_3C);
-  v2 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&self->field_38);
+  a2 = (SpriteS1 *)self->field_6C;
+  v13 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a2);
+  v11 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&self->field_3C);
+  v2 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&self->field_38);
   if ( !gta2::MapRelatedStruct_sub_466CF0(gMapRelatedStruct, v2, v11, v13) )
-    a2 = gta2::Player_sub_401B40((struct Player *)&self->field_6C, (struct S202 *)&a2, (int)&unk_66AC4C)->FirstElement;
-  v14 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&a2);
-  v12 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&self->field_3C);
-  v3 = gta2::AudioSourceParams_sub_41F9D0((struct AudioSourceParams *)&self->field_38);
+    a2 = gta2::Player_sub_401B40((Player *)&self->field_6C, (S202 *)&a2, (int)&unk_66AC4C)->FirstElement;
+  v14 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&a2);
+  v12 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&self->field_3C);
+  v3 = gta2::AudioSourceParams_sub_41F9D0((AudioSourceParams *)&self->field_38);
   v4 = gta2::MapRelatedStruct_sub_4653C0(gMapRelatedStruct, v3, v12, v14);
   if ( v4 )
   {
@@ -1168,18 +1168,18 @@ char gta2::Player_sub_49F350(struct Player *self)
 // 0x0049f460: Player::sub_49F460
 // IDA: Player::sub_49F460
 // Ghidra: Player::FUN_0049f460
-void gta2::Player_sub_49F460(struct Player *self,CollisionBox *pS61)
+void gta2::Player_sub_49F460(Player *self,CollisionBox *pS61)
 {
-  struct SpriteS1 *pSVar1;
+  SpriteS1 *pSVar1;
   char local_9;
   int local_8 [2];
   
   gta2::S63_sub_493090(pS61,&pS61,&local_9);
   local_8[0] = (int)(char)pS61;
-  pSVar1 = FUN_00401bd0(&DAT_0066ac10,(struct SpriteS1 *)(local_8 + 1),local_8);
+  pSVar1 = FUN_00401bd0(&DAT_0066ac10,(SpriteS1 *)(local_8 + 1),local_8);
   gta2::Player_sub_40E530((Point2D *)&DAT_0066b004,(int *)pSVar1);
   local_8[0] = (int)local_9;
-  pSVar1 = FUN_00401bd0(&DAT_0066ac10,(struct SpriteS1 *)(local_8 + 1),local_8);
+  pSVar1 = FUN_00401bd0(&DAT_0066ac10,(SpriteS1 *)(local_8 + 1),local_8);
   gta2::Player_sub_40E530((Point2D *)&DAT_0066b008,(int *)pSVar1);
   gta2::Player_sub_49EF50(self,0xf);
   return;
@@ -1189,7 +1189,7 @@ void gta2::Player_sub_49F460(struct Player *self,CollisionBox *pS61)
 // 0x0049f4e0: Player::sub_49F4E0
 // IDA: Player::sub_49F4E0
 // Ghidra: Player::FUN_0049f4e0
-void gta2::Player_sub_49F4E0(struct Player *self)
+void gta2::Player_sub_49F4E0(Player *self)
 {
   FUN_0040f680(&self->S103_,0x66b004);
   return;
@@ -1199,7 +1199,7 @@ void gta2::Player_sub_49F4E0(struct Player *self)
 // 0x0049f4f0: Player::sub_49F4F0
 // IDA: Player::sub_49F4F0
 // Ghidra: Player::FUN_0049f4f0
-void gta2::Player_sub_49F4F0(struct Player *self)
+void gta2::Player_sub_49F4F0(Player *self)
 {
   FUN_004828c0(&self->S103_,(int *)&DAT_0066b004);
   return;
@@ -1223,33 +1223,33 @@ undefined4 * gta2::Player_sub_49F570(int param_1,undefined4 *param_2)
 {
   int iVar1;
   undefined4 *puVar2;
-  struct SpriteS1 *pSVar3;
+  SpriteS1 *pSVar3;
   int *piVar4;
   void *self;
   undefined4 *puVar5;
   Player *local_1c [2];
-  struct SpriteS1 *local_14;
-  struct SpriteS1 *local_10;
+  SpriteS1 *local_14;
+  SpriteS1 *local_10;
   undefined1 local_c [4];
   undefined1 local_8 [8];
   
   if (*(int *)(*(int *)(param_1 + 0x5c) + 100) != 0) {
     puVar2 = (undefined4 *)FUN_00421cf0(&local_10);
-    local_10 = (struct SpriteS1 *)*puVar2;
+    local_10 = (SpriteS1 *)*puVar2;
     puVar2 = (undefined4 *)FUN_00421cf0(&local_14);
-    local_1c[0] = (struct Player *)*puVar2;
-    pSVar3 = gta2::S202_sub_401B20((Point2D *)&local_10,(struct SpriteS1 *)&local_14,
-                        (struct S127 *)local_1c);
+    local_1c[0] = (Player *)*puVar2;
+    pSVar3 = gta2::S202_sub_401B20((Point2D *)&local_10,(SpriteS1 *)&local_14,
+                        (S127 *)local_1c);
     local_14 = pSVar3->FirstElement;
     iVar1 = *(int *)(param_1 + 0x5c);
-    piVar4 = (int *)gta2::sub_401B90((struct Player *)local_1c,local_c,(int *)&local_14);
-    pSVar3 = (struct SpriteS1 *)
+    piVar4 = (int *)gta2::sub_401B90((Player *)local_1c,local_c,(int *)&local_14);
+    pSVar3 = (SpriteS1 *)
              FUN_0041e1a0((void *)(*(int *)(*(int *)(*(int *)(iVar1 + 100) + 0xc
                                                     ) + 0x58) + 0x30),local_1c,
                           piVar4);
     puVar2 = param_2;
     puVar5 = param_2;
-    piVar4 = (int *)gta2::sub_401B90((struct Player *)&local_10,&param_2,(int *)&local_14);
+    piVar4 = (int *)gta2::sub_401B90((Player *)&local_10,&param_2,(int *)&local_14);
     self = FUN_0041e1a0((void *)(*(int *)(*(int *)(*(int *)(iVar1 + 100) + 8) +
                                          0x58) + 0x30),local_8,piVar4);
     FUN_0040f5c0(self,puVar5,pSVar3);
@@ -1264,24 +1264,24 @@ undefined4 * gta2::Player_sub_49F570(int param_1,undefined4 *param_2)
 // 0x0049f660: Player::sub_49F660
 // IDA: Player::sub_49F660
 // Ghidra: ---
-SpriteS1 * gta2::Player_sub_49F660(struct Player *self, SpriteS1 *a2)
+SpriteS1 * gta2::Player_sub_49F660(Player *self, SpriteS1 *a2)
 {
-  struct Car *sCar1; // ecx
-  struct S900 *v4; // eax
-  struct S900 *v6; // [esp-8h] [ebp-14h]
+  Car *sCar1; // ecx
+  S900 *v4; // eax
+  S900 *v6; // [esp-8h] [ebp-14h]
   char v7[4]; // [esp+4h] [ebp-8h] BYREF
   char v8[4]; // [esp+8h] [ebp-4h] BYREF
 
   sCar1 = self->sCar1;
   if ( sCar1->TrailerCtrl )
   {
-    v6 = gta2::Car_sub_421CF0(*((Car **)sCar1->TrailerCtrl + 3), (struct S900 *)v7);
-    v4 = gta2::Car_sub_421CF0(*((Car **)self->sCar1->TrailerCtrl + 2), (struct S900 *)v8);
-    gta2::S202_sub_401B20((struct S202 *)v4, a2, (struct PublicTransport *)v6);
+    v6 = gta2::Car_sub_421CF0(*((Car **)sCar1->TrailerCtrl + 3), (S900 *)v7);
+    v4 = gta2::Car_sub_421CF0(*((Car **)self->sCar1->TrailerCtrl + 2), (S900 *)v8);
+    gta2::S202_sub_401B20((S202 *)v4, a2, (PublicTransport *)v6);
   }
   else
   {
-    gta2::Car_sub_421CF0(sCar1, (struct S900 *)a2);
+    gta2::Car_sub_421CF0(sCar1, (S900 *)a2);
   }
   return a2;
 }
@@ -1292,14 +1292,14 @@ SpriteS1 * gta2::Player_sub_49F660(struct Player *self, SpriteS1 *a2)
 // Ghidra: FUN_0049f6c0
 SpriteS1 * gta2::Player_sub_49F6C0(int param_1,SpriteS1 *param_2)
 {
-  struct S127 *pS127;
+  S127 *pS127;
   Point2D *self;
-  struct SpriteS1 *pSpriteS1;
+  SpriteS1 *pSpriteS1;
   undefined1 local_8 [4];
   undefined1 local_4 [4];
   
   if (*(int *)(*(int *)(param_1 + 0x5c) + 100) != 0) {
-    pS127 = (struct S127 *)FUN_00425790(local_8);
+    pS127 = (S127 *)FUN_00425790(local_8);
     pSpriteS1 = param_2;
     self = (Point2D *)FUN_00425790(local_4);
     gta2::S202_sub_401B20(self,pSpriteS1,pS127);
@@ -1331,30 +1331,30 @@ undefined4 * gta2::Player_sub_49F720(int param_1,undefined4 *param_2)
 // 0x0049f930: Player::sub_49F930
 // IDA: Player::sub_49F930
 // Ghidra: ---
-int * gta2::Player_sub_49F930(struct Player *self, int *a2)
+int * gta2::Player_sub_49F930(Player *self, int *a2)
 {
-  struct SpriteS1 *v3; // eax
-  struct SpriteS1 *v4; // eax
+  SpriteS1 *v3; // eax
+  SpriteS1 *v4; // eax
   void *v5; // ecx
-  struct SpriteS1 *v6; // eax
+  SpriteS1 *v6; // eax
   void *v7; // ecx
-  struct Car *v8; // eax
+  Car *v8; // eax
   void **v9; // eax
-  struct Car *v10; // eax
-  struct Car *v11; // eax
-  struct Car *sCar1; // edx
+  Car *v10; // eax
+  Car *v11; // eax
+  Car *sCar1; // edx
   void *Car; // eax
   struct Player *TrailerCtrl; // ecx
-  struct SpriteS1 *v15; // eax
+  SpriteS1 *v15; // eax
   void *v16; // ecx
-  struct SpriteS1 *v17; // eax
+  SpriteS1 *v17; // eax
   void *v18; // ecx
-  struct SpriteS1 *v19; // eax
-  struct Car *v20; // eax
+  SpriteS1 *v19; // eax
+  Car *v20; // eax
   void **v21; // eax
-  struct Car *v22; // eax
-  struct Car *v24; // [esp-14h] [ebp-48h]
-  struct Car *v25; // [esp-14h] [ebp-48h]
+  Car *v22; // eax
+  Car *v24; // [esp-14h] [ebp-48h]
+  Car *v25; // [esp-14h] [ebp-48h]
   void **v26; // [esp-10h] [ebp-44h]
   void **v27; // [esp-10h] [ebp-44h]
   _DWORD *v28; // [esp-8h] [ebp-3Ch]
@@ -1369,19 +1369,19 @@ int * gta2::Player_sub_49F930(struct Player *self, int *a2)
 
   v30 = (_DWORD *)gta2::Player_sub_40EC20(self, (int)&a1, (int)&stru_66AC54, (int)&stru_66AD3C, (int)&unk_66ACE8);
   v28 = gta2::sub_421EF0((int)self->sCar1, v33);
-  v3 = gta2::Player_sub_401B40((struct Player *)&unk_66AC00, &pS202, (int)&stru_66AC54.UnitCars);
-  v26 = (void **)gta2::sub_403840(&pS202.S202, (struct Player *)&pS202.S202, v3);
-  v4 = gta2::Player_sub_401B40((struct Player *)&unk_66ABBC, (struct S202 *)&pS202.CarSystemManager, (int)&unk_66ACD4);
-  v24 = (struct Car *)gta2::sub_403840(v5, (struct Player *)&pS202.field_C, v4);
-  v6 = gta2::Player_sub_401B40((struct Player *)&unk_66ABB8, (struct S202 *)&pS202.field_10, (int)&unk_66ACD0);
-  v8 = (struct Car *)gta2::sub_403840(v7, (struct Player *)&pS202.pPlayer, v6);
+  v3 = gta2::Player_sub_401B40((Player *)&unk_66AC00, &pS202, (int)&stru_66AC54.UnitCars);
+  v26 = (void **)gta2::sub_403840(&pS202.S202, (Player *)&pS202.S202, v3);
+  v4 = gta2::Player_sub_401B40((Player *)&unk_66ABBC, (S202 *)&pS202.CarSystemManager, (int)&unk_66ACD4);
+  v24 = (Car *)gta2::sub_403840(v5, (Player *)&pS202.field_C, v4);
+  v6 = gta2::Player_sub_401B40((Player *)&unk_66ABB8, (S202 *)&pS202.field_10, (int)&unk_66ACD0);
+  v8 = (Car *)gta2::sub_403840(v7, (Player *)&pS202.pPlayer, v6);
   v9 = sub_49E2C0((void **)&pS202.field_18, v8, v24, v26);
-  v10 = (struct Car *)gta2::sub_401B90(v9, &a2a, v28);
+  v10 = (Car *)gta2::sub_401B90(v9, &a2a, v28);
   v11 = gta2::sub_41E130(&pS202.field_1C, v10, v30);
   sCar1 = self->sCar1;
   Car = v11->Car;
   a1 = (int)Car;
-  TrailerCtrl = (struct Player *)sCar1->TrailerCtrl;
+  TrailerCtrl = (Player *)sCar1->TrailerCtrl;
   if ( TrailerCtrl )
   {
     v31 = (void **)gta2::Player_sub_40EC20(
@@ -1391,15 +1391,15 @@ int * gta2::Player_sub_49F930(struct Player *self, int *a2)
                      (int)&stru_66ADE0,
                      (int)&unk_66ACE8);
     v29 = gta2::sub_421EF0(*((_DWORD *)self->sCar1->TrailerCtrl + 3), &pS202.field_18);
-    v15 = gta2::Player_sub_401B40((struct Player *)&stru_66AC54.field_1C, (struct S202 *)&pS202.field_10, (int)&unk_66AB98);
-    v27 = (void **)gta2::sub_403840(v16, (struct Player *)&pS202.field_C, v15);
-    v17 = gta2::Player_sub_401B40(&unk_66ACC4, (struct S202 *)&pS202.CarSystemManager, (int)&stru_66AD3C.field_30);
-    v25 = (struct Car *)gta2::sub_403840(v18, (struct Player *)&pS202.S202, v17);
+    v15 = gta2::Player_sub_401B40((Player *)&stru_66AC54.field_1C, (S202 *)&pS202.field_10, (int)&unk_66AB98);
+    v27 = (void **)gta2::sub_403840(v16, (Player *)&pS202.field_C, v15);
+    v17 = gta2::Player_sub_401B40(&unk_66ACC4, (S202 *)&pS202.CarSystemManager, (int)&stru_66AD3C.field_30);
+    v25 = (Car *)gta2::sub_403840(v18, (Player *)&pS202.S202, v17);
     v19 = gta2::Player_sub_401B40(&unk_66ACC0, &pS202, (int)&stru_66AD3C.field_2C);
-    v20 = (struct Car *)gta2::sub_403840(&a2a, (struct Player *)&a2a, v19);
+    v20 = (Car *)gta2::sub_403840(&a2a, (Player *)&a2a, v19);
     v21 = sub_49E2C0((void **)v33, v20, v25, v27);
-    v22 = (struct Car *)gta2::sub_401B90(v21, &pS202.pPlayer, v29);
-    Car = *sub_49E2C0((void **)v36, (struct Car *)&a1, v22, v31);
+    v22 = (Car *)gta2::sub_401B90(v21, &pS202.pPlayer, v29);
+    Car = *sub_49E2C0((void **)v36, (Car *)&a1, v22, v31);
   }
   *a2 = (int)Car;
   return a2;
@@ -1409,13 +1409,13 @@ int * gta2::Player_sub_49F930(struct Player *self, int *a2)
 // 0x0049fac0: Player::sub_49FAC0
 // IDA: Player::sub_49FAC0
 // Ghidra: ---
-ushort gta2::Player_sub_49FAC0(struct Player *self)
+ushort gta2::Player_sub_49FAC0(Player *self)
 {
   ushort result; // ax
   int v3; // [esp+4h] [ebp-4h] BYREF
 
-  gta2::S103_sub_41E1E0((struct S103 *)&self->Tango1);
-  gta2::S103_sub_41E1E0((struct S103 *)&self->field_50);
+  gta2::S103_sub_41E1E0((S103 *)&self->Tango1);
+  gta2::S103_sub_41E1E0((S103 *)&self->field_50);
   gta2::bitShiftLeft1(&v3, 0);
   *(_DWORD *)&self->Attack = v3;
   result = gta2::bitShiftLeft1(&v3, 0);
@@ -1427,13 +1427,13 @@ ushort gta2::Player_sub_49FAC0(struct Player *self)
 // 0x0049fb00: Player::sub_49FB00
 // IDA: Player::sub_49FB00
 // Ghidra: ---
-char gta2::Player_sub_49FB00(struct Player *self, char a2, char a3, char a4, char a5, char a6)
+char gta2::Player_sub_49FB00(Player *self, char a2, char a3, char a4, char a5, char a6)
 {
   char result; // al
   char v8; // cl
   char CameraOrPhysics1_high; // cl
 
-  if ( gta2::SpriteS1_sub_420360((struct SpriteS1 *)&self->S103_4) )
+  if ( gta2::SpriteS1_sub_420360((SpriteS1 *)&self->S103_4) )
   {
     HIBYTE(self->CameraOrPhysics1) = a2;
     result = 0;
@@ -1495,14 +1495,14 @@ LABEL_11:
 // Ghidra: FUN_0049fbe0
 void gta2::Player_sub_49FBE0(int param_1,undefined4 *param_2,undefined4 *param_3)
 {
-  struct Car *self;
-  struct SpriteS1 *pSVar1;
+  Car *self;
+  SpriteS1 *pSVar1;
   bool bVar2;
   undefined4 *puVar3;
   int *piVar4;
   undefined3 extraout_var;
   int iVar5;
-  struct S127 *pS127;
+  S127 *pS127;
   undefined3 extraout_var_00;
   undefined3 extraout_var_01;
   SpawnPoint *pSVar6;
@@ -1551,13 +1551,13 @@ void gta2::Player_sub_49FBE0(int param_1,undefined4 *param_2,undefined4 *param_3
   pSVar6 = (SpawnPoint *)*puVar3;
   local_14 = pSVar6;
   if ((((*(char *)(param_1 + 0xa6) != '\0') ||
-       (bVar2 = gta2::Car_sub_403800((struct Car *)&local_14,(int *)&DAT_0066acdc),
+       (bVar2 = gta2::Car_sub_403800((Car *)&local_14,(int *)&DAT_0066acdc),
        CONCAT31(extraout_var,bVar2) == 0)) ||
       (iVar5 = DecoderFloat((void *)(param_1 + 0x6c)),
       (char)iVar5 != *(char *)(param_1 + 0xa7))) &&
      ((*(char *)(param_1 + 0xaa) == '\0' || (*(char *)(param_1 + 0xab) == '\0'))
      )) {
-    bVar2 = gta2::Car_sub_403800((struct Car *)&local_14,(int *)&DAT_0066acdc);
+    bVar2 = gta2::Car_sub_403800((Car *)&local_14,(int *)&DAT_0066acdc);
     if ((CONCAT31(extraout_var_01,bVar2) != 0) &&
        ((self->S___ != NULL &&
         (iVar5 = FUN_0040f410(self),
@@ -1568,12 +1568,12 @@ void gta2::Player_sub_49FBE0(int param_1,undefined4 *param_2,undefined4 *param_3
     *param_2 = pSVar6;
     return;
   }
-  pS127 = (struct S127 *)FUN_0042a630(&local_8,param_1 + 0x6c);
+  pS127 = (S127 *)FUN_0042a630(&local_8,param_1 + 0x6c);
   puVar3 = (undefined4 *)
            gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ac4c,(GlassInfo *)local_10,pS127);
-  pSVar1 = (struct SpriteS1 *)*puVar3;
+  pSVar1 = (SpriteS1 *)*puVar3;
   local_10[0] = pSVar1;
-  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&local_14,(struct SpriteS1 *)local_10);
+  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&local_14,(SpriteS1 *)local_10);
   if (CONCAT31(extraout_var_00,bVar2) == 0) {
     *param_3 = pSVar6;
     *param_2 = pSVar6;
@@ -1588,7 +1588,7 @@ void gta2::Player_sub_49FBE0(int param_1,undefined4 *param_2,undefined4 *param_3
 // 0x0049fdc0: Player::sub_49FDC0
 // IDA: Player::sub_49FDC0
 // Ghidra: Player::thunk_FUN_0049fdc0
-void gta2::Player_sub_49FDC0(struct Player *self)
+void gta2::Player_sub_49FDC0(Player *self)
 {
   Sprite *this_00;
   undefined4 uVar1;
@@ -1596,64 +1596,64 @@ void gta2::Player_sub_49FDC0(struct Player *self)
   char cVar3;
   undefined4 *puVar4;
   undefined3 extraout_var;
-  struct SpriteS1 *pSVar5;
+  SpriteS1 *pSVar5;
   undefined3 extraout_var_00;
   undefined4 *puVar6;
   undefined3 extraout_var_01;
   int *pConditionValue;
   undefined3 extraout_var_02;
   undefined4 *puVar7;
-  struct SpriteS1 *pSVar8;
+  SpriteS1 *pSVar8;
   undefined3 extraout_var_03;
   undefined3 extraout_var_04;
   undefined3 extraout_var_05;
-  struct SpriteS1 *pSStack_8;
+  SpriteS1 *pSStack_8;
   undefined1 auStack_4 [4];
   
   puVar4 = (undefined4 *)
            gta2::MapRelatedStruct_sub_466F70(gMapRelatedStruct,&pSStack_8,self->field27_0x38,
                       self->field28_0x3c);
-  pSVar8 = (struct SpriteS1 *)*puVar4;
+  pSVar8 = (SpriteS1 *)*puVar4;
   pSStack_8 = pSVar8;
-  bVar2 = gta2::Player_IsCurrentPlayer((struct Player *)&pSStack_8,(struct Player *)&DAT_0066acdc);
+  bVar2 = gta2::Player_IsCurrentPlayer((Player *)&pSStack_8,(Player *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar2) != 0) {
     pSStack_8 = _DAT_0066ac4c;
     pSVar8 = _DAT_0066ac4c;
   }
   puVar4 = &self->Debug;
-  pSVar5 = gta2::S202_sub_401B20((Point2D *)puVar4,(struct SpriteS1 *)auStack_4,
-                      (struct S127 *)&DAT_0066aec0);
-  bVar2 = gta2::Player_sub_40CE70((struct Player *)&pSStack_8,(struct Player *)pSVar5);
+  pSVar5 = gta2::S202_sub_401B20((Point2D *)puVar4,(SpriteS1 *)auStack_4,
+                      (S127 *)&DAT_0066aec0);
+  bVar2 = gta2::Player_sub_40CE70((Player *)&pSStack_8,(Player *)pSVar5);
   if (CONCAT31(extraout_var_00,bVar2) != 0) {
     puVar6 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&pSStack_8,(GlassInfo *)auStack_4,
-                        (struct S127 *)&DAT_0066ac4c);
+                        (S127 *)&DAT_0066ac4c);
     puVar6 = gta2::MapRelatedStruct_sub_466E20(gMapRelatedStruct,&pSStack_8,self->field27_0x38,
-                        self->field28_0x3c,(struct SpriteS1 *)*puVar6);
-    pSVar8 = (struct SpriteS1 *)*puVar6;
+                        self->field28_0x3c,(SpriteS1 *)*puVar6);
+    pSVar8 = (SpriteS1 *)*puVar6;
     pSStack_8 = pSVar8;
-    pSVar5 = gta2::S202_sub_401B20((Point2D *)puVar4,(struct SpriteS1 *)auStack_4,
-                        (struct S127 *)&DAT_0066ac4c);
-    bVar2 = gta2::Player_sub_40CE70((struct Player *)&pSStack_8,(struct Player *)pSVar5);
+    pSVar5 = gta2::S202_sub_401B20((Point2D *)puVar4,(SpriteS1 *)auStack_4,
+                        (S127 *)&DAT_0066ac4c);
+    bVar2 = gta2::Player_sub_40CE70((Player *)&pSStack_8,(Player *)pSVar5);
     if (CONCAT31(extraout_var_01,bVar2) != 0) {
-      pSVar8 = (struct SpriteS1 *)*puVar4;
+      pSVar8 = (SpriteS1 *)*puVar4;
       pSStack_8 = pSVar8;
     }
   }
   pConditionValue =
        (int *)gta2::Player_sub_401B40((SpawnPoint *)puVar4,(GlassInfo *)auStack_4,
-                         (struct S127 *)&DAT_0066aec0);
-  bVar2 = gta2::Player_CheckCondition((struct Player *)&pSStack_8,pConditionValue);
+                         (S127 *)&DAT_0066aec0);
+  bVar2 = gta2::Player_CheckCondition((Player *)&pSStack_8,pConditionValue);
   if (CONCAT31(extraout_var_02,bVar2) == 0) {
-    bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&pSStack_8,(struct SpriteS1 *)puVar4);
+    bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&pSStack_8,(SpriteS1 *)puVar4);
     if (CONCAT31(extraout_var_04,bVar2) != 0) {
       gta2::Player_sub_49EE80(self);
       this_00 = self->CarPlayerPre->CarSprite;
       gta2::SpriteS1_sub_420600(this_00,(int)this_00->Point2D1,
                           *(int *)&this_00->field_0x18,(int)pSVar8);
-      cVar3 = gta2::SpriteS1_sub_4BD670((struct SpriteS1 *)self->CarPlayerPre->CarSprite);
+      cVar3 = gta2::SpriteS1_sub_4BD670((SpriteS1 *)self->CarPlayerPre->CarSprite);
       if (cVar3 != '\0') {
-        pSStack_8 = (struct SpriteS1 *)*puVar4;
+        pSStack_8 = (SpriteS1 *)*puVar4;
       }
     }
   }
@@ -1661,23 +1661,23 @@ void gta2::Player_sub_49FDC0(struct Player *self)
     puVar7 = (undefined4 *)FUN_0049fbe0(&pSStack_8,auStack_4);
     puVar6 = &self->ID;
     *puVar6 = *puVar7;
-    pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar4,(struct SpriteS1 *)auStack_4,(struct S127 *)puVar6);
+    pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar4,(SpriteS1 *)auStack_4,(S127 *)puVar6);
     pSStack_8 = pSVar8->FirstElement;
-    bVar2 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&stack0x00000004,(struct Car *)&DAT_0066acdc);
+    bVar2 = gta2::Car_IsTrainOrTrainCarriage((Car *)&stack0x00000004,(Car *)&DAT_0066acdc);
     if (CONCAT31(extraout_var_03,bVar2) != 0) {
       FUN_0048a1a0(puVar6,(int *)&stack0x00000004);
     }
   }
   puVar6 = (undefined4 *)
            gta2::Player_sub_401B40((SpawnPoint *)&pSStack_8,(GlassInfo *)auStack_4,
-                      (struct S127 *)puVar4);
+                      (S127 *)puVar4);
   uVar1 = *puVar6;
   self->field44_0x70 = (char)uVar1;
   self->field45_0x71 = (char)((uint)uVar1 >> 8);
   self->field46_0x72 = (char)((uint)uVar1 >> 0x10);
   self->field47_0x73 = (char)((uint)uVar1 >> 0x18);
   gta2::Player_sub_40E530((Point2D *)puVar4,(int *)&self->field44_0x70);
-  bVar2 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&stack0x00000004,(struct Car *)&DAT_0066acdc);
+  bVar2 = gta2::Car_IsTrainOrTrainCarriage((Car *)&stack0x00000004,(Car *)&DAT_0066acdc);
   if (CONCAT31(extraout_var_05,bVar2) != 0) {
     FUN_0048a1a0(&self->field44_0x70,(int *)&stack0x00000004);
   }
@@ -1690,7 +1690,7 @@ void gta2::Player_sub_49FDC0(struct Player *self)
 // Ghidra: FUN_0049ff80
 void gta2::Player_sub_49FF80(int param_1,byte param_2)
 {
-  struct SpriteS1 *self;
+  SpriteS1 *self;
   byte bVar1;
   bool bVar2;
   undefined4 *puVar3;
@@ -1718,7 +1718,7 @@ void gta2::Player_sub_49FF80(int param_1,byte param_2)
       bVar1 = bVar1 * '\x02';
     } while (iVar4 < 4);
   }
-  gta2::CameraOrPhysics_sub_4102A0((struct CameraOrPhysics *)gCameraOrPhysics,(GlassInfo *)self);
+  gta2::CameraOrPhysics_sub_4102A0((CameraOrPhysics *)gCameraOrPhysics,(GlassInfo *)self);
   return;
 }
 
@@ -1726,14 +1726,14 @@ void gta2::Player_sub_49FF80(int param_1,byte param_2)
 // 0x004a0020: Player::sub_4A0020
 // IDA: Player::sub_4A0020
 // Ghidra: Player::FUN_004a0020
-byte gta2::Player_sub_4A0020(struct Player *self)
+byte gta2::Player_sub_4A0020(Player *self)
 {
   void *pvVar1;
   char cVar2;
-  struct SpriteS1 *pSVar3;
-  struct SpriteS1 *this_00;
+  SpriteS1 *pSVar3;
+  SpriteS1 *this_00;
   
-  this_00 = (struct SpriteS1 *)self->CarPlayerPre->CarSprite;
+  this_00 = (SpriteS1 *)self->CarPlayerPre->CarSprite;
   cVar2 = gta2::SpriteS1_sub_4BD670(this_00);
   if ((cVar2 == '\0') &&
      (pSVar3 = gta2::SpriteS1_sub_4BDFE0(this_00,0), pSVar3 == NULL)) {
@@ -1800,8 +1800,8 @@ void gta2::Player_sub_4A0120(void *self,Player *pPlayer,GlassInfo *pCar,Ped *par
   undefined2 *puVar6;
   undefined3 extraout_var;
   int Type;
-  struct CollisionBox *pEventHandler;
-  struct CollisionBox *pCVar7;
+  CollisionBox *pEventHandler;
+  CollisionBox *pCVar7;
   int y;
   undefined1 *puVar8;
   int z;
@@ -1820,26 +1820,26 @@ void gta2::Player_sub_4A0120(void *self,Player *pPlayer,GlassInfo *pCar,Ped *par
     iVar3 = FUN_00420360(this_00);
     if (iVar3 == 0) {
       puVar4 = (undefined4 *)FUN_0040f600(&pCar,local_18,this_00);
-      local_10 = (struct Player *)*puVar4;
-      pPlayer = (struct Player *)0x2;
-      local_c = (struct Player *)puVar4[1];
+      local_10 = (Player *)*puVar4;
+      pPlayer = (Player *)0x2;
+      local_c = (Player *)puVar4[1];
       ppPVar9 = &pPlayer;
       puVar8 = local_8;
-      FUN_0040f5c0(this_00,local_18,(struct SpriteS1 *)&pCar);
+      FUN_0040f5c0(this_00,local_18,(SpriteS1 *)&pCar);
       piVar5 = (int *)gta2::FUN_0049e360(puVar8,ppPVar9);
       iVar3 = *piVar5;
       y = piVar5[1];
-      puVar6 = gta2::Player_FUN_0040f790((struct Player *)&local_10,(undefined2 *)&pPlayer);
+      puVar6 = gta2::Player_FUN_0040f790((Player *)&local_10,(undefined2 *)&pPlayer);
       local_18[0] = CONCAT22(local_18[0]._2_2_,*puVar6);
-      piVar5 = gta2::Player_sub_41E260((struct Player *)&local_10,(int *)&pPlayer);
-      pPlayer = (struct Player *)*piVar5;
-      bVar2 = gta2::Car_sub_403800((struct Car *)&pPlayer,(int *)&DAT_0066acdc);
+      piVar5 = gta2::Player_sub_41E260((Player *)&local_10,(int *)&pPlayer);
+      pPlayer = (Player *)*piVar5;
+      bVar2 = gta2::Car_sub_403800((Car *)&pPlayer,(int *)&DAT_0066acdc);
       if (CONCAT31(extraout_var,bVar2) != 0) {
         z = *(int *)((int)self + 0x6c);
         uVar10 = local_18[0];
         Type = gta2::Player_physicsSelect(pPlayer,pPlayer);
         pEventHandler =
-             (struct CollisionBox *)
+             (CollisionBox *)
              gta2::Object_SpawnObject(gObject,Type,iVar3,y,z,(short)uVar10);
         if ((pEventHandler != NULL) &&
            (pCVar7 = pEventHandler,
@@ -1849,7 +1849,7 @@ void gta2::Player_sub_4A0120(void *self,Player *pPlayer,GlassInfo *pCar,Ped *par
         }
       }
     }
-    this_00->car = (struct Car *)pCar;
+    this_00->car = (Car *)pCar;
     this_00->pPed = param_3;
     return;
   }
@@ -1862,24 +1862,24 @@ void gta2::Player_sub_4A0120(void *self,Player *pPlayer,GlassInfo *pCar,Ped *par
 // 0x004a0290: Player::sub_4A0290
 // IDA: Player::sub_4A0290
 // Ghidra: ---
-char gta2::Player_sub_4A0290(struct Player *self)
+char gta2::Player_sub_4A0290(Player *self)
 {
-  struct Car *sCar1; // edi
-  struct Tango *v3; // eax
-  struct SpriteS1 *v4; // eax
+  Car *sCar1; // edi
+  Tango *v3; // eax
+  SpriteS1 *v4; // eax
   int v5; // ebx
-  struct SpriteS1 *v6; // eax
-  struct SpriteS1 *v7; // eax
+  SpriteS1 *v6; // eax
+  SpriteS1 *v7; // eax
   int State; // edi
-  struct SpriteS1 *v9; // eax
+  SpriteS1 *v9; // eax
   int v10; // edi
-  struct SpriteS1 *v11; // eax
-  struct S103 **p_pS103; // ecx
+  SpriteS1 *v11; // eax
+  S103 **p_pS103; // ecx
   char result; // al
-  struct SpriteS1 *v14; // [esp-8h] [ebp-2Ch]
-  struct SpriteS1 *FirstElement; // [esp+Ch] [ebp-18h] BYREF
-  struct SpriteS1 *a2; // [esp+10h] [ebp-14h] BYREF
-  struct SpriteS1 *a3; // [esp+14h] [ebp-10h] BYREF
+  SpriteS1 *v14; // [esp-8h] [ebp-2Ch]
+  SpriteS1 *FirstElement; // [esp+Ch] [ebp-18h] BYREF
+  SpriteS1 *a2; // [esp+10h] [ebp-14h] BYREF
+  SpriteS1 *a3; // [esp+14h] [ebp-10h] BYREF
   char v18[4]; // [esp+18h] [ebp-Ch] BYREF
   _DWORD v19[2]; // [esp+1Ch] [ebp-8h] BYREF
 
@@ -1887,59 +1887,59 @@ char gta2::Player_sub_4A0290(struct Player *self)
   {
     sCar1 = self->sCar1;
     gta2::Car_sub_48A930(sCar1, &a2);
-    v4 = gta2::Radar_AddBlip(v3, (struct SpriteS1 *)&a3, (struct PublicTransport *)&stru_66ADE0.field_10);
+    v4 = gta2::Radar_AddBlip(v3, (SpriteS1 *)&a3, (PublicTransport *)&stru_66ADE0.field_10);
     v5 = unk_66AB78;
     FirstElement = v4->FirstElement;
-    v6 = gta2::Car_sub_421910(sCar1, (struct SpriteS1 *)&a3, *(SpriteS1 **)(unk_66AB78 + 8));
+    v6 = gta2::Car_sub_421910(sCar1, (SpriteS1 *)&a3, *(SpriteS1 **)(unk_66AB78 + 8));
     v14 = *(SpriteS1 **)(v5 + 4);
     a2 = v6->FirstElement;
-    v7 = gta2::Car_sub_421910(sCar1, (struct SpriteS1 *)&a3, v14);
+    v7 = gta2::Car_sub_421910(sCar1, (SpriteS1 *)&a3, v14);
     State = self->State;
     a3 = v7->FirstElement;
     if ( State == 7
       || State == 8
       || State == 9
-      || (gta2::Player_sub_40CE70((struct Player *)&self->field_88, (_DWORD *)(v5 + 40))
-       || self->field_AC && gta2::Car_sub_403800((struct Car *)(v5 + 32), (int)&unk_66ACDC))
+      || (gta2::Player_sub_40CE70((Player *)&self->field_88, (_DWORD *)(v5 + 40))
+       || self->field_AC && gta2::Car_sub_403800((Car *)(v5 + 32), (int)&unk_66ACDC))
       && State != 6 )
     {
-      v9 = gta2::JustCopyByPtrAtoC(&FirstElement, (struct SpriteS1 *)v18);
-      gta2::S103_sub_401D20((struct S103 *)v19, v9, &a2);
+      v9 = gta2::JustCopyByPtrAtoC(&FirstElement, (SpriteS1 *)v18);
+      gta2::S103_sub_401D20((S103 *)v19, v9, &a2);
       gta2::Player_sub_4A0120(self, 0);
-      gta2::S103_sub_401D20((struct S103 *)v19, &FirstElement, &a2);
+      gta2::S103_sub_401D20((S103 *)v19, &FirstElement, &a2);
       gta2::Player_sub_4A0120(self, (void *)1);
     }
     else
     {
-      gta2::S103_sub_41E1E0((struct S103 *)&self->S103_);
-      gta2::S103_sub_41E1E0((struct S103 *)&self->S103_1);
+      gta2::S103_sub_41E1E0((S103 *)&self->S103_);
+      gta2::S103_sub_41E1E0((S103 *)&self->S103_1);
     }
     v10 = self->State;
     if ( v10 == 7
       || v10 == 8
       || v10 == 9
-      || (gta2::Player_sub_40CE70((struct Player *)&self->field_84, (_DWORD *)(unk_66AB78 + 36))
-       || self->field_AC && gta2::Car_sub_403800((struct Car *)(unk_66AB70 + 8), (int)&unk_66ACDC))
+      || (gta2::Player_sub_40CE70((Player *)&self->field_84, (_DWORD *)(unk_66AB78 + 36))
+       || self->field_AC && gta2::Car_sub_403800((Car *)(unk_66AB70 + 8), (int)&unk_66ACDC))
       && v10 != 6 )
     {
-      v11 = gta2::JustCopyByPtrAtoC(&FirstElement, (struct SpriteS1 *)v18);
-      gta2::S103_sub_401D20((struct S103 *)v19, v11, &a3);
+      v11 = gta2::JustCopyByPtrAtoC(&FirstElement, (SpriteS1 *)v18);
+      gta2::S103_sub_401D20((S103 *)v19, v11, &a3);
       gta2::Player_sub_4A0120(self, (void *)3);
-      gta2::S103_sub_401D20((struct S103 *)v19, &FirstElement, &a3);
+      gta2::S103_sub_401D20((S103 *)v19, &FirstElement, &a3);
       gta2::Player_sub_4A0120(self, (void *)2);
       goto LABEL_23;
     }
-    gta2::S103_sub_41E1E0((struct S103 *)&self->S103_2);
+    gta2::S103_sub_41E1E0((S103 *)&self->S103_2);
     p_pS103 = &self->pS103;
   }
   else
   {
-    gta2::S103_sub_41E1E0((struct S103 *)&self->S103_);
-    gta2::S103_sub_41E1E0((struct S103 *)&self->S103_1);
-    gta2::S103_sub_41E1E0((struct S103 *)&self->pS103);
+    gta2::S103_sub_41E1E0((S103 *)&self->S103_);
+    gta2::S103_sub_41E1E0((S103 *)&self->S103_1);
+    gta2::S103_sub_41E1E0((S103 *)&self->pS103);
     p_pS103 = &self->S103_2;
   }
-  gta2::S103_sub_41E1E0((struct S103 *)p_pS103);
+  gta2::S103_sub_41E1E0((S103 *)p_pS103);
 LABEL_23:
   result = self->field_AC;
   if ( result )
@@ -1951,7 +1951,7 @@ LABEL_23:
 // 0x004a0560: Player::sub_4A0560
 // IDA: Player::sub_4A0560
 // Ghidra: ---
-char gta2::Player_sub_4A0560(struct Player *self)
+char gta2::Player_sub_4A0560(Player *self)
 {
   _DWORD *TrailerCtrl; // eax
   struct Player *v3; // esi
@@ -1980,21 +1980,21 @@ char gta2::Player_sub_4A0560(struct Player *self)
 // Ghidra: FUN_004a0850
 void gta2::Player_sub_4A0850(int param_1,undefined4 *param_2,Car *param_3,Ped *param_4)
 {
-  struct Car *pCVar1;
+  Car *pCVar1;
   void *pvVar2;
-  struct S127 *pS127;
+  S127 *pS127;
   SpawnPoint *self;
   int *piVar3;
   undefined4 *puVar4;
-  struct Passenger **ppPVar5;
+  Passenger **ppPVar5;
   GlassInfo *pGVar6;
-  struct Car *pCVar7;
+  Car *pCVar7;
   undefined4 local_c;
   struct Ped *local_8;
   
   local_c = *param_2;
-  local_8 = (struct Ped *)param_2[1];
-  if (param_4 == (struct Ped *)0x1) {
+  local_8 = (Ped *)param_2[1];
+  if (param_4 == (Ped *)0x1) {
     FUN_0040f6b0(&local_c,(GlassInfo *)(param_1 + 0x58));
     FUN_0040f680(&local_c,param_1 + 0x38);
   }
@@ -2003,13 +2003,13 @@ void gta2::Player_sub_4A0850(int param_1,undefined4 *param_2,Car *param_3,Ped *p
   puVar4 = &param_2;
   pCVar7 = pCVar1;
   pvVar2 = gta2::Player_sub_401B40((SpawnPoint *)&local_8,(GlassInfo *)&param_4,
-                      (struct S127 *)(param_1 + 0x34));
-  pS127 = (struct S127 *)gta2::WorldCoordinateToScreenCoord(pvVar2,puVar4,(int *)pCVar7);
+                      (S127 *)(param_1 + 0x34));
+  pS127 = (S127 *)gta2::WorldCoordinateToScreenCoord(pvVar2,puVar4,(int *)pCVar7);
   pGVar6 = (GlassInfo *)&param_3;
   ppPVar5 = &pCVar1->Passengers;
   puVar4 = &local_c;
   pvVar2 = gta2::Player_sub_401B40((SpawnPoint *)&local_c,(GlassInfo *)&stack0xfffffffc,
-                      (struct S127 *)(param_1 + 0x30));
+                      (S127 *)(param_1 + 0x30));
   self = (SpawnPoint *)
          gta2::WorldCoordinateToScreenCoord(pvVar2,puVar4,(int *)ppPVar5);
   piVar3 = (int *)gta2::Player_sub_401B40(self,pGVar6,pS127);
@@ -2035,30 +2035,30 @@ void gta2::Player_sub_4A0900(void *self,void *param_1)
 // 0x004a0930: Player::sub_4A0930
 // IDA: Player::sub_4A0930
 // Ghidra: ---
-void * gta2::Player_sub_4A0930(struct Player *self, Tango *a2)
+void * gta2::Player_sub_4A0930(Player *self, Tango *a2)
 {
-  struct SpriteS1 *v3; // eax
+  SpriteS1 *v3; // eax
   _DWORD *v4; // eax
   char v6[4]; // [esp+4h] [ebp-Ch] BYREF
   char v7[8]; // [esp+8h] [ebp-8h] BYREF
 
-  v3 = gta2::Player_sub_49F660(self, (struct SpriteS1 *)v6);
+  v3 = gta2::Player_sub_49F660(self, (SpriteS1 *)v6);
   v4 = gta2::Tango_sub_41E1A0(a2, v7, v3);
-  return gta2::Tango_sub_40F680((struct Tango *)&self->Tango1, (int)v4);
+  return gta2::Tango_sub_40F680((Tango *)&self->Tango1, (int)v4);
 }
 
 
 // 0x004a0960: Player::sub_4A0960
 // IDA: Player::sub_4A0960
 // Ghidra: ---
-Car * gta2::Player_sub_4A0960(struct Player *self, Tango *a2)
+Car * gta2::Player_sub_4A0960(Player *self, Tango *a2)
 {
-  struct Car *sCar1; // esi
+  Car *sCar1; // esi
   struct Player *v4; // esi
 
   sCar1 = self->sCar1;
   if ( !gta2::Car_sub_421720(sCar1) )
-    return (struct Car *)gta2::Player_sub_4A0900(self, a2);
+    return (Car *)gta2::Player_sub_4A0900(self, a2);
   v4 = *(Player **)(*((_DWORD *)sCar1->TrailerCtrl + 2) + 88);
   gta2::Player_sub_49ECC0(v4);
   gta2::Player_sub_4A0900(v4, a2);
@@ -2069,7 +2069,7 @@ Car * gta2::Player_sub_4A0960(struct Player *self, Tango *a2)
 // 0x004a09b0: Player::sub_4A09B0
 // IDA: Player::sub_4A09B0
 // Ghidra: ---
-void gta2::Player_sub_4A09B0(struct Player *self, int *a2, int a3)
+void gta2::Player_sub_4A09B0(Player *self, int *a2, int a3)
 {
   int *v4; // eax
   int v5; // edx
@@ -2079,13 +2079,13 @@ void gta2::Player_sub_4A09B0(struct Player *self, int *a2, int a3)
   if ( !gta2::Car_IsTrainOrTrainCarriage(self->sCar1) )
   {
     if ( BYTE2(self->CameraOrPhysics1) )
-      v4 = sub_4202E0(a2, v7, (struct S900 *)&stru_66AD3C.field_44);
+      v4 = sub_4202E0(a2, v7, (S900 *)&stru_66AD3C.field_44);
     else
       v4 = a2;
     v5 = v4[1];
     v6[0] = *v4;
     v6[1] = v5;
-    gta2::Player_sub_4A0960(self, (struct Tango *)v6);
+    gta2::Player_sub_4A0960(self, (Tango *)v6);
     gta2::Player_sub_49EF50(self, a3);
     if ( !gta2::Car_IsDriverPlayer(self->sCar1) )
       gta2::Player_sub_421260(self);
@@ -2096,19 +2096,19 @@ void gta2::Player_sub_4A09B0(struct Player *self, int *a2, int a3)
 // 0x004a0a30: Player::sub_4A0A30
 // IDA: Player::sub_4A0A30
 // Ghidra: Player::FUN_004a0a30
-byte gta2::Player_sub_4A0A30(struct Player *self,GameObject *param_1,Passenger *param_2)
+byte gta2::Player_sub_4A0A30(Player *self,GameObject *param_1,Passenger *param_2)
 {
   void *pvVar1;
-  struct GameObject *this_00;
+  GameObject *this_00;
   bool bVar2;
-  struct GameObject **ppGVar3;
+  GameObject **ppGVar3;
   undefined4 *puVar4;
   undefined4 *puVar5;
-  struct Car *pCVar6;
+  Car *pCVar6;
   undefined3 extraout_var;
   int *piVar7;
   struct Player *this_01;
-  struct Car *pCVar8;
+  Car *pCVar8;
   int iVar9;
   undefined1 *puVar10;
   int local_28 [2];
@@ -2139,11 +2139,11 @@ byte gta2::Player_sub_4A0A30(struct Player *self,GameObject *param_1,Passenger *
            FUN_004a05c0(local_8,*puVar5,_DAT_0066ac44,&local_18,&DAT_0066afb4,
                         &DAT_0066ad08,&local_20,local_10,*puVar4,_DAT_0066aea0,
                         _DAT_0066ae88);
-  local_20 = (struct Player *)*puVar4;
-  local_1c = (struct Player *)puVar4[1];
+  local_20 = (Player *)*puVar4;
+  local_1c = (Player *)puVar4[1];
   if (self->State == 6) {
-    pCVar6 = (struct Car *)&param_1;
-    pCVar8 = (struct Car *)&self->CarPlayerPre->CarSprite->Point2D;
+    pCVar6 = (Car *)&param_1;
+    pCVar8 = (Car *)&self->CarPlayerPre->CarSprite->Point2D;
     gta2::GameObject_GetZ(this_00,(undefined4 *)pCVar6);
     bVar2 = gta2::Car_IsTrainOrTrainCarriage(pCVar6,pCVar8);
     if (CONCAT31(extraout_var,bVar2) == 0) goto LAB_004a0b3f;
@@ -2151,21 +2151,21 @@ byte gta2::Player_sub_4A0A30(struct Player *self,GameObject *param_1,Passenger *
   else {
 LAB_004a0b3f:
     if ((char)param_2 != '\0') {
-      param_2 = (struct Passenger *)((uint)param_2 & 0xffffff00);
+      param_2 = (Passenger *)((uint)param_2 & 0xffffff00);
       goto LAB_004a0b53;
     }
   }
-  param_2 = (struct Passenger *)CONCAT31(param_2._1_3_,1);
+  param_2 = (Passenger *)CONCAT31(param_2._1_3_,1);
 LAB_004a0b53:
-  piVar7 = gta2::Player_sub_41E260((struct Player *)&local_20,(int *)&param_1);
+  piVar7 = gta2::Player_sub_41E260((Player *)&local_20,(int *)&param_1);
   _DAT_0066b034 = *piVar7;
   puVar10 = local_8;
   piVar7 = (int *)&DAT_0066ac44;
   pCVar6 = self->CarPlayerPre;
-  this_01 = (struct Player *)gta2::Player_FUN_0040f640((struct Player *)&local_20,local_10);
+  this_01 = (Player *)gta2::Player_FUN_0040f640((Player *)&local_20,local_10);
   puVar4 = (undefined4 *)gta2::Player_FUN_004202e0(this_01,puVar10,piVar7);
-  local_20 = (struct Player *)*puVar4;
-  local_1c = (struct Player *)puVar4[1];
+  local_20 = (Player *)*puVar4;
+  local_1c = (Player *)puVar4[1];
   if (pCVar6->Driver == NULL) {
     pvVar1 = pCVar6->S___;
     if ((((pvVar1 != NULL) && (*(Car **)((int)pvVar1 + 0xc) != NULL)) &&
@@ -2184,7 +2184,7 @@ LAB_004a0b53:
     *(int *)(this_00->ScriptRef + 0x204) = pCVar6->Driver->ID;
     *(undefined1 *)(this_00->ScriptRef + 0x264) = 0x32;
     pvVar1 = (void *)this_00->ScriptRef;
-    pCVar8 = (struct Car *)FUN_0049ef40(pvVar1);
+    pCVar8 = (Car *)FUN_0049ef40(pvVar1);
     *(uint *)((int)pvVar1 + 0x290) =
          (uint)(pCVar8 == self->CarPlayerPre) * 2 + 1;
   }
@@ -2196,7 +2196,7 @@ LAB_004a0b53:
 // 0x004a0c60: Player::sub_4A0C60
 // IDA: Player::sub_4A0C60
 // Ghidra: Player::FUN_004a0c60
-void * gta2::Player_sub_4A0C60(struct Player *self)
+void * gta2::Player_sub_4A0C60(Player *self)
 {
   undefined4 uVar1;
   int *piVar2;
@@ -2208,12 +2208,12 @@ void * gta2::Player_sub_4A0C60(struct Player *self)
   undefined1 local_8 [8];
   
   piVar2 = (int *)gta2::Player_sub_49F660(self,local_10);
-  piVar2 = (int *)gta2::Player_FUN_004202e0((struct Player *)&self->field31_0x48,local_8,piVar2);
+  piVar2 = (int *)gta2::Player_FUN_004202e0((Player *)&self->field31_0x48,local_8,piVar2);
   self->timeSecond = *piVar2;
   self->field37_0x54 = piVar2[1];
   piVar2 = (int *)FUN_0049f6c0(local_10);
   puVar4 = local_c;
-  this_00 = (struct Player *)gta2::JustCopyByPtrAtoC(&self->Tango1,local_8);
+  this_00 = (Player *)gta2::JustCopyByPtrAtoC(&self->Tango1,local_8);
   puVar3 = (undefined4 *)gta2::sub_401B90(this_00,puVar4,piVar2);
   uVar1 = *puVar3;
   self->PrevWeaponX = (char)uVar1;
@@ -2227,7 +2227,7 @@ void * gta2::Player_sub_4A0C60(struct Player *self)
 // 0x004a0cc0: Player::sub_4A0CC0
 // IDA: Player::sub_4A0CC0
 // Ghidra: Player::FUN_004a0cc0
-void * gta2::Player_sub_4A0CC0(struct Player *self)
+void * gta2::Player_sub_4A0CC0(Player *self)
 {
   undefined1 *this_00;
   void *pvVar1;
@@ -2240,7 +2240,7 @@ void * gta2::Player_sub_4A0CC0(struct Player *self)
   this_00 = &self->DeathReason;
   gta2::Player_sub_40E530((Point2D *)this_00,(int *)&self->PrevWeaponX);
   gta2::Player_ResetControlState(self);
-  gta2::Tango_sub_49E3C0((struct Player *)&self->S103_);
+  gta2::Tango_sub_49E3C0((Player *)&self->S103_);
   puVar2 = (undefined4 *)FUN_00482730(this_01,&local_4,(GlassInfo *)this_00);
   pvVar1 = (void *)*puVar2;
   *(void **)this_00 = pvVar1;
@@ -2251,7 +2251,7 @@ void * gta2::Player_sub_4A0CC0(struct Player *self)
 // 0x004a0d10: Player::sub_4A0D10
 // IDA: Player::sub_4A0D10
 // Ghidra: Player::FUN_004a0d10
-void * gta2::Player_sub_4A0D10(struct Player *self,void *param_1,GlassInfo *param_2)
+void * gta2::Player_sub_4A0D10(Player *self,void *param_1,GlassInfo *param_2)
 {
   gta2::Player_sub_49ECA0(self);
   gta2::Player_GetCarPoints(self,param_1,param_2);
@@ -2275,7 +2275,7 @@ void gta2::Player_sub_4A0D40(int param_1,int *param_2,Player *param_3,undefined4
   struct Player *pPVar8;
   undefined3 extraout_var_00;
   void *self;
-  struct SpriteS1 *pSVar9;
+  SpriteS1 *pSVar9;
   int iVar10;
   undefined3 extraout_var_01;
   undefined3 extraout_var_02;
@@ -2289,45 +2289,45 @@ void gta2::Player_sub_4A0D40(int param_1,int *param_2,Player *param_3,undefined4
   pPVar3 = param_3;
   if (*(char *)(param_1 + 0x95) == '\0') {
     puVar5 = (undefined4 *)FUN_0049e650(&local_8,param_3);
-    local_10 = (struct Player *)*puVar5;
-    local_c = (struct Player *)puVar5[1];
+    local_10 = (Player *)*puVar5;
+    local_c = (Player *)puVar5[1];
     pGVar6 = (GlassInfo *)
-             gta2::sub_401C80((struct CarSystemManager *)&param_4,&param_3);
+             gta2::sub_401C80((CarSystemManager *)&param_4,&param_3);
     FUN_0040f6b0(&local_10,pGVar6);
     pSVar9 = param_5;
     piVar7 = (int *)gta2::JustCopyByPtrAtoC(param_5,&param_3);
     puVar5 = (undefined4 *)
              gta2::WorldCoordinateToScreenCoord(&local_10,&param_5,piVar7);
-    local_8 = (struct Player *)*puVar5;
+    local_8 = (Player *)*puVar5;
     piVar7 = (int *)gta2::JustCopyByPtrAtoC(pSVar9->Matrix3DArray,&param_3);
     puVar5 = (undefined4 *)
              gta2::WorldCoordinateToScreenCoord(&local_c,&param_5,piVar7);
-    local_4 = (struct Player *)*puVar5;
+    local_4 = (Player *)*puVar5;
   }
   else {
     FUN_00432860(&local_8,(undefined4 *)&DAT_0066acdc,
                  (undefined4 *)&DAT_0066acdc);
   }
-  piVar7 = gta2::Player_FUN_00403840((struct Player *)&local_c,(int *)&param_3,(GlassInfo *)&local_c);
-  param_3 = (struct Player *)*piVar7;
-  piVar7 = gta2::Player_FUN_00403840((struct Player *)&local_8,(int *)&param_5,(GlassInfo *)&local_8);
+  piVar7 = gta2::Player_FUN_00403840((Player *)&local_c,(int *)&param_3,(GlassInfo *)&local_c);
+  param_3 = (Player *)*piVar7;
+  piVar7 = gta2::Player_FUN_00403840((Player *)&local_8,(int *)&param_5,(GlassInfo *)&local_8);
   iVar2 = *piVar7;
   if ((*(int *)(param_1 + 0x8c) == 2) &&
      (bVar4 = gta2::Car_isTank(*(Car **)(param_1 + 0x5c)), !bVar4)) {
-    bVar4 = gta2::Player_CheckCondition((struct Player *)&param_3,(int *)&DAT_0066ace0);
+    bVar4 = gta2::Player_CheckCondition((Player *)&param_3,(int *)&DAT_0066ace0);
     if (CONCAT31(extraout_var,bVar4) != 0) {
-      pPVar12 = (struct Player *)&DAT_0066ac80;
-      pPVar8 = (struct Player *)
-               gta2::Player_FUN_00403840((struct Player *)&param_5,(int *)&param_5,
+      pPVar12 = (Player *)&DAT_0066ac80;
+      pPVar8 = (Player *)
+               gta2::Player_FUN_00403840((Player *)&param_5,(int *)&param_5,
                           (GlassInfo *)&stack0x00000014);
       bVar4 = gta2::Player_sub_40CE70(pPVar8,pPVar12);
       if (CONCAT31(extraout_var_00,bVar4) != 0) {
         piVar7 = (int *)&param_3;
-        pSVar9 = (struct SpriteS1 *)&param_5;
-        pPVar8 = (struct Player *)&stack0xffffffec;
+        pSVar9 = (SpriteS1 *)&param_5;
+        pPVar8 = (Player *)&stack0xffffffec;
         piVar11 = (int *)&DAT_0066ac80;
-        param_3 = (struct Player *)0x8;
-        pPVar12 = (struct Player *)
+        param_3 = (Player *)0x8;
+        pPVar12 = (Player *)
                   gta2::Player_FUN_00403840(pPVar8,(int *)&local_10,
                              (GlassInfo *)&stack0x00000014);
         self = gta2::sub_401B90(pPVar12,pPVar8,piVar11);
@@ -2339,9 +2339,9 @@ void gta2::Player_sub_4A0D40(int param_1,int *param_2,Player *param_3,undefined4
     }
     if (((*(char *)(param_1 + 0x92) != '\0') &&
         (((bVar1 = *(byte *)(param_1 + 0xac), bVar1 != 0 &&
-          (bVar4 = gta2::Car_sub_403800((struct Car *)&param_3,(int *)&DAT_0066acdc),
+          (bVar4 = gta2::Car_sub_403800((Car *)&param_3,(int *)&DAT_0066acdc),
           CONCAT31(extraout_var_01,bVar4) != 0)) ||
-         (bVar4 = gta2::Player_sub_40CE70((struct Player *)&param_3,(struct Player *)&DAT_0066b010),
+         (bVar4 = gta2::Player_sub_40CE70((Player *)&param_3,(Player *)&DAT_0066b010),
          CONCAT31(extraout_var_02,bVar4) != 0)))) && (bVar1 < 2)) {
       *(undefined1 *)(param_1 + 0xac) = 2;
     }
@@ -2379,16 +2379,16 @@ void gta2::Player_sub_4A0F30(int param_1,undefined4 *param_2)
   if (((bVar2) && (*(int *)(param_1 + 0x98) != 7)) &&
      (*(int *)(param_1 + 0x98) != 8)) {
     if (*(int *)(param_1 + 0x8c) == 2) {
-      piVar3 = gta2::Player_sub_41E260((struct Player *)(param_1 + 0x40),(int *)&local_c)
+      piVar3 = gta2::Player_sub_41E260((Player *)(param_1 + 0x40),(int *)&local_c)
       ;
-      local_c = (struct Player *)*piVar3;
+      local_c = (Player *)*piVar3;
       if (*(char *)(param_1 + 0x94) == '\0') {
         if (*(char *)(param_1 + 0x93) != '\0') {
-          bVar2 = gta2::Player_IsCurrentPlayer((struct Player *)&local_c,(struct Player *)&DAT_0066acdc);
+          bVar2 = gta2::Player_IsCurrentPlayer((Player *)&local_c,(Player *)&DAT_0066acdc);
           iVar1 = _DAT_0066ab70;
           if ((CONCAT31(extraout_var_00,bVar2) == 0) ||
              (*(char *)(param_1 + 0x92) == '\0')) {
-            bVar2 = gta2::Car_sub_403800((struct Car *)&local_c,
+            bVar2 = gta2::Car_sub_403800((Car *)&local_c,
                                     (int *)(_DAT_0066ab70 + 0x44));
             if (CONCAT31(extraout_var_01,bVar2) != 0) {
               piVar3 = (int *)(iVar1 + 0x3c);
@@ -2399,7 +2399,7 @@ void gta2::Player_sub_4A0F30(int param_1,undefined4 *param_2)
               *param_2 = *puVar5;
               return;
             }
-            bVar2 = gta2::Car_sub_403800((struct Car *)&local_c,(int *)(iVar1 + 0x40));
+            bVar2 = gta2::Car_sub_403800((Car *)&local_c,(int *)(iVar1 + 0x40));
             if (CONCAT31(extraout_var_02,bVar2) != 0) {
               piVar3 = (int *)(iVar1 + 0x38);
               puVar6 = local_4;
@@ -2420,7 +2420,7 @@ void gta2::Player_sub_4A0F30(int param_1,undefined4 *param_2)
         }
       }
       else {
-        bVar2 = gta2::Player_IsCurrentPlayer((struct Player *)&local_c,(struct Player *)&DAT_0066acdc);
+        bVar2 = gta2::Player_IsCurrentPlayer((Player *)&local_c,(Player *)&DAT_0066acdc);
         if ((CONCAT31(extraout_var,bVar2) == 0) ||
            (*(char *)(param_1 + 0x92) == '\0')) {
           pS110 = &local_c;
@@ -2460,25 +2460,25 @@ void gta2::Player_sub_4A0F30(int param_1,undefined4 *param_2)
 // Ghidra: FUN_004a1130
 undefined4 * gta2::Player_sub_4A1130(Player *param_1,undefined4 *param_2)
 {
-  struct SpriteS1 *pSVar1;
+  SpriteS1 *pSVar1;
   int iVar2;
   byte bVar3;
   bool bVar4;
   void *self;
   undefined4 *puVar5;
-  struct SpriteS1 *pSVar6;
+  SpriteS1 *pSVar6;
   undefined3 extraout_var;
-  struct SpriteS1 *pSVar7;
+  SpriteS1 *pSVar7;
   short *psVar8;
   undefined2 *puVar9;
   short *unaff_EBP;
   void *unaff_EDI;
-  struct SpriteS1 **pS110;
+  SpriteS1 **pS110;
   int *piVar10;
   undefined1 local_30 [4];
-  struct SpriteS1 *local_2c;
-  struct SpriteS1 *local_28;
-  struct SpriteS1 *local_24;
+  SpriteS1 *local_2c;
+  SpriteS1 *local_28;
+  SpriteS1 *local_24;
   undefined1 local_20 [12];
   undefined1 local_14 [8];
   undefined1 local_c [4];
@@ -2496,14 +2496,14 @@ undefined4 * gta2::Player_sub_4A1130(Player *param_1,undefined4 *param_2)
   piVar10 = (int *)(_DAT_0066ab70 + 8);
   self = (void *)FUN_004a0f30(&local_28);
   puVar5 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(self,pS110,piVar10);
-  pSVar1 = (struct SpriteS1 *)*puVar5;
+  pSVar1 = (SpriteS1 *)*puVar5;
   local_24 = pSVar1;
   if (param_1->field_0xad == '\0') {
     local_2c = _DAT_0066ac4c;
   }
   else {
-    pSVar6 = gta2::S202_sub_401B20((Point2D *)&DAT_0066ac4c,(struct SpriteS1 *)&local_28,
-                        (struct S127 *)(iVar2 + 0x14));
+    pSVar6 = gta2::S202_sub_401B20((Point2D *)&DAT_0066ac4c,(SpriteS1 *)&local_28,
+                        (S127 *)(iVar2 + 0x14));
     local_2c = pSVar6->FirstElement;
   }
   iVar2 = *(int *)&param_1->field_0xa0;
@@ -2511,39 +2511,39 @@ undefined4 * gta2::Player_sub_4A1130(Player *param_1,undefined4 *param_2)
     puVar5 = (undefined4 *)
              gta2::WorldCoordinateToScreenCoord
                        (&DAT_0066afdc,local_20,(int *)&local_2c);
-    local_28 = (struct SpriteS1 *)*puVar5;
+    local_28 = (SpriteS1 *)*puVar5;
     local_30 = (undefined1  [4])_DAT_0066ab80;
     puVar5 = (undefined4 *)
              gta2::WorldCoordinateToScreenCoord
                        (&DAT_0066ac28,local_c,(int *)&DAT_0066afd0);
-    local_24 = (struct SpriteS1 *)*puVar5;
+    local_24 = (SpriteS1 *)*puVar5;
     local_2c = *(SpriteS1 **)&param_1->KEY_UP;
   }
   else if ((0 < iVar2) && (iVar2 < 3)) {
-    bVar4 = gta2::Player_IsCurrentPlayer((struct Player *)&local_24,(struct Player *)&DAT_0066acdc)
+    bVar4 = gta2::Player_IsCurrentPlayer((Player *)&local_24,(Player *)&DAT_0066acdc)
     ;
     pSVar6 = _DAT_0066acdc;
     if (CONCAT31(extraout_var,bVar4) == 0) {
       puVar5 = (undefined4 *)
                gta2::WorldCoordinateToScreenCoord
                          (&DAT_0066afdc,local_20,(int *)&local_2c);
-      local_28 = (struct SpriteS1 *)*puVar5;
+      local_28 = (SpriteS1 *)*puVar5;
       local_30 = (undefined1  [4])_DAT_0066ab80;
       if (iVar2 == 1) {
-        local_24 = (struct SpriteS1 *)0x1e;
-        pSVar7 = FUN_00401bd0(&DAT_0066afe4,(struct SpriteS1 *)&local_2c,
+        local_24 = (SpriteS1 *)0x1e;
+        pSVar7 = FUN_00401bd0(&DAT_0066afe4,(SpriteS1 *)&local_2c,
                               (int *)&local_24);
         pSVar7 = gta2::S202_sub_401B20((Point2D *)&param_1->KEY_UP,
-                            (struct SpriteS1 *)(local_20 + 4),(struct S127 *)pSVar7);
+                            (SpriteS1 *)(local_20 + 4),(S127 *)pSVar7);
         local_2c = pSVar7->FirstElement;
         local_24 = pSVar6;
       }
       else {
-        local_24 = (struct SpriteS1 *)0xffffffe2;
-        pSVar7 = FUN_00401bd0(&DAT_0066afe4,(struct SpriteS1 *)(local_20 + 8),
+        local_24 = (SpriteS1 *)0xffffffe2;
+        pSVar7 = FUN_00401bd0(&DAT_0066afe4,(SpriteS1 *)(local_20 + 8),
                               (int *)&local_24);
-        pSVar7 = gta2::S202_sub_401B20((Point2D *)&param_1->KEY_UP,(struct SpriteS1 *)local_14,
-                            (struct S127 *)pSVar7);
+        pSVar7 = gta2::S202_sub_401B20((Point2D *)&param_1->KEY_UP,(SpriteS1 *)local_14,
+                            (S127 *)pSVar7);
         local_2c = pSVar7->FirstElement;
         local_24 = pSVar6;
       }
@@ -2555,12 +2555,12 @@ undefined4 * gta2::Player_sub_4A1130(Player *param_1,undefined4 *param_2)
       local_24 = _DAT_0066acdc;
     }
   }
-  pSVar6 = gta2::S202_sub_401B20((Point2D *)local_30,(struct SpriteS1 *)local_c,(struct S127 *)&local_24)
+  pSVar6 = gta2::S202_sub_401B20((Point2D *)local_30,(SpriteS1 *)local_c,(S127 *)&local_24)
   ;
   FUN_00432860(local_14,&local_28,&pSVar6->FirstElement);
   psVar8 = (short *)FUN_0040f540(local_30,(int)&local_2c);
   puVar9 = (undefined2 *)
-           gta2::sub_40E5A0((struct CarSystemManager *)&param_1->theta,(struct Ped *)&local_2c,
+           gta2::sub_40E5A0((CarSystemManager *)&param_1->theta,(Ped *)&local_2c,
                       psVar8,unaff_EDI,unaff_EBP);
   FUN_004a0d40(param_2,local_8,*puVar9,local_14,pSVar1);
   return param_2;
@@ -2578,19 +2578,19 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
   undefined4 *puVar4;
   undefined3 extraout_var;
   uint *puVar5;
-  struct SpriteS1 *pSVar6;
-  struct SpriteS1 *pSVar7;
-  struct S127 *pSVar8;
+  SpriteS1 *pSVar6;
+  SpriteS1 *pSVar7;
+  S127 *pSVar8;
   int iVar9;
   undefined2 *puVar10;
   int *piVar11;
   struct Ped **pS110;
   short *pS110_00;
-  struct SpriteS1 **ppSVar12;
+  SpriteS1 **ppSVar12;
   uint local_4c;
-  struct SpriteS1 *local_48;
-  struct SpriteS1 *local_44;
-  struct SpriteS1 *local_40;
+  SpriteS1 *local_48;
+  SpriteS1 *local_44;
+  SpriteS1 *local_40;
   GlassInfo local_3c;
   int local_c;
   undefined1 local_8 [8];
@@ -2604,15 +2604,15 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
     pS110 = &local_3c.pPed;
     pvVar3 = (void *)FUN_004a0f30(&local_3c);
     puVar4 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(pvVar3,pS110,piVar11);
-    local_3c.pPed = (struct Ped *)*puVar4;
+    local_3c.pPed = (Ped *)*puVar4;
     if (param_1->field_0xad == '\0') {
       local_48 = _DAT_0066ac4c;
     }
     else {
       puVar4 = (undefined4 *)
                gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ac4c,&local_3c,
-                          (struct S127 *)(_DAT_0066ab70 + 0x14));
-      local_48 = (struct SpriteS1 *)*puVar4;
+                          (S127 *)(_DAT_0066ab70 + 0x14));
+      local_48 = (SpriteS1 *)*puVar4;
     }
     iVar9 = *(int *)&param_1->field_0xa0;
     if (iVar9 == 0) {
@@ -2621,13 +2621,13 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
                gta2::WorldCoordinateToScreenCoord
                          (&DAT_0066ac28,&local_3c.SpawnPoint,
                           (int *)&DAT_0066af30);
-      local_3c.car = (struct Car *)*puVar4;
+      local_3c.car = (Car *)*puVar4;
       if (*(char *)((int)&param_1->CameraOrPhysics_ + 2) == '\0') {
         param_1->field_0xa8 = 0;
         puVar4 = (undefined4 *)
                  gta2::WorldCoordinateToScreenCoord
                            (&DAT_0066afdc,&local_c,(int *)&local_48);
-        local_48 = (struct SpriteS1 *)*puVar4;
+        local_48 = (SpriteS1 *)*puVar4;
         local_44 = _DAT_0066acdc;
       }
       else {
@@ -2642,15 +2642,15 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
                             (int *)&local_48);
         puVar4 = (undefined4 *)
                  gta2::WorldCoordinateToScreenCoord(pvVar3,pS110_00,piVar11);
-        local_48 = (struct SpriteS1 *)*puVar4;
+        local_48 = (SpriteS1 *)*puVar4;
         local_4c = (uint)(byte)param_1->field_0xa8;
         ppSVar12 = &local_44;
-        pSVar7 = (struct SpriteS1 *)&local_3c.field19_0x28;
-        local_44 = (struct SpriteS1 *)0x80;
+        pSVar7 = (SpriteS1 *)&local_3c.field19_0x28;
+        local_44 = (SpriteS1 *)0x80;
         pSVar6 = FUN_00401bd0((void *)(iVar9 + 0x10),
-                              (struct SpriteS1 *)&local_3c.field20_0x2c,
+                              (SpriteS1 *)&local_3c.field20_0x2c,
                               (int *)&local_4c);
-        pSVar7 = gta2::S122_sub_401BF0((struct Model *)pSVar6,pSVar7,(int *)ppSVar12);
+        pSVar7 = gta2::S122_sub_401BF0((Model *)pSVar6,pSVar7,(int *)ppSVar12);
         local_44 = pSVar7->FirstElement;
       }
       local_4c._0_1_ = param_1->KEY_UP;
@@ -2659,31 +2659,31 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
       local_4c._3_1_ = param_1->RotateRight;
     }
     else if ((0 < iVar9) && (iVar9 < 3)) {
-      bVar2 = gta2::Player_IsCurrentPlayer((struct Player *)&local_3c.pPed,(struct Player *)&DAT_0066acdc);
+      bVar2 = gta2::Player_IsCurrentPlayer((Player *)&local_3c.pPed,(Player *)&DAT_0066acdc);
       pSVar7 = _DAT_0066acdc;
       if (CONCAT31(extraout_var,bVar2) == 0) {
         puVar4 = (undefined4 *)
                  gta2::WorldCoordinateToScreenCoord
                            (&DAT_0066afdc,&local_3c.SpawnPoint,(int *)&local_48)
         ;
-        local_48 = (struct SpriteS1 *)*puVar4;
+        local_48 = (SpriteS1 *)*puVar4;
         local_40 = _DAT_0066ab80;
         if (iVar9 == 1) {
-          local_3c.car = (struct Car *)0x1e;
-          pSVar6 = FUN_00401bd0(&DAT_0066afe4,(struct SpriteS1 *)&local_3c.field_0xc,
+          local_3c.car = (Car *)0x1e;
+          pSVar6 = FUN_00401bd0(&DAT_0066afe4,(SpriteS1 *)&local_3c.field_0xc,
                                 (int *)&local_3c);
           puVar5 = (uint *)gta2::Player_sub_401B40((SpawnPoint *)&param_1->KEY_UP,
                                       (GlassInfo *)&local_3c.field_0x10,
-                                      (struct S127 *)pSVar6);
+                                      (S127 *)pSVar6);
           local_4c = *puVar5;
         }
         else {
-          local_3c.car = (struct Car *)0xffffffe2;
-          pSVar6 = FUN_00401bd0(&DAT_0066afe4,(struct SpriteS1 *)&local_3c.field11_0x14
+          local_3c.car = (Car *)0xffffffe2;
+          pSVar6 = FUN_00401bd0(&DAT_0066afe4,(SpriteS1 *)&local_3c.field11_0x14
                                 ,(int *)&local_3c);
           puVar5 = (uint *)gta2::Player_sub_401B40((SpawnPoint *)&param_1->KEY_UP,
                                       (GlassInfo *)&local_3c.field12_0x18,
-                                      (struct S127 *)pSVar6);
+                                      (S127 *)pSVar6);
           local_4c = *puVar5;
         }
       }
@@ -2695,32 +2695,32 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
         local_48 = _DAT_0066acdc;
         local_40 = _DAT_0066acdc;
       }
-      local_3c.car = (struct Car *)pSVar7;
+      local_3c.car = (Car *)pSVar7;
       local_44 = pSVar7;
       param_1->field_0xa8 = 0;
     }
-    pSVar8 = (struct S127 *)&local_44;
-    pSVar7 = (struct SpriteS1 *)&local_c;
-    pSVar6 = gta2::S202_sub_401B20((Point2D *)&local_40,(struct SpriteS1 *)&local_3c.field20_0x2c,
-                        (struct S127 *)&local_3c);
+    pSVar8 = (S127 *)&local_44;
+    pSVar7 = (SpriteS1 *)&local_c;
+    pSVar6 = gta2::S202_sub_401B20((Point2D *)&local_40,(SpriteS1 *)&local_3c.field20_0x2c,
+                        (S127 *)&local_3c);
     pSVar7 = gta2::S202_sub_401B20((Point2D *)pSVar6,pSVar7,pSVar8);
     FUN_00432860(&local_3c.field17_0x20,&local_48,&pSVar7->FirstElement);
-    gta2::Tango_sub_49E3A0((struct Car *)&local_3c.field17_0x20,
+    gta2::Tango_sub_49E3A0((Car *)&local_3c.field17_0x20,
                       (int *)(_DAT_0066ab70 + 0x1c));
-    pSVar8 = (struct S127 *)gta2::Player_sub_41E260((struct Player *)&param_1->S103_,&local_c);
+    pSVar8 = (S127 *)gta2::Player_sub_41E260((Player *)&param_1->S103_,&local_c);
     puVar4 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066add0,
                         (GlassInfo *)&local_3c.field19_0x28,pSVar8);
-    local_3c.car = (struct Car *)*puVar4;
+    local_3c.car = (Car *)*puVar4;
     piVar11 = (int *)gta2::WorldCoordinateToScreenCoord
                                (&DAT_0066add0,&local_c,(int *)&DAT_0066ac3c);
     puVar4 = (undefined4 *)
-             gta2::sub_401B90((struct Player *)&local_3c,&local_3c.field20_0x2c,piVar11);
-    local_3c.car = (struct Car *)*puVar4;
+             gta2::sub_401B90((Player *)&local_3c,&local_3c.field20_0x2c,piVar11);
+    local_3c.car = (Car *)*puVar4;
     pvVar3 = gta2::WorldCoordinateToScreenCoord(&local_4c,&local_c,(int *)&local_3c);
     iVar9 = FUN_0040f540(&local_4c,(int)pvVar3);
     puVar10 = (undefined2 *)
-              gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&param_1->theta,(struct Ped *)&local_48,
+              gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&param_1->theta,(Ped *)&local_48,
                          iVar9);
     FUN_004a0d40(param_2,local_8,*puVar10,&local_3c.field17_0x20,local_3c.pPed);
     return param_2;
@@ -2733,20 +2733,20 @@ undefined4 * gta2::Player_sub_4A1360(Player *param_1,undefined4 *param_2)
 // 0x004a16b0: Player::sub_4A16B0
 // IDA: Player::sub_4A16B0
 // Ghidra: Player::FUN_004a16b0
-void gta2::Player_sub_4A16B0(struct Player *self)
+void gta2::Player_sub_4A16B0(Player *self)
 {
   undefined4 uVar1;
   bool bVar2;
   void *pvVar3;
-  struct SpriteS1 *pSVar4;
-  struct S127 *pS127;
+  SpriteS1 *pSVar4;
+  S127 *pS127;
   int *piVar5;
   undefined3 extraout_var;
   undefined4 *puVar6;
-  struct SpriteS1 **ppSVar7;
+  SpriteS1 **ppSVar7;
   undefined1 *pS110;
   undefined1 local_18 [4];
-  struct SpriteS1 *local_14;
+  SpriteS1 *local_14;
   int local_10;
   undefined1 local_c [8];
   undefined1 local_4 [4];
@@ -2754,27 +2754,27 @@ void gta2::Player_sub_4A16B0(struct Player *self)
   piVar5 = (int *)local_18;
   if (self->CarPlayerPre->PhysicsBitmask != 2) {
     local_18 = (undefined1  [4])(int)(char)self->field_0xad;
-    pSVar4 = (struct SpriteS1 *)&local_14;
+    pSVar4 = (SpriteS1 *)&local_14;
     pvVar3 = (void *)FUN_0049f720(&local_10);
     pSVar4 = FUN_00401bd0(pvVar3,pSVar4,piVar5);
     *(SpriteS1 **)&self->KEY_UP = pSVar4->FirstElement;
     return;
   }
-  pS127 = (struct S127 *)gta2::Player_sub_41E260((struct Player *)&self->S103_,&local_10);
+  pS127 = (S127 *)gta2::Player_sub_41E260((Player *)&self->S103_,&local_10);
   piVar5 = (int *)gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066add0,(GlassInfo *)&local_14,
                              pS127);
   local_18 = (undefined1  [4])*piVar5;
-  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)local_18,(struct SpriteS1 *)&DAT_0066b060);
+  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)local_18,(SpriteS1 *)&DAT_0066b060);
   if (CONCAT31(extraout_var,bVar2) != 0) {
     local_18 = (undefined1  [4])_DAT_0066b060;
   }
-  local_14 = (struct SpriteS1 *)(int)(char)self->field_0xad;
+  local_14 = (SpriteS1 *)(int)(char)self->field_0xad;
   piVar5 = (int *)gta2::WorldCoordinateToScreenCoord
                             (&DAT_0066add0,&local_10,(int *)&DAT_0066ae10);
-  piVar5 = (int *)gta2::sub_401B90((struct Player *)local_18,local_c,piVar5);
+  piVar5 = (int *)gta2::sub_401B90((Player *)local_18,local_c,piVar5);
   pS110 = local_18;
   ppSVar7 = &local_14;
-  pSVar4 = (struct SpriteS1 *)(local_c + 4);
+  pSVar4 = (SpriteS1 *)(local_c + 4);
   pvVar3 = (void *)FUN_0049f720(local_4);
   pSVar4 = FUN_00401bd0(pvVar3,pSVar4,(int *)ppSVar7);
   puVar6 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(pSVar4,pS110,piVar5);
@@ -2790,14 +2790,14 @@ void gta2::Player_sub_4A16B0(struct Player *self)
 // 0x004a17a0: Player::FUN_004a17a0
 // IDA: sub_4A17A0
 // Ghidra: Player::FUN_004a17a0
-byte gta2::Player_FUN_004a17a0(struct Player *self)
+byte gta2::Player_FUN_004a17a0(Player *self)
 {
   bool bVar1;
   struct Player *pPlayer;
   
   pPlayer = self;
-  gta2::Player_FUN_0049ea00(self,(struct Player *)&pPlayer);
-  bVar1 = gta2::Player_sub_40CE70((struct Player *)&self->Revs,(struct Player *)&pPlayer);
+  gta2::Player_FUN_0049ea00(self,(Player *)&pPlayer);
+  bVar1 = gta2::Player_sub_40CE70((Player *)&self->Revs,(Player *)&pPlayer);
   return bVar1;
 }
 
@@ -2805,7 +2805,7 @@ byte gta2::Player_FUN_004a17a0(struct Player *self)
 // 0x004a17c0: Player::sub_4A17C0
 // IDA: Player::sub_4A17C0
 // Ghidra: Player::FUN_004a17c0
-void * gta2::Player_sub_4A17C0(struct Player *self)
+void * gta2::Player_sub_4A17C0(Player *self)
 {
   struct EngineStruct *pEVar1;
   Turrel *pTVar2;
@@ -2820,7 +2820,7 @@ void * gta2::Player_sub_4A17C0(struct Player *self)
   int iVar8;
   int *piVar9;
   undefined3 extraout_var_02;
-  struct SpriteS1 *pSVar10;
+  SpriteS1 *pSVar10;
   undefined3 extraout_var_03;
   undefined4 *puVar11;
   undefined3 extraout_var_04;
@@ -2834,7 +2834,7 @@ void * gta2::Player_sub_4A17C0(struct Player *self)
   undefined3 extraout_var_12;
   undefined3 extraout_var_13;
   undefined3 extraout_var_14;
-  struct S86_7 *this_00;
+  S86_7 *this_00;
   Turrel *local_8;
   undefined1 local_4 [4];
   
@@ -2845,7 +2845,7 @@ void * gta2::Player_sub_4A17C0(struct Player *self)
     _DAT_0066ae0c = _DAT_0066acdc;
     return pEVar1;
   }
-  bVar3 = gta2::Player_IsCurrentPlayer((struct Player *)&self->KEY_UP,(struct Player *)&DAT_0066acdc);
+  bVar3 = gta2::Player_IsCurrentPlayer((Player *)&self->KEY_UP,(Player *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar3) == 0) {
     return NULL;
   }
@@ -2865,7 +2865,7 @@ void * gta2::Player_sub_4A17C0(struct Player *self)
     return *(void **)&self->field_0xa0;
   }
   pvVar5 = gta2::Player_sub_401B40((SpawnPoint *)&self->Debug,(GlassInfo *)local_4,
-                      (struct S127 *)&DAT_0066ac4c);
+                      (S127 *)&DAT_0066ac4c);
   iVar6 = DecoderFloat(pvVar5);
   iVar7 = DecoderFloat(&self->field28_0x3c);
   iVar8 = DecoderFloat(&self->field27_0x38);
@@ -2878,31 +2878,31 @@ void * gta2::Player_sub_4A17C0(struct Player *self)
   }
   if ((*(byte *)((int)pvVar5 + 10) & 0x33) != 0) {
     piVar9 = (int *)gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ac1c,(GlassInfo *)local_4,
-                               (struct S127 *)&DAT_0066b038);
-    bVar3 = gta2::Car_sub_403800((struct Car *)&local_8,piVar9);
+                               (S127 *)&DAT_0066b038);
+    bVar3 = gta2::Car_sub_403800((Car *)&local_8,piVar9);
     if (CONCAT31(extraout_var_02,bVar3) != 0) {
-      pSVar10 = gta2::S202_sub_401B20((Point2D *)&DAT_0066ac1c,(struct SpriteS1 *)local_4,
-                           (struct S127 *)&DAT_0066b038);
+      pSVar10 = gta2::S202_sub_401B20((Point2D *)&DAT_0066ac1c,(SpriteS1 *)local_4,
+                           (S127 *)&DAT_0066b038);
       bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_8,pSVar10);
       if (CONCAT31(extraout_var_03,bVar3) != 0) {
         puVar11 = (undefined4 *)
                   gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ac1c,(GlassInfo *)local_4,
-                             (struct S127 *)&local_8);
+                             (S127 *)&local_8);
         _DAT_0066ae0c = (Turrel *)*puVar11;
         goto LAB_004a1a36;
       }
     }
     piVar9 = (int *)gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066acfc,(GlassInfo *)local_4,
-                               (struct S127 *)&DAT_0066b038);
-    bVar3 = gta2::Car_sub_403800((struct Car *)&local_8,piVar9);
+                               (S127 *)&DAT_0066b038);
+    bVar3 = gta2::Car_sub_403800((Car *)&local_8,piVar9);
     if (CONCAT31(extraout_var_04,bVar3) != 0) {
-      pSVar10 = gta2::S202_sub_401B20((Point2D *)&DAT_0066acfc,(struct SpriteS1 *)local_4,
-                           (struct S127 *)&DAT_0066b038);
+      pSVar10 = gta2::S202_sub_401B20((Point2D *)&DAT_0066acfc,(SpriteS1 *)local_4,
+                           (S127 *)&DAT_0066b038);
       bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_8,pSVar10);
       if (CONCAT31(extraout_var_05,bVar3) != 0) {
         puVar11 = (undefined4 *)
                   gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066acfc,(GlassInfo *)local_4,
-                             (struct S127 *)&local_8);
+                             (S127 *)&local_8);
         _DAT_0066ae0c = (Turrel *)*puVar11;
       }
     }
@@ -2910,46 +2910,46 @@ void * gta2::Player_sub_4A17C0(struct Player *self)
   }
   if ((*(byte *)((int)pvVar5 + 10) & 0xcc) == 0) goto LAB_004a1a36;
   piVar9 = (int *)gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066aed0,(GlassInfo *)local_4,
-                             (struct S127 *)&DAT_0066b038);
-  bVar3 = gta2::Car_sub_403800((struct Car *)&local_8,piVar9);
+                             (S127 *)&DAT_0066b038);
+  bVar3 = gta2::Car_sub_403800((Car *)&local_8,piVar9);
   if (CONCAT31(extraout_var_06,bVar3) == 0) {
 LAB_004a19d3:
     piVar9 = (int *)gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066af34,(GlassInfo *)local_4,
-                               (struct S127 *)&DAT_0066b038);
-    bVar3 = gta2::Car_sub_403800((struct Car *)&local_8,piVar9);
+                               (S127 *)&DAT_0066b038);
+    bVar3 = gta2::Car_sub_403800((Car *)&local_8,piVar9);
     if (CONCAT31(extraout_var_08,bVar3) != 0) {
       puVar11 = (undefined4 *)
                 gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066af34,(GlassInfo *)local_4,
-                           (struct S127 *)&local_8);
+                           (S127 *)&local_8);
       _DAT_0066ae0c = (Turrel *)*puVar11;
       goto LAB_004a1a36;
     }
-    bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_8,(struct SpriteS1 *)&DAT_0066b038)
+    bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_8,(SpriteS1 *)&DAT_0066b038)
     ;
     if (CONCAT31(extraout_var_09,bVar3) == 0) goto LAB_004a1a36;
     puVar11 = (undefined4 *)gta2::JustCopyByPtrAtoC(&local_8,local_4);
   }
   else {
-    pSVar10 = gta2::S202_sub_401B20((Point2D *)&DAT_0066aed0,(struct SpriteS1 *)local_4,
-                         (struct S127 *)&DAT_0066b038);
+    pSVar10 = gta2::S202_sub_401B20((Point2D *)&DAT_0066aed0,(SpriteS1 *)local_4,
+                         (S127 *)&DAT_0066b038);
     bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&local_8,pSVar10);
     if (CONCAT31(extraout_var_07,bVar3) == 0) goto LAB_004a19d3;
     puVar11 = (undefined4 *)
               gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066aed0,(GlassInfo *)local_4,
-                         (struct S127 *)&local_8);
+                         (S127 *)&local_8);
   }
   _DAT_0066ae0c = (Turrel *)*puVar11;
 LAB_004a1a36:
-  bVar3 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&DAT_0066ae0c,(struct Car *)&DAT_0066acdc)
+  bVar3 = gta2::Car_IsTrainOrTrainCarriage((Car *)&DAT_0066ae0c,(Car *)&DAT_0066acdc)
   ;
-  this_00 = (struct S86_7 *)CONCAT31(extraout_var_10,bVar3);
+  this_00 = (S86_7 *)CONCAT31(extraout_var_10,bVar3);
   if (this_00 != NULL) {
     puVar11 = (undefined4 *)gta2::Car_sub_4234A0(self->CarPlayerPre,local_4);
     pTVar2 = (Turrel *)*puVar11;
     local_8 = pTVar2;
-    bVar3 = gta2::Car_sub_403800((struct Car *)&DAT_0066ae0c,(int *)&DAT_0066acdc);
+    bVar3 = gta2::Car_sub_403800((Car *)&DAT_0066ae0c,(int *)&DAT_0066acdc);
     if (CONCAT31(extraout_var_11,bVar3) == 0) {
-      pSVar10 = (struct SpriteS1 *)gta2::JustCopyByPtrAtoC(&local_8,local_4);
+      pSVar10 = (SpriteS1 *)gta2::JustCopyByPtrAtoC(&local_8,local_4);
       bVar3 = gta2::Point2D_FUN_004037e0((Point2D *)&DAT_0066ae0c,pSVar10);
       puVar11 = (undefined4 *)CONCAT31(extraout_var_13,bVar3);
       if (puVar11 != NULL) {
@@ -2958,18 +2958,18 @@ LAB_004a1a36:
       }
     }
     else {
-      bVar3 = gta2::Car_sub_403800((struct Car *)&DAT_0066ae0c,(int *)&local_8);
+      bVar3 = gta2::Car_sub_403800((Car *)&DAT_0066ae0c,(int *)&local_8);
       puVar11 = (undefined4 *)CONCAT31(extraout_var_12,bVar3);
       if (puVar11 != NULL) {
         _DAT_0066ae0c = pTVar2;
       }
     }
-    this_00 = (struct S86_7 *)CONCAT31((int3)((uint)puVar11 >> 8),gDoShowInstruments);
+    this_00 = (S86_7 *)CONCAT31((int3)((uint)puVar11 >> 8),gDoShowInstruments);
     if (((gDoShowInstruments != 0) &&
-        (this_00 = (struct S86_7 *)self->CarPlayerPre->Driver, this_00 != NULL)) &&
+        (this_00 = (S86_7 *)self->CarPlayerPre->Driver, this_00 != NULL)) &&
        (this_00 = *(S86_7 **)&this_00->field_0x15c, this_00 != NULL)) {
-      bVar4 = gta2::Player_GetCurrentPlayer((struct Player *)this_00);
-      this_00 = (struct S86_7 *)CONCAT31(extraout_var_14,bVar4);
+      bVar4 = gta2::Player_GetCurrentPlayer((Player *)this_00);
+      this_00 = (S86_7 *)CONCAT31(extraout_var_14,bVar4);
       if (bVar4 != 0) {
         this_00 = gta2::S86_7_PrintText(&gHud->S86_7_,L"snap",0,0x40,_DAT_00672f18,1)
         ;
@@ -2984,17 +2984,17 @@ LAB_004a1a36:
 // 0x004a1b20: Player::sub_4A1B20
 // IDA: Player::sub_4A1B20
 // Ghidra: Player::FUN_004a1b20
-void gta2::Player_sub_4A1B20(struct Player *self)
+void gta2::Player_sub_4A1B20(Player *self)
 {
   byte bVar1;
   bool bVar2;
-  struct Car *pCar;
+  Car *pCar;
   undefined3 extraout_var;
   struct Ped *pPVar3;
-  struct S103 **pPlayer;
-  struct Car **ppCVar4;
+  S103 **pPlayer;
+  Car **ppCVar4;
   int local_10;
-  struct Car *local_c;
+  Car *local_c;
   undefined1 local_8 [8];
   
   bVar1 = gta2::Player_sub_49DD80(self);
@@ -3008,12 +3008,12 @@ void gta2::Player_sub_4A1B20(struct Player *self)
     }
     ppCVar4 = &local_c;
     pPlayer = &self->S103_;
-    pCar = (struct Car *)gta2::Player_sub_41E260((struct Player *)pPlayer,&local_10);
+    pCar = (Car *)gta2::Player_sub_41E260((Player *)pPlayer,&local_10);
     bVar2 = gta2::Car_sub_403800(pCar,(int *)ppCVar4);
     if (CONCAT31(extraout_var,bVar2) != 0) {
-      pPVar3 = (struct Ped *)gta2::Player_FUN_0040f790((struct Player *)pPlayer,(undefined2 *)&local_10);
+      pPVar3 = (Ped *)gta2::Player_FUN_0040f790((Player *)pPlayer,(undefined2 *)&local_10);
       FUN_0041e210(local_8,(GlassInfo *)&local_c,pPVar3);
-      gta2::Player_FUN_0049e480((struct Player *)pPlayer,(struct SpriteS1 *)local_8);
+      gta2::Player_FUN_0049e480((Player *)pPlayer,(SpriteS1 *)local_8);
     }
   }
   return;
@@ -3023,7 +3023,7 @@ void gta2::Player_sub_4A1B20(struct Player *self)
 // 0x004a1ba0: Player::sub_4A1BA0
 // IDA: Player::sub_4A1BA0
 // Ghidra: Player::FUN_004a1ba0
-undefined1 gta2::Player_sub_4A1BA0(struct Player *self)
+undefined1 gta2::Player_sub_4A1BA0(Player *self)
 {
   byte bVar1;
   
@@ -3047,13 +3047,13 @@ undefined1 gta2::Player_sub_4A1BA0(struct Player *self)
 // 0x004a1be0: Player::sub_4A1BE0
 // IDA: Player::sub_4A1BE0
 // Ghidra: ---
-int gta2::Player_sub_4A1BE0(struct Player *self)
+int gta2::Player_sub_4A1BE0(Player *self)
 {
   int v2; // eax
   int result; // eax
   int a2; // [esp+8h] [ebp-4h] BYREF
 
-  gta2::S103_sub_41E1E0((struct S103 *)&self->S103_4);
+  gta2::S103_sub_41E1E0((S103 *)&self->S103_4);
   gta2::bitShiftLeft1(&a2, 0);
   *(_DWORD *)&self->prevWeapon = a2;
   *(_DWORD *)&self->Up = unk_66ACDC;
@@ -3074,10 +3074,10 @@ int gta2::Player_sub_4A1BE0(struct Player *self)
   self->AudioManager_ = 0;
   self->gapA4[1] = 0;
   self->gapA4[2] = 0;
-  gta2::S103_sub_41E1E0((struct S103 *)&self->S103_);
-  gta2::S103_sub_41E1E0((struct S103 *)&self->S103_1);
-  gta2::S103_sub_41E1E0((struct S103 *)&self->pS103);
-  gta2::S103_sub_41E1E0((struct S103 *)&self->S103_2);
+  gta2::S103_sub_41E1E0((S103 *)&self->S103_);
+  gta2::S103_sub_41E1E0((S103 *)&self->S103_1);
+  gta2::S103_sub_41E1E0((S103 *)&self->pS103);
+  gta2::S103_sub_41E1E0((S103 *)&self->S103_2);
   *(_DWORD *)&self->AttackIsChanged = 1;
   *(_DWORD *)&self->Rotate = 0;
   v2 = unk_66AE74;
@@ -3097,7 +3097,7 @@ int gta2::Player_sub_4A1BE0(struct Player *self)
 // 0x004a1d30: Player::FUN_004a1d30
 // IDA: sub_4A1D30
 // Ghidra: Player::FUN_004a1d30
-void * gta2::Player_FUN_004a1d30(struct Player *self,Car *pCar)
+void * gta2::Player_FUN_004a1d30(Player *self,Car *pCar)
 {
   byte bVar1;
   undefined3 extraout_var;
@@ -3118,14 +3118,14 @@ void * gta2::Player_FUN_004a1d30(struct Player *self,Car *pCar)
 // 0x004a1da0: Player::sub_4A1DA0
 // IDA: Player::sub_4A1DA0
 // Ghidra: ---
-char gta2::Player_sub_4A1DA0(struct Player *self)
+char gta2::Player_sub_4A1DA0(Player *self)
 {
   char result; // al
   double v3; // st7
   double v4; // st7
   wchar_t *v5; // eax
   double v6; // st7
-  struct SpriteS1 *v7; // eax
+  SpriteS1 *v7; // eax
   double v8; // st7
   double v9; // st7
   void *v10; // ebx
@@ -3163,15 +3163,15 @@ char gta2::Player_sub_4A1DA0(struct Player *self)
     v6 = gta2::FloatDecoder(&self->Forward);
     ShowTextDisplay(&TextWcharT, (char *)L"pointingangrad = %3.3f", v6);
     gta2::S86_7_PrintText(&gHud->S86_7_, &TextWcharT, 0, 112, unk_672F18, 1);
-    v7 = gta2::Player_sub_49F660(self, (struct SpriteS1 *)v21);
+    v7 = gta2::Player_sub_49F660(self, (SpriteS1 *)v21);
     v8 = gta2::FloatDecoder(v7);
     ShowTextDisplay(&TextWcharT, (char *)off_5741EC, v8);
     gta2::S86_7_PrintText(&gHud->S86_7_, &TextWcharT, 0, 128, unk_672F18, 1);
     v9 = gta2::FloatDecoder(&self->field_84);
     ShowTextDisplay(&TextWcharT, (char *)L"front skid = %3.3f", v9);
     v10 = (void *)gta2::S86_7_PrintText(&gHud->S86_7_, &TextWcharT, 0, 144, unk_672F18, 1);
-    if ( gta2::Player_sub_40CE70((struct Player *)&self->field_84, (_DWORD *)(unk_66AB78 + 36))
-      || self->field_AC && gta2::Car_sub_403800((struct Car *)(unk_66AB70 + 8), (int)&unk_66ACDC) )
+    if ( gta2::Player_sub_40CE70((Player *)&self->field_84, (_DWORD *)(unk_66AB78 + 36))
+      || self->field_AC && gta2::Car_sub_403800((Car *)(unk_66AB70 + 8), (int)&unk_66ACDC) )
     {
       sub_45AFD0(v10, 5);
     }
@@ -3180,8 +3180,8 @@ char gta2::Player_sub_4A1DA0(struct Player *self)
     v12 = gta2::S86_7_PrintText(&gHud->S86_7_, &TextWcharT, 0, 160, unk_672F18, 1);
     v13 = unk_66AB78;
     v14 = (void *)v12;
-    if ( gta2::Player_sub_40CE70((struct Player *)&self->field_88, (_DWORD *)(unk_66AB78 + 40))
-      || self->field_AC && gta2::Car_sub_403800((struct Car *)(v13 + 32), (int)&unk_66ACDC) )
+    if ( gta2::Player_sub_40CE70((Player *)&self->field_88, (_DWORD *)(unk_66AB78 + 40))
+      || self->field_AC && gta2::Car_sub_403800((Car *)(v13 + 32), (int)&unk_66ACDC) )
     {
       sub_45AFD0(v14, 5);
     }
@@ -3275,14 +3275,14 @@ void gta2::Player_sub_4A2240(Player *param_1)
   char cVar6;
   undefined3 extraout_var;
   undefined4 *puVar7;
-  struct S127 *pS127;
-  struct SpriteS1 *pSVar8;
+  S127 *pS127;
+  SpriteS1 *pSVar8;
   uint uVar9;
   undefined3 extraout_var_01;
   undefined3 extraout_var_02;
-  struct SpriteS1 *pSVar10;
+  SpriteS1 *pSVar10;
   undefined3 extraout_var_03;
-  struct Car *self;
+  Car *self;
   undefined3 extraout_var_04;
   undefined3 extraout_var_05;
   undefined3 extraout_var_06;
@@ -3297,34 +3297,34 @@ void gta2::Player_sub_4A2240(Player *param_1)
   undefined3 extraout_var_14;
   undefined4 *puVar11;
   undefined3 extraout_var_15;
-  struct SpriteS1 **this_00;
-  struct Car *pCVar12;
-  struct SpriteS1 *local_c;
-  struct SpriteS1 *local_8;
+  SpriteS1 **this_00;
+  Car *pCVar12;
+  SpriteS1 *local_c;
+  SpriteS1 *local_8;
   undefined1 local_4 [4];
   undefined3 extraout_var_00;
   
   uVar9 = param_1->State;
   if (uVar9 == 6) {
     puVar11 = &param_1->Debug;
-    bVar4 = gta2::Car_sub_403800((struct Car *)puVar11,(int *)&DAT_0066ad1c);
+    bVar4 = gta2::Car_sub_403800((Car *)puVar11,(int *)&DAT_0066ad1c);
     if (CONCAT31(extraout_var,bVar4) != 0) {
       *puVar11 = _DAT_0066ad1c;
     }
     puVar7 = (undefined4 *)
              FUN_00469570(&local_8,param_1->field27_0x38,param_1->field28_0x3c,
                           *puVar11);
-    pSVar10 = (struct SpriteS1 *)*puVar7;
+    pSVar10 = (SpriteS1 *)*puVar7;
     local_8 = pSVar10;
-    pS127 = (struct S127 *)gta2::WorldCoordinateToScreenCoord
+    pS127 = (S127 *)gta2::WorldCoordinateToScreenCoord
                               (&DAT_0066abc8,&local_c,(int *)&stack0x00000004);
-    pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar11,(struct SpriteS1 *)local_4,pS127);
+    pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar11,(SpriteS1 *)local_4,pS127);
     pSVar8 = pSVar8->FirstElement;
     local_c = pSVar8;
-    bVar4 = gta2::Player_CheckCondition((struct Player *)&local_c,(int *)&local_8);
+    bVar4 = gta2::Player_CheckCondition((Player *)&local_c,(int *)&local_8);
     uVar9 = CONCAT31(extraout_var_00,bVar4);
     if (uVar9 == 0) {
-      bVar4 = gta2::Car_sub_403800((struct Car *)&local_c,(int *)&DAT_0066ad1c);
+      bVar4 = gta2::Car_sub_403800((Car *)&local_c,(int *)&DAT_0066ad1c);
       uVar9 = CONCAT31(extraout_var_01,bVar4);
       pSVar10 = _DAT_0066ad1c;
       if (uVar9 == 0) goto LAB_004a2563;
@@ -3336,99 +3336,99 @@ void gta2::Player_sub_4A2240(Player *param_1)
                 gta2::MapRelatedStruct_FindMaxZForLocation(gMapRelatedStruct,(float10 *)local_4,
                            (float10 *)param_1->field27_0x38,
                            (float10 *)param_1->field28_0x3c);
-      pSVar8 = (struct SpriteS1 *)*puVar11;
+      pSVar8 = (SpriteS1 *)*puVar11;
       local_c = pSVar8;
-      bVar4 = gta2::Player_IsCurrentPlayer((struct Player *)&local_c,(struct Player *)&DAT_0066acdc);
+      bVar4 = gta2::Player_IsCurrentPlayer((Player *)&local_c,(Player *)&DAT_0066acdc);
       if (CONCAT31(extraout_var_02,bVar4) != 0) {
         local_c = _DAT_0066ac4c;
         pSVar8 = _DAT_0066ac4c;
       }
       puVar11 = &param_1->Debug;
-      pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar11,(struct SpriteS1 *)local_4,
-                           (struct S127 *)&DAT_0066aec0);
-      bVar4 = gta2::Player_sub_40CE70((struct Player *)&local_c,(struct Player *)pSVar10);
+      pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar11,(SpriteS1 *)local_4,
+                           (S127 *)&DAT_0066aec0);
+      bVar4 = gta2::Player_sub_40CE70((Player *)&local_c,(Player *)pSVar10);
       if (CONCAT31(extraout_var_03,bVar4) != 0) {
         iVar1 = param_1->State;
         if ((((iVar1 == 1) || (iVar1 == 2)) || (iVar1 == 3)) || (iVar1 == 4)) {
-          pCVar12 = (struct Car *)&DAT_0066acdc;
-          self = (struct Car *)FUN_0042a630(local_4,&local_c);
+          pCVar12 = (Car *)&DAT_0066acdc;
+          self = (Car *)FUN_0042a630(local_4,&local_c);
           bVar4 = gta2::Car_IsTrainOrTrainCarriage(self,pCVar12);
           if (CONCAT31(extraout_var_04,bVar4) != 0) {
-            pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar11,(struct SpriteS1 *)local_4,
-                                 (struct S127 *)&DAT_0066ac4c);
-            bVar4 = gta2::Player_CheckCondition((struct Player *)&local_c,(int *)pSVar10);
+            pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar11,(SpriteS1 *)local_4,
+                                 (S127 *)&DAT_0066ac4c);
+            bVar4 = gta2::Player_CheckCondition((Player *)&local_c,(int *)pSVar10);
             if (CONCAT31(extraout_var_05,bVar4) != 0) goto LAB_004a2475;
           }
         }
         puVar7 = (undefined4 *)
                  gta2::Player_sub_401B40((SpawnPoint *)&local_c,(GlassInfo *)local_4,
-                            (struct S127 *)&DAT_0066ac10);
+                            (S127 *)&DAT_0066ac10);
         puVar7 = (undefined4 *)
                  FUN_00469570(&local_8,param_1->field27_0x38,
                               param_1->field28_0x3c,*puVar7);
-        pSVar8 = (struct SpriteS1 *)*puVar7;
+        pSVar8 = (SpriteS1 *)*puVar7;
         local_c = pSVar8;
-        bVar4 = gta2::Car_sub_403800((struct Car *)&local_c,puVar11);
+        bVar4 = gta2::Car_sub_403800((Car *)&local_c,puVar11);
         if (CONCAT31(extraout_var_06,bVar4) != 0) {
           puVar7 = (undefined4 *)
                    gta2::Player_sub_401B40((SpawnPoint *)&local_c,(GlassInfo *)local_4,
-                              (struct S127 *)&DAT_0066ac10);
+                              (S127 *)&DAT_0066ac10);
           puVar7 = (undefined4 *)
                    FUN_00469850(&local_8,param_1->field27_0x38,
                                 param_1->field28_0x3c,*puVar7);
-          pSVar10 = (struct SpriteS1 *)*puVar7;
+          pSVar10 = (SpriteS1 *)*puVar7;
           local_8 = pSVar10;
-          bVar4 = gta2::Car_sub_403800((struct Car *)&local_8,(int *)&DAT_0066acdc);
+          bVar4 = gta2::Car_sub_403800((Car *)&local_8,(int *)&DAT_0066acdc);
           if (CONCAT31(extraout_var_07,bVar4) != 0) {
             pSVar8 = pSVar10;
             local_c = pSVar10;
           }
         }
-        pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar11,(struct SpriteS1 *)local_4,
-                             (struct S127 *)&DAT_0066ac4c);
-        bVar4 = gta2::Player_sub_40CE70((struct Player *)&local_c,(struct Player *)pSVar10);
+        pSVar10 = gta2::S202_sub_401B20((Point2D *)puVar11,(SpriteS1 *)local_4,
+                             (S127 *)&DAT_0066ac4c);
+        bVar4 = gta2::Player_sub_40CE70((Player *)&local_c,(Player *)pSVar10);
         if (CONCAT31(extraout_var_08,bVar4) != 0) {
-          pSVar8 = (struct SpriteS1 *)*puVar11;
+          pSVar8 = (SpriteS1 *)*puVar11;
           local_c = pSVar8;
         }
       }
 LAB_004a2475:
       pConditionValue =
            (int *)gta2::Player_sub_401B40((SpawnPoint *)puVar11,(GlassInfo *)local_4,
-                             (struct S127 *)&DAT_0066aec0);
-      bVar4 = gta2::Player_CheckCondition((struct Player *)&local_c,pConditionValue);
+                             (S127 *)&DAT_0066aec0);
+      bVar4 = gta2::Player_CheckCondition((Player *)&local_c,pConditionValue);
       if ((CONCAT31(extraout_var_09,bVar4) != 0) ||
-         (((bVar4 = gta2::Point2D_FUN_004037e0((Point2D *)&local_c,(struct SpriteS1 *)puVar11),
+         (((bVar4 = gta2::Point2D_FUN_004037e0((Point2D *)&local_c,(SpriteS1 *)puVar11),
            CONCAT31(extraout_var_10,bVar4) != 0 && (param_1->field_0xaa != '\0')
            ) && (param_1->field_0xab != '\0')))) {
         puVar7 = (undefined4 *)FUN_0049fbe0(local_4,&local_8);
         param_1->ID = *puVar7;
-        pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar11,(struct SpriteS1 *)local_4,
-                            (struct S127 *)&local_8);
+        pSVar8 = gta2::S202_sub_401B20((Point2D *)puVar11,(SpriteS1 *)local_4,
+                            (S127 *)&local_8);
         pSVar8 = pSVar8->FirstElement;
         local_c = pSVar8;
-        bVar4 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&stack0x00000004,(struct Car *)&DAT_0066acdc);
+        bVar4 = gta2::Car_IsTrainOrTrainCarriage((Car *)&stack0x00000004,(Car *)&DAT_0066acdc);
         if (CONCAT31(extraout_var_11,bVar4) != 0) {
           FUN_0048a1a0(&param_1->ID,(int *)&stack0x00000004);
         }
-        bVar4 = gta2::Car_sub_403800((struct Car *)&local_c,(int *)&DAT_0066ad1c);
+        bVar4 = gta2::Car_sub_403800((Car *)&local_c,(int *)&DAT_0066ad1c);
         if (CONCAT31(extraout_var_12,bVar4) != 0) {
           local_c = _DAT_0066ad1c;
           pSVar8 = _DAT_0066ad1c;
         }
       }
-      bVar4 = gta2::Point2D_FUN_004037e0((Point2D *)&local_c,(struct SpriteS1 *)puVar11);
+      bVar4 = gta2::Point2D_FUN_004037e0((Point2D *)&local_c,(SpriteS1 *)puVar11);
       uVar9 = CONCAT31(extraout_var_13,bVar4);
       if (uVar9 == 0) goto LAB_004a2563;
       gta2::Player_sub_49EE80(param_1);
       pSVar2 = param_1->CarPlayerPre->CarSprite;
       gta2::SpriteS1_sub_420600(pSVar2,(int)pSVar2->Point2D1,
                           *(int *)&pSVar2->field_0x18,(int)pSVar8);
-      bVar5 = gta2::SpriteS1_sub_4BD670((struct SpriteS1 *)param_1->CarPlayerPre->CarSprite);
+      bVar5 = gta2::SpriteS1_sub_4BD670((SpriteS1 *)param_1->CarPlayerPre->CarSprite);
       uVar9 = (uint)bVar5;
       if (bVar5 == 0) goto LAB_004a2563;
     }
-    pSVar10 = (struct SpriteS1 *)param_1->Debug;
+    pSVar10 = (SpriteS1 *)param_1->Debug;
   }
   pSVar8 = pSVar10;
   local_c = pSVar8;
@@ -3442,24 +3442,24 @@ LAB_004a2563:
                         ,(int)pSVar8);
     gCarSystemManager->field44_0x60 = 2;
     gCarSystemManager->CarType = _DAT_0066acdc;
-    gta2::S56_sub_4474E0(gCheckpoint,(struct SpriteS1 *)param_1->CarPlayerPre->CarSprite,2);
+    gta2::S56_sub_4474E0(gCheckpoint,(SpriteS1 *)param_1->CarPlayerPre->CarSprite,2);
     gta2::Player_sub_40E530((Point2D *)&gCarSystemManager->CarType,(int *)&DAT_0066af60);
     this_00 = &gCarSystemManager->CarType;
-    bVar4 = gta2::Car_sub_403800((struct Car *)this_00,(int *)&local_c);
+    bVar4 = gta2::Car_sub_403800((Car *)this_00,(int *)&local_c);
     if (CONCAT31(extraout_var_14,bVar4) != 0) {
       local_c = *this_00;
     }
   }
   puVar11 = (undefined4 *)
             gta2::Player_sub_401B40((SpawnPoint *)&local_c,(GlassInfo *)local_4,
-                       (struct S127 *)&param_1->Debug);
+                       (S127 *)&param_1->Debug);
   uVar3 = *puVar11;
   param_1->field44_0x70 = (char)uVar3;
   param_1->field45_0x71 = (char)((uint)uVar3 >> 8);
   param_1->field46_0x72 = (char)((uint)uVar3 >> 0x10);
   param_1->field47_0x73 = (char)((uint)uVar3 >> 0x18);
   gta2::Player_sub_40E530((Point2D *)&param_1->Debug,(int *)&param_1->field44_0x70);
-  bVar4 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&stack0x00000004,(struct Car *)&DAT_0066acdc);
+  bVar4 = gta2::Car_IsTrainOrTrainCarriage((Car *)&stack0x00000004,(Car *)&DAT_0066acdc);
   if (CONCAT31(extraout_var_15,bVar4) != 0) {
     FUN_0048a1a0(&param_1->field44_0x70,(int *)&stack0x00000004);
   }
@@ -3470,7 +3470,7 @@ LAB_004a2563:
 // 0x004a2640: Player::sub_4A2640
 // IDA: Player::sub_4A2640
 // Ghidra: Player::FUN_004a2640
-void gta2::Player_sub_4A2640(struct Player *self,undefined4 param_1)
+void gta2::Player_sub_4A2640(Player *self,undefined4 param_1)
 {
   undefined4 *pSpriteS1;
   undefined4 *this_00;
@@ -3492,7 +3492,7 @@ void gta2::Player_sub_4A2640(struct Player *self,undefined4 param_1)
     gta2::Player_sub_49ECC0(self);
     pSpriteS1 = &this_01->Debug;
     this_00 = &self->Debug;
-    bVar5 = gta2::Car_sub_403800((struct Car *)this_00,pSpriteS1);
+    bVar5 = gta2::Car_sub_403800((Car *)this_00,pSpriteS1);
     if (CONCAT31(extraout_var,bVar5) != 0) {
       *pSpriteS1 = *this_00;
       uVar2 = self->field45_0x71;
@@ -3504,7 +3504,7 @@ void gta2::Player_sub_4A2640(struct Player *self,undefined4 param_1)
       this_01->field47_0x73 = uVar4;
       return;
     }
-    bVar5 = gta2::Point2D_FUN_004037e0((Point2D *)this_00,(struct SpriteS1 *)pSpriteS1);
+    bVar5 = gta2::Point2D_FUN_004037e0((Point2D *)this_00,(SpriteS1 *)pSpriteS1);
     if (CONCAT31(extraout_var_00,bVar5) != 0) {
       *this_00 = *pSpriteS1;
       uVar2 = this_01->field45_0x71;
@@ -3531,7 +3531,7 @@ undefined1 gta2::Player_sub_4A26C0(Player *param_1,byte *param_2)
   int *piVar4;
   undefined3 extraout_var;
   undefined4 uVar5;
-  struct Car *pCVar6;
+  Car *pCVar6;
   undefined4 *puVar7;
   struct Player *pPVar8;
   undefined3 extraout_var_00;
@@ -3561,7 +3561,7 @@ undefined1 gta2::Player_sub_4A26C0(Player *param_1,byte *param_2)
   bVar1 = gta2::Player_sub_49DD80(param_1);
   if (bVar1 != 0) {
     piVar4 = (int *)gta2::JustCopyByPtrAtoC(&DAT_0066ad4c,local_24);
-    bVar2 = gta2::Car_sub_403800((struct Car *)&param_1->ID,piVar4);
+    bVar2 = gta2::Car_sub_403800((Car *)&param_1->ID,piVar4);
     if (CONCAT31(extraout_var,bVar2) != 0) {
       UseAmmo(&param_1->ID,(int *)&DAT_0066af58);
     }
@@ -3599,8 +3599,8 @@ undefined1 gta2::Player_sub_4A26C0(Player *param_1,byte *param_2)
           pGVar14 = (GlassInfo *)&param_1->EnterControlStatus;
           puVar16 = local_18;
           pvVar9 = (void *)FUN_0049ea30(local_10,iVar15);
-          pPVar8 = (struct Player *)FUN_0040f600(pvVar9,puVar16,pGVar14);
-          pCVar6 = (struct Car *)gta2::Player_FUN_004202e0(pPVar8,puVar17,(int *)pCVar6);
+          pPVar8 = (Player *)FUN_0040f600(pvVar9,puVar16,pGVar14);
+          pCVar6 = (Car *)gta2::Player_FUN_004202e0(pPVar8,puVar17,(int *)pCVar6);
           gta2::Player_ApplyCollisionVelocity(param_1,pCVar6);
         }
         iVar15 = iVar15 + 1;
@@ -3612,19 +3612,19 @@ undefined1 gta2::Player_sub_4A26C0(Player *param_1,byte *param_2)
     *param_2 = 0;
     puVar7 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&param_1->Debug,(GlassInfo *)local_24,
-                        (struct S127 *)&DAT_0066ac4c);
+                        (S127 *)&DAT_0066ac4c);
     uVar5 = FUN_00465650(param_1->field27_0x38,param_1->field28_0x3c,*puVar7);
     param_1->field81_0x9c = uVar5;
   }
 LAB_004a284e:
   pvVar9 = &param_1->Debug;
-  pPlayer = (struct Player *)&DAT_0066acdc;
+  pPlayer = (Player *)&DAT_0066acdc;
   local_2d = param_1->State == 6;
-  pPVar8 = (struct Player *)FUN_0042a630(local_24,pvVar9);
+  pPVar8 = (Player *)FUN_0042a630(local_24,pvVar9);
   bVar2 = gta2::Player_IsCurrentPlayer(pPVar8,pPlayer);
   if (CONCAT31(extraout_var_00,bVar2) != 0) {
     pvVar9 = gta2::Player_sub_401B40((SpawnPoint *)pvVar9,(GlassInfo *)local_24,
-                        (struct S127 *)&DAT_0066ac4c);
+                        (S127 *)&DAT_0066ac4c);
   }
   iVar10 = DecoderFloat(pvVar9);
   pcVar18 = &local_2e;
@@ -3653,7 +3653,7 @@ LAB_004a284e:
           gta2::bitShiftLeft1(local_24,(void *)0x32);
           puVar17 = local_10;
           pGVar14 = (GlassInfo *)FUN_0049ea30(local_18,iVar15);
-          pPVar8 = (struct Player *)
+          pPVar8 = (Player *)
                    FUN_0040f600(&param_1->EnterControlStatus,local_20,pGVar14);
           pvVar9 = gta2::Player_FUN_004202e0(pPVar8,puVar17,piVar4);
           gta2::Player_ApplyCollisionVelocity(param_1,pvVar9);
@@ -3671,7 +3671,7 @@ LAB_004a284e:
 // 0x004a2980: Player::sub_4A2980
 // IDA: Player::sub_4A2980
 // Ghidra: ---
-char gta2::Player_sub_4A2980(struct Player *self)
+char gta2::Player_sub_4A2980(Player *self)
 {
   bool v2; // cl
   _DWORD *TrailerCtrl; // eax
@@ -3711,7 +3711,7 @@ LABEL_11:
 // 0x004a2a30: Player::FUN_004a2a30
 // IDA: ---
 // Ghidra: Player::FUN_004a2a30
-void gta2::Player_FUN_004a2a30(struct Player *self)
+void gta2::Player_FUN_004a2a30(Player *self)
 {
   bool bVar1;
   short *psVar2;
@@ -3729,21 +3729,21 @@ void gta2::Player_FUN_004a2a30(struct Player *self)
   short local_10 [4];
   undefined1 local_8 [8];
   
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)local_10);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)local_10);
   if (self->ControlMode == '\0') {
     local_10[0] = *(short *)&self->theta;
   }
   else {
-    psVar2 = (short *)gta2::sub_40E5A0((struct CarSystemManager *)&self->theta,
-                                 (struct Ped *)&stack0xffffffee,(short *)&DAT_0066ae50,
+    psVar2 = (short *)gta2::sub_40E5A0((CarSystemManager *)&self->theta,
+                                 (Ped *)&stack0xffffffee,(short *)&DAT_0066ae50,
                                  unaff_ESI,in_stack_ffffffec);
     local_10[0] = *psVar2;
   }
-  bVar1 = gta2::Car_sub_403800((struct Car *)&DAT_0066afb4,(int *)&DAT_0066acdc);
+  bVar1 = gta2::Car_sub_403800((Car *)&DAT_0066afb4,(int *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar1) == 0) {
-    bVar1 = gta2::CarSystemManager_less_than((struct CarSystemManager *)local_10,(short *)&DAT_0066afac);
+    bVar1 = gta2::CarSystemManager_less_than((CarSystemManager *)local_10,(short *)&DAT_0066afac);
     if (CONCAT31(extraout_var_02,bVar1) == 0) {
-      bVar1 = gta2::CarSystemManager_less_than((struct CarSystemManager *)local_10,(short *)&DAT_0066ae50);
+      bVar1 = gta2::CarSystemManager_less_than((CarSystemManager *)local_10,(short *)&DAT_0066ae50);
       uVar4 = _DAT_0066ae3c;
       if (CONCAT31(extraout_var_03,bVar1) == 0) goto LAB_004a2b02;
     }
@@ -3753,10 +3753,10 @@ void gta2::Player_FUN_004a2a30(struct Player *self)
     }
   }
   else {
-    bVar1 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)local_10,(short *)&DAT_0066ad38);
+    bVar1 = gta2::CarSystemManager_greater_than((CarSystemManager *)local_10,(short *)&DAT_0066ad38);
     uVar4 = _DAT_0066ae3c;
     if (CONCAT31(extraout_var_00,bVar1) == 0) {
-      bVar1 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)local_10,(short *)&DAT_0066ae50);
+      bVar1 = gta2::CarSystemManager_greater_than((CarSystemManager *)local_10,(short *)&DAT_0066ae50);
       if (CONCAT31(extraout_var_01,bVar1) == 0) goto LAB_004a2b02;
       puVar3 = (undefined4 *)gta2::JustCopyByPtrAtoC(&DAT_0066ae3c,local_10);
       uVar4 = *puVar3;
@@ -3766,7 +3766,7 @@ void gta2::Player_FUN_004a2a30(struct Player *self)
 LAB_004a2b02:
   psVar2 = local_10;
   piVar5 = (int *)&DAT_0066aea8;
-  this_00 = gta2::Player_FUN_00420390((struct Player *)&DAT_0066afb4,local_8);
+  this_00 = gta2::Player_FUN_00420390((Player *)&DAT_0066afb4,local_8);
   FUN_0041e1a0(this_00,psVar2,piVar5);
   gta2::Player_sub_4A0930(self);
   self->field_0xaa = 1;
@@ -3777,7 +3777,7 @@ LAB_004a2b02:
 // 0x004a2b40: Player::FUN_004a2b40
 // IDA: ---
 // Ghidra: Player::FUN_004a2b40
-void gta2::Player_FUN_004a2b40(struct Player *self)
+void gta2::Player_FUN_004a2b40(Player *self)
 {
   bool bVar1;
   undefined2 *puVar2;
@@ -3791,30 +3791,30 @@ void gta2::Player_FUN_004a2b40(struct Player *self)
   undefined3 extraout_var_05;
   void *this_00;
   void *unaff_ESI;
-  struct CarSystemManager **ppCVar4;
+  CarSystemManager **ppCVar4;
   undefined4 uVar5;
   int *piVar6;
   short *in_stack_ffffffec;
-  struct CarSystemManager *pCarSystemManager;
+  CarSystemManager *pCarSystemManager;
   undefined1 local_8 [8];
   
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&pCarSystemManager);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&pCarSystemManager);
   if (self->ControlMode == '\0') {
     pCarSystemManager._0_2_ = *(undefined2 *)&self->theta;
   }
   else {
     puVar2 = (undefined2 *)
-             gta2::sub_40E5A0((struct CarSystemManager *)&self->theta,(struct Ped *)&stack0xffffffee
+             gta2::sub_40E5A0((CarSystemManager *)&self->theta,(Ped *)&stack0xffffffee
                         ,(short *)&DAT_0066ae50,unaff_ESI,in_stack_ffffffec);
     pCarSystemManager._0_2_ = *puVar2;
   }
-  bVar1 = gta2::Car_sub_403800((struct Car *)&DAT_0066afb8,(int *)&DAT_0066acdc);
+  bVar1 = gta2::Car_sub_403800((Car *)&DAT_0066afb8,(int *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar1) == 0) {
-    bVar1 = gta2::CarSystemManager_less_than((struct CarSystemManager *)&pCarSystemManager,
+    bVar1 = gta2::CarSystemManager_less_than((CarSystemManager *)&pCarSystemManager,
                        (short *)&DAT_0066afac);
     uVar5 = _DAT_0066ae3c;
     if (CONCAT31(extraout_var_04,bVar1) == 0) {
-      bVar1 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)&pCarSystemManager,
+      bVar1 = gta2::CarSystemManager_greater_than((CarSystemManager *)&pCarSystemManager,
                          (short *)&DAT_0066ad38);
       if (CONCAT31(extraout_var_05,bVar1) == 0) goto LAB_004a2c31;
       puVar3 = (undefined4 *)gta2::JustCopyByPtrAtoC(&DAT_0066ae3c,&pCarSystemManager)
@@ -3823,16 +3823,16 @@ void gta2::Player_FUN_004a2b40(struct Player *self)
     }
   }
   else {
-    bVar1 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)&pCarSystemManager,
+    bVar1 = gta2::CarSystemManager_greater_than((CarSystemManager *)&pCarSystemManager,
                        (short *)&DAT_0066afac);
     if ((CONCAT31(extraout_var_00,bVar1) == 0) ||
-       (bVar1 = gta2::CarSystemManager_less_than((struct CarSystemManager *)&pCarSystemManager,
+       (bVar1 = gta2::CarSystemManager_less_than((CarSystemManager *)&pCarSystemManager,
                            (short *)&DAT_0066ae50),
        CONCAT31(extraout_var_01,bVar1) == 0)) {
-      bVar1 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)&pCarSystemManager,
+      bVar1 = gta2::CarSystemManager_greater_than((CarSystemManager *)&pCarSystemManager,
                          (short *)&DAT_0066ae50);
       if ((CONCAT31(extraout_var_02,bVar1) == 0) ||
-         (bVar1 = gta2::CarSystemManager_less_than((struct CarSystemManager *)&pCarSystemManager,
+         (bVar1 = gta2::CarSystemManager_less_than((CarSystemManager *)&pCarSystemManager,
                              (short *)&DAT_0066ad38), uVar5 = _DAT_0066ae3c,
          CONCAT31(extraout_var_03,bVar1) == 0)) goto LAB_004a2c31;
     }
@@ -3846,7 +3846,7 @@ void gta2::Player_FUN_004a2b40(struct Player *self)
 LAB_004a2c31:
   ppCVar4 = &pCarSystemManager;
   piVar6 = (int *)&DAT_0066aea8;
-  this_00 = gta2::Player_FUN_00420390((struct Player *)&DAT_0066afb4,local_8);
+  this_00 = gta2::Player_FUN_00420390((Player *)&DAT_0066afb4,local_8);
   FUN_0041e1a0(this_00,ppCVar4,piVar6);
   gta2::Player_sub_4A0930(self);
   self->field_0xaa = 1;
@@ -3857,11 +3857,11 @@ LAB_004a2c31:
 // 0x004a2c70: Player::sub_4A2C70
 // IDA: Player::sub_4A2C70
 // Ghidra: Player::FUN_004a2c70
-void gta2::Player_sub_4A2C70(struct Player *self)
+void gta2::Player_sub_4A2C70(Player *self)
 {
   byte bVar1;
   bool bVar2;
-  struct EventHandler *pEVar3;
+  EventHandler *pEVar3;
   char *pcVar4;
   GlassInfo *pGVar5;
   undefined3 extraout_var;
@@ -3897,9 +3897,9 @@ void gta2::Player_sub_4A2C70(struct Player *self)
   local_8 = *(char (*) [4])pcVar4;
   local_4 = *(char (*) [4])(pcVar4 + 4);
   pGVar5 = (GlassInfo *)
-           gta2::sub_401C80((struct CarSystemManager *)&self->theta,local_1c);
+           gta2::sub_401C80((CarSystemManager *)&self->theta,local_1c);
   FUN_0040f6b0(local_8,pGVar5);
-  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)local_8,(struct SpriteS1 *)&DAT_0066acdc);
+  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)local_8,(SpriteS1 *)&DAT_0066acdc);
   if (CONCAT31(extraout_var,bVar2) == 0) {
     puVar6 = (undefined4 *)gta2::JustCopyByPtrAtoC(local_14,local_1c);
     uVar7 = *puVar6;
@@ -3907,7 +3907,7 @@ void gta2::Player_sub_4A2C70(struct Player *self)
   gta2::Player_sub_49E330(self,uVar7);
   piVar8 = &local_c;
   pcVar4 = local_8;
-  this_00 = gta2::Player_FUN_00420390((struct Player *)&DAT_0066afb4,local_14);
+  this_00 = gta2::Player_FUN_00420390((Player *)&DAT_0066afb4,local_14);
   FUN_0041e1a0(this_00,pcVar4,piVar8);
   gta2::Player_sub_4A0930(self);
   return;
@@ -3917,7 +3917,7 @@ void gta2::Player_sub_4A2C70(struct Player *self)
 // 0x004a2d70: Player::sub_4A2D70
 // IDA: Player::sub_4A2D70
 // Ghidra: Player::FUN_004a2d70
-byte gta2::Player_sub_4A2D70(struct Player *self)
+byte gta2::Player_sub_4A2D70(Player *self)
 {
   if (PTR_005e6874 == (void *)0x1) {
     gta2::Player_FUN_004a2b40(self);
@@ -3938,7 +3938,7 @@ byte gta2::Player_sub_4A2D70(struct Player *self)
 // 0x004a2db0: Player::sub_4A2DB0
 // IDA: Player::sub_4A2DB0
 // Ghidra: Player::FUN_004a2db0
-byte gta2::Player_sub_4A2DB0(struct Player *self)
+byte gta2::Player_sub_4A2DB0(Player *self)
 {
   char in_AL;
   byte bVar1;
@@ -3946,7 +3946,7 @@ byte gta2::Player_sub_4A2DB0(struct Player *self)
   gta2::Car_sub_414F70(self->CarPlayerPre);
   if (in_AL != '\0') {
     gCarSystemManager->field44_0x60 = 1;
-    bVar1 = gta2::S56_sub_4474E0(gCheckpoint,(struct SpriteS1 *)self->CarPlayerPre->CarSprite,2);
+    bVar1 = gta2::S56_sub_4474E0(gCheckpoint,(SpriteS1 *)self->CarPlayerPre->CarSprite,2);
     if (bVar1 != 0) {
       return 1;
     }
@@ -3978,7 +3978,7 @@ void gta2::Player_sub_4A2E00(Player *param_1,undefined4 param_2)
 // 0x004a2f20: Player::sub_4A2F20
 // IDA: Player::sub_4A2F20
 // Ghidra: Player::FUN_004a2f20
-void gta2::Player_sub_4A2F20(struct Player *self)
+void gta2::Player_sub_4A2F20(Player *self)
 {
   undefined4 uVar1;
   undefined4 *puVar2;
@@ -4010,13 +4010,13 @@ void gta2::Player_sub_4A2F20(struct Player *self)
 // 0x004a30a0: Player::FUN_004a30a0
 // IDA: ---
 // Ghidra: Player::FUN_004a30a0
-byte gta2::Player_FUN_004a30a0(struct Player *self,SpriteS1 *param_1,SpriteS1 *param_2)
+byte gta2::Player_FUN_004a30a0(Player *self,SpriteS1 *param_1,SpriteS1 *param_2)
 {
-  struct SpriteS1 *pS127;
-  struct SpriteS1 *this_00;
+  SpriteS1 *pS127;
+  SpriteS1 *this_00;
   byte bVar1;
-  struct SpriteS1 *this_01;
-  struct SpriteS1 *pSVar2;
+  SpriteS1 *this_01;
+  SpriteS1 *pSVar2;
   int *piVar3;
   int local_8;
   int local_4;
@@ -4028,9 +4028,9 @@ byte gta2::Player_FUN_004a30a0(struct Player *self,SpriteS1 *param_1,SpriteS1 *p
   do {
     gta2::Player_sub_49DE40(self);
     piVar3 = &local_4;
-    pSVar2 = (struct SpriteS1 *)&param_2;
-    this_01 = gta2::S202_sub_401B20((Point2D *)this_00,(struct SpriteS1 *)&param_1,(struct S127 *)pS127);
-    pSVar2 = gta2::S122_sub_401BF0((struct Model *)this_01,pSVar2,piVar3);
+    pSVar2 = (SpriteS1 *)&param_2;
+    this_01 = gta2::S202_sub_401B20((Point2D *)this_00,(SpriteS1 *)&param_1,(S127 *)pS127);
+    pSVar2 = gta2::S122_sub_401BF0((Model *)this_01,pSVar2,piVar3);
     pSVar2 = pSVar2->FirstElement;
     gta2::Player_sub_49EEB0(self,(int)pSVar2);
     bVar1 = gta2::Player_sub_4A0020(self);
@@ -4051,7 +4051,7 @@ byte gta2::Player_FUN_004a30a0(struct Player *self,SpriteS1 *param_1,SpriteS1 *p
 // Ghidra: FUN_004a3140
 void gta2::Player_sub_4A3140(Player *param_1,undefined4 param_2,undefined4 *param_3)
 {
-  struct Car *self;
+  Car *self;
   bool bVar1;
   
   self = param_1->CarPlayerPre;
@@ -4076,7 +4076,7 @@ void gta2::Player_sub_4A31B0(Player *param_1,undefined4 *param_2,undefined4 para
   bool bVar1;
   byte bVar2;
   int *piVar3;
-  struct Car *pCVar4;
+  Car *pCVar4;
   undefined3 extraout_var;
   struct Player *this_00;
   undefined3 extraout_var_00;
@@ -4090,7 +4090,7 @@ void gta2::Player_sub_4A31B0(Player *param_1,undefined4 *param_2,undefined4 para
   gta2::Player_sub_41E260(param_4,(int *)&param_4);
   piVar6 = (int *)&DAT_0066aeb0;
   piVar3 = (int *)gta2::Player_sub_49F660(param_1,&local_10);
-  pCVar4 = (struct Car *)gta2::sub_401B90((struct Player *)&param_4,local_8,piVar3);
+  pCVar4 = (Car *)gta2::sub_401B90((Player *)&param_4,local_8,piVar3);
   bVar1 = gta2::Car_sub_403800(pCVar4,piVar6);
   if (CONCAT31(extraout_var,bVar1) != 0) {
     local_c = self->Player_;
@@ -4101,14 +4101,14 @@ void gta2::Player_sub_4A31B0(Player *param_1,undefined4 *param_2,undefined4 para
       bVar2 = gta2::Car_IsDriverPlayer(pCVar4);
       if (bVar2 == 0) {
         piVar3 = (int *)&DAT_0066ab90;
-        this_00 = (struct Player *)gta2::Player_sub_4211C0(param_1,local_8);
+        this_00 = (Player *)gta2::Player_sub_4211C0(param_1,local_8);
         bVar1 = gta2::Player_CheckCondition(this_00,piVar3);
         if ((CONCAT31(extraout_var_00,bVar1) != 0) ||
            (*(char *)((int)&param_1->CameraOrPhysics_ + 2) != '\0')) {
           puVar5 = (undefined4 *)
                    gta2::Player_FUN_004202e0(self,local_8,(int *)&DAT_0066ac48);
-          local_10 = (struct Player *)*puVar5;
-          local_c = (struct Player *)puVar5[1];
+          local_10 = (Player *)*puVar5;
+          local_c = (Player *)puVar5[1];
         }
       }
     }
@@ -4148,7 +4148,7 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
   undefined3 extraout_var_02;
   int iVar5;
   undefined3 extraout_var_03;
-  struct Car *this_02;
+  Car *this_02;
   undefined3 extraout_var_04;
   struct Player *this_03;
   undefined4 uVar6;
@@ -4156,7 +4156,7 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
   undefined4 uVar8;
   undefined4 uVar9;
   int *piVar10;
-  struct SpriteS1 *pSpriteS1;
+  SpriteS1 *pSpriteS1;
   undefined1 local_18 [4];
   undefined1 local_14 [4];
   undefined1 local_10 [8];
@@ -4173,7 +4173,7 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
   FUN_004a05c0(local_10,*puVar3,_DAT_0066ac60,param_2,&DAT_0066afb4,
                &DAT_0066ad08,uVar4,puVar7,uVar6,uVar8,uVar9);
   if (param_1->State == 6) {
-    bVar1 = gta2::Player_CheckCondition((struct Player *)&param_1->field44_0x70,(int *)&DAT_0066acdc);
+    bVar1 = gta2::Player_CheckCondition((Player *)&param_1->field44_0x70,(int *)&DAT_0066acdc);
     if (CONCAT31(extraout_var,bVar1) != 0) {
       puVar3 = &param_2;
       piVar10 = (int *)&DAT_0066ae48;
@@ -4181,7 +4181,7 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
       this_00 = gta2::JustCopyByPtrAtoC(puVar2,local_14);
       puVar3 = (undefined4 *)
                gta2::WorldCoordinateToScreenCoord(this_00,puVar3,piVar10);
-      pSpriteS1 = (struct SpriteS1 *)&DAT_0066ade4;
+      pSpriteS1 = (SpriteS1 *)&DAT_0066ade4;
       *puVar2 = *puVar3;
       this_01 = (Point2D *)
                 gta2::Player_FUN_00403840(this_03,(int *)&param_2,(GlassInfo *)puVar2);
@@ -4195,14 +4195,14 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
   uVar6 = *puVar2;
   _DAT_0066b034 = uVar6;
   if (param_1->State == 6) {
-    bVar1 = gta2::Player_IsCurrentPlayer((struct Player *)&param_1->field44_0x70,(struct Player *)&DAT_0066acdc)
+    bVar1 = gta2::Player_IsCurrentPlayer((Player *)&param_1->field44_0x70,(Player *)&DAT_0066acdc)
     ;
     if (CONCAT31(extraout_var_01,bVar1) != 0) {
-      bVar1 = gta2::Player_IsCurrentPlayer((struct Player *)&param_1->ID,(struct Player *)&DAT_0066acdc);
+      bVar1 = gta2::Player_IsCurrentPlayer((Player *)&param_1->ID,(Player *)&DAT_0066acdc);
       if (CONCAT31(extraout_var_02,bVar1) != 0) {
         iVar5 = FUN_00420360(&param_1->S103_);
         if (iVar5 != 0) {
-          bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)&DAT_0066b034,(struct SpriteS1 *)&DAT_0066aff4)
+          bVar1 = gta2::Point2D_FUN_004037e0((Point2D *)&DAT_0066b034,(SpriteS1 *)&DAT_0066aff4)
           ;
           if (CONCAT31(extraout_var_03,bVar1) != 0) {
             _DAT_0066b034 = _DAT_0066aff4;
@@ -4214,7 +4214,7 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
   }
   gta2::Car_sub_4292F0(param_1->CarPlayerPre,uVar6);
   piVar10 = (int *)&DAT_0066af5c;
-  this_02 = (struct Car *)gta2::Player_sub_41E260((struct Player *)&param_1->S103_,(int *)&param_2);
+  this_02 = (Car *)gta2::Player_sub_41E260((Player *)&param_1->S103_,(int *)&param_2);
   bVar1 = gta2::Car_sub_403800(this_02,piVar10);
   if (CONCAT31(extraout_var_04,bVar1) != 0) {
     bVar1 = gta2::Car_GetFullDamage(param_1->CarPlayerPre);
@@ -4232,27 +4232,27 @@ void gta2::Player_sub_4A32D0(Player *param_1,Player *param_2)
 // 0x004a34a0: Player::sub_4A34A0
 // IDA: Player::sub_4A34A0
 // Ghidra: ---
-EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
+EngineStruct * gta2::Player_sub_4A34A0(Player *self, Car *pCar)
 {
   struct Player *pPlayer; // edi
   int *v4; // eax
   int v5; // edx
   int v6; // eax
-  struct GameEntity *v7; // eax
+  GameEntity *v7; // eax
   int *v8; // eax
   int v9; // edx
   int *v10; // eax
   int v11; // edx
   int *v12; // eax
   int v13; // edx
-  struct Car **v14; // eax
+  Car **v14; // eax
   struct Player **v15; // eax
   int *v16; // eax
   int v17; // ecx
   int v18; // edx
   int State; // eax
   int v20; // eax
-  struct SpriteS1 *v21; // eax
+  SpriteS1 *v21; // eax
   int *v22; // eax
   void *v23; // ecx
   void *v24; // eax
@@ -4260,12 +4260,12 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   _DWORD *v26; // eax
   int *v27; // eax
   int v28; // edx
-  struct Car *sCar1; // ecx
+  Car *sCar1; // ecx
   int *v30; // eax
-  struct Tango *v31; // eax
-  struct SpriteS1 *v32; // eax
-  struct Car *v33; // eax
-  struct Car *v34; // eax
+  Tango *v31; // eax
+  SpriteS1 *v32; // eax
+  Car *v33; // eax
+  Car *v34; // eax
   struct Ped *v35; // eax
   int **v36; // eax
   int *v37; // eax
@@ -4274,7 +4274,7 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   int *v40; // eax
   struct Ped *v41; // eax
   struct Ped *v42; // edi
-  struct Car *v43; // eax
+  Car *v43; // eax
   _DWORD *v44; // eax
   struct Ped *v45; // eax
   struct Ped *v46; // edi
@@ -4297,7 +4297,7 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   int v63; // [esp+4Ch] [ebp-Ch]
   _DWORD a2[2]; // [esp+50h] [ebp-8h] BYREF
 
-  gta2::Player_sub_49F660(self, (struct SpriteS1 *)&v53);
+  gta2::Player_sub_49F660(self, (SpriteS1 *)&v53);
   gta2::Car_CarMakeDriveable4(pCar);
   pPlayer = pCar->Player_;
   gta2::Player_sub_49ECC0(pPlayer);
@@ -4307,7 +4307,7 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   v62 = v5;
   v63 = v6;
   gta2::Player_sub_49ECC0(self);
-  v7 = (struct GameEntity *)gta2::Player_sub_49E5A0(self, &v60, &unk_66AD08);
+  v7 = (GameEntity *)gta2::Player_sub_49E5A0(self, &v60, &unk_66AD08);
   v8 = gta2::S1_sub_40F600(v7, v59, (int)&v62);
   v9 = v8[1];
   v62 = *v8;
@@ -4320,12 +4320,12 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   v13 = v12[1];
   v60 = *v12;
   v61 = v13;
-  v14 = (Car **)gta2::S1_sub_40F600((struct GameEntity *)v58, v59, (int)&unk_66AD08);
+  v14 = (Car **)gta2::S1_sub_40F600((GameEntity *)v58, v59, (int)&unk_66AD08);
   unk_66AFB4 = *v14;
   unk_66AFB8 = v14[1];
-  gta2::Player_sub_49F6C0(pPlayer, (struct SpriteS1 *)v55);
-  v54 = (int)gta2::Player_sub_49F6C0(self, (struct SpriteS1 *)v56);
-  v15 = (Player **)gta2::Player_sub_49F660(pPlayer, (struct SpriteS1 *)arg0);
+  gta2::Player_sub_49F6C0(pPlayer, (SpriteS1 *)v55);
+  v54 = (int)gta2::Player_sub_49F6C0(self, (SpriteS1 *)v56);
+  v15 = (Player **)gta2::Player_sub_49F660(pPlayer, (SpriteS1 *)arg0);
   v16 = sub_4A05C0(a2, v53, *v15);
   v17 = *v16;
   v18 = v16[1];
@@ -4334,21 +4334,21 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   v59[1] = v18;
   if ( State == 6
     && (LOWORD(v20) = gta2::Car_sub_403820(
-                        (struct Car *)&pCar->CarSprite->S3_arr5031[0].PositionZ,
+                        (Car *)&pCar->CarSprite->S3_arr5031[0].PositionZ,
                         &self->sCar1->CarSprite->S3_arr5031[0].PositionZ),
         v20) )
   {
-    v21 = gta2::JustCopyByPtrAtoC(&self->MultiPlayerMode, (struct SpriteS1 *)v56);
-    v22 = (int *)gta2::Radar_AddBlip((struct Tango *)v21, (struct SpriteS1 *)arg0, (struct PublicTransport *)&stru_66ADE0.bool);
+    v21 = gta2::JustCopyByPtrAtoC(&self->MultiPlayerMode, (SpriteS1 *)v56);
+    v22 = (int *)gta2::Radar_AddBlip((Tango *)v21, (SpriteS1 *)arg0, (PublicTransport *)&stru_66ADE0.bool);
     v23 = (void *)*v22;
     self->MultiPlayerMode = *v22;
-    v24 = gta2::sub_403840(v23, (struct Player *)arg0, &self->MultiPlayerMode);
+    v24 = gta2::sub_403840(v23, (Player *)arg0, &self->MultiPlayerMode);
     if ( gta2::sub_4037E0(v24) )
       self->MultiPlayerMode = unk_66ACDC;
     v54 = 10;
-    v25 = gta2::S1_sub_40F600((struct GameEntity *)v58, arg0, (int)&v60);
+    v25 = gta2::S1_sub_40F600((GameEntity *)v58, arg0, (int)&v60);
     v26 = (_DWORD *)sub_420390(v25, v58);
-    v27 = sub_49E360(v26, a2, (struct SpriteS1 *)&v54);
+    v27 = sub_49E360(v26, a2, (SpriteS1 *)&v54);
     v28 = v27[1];
     v60 = *v27;
     sCar1 = self->sCar1;
@@ -4364,9 +4364,9 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
       gta2::Car_sub_49EFC0(self->sCar1);
     }
     v54 = 50;
-    v31 = (struct Tango *)gta2::sub_403840(v55, (struct Player *)v55, &self->Up);
-    v32 = gta2::Radar_AddBlip(v31, (struct SpriteS1 *)v56, (struct PublicTransport *)&v53);
-    unk_66B034.Car = gta2::sub_401BD0(v32, (struct SpriteS1 *)arg0, &v54)->FirstElement;
+    v31 = (Tango *)gta2::sub_403840(v55, (Player *)v55, &self->Up);
+    v32 = gta2::Radar_AddBlip(v31, (SpriteS1 *)v56, (PublicTransport *)&v53);
+    unk_66B034.Car = gta2::sub_401BD0(v32, (SpriteS1 *)arg0, &v54)->FirstElement;
   }
   else
   {
@@ -4375,7 +4375,7 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   }
   if ( gta2::Car_sub_49EFE0(self->sCar1, v49)
     && !gta2::Car_sub_4216E0(pCar)
-    && (v33 = (struct Car *)gta2::Player_sub_41E260((struct Player *)v59, (int)arg0), gta2::Car_sub_403800(v33, (int)&unk_66AF60))
+    && (v33 = (Car *)gta2::Player_sub_41E260((Player *)v59, (int)arg0), gta2::Car_sub_403800(v33, (int)&unk_66AF60))
     && (gta2::Player_sub_4211A0(self, arg0), gta2::Car_sub_403800(v34, (int)&unk_66AB9C)) )
   {
     v50 = 1;
@@ -4394,11 +4394,11 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
   else
   {
     v50 = 0;
-    v36 = gta2::Player_sub_4A31B0(self, arg0, (int *)&unk_66AD08, (struct Player *)v59, 50);
-    gta2::Player_sub_40E530((struct Player *)&unk_66B034, (struct Tango *)v36);
+    v36 = gta2::Player_sub_4A31B0(self, arg0, (int *)&unk_66AD08, (Player *)v59, 50);
+    gta2::Player_sub_40E530((Player *)&unk_66B034, (Tango *)v36);
   }
   gta2::Car_sub_425CA0(self->sCar1, pCar);
-  LOWORD(v37) = gta2::Car_sub_4292F0(self->sCar1, (struct Car *)unk_66B034.Car);
+  LOWORD(v37) = gta2::Car_sub_4292F0(self->sCar1, (Car *)unk_66B034.Car);
   a3 = v37;
   if ( (__int16)v37 > 200 )
   {
@@ -4407,13 +4407,13 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
     if ( v38 )
     {
       if ( gta2::Ped_IsPlayerControlled(v38) )
-        gta2::PlayerStats_sub_4B8870((struct PlayerStats *)(*(_DWORD *)(v54 + 348) + 724), self->sCar1, a3);
+        gta2::PlayerStats_sub_4B8870((PlayerStats *)(*(_DWORD *)(v54 + 348) + 724), self->sCar1, a3);
     }
   }
   if ( !v50 )
   {
     gta2::Player_sub_49ECC0(pPlayer);
-    v39 = (struct Player *)sub_40F640(v59, a2);
+    v39 = (Player *)sub_40F640(v59, a2);
     gta2::Player_sub_4A31B0(pPlayer, arg0, (int *)&unk_66AD08, v39, 50);
     if ( gta2::Car_IsTrainOrTrainCarriage(self->sCar1) )
     {
@@ -4422,7 +4422,7 @@ EngineStruct * gta2::Player_sub_4A34A0(struct Player *self, Car *pCar)
     }
     else
     {
-      LOWORD(v40) = gta2::Car_sub_4292F0(pCar, (struct Car *)unk_66B034.Car);
+      LOWORD(v40) = gta2::Car_sub_4292F0(pCar, (Car *)unk_66B034.Car);
       a3a = v40;
       if ( (__int16)v40 <= 200 )
       {
@@ -4434,11 +4434,11 @@ LABEL_32:
     v41 = gta2::Car_sub_423480(self->sCar1);
     v42 = v41;
     if ( v41 && gta2::Ped_IsPlayerControlled(v41) )
-      gta2::PlayerStats_sub_4B8870((struct PlayerStats *)&v42->isPlayer->Money, pCar, a3a);
+      gta2::PlayerStats_sub_4B8870((PlayerStats *)&v42->isPlayer->Money, pCar, a3a);
     goto LABEL_32;
   }
 LABEL_33:
-  v43 = (struct Car *)gta2::Player_sub_41E260((struct Player *)&self->S103_4, (int)arg0);
+  v43 = (Car *)gta2::Player_sub_41E260((Player *)&self->S103_4, (int)arg0);
   if ( gta2::Car_sub_403800(v43, (int)&unk_66AF5C) && !gta2::Car_GetFullDamage(self->sCar1) )
   {
     v44 = sub_40F640(&v62, a2);
@@ -4481,12 +4481,12 @@ LABEL_33:
 // 0x004a3a40: Player::sub_4A3A40
 // IDA: Player::sub_4A3A40
 // Ghidra: Player::FUN_004a3a40
-void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined4 param_2)
+void gta2::Player_sub_4A3A40(Player *self,CollisionBox *param_1,undefined4 param_2)
 {
   byte bVar1;
   bool bVar2;
   undefined4 *puVar3;
-  struct SpriteS1 **ppSVar4;
+  SpriteS1 **ppSVar4;
   void *pvVar5;
   struct Player *pPVar6;
   undefined3 extraout_var;
@@ -4499,14 +4499,14 @@ void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined
   undefined1 *puVar10;
   GlassInfo *pGVar11;
   int *piVar12;
-  struct SpriteS1 *pSVar13;
+  SpriteS1 *pSVar13;
   int local_50;
-  struct SpriteS1 *local_4c;
+  SpriteS1 *local_4c;
   int local_48 [2];
   undefined1 local_40 [16];
   struct Player *local_30;
   struct Player *local_2c;
-  struct Car *local_28;
+  Car *local_28;
   struct Ped *local_24;
   SpawnPoint *local_20;
   struct Player *local_1c;
@@ -4524,15 +4524,15 @@ void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined
   if (bVar1 == 0) {
     puVar3 = (undefined4 *)
              gta2::Player_GetCarPoints(self,local_10,(GlassInfo *)&DAT_0066ad08);
-    local_30 = (struct Player *)*puVar3;
-    local_2c = (struct Player *)puVar3[1];
+    local_30 = (Player *)*puVar3;
+    local_2c = (Player *)puVar3[1];
     puVar3 = (undefined4 *)FUN_0049f6c0(local_48);
     puVar3 = (undefined4 *)
              FUN_004a05c0(local_10,local_50,_DAT_0066ac60,&local_30,
                           &DAT_0066afb4,&DAT_0066ad08,local_40 + 8,local_40,
                           *puVar3,_DAT_0066afd8,_DAT_0066adb4);
     local_20 = (SpawnPoint *)*puVar3;
-    local_1c = (struct Player *)puVar3[1];
+    local_1c = (Player *)puVar3[1];
   }
   else {
     ppSVar4 = &local_4c;
@@ -4540,32 +4540,32 @@ void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined
     pSVar13 = *ppSVar4;
     local_4c = pSVar13;
     puVar3 = (undefined4 *)FUN_00482c50(&local_20);
-    local_28 = (struct Car *)*puVar3;
+    local_28 = (Car *)*puVar3;
     pGVar11 = (GlassInfo *)&local_28;
-    local_24 = (struct Ped *)puVar3[1];
+    local_24 = (Ped *)puVar3[1];
     piVar8 = local_48;
     pvVar5 = gta2::Player_GetCarPoints(self,&local_20,(GlassInfo *)&DAT_0066ad08);
     puVar3 = (undefined4 *)FUN_0040f600(pvVar5,piVar8,pGVar11);
-    local_30 = (struct Player *)*puVar3;
-    local_2c = (struct Player *)puVar3[1];
+    local_30 = (Player *)*puVar3;
+    local_2c = (Player *)puVar3[1];
     puVar3 = (undefined4 *)FUN_0049f6c0(local_48);
     puVar3 = (undefined4 *)
              FUN_004a05c0(local_18,local_50,pSVar13,&local_30,&DAT_0066afb4,
                           &DAT_0066ad08,local_40 + 8,local_40,*puVar3,
                           _DAT_0066afd8,_DAT_0066aea4);
     local_20 = (SpawnPoint *)*puVar3;
-    local_1c = (struct Player *)puVar3[1];
+    local_1c = (Player *)puVar3[1];
     ppSVar4 = &local_4c;
     puVar9 = local_10;
-    pPVar6 = (struct Player *)gta2::Player_FUN_0040f640((struct Player *)&local_20,local_18);
+    pPVar6 = (Player *)gta2::Player_FUN_0040f640((Player *)&local_20,local_18);
     puVar3 = (undefined4 *)gta2::Player_FUN_004202e0(pPVar6,puVar9,(int *)ppSVar4);
-    local_28 = (struct Car *)*puVar3;
-    local_24 = (struct Ped *)puVar3[1];
-    gta2::S63_sub_484A40((struct EventHandler *)param_1,&local_28);
+    local_28 = (Car *)*puVar3;
+    local_24 = (Ped *)puVar3[1];
+    gta2::S63_sub_484A40((EventHandler *)param_1,&local_28);
   }
   if (self->State == 6) {
-    bVar2 = gta2::Car_IsTrainOrTrainCarriage((struct Car *)&param_1->Index->z,
-                       (struct Car *)&self->CarPlayerPre->CarSprite->Point2D);
+    bVar2 = gta2::Car_IsTrainOrTrainCarriage((Car *)&param_1->Index->z,
+                       (Car *)&self->CarPlayerPre->CarSprite->Point2D);
     if (CONCAT31(extraout_var,bVar2) != 0) {
       piVar8 = local_48;
       puVar3 = &self->ID;
@@ -4573,8 +4573,8 @@ void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined
       pvVar5 = gta2::JustCopyByPtrAtoC(puVar3,&local_4c);
       puVar7 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(pvVar5,piVar8,piVar12)
       ;
-      pPVar6 = (struct Player *)*puVar7;
-      pSVar13 = (struct SpriteS1 *)&DAT_0066ade4;
+      pPVar6 = (Player *)*puVar7;
+      pSVar13 = (SpriteS1 *)&DAT_0066ade4;
       *puVar3 = pPVar6;
       this_00 = (Point2D *)
                 gta2::Player_FUN_00403840(pPVar6,local_48,(GlassInfo *)puVar3);
@@ -4585,8 +4585,8 @@ void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined
       ppSVar4 = &local_4c;
       puVar9 = local_10;
       puVar10 = local_18;
-      local_4c = (struct SpriteS1 *)0xa;
-      pPVar6 = (struct Player *)
+      local_4c = (SpriteS1 *)0xa;
+      pPVar6 = (Player *)
                FUN_0040f600(local_40 + 8,local_48,(GlassInfo *)local_40);
       gta2::Player_FUN_00420390(pPVar6,puVar10);
       puVar3 = (undefined4 *)gta2::FUN_0049e360(puVar9,ppSVar4);
@@ -4595,15 +4595,15 @@ void gta2::Player_sub_4A3A40(struct Player *self,CollisionBox *param_1,undefined
       gta2::Player_sub_4A09B0(self,(undefined4 *)(local_40 + 8),0x32);
       bVar1 = gta2::S63_sub_482C90(param_1);
       if (bVar1 != 0) {
-        pvVar5 = gta2::Player_FUN_0040f640((struct Player *)(local_40 + 8),local_10);
-        gta2::S63_sub_484A40((struct EventHandler *)param_1,pvVar5);
+        pvVar5 = gta2::Player_FUN_0040f640((Player *)(local_40 + 8),local_10);
+        gta2::S63_sub_484A40((EventHandler *)param_1,pvVar5);
       }
       ppSVar4 = &local_4c;
-      pSVar13 = (struct SpriteS1 *)local_48;
+      pSVar13 = (SpriteS1 *)local_48;
       piVar8 = &local_50;
       puVar9 = local_40;
-      local_4c = (struct SpriteS1 *)0x32;
-      piVar12 = gta2::Player_FUN_00403840((struct Player *)(local_40 + 8),(int *)(local_40 + 8),
+      local_4c = (SpriteS1 *)0x32;
+      piVar12 = gta2::Player_FUN_00403840((Player *)(local_40 + 8),(int *)(local_40 + 8),
                            (GlassInfo *)&self->field44_0x70);
       pvVar5 = gta2::WorldCoordinateToScreenCoord(piVar12,puVar9,piVar8);
       pSVar13 = FUN_00401bd0(pvVar5,pSVar13,(int *)ppSVar4);
@@ -4617,12 +4617,12 @@ LAB_004a3d3f:
   piVar8 = (int *)FUN_004a31b0(local_40 + 8,&DAT_0066ad08,&local_20,0xf);
   gta2::Player_sub_40E530((Point2D *)&DAT_0066b034,piVar8);
   gta2::Car_sub_4292F0(self->CarPlayerPre,_DAT_0066b034);
-  gta2::S63_sub_486410(param_1,(struct SpriteS1 *)self->CarPlayerPre->CarSprite);
-  bVar2 = gta2::Car_sub_403800((struct Car *)&DAT_0066b034,(int *)&DAT_0066ad00);
+  gta2::S63_sub_486410(param_1,(SpriteS1 *)self->CarPlayerPre->CarSprite);
+  bVar2 = gta2::Car_sub_403800((Car *)&DAT_0066b034,(int *)&DAT_0066ad00);
   if (CONCAT31(extraout_var_01,bVar2) != 0) {
     bVar2 = gta2::Car_GetFullDamage(self->CarPlayerPre);
     if (!bVar2) {
-      puVar3 = (undefined4 *)gta2::Player_FUN_0040f640((struct Player *)&local_30,local_10);
+      puVar3 = (undefined4 *)gta2::Player_FUN_0040f640((Player *)&local_30,local_10);
       FUN_0048db00(_DAT_0066ad08,_DAT_0066ad0c,self->Debug,*puVar3,puVar3[1]);
     }
     FUN_00423180(param_2,_DAT_0066b034);
@@ -4634,14 +4634,14 @@ LAB_004a3d3f:
 // 0x004a3df0: Player::sub_4A3DF0
 // IDA: Player::sub_4A3DF0
 // Ghidra: Player::FUN_004a3df0
-void * gta2::Player_sub_4A3DF0(struct Player *self,Car *param_1)
+void * gta2::Player_sub_4A3DF0(Player *self,Car *param_1)
 {
   char cVar1;
   bool bVar2;
   undefined4 *puVar3;
   void *pvVar4;
   GlassInfo *pGVar5;
-  struct SpriteS1 *pSpriteS1;
+  SpriteS1 *pSpriteS1;
   Point2D *this_00;
   undefined3 extraout_var;
   undefined3 extraout_var_00;
@@ -4654,7 +4654,7 @@ void * gta2::Player_sub_4A3DF0(struct Player *self,Car *param_1)
     gta2::bitShiftLeft1(&stack0x00000008,NULL);
     puVar3 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&self->field28_0x3c,(GlassInfo *)&param_1,
-                        (struct S127 *)&DAT_005e688c);
+                        (S127 *)&DAT_005e688c);
     FUN_00432860(&DAT_0066afb4,(undefined4 *)&stack0x00000008,puVar3);
     puVar3 = (undefined4 *)
              gta2::Player_GetCarPoints(self,local_10,(GlassInfo *)&DAT_0066ad08);
@@ -4666,19 +4666,19 @@ void * gta2::Player_sub_4A3DF0(struct Player *self,Car *param_1)
   FUN_00432860(&DAT_0066ad08,&DAT_005e6888,&DAT_005e688c);
   FUN_004828c0(&DAT_0066ad08,(int *)param_1);
   pGVar5 = (GlassInfo *)
-           gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&self->theta,(struct Ped *)&param_1,
+           gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&self->theta,(Ped *)&param_1,
                       (int)&stack0x00000008);
   FUN_0040f6b0(&DAT_0066ad08,pGVar5);
   gta2::Player_sub_40E530((Point2D *)&DAT_0066ad08,&self->field27_0x38);
   _DAT_0066ad0c = DAT_005e688c;
   pGVar5 = (GlassInfo *)
            gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ad08,(GlassInfo *)&stack0x00000008,
-                      (struct S127 *)&DAT_005e687c);
-  pSpriteS1 = (struct SpriteS1 *)
-              gta2::Player_FUN_00403840((struct Player *)&param_1,(int *)&param_1,pGVar5);
+                      (S127 *)&DAT_005e687c);
+  pSpriteS1 = (SpriteS1 *)
+              gta2::Player_FUN_00403840((Player *)&param_1,(int *)&param_1,pGVar5);
   pGVar5 = (GlassInfo *)
            gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ad08,(GlassInfo *)local_10,
-                      (struct S127 *)&DAT_005e6878);
+                      (S127 *)&DAT_005e6878);
   this_00 = (Point2D *)gta2::Player_FUN_00403840(this_01,(int *)local_8,pGVar5);
   bVar2 = gta2::Point2D_FUN_004037e0(this_00,pSpriteS1);
   if (CONCAT31(extraout_var,bVar2) == 0) {
@@ -4691,7 +4691,7 @@ void * gta2::Player_sub_4A3DF0(struct Player *self,Car *param_1)
            gta2::Player_GetCarPoints(self,local_10,(GlassInfo *)&DAT_0066ad08);
   local_8[0] = (SpawnPoint *)*puVar3;
   local_8[1] = (SpawnPoint *)puVar3[1];
-  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&self->field28_0x3c,(struct SpriteS1 *)&DAT_0066ad0c);
+  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&self->field28_0x3c,(SpriteS1 *)&DAT_0066ad0c);
   if (CONCAT31(extraout_var_00,bVar2) == 0) {
     gta2::bitShiftLeft1(&stack0x00000008,NULL);
     puVar3 = (undefined4 *)&DAT_0066ac4c;
@@ -4709,14 +4709,14 @@ void * gta2::Player_sub_4A3DF0(struct Player *self,Car *param_1)
 // 0x004a3fb0: Player::sub_4A3FB0
 // IDA: Player::sub_4A3FB0
 // Ghidra: Player::FUN_004a3fb0
-void gta2::Player_sub_4A3FB0(struct Player *self,Car *param_1)
+void gta2::Player_sub_4A3FB0(Player *self,Car *param_1)
 {
   char cVar1;
   bool bVar2;
   undefined4 *puVar3;
   undefined4 *puVar4;
   GlassInfo *pGVar5;
-  struct SpriteS1 *pSpriteS1;
+  SpriteS1 *pSpriteS1;
   Point2D *this_00;
   undefined3 extraout_var;
   undefined3 extraout_var_00;
@@ -4730,7 +4730,7 @@ void gta2::Player_sub_4A3FB0(struct Player *self,Car *param_1)
     puVar4 = (undefined4 *)&stack0x00000008;
     puVar3 = (undefined4 *)
              gta2::Player_sub_401B40((SpawnPoint *)&self->field27_0x38,(GlassInfo *)&param_1,
-                        (struct S127 *)&DAT_005e6888);
+                        (S127 *)&DAT_005e6888);
     FUN_00432860(&DAT_0066afb4,puVar3,puVar4);
     puVar4 = (undefined4 *)
              gta2::Player_GetCarPoints(self,local_10,(GlassInfo *)&DAT_0066ad08);
@@ -4742,19 +4742,19 @@ void gta2::Player_sub_4A3FB0(struct Player *self,Car *param_1)
   FUN_00432860(&DAT_0066ad08,&DAT_005e6888,&DAT_005e688c);
   FUN_004828c0(&DAT_0066ad08,(int *)param_1);
   pGVar5 = (GlassInfo *)
-           gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)&self->theta,(struct Ped *)&param_1,
+           gta2::SpriteS1_sub_40E5D0((CarSystemManager *)&self->theta,(Ped *)&param_1,
                       (int)&stack0x00000008);
   FUN_0040f6b0(&DAT_0066ad08,pGVar5);
   gta2::Player_sub_40E530((Point2D *)&DAT_0066ad0c,&self->field28_0x3c);
   _DAT_0066ad08 = DAT_005e6888;
   pGVar5 = (GlassInfo *)
            gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ad0c,(GlassInfo *)&stack0x00000008,
-                      (struct S127 *)&DAT_005e6884);
-  pSpriteS1 = (struct SpriteS1 *)
-              gta2::Player_FUN_00403840((struct Player *)&param_1,(int *)&param_1,pGVar5);
+                      (S127 *)&DAT_005e6884);
+  pSpriteS1 = (SpriteS1 *)
+              gta2::Player_FUN_00403840((Player *)&param_1,(int *)&param_1,pGVar5);
   pGVar5 = (GlassInfo *)
            gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ad0c,(GlassInfo *)local_10,
-                      (struct S127 *)&DAT_005e6880);
+                      (S127 *)&DAT_005e6880);
   this_00 = (Point2D *)gta2::Player_FUN_00403840(this_01,(int *)local_8,pGVar5);
   bVar2 = gta2::Point2D_FUN_004037e0(this_00,pSpriteS1);
   if (CONCAT31(extraout_var,bVar2) == 0) {
@@ -4767,7 +4767,7 @@ void gta2::Player_sub_4A3FB0(struct Player *self,Car *param_1)
            gta2::Player_GetCarPoints(self,local_10,(GlassInfo *)&DAT_0066ad08);
   local_8[0] = (SpawnPoint *)*puVar4;
   local_8[1] = (SpawnPoint *)puVar4[1];
-  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&self->field27_0x38,(struct SpriteS1 *)&DAT_0066ad08);
+  bVar2 = gta2::Point2D_FUN_004037e0((Point2D *)&self->field27_0x38,(SpriteS1 *)&DAT_0066ad08);
   if (CONCAT31(extraout_var_00,bVar2) == 0) {
     gta2::bitShiftLeft1(&stack0x00000008,NULL);
     puVar4 = (undefined4 *)&stack0x00000008;
@@ -4787,13 +4787,13 @@ void gta2::Player_sub_4A3FB0(struct Player *self,Car *param_1)
 // 0x004a4170: Player::sub_4A4170
 // IDA: Player::sub_4A4170
 // Ghidra: ---
-void gta2::Player_sub_4A4170(struct Player *self, SpriteS1 *pPed, S202 *pPed_4)
+void gta2::Player_sub_4A4170(Player *self, SpriteS1 *pPed, S202 *pPed_4)
 {
-  struct Weapon **v4; // eax
-  struct SpriteS1 *v5; // edi
-  struct Car *pCar; // eax
-  struct SpriteS1 *GameObject; // eax
-  struct EventHandler *v8; // eax
+  Weapon **v4; // eax
+  SpriteS1 *v5; // edi
+  Car *pCar; // eax
+  SpriteS1 *GameObject; // eax
+  EventHandler *v8; // eax
   char v9; // [esp-4h] [ebp-14h]
   Weapon *arg0[2]; // [esp+8h] [ebp-8h] BYREF
 
@@ -4825,7 +4825,7 @@ void gta2::Player_sub_4A4170(struct Player *self, SpriteS1 *pPed, S202 *pPed_4)
       }
       else
       {
-        GameObject = (struct SpriteS1 *)gta2::SpriteS1_GetGameObject(v5);
+        GameObject = (SpriteS1 *)gta2::SpriteS1_GetGameObject(v5);
         if ( GameObject )
         {
           gta2::Player_sub_4A0A30(self, GameObject);
@@ -4833,7 +4833,7 @@ void gta2::Player_sub_4A4170(struct Player *self, SpriteS1 *pPed, S202 *pPed_4)
         else
         {
           v9 = byte_66AB6C[0];
-          v8 = (struct EventHandler *)gta2::SpriteS1_sub_40FEC0(v5);
+          v8 = (EventHandler *)gta2::SpriteS1_sub_40FEC0(v5);
           gta2::Player_sub_4A3A40(self, v8, v9);
         }
       }
@@ -4846,7 +4846,7 @@ void gta2::Player_sub_4A4170(struct Player *self, SpriteS1 *pPed, S202 *pPed_4)
 // 0x004a4310: Player::FUN_004a4310
 // IDA: ---
 // Ghidra: Player::FUN_004a4310
-undefined1 gta2::Player_FUN_004a4310(struct Player *self)
+undefined1 gta2::Player_FUN_004a4310(Player *self)
 {
   bool bVar1;
   byte bVar2;
@@ -4861,16 +4861,16 @@ undefined1 gta2::Player_FUN_004a4310(struct Player *self)
   int iVar8;
   undefined1 *pS110;
   int *piVar9;
-  struct SpriteS1 *local_24;
-  struct SpriteS1 *local_20;
-  struct SpriteS1 *local_1c;
+  SpriteS1 *local_24;
+  SpriteS1 *local_20;
+  SpriteS1 *local_1c;
   undefined1 local_18 [8];
   int aiStack_10 [4];
   
   uVar6 = 0;
   iVar8 = 0;
   iVar7 = 2;
-  bVar1 = gta2::Player_sub_40CE70((struct Player *)&DAT_0066afc0,(struct Player *)&DAT_0066ad4c)
+  bVar1 = gta2::Player_sub_40CE70((Player *)&DAT_0066afc0,(Player *)&DAT_0066ad4c)
   ;
   iVar4 = CONCAT31(extraout_var,bVar1);
   while( true ) {
@@ -4897,10 +4897,10 @@ undefined1 gta2::Player_FUN_004a4310(struct Player *self)
           iVar4 = iVar4 + 1;
         } while (iVar4 < iVar8);
       }
-      gta2::Player_FUN_004a30a0(self,(struct SpriteS1 *)&local_20,(struct SpriteS1 *)&local_24);
+      gta2::Player_FUN_004a30a0(self,(SpriteS1 *)&local_20,(SpriteS1 *)&local_24);
       bVar1 = gta2::Car_IsTrainOrTrainCarriage(self->CarPlayerPre);
       if ((bVar1) &&
-         (bVar2 = gta2::Player_FUN_0049e450((struct Player *)&self->S103_), bVar2 == 0)) {
+         (bVar2 = gta2::Player_FUN_0049e450((Player *)&self->S103_), bVar2 == 0)) {
         local_24 = _DAT_0066acdc;
       }
       gta2::Player_CollideCars(self,local_20,local_24);
@@ -4908,7 +4908,7 @@ undefined1 gta2::Player_FUN_004a4310(struct Player *self)
     pS110 = local_18;
     piVar9 = (int *)&DAT_0066afc0;
     this_00 = gta2::Player_sub_401B40((SpawnPoint *)&DAT_0066ac4c,(GlassInfo *)(local_18 + 4)
-                         ,(struct S127 *)&local_24);
+                         ,(S127 *)&local_24);
     puVar5 = (undefined4 *)gta2::WorldCoordinateToScreenCoord(this_00,pS110,piVar9);
     _DAT_0066afc0 = *puVar5;
     aiStack_10[iVar8] = DAT_005e6894;
@@ -4920,7 +4920,7 @@ undefined1 gta2::Player_FUN_004a4310(struct Player *self)
     }
     gta2::Player_sub_4A2980(self);
     if (iVar7 <= iVar8) break;
-    bVar1 = gta2::Player_sub_40CE70((struct Player *)&DAT_0066afc0,(struct Player *)&DAT_0066ad4c);
+    bVar1 = gta2::Player_sub_40CE70((Player *)&DAT_0066afc0,(Player *)&DAT_0066ad4c);
     iVar4 = CONCAT31(extraout_var_00,bVar1);
   }
   return uVar6;
@@ -4930,7 +4930,7 @@ undefined1 gta2::Player_FUN_004a4310(struct Player *self)
 // 0x004a4490: Player::sub_4A4490
 // IDA: Player::sub_4A4490
 // Ghidra: Player::FUN_004a4490
-byte gta2::Player_sub_4A4490(struct Player *self)
+byte gta2::Player_sub_4A4490(Player *self)
 {
   undefined1 uVar1;
   undefined1 uVar2;
@@ -4952,7 +4952,7 @@ byte gta2::Player_sub_4A4490(struct Player *self)
     bVar4 = gta2::Player_FUN_004a4310(self);
     if (bVar6 != 0) break;
     self->field_0xaa = 0;
-    bVar5 = gta2::Player_IsCurrentPlayer((struct Player *)&DAT_0066afc0,(struct Player *)&DAT_0066ac4c);
+    bVar5 = gta2::Player_IsCurrentPlayer((Player *)&DAT_0066afc0,(Player *)&DAT_0066ac4c);
     if ((CONCAT31(extraout_var,bVar5) == 0) || (bVar4 == 0)) goto LAB_004a452c;
     bVar6 = gta2::Player_sub_49DDF0(self);
     if (bVar6 == 0) goto LAB_004a452c;
@@ -4961,7 +4961,7 @@ byte gta2::Player_sub_4A4490(struct Player *self)
     gta2::Player_sub_4A0C60(self);
     gta2::Player_sub_4A0CC0(self);
   }
-  bVar5 = gta2::Player_IsCurrentPlayer((struct Player *)&DAT_0066afc0,(struct Player *)&DAT_0066ac4c);
+  bVar5 = gta2::Player_IsCurrentPlayer((Player *)&DAT_0066afc0,(Player *)&DAT_0066ac4c);
   if (CONCAT31(extraout_var_00,bVar5) != 0) {
     gta2::S103_sub_41E1E0((LinkedList *)&self->S103_);
     uVar1 = DAT_0066acdc_1;
@@ -4975,12 +4975,12 @@ byte gta2::Player_sub_4A4490(struct Player *self)
 LAB_004a452c:
   puVar7 = (undefined4 *)
            gta2::Player_sub_401B40((SpawnPoint *)&self->EnterControlStatus,
-                      (GlassInfo *)&stack0xfffffffc,(struct S127 *)&stack0xfffffff4);
-  self->CurrentPlayer = (struct Player *)*puVar7;
+                      (GlassInfo *)&stack0xfffffffc,(S127 *)&stack0xfffffff4);
+  self->CurrentPlayer = (Player *)*puVar7;
   puVar7 = (undefined4 *)
            gta2::Player_sub_401B40((SpawnPoint *)&self->RESPECT,(GlassInfo *)&stack0xfffffffc
-                      ,(struct S127 *)&local_8);
-  self->Player_ = (struct Player *)*puVar7;
+                      ,(S127 *)&local_8);
+  self->Player_ = (Player *)*puVar7;
   return bVar4;
 }
 
@@ -4988,9 +4988,9 @@ LAB_004a452c:
 // 0x004a4570: Player::sub_4A4570
 // IDA: Player::sub_4A4570
 // Ghidra: ---
-bool gta2::Player_sub_4A4570(struct Player *self)
+bool gta2::Player_sub_4A4570(Player *self)
 {
-  struct SpriteS1 *v1; // edi
+  SpriteS1 *v1; // edi
   char v3; // al
   int v4; // eax
   char v5; // bl
@@ -5097,7 +5097,7 @@ LABEL_13:
 // 0x004a4780: Player::sub_4A4780
 // IDA: Player::sub_4A4780
 // Ghidra: ---
-char gta2::Player_sub_4A4780(struct Player *self, Car *a2, char a3)
+char gta2::Player_sub_4A4780(Player *self, Car *a2, char a3)
 {
   int *v3; // eax
   char v5; // cl
@@ -5110,7 +5110,7 @@ char gta2::Player_sub_4A4780(struct Player *self, Car *a2, char a3)
   if ( a2 != self->sCar1 )
   {
     v5 = 1;
-    while ( (struct Car *)*v3 != a2 )
+    while ( (Car *)*v3 != a2 )
     {
       --v3;
       if ( --v5 < 0 )
@@ -5138,7 +5138,7 @@ char gta2::Player_sub_4A4780(struct Player *self, Car *a2, char a3)
 // 0x004a47f0: Player::sub_4A47F0
 // IDA: Player::sub_4A47F0
 // Ghidra: ---
-void * gta2::Player_sub_4A47F0(struct Player *self, Car *a2)
+void * gta2::Player_sub_4A47F0(Player *self, Car *a2)
 {
   void *result; // eax
   unsigned __int8 v3; // dl
@@ -5174,7 +5174,7 @@ void * gta2::Player_sub_4A47F0(struct Player *self, Car *a2)
 // 0x004a4870: Player::FUN_004a4870
 // IDA: sub_4A4870
 // Ghidra: Player::FUN_004a4870
-undefined4 gta2::Player_FUN_004a4870(struct Player *self)
+undefined4 gta2::Player_FUN_004a4870(Player *self)
 {
   if (self->SelectWeapon == -1) {
     return 0;
@@ -5186,7 +5186,7 @@ undefined4 gta2::Player_FUN_004a4870(struct Player *self)
 // 0x004a4890: Player::sub_4A4890
 // IDA: Player::sub_4A4890
 // Ghidra: ---
-int gta2::Player_sub_4A4890(struct Player *self, Weapon *pWeapon)
+int gta2::Player_sub_4A4890(Player *self, Weapon *pWeapon)
 {
   int index; // eax
 
@@ -5201,7 +5201,7 @@ int gta2::Player_sub_4A4890(struct Player *self, Weapon *pWeapon)
 // 0x004a48c0: Player::SetDefautWeapon
 // IDA: Player::SetDefautWeapon
 // Ghidra: ---
-void gta2::Player_SetDefautWeapon(struct Player *self)
+void gta2::Player_SetDefautWeapon(Player *self)
 {
   memset(&self->sWeapon[15], 0, 52u);
 }
@@ -5210,7 +5210,7 @@ void gta2::Player_SetDefautWeapon(struct Player *self)
 // 0x004a48e0: Player::SetActivePowerUps
 // IDA: Player::SetActivePowerUps
 // Ghidra: ---
-int gta2::Player_SetActivePowerUps(struct Player *self)
+int gta2::Player_SetActivePowerUps(Player *self)
 {
   int result; // eax
   bool v2; // bl
@@ -5238,7 +5238,7 @@ LABEL_6:
 // 0x004a4930: Player::SetPlayer
 // IDA: Player::SetPlayer
 // Ghidra: ---
-void gta2::Player_SetPlayer(struct Player *self, Player *a2)
+void gta2::Player_SetPlayer(Player *self, Player *a2)
 {
   self->Player_ = a2;
 }
@@ -5247,13 +5247,13 @@ void gta2::Player_SetPlayer(struct Player *self, Player *a2)
 // 0x004a4940: Player::sub_4A4940
 // IDA: Player::sub_4A4940
 // Ghidra: ---
-char gta2::Player_sub_4A4940(struct Player *self, unsigned __int8 a2)
+char gta2::Player_sub_4A4940(Player *self, unsigned __int8 a2)
 {
-  struct Gangs *pGang; // esi
-  struct Gang *NextUsedGang; // eax
+  Gangs *pGang; // esi
+  Gang *NextUsedGang; // eax
   int v5; // edi
 
-  pGang = (struct Gangs *)gta2::Gangs_GetFirstUsedGang(gGangs);
+  pGang = (Gangs *)gta2::Gangs_GetFirstUsedGang(gGangs);
   LOBYTE(NextUsedGang) = a2;
   if ( a2 )
   {
@@ -5262,7 +5262,7 @@ char gta2::Player_sub_4A4940(struct Player *self, unsigned __int8 a2)
     {
       NextUsedGang = gta2::Gangs_GetNextUsedGang(gGangs);
       --v5;
-      pGang = (struct Gangs *)NextUsedGang;
+      pGang = (Gangs *)NextUsedGang;
     }
     while ( v5 );
   }
@@ -5280,7 +5280,7 @@ char gta2::Player_sub_4A4940(struct Player *self, unsigned __int8 a2)
 // 0x004a49b0: Player::sub_4A49B0
 // IDA: Player::sub_4A49B0
 // Ghidra: ---
-byte gta2::Player_sub_4A49B0(struct Player *self)
+byte gta2::Player_sub_4A49B0(Player *self)
 {
   struct Ped *v1; // ecx
   byte result; // al
@@ -5443,7 +5443,7 @@ bool gta2::Player_sub_4A4AE0(int self)
 // 0x004a4c40: Player::sub_4A4C40
 // IDA: Player::sub_4A4C40
 // Ghidra: Player::FUN_004a4c40
-byte gta2::Player_sub_4A4C40(struct Player *self,Car *pCar)
+byte gta2::Player_sub_4A4C40(Player *self,Car *pCar)
 {
   byte bVar1;
   undefined4 in_EAX;
@@ -5474,7 +5474,7 @@ byte gta2::Player_sub_4A4C40(struct Player *self,Car *pCar)
 // 0x004a4c90: Player::sub_4A4C90
 // IDA: Player::sub_4A4C90
 // Ghidra: ---
-int gta2::Player_sub_4A4C90(struct Player *self)
+int gta2::Player_sub_4A4C90(Player *self)
 {
   int result; // eax
 
@@ -5488,7 +5488,7 @@ int gta2::Player_sub_4A4C90(struct Player *self)
 // 0x004a4cb0: Player::sub_4A4CB0
 // IDA: Player::sub_4A4CB0
 // Ghidra: ---
-void gta2::Player_sub_4A4CB0(struct Player *self)
+void gta2::Player_sub_4A4CB0(Player *self)
 {
   if ( self->debugKey1 )
   {
@@ -5528,13 +5528,13 @@ void gta2::Player_sub_4A4CF0(int param_1,CameraOrPhysics *param_2)
 // 0x004a4d50: Player::AddLives
 // IDA: Player::AddLives
 // Ghidra: ---
-int gta2::Player_AddLives(struct Player *self, int a2)
+int gta2::Player_AddLives(Player *self, int a2)
 {
   int result; // eax
 
   result = a2;
   if ( !do_infinite_lives || a2 > 0 )
-    return gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)&self->Lives, a2);
+    return gta2::PlayerStats_SetMultiPlayer((PlayerStats *)&self->Lives, a2);
   return result;
 }
 
@@ -5542,7 +5542,7 @@ int gta2::Player_AddLives(struct Player *self, int a2)
 // 0x004a4e10: Player::GetDeathDescription
 // IDA: Player::GetDeathDescription
 // Ghidra: ---
-const char * gta2::Player_GetDeathDescription(struct Player *self)
+const char * gta2::Player_GetDeathDescription(Player *self)
 {
   const char *result; // eax
 
@@ -5572,7 +5572,7 @@ const char * gta2::Player_GetDeathDescription(struct Player *self)
 // 0x004a4e70: Player::sub_4A4E70
 // IDA: Player::sub_4A4E70
 // Ghidra: ---
-void gta2::Player_sub_4A4E70(struct Player *self)
+void gta2::Player_sub_4A4E70(Player *self)
 {
   BYTE1(self->S103_5) = 0;
 }
@@ -5581,7 +5581,7 @@ void gta2::Player_sub_4A4E70(struct Player *self)
 // 0x004a4ea0: Player::PlayerControl
 // IDA: Player::PlayerControl
 // Ghidra: ---
-void gta2::Player_PlayerControl(struct Player *self)
+void gta2::Player_PlayerControl(Player *self)
 {
   self->Forward = 0;
   self->Backward = 0;
@@ -5609,7 +5609,7 @@ void gta2::Player_PlayerControl(struct Player *self)
 // 0x004a5100: Player::sub_4A5100
 // IDA: Player::sub_4A5100
 // Ghidra: ---
-char gta2::Player_sub_4A5100(struct Player *self)
+char gta2::Player_sub_4A5100(Player *self)
 {
   struct Ped *pPassenger; // ecx
   ALL_PED CurrentOccupation; // eax
@@ -5627,7 +5627,7 @@ char gta2::Player_sub_4A5100(struct Player *self)
 // 0x004a5130: Player::GetCurrentPed
 // IDA: Player::GetCurrentPed
 // Ghidra: ---
-Ped * gta2::Player_GetCurrentPed(struct Player *self)
+Ped * gta2::Player_GetCurrentPed(Player *self)
 {
   if ( self->MultiPlayerMode == 2 )
     return self->pPassenger;
@@ -5639,7 +5639,7 @@ Ped * gta2::Player_GetCurrentPed(struct Player *self)
 // 0x004a5150: Player::GetActivePed
 // IDA: Player::GetActivePed
 // Ghidra: ---
-Ped * gta2::Player_GetActivePed(struct Player *self)
+Ped * gta2::Player_GetActivePed(Player *self)
 {
   int MultiPlayerMode; // eax
 
@@ -5654,7 +5654,7 @@ Ped * gta2::Player_GetActivePed(struct Player *self)
 // 0x004a5180: Player::sub_4A5180
 // IDA: Player::sub_4A5180
 // Ghidra: Player::FUN_004a5180
-void gta2::Player_sub_4A5180(struct Player *self)
+void gta2::Player_sub_4A5180(Player *self)
 {
   self->timeSecond = 0;
   return;
@@ -5664,7 +5664,7 @@ void gta2::Player_sub_4A5180(struct Player *self)
 // 0x004a51c0: Player::sub_4A51C0
 // IDA: Player::sub_4A51C0
 // Ghidra: ---
-char gta2::Player_sub_4A51C0(struct Player *self, Car *pCar)
+char gta2::Player_sub_4A51C0(Player *self, Car *pCar)
 {
   char result; // al
   int *v3; // esi
@@ -5703,10 +5703,10 @@ char gta2::Player_sub_4A51C0(struct Player *self, Car *pCar)
 // 0x004a5220: Player::sub_4A5220
 // IDA: Player::sub_4A5220
 // Ghidra: ---
-void gta2::Player_sub_4A5220(struct Player *self, Car *a1, WeaponType pWeaponType)
+void gta2::Player_sub_4A5220(Player *self, Car *a1, WeaponType pWeaponType)
 {
-  struct Weapon *WeaponInPool; // eax
-  struct Weapon *pWeapon; // ebx
+  Weapon *WeaponInPool; // eax
+  Weapon *pWeapon; // ebx
   struct Ped *Driver; // edi
 
   LOWORD(self->S103_1) = self->SelectWeapon;
@@ -5722,7 +5722,7 @@ void gta2::Player_sub_4A5220(struct Player *self, Car *a1, WeaponType pWeaponTyp
     pWeapon = gta2::Turrel_CreateWeaponForTurret(gArsenal, pWeaponType, a1, 0);
   }
   *(_DWORD *)&self->SelectWeaponNext = pWeaponType;
-  self->pS103 = (struct S103 *)a1;
+  self->pS103 = (S103 *)a1;
   self->ID = a1->ID;
   gta2::Weapon_GiveWeaponInfiniti(pWeapon);
   Driver = a1->Driver;
@@ -5740,13 +5740,13 @@ void gta2::Player_sub_4A5220(struct Player *self, Car *a1, WeaponType pWeaponTyp
 // 0x004a5300: Player::ProcessWeaponChange
 // IDA: Player::ProcessWeaponChange
 // Ghidra: ---
-void gta2::Player_ProcessWeaponChange(struct Player *self)
+void gta2::Player_ProcessWeaponChange(Player *self)
 {
-  struct Arsenal *pCar; // ebx
+  Arsenal *pCar; // ebx
   WeaponType pWeaponType; // edi
-  struct Car *pS103; // eax
-  struct Weapon *WeaponInPool; // edi
-  struct EventHandler *S63_9; // eax
+  Car *pS103; // eax
+  Weapon *WeaponInPool; // edi
+  EventHandler *S63_9; // eax
 
   if ( LOWORD(self->S103_1) != 0xFFFE )
   {
@@ -5754,7 +5754,7 @@ void gta2::Player_ProcessWeaponChange(struct Player *self)
     pWeaponType = *(_DWORD *)&self->SelectWeaponNext;
     if ( gta2::Turrel_GetCarBomb(gArsenal, pWeaponType) )
     {
-      pS103 = (struct Car *)self->pS103;
+      pS103 = (Car *)self->pS103;
       if ( pS103->ID != self->ID )
         goto LABEL_14;
       WeaponInPool = gta2::Turrel_FindWeaponInPool(pCar, pS103, pWeaponType);
@@ -5784,11 +5784,11 @@ LABEL_14:
 // 0x004a53d0: Player::sub_4A53D0
 // IDA: Player::sub_4A53D0
 // Ghidra: Player::FUN_004a53d0
-bool gta2::Player_sub_4A53D0(struct Player *self)
+bool gta2::Player_sub_4A53D0(Player *self)
 {
   bool bVar1;
   int iVar2;
-  struct Weapon **ppWVar3;
+  Weapon **ppWVar3;
   
   iVar2 = 0;
   ppWVar3 = self->sWeapon;
@@ -5807,7 +5807,7 @@ bool gta2::Player_sub_4A53D0(struct Player *self)
 // 0x004a5400: Player::sub_4A5400
 // IDA: Player::sub_4A5400
 // Ghidra: ---
-char gta2::Player_sub_4A5400(struct Player *self, WeaponType Id, unsigned __int8 pAmmo)
+char gta2::Player_sub_4A5400(Player *self, WeaponType Id, unsigned __int8 pAmmo)
 {
   struct Ped *CurrentPed; // eax
   bool v5; // bl
@@ -5828,16 +5828,16 @@ char gta2::Player_sub_4A5400(struct Player *self, WeaponType Id, unsigned __int8
 // 0x004a5460: Player::sub_4A5460
 // IDA: Player::sub_4A5460
 // Ghidra: ---
-char gta2::Player_sub_4A5460(struct Player *self, char a2, char a3)
+char gta2::Player_sub_4A5460(Player *self, char a2, char a3)
 {
   struct Ped *pPed; // eax
   int v5; // edi
   __int16 SelectWeapon; // ax
   __int16 v7; // cx
-  struct Weapon *v8; // eax
-  struct Weapon *v9; // ecx
+  Weapon *v8; // eax
+  Weapon *v9; // ecx
   __int16 v10; // ax
-  struct Weapon *v11; // ecx
+  Weapon *v11; // ecx
 
   pPed = gta2::Player_GetCurrentPed(self);
   if ( !BYTE1(self->S103_5) )
@@ -5905,11 +5905,11 @@ LABEL_15:
 // 0x004a5570: Player::sub_4A5570
 // IDA: Player::sub_4A5570
 // Ghidra: ---
-char gta2::Player_sub_4A5570(struct Player *self, Car *a1)
+char gta2::Player_sub_4A5570(Player *self, Car *a1)
 {
   WeaponType v3; // esi
-  struct Weapon **v4; // edi
-  struct Weapon *WeaponInPool; // eax
+  Weapon **v4; // edi
+  Weapon *WeaponInPool; // eax
   char result; // al
   __int16 TypeWeapon; // ax
   __int16 v8; // [esp+10h] [ebp-4h]
@@ -5943,11 +5943,11 @@ char gta2::Player_sub_4A5570(struct Player *self, Car *a1)
 // 0x004a5600: Player::sub_4A5600
 // IDA: Player::sub_4A5600
 // Ghidra: ---
-void gta2::Player_sub_4A5600(struct Player *self)
+void gta2::Player_sub_4A5600(Player *self)
 {
-  struct Weapon **sWeapon; // esi
+  Weapon **sWeapon; // esi
   int v2; // ebx
-  struct Weapon *sWeapon_15; // edi
+  Weapon *sWeapon_15; // edi
 
   sWeapon = &self->sWeapon[15];
   v2 = 13;
@@ -5969,7 +5969,7 @@ void gta2::Player_sub_4A5600(struct Player *self)
 // 0x004a5640: Player::RestoreOnFootWeapons
 // IDA: Player::RestoreOnFootWeapons
 // Ghidra: ---
-char gta2::Player_RestoreOnFootWeapons(struct Player *self)
+char gta2::Player_RestoreOnFootWeapons(Player *self)
 {
   __int16 SelectWeapon; // ax
   __int16 S103_1; // ax
@@ -5996,10 +5996,10 @@ char gta2::Player_RestoreOnFootWeapons(struct Player *self)
 // 0x004a5690: Player::sub_4A5690
 // IDA: Player::sub_4A5690
 // Ghidra: ---
-char gta2::Player_sub_4A5690(struct Player *self)
+char gta2::Player_sub_4A5690(Player *self)
 {
   int v2; // ebx
-  struct Weapon *v3; // esi
+  Weapon *v3; // esi
   __int16 SelectWeapon; // ax
 
   v2 = 15;
@@ -6025,7 +6025,7 @@ char gta2::Player_sub_4A5690(struct Player *self)
 // 0x004a5710: Player::sub_4A5710
 // IDA: Player::sub_4A5710
 // Ghidra: ---
-int gta2::Player_sub_4A5710(struct Player *self)
+int gta2::Player_sub_4A5710(Player *self)
 {
   POWERUP_TYPE v2; // di
   int result; // eax
@@ -6046,24 +6046,24 @@ int gta2::Player_sub_4A5710(struct Player *self)
 // 0x004a5780: Player::GivePowerUp
 // IDA: Player::GivePowerUp
 // Ghidra: ---
-char gta2::Player_GivePowerUp(struct Player *self, POWERUP_TYPE POWERUPTYPE)
+char gta2::Player_GivePowerUp(Player *self, POWERUP_TYPE POWERUPTYPE)
 {
   char result; // al
   struct Ped *MainPed; // esi
   struct Ped *pPed; // esi
-  struct Gangs *RESPECT; // ecx
+  Gangs *RESPECT; // ecx
   struct Ped *v7; // esi
 
   switch ( POWERUPTYPE )
   {
     case POWERUP_TYPE_MULTIPLIER:
-      if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->MultiPlayer) == 99 )
+      if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->MultiPlayer) == 99 )
         goto LABEL_28;
       gta2::Player_SetMultiPlayer(self, 1);
       result = 1;
       break;
     case POWERUP_TYPE_LIFE:
-      if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives) == 99 )
+      if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives) == 99 )
         goto LABEL_28;
       gta2::Player_AddLives(self, 1);
       result = 1;
@@ -6155,7 +6155,7 @@ LABEL_28:
 // 0x004a59a0: Player::sub_4A59A0
 // IDA: Player::sub_4A59A0
 // Ghidra: ---
-char gta2::Player_sub_4A59A0(struct Player *self)
+char gta2::Player_sub_4A59A0(Player *self)
 {
   POWERUP_TYPE v2; // ax
   POWERUP_TYPE v3; // ax
@@ -6204,7 +6204,7 @@ char gta2::Player_sub_4A59A0(struct Player *self)
 // 0x004a5a50: Player::sub_4A5A50
 // IDA: Player::sub_4A5A50
 // Ghidra: ---
-int gta2::Player_sub_4A5A50(struct Player *self, int a2)
+int gta2::Player_sub_4A5A50(Player *self, int a2)
 {
   int v3; // esi
   POWERUP_TYPE *PowerUp; // edi
@@ -6247,7 +6247,7 @@ int gta2::Player_sub_4A5A50(struct Player *self, int a2)
 // 0x004a5ad0: Player::DoTeleport
 // IDA: Player::DoTeleport
 // Ghidra: ---
-void gta2::Player_DoTeleport(struct Player *self)
+void gta2::Player_DoTeleport(Player *self)
 {
   wchar_t *v2; // eax
 
@@ -6255,7 +6255,7 @@ void gta2::Player_DoTeleport(struct Player *self)
   qmemcpy(&self->CameraOrPhysics1, &self->CameraOrPhysics_, 188u);
   self->field_6C = 0;
   self->MultiPlayerMode = 0;
-  gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+  gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics1);
   v2 = gta2::Text__Bsearch(gText, "tport");
   gta2::HudMessage_ShowBigOnScreenLabel(&gHud->HudMessage_, v2, 3);
 }
@@ -6264,12 +6264,12 @@ void gta2::Player_DoTeleport(struct Player *self)
 // 0x004a5b40: Player::sub_4A5B40
 // IDA: Player::sub_4A5B40
 // Ghidra: ---
-int gta2::Player_sub_4A5B40(struct Player *self, Ped *pPed_1)
+int gta2::Player_sub_4A5B40(Player *self, Ped *pPed_1)
 {
   struct Ped *pPed; // ebx
   WeaponType Index; // edi
-  struct CarSystemManager *v5; // eax
-  struct Weapon **sWeapon; // ebp
+  CarSystemManager *v5; // eax
+  Weapon **sWeapon; // ebp
   char pAmmo[2]; // [esp+12h] [ebp-2h] BYREF
 
   pPed = pPed_1;
@@ -6280,11 +6280,11 @@ int gta2::Player_sub_4A5B40(struct Player *self, Ped *pPed_1)
   self->MoneyValue = 0;
   self->MainPed = pPed;
   self->Rotate = unk_66B0C4;
-  v5 = (struct CarSystemManager *)gta2::sub_40E5A0(&unk_66B25C, (struct CarSystemManager *)pAmmo, &unk_66B20C);
-  *((_WORD *)&self->Rotate + 1) = *(_WORD *)gta2::sub_40E5A0(v5, (struct CarSystemManager *)&pPed_1, &unk_66B20C);
+  v5 = (CarSystemManager *)gta2::sub_40E5A0(&unk_66B25C, (CarSystemManager *)pAmmo, &unk_66B20C);
+  *((_WORD *)&self->Rotate + 1) = *(_WORD *)gta2::sub_40E5A0(v5, (CarSystemManager *)&pPed_1, &unk_66B20C);
   self->FW = unk_66B15C;
   gta2::bitShiftLeft1(&pPed_1, 0);
-  self->S103_ = (struct S103 *)pPed_1;
+  self->S103_ = (S103 *)pPed_1;
   self->field_680 = 0;
   self->field_682 = 1000;
   gta2::Ped_sub_435C40(pPed, self, 0);
@@ -6310,7 +6310,7 @@ int gta2::Player_sub_4A5B40(struct Player *self, Ped *pPed_1)
 // 0x004a5c50: Player::FUN_004a5c50
 // IDA: sub_4A5C50
 // Ghidra: Player::FUN_004a5c50
-byte gta2::Player_FUN_004a5c50(struct Player *self,Ped *pPed)
+byte gta2::Player_FUN_004a5c50(Player *self,Ped *pPed)
 {
   undefined2 *puVar1;
   short sVar2;
@@ -6324,9 +6324,9 @@ byte gta2::Player_FUN_004a5c50(struct Player *self,Ped *pPed)
   undefined3 extraout_var_02;
   undefined4 *puVar7;
   int iVar8;
-  struct GameObject *pGVar9;
+  GameObject *pGVar9;
   uint uVar10;
-  struct CarSystemManager *this_00;
+  CarSystemManager *this_00;
   undefined4 uVar11;
   short *unaff_ESI;
   void *unaff_EDI;
@@ -6334,7 +6334,7 @@ byte gta2::Player_FUN_004a5c50(struct Player *self,Ped *pPed)
   struct Ped *pPed2;
   
   local_4 = self;
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&local_4);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&local_4);
   pPed2 = pPed;
   sVar2 = self->field3_0xa;
   uVar10._0_1_ = pPed->CurrentAction;
@@ -6355,24 +6355,24 @@ byte gta2::Player_FUN_004a5c50(struct Player *self,Ped *pPed)
     puVar1 = &self->Player_;
     if (*(char *)&self->field41_0x64 == '\0') {
       puVar5 = (undefined2 *)
-               gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)puVar1,(struct Ped *)&pPed,(int)&local_4)
+               gta2::SpriteS1_sub_40E5D0((CarSystemManager *)puVar1,(Ped *)&pPed,(int)&local_4)
       ;
       *puVar1 = *puVar5;
-      psVar6 = (short *)gta2::sub_401C80((struct CarSystemManager *)&DAT_0066b3c8,&pPed);
-      bVar4 = gta2::CarSystemManager_less_than((struct CarSystemManager *)puVar1,psVar6);
+      psVar6 = (short *)gta2::sub_401C80((CarSystemManager *)&DAT_0066b3c8,&pPed);
+      bVar4 = gta2::CarSystemManager_less_than((CarSystemManager *)puVar1,psVar6);
       if (CONCAT31(extraout_var_00,bVar4) != 0) {
-        this_00 = (struct CarSystemManager *)&DAT_0066b3c8;
+        this_00 = (CarSystemManager *)&DAT_0066b3c8;
         goto LAB_004a5d23;
       }
     }
     else {
       puVar5 = (undefined2 *)
-               gta2::SpriteS1_sub_40E5D0((struct CarSystemManager *)puVar1,(struct Ped *)&pPed,0x66b20c);
+               gta2::SpriteS1_sub_40E5D0((CarSystemManager *)puVar1,(Ped *)&pPed,0x66b20c);
       *puVar1 = *puVar5;
-      psVar6 = (short *)gta2::sub_401C80((struct CarSystemManager *)&DAT_0066b284,&pPed);
-      bVar4 = gta2::CarSystemManager_less_than((struct CarSystemManager *)puVar1,psVar6);
+      psVar6 = (short *)gta2::sub_401C80((CarSystemManager *)&DAT_0066b284,&pPed);
+      bVar4 = gta2::CarSystemManager_less_than((CarSystemManager *)puVar1,psVar6);
       if (CONCAT31(extraout_var,bVar4) != 0) {
-        this_00 = (struct CarSystemManager *)&DAT_0066b284;
+        this_00 = (CarSystemManager *)&DAT_0066b284;
 LAB_004a5d23:
         puVar5 = (undefined2 *)gta2::sub_401C80(this_00,&pPed);
         *puVar1 = *puVar5;
@@ -6387,20 +6387,20 @@ LAB_004a5d23:
     puVar1 = &self->Player_;
     if (*(char *)&self->field41_0x64 == '\0') {
       puVar5 = (undefined2 *)
-               gta2::sub_40E5A0((struct CarSystemManager *)puVar1,(struct Ped *)&pPed,
+               gta2::sub_40E5A0((CarSystemManager *)puVar1,(Ped *)&pPed,
                           (short *)&local_4,unaff_EDI,unaff_ESI);
       *puVar1 = *puVar5;
-      bVar4 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)puVar1,(short *)&DAT_0066b3c8);
+      bVar4 = gta2::CarSystemManager_greater_than((CarSystemManager *)puVar1,(short *)&DAT_0066b3c8);
       if (CONCAT31(extraout_var_02,bVar4) != 0) {
         *puVar1 = _DAT_0066b3c8;
       }
     }
     else {
       puVar5 = (undefined2 *)
-               gta2::sub_40E5A0((struct CarSystemManager *)puVar1,(struct Ped *)&pPed,
+               gta2::sub_40E5A0((CarSystemManager *)puVar1,(Ped *)&pPed,
                           (short *)&DAT_0066b20c,unaff_EDI,unaff_ESI);
       *puVar1 = *puVar5;
-      bVar4 = gta2::CarSystemManager_greater_than((struct CarSystemManager *)puVar1,(short *)&DAT_0066b284);
+      bVar4 = gta2::CarSystemManager_greater_than((CarSystemManager *)puVar1,(short *)&DAT_0066b284);
       if (CONCAT31(extraout_var_01,bVar4) != 0) {
         *puVar1 = _DAT_0066b284;
       }
@@ -6434,11 +6434,11 @@ LAB_004a5e20:
   }
   pGVar9 = pPed2->GameObject_;
   if (((pGVar9 != NULL) &&
-      (pGVar9 = (struct GameObject *)(uint)(byte)self->keySpecial,
+      (pGVar9 = (GameObject *)(uint)(byte)self->keySpecial,
       self->keySpecial != 0)) &&
-     ((pGVar9 = (struct GameObject *)(uint)(byte)self->field64_0x84,
+     ((pGVar9 = (GameObject *)(uint)(byte)self->field64_0x84,
       self->field64_0x84 != 0 &&
-      (pGVar9 = (struct GameObject *)(uint)self->Tango1, self->Tango1 == false)))) {
+      (pGVar9 = (GameObject *)(uint)self->Tango1, self->Tango1 == false)))) {
     gta2::Ped_sub_433DD0(pPed2,0x14);
   }
   return (byte)pGVar9;
@@ -6448,12 +6448,12 @@ LAB_004a5e20:
 // 0x004a5e90: Player::sub_4A5E90
 // IDA: Player::sub_4A5E90
 // Ghidra: ---
-char gta2::Player_sub_4A5E90(struct Player *self, char a2)
+char gta2::Player_sub_4A5E90(Player *self, char a2)
 {
   char result; // al
   struct Ped *pPed; // eax
-  struct Car *CarPlayers; // eax
-  struct Car *v6; // edi
+  Car *CarPlayers; // eax
+  Car *v6; // edi
   struct Player *Player; // ecx
   double v8; // st7
   double pCamerX; // st7
@@ -6511,12 +6511,12 @@ char gta2::Player_sub_4A5E90(struct Player *self, char a2)
 // 0x004a6050: Player::sub_4A6050
 // IDA: Player::sub_4A6050
 // Ghidra: ---
-void gta2::Player_sub_4A6050(struct Player *self)
+void gta2::Player_sub_4A6050(Player *self)
 {
   char *v2; // eax
   struct Ped *MainPed; // esi
-  struct Weapon *v4; // eax
-  struct Weapon *XCoordinate; // eax
+  Weapon *v4; // eax
+  Weapon *XCoordinate; // eax
   unsigned __int8 v6; // al
   char *v7; // eax
   unsigned __int8 v8; // [esp-Ch] [ebp-18h]
@@ -6525,7 +6525,7 @@ void gta2::Player_sub_4A6050(struct Player *self)
 
   if ( !gta2::Network_GetNetworkGame(&gNetwork) && !self->field_640 )
     gta2::Player_AddLives(self, -1);
-  if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives) > 0 )
+  if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives) > 0 )
   {
     if ( gta2::Network_GetNetworkGame(&gNetwork) )
     {
@@ -6537,7 +6537,7 @@ void gta2::Player_sub_4A6050(struct Player *self)
       MainPed = self->MainPed;
       gta2::Ped_GetYCoordinate(MainPed, (int *)v9);
       v8 = gta2::Weapon_sub_41C1E0(v4);
-      XCoordinate = (struct Weapon *)gta2::Ped_GetXCoordinate(MainPed, (int)v10);
+      XCoordinate = (Weapon *)gta2::Ped_GetXCoordinate(MainPed, (int)v10);
       v6 = gta2::Weapon_sub_41C1E0(XCoordinate);
       v7 = gta2::MapRelatedStruct_sub_469110(gMapRelatedStruct, v6, v8, 16);
       gta2::Ped_sub_43E140(self->MainPed, (int)v7);
@@ -6549,7 +6549,7 @@ void gta2::Player_sub_4A6050(struct Player *self)
 // 0x004a6100: Player::sub_4A6100
 // IDA: Player::sub_4A6100
 // Ghidra: ---
-unsigned __int8 * gta2::Player_sub_4A6100(struct Player *self)
+unsigned __int8 * gta2::Player_sub_4A6100(Player *self)
 {
   struct Ped *CurrentPed; // edi
   int v3; // ebx
@@ -6571,17 +6571,17 @@ unsigned __int8 * gta2::Player_sub_4A6100(struct Player *self)
   gta2::Ped_GetYCoordinate(CurrentPed, &Y);
   Y = *v5;
   v4 = Y;
-  v10 = gta2::Weapon_sub_41C1E0((struct Weapon *)&Y);
-  v6 = gta2::Weapon_sub_41C1E0((struct Weapon *)&X);
-  self->field_38 = (struct S103 *)gta2::MapRelatedStruct_sub_464FE0(gMapRelatedStruct, v6, v10, 15);
-  v11 = gta2::Weapon_sub_41C1E0((struct Weapon *)&Y);
-  v7 = gta2::Weapon_sub_41C1E0((struct Weapon *)&X);
+  v10 = gta2::Weapon_sub_41C1E0((Weapon *)&Y);
+  v6 = gta2::Weapon_sub_41C1E0((Weapon *)&X);
+  self->field_38 = (S103 *)gta2::MapRelatedStruct_sub_464FE0(gMapRelatedStruct, v6, v10, 15);
+  v11 = gta2::Weapon_sub_41C1E0((Weapon *)&Y);
+  v7 = gta2::Weapon_sub_41C1E0((Weapon *)&X);
   self->field_3C = (int)gta2::MapRelatedStruct_sub_464FE0(gMapRelatedStruct, v7, v11, 1);
-  v12 = gta2::Weapon_sub_41C1E0((struct Weapon *)&Y);
-  v8 = gta2::Weapon_sub_41C1E0((struct Weapon *)&X);
-  self->S103_4 = (struct S103 *)gta2::MapRelatedStruct_sub_464FE0(gMapRelatedStruct, v8, v12, 5);
+  v12 = gta2::Weapon_sub_41C1E0((Weapon *)&Y);
+  v8 = gta2::Weapon_sub_41C1E0((Weapon *)&X);
+  self->S103_4 = (S103 *)gta2::MapRelatedStruct_sub_464FE0(gMapRelatedStruct, v8, v12, 5);
   result = (unsigned __int8 *)gta2::MapRelatedStruct_sub_465350(gMapRelatedStruct, v3, v4);
-  self->RESPECT = (struct Gangs *)result;
+  self->RESPECT = (Gangs *)result;
   return result;
 }
 
@@ -6591,29 +6591,29 @@ unsigned __int8 * gta2::Player_sub_4A6100(struct Player *self)
 // Ghidra: FUN_004a61f0
 void gta2::Player_sub_4A61F0(int param_1)
 {
-  struct CameraOrPhysics *self;
+  CameraOrPhysics *self;
   int iVar1;
-  struct CameraOrPhysics *pCVar2;
+  CameraOrPhysics *pCVar2;
   undefined4 *puVar3;
   
-  gta2::Player_sub_4A5E90((struct Player *)param_1,'\x01');
+  gta2::Player_sub_4A5E90((Player *)param_1,'\x01');
   switch(*(undefined4 *)(param_1 + 0x68)) {
   case 0:
-    pCVar2 = (struct CameraOrPhysics *)(param_1 + 0x90);
+    pCVar2 = (CameraOrPhysics *)(param_1 + 0x90);
     gta2::CameraOrPhysics_sub_41E7A0(pCVar2);
     if (*(char *)(param_1 + 0x2d0) != '\0') {
-      self = (struct CameraOrPhysics *)(param_1 + 0x208);
+      self = (CameraOrPhysics *)(param_1 + 0x208);
       break;
     }
     goto LAB_004a624a;
   case 1:
-    self = (struct CameraOrPhysics *)(param_1 + 0x90);
+    self = (CameraOrPhysics *)(param_1 + 0x90);
     pCVar2 = self;
     break;
   case 2:
   case 3:
-    gta2::CameraOrPhysics_sub_41E7A0((struct CameraOrPhysics *)(param_1 + 0x90));
-    self = (struct CameraOrPhysics *)(param_1 + 0x208);
+    gta2::CameraOrPhysics_sub_41E7A0((CameraOrPhysics *)(param_1 + 0x90));
+    self = (CameraOrPhysics *)(param_1 + 0x208);
     pCVar2 = self;
     break;
   default:
@@ -6625,7 +6625,7 @@ LAB_004a624a:
     puVar3 = (undefined4 *)(param_1 + 0x14c);
     for (iVar1 = 0x2f; iVar1 != 0; iVar1 = iVar1 + -1) {
       *puVar3 = pCVar2->m_vPosition;
-      pCVar2 = (struct CameraOrPhysics *)&pCVar2->S132;
+      pCVar2 = (CameraOrPhysics *)&pCVar2->S132;
       puVar3 = puVar3 + 1;
     }
   }
@@ -6633,9 +6633,9 @@ switchD_004a6204_caseD_4:
   if (*(int *)(param_1 + 0x6c) != 1) {
     return;
   }
-  pCVar2 = (struct CameraOrPhysics *)(param_1 + 0x14c);
+  pCVar2 = (CameraOrPhysics *)(param_1 + 0x14c);
   gta2::CameraOrPhysics_sub_4A5070(pCVar2);
-  gta2::CameraOrPhysics_sub_41EA10((struct Player *)pCVar2,*(char *)(param_1 + 0x70),
+  gta2::CameraOrPhysics_sub_41EA10((Player *)pCVar2,*(char *)(param_1 + 0x70),
              *(char *)(param_1 + 0x71),*(char *)(param_1 + 0x72),
              *(char *)(param_1 + 0x73),*(char *)(param_1 + 0x74),
              *(char *)(param_1 + 0x75));
@@ -6647,10 +6647,10 @@ switchD_004a6204_caseD_4:
 // 0x004a62b0: Player::sub_4A62B0
 // IDA: Player::sub_4A62B0
 // Ghidra: ---
-char gta2::Player_sub_4A62B0(struct Player *self)
+char gta2::Player_sub_4A62B0(Player *self)
 {
-  struct Car *CarPlayers; // edi
-  struct Car *CurrentCar; // eax
+  Car *CarPlayers; // edi
+  Car *CurrentCar; // eax
 
   CarPlayers = gta2::Ped_GetCarPlayers(self->pPassenger);
   if ( CarPlayers->Driver )
@@ -6669,7 +6669,7 @@ char gta2::Player_sub_4A62B0(struct Player *self)
 // 0x004a6310: Player::sub_4A6310
 // IDA: Player::sub_4A6310
 // Ghidra: ---
-byte gta2::Player_sub_4A6310(struct Player *self)
+byte gta2::Player_sub_4A6310(Player *self)
 {
   byte result; // al
 
@@ -6681,7 +6681,7 @@ byte gta2::Player_sub_4A6310(struct Player *self)
     self->pPassenger = 0;
     self->sCar2 = 0;
     self->field_2D0 = 0;
-    gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+    gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics1);
   }
   return result;
 }
@@ -6690,7 +6690,7 @@ byte gta2::Player_sub_4A6310(struct Player *self)
 // 0x004a6350: Player::sub_4A6350
 // IDA: Player::sub_4A6350
 // Ghidra: ---
-char gta2::Player_sub_4A6350(struct Player *self, Car *pCar)
+char gta2::Player_sub_4A6350(Player *self, Car *pCar)
 {
   struct Ped *PedInCar; // eax
   struct Ped *pPassenger; // [esp-4h] [ebp-10h]
@@ -6705,9 +6705,9 @@ char gta2::Player_sub_4A6350(struct Player *self, Car *pCar)
   gta2::Car_SetLocksDoor(pCar);
   pPassenger = self->pPassenger;
   self->MultiPlayerMode = 2;
-  gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics2, (struct S131 *)pPassenger);
-  gta2::CameraOrPhysics_sub_41E410((struct CameraOrPhysics *)&self->CameraOrPhysics2);
-  gta2::CameraOrPhysics_sub_41E010((struct CameraOrPhysics *)&self->CameraOrPhysics2);
+  gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics2, (S131 *)pPassenger);
+  gta2::CameraOrPhysics_sub_41E410((CameraOrPhysics *)&self->CameraOrPhysics2);
+  gta2::CameraOrPhysics_sub_41E010((CameraOrPhysics *)&self->CameraOrPhysics2);
   self->field_2D0 = 1;
   gta2::Player_RestoreOnFootWeapons(self);
   return gta2::Player_sub_4A5570(self, pCar);
@@ -6717,17 +6717,17 @@ char gta2::Player_sub_4A6350(struct Player *self, Car *pCar)
 // 0x004a6400: Player::sub_4A6400
 // IDA: Player::sub_4A6400
 // Ghidra: Player::FUN_004a6400
-void gta2::Player_sub_4A6400(struct Player *self,Car *pCar)
+void gta2::Player_sub_4A6400(Player *self,Car *pCar)
 {
-  struct CameraOrPhysics **this_00;
+  CameraOrPhysics **this_00;
   
   if (((self->field615_0x2d0 == false) && (self->Passenger_ == NULL)) &&
      (self->field614_0x2cc == 0)) {
     this_00 = &self->CameraOrPhysics1;
     self->field614_0x2cc = pCar;
-    gta2::CameraOrPhysics_sub_41EE30((struct CameraOrPhysics *)this_00,pCar);
-    gta2::CameraOrPhysics_sub_41E410((struct CameraOrPhysics *)this_00);
-    gta2::CameraOrPhysics_sub_41E010((struct CameraOrPhysics *)this_00);
+    gta2::CameraOrPhysics_sub_41EE30((CameraOrPhysics *)this_00,pCar);
+    gta2::CameraOrPhysics_sub_41E410((CameraOrPhysics *)this_00);
+    gta2::CameraOrPhysics_sub_41E010((CameraOrPhysics *)this_00);
     self->ID = 3;
     self->field615_0x2d0 = true;
   }
@@ -6738,19 +6738,19 @@ void gta2::Player_sub_4A6400(struct Player *self,Car *pCar)
 // 0x004a6530: Player::sub_4A6530
 // IDA: Player::sub_4A6530
 // Ghidra: ---
-int gta2::Player_sub_4A6530(struct Player *self, void *Y)
+int gta2::Player_sub_4A6530(Player *self, void *Y)
 {
   struct Ped *ActivePed; // esi
-  struct Weapon *XCoordinate; // eax
+  Weapon *XCoordinate; // eax
   char v5; // al
-  struct Weapon *v6; // eax
+  Weapon *v6; // eax
   char v7; // al
-  struct Weapon *PositionZ; // eax
+  Weapon *PositionZ; // eax
   int result; // eax
-  struct CameraOrPhysics *MultiPlayerMode; // esi
+  CameraOrPhysics *MultiPlayerMode; // esi
   char v11; // al
   char v12; // al
-  struct SpriteS1 *v13; // eax
+  SpriteS1 *v13; // eax
   char v14[4]; // [esp+8h] [ebp-4h] BYREF
   _BYTE *v15; // [esp+14h] [ebp+8h]
   _BYTE *v16; // [esp+18h] [ebp+Ch]
@@ -6758,24 +6758,24 @@ int gta2::Player_sub_4A6530(struct Player *self, void *Y)
   ActivePed = gta2::Player_GetActivePed(self);
   if ( ActivePed )
   {
-    XCoordinate = (struct Weapon *)gta2::Ped_GetXCoordinate(ActivePed, (int)v14);
+    XCoordinate = (Weapon *)gta2::Ped_GetXCoordinate(ActivePed, (int)v14);
     v5 = gta2::Weapon_sub_41C1E0(XCoordinate);
     *(_BYTE *)Y = v5;
     gta2::Ped_GetYCoordinate(ActivePed, (int *)&Y);
     v7 = gta2::Weapon_sub_41C1E0(v6);
     *v15 = v7;
-    PositionZ = (struct Weapon *)gta2::Ped_GetPositionZ(ActivePed, (int)&Y);
+    PositionZ = (Weapon *)gta2::Ped_GetPositionZ(ActivePed, (int)&Y);
     result = gta2::Weapon_sub_41C1E0(PositionZ);
   }
   else
   {
     MultiPlayerMode = gta2::Player_GetMultiPlayerMode(self);
-    v11 = gta2::Weapon_sub_41C1E0((struct Weapon *)&MultiPlayerMode->cameraPosTarget_[3].Player);
+    v11 = gta2::Weapon_sub_41C1E0((Weapon *)&MultiPlayerMode->cameraPosTarget_[3].Player);
     *(_BYTE *)Y = v11;
-    v12 = gta2::Weapon_sub_41C1E0((struct Weapon *)&MultiPlayerMode->cameraPosTarget_[3].field_20);
+    v12 = gta2::Weapon_sub_41C1E0((Weapon *)&MultiPlayerMode->cameraPosTarget_[3].field_20);
     *v15 = v12;
-    v13 = gta2::sub_4A5090((struct S202 *)MultiPlayerMode, (struct SpriteS1 *)&Y);
-    result = gta2::Weapon_sub_41C1E0((struct Weapon *)v13);
+    v13 = gta2::sub_4A5090((S202 *)MultiPlayerMode, (SpriteS1 *)&Y);
+    result = gta2::Weapon_sub_41C1E0((Weapon *)v13);
   }
   *v16 = result;
   return result;
@@ -6785,11 +6785,11 @@ int gta2::Player_sub_4A6530(struct Player *self, void *Y)
 // 0x004a65e0: Player::GetActivePlayerCar
 // IDA: Player::GetActivePlayerCar
 // Ghidra: ---
-Car * gta2::Player_GetActivePlayerCar(struct Player *self)
+Car * gta2::Player_GetActivePlayerCar(Player *self)
 {
   struct Ped *ActivePed; // eax
   struct Ped *v2; // esi
-  struct Car *result; // eax
+  Car *result; // eax
 
   ActivePed = gta2::Player_GetActivePed(self);
   v2 = ActivePed;
@@ -6805,21 +6805,21 @@ Car * gta2::Player_GetActivePlayerCar(struct Player *self)
 // 0x004a6610: Player::sub_4A6610
 // IDA: Player::sub_4A6610
 // Ghidra: ---
-GameObject ** gta2::Player_sub_4A6610(struct Player *self, void *Y)
+GameObject ** gta2::Player_sub_4A6610(Player *self, void *Y)
 {
   struct Ped *pPed; // eax
   struct Ped *pPEd1; // esi
-  struct Car *pCar; // edi
+  Car *pCar; // edi
   _DWORD *v6; // eax
   int *v7; // eax
-  struct GameObject **result; // eax
+  GameObject **result; // eax
   _DWORD *PositionX; // eax
   int *v10; // eax
-  struct CameraOrPhysics *MultiPlayerMode; // eax
-  struct SpriteS1 *FirstElement; // edx
+  CameraOrPhysics *MultiPlayerMode; // eax
+  SpriteS1 *FirstElement; // edx
   char v13[4]; // [esp+8h] [ebp-4h] BYREF
   int *v14; // [esp+14h] [ebp+8h]
-  struct GameObject **v15; // [esp+18h] [ebp+Ch]
+  GameObject **v15; // [esp+18h] [ebp+Ch]
 
   pPed = gta2::Player_GetActivePed(self);
   pPEd1 = pPed;
@@ -6849,9 +6849,9 @@ GameObject ** gta2::Player_sub_4A6610(struct Player *self, void *Y)
     MultiPlayerMode = gta2::Player_GetMultiPlayerMode(self);
     *(_DWORD *)Y = MultiPlayerMode->cameraPosTarget_[3].Player;
     *v14 = MultiPlayerMode->cameraPosTarget_[3].field_20;
-    FirstElement = gta2::sub_4A5090((struct S202 *)MultiPlayerMode, (struct SpriteS1 *)&Y)->FirstElement;
+    FirstElement = gta2::sub_4A5090((S202 *)MultiPlayerMode, (SpriteS1 *)&Y)->FirstElement;
     result = v15;
-    *v15 = (struct GameObject *)FirstElement;
+    *v15 = (GameObject *)FirstElement;
   }
   return result;
 }
@@ -6860,11 +6860,11 @@ GameObject ** gta2::Player_sub_4A6610(struct Player *self, void *Y)
 // 0x004a6900: Player::sub_4A6900
 // IDA: Player::sub_4A6900
 // Ghidra: ---
-int gta2::Player_sub_4A6900(struct Player *self)
+int gta2::Player_sub_4A6900(Player *self)
 {
   int MultiPlayerMode; // eax
   struct Ped *pPassenger; // esi
-  struct Car *CarPlayers; // edi
+  Car *CarPlayers; // edi
   int result; // eax
 
   MultiPlayerMode = self->MultiPlayerMode;
@@ -6909,7 +6909,7 @@ LABEL_12:
 // 0x004a69a0: Player::sub_4A69A0
 // IDA: Player::sub_4A69A0
 // Ghidra: ---
-int gta2::Player_sub_4A69A0(struct Player *self)
+int gta2::Player_sub_4A69A0(Player *self)
 {
   self->field_2F = 1;
   return gta2::Player_sub_4A6900(self);
@@ -6919,12 +6919,12 @@ int gta2::Player_sub_4A69A0(struct Player *self)
 // 0x004a6a80: Player::sub_4A6A80
 // IDA: Player::sub_4A6A80
 // Ghidra: ---
-int gta2::Player_sub_4A6A80(struct Player *self)
+int gta2::Player_sub_4A6A80(Player *self)
 {
   int *v1; // esi
   __int16 *v2; // ebx
   int v3; // ebp
-  struct Car *v4; // edi
+  Car *v4; // edi
   int result; // eax
 
   v1 = (int *)&unk_664680;
@@ -6932,7 +6932,7 @@ int gta2::Player_sub_4A6A80(struct Player *self)
   v3 = 3;
   do
   {
-    if ( gta2::Car_sub_403800((struct Car *)(v1 - 3), (int)&unk_66B15C) && gta2::Car_sub_403800((struct Car *)v1, (int)&unk_66B15C) )
+    if ( gta2::Car_sub_403800((Car *)(v1 - 3), (int)&unk_66B15C) && gta2::Car_sub_403800((Car *)v1, (int)&unk_66B15C) )
     {
       v4 = gta2::CarSystemManager_SpawnCar(
              gCarSystemManager,
@@ -6959,16 +6959,16 @@ int gta2::Player_sub_4A6A80(struct Player *self)
 // 0x004a6b20: Player::sub_4A6B20
 // IDA: Player::sub_4A6B20
 // Ghidra: ---
-int gta2::Player_sub_4A6B20(struct Player *self, int a2)
+int gta2::Player_sub_4A6B20(Player *self, int a2)
 {
   _DWORD *XCoordinate; // eax
   int v4; // edi
   _DWORD *v5; // eax
   unsigned __int8 v6; // bl
   char *v7; // ebp
-  struct Gang *v8; // eax
+  Gang *v8; // eax
   char *v9; // ebp
-  struct Weapon **sWeapon; // ebx
+  Weapon **sWeapon; // ebx
   _DWORD *v11; // ecx
   int *v12; // eax
   int v13; // edx
@@ -7031,13 +7031,13 @@ int gta2::Player_sub_4A6B20(struct Player *self, int a2)
 // 0x004a6c80: Player::sub_4A6C80
 // IDA: Player::sub_4A6C80
 // Ghidra: ---
-int gta2::Player_sub_4A6C80(struct Player *self, int a2)
+int gta2::Player_sub_4A6C80(Player *self, int a2)
 {
   GANG v4; // bl
   char *v5; // ebp
-  struct Gang *v6; // eax
+  Gang *v6; // eax
   byte *v7; // ebp
-  struct Weapon **sWeapon; // ebx
+  Weapon **sWeapon; // ebx
   int *v9; // ecx
   int *v10; // eax
   int v11; // edx
@@ -7045,9 +7045,9 @@ int gta2::Player_sub_4A6C80(struct Player *self, int a2)
   GANG a2a; // [esp+14h] [ebp+4h]
   int a2b; // [esp+14h] [ebp+4h]
 
-  gta2::PlayerStats_SetMonyeLives((struct PlayerStats *)&self->Lives, *(unsigned __int8 *)(a2 + 128));
-  gta2::PlayerStats_SetMonyeLives((struct PlayerStats *)&self->MultiPlayer, *(_DWORD *)(a2 + 20));
-  gta2::PlayerStats_GivenMoney((struct PlayerStats *)&self->Money, *(_DWORD *)(a2 + 16));
+  gta2::PlayerStats_SetMonyeLives((PlayerStats *)&self->Lives, *(unsigned __int8 *)(a2 + 128));
+  gta2::PlayerStats_SetMonyeLives((PlayerStats *)&self->MultiPlayer, *(_DWORD *)(a2 + 20));
+  gta2::PlayerStats_GivenMoney((PlayerStats *)&self->Money, *(_DWORD *)(a2 + 16));
   self->SelectWeapon = *(_WORD *)(a2 + 130);
   gta2::Ped_SetHealth(self->MainPed, *(_WORD *)(a2 + 24));
   gta2::Ped_SetPoliceNoStar(self->MainPed);
@@ -7093,15 +7093,15 @@ int gta2::Player_sub_4A6C80(struct Player *self, int a2)
 // 0x004a6da0: Player::StartGames
 // IDA: Player::StartGames
 // Ghidra: ---
-char gta2::Player_StartGames(struct Player *self)
+char gta2::Player_StartGames(Player *self)
 {
-  struct Gang *i; // eax
-  struct Gang *pGang; // eax
+  Gang *i; // eax
+  Gang *pGang; // eax
 
   if ( gDANISGOD )
-    gta2::PlayerStats_GivenMoney((struct PlayerStats *)&self->Money, 200000);
+    gta2::PlayerStats_GivenMoney((PlayerStats *)&self->Money, 200000);
   if ( gIAMDAVEJ )
-    gta2::PlayerStats_GivenMoney((struct PlayerStats *)&self->Money, 9999999);
+    gta2::PlayerStats_GivenMoney((PlayerStats *)&self->Money, 9999999);
   if ( gVOLTFEST )
     gta2::Weapon_GiveWeaponInfiniti(self->sWeapon[ElectorGun]);
   if ( FLAMEON )
@@ -7112,9 +7112,9 @@ char gta2::Player_StartGames(struct Player *self)
       gta2::Gang_SetRespectForPlayer(i, self->Ids, 100);
   }
   if ( gHeats99 )
-    gta2::PlayerStats_SetMonyeLives((struct PlayerStats *)&self->Lives, 99);
+    gta2::PlayerStats_SetMonyeLives((PlayerStats *)&self->Lives, 99);
   if ( gSEGARULZ )
-    gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)&self->MultiPlayer, 9);
+    gta2::PlayerStats_SetMultiPlayer((PlayerStats *)&self->MultiPlayer, 9);
   if ( gBunt )
     gCharacter->Bunt = 1;
   if ( gFYOHZZ0 )
@@ -7138,7 +7138,7 @@ char gta2::Player_StartGames(struct Player *self)
 // 0x004a6ef0: Player::sub_4A6EF0
 // IDA: Player::sub_4A6EF0
 // Ghidra: ---
-void gta2::Player_sub_4A6EF0(struct Player *self)
+void gta2::Player_sub_4A6EF0(Player *self)
 {
   int *v2; // ecx
 
@@ -7154,11 +7154,11 @@ void gta2::Player_sub_4A6EF0(struct Player *self)
   v2[2] = 0;
   if ( self->Sound )
   {
-    gta2::DMAudio_DMAudio_des(&gDMAudio, (struct cameraPosTarget *)self->Sound);
+    gta2::DMAudio_DMAudio_des(&gDMAudio, (cameraPosTarget *)self->Sound);
     self->Sound = 0;
   }
   nullsub_12();
-  gta2::PlayerStats_sub_4A4F10((struct PlayerStats *)&self->Money);
+  gta2::PlayerStats_sub_4A4F10((PlayerStats *)&self->Money);
   gta2::CameraOrPhysics_nullsub_6();
   gta2::CameraOrPhysics_nullsub_6();
   gta2::CameraOrPhysics_nullsub_6();
@@ -7168,10 +7168,10 @@ void gta2::Player_sub_4A6EF0(struct Player *self)
 // 0x004a6fd0: Player::sub_4A6FD0
 // IDA: Player::sub_4A6FD0
 // Ghidra: ---
-char gta2::Player_sub_4A6FD0(struct Player *self)
+char gta2::Player_sub_4A6FD0(Player *self)
 {
-  struct Car *v2; // eax
-  struct Car *v3; // edi
+  Car *v2; // eax
+  Car *v3; // edi
 
   v2 = gta2::CarSystemManager_sub_426AA0(gCarSystemManager, self->Camer_X_View, self->Camer_Y_View, self->Camer_Z_View, 0);
   v3 = v2;
@@ -7187,15 +7187,15 @@ char gta2::Player_sub_4A6FD0(struct Player *self)
 // 0x004a7010: Player::sub_4A7010
 // IDA: Player::sub_4A7010
 // Ghidra: ---
-void gta2::Player_sub_4A7010(struct Player *self, const CHAR *pKey)
+void gta2::Player_sub_4A7010(Player *self, const CHAR *pKey)
 {
   unsigned __int8 v3; // al
   BYTE CDVol; // al
   struct Ped *pMainPed; // ecx
   struct Ped *MainPed; // ecx
   struct Player *Player; // ecx
-  struct Car *ActivePlayerCar; // eax
-  struct Car *v9; // eax
+  Car *ActivePlayerCar; // eax
+  Car *v9; // eax
   void *v10; // [esp+0h] [ebp-Ch]
   char pKeya; // [esp+10h] [ebp+4h]
 
@@ -7395,14 +7395,14 @@ LABEL_18:
         if ( do_debug_keys )
         {
           self->MultiPlayerMode = 0;
-          gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+          gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics1);
         }
         break;
       case 88:
         if ( do_debug_keys )
         {
           self->MultiPlayerMode = 1;
-          gta2::CameraOrPhysics_sub_4A5070((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+          gta2::CameraOrPhysics_sub_4A5070((CameraOrPhysics *)&self->CameraOrPhysics1);
         }
         break;
       case 181:
@@ -7412,8 +7412,8 @@ LABEL_18:
       case 199:
         if ( do_debug_keys )
         {
-          gta2::CameraOrPhysics_sub_41DFB0((struct CameraOrPhysics *)&self->CameraOrPhysics1);
-          gta2::CameraOrPhysics_sub_41DFB0((struct CameraOrPhysics *)&self->CameraOrPhysics2);
+          gta2::CameraOrPhysics_sub_41DFB0((CameraOrPhysics *)&self->CameraOrPhysics1);
+          gta2::CameraOrPhysics_sub_41DFB0((CameraOrPhysics *)&self->CameraOrPhysics2);
         }
         break;
       case 201:
@@ -7434,7 +7434,7 @@ LABEL_18:
 // 0x004a7680: Player::sub_4A7680
 // IDA: Player::sub_4A7680
 // Ghidra: ---
-void gta2::Player_sub_4A7680(struct Player *self)
+void gta2::Player_sub_4A7680(Player *self)
 {
   struct Player *Player; // ecx
   const CHAR *v3; // [esp-4h] [ebp-8h]
@@ -7462,21 +7462,21 @@ void gta2::Player_sub_4A7680(struct Player *self)
 // 0x004a76d0: Player::sub_4A76D0
 // IDA: Player::sub_4A76D0
 // Ghidra: Player::FUN_004a76d0
-byte gta2::Player_sub_4A76D0(struct Player *self,Ped *pPed)
+byte gta2::Player_sub_4A76D0(Player *self,Ped *pPed)
 {
-  struct GameObject *pGVar1;
+  GameObject *pGVar1;
   undefined4 uVar2;
   byte bVar3;
   bool bVar4;
   char cVar5;
-  struct Car *pCar;
+  Car *pCar;
   int iVar6;
-  struct Car *pCar1;
+  Car *pCar1;
   
-  pCar = (struct Car *)gta2::Ped_GetCarPlayers(pPed);
+  pCar = (Car *)gta2::Ped_GetCarPlayers(pPed);
   pCar1 = pCar;
   if ((pPed == NULL) ||
-     (pCar1 = (struct Car *)gta2::Ped_GetPedState(pPed), pCar1 == (struct Car *)0x9))
+     (pCar1 = (Car *)gta2::Ped_GetPedState(pPed), pCar1 == (Car *)0x9))
   goto LAB_004a7906;
   if ((self->Enter == false) || (self->field68_0x89 == '\0')) {
     iVar6 = gta2::Ped_GetState(pPed);
@@ -7509,7 +7509,7 @@ byte gta2::Player_sub_4A76D0(struct Player *self,Ped *pPed)
          (pGVar1 = pPed->GameObject_, uVar2._0_1_ = pGVar1->AIState,
          uVar2._1_1_ = pGVar1->AISubState, uVar2._2_1_ = pGVar1->AITarget,
          uVar2._3_1_ = pGVar1->AITimer,
-         pCar1 = (struct Car *)gta2::CarSystemManager_sub_424E70(gCarSystemManager,uVar2,3), pCar1 != NULL)) {
+         pCar1 = (Car *)gta2::CarSystemManager_sub_424E70(gCarSystemManager,uVar2,3), pCar1 != NULL)) {
         gta2::Ped_SetAnimationState(pPed,0,9999);
         bVar4 = gta2::Car_IsTrainOrTrainCarriage(pCar1);
         if (bVar4) {
@@ -7555,7 +7555,7 @@ LAB_004a78d1:
   }
   if (pCar != NULL) {
     bVar4 = gta2::Ped_IsTargetCarDoor(pPed);
-    pCar1 = (struct Car *)(uint)bVar4;
+    pCar1 = (Car *)(uint)bVar4;
     if (!bVar4) goto LAB_004a7906;
     bVar4 = gta2::Car_IsTrainOrTrainCarriage(pCar);
     if (!bVar4) {
@@ -7564,7 +7564,7 @@ LAB_004a78d1:
     }
   }
   bVar3 = gta2::Player_FUN_004a5c50(self,pPed);
-  pCar1 = (struct Car *)(uint)bVar3;
+  pCar1 = (Car *)(uint)bVar3;
 LAB_004a7906:
   return (byte)pCar1;
 }
@@ -7573,7 +7573,7 @@ LAB_004a7906:
 // 0x004a7910: Player::HandleDeath
 // IDA: Player::HandleDeath
 // Ghidra: ---
-void gta2::Player_HandleDeath(struct Player *self)
+void gta2::Player_HandleDeath(Player *self)
 {
   struct Ped *Ped; // eax
   struct Ped *v3; // esi
@@ -7593,7 +7593,7 @@ void gta2::Player_HandleDeath(struct Player *self)
   if ( gNetworkGame )
   {
     if ( !self->MainPed->PedId
-      || (Ped = gta2::Character_FindPed(gCharacter, (struct Ped *)self->MainPed->PedId), (v3 = Ped) == 0)
+      || (Ped = gta2::Character_FindPed(gCharacter, (Ped *)self->MainPed->PedId), (v3 = Ped) == 0)
       || !gta2::Ped_IsSearchType(Ped, SEARCHTYPE_LINE_OF_SIGHT_PLAYER_ONLY)
       || (isPlayer = v3->isPlayer) == 0 )
     {
@@ -7617,7 +7617,7 @@ void gta2::Player_HandleDeath(struct Player *self)
     {
       self->MoneyValue = MoneyValue - 1;
     }
-    else if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives) > 0 || gNetworkGame )
+    else if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives) > 0 || gNetworkGame )
     {
       gta2::Player_ProcessWeaponChange(self);
       if ( !gKeep_weapons_after_death )
@@ -7627,8 +7627,8 @@ void gta2::Player_HandleDeath(struct Player *self)
         gta2::Player_sub_4A5710(self);
       }
       self->MultiPlayerMode = 0;
-      gta2::CameraOrPhysics_sub_41E010((struct CameraOrPhysics *)&self->CameraOrPhysics1);
-      gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_sub_41E010((CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics1);
       v14 = self->pPassenger;
       if ( v14 )
       {
@@ -7648,7 +7648,7 @@ void gta2::Player_HandleDeath(struct Player *self)
   {
     if ( gta2::Player_GetCurrentPlayer(self) )
     {
-      if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives) > 1 || gNetworkGame )
+      if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives) > 1 || gNetworkGame )
       {
         DeathDescription = gta2::Player_GetDeathDescription(self);
         v10 = gta2::Text__Bsearch(gText, DeathDescription);
@@ -7667,7 +7667,7 @@ void gta2::Player_HandleDeath(struct Player *self)
       gta2::Player_sub_4A6310(self);
     LOBYTE(self->S103_2) = 1;
     self->MoneyValue = 70;
-    if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives) > 1 )
+    if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives) > 1 )
     {
       v11 = gta2::Character_sub_43DFB0(gCharacter, self->MainPed);
       self->pPassenger = v11;
@@ -7687,7 +7687,7 @@ void gta2::Player_HandleDeath(struct Player *self)
 // 0x004a7b70: Player::sub_4A7B70
 // IDA: Player::sub_4A7B70
 // Ghidra: ---
-void gta2::Player_sub_4A7B70(struct Player *self)
+void gta2::Player_sub_4A7B70(Player *self)
 {
   if ( BYTE1(self->S103_2) )
   {
@@ -7708,13 +7708,13 @@ void gta2::Player_sub_4A7B70(struct Player *self)
 // 0x004a7ba0: Player::sub_4A7BA0
 // IDA: Player::sub_4A7BA0
 // Ghidra: ---
-char gta2::Player_sub_4A7BA0(struct Player *self)
+char gta2::Player_sub_4A7BA0(Player *self)
 {
   struct Ped *MainPed; // ecx
   const char *DeathDescription; // eax
   wchar_t *v4; // eax
   char v5; // al
-  struct S169 *pPassenger; // ecx
+  S169 *pPassenger; // ecx
   struct Ped *v7; // eax
   struct Ped *pMainPed; // ebp
   int MoneyValue; // eax
@@ -7734,7 +7734,7 @@ char gta2::Player_sub_4A7BA0(struct Player *self)
     {
       if ( (_WORD)MoneyValue == 2 )
       {
-        MoneyValue = gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives);
+        MoneyValue = gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives);
         if ( MoneyValue > 0 )
         {
           LOBYTE(MoneyValue) = gta2::MapGm_GetGang(&gMapGm);
@@ -7748,13 +7748,13 @@ char gta2::Player_sub_4A7BA0(struct Player *self)
         }
       }
     }
-    else if ( gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->Lives) <= 0 || gta2::MapGm_GetGang(&gMapGm) == 1 )
+    else if ( gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->Lives) <= 0 || gta2::MapGm_GetGang(&gMapGm) == 1 )
     {
       LOBYTE(MoneyValue) = gta2::Game_SetState(gGame, 0, 3);
     }
     else
     {
-      gta2::GUI_SetInteface((struct GUI *)&gHud->HudMessage_);
+      gta2::GUI_SetInteface((GUI *)&gHud->HudMessage_);
       gta2::Player_ProcessWeaponChange(self);
       if ( gta2::Player_GetPowerUp(self, 4) )
       {
@@ -7769,14 +7769,14 @@ char gta2::Player_sub_4A7BA0(struct Player *self)
           gta2::Player_sub_4A5690(self);
           gta2::Player_sub_4A5710(self);
         }
-        v11 = gta2::PlayerStats_getMoneyValue((struct PlayerStats *)&self->MultiPlayer) / 2;
+        v11 = gta2::PlayerStats_getMoneyValue((PlayerStats *)&self->MultiPlayer) / 2;
         if ( !v11 )
           v11 = 1;
-        gta2::PlayerStats_SetMonyeLives((struct PlayerStats *)&self->MultiPlayer, v11);
+        gta2::PlayerStats_SetMonyeLives((PlayerStats *)&self->MultiPlayer, v11);
       }
       self->MultiPlayerMode = 0;
-      gta2::CameraOrPhysics_sub_41E010((struct CameraOrPhysics *)&self->CameraOrPhysics1);
-      gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_sub_41E010((CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics1);
       LOWORD(self->pPassenger->XCoordinate) = 0;
       LOWORD(self->pPassenger->XCoordinate) = 0;
       self->pPassenger->PoliceStar1 = 0;
@@ -7831,18 +7831,18 @@ char gta2::Player_sub_4A7BA0(struct Player *self)
 // 0x004a7e80: Player::sub_4A7E80
 // IDA: Player::sub_4A7E80
 // Ghidra: ---
-__int16 gta2::Player_sub_4A7E80(struct Player *self)
+__int16 gta2::Player_sub_4A7E80(Player *self)
 {
   unsigned int Health; // eax
-  struct PlayerStats **p_Money; // ecx
-  struct PlayerStats *v3; // eax
-  struct PlayerStats *v4; // eax
+  PlayerStats **p_Money; // ecx
+  PlayerStats *v3; // eax
+  PlayerStats *v4; // eax
   void *v5; // edi
   unsigned __int16 v7; // ax
   char v8; // cl
   char v9; // al
-  struct CameraOrPhysics **p_CameraOrPhysics1; // esi
-  struct CameraOrPhysics **p_CameraOrPhysics2; // ecx
+  CameraOrPhysics **p_CameraOrPhysics1; // esi
+  CameraOrPhysics **p_CameraOrPhysics2; // ecx
   struct Ped *MainPed; // ecx
   bool v13; // zf
   char v14; // al
@@ -7866,7 +7866,7 @@ __int16 gta2::Player_sub_4A7E80(struct Player *self)
     self->Enter = 0;
     BYTE1(self->field_88) = 0;
   }
-  gta2::PlayerStats_sub_4B7770((struct PlayerStats *)&self->Money);
+  gta2::PlayerStats_sub_4B7770((PlayerStats *)&self->Money);
   sub_44A1E0(&self->field_644);
   v8 = LOBYTE(self->field_88) && self->NextWeaponZ;
   v9 = HIBYTE(self->field_84) && self->PrevWeaponX;
@@ -7884,29 +7884,29 @@ __int16 gta2::Player_sub_4A7E80(struct Player *self)
   {
     case 0:
       p_CameraOrPhysics1 = &self->CameraOrPhysics1;
-      gta2::Player_sub_4A4CF0(self, (struct SpriteS1 *)&self->CameraOrPhysics1, v5);
+      gta2::Player_sub_4A4CF0(self, (SpriteS1 *)&self->CameraOrPhysics1, v5);
       if ( !self->field_2F )
         gta2::Player_sub_4A76D0(self, self->MainPed);
-      gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics1, (struct S131 *)self->MainPed);
-      gta2::CameraOrPhysics_sub_41F2F0((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics1, (S131 *)self->MainPed);
+      gta2::CameraOrPhysics_sub_41F2F0((CameraOrPhysics *)&self->CameraOrPhysics1);
       if ( !self->field_2D0 )
         goto LABEL_41;
       if ( self->pPassenger )
       {
-        gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics2, (struct S131 *)self->pPassenger);
+        gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics2, (S131 *)self->pPassenger);
         p_CameraOrPhysics2 = &self->CameraOrPhysics2;
       }
       else
       {
         if ( self->sCar2 )
-          gta2::CameraOrPhysics_sub_41EE30((struct CameraOrPhysics *)&self->CameraOrPhysics2, self->sCar2);
+          gta2::CameraOrPhysics_sub_41EE30((CameraOrPhysics *)&self->CameraOrPhysics2, self->sCar2);
         p_CameraOrPhysics2 = &self->CameraOrPhysics2;
       }
       goto LABEL_40;
     case 1:
       p_CameraOrPhysics1 = &self->CameraOrPhysics1;
       gta2::CameraOrPhysics_sub_41EA10(
-        (struct CameraOrPhysics *)&self->CameraOrPhysics1,
+        (CameraOrPhysics *)&self->CameraOrPhysics1,
         self->Forward,
         self->Backward,
         self->RotateLeft,
@@ -7918,32 +7918,32 @@ __int16 gta2::Player_sub_4A7E80(struct Player *self)
       p_CameraOrPhysics1 = &self->CameraOrPhysics2;
       self->Enter = 0;
       BYTE1(self->field_88) = 0;
-      gta2::Player_sub_4A4CF0(self, (struct SpriteS1 *)&self->CameraOrPhysics2, v5);
+      gta2::Player_sub_4A4CF0(self, (SpriteS1 *)&self->CameraOrPhysics2, v5);
       if ( self->pPassenger )
       {
         if ( !self->field_2F )
           gta2::Player_sub_4A76D0(self, self->pPassenger);
-        gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics2, (struct S131 *)self->pPassenger);
+        gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics2, (S131 *)self->pPassenger);
       }
-      gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics1, (struct S131 *)self->MainPed);
-      gta2::CameraOrPhysics_sub_41F2F0((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics1, (S131 *)self->MainPed);
+      gta2::CameraOrPhysics_sub_41F2F0((CameraOrPhysics *)&self->CameraOrPhysics1);
       goto LABEL_39;
     case 3:
-      gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics1, (struct S131 *)self->MainPed);
+      gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics1, (S131 *)self->MainPed);
       if ( self->pPassenger )
       {
-        gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics2, (struct S131 *)self->pPassenger);
+        gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics2, (S131 *)self->pPassenger);
       }
       else if ( self->sCar2 )
       {
-        gta2::CameraOrPhysics_sub_41EE30((struct CameraOrPhysics *)&self->CameraOrPhysics2, self->sCar2);
+        gta2::CameraOrPhysics_sub_41EE30((CameraOrPhysics *)&self->CameraOrPhysics2, self->sCar2);
       }
-      gta2::CameraOrPhysics_sub_41F2F0((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+      gta2::CameraOrPhysics_sub_41F2F0((CameraOrPhysics *)&self->CameraOrPhysics1);
       p_CameraOrPhysics1 = &self->CameraOrPhysics2;
 LABEL_39:
       p_CameraOrPhysics2 = p_CameraOrPhysics1;
 LABEL_40:
-      gta2::CameraOrPhysics_sub_41F2F0((struct CameraOrPhysics *)p_CameraOrPhysics2);
+      gta2::CameraOrPhysics_sub_41F2F0((CameraOrPhysics *)p_CameraOrPhysics2);
 LABEL_41:
       if ( !self->field_6C )
         qmemcpy(&self->CameraOrPhysics_, p_CameraOrPhysics1, 0xBCu);
@@ -7954,9 +7954,9 @@ LABEL_41:
   gta2::Player_sub_4A6100(self);
   if ( self->field_6C == 1 )
   {
-    gta2::CameraOrPhysics_sub_4A5070((struct CameraOrPhysics *)&self->CameraOrPhysics_);
+    gta2::CameraOrPhysics_sub_4A5070((CameraOrPhysics *)&self->CameraOrPhysics_);
     gta2::CameraOrPhysics_sub_41EA10(
-      (struct CameraOrPhysics *)&self->CameraOrPhysics_,
+      (CameraOrPhysics *)&self->CameraOrPhysics_,
       self->Up,
       self->Down,
       self->Left,
@@ -7965,7 +7965,7 @@ LABEL_41:
       self->nextWeapon);
     if ( LOBYTE(self->Tango1) )
       gta2::sub_41E580(&self->CameraOrPhysics_, &self->CameraOrPhysics1);
-    gta2::CameraOrPhysics_sub_41F2F0((struct CameraOrPhysics *)&self->CameraOrPhysics_);
+    gta2::CameraOrPhysics_sub_41F2F0((CameraOrPhysics *)&self->CameraOrPhysics_);
   }
   gta2::Player_sub_4A4C90(self);
   MainPed = self->MainPed;
@@ -8012,21 +8012,21 @@ LABEL_55:
       p_Money = &self->Money;
       if ( self->field_60 )
       {
-        Health = gta2::PlayerStats_GetHealth((struct PlayerStats *)p_Money);
+        Health = gta2::PlayerStats_GetHealth((PlayerStats *)p_Money);
         if ( Health < gMissionManager->Health )
         {
           self->field_60 = 0;
-          v4 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+          v4 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
           LOWORD(Health) = gta2::PlayerStats_sub_44B300(v4, 2, 0);
         }
       }
       else
       {
-        Health = gta2::PlayerStats_GetHealth((struct PlayerStats *)p_Money);
+        Health = gta2::PlayerStats_GetHealth((PlayerStats *)p_Money);
         if ( Health >= gMissionManager->Health )
         {
           self->field_60 = 1;
-          v3 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+          v3 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
           LOWORD(Health) = gta2::PlayerStats_sub_44B300(v3, 7, 6);
         }
       }
@@ -8039,21 +8039,21 @@ LABEL_55:
 // 0x004a81e0: Player::sub_4A81E0
 // IDA: Player::sub_4A81E0
 // Ghidra: ---
-__int16 gta2::Player_sub_4A81E0(struct Player *self)
+__int16 gta2::Player_sub_4A81E0(Player *self)
 {
-  struct PlayerStats *v1; // eax
+  PlayerStats *v1; // eax
   char *v2; // eax
-  struct PlayerStats *v3; // eax
+  PlayerStats *v3; // eax
   char *v4; // eax
-  struct PlayerStats *v5; // eax
+  PlayerStats *v5; // eax
   char *v6; // eax
-  struct PlayerStats *v7; // eax
+  PlayerStats *v7; // eax
   char *v8; // eax
-  struct PlayerStats *v9; // eax
+  PlayerStats *v9; // eax
   char *v10; // eax
-  struct PlayerStats *pS161_1; // eax
+  PlayerStats *pS161_1; // eax
   char *v12; // eax
-  struct PlayerStats *v13; // eax
+  PlayerStats *v13; // eax
   char *v14; // eax
   unsigned __int8 Gang; // al
   void *pS161; // ecx
@@ -8067,9 +8067,9 @@ __int16 gta2::Player_sub_4A81E0(struct Player *self)
   self->field_640 = 0;
   self->field_680 = 0;
   self->field_682 = 1000;
-  gta2::PlayerStats_sub_4B7D50((struct PlayerStats *)&self->Money);
-  gta2::PlayerStats_sub_44B260((struct PlayerStats *)&self->Lives);
-  gta2::PlayerStats_sub_44B260((struct PlayerStats *)&self->MultiPlayer);
+  gta2::PlayerStats_sub_4B7D50((PlayerStats *)&self->Money);
+  gta2::PlayerStats_sub_44B260((PlayerStats *)&self->Lives);
+  gta2::PlayerStats_sub_44B260((PlayerStats *)&self->MultiPlayer);
   LOBYTE(self->field_64) = 0;
   LOWORD(self->S103_1) = -2;
   if ( gta2::MissionManager_sub_475A20(gMissionManager) )
@@ -8081,23 +8081,23 @@ __int16 gta2::Player_sub_4A81E0(struct Player *self)
     Gang = gta2::MapGm_GetGang(&gMapGm);
     pS161 = &self->Lives;
     if ( Gang )
-      gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)pS161, 1);
+      gta2::PlayerStats_SetMultiPlayer((PlayerStats *)pS161, 1);
     else
-      gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)pS161, 5);
-    gta2::PlayerStats_SetMultiPlayer((struct PlayerStats *)&self->MultiPlayer, 1);
+      gta2::PlayerStats_SetMultiPlayer((PlayerStats *)pS161, 5);
+    gta2::PlayerStats_SetMultiPlayer((PlayerStats *)&self->MultiPlayer, 1);
   }
-  gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics1, (struct S131 *)self->MainPed);
-  gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics1);
-  gta2::CameraOrPhysics_sub_41E410((struct CameraOrPhysics *)&self->CameraOrPhysics1);
-  gta2::CameraOrPhysics_sub_41E010((struct CameraOrPhysics *)&self->CameraOrPhysics1);
-  gta2::CameraOrPhysics_sub_41F410((struct CameraOrPhysics *)&self->CameraOrPhysics2, (struct S131 *)self->MainPed);
-  gta2::CameraOrPhysics_ResetAccuracy((struct CameraOrPhysics *)&self->CameraOrPhysics2);
-  gta2::CameraOrPhysics_sub_41E410((struct CameraOrPhysics *)&self->CameraOrPhysics2);
-  gta2::CameraOrPhysics_sub_41E010((struct CameraOrPhysics *)&self->CameraOrPhysics2);
+  gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics1, (S131 *)self->MainPed);
+  gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics1);
+  gta2::CameraOrPhysics_sub_41E410((CameraOrPhysics *)&self->CameraOrPhysics1);
+  gta2::CameraOrPhysics_sub_41E010((CameraOrPhysics *)&self->CameraOrPhysics1);
+  gta2::CameraOrPhysics_sub_41F410((CameraOrPhysics *)&self->CameraOrPhysics2, (S131 *)self->MainPed);
+  gta2::CameraOrPhysics_ResetAccuracy((CameraOrPhysics *)&self->CameraOrPhysics2);
+  gta2::CameraOrPhysics_sub_41E410((CameraOrPhysics *)&self->CameraOrPhysics2);
+  gta2::CameraOrPhysics_sub_41E010((CameraOrPhysics *)&self->CameraOrPhysics2);
   self->field_2D0 = 0;
   if ( gta2::Player_GetCurrentPlayer(self) && !skip_audio )
-    self->Sound = gta2::DMAudio_sub_410750(&gDMAudio, (struct CameraOrPhysics *)&self->CameraOrPhysics1);
-  self->sPed1 = (struct Ped *)2;
+    self->Sound = gta2::DMAudio_sub_410750(&gDMAudio, (CameraOrPhysics *)&self->CameraOrPhysics1);
+  self->sPed1 = (Ped *)2;
   *(_WORD *)self->gap790 = 0;
   LOWORD(pNetworkGame) = gNetworkGame;
   if ( gNetworkGame )
@@ -8107,60 +8107,60 @@ __int16 gta2::Player_sub_4A81E0(struct Player *self)
     {
       case 0:
       case 1:
-        v13 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        v13 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(v13, 7, 4);
-        v14 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v14, 7, 4);
+        v14 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v14, 7, 4);
         *(_WORD *)self->gap790 = 4;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       case 2:
-        pS161_1 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        pS161_1 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(pS161_1, 7, 8);
-        v12 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v12, 7, 8);
+        v12 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v12, 7, 8);
         *(_WORD *)self->gap790 = 8;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       case 3:
-        v9 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        v9 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(v9, 7, 7);
-        v10 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v10, 7, 7);
+        v10 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v10, 7, 7);
         *(_WORD *)self->gap790 = 7;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       case 4:
-        v7 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        v7 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(v7, 7, 5);
-        v8 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v8, 7, 5);
+        v8 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v8, 7, 5);
         *(_WORD *)self->gap790 = 5;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       case 5:
-        v5 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        v5 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(v5, 7, 6);
-        v6 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v6, 7, 6);
+        v6 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v6, 7, 6);
         *(_WORD *)self->gap790 = 6;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       case 6:
-        v3 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        v3 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(v3, 7, 3);
-        v4 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v4, 7, 3);
+        v4 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v4, 7, 3);
         *(_WORD *)self->gap790 = 3;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       case 8:
-        v1 = gta2::PlayerStats_sub_4B74D0((struct PlayerStats *)&self->Money);
+        v1 = gta2::PlayerStats_sub_4B74D0((PlayerStats *)&self->Money);
         gta2::PlayerStats_sub_44B300(v1, 7, 2);
-        v2 = gta2::PlayerStats_sub_4B7570((struct PlayerStats *)&self->Money);
-        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((struct PlayerStats *)v2, 7, 2);
+        v2 = gta2::PlayerStats_sub_4B7570((PlayerStats *)&self->Money);
+        LOWORD(pNetworkGame) = gta2::PlayerStats_sub_44B300((PlayerStats *)v2, 7, 2);
         *(_WORD *)self->gap790 = 2;
-        self->sPed1 = (struct Ped *)7;
+        self->sPed1 = (Ped *)7;
         break;
       default:
         return pNetworkGame;
@@ -8173,9 +8173,9 @@ __int16 gta2::Player_sub_4A81E0(struct Player *self)
 // 0x004a8340: Player::sub_4A8340
 // IDA: Player::sub_4A8340
 // Ghidra: ---
-void gta2::Player_sub_4A8340(struct Player *self)
+void gta2::Player_sub_4A8340(Player *self)
 {
-  struct Car *v2; // edi
+  Car *v2; // edi
   int v3; // [esp+4h] [ebp-Ch]
   int v4; // [esp+8h] [ebp-8h]
   int Y; // [esp+Ch] [ebp-4h] BYREF
@@ -8202,25 +8202,25 @@ void gta2::Player_sub_4A8340(struct Player *self)
 // 0x004a83c0: Player::Player
 // IDA: Player::Player
 // Ghidra: ---
-Player * gta2::Player_Player(struct Player *self, unsigned __int8 IDs)
+Player * gta2::Player_Player(Player *self, unsigned __int8 IDs)
 {
   KeyPlayer *p_Rotate; // edi
-  struct S103 *v4; // ecx
+  S103 *v4; // ecx
   struct Player *v5; // ecx
   _DWORD v7[5]; // [esp+10h] [ebp-14h] BYREF
 
   v7[1] = self;
   p_Rotate = &self->Rotate;
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&self->Rotate);
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)(&self->Rotate + 1));
-  gta2::CameraOrPhysics_SUB_0041f580((struct CameraOrPhysics *)&self->CameraOrPhysics1);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&self->Rotate);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)(&self->Rotate + 1));
+  gta2::CameraOrPhysics_SUB_0041f580((CameraOrPhysics *)&self->CameraOrPhysics1);
   v7[4] = 4;
-  gta2::CameraOrPhysics_SUB_0041f580((struct CameraOrPhysics *)&self->CameraOrPhysics_);
-  gta2::CameraOrPhysics_SUB_0041f580((struct CameraOrPhysics *)&self->CameraOrPhysics2);
-  gta2::PlayerStats_Money((struct PlayerStats *)&self->Money);
+  gta2::CameraOrPhysics_SUB_0041f580((CameraOrPhysics *)&self->CameraOrPhysics_);
+  gta2::CameraOrPhysics_SUB_0041f580((CameraOrPhysics *)&self->CameraOrPhysics2);
+  gta2::PlayerStats_Money((PlayerStats *)&self->Money);
   gta2::sub_44A1D0(&self->field_644);
-  gta2::PlayerStats_Lives((struct PlayerStats *)&self->Lives);
-  gta2::PlayerStats_Lives((struct PlayerStats *)&self->MultiPlayer);
+  gta2::PlayerStats_Lives((PlayerStats *)&self->Lives);
+  gta2::PlayerStats_Lives((PlayerStats *)&self->MultiPlayer);
   gta2::sub_4A6FC0(&self->Network_);
   self->Ids = IDs;
   LOBYTE(self->S103_2) = 0;
@@ -8241,7 +8241,7 @@ Player * gta2::Player_Player(struct Player *self, unsigned __int8 IDs)
   *((_WORD *)&self->Rotate + 1) = unk_66B0C4;
   self->FW = unk_66B15C;
   gta2::bitShiftLeft1(v7, 0);
-  v4 = (struct S103 *)v7[0];
+  v4 = (S103 *)v7[0];
   self->SelectWeapon = 0;
   self->S103_ = v4;
   self->MultiPlayerMode = 1;
@@ -8268,14 +8268,14 @@ Player * gta2::Player_Player(struct Player *self, unsigned __int8 IDs)
   self->MoneyValue = 0;
   self->Sound = 0;
   self->Ids = IDs;
-  gta2::PlayerStats_sub_4B7490((struct PlayerStats *)&self->Money, self, 2, 999999999, 158, 999u);
-  gta2::PlayerStats_sub_44B220((struct PlayerStats *)&self->Lives, 1, 99, 115);
-  gta2::PlayerStats_sub_44B220((struct PlayerStats *)&self->MultiPlayer, 1, 99, 116);
+  gta2::PlayerStats_sub_4B7490((PlayerStats *)&self->Money, self, 2, 999999999, 158, 999u);
+  gta2::PlayerStats_sub_44B220((PlayerStats *)&self->Lives, 1, 99, 115);
+  gta2::PlayerStats_sub_44B220((PlayerStats *)&self->MultiPlayer, 1, 99, 116);
   gta2::Player_SetActivePowerUps(self);
   gta2::Player_sub_4A5180(v5);
   gta2::Player_SetPlayerState(self, 0);
   if ( gNetworkGame )
-    gta2::Network_sub_409DA0((struct Network *)&dword_674214.BaseCar[1].S82, self->string_Arr0x16);
+    gta2::Network_sub_409DA0((Network *)&dword_674214.BaseCar[1].S82, self->string_Arr0x16);
   else
     self->string_Arr0x16[0] = 0;
   self->quit1 = 0;
@@ -8289,15 +8289,15 @@ Player * gta2::Player_Player(struct Player *self, unsigned __int8 IDs)
 void gta2::Player_sub_4BA0A0(void *self,undefined4 *param_1,undefined4 *param_2)
 {
   undefined4 *puVar1;
-  struct SpriteS1 *pSVar2;
+  SpriteS1 *pSVar2;
   int local_8 [2];
   
   local_8[0] = 2;
-  pSVar2 = gta2::S122_sub_401BF0((struct Model *)self,(struct SpriteS1 *)(local_8 + 1),local_8);
+  pSVar2 = gta2::S122_sub_401BF0((Model *)self,(SpriteS1 *)(local_8 + 1),local_8);
   puVar1 = param_1;
   param_1 = (undefined4 *)0x2;
   *puVar1 = pSVar2->FirstElement;
-  pSVar2 = gta2::S122_sub_401BF0((struct Model *)((int)self + 4),(struct SpriteS1 *)(local_8 + 1)
+  pSVar2 = gta2::S122_sub_401BF0((Model *)((int)self + 4),(SpriteS1 *)(local_8 + 1)
                               ,(int *)&param_1);
   *param_2 = pSVar2->FirstElement;
   return;
@@ -8317,9 +8317,9 @@ void gta2::Player_sub_4C5F60(void *self,Player *pPlayer)
 // 0x004c7340: Player::sub_4C7340
 // IDA: Player::sub_4C7340
 // Ghidra: ---
-Tango * gta2::Player_sub_4C7340(struct Player *self)
+Tango * gta2::Player_sub_4C7340(Player *self)
 {
-  return (struct Tango *)self->S103_4;
+  return (Tango *)self->S103_4;
 }
 
 
@@ -8336,7 +8336,7 @@ int gta2::Player_OpenChat(void *self, void *a1)
 // 0x004ccab0: Player::sub_4CCAB0
 // IDA: Player::sub_4CCAB0
 // Ghidra: ---
-int gta2::Player_sub_4CCAB0(struct Player *self)
+int gta2::Player_sub_4CCAB0(Player *self)
 {
   int v1; // eax
   int result; // eax
@@ -8354,7 +8354,7 @@ int gta2::Player_sub_4CCAB0(struct Player *self)
 // 0x004ccad0: Player::sub_4CCAD0
 // IDA: Player::sub_4CCAD0
 // Ghidra: ---
-int gta2::Player_sub_4CCAD0(struct Player *self)
+int gta2::Player_sub_4CCAD0(Player *self)
 {
   int result; // eax
 
@@ -8368,7 +8368,7 @@ int gta2::Player_sub_4CCAD0(struct Player *self)
 // 0x004ccae0: Player::sub_4CCAE0
 // IDA: Player::sub_4CCAE0
 // Ghidra: ---
-int gta2::Player_sub_4CCAE0(struct Player *self)
+int gta2::Player_sub_4CCAE0(Player *self)
 {
   return self->field_50;
 }
@@ -8377,7 +8377,7 @@ int gta2::Player_sub_4CCAE0(struct Player *self)
 // 0x004ccb00: Player::FUN_004ccb00
 // IDA: sub_4CCB00
 // Ghidra: Player::FUN_004ccb00
-byte gta2::Player_FUN_004ccb00(struct Player *self)
+byte gta2::Player_FUN_004ccb00(Player *self)
 {
   return -1 < self->timeSecond;
 }
@@ -8387,8 +8387,8 @@ byte gta2::Player_FUN_004ccb00(struct Player *self)
 // IDA: Player::sub_401B40
 // Ghidra: ---
   return gta2::Player_sub_401B40(
-           (struct Player *)&stru_5D22FC.gap2D8[12],
-           (struct S202 *)&stru_5D22FC.gap194[16],
+           (Player *)&stru_5D22FC.gap2D8[12],
+           (S202 *)&stru_5D22FC.gap194[16],
            (int)&stru_5D22FC.gap194[12]);
 }
 
@@ -8396,7 +8396,7 @@ byte gta2::Player_FUN_004ccb00(struct Player *self)
 // 0x004e5540: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&stru_5D22FC, (struct S202 *)&stru_5D22FC.gapBC[16], (int)&stru_5D22FC.S103_2);
+  return gta2::Player_sub_401B40(&stru_5D22FC, (S202 *)&stru_5D22FC.gapBC[16], (int)&stru_5D22FC.S103_2);
 }
 
 
@@ -8404,8 +8404,8 @@ byte gta2::Player_FUN_004ccb00(struct Player *self)
 // IDA: Player::sub_401B40
 // Ghidra: ---
   return gta2::Player_sub_401B40(
-           (struct Player *)&stru_5D22FC.field_480,
-           (struct S202 *)&stru_5D22FC.gap344[152],
+           (Player *)&stru_5D22FC.field_480,
+           (S202 *)&stru_5D22FC.gap344[152],
            (int)&stru_5D22FC.gap344[148]);
 }
 
@@ -8416,7 +8416,7 @@ byte gta2::Player_FUN_004ccb00(struct Player *self)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005d303c,(GlassInfo *)&DAT_005d2ed0,
-             (struct S127 *)&DAT_005d2ecc);
+             (S127 *)&DAT_005d2ecc);
   return;
 }
 
@@ -8427,7 +8427,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)(gBufferSize + 0x1390),
-             (GlassInfo *)(gBufferSize + 0x1474),(struct S127 *)(gBufferSize + 0x13bc))
+             (GlassInfo *)(gBufferSize + 0x1474),(S127 *)(gBufferSize + 0x13bc))
   ;
   return;
 }
@@ -8436,112 +8436,112 @@ void gta2::Player_sub_401B40(void)
 // 0x004e8350: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_5D31C0.pPlayer, &stru_5D3130, (int)&stru_5D3110.field_1C);
+  return gta2::Player_sub_401B40((Player *)&stru_5D31C0.pPlayer, &stru_5D3130, (int)&stru_5D3110.field_1C);
 }
 
 
 // 0x004e8c90: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_5D3354.pPlayer, &stru_5D32C4, (int)&stru_5D32A4.field_1C);
+  return gta2::Player_sub_401B40((Player *)&stru_5D3354.pPlayer, &stru_5D32C4, (int)&stru_5D32A4.field_1C);
 }
 
 
 // 0x004e8d40: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_5D31E0.pPlayer, (struct S202 *)&stru_5D3254.CarSystemManager, (int)&unk_5D3208);
+  return gta2::Player_sub_401B40((Player *)&stru_5D31E0.pPlayer, (S202 *)&stru_5D3254.CarSystemManager, (int)&unk_5D3208);
 }
 
 
 // 0x004e95f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5D3518, &stru_5D3474, (int)&stru_5D3454.field_1C);
+  return gta2::Player_sub_401B40((Player *)&unk_5D3518, &stru_5D3474, (int)&stru_5D3454.field_1C);
 }
 
 
 // 0x004e96a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_5D3390.pPlayer, (struct S202 *)&stru_5D3404.CarSystemManager, (int)&unk_5D33B8);
+  return gta2::Player_sub_401B40((Player *)&stru_5D3390.pPlayer, (S202 *)&stru_5D3404.CarSystemManager, (int)&unk_5D33B8);
 }
 
 
 // 0x004e9f50: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5D38A4, (struct S202 *)&unk_5D3734, (int)&unk_5D3730);
+  return gta2::Player_sub_401B40(&unk_5D38A4, (S202 *)&unk_5D3734, (int)&unk_5D3730);
 }
 
 
 // 0x004ea750: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_5D3548.field_10, (struct S202 *)&unk_5D3644, (int)&unk_5D3588);
+  return gta2::Player_sub_401B40((Player *)&stru_5D3548.field_10, (S202 *)&unk_5D3644, (int)&unk_5D3588);
 }
 
 
 // 0x004eb770: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5D7E50, (struct S202 *)&unk_5D507C, (int)&unk_5D5078);
+  return gta2::Player_sub_401B40(&unk_5D7E50, (S202 *)&unk_5D507C, (int)&unk_5D5078);
 }
 
 
 // 0x004ec590: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5D81C8, (struct S202 *)&unk_5D805C, (int)&unk_5D8058);
+  return gta2::Player_sub_401B40(&unk_5D81C8, (S202 *)&unk_5D805C, (int)&unk_5D8058);
 }
 
 
 // 0x004ecd90: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5D7E8C, (struct S202 *)&unk_5D7F70, (int)&unk_5D7EB8);
+  return gta2::Player_sub_401B40((Player *)&unk_5D7E8C, (S202 *)&unk_5D7F70, (int)&unk_5D7EB8);
 }
 
 
 // 0x004edd10: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5D854C, (struct S202 *)&unk_5D83E0, (int)&unk_5D83DC);
+  return gta2::Player_sub_401B40(&unk_5D854C, (S202 *)&unk_5D83E0, (int)&unk_5D83DC);
 }
 
 
 // 0x004ee510: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5D8210, (struct S202 *)&unk_5D82F4, (int)&unk_5D823C);
+  return gta2::Player_sub_401B40((Player *)&unk_5D8210, (S202 *)&unk_5D82F4, (int)&unk_5D823C);
 }
 
 
 // 0x004ef490: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5DC754, (struct S202 *)&unk_5DC5E8, (int)&unk_5DC5E4);
+  return gta2::Player_sub_401B40(&unk_5DC754, (S202 *)&unk_5DC5E8, (int)&unk_5DC5E4);
 }
 
 
 // 0x004efc90: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5D8590, (struct S202 *)&unk_5DC4FC, (int)&unk_5DC444);
+  return gta2::Player_sub_401B40((Player *)&dword_5D8590, (S202 *)&unk_5DC4FC, (int)&unk_5DC444);
 }
 
 
 // 0x004f0c30: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5DCAF4, (struct S202 *)&unk_5DC988, (int)&unk_5DC984);
+  return gta2::Player_sub_401B40(&unk_5DCAF4, (S202 *)&unk_5DC988, (int)&unk_5DC984);
 }
 
 
 // 0x004f0ce0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5DC7A8, (struct S202 *)&unk_5DC8AC, (int)&unk_5DC7D8);
+  return gta2::Player_sub_401B40(&unk_5DC7A8, (S202 *)&unk_5DC8AC, (int)&unk_5DC7D8);
 }
 
 
@@ -8551,7 +8551,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e2450,(GlassInfo *)&DAT_005e22e0,
-             (struct S127 *)&DAT_005e22dc);
+             (S127 *)&DAT_005e22dc);
   return;
 }
 
@@ -8559,14 +8559,14 @@ void gta2::Player_sub_401B40(void)
 // 0x004f2c60: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5DCB90, (struct S202 *)&unk_5E21F0, (int)&unk_5DCBBC);
+  return gta2::Player_sub_401B40((Player *)&unk_5DCB90, (S202 *)&unk_5E21F0, (int)&unk_5DCBBC);
 }
 
 
 // 0x004f3c20: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E27F8, (struct S202 *)&unk_5E2694, (int)&unk_5E2690);
+  return gta2::Player_sub_401B40(&unk_5E27F8, (S202 *)&unk_5E2694, (int)&unk_5E2690);
 }
 
 
@@ -8580,105 +8580,105 @@ void gta2::Player_sub_401B40(void)
 // 0x004f53a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E2B84, (struct S202 *)&unk_5E2A10, (int)&unk_5E2A0C);
+  return gta2::Player_sub_401B40(&unk_5E2B84, (S202 *)&unk_5E2A10, (int)&unk_5E2A0C);
 }
 
 
 // 0x004f5ba0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E2840, (struct S202 *)&unk_5E2924, (int)&unk_5E286C);
+  return gta2::Player_sub_401B40((Player *)&unk_5E2840, (S202 *)&unk_5E2924, (int)&unk_5E286C);
 }
 
 
 // 0x004f6b40: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&byte_5E2F10, (struct S202 *)&unk_5E2DA4, (int)&unk_5E2DA0);
+  return gta2::Player_sub_401B40((Player *)&byte_5E2F10, (S202 *)&unk_5E2DA4, (int)&unk_5E2DA0);
 }
 
 
 // 0x004f7340: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E2BD4, (struct S202 *)&unk_5E2CB8, (int)&unk_5E2C00);
+  return gta2::Player_sub_401B40((Player *)&unk_5E2BD4, (S202 *)&unk_5E2CB8, (int)&unk_5E2C00);
 }
 
 
 // 0x004f82c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E3290, (struct S202 *)&unk_5E3124, (int)&unk_5E3120);
+  return gta2::Player_sub_401B40((Player *)&dword_5E3290, (S202 *)&unk_5E3124, (int)&unk_5E3120);
 }
 
 
 // 0x004f8ac0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E2F54, (struct S202 *)&unk_5E3038, (int)&unk_5E2F80);
+  return gta2::Player_sub_401B40((Player *)&dword_5E2F54, (S202 *)&unk_5E3038, (int)&unk_5E2F80);
 }
 
 
 // 0x004f9a40: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E3620, (struct S202 *)&unk_5E34B4, (int)&unk_5E34B0);
+  return gta2::Player_sub_401B40(&unk_5E3620, (S202 *)&unk_5E34B4, (int)&unk_5E34B0);
 }
 
 
 // 0x004fa240: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E32E4, (struct S202 *)&unk_5E33C8, (int)&unk_5E3310);
+  return gta2::Player_sub_401B40((Player *)&dword_5E32E4, (S202 *)&unk_5E33C8, (int)&unk_5E3310);
 }
 
 
 // 0x004fb1c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E3828, (struct S202 *)&unk_5E3784, (int)&unk_5E3780);
+  return gta2::Player_sub_401B40((Player *)&unk_5E3828, (S202 *)&unk_5E3784, (int)&unk_5E3780);
 }
 
 
 // 0x004fbb00: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E3CB0, (struct S202 *)&unk_5E3B44, (int)&unk_5E3B40);
+  return gta2::Player_sub_401B40(&unk_5E3CB0, (S202 *)&unk_5E3B44, (int)&unk_5E3B40);
 }
 
 
 // 0x004fc270: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E3964, (struct S202 *)&unk_5E3BD8, (int)&unk_5E3994);
+  return gta2::Player_sub_401B40((Player *)&unk_5E3964, (S202 *)&unk_5E3BD8, (int)&unk_5E3994);
 }
 
 
 // 0x004fd320: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E4074, (struct S202 *)&unk_5E3EFC, (int)&unk_5E3EF8);
+  return gta2::Player_sub_401B40(&unk_5E4074, (S202 *)&unk_5E3EFC, (int)&unk_5E3EF8);
 }
 
 
 // 0x004fdb20: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E3D04, &unk_5E3DF8, (int)&unk_5E3D34);
+  return gta2::Player_sub_401B40((Player *)&unk_5E3D04, &unk_5E3DF8, (int)&unk_5E3D34);
 }
 
 
 // 0x004fec30: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E5064, (struct S202 *)&unk_5E4EE4, (int)&unk_5E4EE0);
+  return gta2::Player_sub_401B40(&unk_5E5064, (S202 *)&unk_5E4EE4, (int)&unk_5E4EE0);
 }
 
 
 // 0x004ff430: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E4CE8, &unk_5E4DE8, (int)&unk_5E4D18);
+  return gta2::Player_sub_401B40((Player *)&unk_5E4CE8, &unk_5E4DE8, (int)&unk_5E4D18);
 }
 
 
@@ -8688,7 +8688,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e542c,(GlassInfo *)&DAT_005e52ac,
-             (struct S127 *)&DAT_005e52a8);
+             (S127 *)&DAT_005e52a8);
   return;
 }
 
@@ -8699,7 +8699,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e50cc,(GlassInfo *)&DAT_005e51bc,
-             (struct S127 *)&DAT_005e50fc);
+             (S127 *)&DAT_005e50fc);
   return;
 }
 
@@ -8710,7 +8710,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e57f8,(GlassInfo *)&DAT_005e5690,
-             (struct S127 *)&DAT_005e568c);
+             (S127 *)&DAT_005e568c);
   return;
 }
 
@@ -8721,7 +8721,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e54c4,(GlassInfo *)&DAT_005e5720,
-             (struct S127 *)&DAT_005e54ec);
+             (S127 *)&DAT_005e54ec);
   return;
 }
 
@@ -8732,7 +8732,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e5b7c,(GlassInfo *)&DAT_005e5a18,
-             (struct S127 *)&DAT_005e5a14);
+             (S127 *)&DAT_005e5a14);
   return;
 }
 
@@ -8743,7 +8743,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e5844,(GlassInfo *)&DAT_005e5940,
-             (struct S127 *)&DAT_005e5870);
+             (S127 *)&DAT_005e5870);
   return;
 }
 
@@ -8754,7 +8754,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e5fa4,(GlassInfo *)&DAT_005e5e18,
-             (struct S127 *)&DAT_005e5e14);
+             (S127 *)&DAT_005e5e14);
   return;
 }
 
@@ -8762,7 +8762,7 @@ void gta2::Player_sub_401B40(void)
 // 0x005054a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E5C34, (struct S202 *)&unk_5E5D24, (int)&unk_5E5C64);
+  return gta2::Player_sub_401B40((Player *)&unk_5E5C34, (S202 *)&unk_5E5D24, (int)&unk_5E5C64);
 }
 
 
@@ -8772,7 +8772,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e632c,(GlassInfo *)&DAT_005e61c0,
-             (struct S127 *)&DAT_005e61bc);
+             (S127 *)&DAT_005e61bc);
   return;
 }
 
@@ -8783,7 +8783,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e5ff0,(GlassInfo *)&DAT_005e60d4,
-             (struct S127 *)&DAT_005e601c);
+             (S127 *)&DAT_005e601c);
   return;
 }
 
@@ -8794,7 +8794,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e663c,(GlassInfo *)&DAT_005e64fc,
-             (struct S127 *)&DAT_005e64f8);
+             (S127 *)&DAT_005e64f8);
   return;
 }
 
@@ -8805,7 +8805,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e6364,(GlassInfo *)&DAT_005e642c,
-             (struct S127 *)&DAT_005e638c);
+             (S127 *)&DAT_005e638c);
   return;
 }
 
@@ -8816,7 +8816,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e6a3c,(GlassInfo *)&DAT_005e68cc,
-             (struct S127 *)&DAT_005e68c8);
+             (S127 *)&DAT_005e68c8);
   return;
 }
 
@@ -8827,7 +8827,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e66cc,(GlassInfo *)&DAT_005e67b8,
-             (struct S127 *)&DAT_005e66fc);
+             (S127 *)&DAT_005e66fc);
   return;
 }
 
@@ -8838,7 +8838,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e7470,(GlassInfo *)&DAT_005e7378,
-             (struct S127 *)&DAT_005e7374);
+             (S127 *)&DAT_005e7374);
   return;
 }
 
@@ -8849,7 +8849,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e784c,(GlassInfo *)&DAT_005e76bc,
-             (struct S127 *)&DAT_005e76b8);
+             (S127 *)&DAT_005e76b8);
   return;
 }
 
@@ -8860,7 +8860,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e74c4,(GlassInfo *)&DAT_005e75c8,
-             (struct S127 *)&DAT_005e74f8);
+             (S127 *)&DAT_005e74f8);
   return;
 }
 
@@ -8871,7 +8871,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e79e8,(GlassInfo *)&DAT_005e7944,
-             (struct S127 *)&DAT_005e7940);
+             (S127 *)&DAT_005e7940);
   return;
 }
 
@@ -8882,7 +8882,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005e7d5c,(GlassInfo *)&DAT_005e7bf0,
-             (struct S127 *)&DAT_005e7bec);
+             (S127 *)&DAT_005e7bec);
   return;
 }
 
@@ -8890,140 +8890,140 @@ void gta2::Player_sub_401B40(void)
 // 0x0050e450: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E7A20, (struct S202 *)&unk_5E7B04, (int)&unk_5E7A4C);
+  return gta2::Player_sub_401B40((Player *)&unk_5E7A20, (S202 *)&unk_5E7B04, (int)&unk_5E7A4C);
 }
 
 
 // 0x0050f3d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E80F4, (struct S202 *)&unk_5E7F8C, (int)&unk_5E7F88);
+  return gta2::Player_sub_401B40((Player *)&dword_5E80F4, (S202 *)&unk_5E7F8C, (int)&unk_5E7F88);
 }
 
 
 // 0x0050f480: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E7DA8, (struct S202 *)&unk_5E7EAC, (int)&unk_5E7DD4);
+  return gta2::Player_sub_401B40((Player *)&dword_5E7DA8, (S202 *)&unk_5E7EAC, (int)&unk_5E7DD4);
 }
 
 
 // 0x00510be0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5E8424, (struct S202 *)&unk_5E82DC, (int)&unk_5E82D8);
+  return gta2::Player_sub_401B40((Player *)&unk_5E8424, (S202 *)&unk_5E82DC, (int)&unk_5E82D8);
 }
 
 
 // 0x005113e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E8130, (struct S202 *)&unk_5E8204, (int)&unk_5E8158);
+  return gta2::Player_sub_401B40((Player *)&dword_5E8130, (S202 *)&unk_5E8204, (int)&unk_5E8158);
 }
 
 
 // 0x005121a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E85B8, (struct S202 *)&unk_5E8514, (int)&unk_5E8510);
+  return gta2::Player_sub_401B40(&unk_5E85B8, (S202 *)&unk_5E8514, (int)&unk_5E8510);
 }
 
 
 // 0x00512ae0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E8844, (struct S202 *)&unk_5E8738, (int)&unk_5E8734);
+  return gta2::Player_sub_401B40((Player *)&dword_5E8844, (S202 *)&unk_5E8738, (int)&unk_5E8734);
 }
 
 
 // 0x005132e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E85E4, (struct S202 *)&unk_5E868C, (int)&unk_5E8608);
+  return gta2::Player_sub_401B40((Player *)&dword_5E85E4, (S202 *)&unk_5E868C, (int)&unk_5E8608);
 }
 
 
 // 0x00513c20: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E8B68, (struct S202 *)&unk_5E8A28, (int)&unk_5E8A24);
+  return gta2::Player_sub_401B40((Player *)&dword_5E8B68, (S202 *)&unk_5E8A28, (int)&unk_5E8A24);
 }
 
 
 // 0x00513cd0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E8878, (struct S202 *)&unk_5E8964, (int)&unk_5E88A0);
+  return gta2::Player_sub_401B40((Player *)&dword_5E8878, (S202 *)&unk_5E8964, (int)&unk_5E88A0);
 }
 
 
 // 0x005151e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E8EF0, (struct S202 *)&unk_5E8D84, (int)&unk_5E8D80);
+  return gta2::Player_sub_401B40(&unk_5E8EF0, (S202 *)&unk_5E8D84, (int)&unk_5E8D80);
 }
 
 
 // 0x005159e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E8BB4, (struct S202 *)&unk_5E8C98, (int)&unk_5E8BE0);
+  return gta2::Player_sub_401B40((Player *)&dword_5E8BB4, (S202 *)&unk_5E8C98, (int)&unk_5E8BE0);
 }
 
 
 // 0x00516960: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E932C, (struct S202 *)&unk_5E91C4, (int)&unk_5E91C0);
+  return gta2::Player_sub_401B40(&unk_5E932C, (S202 *)&unk_5E91C4, (int)&unk_5E91C0);
 }
 
 
 // 0x00516a10: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E8FDC, (struct S202 *)&unk_5E90DC, (int)&unk_5E9008);
+  return gta2::Player_sub_401B40((Player *)&dword_5E8FDC, (S202 *)&unk_5E90DC, (int)&unk_5E9008);
 }
 
 
 // 0x00518180: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5E96E8, (struct S202 *)&unk_5E957C, (int)&unk_5E9578);
+  return gta2::Player_sub_401B40(&unk_5E96E8, (S202 *)&unk_5E957C, (int)&unk_5E9578);
 }
 
 
 // 0x00518980: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5E93AC, (struct S202 *)&unk_5E9490, (int)&unk_5E93D8);
+  return gta2::Player_sub_401B40((Player *)&dword_5E93AC, (S202 *)&unk_5E9490, (int)&unk_5E93D8);
 }
 
 
 // 0x00519900: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5EA9B8, (struct S202 *)&unk_5EA820, (int)&unk_5EA81C);
+  return gta2::Player_sub_401B40((Player *)&unk_5EA9B8, (S202 *)&unk_5EA820, (int)&unk_5EA81C);
 }
 
 
 // 0x005199b0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5EA630, (struct S202 *)&unk_5EA75C, (int)&unk_5EA658);
+  return gta2::Player_sub_401B40(&unk_5EA630, (S202 *)&unk_5EA75C, (int)&unk_5EA658);
 }
 
 
 // 0x0051af00: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5EAD3C, (struct S202 *)&unk_5EABD0, (int)&unk_5EABCC);
+  return gta2::Player_sub_401B40(&unk_5EAD3C, (S202 *)&unk_5EABD0, (int)&unk_5EABCC);
 }
 
 
 // 0x0051b700: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5EAA00, (struct S202 *)&unk_5EAAE4, (int)&unk_5EAA2C);
+  return gta2::Player_sub_401B40((Player *)&unk_5EAA00, (S202 *)&unk_5EAAE4, (int)&unk_5EAA2C);
 }
 
 
@@ -9033,7 +9033,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_005eaf3c,(GlassInfo *)&DAT_005eae98,
-             (struct S127 *)&DAT_005eae94);
+             (S127 *)&DAT_005eae94);
   return;
 }
 
@@ -9041,154 +9041,154 @@ void gta2::Player_sub_401B40(void)
 // 0x0051cfd0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EB4E8, (struct S202 *)&unk_5EB37C, (int)&unk_5EB378);
+  return gta2::Player_sub_401B40((Player *)&dword_5EB4E8, (S202 *)&unk_5EB37C, (int)&unk_5EB378);
 }
 
 
 // 0x0051d080: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EB194, (struct S202 *)&unk_5EB294, (int)&unk_5EB1C0);
+  return gta2::Player_sub_401B40((Player *)&dword_5EB194, (S202 *)&unk_5EB294, (int)&unk_5EB1C0);
 }
 
 
 // 0x0051e800: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_5EB884, (struct S202 *)&unk_5EB70C, (int)&unk_5EB708);
+  return gta2::Player_sub_401B40((Player *)&unk_5EB884, (S202 *)&unk_5EB70C, (int)&unk_5EB708);
 }
 
 
 // 0x0051f000: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EB52C, (struct S202 *)&unk_5EB618, (int)&unk_5EB558);
+  return gta2::Player_sub_401B40((Player *)&dword_5EB52C, (S202 *)&unk_5EB618, (int)&unk_5EB558);
 }
 
 
 // 0x00520030: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5EBB1C, (struct S202 *)&unk_5EBA10, (int)&unk_5EBA0C);
+  return gta2::Player_sub_401B40(&unk_5EBB1C, (S202 *)&unk_5EBA10, (int)&unk_5EBA0C);
 }
 
 
 // 0x00520830: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_5EB8BC, (struct S202 *)&unk_5EB964, (int)&unk_5EB8E0);
+  return gta2::Player_sub_401B40(&unk_5EB8BC, (S202 *)&unk_5EB964, (int)&unk_5EB8E0);
 }
 
 
 // 0x00521170: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EBEA0, (struct S202 *)&unk_5EBD34, (int)&unk_5EBD30);
+  return gta2::Player_sub_401B40((Player *)&dword_5EBEA0, (S202 *)&unk_5EBD34, (int)&unk_5EBD30);
 }
 
 
 // 0x00521970: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EBB64, (struct S202 *)&unk_5EBC48, (int)&unk_5EBB90);
+  return gta2::Player_sub_401B40((Player *)&dword_5EBB64, (S202 *)&unk_5EBC48, (int)&unk_5EBB90);
 }
 
 
 // 0x005228f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EC7A0, (struct S202 *)&unk_5EC63C, (int)&unk_5EC638);
+  return gta2::Player_sub_401B40((Player *)&dword_5EC7A0, (S202 *)&unk_5EC63C, (int)&unk_5EC638);
 }
 
 
 // 0x005229a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EBEEC, (struct S202 *)&unk_5EBFE8, (int)&unk_5EBF18);
+  return gta2::Player_sub_401B40((Player *)&dword_5EBEEC, (S202 *)&unk_5EBFE8, (int)&unk_5EBF18);
 }
 
 
 // 0x00524080: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_661E84, (struct S202 *)&unk_5EC9C8, (int)&unk_5EC9C4);
+  return gta2::Player_sub_401B40(&unk_661E84, (S202 *)&unk_5EC9C8, (int)&unk_5EC9C4);
 }
 
 
 // 0x00524880: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_5EC7E4, (struct S202 *)&unk_5EC8CC, (int)&unk_5EC810);
+  return gta2::Player_sub_401B40((Player *)&dword_5EC7E4, (S202 *)&unk_5EC8CC, (int)&unk_5EC810);
 }
 
 
 // 0x005258c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66211C, (struct S202 *)&unk_662014, (int)&unk_662010);
+  return gta2::Player_sub_401B40((Player *)&unk_66211C, (S202 *)&unk_662014, (int)&unk_662010);
 }
 
 
 // 0x00526030: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_661EBC, (struct S202 *)&unk_662074, (int)&unk_661EE0);
+  return gta2::Player_sub_401B40(&unk_661EBC, (S202 *)&unk_662074, (int)&unk_661EE0);
 }
 
 
 // 0x00526a00: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_6622B0, (struct S202 *)&unk_66220C, (int)&unk_662208);
+  return gta2::Player_sub_401B40((Player *)&dword_6622B0, (S202 *)&unk_66220C, (int)&unk_662208);
 }
 
 
 // 0x00527340: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_662508, (struct S202 *)&unk_662410, (int)&unk_66240C);
+  return gta2::Player_sub_401B40((Player *)&dword_662508, (S202 *)&unk_662410, (int)&unk_66240C);
 }
 
 
 // 0x00528340: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66269C, (struct S202 *)&unk_6625F8, (int)&unk_6625F4);
+  return gta2::Player_sub_401B40((Player *)&dword_66269C, (S202 *)&unk_6625F8, (int)&unk_6625F4);
 }
 
 
 // 0x005283f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_662528, (struct S202 *)&unk_662590, (int)&unk_66253C);
+  return gta2::Player_sub_401B40((Player *)&dword_662528, (S202 *)&unk_662590, (int)&unk_66253C);
 }
 
 
 // 0x00528ca0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_662B08, (struct S202 *)&unk_6629A0, (int)&unk_66299C);
+  return gta2::Player_sub_401B40(&unk_662B08, (S202 *)&unk_6629A0, (int)&unk_66299C);
 }
 
 
 // 0x00528d50: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_6627B8, (struct S202 *)&unk_6628B8, (int)&unk_6627E4);
+  return gta2::Player_sub_401B40(&unk_6627B8, (S202 *)&unk_6628B8, (int)&unk_6627E4);
 }
 
 
 // 0x0052a4c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66327C, &unk_663110, (int)&unk_66310C);
+  return gta2::Player_sub_401B40((Player *)&unk_66327C, &unk_663110, (int)&unk_66310C);
 }
 
 
 // 0x0052acc0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_662C3C, (struct S202 *)&unk_662D20, (int)&unk_662C68);
+  return gta2::Player_sub_401B40((Player *)&unk_662C3C, (S202 *)&unk_662D20, (int)&unk_662C68);
 }
 
 
@@ -9202,161 +9202,161 @@ void gta2::Player_sub_401B40(void)
 // 0x0052c9b0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_6633F4, &unk_6634D8, (int)&unk_66341C);
+  return gta2::Player_sub_401B40((Player *)&unk_6633F4, &unk_6634D8, (int)&unk_66341C);
 }
 
 
 // 0x0052d7e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_663DD4, (struct S202 *)&unk_6638C4, (int)&unk_6638C0);
+  return gta2::Player_sub_401B40(&unk_663DD4, (S202 *)&unk_6638C4, (int)&unk_6638C0);
 }
 
 
 // 0x0052dfe0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66376C, (struct S202 *)&unk_663818, (int)&unk_663790);
+  return gta2::Player_sub_401B40((Player *)&unk_66376C, (S202 *)&unk_663818, (int)&unk_663790);
 }
 
 
 // 0x0052e950: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_664154, (struct S202 *)&unk_663FE8, (int)&unk_663FE4);
+  return gta2::Player_sub_401B40(&unk_664154, (S202 *)&unk_663FE8, (int)&unk_663FE4);
 }
 
 
 // 0x0052f150: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_663E18, (struct S202 *)&unk_663EFC, (int)&unk_663E44);
+  return gta2::Player_sub_401B40(&unk_663E18, (S202 *)&unk_663EFC, (int)&unk_663E44);
 }
 
 
 // 0x005300d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_664488, (struct S202 *)&unk_664340, (int)&unk_66433C);
+  return gta2::Player_sub_401B40((Player *)&dword_664488, (S202 *)&unk_664340, (int)&unk_66433C);
 }
 
 
 // 0x005308d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_664194, (struct S202 *)&unk_664268, (int)&unk_6641BC);
+  return gta2::Player_sub_401B40((Player *)&dword_664194, (S202 *)&unk_664268, (int)&unk_6641BC);
 }
 
 
 // 0x00531690: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_664FDC, (struct S202 *)&unk_664E68, (int)&unk_664E64);
+  return gta2::Player_sub_401B40(&unk_664FDC, (S202 *)&unk_664E68, (int)&unk_664E64);
 }
 
 
 // 0x00531e90: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_664504, (struct S202 *)&unk_664D78, (int)&unk_664534);
+  return gta2::Player_sub_401B40((Player *)&dword_664504, (S202 *)&unk_664D78, (int)&unk_664534);
 }
 
 
 // 0x00532ef0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_665394, (struct S202 *)&unk_66524C, (int)&unk_665248);
+  return gta2::Player_sub_401B40(&unk_665394, (S202 *)&unk_66524C, (int)&unk_665248);
 }
 
 
 // 0x005336f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_6650A0, (struct S202 *)&unk_665174, (int)&unk_6650C8);
+  return gta2::Player_sub_401B40((Player *)&dword_6650A0, (S202 *)&unk_665174, (int)&unk_6650C8);
 }
 
 
 // 0x005344b0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66574C, (struct S202 *)&unk_6655B4, (int)&unk_6655B0);
+  return gta2::Player_sub_401B40((Player *)&unk_66574C, (S202 *)&unk_6655B4, (int)&unk_6655B0);
 }
 
 
 // 0x00534cb0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_6653D8, (struct S202 *)&unk_6654C4, (int)&unk_665408);
+  return gta2::Player_sub_401B40((Player *)&dword_6653D8, (S202 *)&unk_6654C4, (int)&unk_665408);
 }
 
 
 // 0x00535ce0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_665B28, (struct S202 *)&unk_6659AC, (int)&unk_6659A8);
+  return gta2::Player_sub_401B40(&unk_665B28, (S202 *)&unk_6659AC, (int)&unk_6659A8);
 }
 
 
 // 0x005364e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_6657D0, (struct S202 *)&unk_6658BC, (int)&unk_6657FC);
+  return gta2::Player_sub_401B40((Player *)&unk_6657D0, (S202 *)&unk_6658BC, (int)&unk_6657FC);
 }
 
 
 // 0x005374b0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&byte_669AD8, (struct S202 *)&stru_6691E4.S202, (int)&stru_6691E4);
+  return gta2::Player_sub_401B40(&byte_669AD8, (S202 *)&stru_6691E4.S202, (int)&stru_6691E4);
 }
 
 
 // 0x00537cb0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_665B64, (struct S202 *)&unk_665C10, (int)&unk_665B88);
+  return gta2::Player_sub_401B40((Player *)&unk_665B64, (S202 *)&unk_665C10, (int)&unk_665B88);
 }
 
 
 // 0x0053d120: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_669E5C, (struct S202 *)&unk_669CF4, (int)&stru_669CD4.field_1C);
+  return gta2::Player_sub_401B40(&unk_669E5C, (S202 *)&unk_669CF4, (int)&stru_669CD4.field_1C);
 }
 
 
 // 0x0053d1d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)stru_669B08.gap14, &unk_669C18, (int)&unk_669B48);
+  return gta2::Player_sub_401B40((Player *)stru_669B08.gap14, &unk_669C18, (int)&unk_669B48);
 }
 
 
 // 0x0053e8c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66A210, (struct S202 *)&unk_66A098, (int)&unk_66A094);
+  return gta2::Player_sub_401B40(&unk_66A210, (S202 *)&unk_66A098, (int)&unk_66A094);
 }
 
 
 // 0x0053f0c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_669EB8, (struct S202 *)&unk_669FA4, (int)&unk_669EE4);
+  return gta2::Player_sub_401B40((Player *)&unk_669EB8, (S202 *)&unk_669FA4, (int)&unk_669EE4);
 }
 
 
 // 0x00540120: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66A3B0, (struct S202 *)&unk_66A30C, (int)&unk_66A308);
+  return gta2::Player_sub_401B40((Player *)&unk_66A3B0, (S202 *)&unk_66A30C, (int)&unk_66A308);
 }
 
 
 // 0x00540a60: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66A79C, (struct S202 *)&unk_66A600, (int)&unk_66A5FC);
+  return gta2::Player_sub_401B40(&unk_66A79C, (S202 *)&unk_66A600, (int)&unk_66A5FC);
 }
 
 
@@ -9370,84 +9370,84 @@ void gta2::Player_sub_401B40(void)
 // 0x00542420: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66AB58, (struct S202 *)&unk_66A9EC, (int)&unk_66A9E8);
+  return gta2::Player_sub_401B40(&unk_66AB58, (S202 *)&unk_66A9EC, (int)&unk_66A9E8);
 }
 
 
 // 0x00542c20: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66A81C, (struct S202 *)&unk_66A900, (int)&unk_66A848);
+  return gta2::Player_sub_401B40((Player *)&dword_66A81C, (S202 *)&unk_66A900, (int)&unk_66A848);
 }
 
 
 // 0x00543ba0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66B048, (struct S202 *)&unk_66AE60, (int)&unk_66AE5C);
+  return gta2::Player_sub_401B40((Player *)&dword_66B048, (S202 *)&unk_66AE60, (int)&unk_66AE5C);
 }
 
 
 // 0x005443a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66ABD4, (struct S202 *)&dword_66AD1C, (int)&unk_66AC10);
+  return gta2::Player_sub_401B40((Player *)&dword_66ABD4, (S202 *)&dword_66AD1C, (int)&unk_66AC10);
 }
 
 
 // 0x00544b30: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&dword_66B014, (int)&unk_66AB94);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&dword_66B014, (int)&unk_66AB94);
 }
 
 
 // 0x00544b50: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&dword_66AFF0, (int)&unk_66AF5C);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&dword_66AFF0, (int)&unk_66AF5C);
 }
 
 
 // 0x00544b70: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&dword_66AD04, (int)&unk_66AF5C);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&dword_66AD04, (int)&unk_66AF5C);
 }
 
 
 // 0x00544b90: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&unk_66AD10, (int)&MEMORY[0x66ACAC]);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&unk_66AD10, (int)&MEMORY[0x66ACAC]);
 }
 
 
 // 0x00544bc0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&MEMORY[0x66AD94], (int)&unk_66AB90);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&MEMORY[0x66AD94], (int)&unk_66AB90);
 }
 
 
 // 0x00544c40: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&unk_66AF50, (int)&unk_66AF78);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&unk_66AF50, (int)&unk_66AF78);
 }
 
 
 // 0x00544cc0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66AC4C, (struct S202 *)&unk_66AF30, (int)&unk_66AFD0);
+  return gta2::Player_sub_401B40((Player *)&unk_66AC4C, (S202 *)&unk_66AF30, (int)&unk_66AFD0);
 }
 
 
 // 0x005458b0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66B3F0, (struct S202 *)&unk_66B274, (int)&unk_66B270);
+  return gta2::Player_sub_401B40(&unk_66B3F0, (S202 *)&unk_66B274, (int)&unk_66B270);
 }
 
 
@@ -9457,7 +9457,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&PTR_0066b098,(GlassInfo *)&DAT_0066b184,
-             (struct S127 *)&DAT_0066b0c8);
+             (S127 *)&DAT_0066b0c8);
   return;
 }
 
@@ -9465,112 +9465,112 @@ void gta2::Player_sub_401B40(void)
 // 0x00547120: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_66B76C.Select, (struct S202 *)&stru_66B600.Weapon_, (int)&stru_66B600.field_4);
+  return gta2::Player_sub_401B40((Player *)&stru_66B76C.Select, (S202 *)&stru_66B600.Weapon_, (int)&stru_66B600.field_4);
 }
 
 
 // 0x00547920: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66B438, (struct S202 *)&unk_66B51C, (int)&unk_66B464);
+  return gta2::Player_sub_401B40((Player *)&dword_66B438, (S202 *)&unk_66B51C, (int)&unk_66B464);
 }
 
 
 // 0x005488a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66BB1C, (struct S202 *)&unk_66B9B0, (int)&unk_66B9AC);
+  return gta2::Player_sub_401B40((Player *)&unk_66BB1C, (S202 *)&unk_66B9B0, (int)&unk_66B9AC);
 }
 
 
 // 0x005490a0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_66B7D0.TargetCar, (struct S202 *)&unk_66B8C0, (int)&unk_66B808);
+  return gta2::Player_sub_401B40((Player *)&stru_66B7D0.TargetCar, (S202 *)&unk_66B8C0, (int)&unk_66B808);
 }
 
 
 // 0x0054a030: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66BED4, (struct S202 *)&unk_66BD6C, (int)&unk_66BD68);
+  return gta2::Player_sub_401B40((Player *)&dword_66BED4, (S202 *)&unk_66BD6C, (int)&unk_66BD68);
 }
 
 
 // 0x0054a0e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66BB8C, (struct S202 *)&unk_66BC90, (int)&unk_66BBBC);
+  return gta2::Player_sub_401B40((Player *)&dword_66BB8C, (S202 *)&unk_66BC90, (int)&unk_66BBBC);
 }
 
 
 // 0x0054b850: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66C25C, (struct S202 *)&unk_66C0F0, (int)&unk_66C0EC);
+  return gta2::Player_sub_401B40(&unk_66C25C, (S202 *)&unk_66C0F0, (int)&unk_66C0EC);
 }
 
 
 // 0x0054c050: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66BF20, (struct S202 *)&unk_66C004, (int)&unk_66BF4C);
+  return gta2::Player_sub_401B40((Player *)&dword_66BF20, (S202 *)&unk_66C004, (int)&unk_66BF4C);
 }
 
 
 // 0x0054cfd0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66C610, (struct S202 *)&unk_66C498, (int)&unk_66C494);
+  return gta2::Player_sub_401B40(&unk_66C610, (S202 *)&unk_66C498, (int)&unk_66C494);
 }
 
 
 // 0x0054d7d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66C2B4, &unk_66C39C, (int)&unk_66C2E0);
+  return gta2::Player_sub_401B40((Player *)&dword_66C2B4, &unk_66C39C, (int)&unk_66C2E0);
 }
 
 
 // 0x0054e7e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66C7AC, (struct S202 *)&unk_66C708, (int)&unk_66C704);
+  return gta2::Player_sub_401B40((Player *)&unk_66C7AC, (S202 *)&unk_66C708, (int)&unk_66C704);
 }
 
 
 // 0x0054f130: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_66F22C.Select, (struct S202 *)&stru_66F090.field_38, (int)&stru_66F090.UnitCars);
+  return gta2::Player_sub_401B40((Player *)&stru_66F22C.Select, (S202 *)&stru_66F090.field_38, (int)&stru_66F090.UnitCars);
 }
 
 
 // 0x0054f930: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66C7E0, (struct S202 *)&unk_66C8C4, (int)&unk_66C80C);
+  return gta2::Player_sub_401B40((Player *)&unk_66C7E0, (S202 *)&unk_66C8C4, (int)&unk_66C80C);
 }
 
 
 // 0x005508d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66F5C8, (struct S202 *)&unk_66F458, (int)&unk_66F454);
+  return gta2::Player_sub_401B40((Player *)&dword_66F5C8, (S202 *)&unk_66F458, (int)&unk_66F454);
 }
 
 
 // 0x005510d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_66F26C.field_10, (struct S202 *)&unk_66F368, (int)&unk_66F2AC);
+  return gta2::Player_sub_401B40((Player *)&stru_66F26C.field_10, (S202 *)&unk_66F368, (int)&unk_66F2AC);
 }
 
 
 // 0x005520f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_66F970, (struct S202 *)&unk_66F7FC, (int)&unk_66F7F8);
+  return gta2::Player_sub_401B40((Player *)&dword_66F970, (S202 *)&unk_66F7FC, (int)&unk_66F7F8);
 }
 
 
@@ -9580,7 +9580,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&gSpawnPoint,(GlassInfo *)&DAT_0066f714,
-             (struct S127 *)&DAT_0066f63c);
+             (S127 *)&DAT_0066f63c);
   return;
 }
 
@@ -9588,98 +9588,98 @@ void gta2::Player_sub_401B40(void)
 // 0x005539d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66FB08, (struct S202 *)&unk_66FA64, (int)&unk_66FA60);
+  return gta2::Player_sub_401B40((Player *)&unk_66FB08, (S202 *)&unk_66FA64, (int)&unk_66FA60);
 }
 
 
 // 0x00554310: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_66FE08, (struct S202 *)&unk_66FCC8, (int)&unk_66FCC4);
+  return gta2::Player_sub_401B40(&unk_66FE08, (S202 *)&unk_66FCC8, (int)&unk_66FCC4);
 }
 
 
 // 0x00554b10: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66FB30, (struct S202 *)&unk_66FBF8, (int)&unk_66FB58);
+  return gta2::Player_sub_401B40((Player *)&unk_66FB30, (S202 *)&unk_66FBF8, (int)&unk_66FB58);
 }
 
 
 // 0x005557c0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_6702A8, (struct S202 *)&unk_670138, (int)&unk_670134);
+  return gta2::Player_sub_401B40(&unk_6702A8, (S202 *)&unk_670138, (int)&unk_670134);
 }
 
 
 // 0x00555fc0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_66FF54, (struct S202 *)&unk_67003C, (int)&unk_66FF80);
+  return gta2::Player_sub_401B40((Player *)&unk_66FF54, (S202 *)&unk_67003C, (int)&unk_66FF80);
 }
 
 
 // 0x00556fe0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_67062C, (struct S202 *)&unk_6704C0, (int)&unk_6704BC);
+  return gta2::Player_sub_401B40((Player *)&unk_67062C, (S202 *)&unk_6704C0, (int)&unk_6704BC);
 }
 
 
 // 0x005577e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_6702F0, (struct S202 *)&unk_6703D4, (int)&unk_67031C);
+  return gta2::Player_sub_401B40((Player *)&dword_6702F0, (S202 *)&unk_6703D4, (int)&unk_67031C);
 }
 
 
 // 0x00558760: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_6708D4, (struct S202 *)&unk_6707DC, (int)&unk_6707D8);
+  return gta2::Player_sub_401B40((Player *)&dword_6708D4, (S202 *)&unk_6707DC, (int)&unk_6707D8);
 }
 
 
 // 0x00559760: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_670C50, (struct S202 *)&unk_670AEC, (int)&unk_670AE8);
+  return gta2::Player_sub_401B40((Player *)&dword_670C50, (S202 *)&unk_670AEC, (int)&unk_670AE8);
 }
 
 
 // 0x00559810: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_670918, (struct S202 *)&unk_670A14, (int)&unk_670944);
+  return gta2::Player_sub_401B40(&unk_670918, (S202 *)&unk_670A14, (int)&unk_670944);
 }
 
 
 // 0x0055aee0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_671038, (struct S202 *)&unk_670EC4, (int)&unk_670EC0);
+  return gta2::Player_sub_401B40((Player *)&unk_671038, (S202 *)&unk_670EC4, (int)&unk_670EC0);
 }
 
 
 // 0x0055b6e0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&stru_670CD8.field_10, (struct S202 *)&unk_670DD4, (int)&unk_670D18);
+  return gta2::Player_sub_401B40((Player *)&stru_670CD8.field_10, (S202 *)&unk_670DD4, (int)&unk_670D18);
 }
 
 
 // 0x0055c710: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_67186C, (struct S202 *)&unk_671724, (int)&unk_671720);
+  return gta2::Player_sub_401B40((Player *)&dword_67186C, (S202 *)&unk_671724, (int)&unk_671720);
 }
 
 
 // 0x0055cf10: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_671578, (struct S202 *)&unk_67164C, (int)&unk_6715A0);
+  return gta2::Player_sub_401B40((Player *)&dword_671578, (S202 *)&unk_67164C, (int)&unk_6715A0);
 }
 
 
@@ -9693,119 +9693,119 @@ void gta2::Player_sub_401B40(void)
 // 0x0055e4d0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_67199C, (struct S202 *)&unk_671A44, (int)&unk_6719C0);
+  return gta2::Player_sub_401B40(&unk_67199C, (S202 *)&unk_671A44, (int)&unk_6719C0);
 }
 
 
 // 0x0055ee10: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_671E90, (struct S202 *)&unk_671D84, (int)&unk_671D80);
+  return gta2::Player_sub_401B40((Player *)&dword_671E90, (S202 *)&unk_671D84, (int)&unk_671D80);
 }
 
 
 // 0x0055f610: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_671C30, (struct S202 *)&unk_671CD8, (int)&unk_671C54);
+  return gta2::Player_sub_401B40((Player *)&dword_671C30, (S202 *)&unk_671CD8, (int)&unk_671C54);
 }
 
 
 // 0x0055ff50: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_6721BC, (struct S202 *)&unk_672074, (int)&unk_672070);
+  return gta2::Player_sub_401B40((Player *)&dword_6721BC, (S202 *)&unk_672074, (int)&unk_672070);
 }
 
 
 // 0x00560750: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_671EC8, (struct S202 *)&unk_671F9C, (int)&unk_671EF0);
+  return gta2::Player_sub_401B40((Player *)&dword_671EC8, (S202 *)&unk_671F9C, (int)&unk_671EF0);
 }
 
 
 // 0x00561520: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_672560, (struct S202 *)&unk_6723E4, (int)&unk_6723E0);
+  return gta2::Player_sub_401B40(&unk_672560, (S202 *)&unk_6723E4, (int)&unk_6723E0);
 }
 
 
 // 0x00561d20: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_672204, (struct S202 *)&unk_6722F4, (int)&unk_672234);
+  return gta2::Player_sub_401B40((Player *)&unk_672204, (S202 *)&unk_6722F4, (int)&unk_672234);
 }
 
 
 // 0x00562db0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_672800, (struct S202 *)&unk_6726F4, (int)&unk_6726F0);
+  return gta2::Player_sub_401B40(&unk_672800, (S202 *)&unk_6726F4, (int)&unk_6726F0);
 }
 
 
 // 0x005635b0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_6725A0, (struct S202 *)&unk_672648, (int)&unk_6725C4);
+  return gta2::Player_sub_401B40((Player *)&unk_6725A0, (S202 *)&unk_672648, (int)&unk_6725C4);
 }
 
 
 // 0x00563ef0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_672B7C, (struct S202 *)&unk_672A10, (int)&unk_672A0C);
+  return gta2::Player_sub_401B40(&unk_672B7C, (S202 *)&unk_672A10, (int)&unk_672A0C);
 }
 
 
 // 0x005646f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&dword_672840, (struct S202 *)&unk_672924, (int)&unk_67286C);
+  return gta2::Player_sub_401B40((Player *)&dword_672840, (S202 *)&unk_672924, (int)&unk_67286C);
 }
 
 
 // 0x00565670: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_672F00, (struct S202 *)&unk_672D94, (int)&unk_672D90);
+  return gta2::Player_sub_401B40(&unk_672F00, (S202 *)&unk_672D94, (int)&unk_672D90);
 }
 
 
 // 0x00565e70: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_672BC4, (struct S202 *)&unk_672CA8, (int)&unk_672BF0);
+  return gta2::Player_sub_401B40(&unk_672BC4, (S202 *)&unk_672CA8, (int)&unk_672BF0);
 }
 
 
 // 0x00566df0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_6732C8, (struct S202 *)&unk_673154, (int)&unk_673150);
+  return gta2::Player_sub_401B40(&unk_6732C8, (S202 *)&unk_673154, (int)&unk_673150);
 }
 
 
 // 0x005675f0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_672F70, &unk_673058, (int)&unk_672F9C);
+  return gta2::Player_sub_401B40((Player *)&unk_672F70, &unk_673058, (int)&unk_672F9C);
 }
 
 
 // 0x00568630: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_67392C, (struct S202 *)&unk_6737BC, (int)&unk_6737B8);
+  return gta2::Player_sub_401B40(&unk_67392C, (S202 *)&unk_6737BC, (int)&unk_6737B8);
 }
 
 
 // 0x00568e30: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_6735D8, (struct S202 *)&unk_6736C0, (int)&unk_673604);
+  return gta2::Player_sub_401B40(&unk_6735D8, (S202 *)&unk_6736C0, (int)&unk_673604);
 }
 
 
@@ -9819,7 +9819,7 @@ void gta2::Player_sub_401B40(void)
 // 0x0056a650: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40((struct Player *)&unk_673984, &unk_673A78, (int)&unk_6739B4);
+  return gta2::Player_sub_401B40((Player *)&unk_673984, &unk_673A78, (int)&unk_6739B4);
 }
 
 
@@ -9829,7 +9829,7 @@ void gta2::Player_sub_401B40(void)
 void gta2::Player_sub_401B40(void)
 {
   gta2::Player_sub_401B40((SpawnPoint *)&DAT_00674f94,(GlassInfo *)&DAT_0067416c,
-             (struct S127 *)&DAT_00674168);
+             (S127 *)&DAT_00674168);
   return;
 }
 
@@ -9837,7 +9837,7 @@ void gta2::Player_sub_401B40(void)
 // 0x0056bfe0: Player::sub_401B40
 // IDA: Player::sub_401B40
 // Ghidra: ---
-  return gta2::Player_sub_401B40(&unk_673F88, (struct S202 *)&stru_67404C.field_24, (int)&unk_673FB4);
+  return gta2::Player_sub_401B40(&unk_673F88, (S202 *)&stru_67404C.field_24, (int)&unk_673FB4);
 }
 
 

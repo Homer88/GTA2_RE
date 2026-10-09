@@ -9,14 +9,14 @@
 // Ghidra: ---
 TrafficManager * gta2::S31_sub_474E80(struct TrafficManager *self)
 {
-  struct TrafficManager *result; // eax
+  TrafficManager *result; // eax
   int v2; // edx
 
   result = self;
   v2 = 0;
   while ( result->FirstElement )
   {
-    result = (struct TrafficManager *)((char *)result + 12);
+    result = (TrafficManager *)((char *)result + 12);
     if ( (unsigned __int16)++v2 >= 0x32u )
       return 0;
   }
@@ -29,15 +29,15 @@ TrafficManager * gta2::S31_sub_474E80(struct TrafficManager *self)
 // Ghidra: ---
 char gta2::S31_sub_474ED0(struct TrafficManager *self, void *a2)
 {
-  struct TrafficManager *v2; // eax
+  TrafficManager *v2; // eax
   int v3; // ecx
-  struct S32 *v4; // edx
+  S32 *v4; // edx
 
   v2 = gta2::TrafficManager_sub_474E80(self);
   if ( v2 )
   {
-    v2->FirstElement = (struct S32 *)a2;
-    v4 = (struct S32 *)*((_DWORD *)a2 + 5);
+    v2->FirstElement = (S32 *)a2;
+    v4 = (S32 *)*((_DWORD *)a2 + 5);
     v2->S32_[0].currentData = 2;
     v2->S32_[0].prev_field = v4;
     LOBYTE(v2) = *(_BYTE *)(v3 + 600) + 1;
@@ -52,13 +52,13 @@ char gta2::S31_sub_474ED0(struct TrafficManager *self, void *a2)
 // Ghidra: ---
 int gta2::S31_sub_476BC0(struct TrafficManager *self)
 {
-  struct TrafficManager *v2; // esi
+  TrafficManager *v2; // esi
   struct S169 *S169; // ecx
-  struct Car *pCar; // edi
-  struct Car *FirstElement; // ecx
+  Car *pCar; // edi
+  Car *FirstElement; // ecx
   struct S169 *pS169; // ecx
   int v7; // ecx
-  struct Car *v8; // edi
+  Car *v8; // edi
   int result; // eax
   int v10; // [esp+10h] [ebp-4h]
 
@@ -79,34 +79,34 @@ int gta2::S31_sub_476BC0(struct TrafficManager *self)
   v10 = 50;
   do
   {
-    FirstElement = (struct Car *)v2->FirstElement;
+    FirstElement = (Car *)v2->FirstElement;
     if ( v2->FirstElement )
     {
       if ( v2->S32_[0].currentData == 1 )
       {
-        if ( (struct S32 *)FirstElement->ID == v2->S32_[0].prev_field )
+        if ( (S32 *)FirstElement->ID == v2->S32_[0].prev_field )
         {
-          gta2::Player_sub_4A47F0(gGame->PlayerMain, (struct Car *)v2->FirstElement);
-          gta2::Car_CarMakeDriveable1((struct Car *)v2->FirstElement, SEARCHTYPE_AREA);
-          v8 = (struct Car *)v2->FirstElement;
-          if ( !gta2::Car_GetMask7((struct Car *)v2->FirstElement) )
+          gta2::Player_sub_4A47F0(gGame->PlayerMain, (Car *)v2->FirstElement);
+          gta2::Car_CarMakeDriveable1((Car *)v2->FirstElement, SEARCHTYPE_AREA);
+          v8 = (Car *)v2->FirstElement;
+          if ( !gta2::Car_GetMask7((Car *)v2->FirstElement) )
             gta2::Car_isMask4(v8);
         }
       }
       else if ( v2->S32_[0].currentData == 2 )
       {
-        if ( FirstElement->CarDoor_[0].PedInDoor == (struct Ped *)v2->S32_[0].prev_field )
+        if ( FirstElement->CarDoor_[0].PedInDoor == (Ped *)v2->S32_[0].prev_field )
         {
-          gta2::S63_sub_483C40((struct EventHandler *)FirstElement);
+          gta2::S63_sub_483C40((EventHandler *)FirstElement);
           gta2::sub_4827C0(&v2->FirstElement->currentData);
         }
       }
-      else if ( v2->S32_[0].currentData == 3 && (struct S32 *)FirstElement[2].Mask == v2->S32_[0].prev_field )
+      else if ( v2->S32_[0].currentData == 3 && (S32 *)FirstElement[2].Mask == v2->S32_[0].prev_field )
       {
         pS169 = *(S169 **)&FirstElement[1].field_A8;
         if ( pS169 )
           gta2::S169_sub_403DA0(pS169);
-        gta2::Ped_sub_43EC30((struct Ped *)v2->FirstElement);
+        gta2::Ped_sub_43EC30((Ped *)v2->FirstElement);
         v7 = *(_DWORD *)&v2->FirstElement[45].currentData;
         BYTE1(v7) |= 4u;
         *(_DWORD *)&v2->FirstElement[45].currentData = v7;
@@ -116,7 +116,7 @@ int gta2::S31_sub_476BC0(struct TrafficManager *self)
       v2->S32_[0].currentData = 0;
       --LOBYTE(self->S32_[49].NextElement);
     }
-    v2 = (struct TrafficManager *)((char *)v2 + 12);
+    v2 = (TrafficManager *)((char *)v2 + 12);
     result = --v10;
   }
   while ( v10 );
@@ -152,13 +152,13 @@ _DWORD * gta2::S31_CreatePed2(struct TrafficManager *self, Ped *pPed)
 // Ghidra: ---
 TrafficManager * gta2::S31_sub_476D50(struct TrafficManager *self, S32 *pS32, char a3)
 {
-  struct TrafficManager *result; // eax
+  TrafficManager *result; // eax
 
   LOBYTE(result) = a3;
   if ( a3
     || pS32
-    && ((int)gta2::S32_sub_40FEF0(pS32) < 64 || (result = (struct TrafficManager *)gta2::S32_sub_40FEF0(pS32), (int)result > 108))
-    && ((int)gta2::S32_sub_40FEF0(pS32) < 200 || (result = (struct TrafficManager *)gta2::S32_sub_40FEF0(pS32), (int)result > 244)) )
+    && ((int)gta2::S32_sub_40FEF0(pS32) < 64 || (result = (TrafficManager *)gta2::S32_sub_40FEF0(pS32), (int)result > 108))
+    && ((int)gta2::S32_sub_40FEF0(pS32) < 200 || (result = (TrafficManager *)gta2::S32_sub_40FEF0(pS32), (int)result > 244)) )
   {
     result = gta2::TrafficManager_sub_474E80(self);
     if ( result )

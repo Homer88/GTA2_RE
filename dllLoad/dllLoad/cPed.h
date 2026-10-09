@@ -104,8 +104,20 @@ struct S169;
 
 #pragma pack(push, 1)
 struct Ped {
-    char S200[9];            // 0x00 S200[3] (header / anim block prefix)
-    char gap9[0xC2];         // 0x09..0xCA (unnamed animation area)
+char S200[9];            // 0x00 S200[3] (header / anim block prefix)
+       // 0x09..0xCA: unnamed animation area. Retail touches only 5 dwords in
+       // it, each read-only - the block is initialised in bulk, never per field.
+       char gap9[0x13];         // 0x09..0x1B
+       int  field_1C;           // 0x1C dword; ==2 tested at 0x43A9B8, copied
+                                //      ped->ped into +0x1B4 at 0x436005
+       char gap20[0x40];        // 0x20..0x5F
+       int  field_60;           // 0x60 dword, read at 0x43EC9B
+       char gap64[0x1C];        // 0x64..0x7F
+       int  field_80;           // 0x80 dword, read at 0x433CC5
+       char gap84[0x14];        // 0x84..0x97
+       int  field_98;           // 0x98 dword, read at 0x435C2A
+       int  field_9C;           // 0x9C dword, read at 0x435C32
+       char gapA0[0x2B];        // 0xA0..0xCA
     char field_CB;           // 0xCB
     char field_CC;
     char field_CD;
@@ -334,5 +346,17 @@ struct PedManager {
     char field_203AB;
 };
 static_assert(sizeof(PedManager) == 0x203AC, "PedManager size 0x203AC");
+
+// Retail setter bodies verified byte-exact against
+// C:\games\original\Grand Theft Auto 2\gta2.exe (ImageBase 0x3F0000).
+// Each is a single store + "ret 4", so no trampoline is needed.
+//   0x00403920  8b442404 898138020000 c20400  mov eax,[esp+4]; mov [ecx+0x238],eax; ret 4
+//   0x00403930  8b442404 898164010000 c20400  mov eax,[esp+4]; mov [ecx+0x164],eax; ret 4
+//   0x00403940  8a442404 88813c020000 c20400  mov al,[esp+4]; mov [ecx+0x23C],al ; ret 4
+//   0x004039A0  668b4424 668981160200 c20400 mov ax,[esp+4]; mov [ecx+0x216],ax ; ret 4
+void __fastcall HookSetSearchType(Ped* pPed, void* _EDX, int value);   // @0x00403920
+void __fastcall HookSetS169(Ped* pPed, void* _EDX, int value);         // @0x00403930
+void __fastcall HookSetCarId(Ped* pPed, void* _EDX, unsigned char v);  // @0x00403940
+void __fastcall HookSetHealth(Ped* pPed, void* _EDX, short value);     // @0x004039A0
 
 #endif

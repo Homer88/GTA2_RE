@@ -9,7 +9,7 @@
 // Ghidra: ---
 void gta2::S46_S46(struct VehiclePool *self)
 {
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&self->CarSystemManager_);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&self->CarSystemManager_);
 }
 
 

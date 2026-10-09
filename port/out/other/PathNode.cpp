@@ -7,64 +7,64 @@
 // 0x00488f70: PathNode::sub_488F70
 // IDA: PathNode::sub_488F70
 // Ghidra: ---
-char gta2::PathNode_sub_488F70(struct PathNode *self)
+char gta2::PathNode_sub_488F70(PathNode *self)
 {
-  struct S58 *v2; // eax
-  struct S58 *v3; // eax
-  struct S58 *v4; // eax
-  struct S58 *v5; // eax
-  struct S58 *v6; // eax
-  struct S58 *v7; // eax
-  struct S58 *v8; // eax
-  struct S58 *v9; // eax
-  struct S58 *v10; // eax
+  S58 *v2; // eax
+  S58 *v3; // eax
+  S58 *v4; // eax
+  S58 *v5; // eax
+  S58 *v6; // eax
+  S58 *v7; // eax
+  S58 *v8; // eax
+  S58 *v9; // eax
+  S58 *v10; // eax
   int v11; // ecx
-  struct S58 *v12; // eax
+  S58 *v12; // eax
   int v13; // ecx
-  struct S58 *v14; // eax
+  S58 *v14; // eax
   int v15; // ecx
-  struct S58 *v16; // eax
+  S58 *v16; // eax
   int v17; // ecx
-  struct S58 *v18; // eax
-  struct S58 *v19; // eax
-  struct S58 *v20; // edi
-  struct S58 *v21; // edi
+  S58 *v18; // eax
+  S58 *v19; // eax
+  S58 *v20; // edi
+  S58 *v21; // edi
   int *v22; // eax
   int v23; // ecx
-  struct S58 *v24; // eax
-  struct S58 *v25; // eax
-  struct S58 *v26; // eax
-  struct S58 *v27; // eax
+  S58 *v24; // eax
+  S58 *v25; // eax
+  S58 *v26; // eax
+  S58 *v27; // eax
   int v28; // ecx
   int v29; // eax
-  struct S58 *v30; // eax
+  S58 *v30; // eax
   int v31; // ecx
-  struct S58 *v32; // eax
+  S58 *v32; // eax
   int v33; // ecx
-  struct S58 *v34; // eax
+  S58 *v34; // eax
   int v35; // ecx
-  struct S58 *v36; // eax
+  S58 *v36; // eax
   int v37; // ecx
-  struct S58 *v38; // eax
+  S58 *v38; // eax
   int v39; // ecx
-  struct S58 *v40; // eax
+  S58 *v40; // eax
   int v41; // ecx
-  struct S58 *v42; // eax
+  S58 *v42; // eax
   int v43; // ecx
-  struct S58 *v44; // eax
+  S58 *v44; // eax
   int v45; // ecx
-  struct S58 *v46; // eax
+  S58 *v46; // eax
   int v47; // ecx
-  struct S58 *v48; // eax
+  S58 *v48; // eax
   int v49; // ecx
-  struct S58 *v50; // eax
+  S58 *v50; // eax
   int v51; // ecx
-  struct S58 *v52; // eax
+  S58 *v52; // eax
   __int16 v53; // dx
   int v54; // ebp
-  struct S58 *v55; // edi
+  S58 *v55; // edi
   int v56; // edx
-  struct SpriteS1 *FirstElement; // eax
+  SpriteS1 *FirstElement; // eax
   int v58; // eax
   int v60; // [esp+10h] [ebp-10h] BYREF
   int v61; // [esp+14h] [ebp-Ch] BYREF
@@ -123,8 +123,8 @@ char gta2::PathNode_sub_488F70(struct PathNode *self)
   v21->field_54 = 2;
   v60 = 8;
   v61 = 8;
-  v60 = (int)gta2::sub_401BD0(&unk_665B88, (struct SpriteS1 *)&v62, &v60);
-  v22 = (int *)gta2::sub_401BD0(&unk_665B88, (struct SpriteS1 *)&v63, &v61);
+  v60 = (int)gta2::sub_401BD0(&unk_665B88, (SpriteS1 *)&v62, &v60);
+  v22 = (int *)gta2::sub_401BD0(&unk_665B88, (SpriteS1 *)&v63, &v61);
   gta2::sub_487F60(v21, *v22, *(_DWORD *)v60, unk_669AAC);
   v21->field_18 = (int)byte_66921C;
   v23 = 2 - (do_show_imaginary != 0);
@@ -236,7 +236,7 @@ char gta2::PathNode_sub_488F70(struct PathNode *self)
     v56 = v55->field_34;
     v55->field_38 = v54;
     v55->field_34 = 2 * (v56 != 6) + 7;
-    FirstElement = gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)&v63)->FirstElement;
+    FirstElement = gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)&v63)->FirstElement;
     v55->field_4C = 1;
     v55->field_14 = (int)FirstElement;
     v58 = v60;
@@ -257,7 +257,7 @@ char gta2::PathNode_sub_488F70(struct PathNode *self)
 // 0x00489530: PathNode::sub_489530
 // IDA: PathNode::sub_489530
 // Ghidra: ---
-__int16 gta2::PathNode_sub_489530(struct PathNode *self)
+__int16 gta2::PathNode_sub_489530(PathNode *self)
 {
   __int16 result; // ax
   int v2; // ecx

@@ -39,7 +39,7 @@ void gta2::AudioManager_ResetAudioState(struct AudioManager *self)
 {
   int streamIndex; // esi
   int v3; // edi
-  struct AudioBuffer *buffer; // eax
+  AudioBuffer *buffer; // eax
   int v5; // ecx
   unsigned int sampleRate; // eax
 
@@ -105,8 +105,8 @@ Car * gta2::AudioManager_sub_4B1E40(struct AudioManager *self)
 {
   int v1; // ebx
   int v2; // ebp
-  struct Car *result; // eax
-  struct Car *pCar; // edi
+  Car *result; // eax
+  Car *pCar; // edi
   char dataSize; // al
   int *v7; // eax
   int *v8; // ebx
@@ -291,9 +291,9 @@ char gta2::AudioManager_sub_4B2180(struct AudioManager *self, cGameObject *a2)
     return 0;
   gta2::Player_sub_4A6610(gGame->PlayerMain, &Y);
   v5 = gta2::sub_41F9E0(&self->field_546C + 7 * v3);
-  v6 = abs16(gta2::Game_ShiftId((struct Game *)&a2) - v5);
+  v6 = abs16(gta2::Game_ShiftId((Game *)&a2) - v5);
   v7 = gta2::sub_41F9E0(v4 + 21612);
-  v8 = abs16(gta2::Game_ShiftId((struct Game *)&Y) - v7) + v6;
+  v8 = abs16(gta2::Game_ShiftId((Game *)&Y) - v7) + v6;
   v9 = v13 ? *((_WORD *)v4 + 10813) : *((_WORD *)v4 + 10812);
   if ( v8 >= v9 )
     return 0;
@@ -505,7 +505,7 @@ Car * gta2::AudioManager_sub_4B25D0(struct AudioManager *self, char streamIndex)
         gta2::SoundCard_sub_4B6910(&gSoundCard, 0, v10);
         return gta2::AudioManager_sub_4B1E40(self);
       }
-      return (struct Car *)gta2::SoundCard_CloseStreamByIndex(&gSoundCard, 0);
+      return (Car *)gta2::SoundCard_CloseStreamByIndex(&gSoundCard, 0);
     }
     if ( dataSize < 5u )
       *((_DWORD *)&self->gap5480 + 7 * LOBYTE(self->AudioBuffer_[1].dataSize)) = gta2::SoundCard_sub_4B6930(&gSoundCard, 0);
@@ -537,7 +537,7 @@ Car * gta2::AudioManager_sub_4B25D0(struct AudioManager *self, char streamIndex)
     gta2::SoundCard_sub_4B6910(&gSoundCard, 0, v7);
     return gta2::AudioManager_sub_4B1E40(self);
   }
-  return (struct Car *)gta2::SoundCard_CloseStreamByIndex(&gSoundCard, 0);
+  return (Car *)gta2::SoundCard_CloseStreamByIndex(&gSoundCard, 0);
 }
 
 
@@ -546,7 +546,7 @@ Car * gta2::AudioManager_sub_4B25D0(struct AudioManager *self, char streamIndex)
 // Ghidra: ---
 bool gta2::AudioManager_sub_4B2830(struct AudioManager *self)
 {
-  struct Car *ActivePlayerCar; // edi
+  Car *ActivePlayerCar; // edi
   bool IsSpecialCarModel; // al
   unsigned __int8 v4; // al
   unsigned __int8 v5; // bl
@@ -697,7 +697,7 @@ LABEL_34:
 // Ghidra: ---
 void gta2::AudioManager_sub_4B2AD0(AudioManager *a1)
 {
-  struct AudioManager *v1; // esi
+  AudioManager *v1; // esi
   char *v2; // eax
   char v3; // al
   cGameObject *v4; // edx
@@ -796,11 +796,11 @@ char gta2::AudioManager_sub_4B2D50(struct AudioManager *self)
   unsigned __int8 dataSize; // al
   int v2; // ecx
   unsigned int v3; // edx
-  struct Game *result; // eax
+  Game *result; // eax
   char v6; // al
   int v7; // edx
-  struct Car *ActivePlayerCar; // eax
-  struct Car *pCar; // edi
+  Car *ActivePlayerCar; // eax
+  Car *pCar; // edi
   bool IsTransportOrCargo; // bl
   bool FullDamage; // al
   char v12; // al
@@ -878,7 +878,7 @@ char gta2::AudioManager_sub_4B2D50(struct AudioManager *self)
           gta2::SoundCard_CloseStreamByIndex(&gSoundCard, 0);
           gta2::SoundCard_OpenVocal(&gSoundCard, 0, 12, 1);
           gta2::SoundCard_SetStreamVolume_0(&gSoundCard, 0, 0);
-          result = (struct Game *)gta2::SoundCard_sub_4B6960(&gSoundCard, 0);
+          result = (Game *)gta2::SoundCard_sub_4B6960(&gSoundCard, 0);
           if ( result )
             LOBYTE(result) = gta2::SoundCard_sub_4B6910(&gSoundCard, 0, self->field_145C % (unsigned int)result);
           *(int *)((char *)&self->AudioBuffer_[3].endOffset + 2) = 60;
@@ -913,7 +913,7 @@ char gta2::AudioManager_sub_4B2D50(struct AudioManager *self)
           gta2::AudioManager_sub_4B2420(self);
           LOBYTE(self->AudioBuffer_[2].dataSize) = 0;
         }
-        v13 = gta2::Car_sub_403820((struct Car *)&pCar->field_68, &dword_66BF7C);
+        v13 = gta2::Car_sub_403820((Car *)&pCar->field_68, &dword_66BF7C);
         LOBYTE(result) = (unsigned __int8)gta2::AudioManager_sub_4B25D0(self, v13);
         unk_66C274 = pCar;
       }

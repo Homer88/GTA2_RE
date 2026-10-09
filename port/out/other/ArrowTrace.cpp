@@ -55,7 +55,7 @@ void gta2::ArrowTrace_SetPlayer(struct ArrowTrace *self, Player *CurrentPlayer)
 // Ghidra: ---
 ArrowTrace * gta2::ArrowTrace_ArrowTrace(struct ArrowTrace *self)
 {
-  struct ArrowTrace *result; // eax
+  ArrowTrace *result; // eax
 
   result = self;
   self->field_0 = 0;
@@ -105,14 +105,14 @@ int gta2::ArrowTrace_sub_4C7CC0(struct ArrowTrace *self, int *a2)
 char gta2::ArrowTrace_MainLogic(struct ArrowTrace *self)
 {
   int m_nType; // eax
-  struct Player *CurrentPlayer; // edi
+  Player *CurrentPlayer; // edi
   int *v4; // eax
-  struct Ped *v5; // edi
+  Ped *v5; // edi
   int *v6; // eax
-  struct Car *v7; // edi
-  struct CameraOrPhysics *pCameraOrPhysics; // eax
-  struct SpriteS1 *m_vPos; // [esp-Ch] [ebp-2Ch]
-  struct Player *m_vPos1; // [esp-8h] [ebp-28h]
+  Car *v7; // edi
+  CameraOrPhysics *pCameraOrPhysics; // eax
+  SpriteS1 *m_vPos; // [esp-Ch] [ebp-2Ch]
+  Player *m_vPos1; // [esp-8h] [ebp-28h]
   int X; // [esp+8h] [ebp-18h] BYREF
   int Y; // [esp+Ch] [ebp-14h] BYREF
   int Z; // [esp+10h] [ebp-10h] BYREF
@@ -126,8 +126,8 @@ char gta2::ArrowTrace_MainLogic(struct ArrowTrace *self)
     case 0:
       return m_nType;
     case 2:
-      v5 = (struct Ped *)self->field_0;
-      if ( !gta2::Ped_Get_433B40((struct Ped *)self->field_0) )
+      v5 = (Ped *)self->field_0;
+      if ( !gta2::Ped_Get_433B40((Ped *)self->field_0) )
         goto LABEL_10;
       self->m_vPos = *(_DWORD *)gta2::Ped_GetXCoordinate(v5, (int)&v15);
       gta2::Ped_GetYCoordinate(v5, &v16);
@@ -135,7 +135,7 @@ char gta2::ArrowTrace_MainLogic(struct ArrowTrace *self)
       self->m_vPos3 = *(_DWORD *)gta2::Ped_GetPositionZ(v5, (int)&v17);
       break;
     case 3:
-      v7 = (struct Car *)self->field_4;
+      v7 = (Car *)self->field_4;
       if ( gta2::Car_GetMask(v7) )
         goto LABEL_10;
       gta2::SpriteS1_GetXYZ(v7->CarSprite, &self->m_vPos, &self->m_vPos1, &self->m_vPos3);
@@ -164,8 +164,8 @@ LABEL_10:
     default:
       break;
   }
-  m_vPos1 = (struct Player *)self->m_vPos1;
-  m_vPos = (struct SpriteS1 *)self->m_vPos;
+  m_vPos1 = (Player *)self->m_vPos1;
+  m_vPos = (SpriteS1 *)self->m_vPos;
   pCameraOrPhysics = gta2::Player_GetMultiPlayerMode(gGame->PlayerMain);
   LOBYTE(m_nType) = gta2::CameraOrPhysics_sub_41E710(pCameraOrPhysics, m_vPos, m_vPos1);
   self->field_23 = m_nType;

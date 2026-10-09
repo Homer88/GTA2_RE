@@ -773,11 +773,11 @@ void gta2::sub_401AE0(void *self, __int16 a2)
 // 0x00401af0: bitShiftLeft1
 // IDA: bitShiftLeft1
 // Ghidra: ---
-ushort gta2::bitShiftLeft1(ushort *self, int a2)
+ushort gta2::bitShiftLeft1(void *self, int a2)
 {
   ushort result; // ax
 
-  result = *self;
+  result = *(ushort *)self;
   *(_DWORD *)self = (unsigned int)(_DWORD)(a2 << 14);
   return result;
 }
@@ -2116,7 +2116,7 @@ void gta2::sub_403870(void *self)
 // 0x004038c0: sub_4038C0
 // IDA: sub_4038C0
 // Ghidra: ---
-int gta2::sub_4038C0(S801 *self)
+int gta2::sub_4038C0(struct S801 *self)
 {
   int v1; // edx
 

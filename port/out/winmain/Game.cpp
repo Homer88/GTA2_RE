@@ -7,7 +7,7 @@
 // 0x003f113c: Game::GetCurrentPlayerSlot
 // IDA: Game::GetCurrentPlayerSlot
 // Ghidra: ---
-void * gta2::Game_GetCurrentPlayerSlot(Game *self)
+void * gta2::Game_GetCurrentPlayerSlot(struct Game *self)
 {
   unsigned __int8 v1; // al
   _BYTE *v2; // ecx
@@ -46,7 +46,7 @@ LABEL_5:
 // 0x003f11a8: Game::start1
 // IDA: Game::start1
 // Ghidra: ---
-Player * gta2::Game_start1(Game *self)
+Player * gta2::Game_start1(struct Game *self)
 {
   unsigned __int8 MaxIdx; // dl
   unsigned __int8 pID; // al
@@ -82,7 +82,7 @@ LABEL_5:
 // 0x003f1208: Game::SwitchToNextPlayer
 // IDA: Game::SwitchToNextPlayer
 // Ghidra: ---
-CameraOrPhysics ** gta2::Game_SwitchToNextPlayer(Game *self)
+CameraOrPhysics ** gta2::Game_SwitchToNextPlayer(struct Game *self)
 {
   unsigned __int8 Index; // al
   Player *v3; // edx
@@ -138,7 +138,7 @@ CameraOrPhysics ** gta2::Game_SwitchToNextPlayer(Game *self)
 // 0x003f12a8: Game::CycleToNextPlayer
 // IDA: Game::CycleToNextPlayer
 // Ghidra: ---
-Player * gta2::Game_CycleToNextPlayer(Game *self)
+Player * gta2::Game_CycleToNextPlayer(struct Game *self)
 {
   unsigned __int8 CurentPlayer; // al
   unsigned __int8 MaxIdx; // dl
@@ -180,7 +180,7 @@ LABEL_7:
 // 0x003f135c: Game::sub_3F135C
 // IDA: Game::sub_3F135C
 // Ghidra: ---
-char gta2::Game_sub_3F135C(Game *self, unsigned __int8 a2)
+char gta2::Game_sub_3F135C(struct Game *self, unsigned __int8 a2)
 {
   unsigned __int8 v2; // dl
 
@@ -194,7 +194,7 @@ char gta2::Game_sub_3F135C(Game *self, unsigned __int8 a2)
 // 0x00401b00: Game::ShiftId
 // IDA: Game::ShiftId
 // Ghidra: ---
-int gta2::Game_ShiftId(Game *self)
+int gta2::Game_ShiftId(struct Game *self)
 {
   return (int)self->Status >> 14;
 }

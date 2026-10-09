@@ -176,6 +176,7 @@ void __stdcall Set_FUN_0045E4B0(MapGm* pMapGm, int Param);
 void __stdcall SetPlayerSlotSave(MapGm* pMapGm, int PlayerSlot);
 void __stdcall SetBonus(MapGm* pMapGm, int Param);
 void __stdcall Set_FUN_0045E630(MapGm* pMapGm);
+void __stdcall SetScoresNative(MapGm* pMapGm, void* area);
 
 #endif // !1
 

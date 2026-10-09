@@ -45,7 +45,7 @@ void gta2::S67_sub_482BA0(int param_1,undefined4 *param_2)
   undefined4 local_8;
   undefined4 local_4;
   
-  FUN_0041e210(&local_8,(GlassInfo *)(param_1 + 0xc),(struct Ped *)(param_1 + 4));
+  FUN_0041e210(&local_8,(GlassInfo *)(param_1 + 0xc),(Ped *)(param_1 + 4));
   *param_2 = local_8;
   param_2[1] = local_4;
   return;
@@ -57,8 +57,8 @@ void gta2::S67_sub_482BA0(int param_1,undefined4 *param_2)
 // Ghidra: ---
 void gta2::S67_S67(struct S67 *self)
 {
-  gta2::Arsenal_Reset((struct Arsenal *)self);
-  gta2::CarSystemManager_SetIndexDefautCarManager((struct CarSystemManager *)&self->field_4);
+  gta2::Arsenal_Reset((Arsenal *)self);
+  gta2::CarSystemManager_SetIndexDefautCarManager((CarSystemManager *)&self->field_4);
   self->NextElement = 0;
   self->field_1C = unk_665AA0;
   self->field_18 = unk_665AA0;

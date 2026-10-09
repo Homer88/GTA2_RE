@@ -10,7 +10,7 @@
 void gta2::S40_S40(struct GangInfo *self)
 {
   gta2::Construct(self->S41_, 8, 4, S41::S41, S41::S41_Dec);
-  gta2::SpriteS3__FUN_004bc8f0((struct SpriteS3 *)self);
+  gta2::SpriteS3__FUN_004bc8f0((SpriteS3 *)self);
 }
 
 

@@ -17,7 +17,7 @@ wchar_t * gta2::S151_sub_4A8600(struct S151 *self)
   {
     result = CopyWideString(self->ALAN, gText_Menu);
     self->field_14 = 0;
-    self = (struct S151 *)((char *)self + 24);
+    self = (S151 *)((char *)self + 24);
     --v2;
   }
   while ( v2 );

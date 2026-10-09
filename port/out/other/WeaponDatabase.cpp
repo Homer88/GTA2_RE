@@ -9,13 +9,13 @@
 // Ghidra: ---
 WeaponDatabase * gta2::WeaponDatabase_WeaponDatabase(struct WeaponDatabase *self)
 {
-  struct Weapon *sWeapon_Arr255; // edi
-  struct Weapon *p_NextWeapon; // eax
+  Weapon *sWeapon_Arr255; // edi
+  Weapon *p_NextWeapon; // eax
   int count; // ecx
 
   sWeapon_Arr255 = self->sWeapon_Arr255;
   gta2::Construct(self->sWeapon_Arr255, 48, 255, Weapon::Weapon, Weapon::Weapon_dec);
-  p_NextWeapon = (struct Weapon *)&sWeapon_Arr255->NextWeapon;
+  p_NextWeapon = (Weapon *)&sWeapon_Arr255->NextWeapon;
   count = 254;
   do
   {

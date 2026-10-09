@@ -70,7 +70,7 @@ Particle * gta2::Particle_Particle(struct Particle *self)
   count = 499;
   do
   {
-    *p_Particle1 = (struct Particle1 *)(p_Particle1 + 4);
+    *p_Particle1 = (Particle1 *)(p_Particle1 + 4);
     p_Particle1 += 19;
     --count;
   }

@@ -9,7 +9,7 @@
 // Ghidra: FUN_00472fb0
 void gta2::Medical_sub_472FB0(void *self,Ped *param_1)
 {
-  gta2::Passenger_sub_445F10((struct Passenger *)((int)self + 0x10),param_1);
+  gta2::Passenger_sub_445F10((Passenger *)((int)self + 0x10),param_1);
   *(char *)((int)self + 0x14) = *(char *)((int)self + 0x14) + '\x01';
   return;
 }
@@ -44,7 +44,7 @@ int gta2::Medical_sub_473140(struct Medical *self)
 // Ghidra: ---
 char gta2::Medical_sub_473170(struct Medical *self)
 {
-  struct S169 *v2; // ebx
+  S169 *v2; // ebx
   struct Ped *Ped; // eax
   struct Ped *v5; // esi
   struct Ped *pPed; // edi
@@ -62,11 +62,11 @@ char gta2::Medical_sub_473170(struct Medical *self)
   gta2::Ped_sub_433BB0(v5, 2);
   gta2::Ped_PutPedInCarRelated(v5, self->S110_->Car);
   gta2::Ped_PedSetObjective(v5, 14, 0);
-  gta2::S202_sub_40CE30((struct S202 *)&v7, self->field);
+  gta2::S202_sub_40CE30((S202 *)&v7, self->field);
   v5->Weapon2 = (int)v7;
-  gta2::S202_sub_40CE30((struct S202 *)&v7, self->field_1);
+  gta2::S202_sub_40CE30((S202 *)&v7, self->field_1);
   v5->Gang_ = v7;
-  gta2::S202_sub_40CE30((struct S202 *)&v7, self->field_2);
+  gta2::S202_sub_40CE30((S202 *)&v7, self->field_2);
   v5->DriverPed = (int)v7;
   v5->field_228 = 1;
   v5->field_224 = 0;
@@ -109,14 +109,14 @@ void gta2::Medical_sub_473320(struct Medical *self)
   struct Ped *v3; // ecx
   struct S110 *S110; // eax
   struct Car *CurrentCar; // edx
-  struct S169 *NPC; // eax
+  S169 *NPC; // eax
   bool v7; // al
   struct Car *Car; // ecx
 
   pCar = self->S110_;
   if ( *((_DWORD *)pCar + 9) == 2 )
   {
-    v3 = (struct Ped *)*((_DWORD *)pCar + 1);
+    v3 = (Ped *)*((_DWORD *)pCar + 1);
     if ( !v3 || gta2::Ped_GetDeadPed(v3) )
     {
       *((_DWORD *)pCar + 10) = 5;
@@ -197,7 +197,7 @@ int gta2::Medical_sub_473410(struct Medical *self)
   struct S110 *v7; // eax
   struct Car *Car; // edi
   void *v9; // ecx
-  struct Passenger *v10; // eax
+  Passenger *v10; // eax
   struct Ped *v11; // edi
   struct S110 *S110; // ecx
   struct EngineStruct *EngineStruct; // eax
@@ -212,13 +212,13 @@ int gta2::Medical_sub_473410(struct Medical *self)
   struct Ped *Passenger; // edi
   char v23; // al
   struct Ped **v24; // eax
-  struct S169 *NPC; // eax
-  struct Passenger *v26; // eax
+  S169 *NPC; // eax
+  Passenger *v26; // eax
   struct Ped *v27; // edi
   struct S110 *v28; // eax
-  struct S169 *v29; // eax
+  S169 *v29; // eax
   struct S110 *v30; // eax
-  struct S169 *v31; // eax
+  S169 *v31; // eax
   bool v32; // [esp+11h] [ebp-2Fh]
   bool v33; // [esp+12h] [ebp-2Eh]
   bool v34; // [esp+13h] [ebp-2Dh]
@@ -277,7 +277,7 @@ LABEL_16:
           if ( gta2::Ped_sub_472FD0(pPed) )
           {
             v10 = sub_446100(&self->Passenger_);
-            v11 = (struct Ped *)v10;
+            v11 = (Ped *)v10;
             if ( v10 )
             {
               v5 = !sub_435430(v10);
@@ -375,7 +375,7 @@ LABEL_38:
           }
           else if ( gta2::Ped_GetCurrentAction(pPed) == 9 )
           {
-            v18 = (struct Ped *)sub_446100(&self->Passenger_);
+            v18 = (Ped *)sub_446100(&self->Passenger_);
             if ( v18 )
             {
               gta2::Ped_SetAnimationState(unk_663DE0, 0, 9999);
@@ -407,10 +407,10 @@ LABEL_25:
             goto LABEL_96;
           }
           gta2::S202_sub_40CE30(&v37, self->field_1);
-          gta2::S202_sub_40CE30((struct S202 *)&v37.S202, self->field);
+          gta2::S202_sub_40CE30((S202 *)&v37.S202, self->field);
           gta2::Ped_GetYCoordinate(pPed, &v37.field_C);
           gta2::Ped_GetXCoordinate(pPed, (int)&v37.field_10);
-          v37.CarSystemManager = (struct CarSystemManager *)gta2::sub_42A6B0(v9, &v37.pPlayer)->Car;
+          v37.CarSystemManager = (CarSystemManager *)gta2::sub_42A6B0(v9, &v37.pPlayer)->Car;
           if ( !gta2::sub_4037E0(&v37.CarSystemManager) )
             goto LABEL_96;
           if ( !(unsigned __int16)sub_445BB0(&self->Passenger_) )
@@ -430,7 +430,7 @@ LABEL_96:
           {
             pPed = *(Ped **)(result + 4 * v36 + 4);
             unk_663DE0 = pPed;
-            Ped = (struct Ped *)self->field_C;
+            Ped = (Ped *)self->field_C;
             a2 = Ped;
           }
           else
@@ -520,7 +520,7 @@ LABEL_96:
               goto LABEL_95;
             }
             v26 = sub_446100(&self->Passenger_);
-            v27 = (struct Ped *)v26;
+            v27 = (Ped *)v26;
             if ( v26 )
             {
               if ( sub_435430(v26) )
@@ -592,7 +592,7 @@ LABEL_101:
 // Ghidra: ---
 void * gta2::Medical_sub_473CE0(struct Medical *self)
 {
-  struct Passenger *p_Passenger; // edi
+  Passenger *p_Passenger; // edi
   void *result; // eax
   struct Ped *v4; // eax
   struct S110 *v5; // eax
@@ -611,11 +611,11 @@ void * gta2::Medical_sub_473CE0(struct Medical *self)
         if ( gta2::Medical_sub_473170(self) )
         {
           unk_663DE0 = self->S110_->Ped_;
-          S110 = (struct Car *)self->S110_;
+          S110 = (Car *)self->S110_;
           LOBYTE(self->field_18) = 0;
           if ( !S110->Car )
             return (void *)gta2::Medical_sub_473410(self);
-          gta2::Car_sub_422D20((struct Car *)S110->Car);
+          gta2::Car_sub_422D20((Car *)S110->Car);
           return (void *)gta2::Medical_sub_473410(self);
         }
         else
@@ -638,7 +638,7 @@ void * gta2::Medical_sub_473CE0(struct Medical *self)
     case 5:
       while ( !gta2::Passenger_Passenger_des(p_Passenger) )
       {
-        v4 = (struct Ped *)sub_446100(p_Passenger);
+        v4 = (Ped *)sub_446100(p_Passenger);
         gta2::Ambulance_AddPedToAmbulance(gAmbulance, v4);
       }
       v5 = self->S110_;

@@ -7,7 +7,7 @@
 // 0x00488170: S57::sub_488170
 // IDA: S57::sub_488170
 // Ghidra: ---
-int gta2::S57_sub_488170(struct PathNode *self, int index)
+int gta2::S57_sub_488170(PathNode *self, int index)
 {
   return *(_DWORD *)&self->buffer_0x4B0[4 * index];
 }
@@ -16,7 +16,7 @@ int gta2::S57_sub_488170(struct PathNode *self, int index)
 // 0x00488180: S57::sub_488180
 // IDA: S57::sub_488180
 // Ghidra: PathNode::FUN_00488180
-RouteInfo * gta2::S57_sub_488180(struct PathNode *self,int param_1,int param_2)
+RouteInfo * gta2::S57_sub_488180(PathNode *self,int param_1,int param_2)
 {
   RouteInfo *pRVar1;
   int iVar2;
@@ -41,7 +41,7 @@ RouteInfo * gta2::S57_sub_488180(struct PathNode *self,int param_1,int param_2)
 // 0x004881d0: S57::sub_4881D0
 // IDA: S57::sub_4881D0
 // Ghidra: PathNode::FUN_004881d0
-void gta2::S57_sub_4881D0(struct PathNode *self,int param_1)
+void gta2::S57_sub_4881D0(PathNode *self,int param_1)
 {
   ushort uVar1;
   
@@ -57,9 +57,9 @@ void gta2::S57_sub_4881D0(struct PathNode *self,int param_1)
 // 0x00488420: S57::sub_488420
 // IDA: S57::sub_488420
 // Ghidra: ---
-S58 * gta2::S57_sub_488420(struct PathNode *self, int a2, int a3, __int16 a4, unsigned __int8 a5)
+S58 * gta2::S57_sub_488420(PathNode *self, int a2, int a3, __int16 a4, unsigned __int8 a5)
 {
-  struct S58 *result; // eax
+  S58 *result; // eax
 
   result = gta2::S57_sub_4881D0(self, a2);
   result->field_28 = a3;
@@ -73,13 +73,13 @@ S58 * gta2::S57_sub_488420(struct PathNode *self, int a2, int a3, __int16 a4, un
 // 0x00488450: S57::sub_488450
 // IDA: S57::sub_488450
 // Ghidra: ---
-unsigned __int8 * gta2::S57_sub_488450(struct PathNode *self)
+unsigned __int8 * gta2::S57_sub_488450(PathNode *self)
 {
   __int16 v1; // di
   unsigned __int8 *result; // eax
   unsigned __int8 *v4; // esi
   unsigned __int16 i; // bx
-  struct S58 *v6; // eax
+  S58 *v6; // eax
 
   v1 = 0;
   result = (unsigned __int8 *)gta2::Style_get_obji_by_idx(gStyle, 0);
@@ -99,7 +99,7 @@ unsigned __int8 * gta2::S57_sub_488450(struct PathNode *self)
 // 0x004884b0: S57::sub_4884B0
 // IDA: S57::sub_4884B0
 // Ghidra: ---
-void gta2::S57_sub_4884B0(struct PathNode *self)
+void gta2::S57_sub_4884B0(PathNode *self)
 {
   int v1; // esi
   _DWORD *v3; // edx
@@ -151,41 +151,41 @@ void gta2::S57_sub_4884B0(struct PathNode *self)
 // 0x00488570: S57::sub_488570
 // IDA: S57::sub_488570
 // Ghidra: ---
-int gta2::S57_sub_488570(struct PathNode *self)
+int gta2::S57_sub_488570(PathNode *self)
 {
   _BYTE *v2; // eax
   int v3; // ecx
-  struct S58 *v4; // eax
+  S58 *v4; // eax
   int v5; // ecx
-  struct S58 *v6; // eax
+  S58 *v6; // eax
   int v7; // ecx
   _BYTE *v8; // eax
   int v9; // ecx
-  struct S58 *v10; // eax
+  S58 *v10; // eax
   int v11; // ecx
-  struct S58 *v12; // ebp
-  struct S58 *v13; // eax
-  struct S58 *v14; // ebp
-  struct S58 *v15; // eax
-  struct S58 *v16; // ebp
-  struct S58 *v17; // eax
-  struct S58 *v18; // ebp
-  struct S58 *v19; // ebp
-  struct S58 *v20; // eax
-  struct S58 *v21; // ebp
-  struct S58 *v22; // eax
-  struct S58 *v23; // ebp
-  struct S58 *v24; // eax
-  struct S58 *v25; // ebp
-  struct S58 *v26; // ebp
-  struct S58 *v27; // eax
-  struct S58 *v28; // ebp
-  struct S58 *v29; // eax
-  struct S58 *v30; // ebp
-  struct S58 *v31; // ebp
-  struct S58 *v32; // eax
-  struct S58 *v33; // ebp
-  struct S58 *v34; // ebp
+  S58 *v12; // ebp
+  S58 *v13; // eax
+  S58 *v14; // ebp
+  S58 *v15; // eax
+  S58 *v16; // ebp
+  S58 *v17; // eax
+  S58 *v18; // ebp
+  S58 *v19; // ebp
+  S58 *v20; // eax
+  S58 *v21; // ebp
+  S58 *v22; // eax
+  S58 *v23; // ebp
+  S58 *v24; // eax
+  S58 *v25; // ebp
+  S58 *v26; // ebp
+  S58 *v27; // eax
+  S58 *v28; // ebp
+  S58 *v29; // eax
+  S58 *v30; // ebp
+  S58 *v31; // ebp
+  S58 *v32; // eax
+  S58 *v33; // ebp
+  S58 *v34; // ebp
   int result; // eax
   char v36[4]; // [esp+10h] [ebp-4h] BYREF
 
@@ -244,7 +244,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v12->field_3C = 53;
   v12->field_44 = 0;
   v12->field_10 = unk_665B50;
-  v12->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v12->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v12->byte_ = 1;
   v12->field_4C = 3;
   v12->field_50 = 3;
@@ -261,7 +261,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v14->field_40 = 4;
   v14->field_44 = 0;
   v14->field_10 = unk_665B50;
-  v14->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v14->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v14->byte_ = 1;
   v14->field_4C = 3;
   v14->field_50 = 3;
@@ -278,7 +278,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v16->field_40 = 4;
   v16->field_44 = 0;
   v16->field_10 = unk_665B50;
-  v16->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v16->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v16->byte_ = 1;
   v16->field_4C = 3;
   v16->field_50 = 3;
@@ -295,7 +295,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v18->field_40 = 4;
   v18->field_44 = 0;
   v18->field_10 = unk_665B50;
-  v18->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v18->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v18->byte_ = 1;
   v18->field_4C = 3;
   v18->field_50 = 3;
@@ -310,7 +310,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v19->field_40 = 4;
   v19->field_44 = 0;
   v19->field_10 = unk_665B50;
-  v19->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v19->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v19->byte_ = 1;
   v19->field_4C = 3;
   v19->field_50 = 3;
@@ -327,7 +327,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v21->field_40 = 4;
   v21->field_44 = 0;
   v21->field_10 = unk_665B50;
-  v21->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v21->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v21->byte_ = 1;
   v21->field_4C = 3;
   v21->field_50 = 3;
@@ -344,7 +344,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v23->field_40 = 4;
   v23->field_44 = 0;
   v23->field_10 = unk_665B50;
-  v23->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v23->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v23->byte_ = 1;
   v23->field_4C = 3;
   v23->field_50 = 3;
@@ -361,7 +361,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v25->field_40 = 4;
   v25->field_44 = 0;
   v25->field_10 = unk_665B50;
-  v25->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v25->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v25->byte_ = 1;
   v25->field_4C = 3;
   v25->field_50 = 3;
@@ -376,7 +376,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v26->field_40 = 4;
   v26->field_44 = 0;
   v26->field_10 = unk_665B50;
-  v26->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v26->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v26->byte_ = 1;
   v26->field_4C = 3;
   v26->field_50 = 3;
@@ -393,7 +393,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v28->field_40 = 4;
   v28->field_44 = 0;
   v28->field_10 = unk_665B50;
-  v28->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v28->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v28->byte_ = 1;
   v28->field_4C = 3;
   v28->field_50 = 3;
@@ -408,7 +408,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v30->field_40 = 4;
   v30->field_44 = 0;
   v30->field_10 = unk_665B50;
-  v30->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v30->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v30->byte_ = 1;
   v30->field_4C = 3;
   v30->field_50 = 3;
@@ -422,7 +422,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v31->field_40 = 4;
   v31->field_44 = 0;
   v31->field_10 = unk_665B50;
-  v31->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v31->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v31->byte_ = 1;
   v31->field_4C = 3;
   v31->field_50 = 3;
@@ -433,7 +433,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v33 = gta2::PathNode_sub_488180(self, 157, 7);
   v33->field_34 = 3;
   v33->field_4C = 2;
-  v33->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v33->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v33->field_40 = 4;
   v33->field_38 = 7;
   v33->field_3C = 7;
@@ -443,7 +443,7 @@ int gta2::S57_sub_488570(struct PathNode *self)
   v34 = gta2::PathNode_sub_488180(self, 158, 1);
   v34->field_34 = 3;
   v34->field_4C = 2;
-  v34->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (struct SpriteS1 *)v36)->FirstElement;
+  v34->field_14 = (int)gta2::JustCopyByPtrAtoC(&unk_665B54, (SpriteS1 *)v36)->FirstElement;
   v34->field_38 = 1;
   v34->field_3C = 1;
   v34->field_44 = 0;
@@ -459,12 +459,12 @@ int gta2::S57_sub_488570(struct PathNode *self)
 // 0x00488d10: S57::sub_488D10
 // IDA: S57::sub_488D10
 // Ghidra: ---
-int gta2::S57_sub_488D10(struct PathNode *self)
+int gta2::S57_sub_488D10(PathNode *self)
 {
   int result; // eax
   __int16 v2; // bp
   unsigned __int8 *v3; // esi
-  struct S58 *v4; // edi
+  S58 *v4; // edi
   int v5; // ecx
   int v6; // [esp+4h] [ebp-8h]
 
@@ -479,9 +479,9 @@ int gta2::S57_sub_488D10(struct PathNode *self)
       v4 = gta2::S57_sub_488420(self, *((_DWORD *)v3 - 1), 4, v2, *v3);
       v2 += *v3;
       v4->field_28 = *((_DWORD *)v3 + 13);
-      if ( gta2::Player_IsCurrentPlayer((struct Player *)(v3 + 68), (struct Player *)&unk_665BF8)
-        && gta2::Player_IsCurrentPlayer((struct Player *)(v3 + 72), (struct Player *)&unk_665BF8)
-        && gta2::Player_IsCurrentPlayer((struct Player *)(v3 + 76), (struct Player *)&unk_665BF8) )
+      if ( gta2::Player_IsCurrentPlayer((Player *)(v3 + 68), (Player *)&unk_665BF8)
+        && gta2::Player_IsCurrentPlayer((Player *)(v3 + 72), (Player *)&unk_665BF8)
+        && gta2::Player_IsCurrentPlayer((Player *)(v3 + 76), (Player *)&unk_665BF8) )
       {
         sub_487FA0(v4);
       }
@@ -527,7 +527,7 @@ int gta2::S57_sub_488D10(struct PathNode *self)
 // 0x00488eb0: S57::S57
 // IDA: S57::S57
 // Ghidra: ---
-PathNode * gta2::S57_S57(struct PathNode *self)
+PathNode * gta2::S57_S57(PathNode *self)
 {
   gta2::Construct(self->S58_, 116, 300, S58::S58, S58::S58_Des);
   memset(self->buffer_0x4B0, 0, sizeof(self->buffer_0x4B0));
@@ -540,7 +540,7 @@ PathNode * gta2::S57_S57(struct PathNode *self)
 // 0x004c6e30: S57::sub_4C6E30
 // IDA: S57::sub_4C6E30
 // Ghidra: ---
-__int16 gta2::S57_sub_4C6E30(struct PathNode *self, int index)
+__int16 gta2::S57_sub_4C6E30(PathNode *self, int index)
 {
   return *(_WORD *)(gta2::PathNode_sub_488170(self, index) + 30);
 }

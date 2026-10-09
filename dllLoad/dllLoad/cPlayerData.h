@@ -149,5 +149,8 @@ struct PlayerData{
 
 static_assert(sizeof(PlayerData) == 0x2bc0, "ERROR PLAYER DATA." );
 
+int __stdcall SaveLevelRecordNative(PlayerData* pPlayerData, void* cityBlock);
+void __stdcall UpdateBestScoresNative(PlayerData* pPlayerData);
+
 #endif // !__PLAYER_DATA_GAMES_H_
 

@@ -194,7 +194,7 @@ char * gta2::MissionManager_ExtractFileNameWithoutExtension(MissionManager *self
 __int16 gta2::MissionManager_sub_475E90(MissionManager *self, FileMgr *a2)
 {
   void *v3; // ecx
-  struct FileMgr *v4; // ecx
+  FileMgr *v4; // ecx
   int v6; // eax
   int v7; // ecx
   int v8; // edx
@@ -226,13 +226,13 @@ __int16 gta2::MissionManager_sub_475E90(MissionManager *self, FileMgr *a2)
     strcat(gStr, (const char *)a2);
     gta2::FileMgr_SetFilePath(gStr);
     gta2::FileMgr_FileOpen(v3, gStr);
-    a2 = (struct FileMgr *)2;
+    a2 = (FileMgr *)2;
     gta2::FileMgr_Read((FILE *)&size, (SIZE_T *)&a2);
-    a2 = (struct FileMgr *)2;
+    a2 = (FileMgr *)2;
     gta2::FileMgr_Read(v11, (SIZE_T *)&a2);
-    a2 = (struct FileMgr *)4;
+    a2 = (FileMgr *)4;
     gta2::FileMgr_Read(&v10, (SIZE_T *)&a2);
-    a2 = (struct FileMgr *)3072;
+    a2 = (FileMgr *)3072;
     gta2::FileMgr_Read((FILE *)((char *)self->OBJECTIVE_DATA_SIZE + 2 * (unsigned __int16)size), (SIZE_T *)&a2);
     partOfLoadScrip(
       (char *)self->Script + *((unsigned __int16 *)self->OBJECTIVE_DATA_SIZE + (unsigned __int16)size),
@@ -254,8 +254,8 @@ void gta2::MissionManager_sub_476070(int param_1)
   int iVar4;
   ushort *puVar5;
   char *pcVar6;
-  struct FileMgr *self;
-  struct FileMgr *this_00;
+  FileMgr *self;
+  FileMgr *this_00;
   uint uVar7;
   undefined2 local_14 [2];
   uint local_10;
@@ -285,18 +285,18 @@ void gta2::MissionManager_sub_476070(int param_1)
                    (uint)*(byte *)(iVar4 + 8));
           gta2::FileMgr_FileOpen(self,(char *)&gLanguage);
           local_8 = 2;
-          gta2::FileMgr_Read((struct FileMgr *)&local_8,(size_t)local_14);
+          gta2::FileMgr_Read((FileMgr *)&local_8,(size_t)local_14);
           uVar7 = local_10 & 0xffff;
           *(undefined2 *)(param_1 + 0xc1d72 + uVar7 * 2) = local_14[0];
           local_8 = 2;
-          gta2::FileMgr_Read((struct FileMgr *)&local_8,(size_t)local_14);
+          gta2::FileMgr_Read((FileMgr *)&local_8,(size_t)local_14);
           *(undefined2 *)(param_1 + 0xc1d34 + uVar7 * 2) = local_14[0];
           local_8 = 4;
-          gta2::FileMgr_Read((struct FileMgr *)&local_8,(size_t)&local_4);
+          gta2::FileMgr_Read((FileMgr *)&local_8,(size_t)&local_4);
           piVar2 = (int *)(param_1 + 0xc1db0 + uVar7 * 4);
           *piVar2 = local_4;
           local_8 = 0xc00;
-          gta2::FileMgr_Read((struct FileMgr *)&local_8,uVar7 * 0xc00 + 0xaa934 + param_1);
+          gta2::FileMgr_Read((FileMgr *)&local_8,uVar7 * 0xc00 + 0xaa934 + param_1);
           FUN_00403040(uVar7 * 20000 + 0x13354 + param_1,piVar2);
           gta2::FileMgr_CloseFile(this_00);
           *(short *)(iVar4 + 2) = (short)local_10;
@@ -626,19 +626,19 @@ undefined1 gta2::MissionManager_sub_4765A0(void *self,int param_2,char param_3,c
 // Ghidra: ---
 _DWORD gta2::MissionManager_sub_4799D0(MissionManager *a1)
 {
-  struct MissionScriptObjectData *v1; // ecx
+  MissionScriptObjectData *v1; // ecx
   MissionManager *v2; // esi
   int *v3; // edi
   _DWORD *started; // ebp
   void *v5; // eax
   void *v6; // eax
-  struct SpriteS1 *v7; // eax
+  SpriteS1 *v7; // eax
   int *v8; // ebx
   int *v9; // eax
   int v10; // eax
   int result; // eax
   MissionManager *v12; // [esp-4h] [ebp-2Ch]
-  struct MissionScriptObjectData *v13; // [esp+10h] [ebp-18h]
+  MissionScriptObjectData *v13; // [esp+10h] [ebp-18h]
   _BYTE a2[4]; // [esp+18h] [ebp-10h] BYREF
   char v15; // [esp+1Ch] [ebp-Ch] BYREF
   char v16; // [esp+20h] [ebp-8h] BYREF
@@ -649,17 +649,17 @@ _DWORD gta2::MissionManager_sub_4799D0(MissionManager *a1)
   v3 = &dword_6644CC->arr_96[6];
   started = gta2::MissionManager_StartMission(gMissionManager, dword_6644CC->arr_96[1]);
   v5 = gta2::sub_401B90(v3, a2, &unk_664DC4);
-  gta2::Player_sub_401B40((struct Player *)&v2->arr_96[3], (struct S202 *)&v15, (int)v5);
+  gta2::Player_sub_401B40((Player *)&v2->arr_96[3], (S202 *)&v15, (int)v5);
   v6 = gta2::sub_401B90(&v2->arr_96[5], &v16, &unk_664DC4);
-  v7 = gta2::Player_sub_401B40((struct Player *)&v2->arr_96[2], (struct S202 *)&v17, (int)v6);
+  v7 = gta2::Player_sub_401B40((Player *)&v2->arr_96[2], (S202 *)&v17, (int)v6);
   gta2::AudioSourceParams_sub_463710(&gMissionManager->S9, v7->FirstElement);
-  v8 = (int *)gta2::S202_sub_401B20((struct S202 *)&v2->arr_96[4], (struct SpriteS1 *)&v17, (struct PublicTransport *)&unk_664E08);
-  v9 = (int *)gta2::Player_sub_401B40((struct Player *)&v2->arr_96[4], (struct S202 *)&v16, (int)&unk_664E08);
+  v8 = (int *)gta2::S202_sub_401B20((S202 *)&v2->arr_96[4], (SpriteS1 *)&v17, (PublicTransport *)&unk_664E08);
+  v9 = (int *)gta2::Player_sub_401B40((Player *)&v2->arr_96[4], (S202 *)&v16, (int)&unk_664E08);
   gta2::AudioSourceParams_sub_41E370(&gMissionManager->S9, *v9, *v8);
   v10 = started[2];
   if ( v10 && *(_DWORD *)(v10 + 136) != 6 )
   {
-    if ( gta2::SpriteS1_sub_4BB020(*(SpriteS1 **)(v10 + 80), (struct Ped *)&gMissionManager->S9)
+    if ( gta2::SpriteS1_sub_4BB020(*(SpriteS1 **)(v10 + 80), (Ped *)&gMissionManager->S9)
       || gta2::sub_4BA6C0(&gMissionManager->S9, *(SpriteS1 **)(started[2] + 80)) )
     {
       v12 = dword_6644CC;
@@ -717,10 +717,10 @@ char gta2::MissionManager_sub_47EDB0(MissionManager *self, int a2)
   MissionManager *started; // esi
   int *v4; // eax
   int *v5; // ebx
-  struct S202 *v6; // eax
-  struct SpriteS1 *v7; // ebp
-  struct S202 *v8; // eax
-  struct SpriteS1 *v9; // eax
+  S202 *v6; // eax
+  SpriteS1 *v7; // ebp
+  S202 *v8; // eax
+  SpriteS1 *v9; // eax
   MissionManager *v10; // eax
   int v12; // [esp-14h] [ebp-3Ch]
   int FirstElement; // [esp-10h] [ebp-38h]
@@ -737,12 +737,12 @@ char gta2::MissionManager_sub_47EDB0(MissionManager *self, int a2)
   started = gta2::MissionManager_StartMission(self, a2);
   a2 = 3;
   v17 = 1;
-  gta2::S202_sub_40CE30((struct S202 *)&v18, BYTE2(started->arr_96[2]));
+  gta2::S202_sub_40CE30((S202 *)&v18, BYTE2(started->arr_96[2]));
   v5 = v4;
-  gta2::S202_sub_40CE30((struct S202 *)&v20, BYTE1(started->arr_96[2]));
-  v7 = gta2::S202_sub_401B20(v6, (struct SpriteS1 *)&v19, (struct PublicTransport *)&unk_664E08);
-  gta2::S202_sub_40CE30((struct S202 *)&v22, started->arr_96[2]);
-  v9 = gta2::S202_sub_401B20(v8, (struct SpriteS1 *)&v21, (struct PublicTransport *)&unk_664E08);
+  gta2::S202_sub_40CE30((S202 *)&v20, BYTE1(started->arr_96[2]));
+  v7 = gta2::S202_sub_401B20(v6, (SpriteS1 *)&v19, (PublicTransport *)&unk_664E08);
+  gta2::S202_sub_40CE30((S202 *)&v22, started->arr_96[2]);
+  v9 = gta2::S202_sub_401B20(v8, (SpriteS1 *)&v21, (PublicTransport *)&unk_664E08);
   v16 = unk_664E08.field_0;
   v15 = unk_664E08.field_0;
   v14 = *v5;
@@ -874,15 +874,15 @@ int gta2::MissionManager_SaveFile(MissionManager *self, char *pSaveFileName)
 int gta2::MissionManager_sub_47F0B0(MissionManager *self, char *SaveFileName)
 {
   void *v3; // ecx
-  struct FileMgr *v4; // ecx
-  struct S63_1 *p_S63_1; // edi
+  FileMgr *v4; // ecx
+  S63_1 *p_S63_1; // edi
   int result; // eax
   FILE v7; // [esp+Ch] [ebp-18h] BYREF
   FILE v8; // [esp+10h] [ebp-14h] BYREF
   int size; // [esp+14h] [ebp-10h] BYREF
   FILE *v10; // [esp+18h] [ebp-Ch] BYREF
   FILE *v11; // [esp+1Ch] [ebp-8h] BYREF
-  struct FileMgr *v12; // [esp+20h] [ebp-4h] BYREF
+  FileMgr *v12; // [esp+20h] [ebp-4h] BYREF
 
   gta2::MapRelatedStruct_sub_4642A0(gMapRelatedStruct, &v10, &size, &v11, &v8, &v12, (int *)&v7);
   gta2::FileMgr_FileOpen(v3, SaveFileName);
@@ -908,7 +908,7 @@ int gta2::MissionManager_sub_47F0B0(MissionManager *self, char *SaveFileName)
   gta2::FileMgr_CloseFile(v4);
   gta2::MissionManager_sub_47EF10(self);
   gta2::Object_sub_485640(gObject, byte_664B74);
-  p_S63_1 = (struct S63_1 *)&gObject->S63[0].S63_1;
+  p_S63_1 = (S63_1 *)&gObject->S63[0].S63_1;
   qmemcpy(&gObject->S63[0].S63_1, unk_664CA0, 48u);
   p_S63_1->field_30 = unk_664CA0[24];
   result = gta2::MapGm_sub_476B10(&gMapGm, unk_664CD4);
@@ -971,7 +971,7 @@ unsigned __int8 gta2::MissionManager_loadScript(MissionManager *self, char *Scri
   int index; // edx
   char v6; // cl
   void *v7; // ecx
-  struct FileMgr *v8; // ecx
+  FileMgr *v8; // ecx
   void *v9; // [esp-Ch] [ebp-14h]
   int size; // [esp+4h] [ebp-4h] BYREF
 
@@ -1103,7 +1103,7 @@ int gta2::MissionManager_sub_481200(MissionManager *self)
     if ( ((1 << v2) & unk_6646BC) != 0 )
     {
       started = gta2::MissionManager_StartMission(self, *(_WORD *)arr2_15);
-      gta2::S63_sub_483C60((struct EventHandler *)started->arr_96[1], 174);
+      gta2::S63_sub_483C60((EventHandler *)started->arr_96[1], 174);
       gta2::MissionManager_sub_47F420(gMissionManager, *(_DWORD *)(started->arr_96[1] + 20));
     }
     ++v2;
@@ -1120,8 +1120,8 @@ int gta2::MissionManager_sub_481200(MissionManager *self)
 // Ghidra: ---
 Player * gta2::MissionManager_sub_481890(MissionManager *self)
 {
-  struct Player *result; // eax
-  struct MissionScriptObjectData *pMissionScriptObjectData; // edi
+  Player *result; // eax
+  MissionScriptObjectData *pMissionScriptObjectData; // edi
   __int16 *v4; // esi
 
   LOBYTE(result) = skip_mission;
@@ -1137,7 +1137,7 @@ Player * gta2::MissionManager_sub_481890(MissionManager *self)
     }
     else
     {
-      return (struct Player *)gta2::debug_log(0x41u, "miss2.cpp", 12774);
+      return (Player *)gta2::debug_log(0x41u, "miss2.cpp", 12774);
     }
   }
   return result;
@@ -1174,10 +1174,10 @@ void gta2::MissionManager_sub_481900(MissionManager *self)
 // Ghidra: ---
 MissionManager * gta2::MissionManager_MissionManager(MissionManager *self)
 {
-  struct MissionScriptObjects *pS27; // eax
-  struct MissionScriptObjects *ppS27; // eax
-  struct TrafficManager *pS31; // eax
-  struct TrafficManager *ppS31; // eax
+  MissionScriptObjects *pS27; // eax
+  MissionScriptObjects *ppS27; // eax
+  TrafficManager *pS31; // eax
+  TrafficManager *ppS31; // eax
 
   self->EVENT_LOG_SIZE[1] = 0;
   if ( !skip_mission )
@@ -1185,7 +1185,7 @@ MissionManager * gta2::MissionManager_MissionManager(MissionManager *self)
     memset(self->Script, 0, sizeof(self->Script));
     if ( !gMissionScriptObjects )
     {
-      pS27 = (struct MissionScriptObjects *)gta2::operator_new(0x8ECu);
+      pS27 = (MissionScriptObjects *)gta2::operator_new(0x8ECu);
       if ( pS27 )
         ppS27 = gta2::MissionScriptObjects_MissionScriptObjects(pS27);
       else
@@ -1205,7 +1205,7 @@ MissionManager * gta2::MissionManager_MissionManager(MissionManager *self)
   self->field_278 = 0;
   memset(self->arr_30, 0, sizeof(self->arr_30));
   memset(unk_664590, 0, 0x748u);
-  pS31 = (struct TrafficManager *)gta2::operator_new(604u);
+  pS31 = (TrafficManager *)gta2::operator_new(604u);
   if ( pS31 )
     ppS31 = gta2::TrafficManager_TrafficManager(pS31);
   else

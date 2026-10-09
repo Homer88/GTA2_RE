@@ -40,11 +40,11 @@ bool gta2::Game_IsDeadPlayer(struct Game *self)
 // Ghidra: TransmissionInfo::FUN_004b92b0
 byte gta2::Game_sub_4B92B0(struct Game *self,int param_1,int *param_2)
 {
-  struct Player *pPVar1;
-  struct SpriteS1 *X;
+  Player *pPVar1;
+  SpriteS1 *X;
   bool bVar2;
-  struct S127 *pS127;
-  struct SpriteS1 *pSVar3;
+  S127 *pS127;
+  SpriteS1 *pSVar3;
   undefined3 extraout_var;
   undefined3 extraout_var_00;
   undefined3 extraout_var_01;
@@ -55,8 +55,8 @@ byte gta2::Game_sub_4B92B0(struct Game *self,int param_1,int *param_2)
   int iVar5;
   int iVar6;
   undefined4 unaff_EDI;
-  struct SpriteS1 *local_10;
-  struct SpriteS1 *local_c;
+  SpriteS1 *local_10;
+  SpriteS1 *local_c;
   int local_8;
   undefined1 local_4 [4];
   int *pConditionValue;
@@ -68,42 +68,42 @@ byte gta2::Game_sub_4B92B0(struct Game *self,int param_1,int *param_2)
   else {
     iVar6 = 0;
   }
-  gta2::CameraOrPhysics_WorldToScreen2D((struct CameraOrPhysics *)&pPVar1->pCameraOrPhysics,
+  gta2::CameraOrPhysics_WorldToScreen2D((CameraOrPhysics *)&pPVar1->pCameraOrPhysics,
              *(int *)&self[2].field_0x6,*(int *)&self[2].field_0xa,
              *(int *)&self[2].field_0xe,(int *)&local_10,&local_8);
   if (*(int *)&self[3].field_0x5 < 0) {
     iVar6 = (iVar6 - (int)param_2) * *(int *)&self[3].field_0x9;
     iVar5 = *(int *)&self[3].field_0xd * -7;
-    gta2::S202_sub_41F980((struct SpriteS1 *)&param_2,-*(int *)&self[3].field_0x5);
-    local_c = (struct SpriteS1 *)param_2;
+    gta2::S202_sub_41F980((SpriteS1 *)&param_2,-*(int *)&self[3].field_0x5);
+    local_c = (SpriteS1 *)param_2;
   }
   else {
     iVar6 = iVar6 - (int)param_2;
     iVar5 = -7;
     local_c = _DAT_0066f668;
   }
-  pS127 = (struct S127 *)param_2;
-  gta2::S202_sub_41F980((struct SpriteS1 *)&param_2,iVar6);
-  pSVar3 = gta2::S202_sub_401B20((Point2D *)&local_10,(struct SpriteS1 *)local_4,pS127);
+  pS127 = (S127 *)param_2;
+  gta2::S202_sub_41F980((SpriteS1 *)&param_2,iVar6);
+  pSVar3 = gta2::S202_sub_401B20((Point2D *)&local_10,(SpriteS1 *)local_4,pS127);
   X = pSVar3->FirstElement;
   param_2 = (int *)X;
-  gta2::S202_sub_41F980((struct SpriteS1 *)local_4,iVar5);
-  pSVar3 = gta2::S202_sub_401B20((Point2D *)&local_8,(struct SpriteS1 *)&local_10,(struct S127 *)pSVar3);
+  gta2::S202_sub_41F980((SpriteS1 *)local_4,iVar5);
+  pSVar3 = gta2::S202_sub_401B20((Point2D *)&local_8,(SpriteS1 *)&local_10,(S127 *)pSVar3);
   pSVar3 = pSVar3->FirstElement;
   local_10 = pSVar3;
-  bVar2 = gta2::Player_sub_40CE70((struct Player *)&param_2,(struct Player *)&DAT_0066f6d4);
+  bVar2 = gta2::Player_sub_40CE70((Player *)&param_2,(Player *)&DAT_0066f6d4);
   pConditionValue = (int *)CONCAT31(extraout_var,bVar2);
   if (pConditionValue != NULL) {
     decoderfloat(local_4,0x280);
-    bVar2 = gta2::Player_CheckCondition((struct Player *)&param_2,pConditionValue);
+    bVar2 = gta2::Player_CheckCondition((Player *)&param_2,pConditionValue);
     pConditionValue = (int *)CONCAT31(extraout_var_00,bVar2);
     if (pConditionValue != NULL) {
-      bVar2 = gta2::Player_sub_40CE70((struct Player *)&local_10,(struct Player *)&DAT_0066f6d4)
+      bVar2 = gta2::Player_sub_40CE70((Player *)&local_10,(Player *)&DAT_0066f6d4)
       ;
       pConditionValue = (int *)CONCAT31(extraout_var_01,bVar2);
       if (pConditionValue != NULL) {
         decoderfloat(&param_2,0x1e0);
-        bVar2 = gta2::Player_CheckCondition((struct Player *)&local_10,pConditionValue);
+        bVar2 = gta2::Player_CheckCondition((Player *)&local_10,pConditionValue);
         pConditionValue = (int *)CONCAT31(extraout_var_02,bVar2);
         if (pConditionValue != NULL) {
           param_2 = (int *)0x7;
@@ -112,7 +112,7 @@ byte gta2::Game_sub_4B92B0(struct Game *self,int param_1,int *param_2)
                              (&pPVar1->field_0x1f4,local_4,(int *)&local_c);
           pConditionValue =
                (int *)CONCAT22((short)((uint)puVar4 >> 0x10),_DAT_0066f7a0);
-          gta2::sub_4CBA50((struct SpriteS1 *)(param_1 + 0xa3),6,(struct SpriteS1 *)(param_1 + 0xa3)
+          gta2::sub_4CBA50((SpriteS1 *)(param_1 + 0xa3),6,(SpriteS1 *)(param_1 + 0xa3)
                      ,X,pSVar3,pConditionValue,*puVar4,&param_2,
                      CONCAT22(extraout_var_03,
                               *(undefined2 *)((int)&self[3].select + 1)),1,
@@ -134,10 +134,10 @@ char gta2::Game_sub_4B94B0(struct Game *self)
 {
   int *p_State; // ebx
   int *p_isDead; // edi
-  struct Tango *v4; // eax
-  struct Tango *v5; // eax
+  Tango *v4; // eax
+  Tango *v5; // eax
   unsigned int Status; // eax
-  struct SpriteS1 *a3; // [esp+Ch] [ebp-Ch] BYREF
+  SpriteS1 *a3; // [esp+Ch] [ebp-Ch] BYREF
   int Camer_Z_View; // [esp+10h] [ebp-8h] BYREF
   _BYTE a2[4]; // [esp+14h] [ebp-4h] BYREF
 
@@ -152,31 +152,31 @@ char gta2::Game_sub_4B94B0(struct Game *self)
     &Camer_Z_View);
   if ( gta2::sub_4037E0(&a3) )
   {
-    a3 = gta2::Player_sub_401B40((struct Player *)&unk_66F950, (struct S202 *)a2, (int)&a3)->FirstElement;
-    v4 = (struct Tango *)gta2::sub_401B90(&a3, a2, &unk_66F8F0);
+    a3 = gta2::Player_sub_401B40((Player *)&unk_66F950, (S202 *)a2, (int)&a3)->FirstElement;
+    v4 = (Tango *)gta2::sub_401B90(&a3, a2, &unk_66F8F0);
   }
   else
   {
-    if ( !gta2::Car_sub_403800((struct Car *)&a3, (int)&unk_66F964) )
+    if ( !gta2::Car_sub_403800((Car *)&a3, &unk_66F964) )
       goto LABEL_6;
-    a3 = gta2::Player_sub_401B40(&unk_66F964, (struct S202 *)a2, (int)&a3)->FirstElement;
-    v4 = (struct Tango *)gta2::sub_401B90(&a3, a2, &unk_66F8F0);
+    a3 = gta2::Player_sub_401B40(&unk_66F964, (S202 *)a2, (int)&a3)->FirstElement;
+    v4 = (Tango *)gta2::sub_401B90(&a3, a2, &unk_66F8F0);
   }
-  gta2::Player_sub_40E530((struct Player *)p_isDead, v4);
+  gta2::Player_sub_40E530((Player *)p_isDead, v4);
 LABEL_6:
   if ( gta2::sub_4037E0(&Camer_Z_View) )
   {
-    Camer_Z_View = (int)gta2::Player_sub_401B40(&unk_66F654, (struct S202 *)a2, (int)&Camer_Z_View)->FirstElement;
-    v5 = (struct Tango *)gta2::sub_401B90(&Camer_Z_View, a2, &unk_66F8F0);
+    Camer_Z_View = (int)gta2::Player_sub_401B40(&unk_66F654, (S202 *)a2, (int)&Camer_Z_View)->FirstElement;
+    v5 = (Tango *)gta2::sub_401B90(&Camer_Z_View, a2, &unk_66F8F0);
   }
   else
   {
-    if ( !gta2::Car_sub_403800((struct Car *)&Camer_Z_View, (int)&unk_66F8E0) )
+    if ( !gta2::Car_sub_403800((Car *)&Camer_Z_View, &unk_66F8E0) )
       goto LABEL_11;
-    Camer_Z_View = (int)gta2::Player_sub_401B40((struct Player *)&unk_66F8E0, (struct S202 *)a2, (int)&Camer_Z_View)->FirstElement;
-    v5 = (struct Tango *)gta2::sub_401B90(&Camer_Z_View, a2, &unk_66F8F0);
+    Camer_Z_View = (int)gta2::Player_sub_401B40((Player *)&unk_66F8E0, (S202 *)a2, (int)&Camer_Z_View)->FirstElement;
+    v5 = (Tango *)gta2::sub_401B90(&Camer_Z_View, a2, &unk_66F8F0);
   }
-  gta2::Player_sub_40E530((struct Player *)p_State, v5);
+  gta2::Player_sub_40E530((Player *)p_State, v5);
 LABEL_11:
   Status = self->Status;
   switch ( self->Status )

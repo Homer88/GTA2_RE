@@ -9,7 +9,7 @@
 // Ghidra: ---
 Viewport * gta2::S33_S33_sub_476780(struct Camera *self, Viewport *pS34)
 {
-  struct Viewport *result; // eax
+  Viewport *result; // eax
 
   result = pS34;
   pS34->NextElement = self->FirstElement;

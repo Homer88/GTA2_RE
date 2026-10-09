@@ -15,7 +15,7 @@ RenderManager * gta2::RenderManager_sub_4C4B40(struct RenderManager *self)
   if ( v1 >= 0x3E8 )
     return 0;
   self->field_2EE0 = v1 + 1;
-  return (struct RenderManager *)((char *)self + 12 * v1);
+  return (RenderManager *)((char *)self + 12 * v1);
 }
 
 
@@ -44,7 +44,7 @@ RenderManager * gta2::RenderManager_RenderManager_des(struct RenderManager *self
 // Ghidra: ---
 RenderManager * gta2::RenderManager_RenderManager(struct RenderManager *self)
 {
-  struct RenderManager *pS20; // eax
+  RenderManager *pS20; // eax
   int count; // ecx
 
   pS20 = self;
@@ -52,7 +52,7 @@ RenderManager * gta2::RenderManager_RenderManager(struct RenderManager *self)
   do
   {
     pS20->ARR_1000[0].FirstElement = 0;
-    pS20 = (struct RenderManager *)((char *)pS20 + 12);
+    pS20 = (RenderManager *)((char *)pS20 + 12);
     --count;
   }
   while ( count );

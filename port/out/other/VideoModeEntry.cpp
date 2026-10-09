@@ -28,7 +28,7 @@ void gta2::VideoModeEntry_sub_4C4D20(void *self)
     bVar2 = gta2::CameraManager_IsEmpty(pS21_1);
     if (bVar2) break;
     pS21_3 = (PedModel *)gta2::CameraManager_Pop(pS21_1);
-    gta2::SpriteS1_sub_4BE060((struct SpriteS1 *)pS21_3->field0_0x0);
+    gta2::SpriteS1_sub_4BE060((SpriteS1 *)pS21_3->field0_0x0);
     iVar1 = *(int *)&pS21_3->field_0x8;
     pS21 = gPedModel;
   }
@@ -51,13 +51,13 @@ void gta2::VideoModeEntry_sub_4C4D60(struct VideoModeEntry *self)
 // Ghidra: ---
 VideoModeEntry * gta2::VideoModeEntry_VideoModeEntry(struct VideoModeEntry *self)
 {
-  struct RenderManager *pS20; // eax
-  struct RenderManager *_pS20; // eax
-  struct CameraManager *pS21; // eax
+  RenderManager *pS20; // eax
+  RenderManager *_pS20; // eax
+  CameraManager *pS21; // eax
 
   if ( !gRenderManager )
   {
-    pS20 = (struct RenderManager *)gta2::operator_new(0x2EE4u);
+    pS20 = (RenderManager *)gta2::operator_new(0x2EE4u);
     if ( pS20 )
       _pS20 = gta2::RenderManager_RenderManager(pS20);
     else
@@ -66,7 +66,7 @@ VideoModeEntry * gta2::VideoModeEntry_VideoModeEntry(struct VideoModeEntry *self
   }
   if ( !gCameraManager )
   {
-    pS21 = (struct CameraManager *)gta2::operator_new(0xFA4u);
+    pS21 = (CameraManager *)gta2::operator_new(0xFA4u);
     if ( pS21 )
     {
       gCameraManager = gta2::CameraManager_CameraManager(pS21);

@@ -7,7 +7,7 @@
 // 0x00403890: PedManager::sub_403890
 // IDA: PedManager::sub_403890
 // Ghidra: ---
-Ped * gta2::PedManager_sub_403890(PedManager *self)
+Ped * gta2::PedManager_sub_403890(struct PedManager *self)
 {
   Ped *NextPed; // edx
   Ped *FirstElement; // esi

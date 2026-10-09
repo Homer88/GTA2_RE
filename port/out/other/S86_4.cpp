@@ -64,7 +64,7 @@ void gta2::S86_4_sub_4C79D0(struct S86_4 *self)
 {
   struct Ped *Ped; // edi
   int v3; // edi
-  struct S86_4 *i; // ecx
+  S86_4 *i; // ecx
   int v5; // ecx
   char a2; // [esp+8h] [ebp-4h]
 
@@ -72,7 +72,7 @@ void gta2::S86_4_sub_4C79D0(struct S86_4 *self)
   self->CopStars = gta2::Ped_GetCopStars(Ped);
   a2 = gta2::Police_sub_4A9590(gPolice, Ped);
   v3 = 0;
-  for ( i = self; v3 < self->CopStars; i = (struct S86_4 *)(v5 + 12) )
+  for ( i = self; v3 < self->CopStars; i = (S86_4 *)(v5 + 12) )
   {
     gta2::S86_4_sub_4C5E00(i, a2);
     ++v3;
@@ -85,16 +85,16 @@ void gta2::S86_4_sub_4C79D0(struct S86_4 *self)
 // Ghidra: ---
 void gta2::S86_4_sub_4C7A30(struct S86_4 *self)
 {
-  struct Player *v2; // eax
-  struct SpriteS1 *v3; // eax
+  Player *v2; // eax
+  SpriteS1 *v3; // eax
   int v4; // ebx
-  struct S86_4 *v5; // esi
+  S86_4 *v5; // esi
   int v6; // ecx
-  struct PublicTransport *v7; // eax
+  PublicTransport *v7; // eax
   int *v8; // eax
   int v9; // edx
   int CopStars; // [esp-10h] [ebp-34h]
-  struct SpriteS1 *v11; // [esp-Ch] [ebp-30h]
+  SpriteS1 *v11; // [esp-Ch] [ebp-30h]
   int a1; // [esp+10h] [ebp-14h] BYREF
   int mode; // [esp+14h] [ebp-10h] BYREF
   int WindowHeight; // [esp+18h] [ebp-Ch] BYREF
@@ -103,25 +103,25 @@ void gta2::S86_4_sub_4C7A30(struct S86_4 *self)
 
   CopStars = self->CopStars;
   mode = 2;
-  v11 = sub_4C60D0((struct SpriteS1 *)&WindowHeight, CopStars, &self->field_4C);
+  v11 = sub_4C60D0((SpriteS1 *)&WindowHeight, CopStars, &self->field_4C);
   gta2::sub_40CE00(&v16, 640);
-  v3 = gta2::Player_sub_401B40(v2, (struct S202 *)&v15, (int)v11);
-  gta2::S122_sub_401BF0((struct S122 *)v3, (int)&a1, (int)&mode);
+  v3 = gta2::Player_sub_401B40(v2, (S202 *)&v15, (int)v11);
+  gta2::S122_sub_401BF0((S122 *)v3, (int)&a1, (int)&mode);
   mode = 2;
-  gta2::S122_sub_401BF0((struct S122 *)&self->field_50, (int)&WindowHeight, (int)&mode);
+  gta2::S122_sub_401BF0((S122 *)&self->field_50, (int)&WindowHeight, (int)&mode);
   v4 = 0;
   v5 = self;
   while ( v4 < self->CopStars )
   {
     v6 = v5->S83_3[0].field_4;
     mode = 2;
-    gta2::S202_sub_41F980((struct S202 *)&v16, v6);
-    v8 = (int *)gta2::S202_sub_401B20((struct S202 *)&WindowHeight, (struct SpriteS1 *)&v15, v7);
+    gta2::S202_sub_41F980((S202 *)&v16, v6);
+    v8 = (int *)gta2::S202_sub_401B20((S202 *)&WindowHeight, (SpriteS1 *)&v15, v7);
     LOWORD(v9) = (unsigned __int8)v5->S83_3[0].field_0;
-    gta2::Hud_DrawSprite((struct Hud *)a1, 6, v9 + 14, a1, *v8, unk_672F98.Index, &mode, 0, 0);
+    gta2::Hud_DrawSprite((Hud *)a1, 6, v9 + 14, a1, *v8, unk_672F98.Index, &mode, 0, 0);
     ++v4;
-    v5 = (struct S86_4 *)((char *)v5 + 12);
-    gta2::Player_sub_40E530((struct Player *)&a1, (struct Tango *)&self->field_4C);
+    v5 = (S86_4 *)((char *)v5 + 12);
+    gta2::Player_sub_40E530((Player *)&a1, (Tango *)&self->field_4C);
   }
 }
 
@@ -141,15 +141,15 @@ char gta2::S86_4_sub_4C7B10(struct S86_4 *self)
 
   GlobalSpriteId = gta2::Style_GetGlobalSpriteId(gStyle, 6, 14);
   Sprite = gta2::Style_GetSprite(gStyle, GlobalSpriteId);
-  gta2::S202_sub_40CE30((struct S202 *)&v8, *(_BYTE *)(Sprite + 4));
+  gta2::S202_sub_40CE30((S202 *)&v8, *(_BYTE *)(Sprite + 4));
   self->field_4C = *v4;
-  gta2::S202_sub_40CE30((struct S202 *)&v8, *(_BYTE *)(Sprite + 5));
+  gta2::S202_sub_40CE30((S202 *)&v8, *(_BYTE *)(Sprite + 5));
   v6 = 6;
   self->field_50 = *v5;
   do
   {
     gta2::S86_4_sub_4C6EA0(self, 2);
-    self = (struct S86_4 *)((char *)self + 12);
+    self = (S86_4 *)((char *)self + 12);
     --v6;
   }
   while ( v6 );

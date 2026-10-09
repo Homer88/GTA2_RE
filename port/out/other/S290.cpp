@@ -16,7 +16,7 @@
 // Ghidra: FUN_004ebce0
 void gta2::S290_S290(void)
 {
-  gta2::S290_S290((struct S290 *)&gS290);
+  gta2::S290_S290((S290 *)&gS290);
   return;
 }
 

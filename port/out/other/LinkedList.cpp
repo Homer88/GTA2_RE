@@ -13,7 +13,7 @@
   iVar1 = _DAT_0066ac4c;
   _DAT_0066afc0 = _DAT_0066ac4c;
   S1_FUN_0049def0(self);
-  gta2::Player_cPlayer_FUN_004a2e30((struct Player *)self,iVar1);
+  gta2::Player_cPlayer_FUN_004a2e30((Player *)self,iVar1);
   return;
 }
 

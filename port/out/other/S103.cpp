@@ -9,11 +9,11 @@
 // Ghidra: ---
 ushort gta2::S103_sub_4A1CF0(struct S103 *self)
 {
-  gta2::S103_sub_41E1E0((struct S103 *)&self->S104_.S63);
+  gta2::S103_sub_41E1E0((S103 *)&self->S104_.S63);
   LOWORD(self->S104_.field_58) = unk_66AC08;
-  gta2::S103_sub_41E1E0((struct S103 *)&self->S104_.S63_2);
+  gta2::S103_sub_41E1E0((S103 *)&self->S104_.S63_2);
   self->S104_.field_5C = 0;
-  gta2::Player_sub_4A1BE0((struct Player *)self);
+  gta2::Player_sub_4A1BE0((Player *)self);
   return gta2::S103_sub_41E1E0(self);
 }
 

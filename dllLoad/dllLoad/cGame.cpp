@@ -1,3 +1,4 @@
+﻿#include "cPed.h"
 #include <Windows.h>
 #include <stdio.h>
 
@@ -224,3 +225,4 @@ void __fastcall HookUpdateWrapper(void* thisp, void* _EDX)
     writeFileLog((char*)"game.txt", (char*)"  Hud::UpdateWrapper enter", (char*)"InitGame", (char*)"");
     ((void (__fastcall*)(void*, void*))_UpdateWrapper)(thisp, _EDX);
 }
+

@@ -257,7 +257,7 @@ char gta2::S95_sub_49C820(struct S95 *self)
 // Ghidra: VertexBuffer::FUN_0049cb40
 bool gta2::S95_sub_49CB40(VertexBuffer *self,Ped *param_1)
 {
-  return (struct Ped *)((self->Passenger2).Passenger)->Passenger_ == param_1;
+  return (Ped *)((self->Passenger2).Passenger)->Passenger_ == param_1;
 }
 
 
@@ -465,7 +465,7 @@ char gta2::S95_sub_49CF70(
         unsigned __int8 a2,
         S202 *a7)
 {
-  struct Passenger *v7; // eax
+  Passenger *v7; // eax
   char v9; // dl
   char v10; // al
   unsigned __int8 v11; // bl
@@ -474,10 +474,10 @@ char gta2::S95_sub_49CF70(
   struct CarSystemManager *CarSystemManager; // eax
   int *v15; // eax
   int *v16; // edi
-  struct SpriteS1 **v17; // eax
-  struct SpriteS1 **v18; // ebp
+  SpriteS1 **v17; // eax
+  SpriteS1 **v18; // ebp
   int **v19; // eax
-  struct Weapon *v20; // eax
+  Weapon *v20; // eax
   char v21; // dl
   char v22; // al
   int v24; // edx
@@ -552,12 +552,12 @@ char gta2::S95_sub_49CF70(
     gta2::S95_InitBuffer(self);
     if ( !gta2::MapRelatedStruct_sub_466CF0(gMapRelatedStruct, v11, a5, a2) )
     {
-      gta2::S202_sub_40CE30((struct S202 *)&a7, a2);
+      gta2::S202_sub_40CE30((S202 *)&a7, a2);
       v16 = v15;
       gta2::S202_sub_40CE30(&v51, a5);
       v18 = v17;
-      gta2::S202_sub_40CE30((struct S202 *)&v51.S202, v11);
-      v20 = (struct Weapon *)gta2::MapRelatedStruct_sub_469570(gMapRelatedStruct, &arg0, *v19, *v18, *v16);
+      gta2::S202_sub_40CE30((S202 *)&v51.S202, v11);
+      v20 = (Weapon *)gta2::MapRelatedStruct_sub_469570(gMapRelatedStruct, &arg0, *v19, *v18, *v16);
       self->field_10 = gta2::Weapon_sub_41C1E0(v20);
     }
     v21 = a5;
@@ -866,10 +866,10 @@ char gta2::S95_sub_49D7A0(struct S95 *self, char a2, _BYTE *a3, _BYTE *a4, unsig
   int v11; // ecx
   int *v12; // eax
   int *v13; // edi
-  struct SpriteS1 **v14; // eax
-  struct SpriteS1 **v15; // ebp
+  SpriteS1 **v14; // eax
+  SpriteS1 **v15; // ebp
   int **v16; // eax
-  struct Weapon *v17; // eax
+  Weapon *v17; // eax
   char v18; // dl
   char v19; // al
   __int16 v20; // cx
@@ -882,11 +882,11 @@ char gta2::S95_sub_49D7A0(struct S95 *self, char a2, _BYTE *a3, _BYTE *a4, unsig
   unsigned __int16 v27; // cx
   _BYTE *v28; // edx
   char v29; // al
-  struct PublicTransport *v30; // eax
-  struct PublicTransport *v31; // eax
-  struct S202 *v32; // eax
-  struct PublicTransport *v33; // eax
-  struct PublicTransport *v34; // eax
+  PublicTransport *v30; // eax
+  PublicTransport *v31; // eax
+  S202 *v32; // eax
+  PublicTransport *v33; // eax
+  PublicTransport *v34; // eax
   char v35; // dl
   char v36; // cl
   char v37; // cl
@@ -921,12 +921,12 @@ char gta2::S95_sub_49D7A0(struct S95 *self, char a2, _BYTE *a3, _BYTE *a4, unsig
   self->field_4 = 1;
   if ( !gta2::MapRelatedStruct_sub_466CF0(gMapRelatedStruct, v11, v38, v10) )
   {
-    gta2::S202_sub_40CE30((struct S202 *)&v40.CarSystemManager, self->field_10);
+    gta2::S202_sub_40CE30((S202 *)&v40.CarSystemManager, self->field_10);
     v13 = v12;
-    gta2::S202_sub_40CE30((struct S202 *)&v40.S202, self->field_F);
+    gta2::S202_sub_40CE30((S202 *)&v40.S202, self->field_F);
     v15 = v14;
     gta2::S202_sub_40CE30(&v40, self->field_E);
-    v17 = (struct Weapon *)gta2::MapRelatedStruct_sub_469570(gMapRelatedStruct, &v40.field_C, *v16, *v15, *v13);
+    v17 = (Weapon *)gta2::MapRelatedStruct_sub_469570(gMapRelatedStruct, &v40.field_C, *v16, *v15, *v13);
     self->field_10 = gta2::Weapon_sub_41C1E0(v17);
   }
   *(_WORD *)&self->field_16 = 0;
@@ -1063,22 +1063,22 @@ LABEL_17:
       if ( !self->field_18 )
         return 1;
     }
-    gta2::S202_sub_40CE30((struct S202 *)&v40.field_C, self->field_27);
-    gta2::S202_sub_40CE30((struct S202 *)&v40.field_10, self->field_26);
-    gta2::S202_sub_401B20(&unk_66AA40, (struct SpriteS1 *)&v40.pPlayer, v30);
-    gta2::S202_sub_40CE30((struct S202 *)&v40.field_18, self->field_25);
-    gta2::S202_sub_401B20(&unk_66AA40, (struct SpriteS1 *)&v40.field_1C, v31);
-    gta2::S202_sub_40CE30((struct S202 *)&v41, *a5);
+    gta2::S202_sub_40CE30((S202 *)&v40.field_C, self->field_27);
+    gta2::S202_sub_40CE30((S202 *)&v40.field_10, self->field_26);
+    gta2::S202_sub_401B20(&unk_66AA40, (SpriteS1 *)&v40.pPlayer, v30);
+    gta2::S202_sub_40CE30((S202 *)&v40.field_18, self->field_25);
+    gta2::S202_sub_401B20(&unk_66AA40, (SpriteS1 *)&v40.field_1C, v31);
+    gta2::S202_sub_40CE30((S202 *)&v41, *a5);
     v40.S202 = v32;
-    gta2::S202_sub_40CE30((struct S202 *)&v42, *a4);
-    v40.CarSystemManager = (struct CarSystemManager *)gta2::S202_sub_401B20(&unk_66AA40, (struct SpriteS1 *)&v43, v33);
-    gta2::S202_sub_40CE30((struct S202 *)&v44, *a3);
-    gta2::S202_sub_401B20(&unk_66AA40, (struct SpriteS1 *)&v45, v34);
+    gta2::S202_sub_40CE30((S202 *)&v42, *a4);
+    v40.CarSystemManager = (CarSystemManager *)gta2::S202_sub_401B20(&unk_66AA40, (SpriteS1 *)&v43, v33);
+    gta2::S202_sub_40CE30((S202 *)&v44, *a3);
+    gta2::S202_sub_401B20(&unk_66AA40, (SpriteS1 *)&v45, v34);
     if ( gta2::MapRelatedStruct_sub_469F90(
            gMapRelatedStruct,
-           (struct SpriteS1 *)unk_66AAC8.field_0,
-           (struct SpriteS1 *)unk_66AA48.field_0,
-           (struct Player *)unk_66AAC8.field_0) )
+           (SpriteS1 *)unk_66AAC8.field_0,
+           (SpriteS1 *)unk_66AA48.field_0,
+           (Player *)unk_66AAC8.field_0) )
     {
       goto LABEL_17;
     }

@@ -139,34 +139,34 @@ void gta2::S86_8_S86_8(struct S86_8 *self)
 void gta2::S86_8_sub_4C9890(void *self)
 {
   int v2; // ebx
-  struct Player *v3; // ecx
-  struct CarSystemManager *v4; // eax
+  Player *v3; // ecx
+  CarSystemManager *v4; // eax
   int v5; // ecx
-  struct Hud *v6; // ecx
-  struct CarSystemManager *v7; // eax
-  struct Player *v8; // ecx
+  Hud *v6; // ecx
+  CarSystemManager *v7; // eax
+  Player *v8; // ecx
   int v9; // ecx
-  struct Hud *v10; // ecx
-  struct CarSystemManager *v11; // ecx
-  struct Player *v12; // edx
+  Hud *v10; // ecx
+  CarSystemManager *v11; // ecx
+  Player *v12; // edx
   int v13; // ecx
-  struct Hud *v14; // ecx
-  struct CarSystemManager *v15; // eax
-  struct Player *v16; // ecx
+  Hud *v14; // ecx
+  CarSystemManager *v15; // eax
+  Player *v16; // ecx
   int v17; // ecx
-  struct Hud *v18; // ecx
+  Hud *v18; // ecx
   int v19; // eax
-  struct Player *v20; // ecx
+  Player *v20; // ecx
   int CharHeight; // eax
-  struct S202 *v22; // ecx
+  S202 *v22; // ecx
   S202 v23; // [esp-1Ch] [ebp-30h] BYREF
   int mode; // [esp+10h] [ebp-4h] BYREF
 
   if ( *(_BYTE *)self )
   {
     v2 = gta2::sub_4C7220(159);
-    v3 = (struct Player *)*((_DWORD *)self + 36);
-    v4 = (struct CarSystemManager *)(v2 - (v2 >> 31));
+    v3 = (Player *)*((_DWORD *)self + 36);
+    v4 = (CarSystemManager *)(v2 - (v2 >> 31));
     LOBYTE(v4) = *((_BYTE *)self + 148);
     v23.field_18 = v4;
     LOWORD(v4) = unk_672F98.Index;
@@ -174,12 +174,12 @@ void gta2::S86_8_sub_4C9890(void *self)
     v23.field_10 = 0;
     v23.field_C = (int)&mode;
     v23.CarSystemManager = v4;
-    v23.S202 = (struct S202 *)v3;
+    v23.S202 = (S202 *)v3;
     mode = 2;
-    gta2::S202_sub_41F980((struct S202 *)&v23.S202, 27);
+    gta2::S202_sub_41F980((S202 *)&v23.S202, 27);
     v23.field_0 = v5;
     gta2::S202_sub_41F980(&v23, 320 - v2 / 2 - v2);
-    v7 = (struct CarSystemManager *)gta2::Hud_DrawSprite(
+    v7 = (CarSystemManager *)gta2::Hud_DrawSprite(
                                v6,
                                6,
                                159,
@@ -190,16 +190,16 @@ void gta2::S86_8_sub_4C9890(void *self)
                                (int)v23.field_10,
                                (int)v23.pPlayer);
     LOBYTE(v7) = *((_BYTE *)self + 148);
-    v8 = (struct Player *)*((_DWORD *)self + 36);
+    v8 = (Player *)*((_DWORD *)self + 36);
     v23.field_18 = v7;
     LOWORD(v7) = unk_672F98.Index;
     v23.pPlayer = v8;
     v23.field_10 = 0;
     v23.field_C = (int)&mode;
     v23.CarSystemManager = v7;
-    v23.S202 = (struct S202 *)v8;
+    v23.S202 = (S202 *)v8;
     mode = 2;
-    gta2::S202_sub_41F980((struct S202 *)&v23.S202, 27);
+    gta2::S202_sub_41F980((S202 *)&v23.S202, 27);
     v23.field_0 = v9;
     gta2::S202_sub_41F980(&v23, 320 - v2 / 2);
     gta2::Hud_DrawSprite(
@@ -213,19 +213,19 @@ void gta2::S86_8_sub_4C9890(void *self)
       (int)v23.field_10,
       (int)v23.pPlayer);
     LOBYTE(v11) = *((_BYTE *)self + 148);
-    v12 = (struct Player *)*((_DWORD *)self + 36);
+    v12 = (Player *)*((_DWORD *)self + 36);
     v23.field_18 = v11;
     LOWORD(v11) = unk_672F98.Index;
     v23.pPlayer = v12;
     v23.field_10 = 0;
     v23.field_C = (int)&mode;
     v23.CarSystemManager = v11;
-    v23.S202 = (struct S202 *)v11;
+    v23.S202 = (S202 *)v11;
     mode = 2;
-    gta2::S202_sub_41F980((struct S202 *)&v23.S202, 27);
+    gta2::S202_sub_41F980((S202 *)&v23.S202, 27);
     v23.field_0 = v13;
     gta2::S202_sub_41F980(&v23, v2 / 2 + 320);
-    v15 = (struct CarSystemManager *)gta2::Hud_DrawSprite(
+    v15 = (CarSystemManager *)gta2::Hud_DrawSprite(
                                 v14,
                                 6,
                                 161,
@@ -236,7 +236,7 @@ void gta2::S86_8_sub_4C9890(void *self)
                                 (int)v23.field_10,
                                 (int)v23.pPlayer);
     LOBYTE(v15) = *((_BYTE *)self + 148);
-    v16 = (struct Player *)*((_DWORD *)self + 36);
+    v16 = (Player *)*((_DWORD *)self + 36);
     v23.field_18 = v15;
     mode = 2;
     v23.pPlayer = v16;
@@ -244,8 +244,8 @@ void gta2::S86_8_sub_4C9890(void *self)
     v23.field_10 = 0;
     v23.field_C = (int)&mode;
     v23.CarSystemManager = v15;
-    v23.S202 = (struct S202 *)v16;
-    gta2::S202_sub_41F980((struct S202 *)&v23.S202, 27);
+    v23.S202 = (S202 *)v16;
+    gta2::S202_sub_41F980((S202 *)&v23.S202, 27);
     v23.field_0 = v17;
     gta2::S202_sub_41F980(&v23, v2 / 2 + v2 + 320);
     v19 = gta2::Hud_DrawSprite(
@@ -259,20 +259,20 @@ void gta2::S86_8_sub_4C9890(void *self)
             (int)v23.field_10,
             (int)v23.pPlayer);
     LOBYTE(v19) = *((_BYTE *)self + 148);
-    v20 = (struct Player *)*((_DWORD *)self + 36);
+    v20 = (Player *)*((_DWORD *)self + 36);
     v23.field_18 = v19;
     v23.pPlayer = v20;
     v23.field_10 = 0;
     LOWORD(v20) = unk_672F30;
     v23.field_C = (int)&mode;
-    v23.CarSystemManager = (struct CarSystemManager *)v20;
+    v23.CarSystemManager = (CarSystemManager *)v20;
     mode = 2;
     CharHeight = gta2::Font_GetCharHeight(unk_672F30);
     v23.S202 = v22;
-    gta2::S202_sub_41F980((struct S202 *)&v23.S202, 27 - CharHeight / 2);
+    gta2::S202_sub_41F980((S202 *)&v23.S202, 27 - CharHeight / 2);
     v23.field_0 = *((_DWORD *)self + 33);
     gta2::S202_sub_41F980(&v23, (640 - v23.field_0) / 2);
-    sub_4C7280((unsigned __int16 *)self + 1, v23.field_0, (struct SpriteS1 *)v23.S202);
+    sub_4C7280((unsigned __int16 *)self + 1, v23.field_0, (SpriteS1 *)v23.S202);
   }
 }
 

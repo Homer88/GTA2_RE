@@ -9,7 +9,7 @@
 // Ghidra: ---
 unsigned __int8 gta2::S27_sub_47F4D0(struct MissionScriptObjects *self)
 {
-  struct MissionScriptObjectData *i; // esi
+  MissionScriptObjectData *i; // esi
   unsigned __int8 result; // al
 
   for ( i = self->MissionScriptObjectDataNextElement; i; i = i->NextElement )

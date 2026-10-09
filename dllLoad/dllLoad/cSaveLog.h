@@ -22,6 +22,12 @@
 int __fastcall HookSaveFile(void* thisp, void* _EDX, char* pSaveFileName);
 int __fastcall HookWriteFileNamePlayer(void* thisp, void* _EDX, unsigned short slot);
 int __fastcall HookWriteHiscores(void* thisp, void* _EDX);
+void __fastcall HookUpdateBestScores(void* thisp, void* _EDX);
+
+// Выбор мира (фронтенд-диспетчер 0x4D16xx): instrumentation only, retail does
+// the real work through the trampolines.
+void __fastcall HookMapGmSetScores(void* thisp, void* _EDX, void* srcArea);
+int  __fastcall HookSaveLevelRecord(void* thisp, void* _EDX, void* cityBlock);
 
 // ---------------------------------------------------------------------------
 // Ручные правки сейва из инспектора / хоткеев. Все пишут и в block0 (файл .svg)

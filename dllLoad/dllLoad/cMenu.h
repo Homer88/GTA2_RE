@@ -53,12 +53,23 @@ struct Menu{
 	unsigned short Page;
 	short Filderer0x120;
 	MenuPage pMenuPage[17];
-	//wchar_t ppPlayerName[9]; //0xC98C
-	wchar_t* pPlayerName;
-	void* field_C990;
-	void* field_C994;
-	void* field_C998;
-	__int16 field_C99C;
+	// Реально это inline буфер имени на 9 wchar (Menu+0xC98C..0xC99E).
+	// Retail типизирует его как wchar_t*, но ValidatePlayerName @0x4524C0 и
+	// цикл набора SpecialFunction4 @0x459E30 пишут 18 байт МЕСТНЫХ wide-символов
+	// в &this->PlayerName (IDA так разрешил буфер). Объявление указателем
+	// ломало чтение: thisMenu->pPlayerName		 == содержимое буфера как «адрес».
+	// union ровно 18 байт - физический лэйаут полей (pPlayerName..field_C99C) не
+	// меняется, Length/Key/MenuItems остаются на своих местах.
+	union {
+		wchar_t pPlayerName[9]; // 0xC98C (18 байт)
+		struct {
+			wchar_t* field_C90C; // неиспользуемый алиас
+			void* field_C990;
+			void* field_C994;
+			void* field_C998;
+			__int16 field_C99C;
+		};
+	};
 	char Length;
 	char field_C99F;
 	__int16 Key;
@@ -125,7 +136,9 @@ struct Menu{
 //51�596-48 932
 //51 972					 //125755
 //FIXME
-//static_assert(sizeof(Menu) == 125760, "ERROR MENU STRUCT");
+// sizeof подтверждён авторитетно: Inistal_Defaut @0x00457830 делает
+// push 0x1EB40 / call operator_new @0x004D5DCA, т.е. Menu ровно 125760 байт.
+static_assert(sizeof(Menu) == 0x1EB40, "ERROR MENU STRUCT");
 
 
 
@@ -155,6 +168,12 @@ void  __fastcall SetPlayerNameFromMenu(Menu* thisMenu);
 // the constructor returns, in FUN_00457830: gMenu = Menu::Menu(pMenu)).
 short  __fastcall   LoadTextMenu(Menu* thisMenu);
 
+// Retail Menu::text resolver @0x00452200 (__thiscall, стек = {page, idx, out}).
+// Детур читает готовую строку retail, а для селекторов, построенных нашим
+// MenuBuildCustomPages, подменяет "<текст> <номер>" на "<текст> <название>".
+void  __fastcall    HookMenuResolveText(void* pThis, void* _EDX, int page, int idx,
+                                        const wchar_t** out);
+
 
 // Retail versions are __thiscall; the detours forward to the original trampolines
 // (trace only - the retail behaviour is preserved).
@@ -166,6 +185,18 @@ char  __fastcall   MultiplayerMenu(Menu* thisMenu, void* _EDX, void* pPlayerName
 // GetDeviceState -> Menu::Keys[256]). Hook logs every newly-pressed key and
 // dumps the current menu page state (down to MenuEntry/S136 sub-classes).
 void __fastcall HookProcessInput(Menu* thisMenu, void* _EDX);
+
+
+// ---- DrawGTATextRaw trace ring (crash forensics) --------------------------
+// Retail DrawGTATextRaw @0x004CC100 is __stdcall with 9 dwords (ret 0x24).
+// The name/menu render path reaches it only through DrawGTATextRawMain @0x4539F0
+// (whose `call 0x4CC100` sits at 0x453A1D -> caller 0x453A22 was on the crash
+// stack). The hook only OBSERVES: pushes the call into a fixed 512-entry ring
+// and forwards to the retail trampoline. DumpDrawRing() is called from the
+// DLL crash filter to print the last draws before the fault.
+void __stdcall HookDrawGTATextRaw(DWORD a1, DWORD a2, DWORD a3, DWORD a4,
+                                  DWORD a5, DWORD a6, DWORD a7, DWORD a8, DWORD a9);
+void  DumpDrawRing(FILE* f);
 
 
 

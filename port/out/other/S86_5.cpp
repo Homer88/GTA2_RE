@@ -9,18 +9,18 @@
 // Ghidra: ---
 char gta2::S86_5_sub_4C73A0(int *self)
 {
-  struct Ped *CurrentPed; // eax
-  struct Ped *v3; // esi
+  Ped *CurrentPed; // eax
+  Ped *v3; // esi
   int *PositionZ; // ebx
   int *v5; // eax
   int *v6; // ebp
   int *XCoordinate; // eax
-  struct CarSystemManager *Rotation; // eax
+  CarSystemManager *Rotation; // eax
   int *v9; // ebx
   int *v10; // eax
   int *v11; // ebp
   int *v12; // eax
-  struct CameraOrPhysics *MultiPlayerMode; // eax
+  CameraOrPhysics *MultiPlayerMode; // eax
   int v15; // [esp-14h] [ebp-30h]
   int v16; // [esp-10h] [ebp-2Ch]
   AudioSourceParams v17; // [esp-Ch] [ebp-28h]
@@ -48,8 +48,8 @@ char gta2::S86_5_sub_4C73A0(int *self)
     *((_BYTE *)self + 10) = (_BYTE)CurrentPed;
     if ( (_BYTE)CurrentPed )
     {
-      Rotation = (struct CarSystemManager *)gta2::Ped_GetRotation(v3, (__int16 *)&Z);
-      *((_WORD *)self + 4) = *(_WORD *)gta2::sub_40E5A0(Rotation, (struct CarSystemManager *)&Y, &unk_67314C);
+      Rotation = (CarSystemManager *)gta2::Ped_GetRotation(v3, (__int16 *)&Z);
+      *((_WORD *)self + 4) = *(_WORD *)gta2::sub_40E5A0(Rotation, (CarSystemManager *)&Y, &unk_67314C);
       v9 = (int *)gta2::Ped_GetPositionZ(v3, (int)&X);
       gta2::Ped_GetYCoordinate(v3, &Z);
       v11 = v10;

@@ -70,12 +70,12 @@ char gta2::Ambulance_sub_473010(struct Ambulance *self, Ped *pPed)
 {
   unsigned __int8 v3; // cl
   int v4; // eax
-  struct Medical *v5; // esi
+  Medical *v5; // esi
   struct S110 *S110; // eax
-  struct S169 *v7; // eax
+  S169 *v7; // eax
   char v9; // bl
   struct S110 *v10; // eax
-  struct S169 *NPC; // ecx
+  S169 *NPC; // ecx
   struct Ped *Ped; // edi
   struct Ped *v13; // edi
   struct Ped *v14; // ecx
@@ -104,8 +104,8 @@ char gta2::Ambulance_sub_473010(struct Ambulance *self, Ped *pPed)
           gta2::Ambulance_AddPedToAmbulance(self, Ped);
           v5->Ped_ = 0;
         }
-        v13 = (struct Ped *)v5->field_C;
-        if ( v13 && gta2::Ped_GetPedState((struct Ped *)v5->field_C) == 9 )
+        v13 = (Ped *)v5->field_C;
+        if ( v13 && gta2::Ped_GetPedState((Ped *)v5->field_C) == 9 )
         {
           gta2::Ambulance_AddPedToAmbulance(self, v13);
           v5->field_C = 0;
@@ -130,7 +130,7 @@ char gta2::Ambulance_sub_473010(struct Ambulance *self, Ped *pPed)
   }
   if ( pPed->field_10B )
     gta2::S110_sub_4C54C0(v5->S110_, pPed);
-  v15 = (struct Ped *)v5->field_C;
+  v15 = (Ped *)v5->field_C;
   if ( v15 )
   {
     if ( gta2::Ped_GetPedState(v15) == 9 )
@@ -151,16 +151,16 @@ LABEL_27:
 // Ghidra: ---
 void gta2::Ambulance_sub_473E00(struct Ambulance *self)
 {
-  struct Passenger *p_Passenger; // esi
+  Passenger *p_Passenger; // esi
   char v3; // cl
   struct Ped *v4; // ebx
-  struct Weapon *XCoordinate; // eax
-  struct Weapon *v6; // eax
-  struct Weapon *PositionZ; // eax
+  Weapon *XCoordinate; // eax
+  Weapon *v6; // eax
+  Weapon *PositionZ; // eax
   int Index; // eax
-  struct Medical *ppMedical_1; // esi
-  struct Medical *ppMedical; // eax
-  struct Medical *pMedical; // edi
+  Medical *ppMedical_1; // esi
+  Medical *ppMedical; // eax
+  Medical *pMedical; // edi
   struct S110 *pS110; // esi
   struct S110 *S110; // eax
   unsigned __int8 v14; // dl
@@ -181,7 +181,7 @@ void gta2::Ambulance_sub_473E00(struct Ambulance *self)
   self->field_1 = v3;
   if ( v3 )
   {
-    v4 = (struct Ped *)sub_446100(p_Passenger);
+    v4 = (Ped *)sub_446100(p_Passenger);
     if ( sub_435430(v4) )
     {
       --self->field_1;
@@ -189,11 +189,11 @@ void gta2::Ambulance_sub_473E00(struct Ambulance *self)
     }
     else
     {
-      XCoordinate = (struct Weapon *)gta2::Ped_GetXCoordinate(v4, (int)&X);
+      XCoordinate = (Weapon *)gta2::Ped_GetXCoordinate(v4, (int)&X);
       a2[0] = gta2::Weapon_sub_41C1E0(XCoordinate);
       gta2::Ped_GetYCoordinate(v4, &X);
       v17[0] = gta2::Weapon_sub_41C1E0(v6);
-      PositionZ = (struct Weapon *)gta2::Ped_GetPositionZ(v4, (int)&X);
+      PositionZ = (Weapon *)gta2::Ped_GetPositionZ(v4, (int)&X);
       v18[0] = gta2::Weapon_sub_41C1E0(PositionZ);
       if ( gta2::S95_sub_49D7A0(gS95, 1, a2, v17, v18, 0) )
       {
@@ -203,8 +203,8 @@ void gta2::Ambulance_sub_473E00(struct Ambulance *self)
           ppMedical_1 = &self->Medical_[Index];
           if ( self->Medical_[Index].field_14 == 1 && gta2::S110_sub_4C54F0(self->Medical_[Index].S110) )
           {
-            gta2::S202_sub_40CE30((struct S202 *)&v20, ppMedical_1->field_1);
-            gta2::S202_sub_40CE30((struct S202 *)&v21, ppMedical_1->field);
+            gta2::S202_sub_40CE30((S202 *)&v20, ppMedical_1->field_1);
+            gta2::S202_sub_40CE30((S202 *)&v21, ppMedical_1->field);
 
             gta2::Ped_GetYCoordinate(v4, &Y);
             gta2::Ped_GetXCoordinate(v4, (int)&v24);
@@ -254,13 +254,13 @@ void gta2::Ambulance_sub_473E00(struct Ambulance *self)
           pS110->field_28 = 3;
           pS110->field_18 = 300;
           pS110->field_1C = 0;
-          gta2::S202_sub_40CE30((struct S202 *)&X, a2[0]);
+          gta2::S202_sub_40CE30((S202 *)&X, a2[0]);
           pS110->field_C = X;
 
-          gta2::S202_sub_40CE30((struct S202 *)&X, v17[0]);
+          gta2::S202_sub_40CE30((S202 *)&X, v17[0]);
           pS110->field_10 = X;
 
-          gta2::S202_sub_40CE30((struct S202 *)&X, v18[0]);
+          gta2::S202_sub_40CE30((S202 *)&X, v18[0]);
           pS110->field_14 = X;
 
           gta2::Medical_sub_472FB0(pMedical, v4);
@@ -282,7 +282,7 @@ void gta2::Ambulance_sub_473E00(struct Ambulance *self)
 // Ghidra: ---
 void gta2::Ambulance_sub_4740B0(struct Ambulance *self)
 {
-  struct Medical *pMedical; // esi
+  Medical *pMedical; // esi
   int v3; // edi
 
   if ( self->field_1 )
@@ -305,8 +305,8 @@ void gta2::Ambulance_sub_4740B0(struct Ambulance *self)
 // Ghidra: ---
 int gta2::Ambulance_sub_4FA800(struct Ambulance *self, Ped *a2)
 {
-  struct SpriteS1 *v2; // eax
-  struct SpriteS1 *v3; // eax
+  SpriteS1 *v2; // eax
+  SpriteS1 *v3; // eax
   int v5; // [esp+0h] [ebp-10h] BYREF
   int a2a; // [esp+4h] [ebp-Ch] BYREF
   char v7; // [esp+8h] [ebp-8h] BYREF
@@ -314,9 +314,9 @@ int gta2::Ambulance_sub_4FA800(struct Ambulance *self, Ped *a2)
 
   v5 = 30;
   gta2::bitShiftLeft1(&a2a, 0);
-  v2 = gta2::JustCopyByPtrAtoC(&unk_5E3310, (struct SpriteS1 *)&v8);
-  v3 = gta2::sub_401BD0(v2, (struct SpriteS1 *)&v7, &v5);
-  gta2::S103_sub_401D20((struct S103 *)&unk_5E34C8, &a2a, v3);
+  v2 = gta2::JustCopyByPtrAtoC(&unk_5E3310, (SpriteS1 *)&v8);
+  v3 = gta2::sub_401BD0(v2, (SpriteS1 *)&v7, &v5);
+  gta2::S103_sub_401D20((S103 *)&unk_5E34C8, &a2a, v3);
   return gta2::atexit(nullsub_76);
 }
 

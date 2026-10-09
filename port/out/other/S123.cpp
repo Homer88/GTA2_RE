@@ -39,9 +39,9 @@ void gta2::S123_sub_4B91F0(struct S123 *self, int a2, int a3, int a4, unsigned i
     Game = gta2::S124_GetGame(&self->S124_);
     if ( Game )
     {
-      while ( Game[1].ArrayPlayer[2] >= (struct Player *)a5 )
+      while ( Game[1].ArrayPlayer[2] >= (Player *)a5 )
       {
-        Game = (struct Game *)Game[1].ArrayPlayer[0];
+        Game = (Game *)Game[1].ArrayPlayer[0];
         if ( !Game )
           goto LABEL_7;
       }
@@ -68,12 +68,12 @@ LABEL_7:
 // Ghidra: ---
 void gta2::S123_sub_4B9260(struct S123 *self)
 {
-  struct S124 *p_S124; // ebx
+  S124 *p_S124; // ebx
   struct Game *Game; // esi
   struct Game *v3; // edi
   struct Game *v4; // ebp
   struct Game *v5; // eax
-  struct Player *S125_1; // eax
+  Player *S125_1; // eax
 
   p_S124 = &self->S124_;
   Game = self->S124_.Game;
@@ -84,41 +84,41 @@ void gta2::S123_sub_4B9260(struct S123 *self)
     do
     {
       ++LOWORD(p_S124[1].S125_1);
-      v4 = (struct Game *)Game[1].ArrayPlayer[0];
+      v4 = (Game *)Game[1].ArrayPlayer[0];
       if ( gta2::sub_4B8F70(Game) )
       {
         if ( !v3 )
           goto LABEL_6;
-        if ( (struct Game *)v3[1].ArrayPlayer[0] != Game )
+        if ( (Game *)v3[1].ArrayPlayer[0] != Game )
         {
           v3 = 0;
 LABEL_6:
           v5 = p_S124->Game_;
           if ( v5 == Game )
           {
-            S125_1 = (struct Player *)p_S124->S125_1;
-            p_S124->Game_ = (struct Game *)Game[1].ArrayPlayer[0];
+            S125_1 = (Player *)p_S124->S125_1;
+            p_S124->Game_ = (Game *)Game[1].ArrayPlayer[0];
             Game[1].ArrayPlayer[0] = S125_1;
-            p_S124->S125_1 = (struct S125 *)Game;
+            p_S124->S125_1 = (S125 *)Game;
           }
           else
           {
             v3 = p_S124->Game_;
-            if ( (struct Game *)v5[1].ArrayPlayer[0] != Game )
+            if ( (Game *)v5[1].ArrayPlayer[0] != Game )
             {
               do
-                v3 = (struct Game *)v3[1].ArrayPlayer[0];
-              while ( (struct Game *)v3[1].ArrayPlayer[0] != Game );
+                v3 = (Game *)v3[1].ArrayPlayer[0];
+              while ( (Game *)v3[1].ArrayPlayer[0] != Game );
             }
             v3[1].ArrayPlayer[0] = Game[1].ArrayPlayer[0];
-            Game[1].ArrayPlayer[0] = (struct Player *)p_S124->S125_1;
-            p_S124->S125_1 = (struct S125 *)Game;
+            Game[1].ArrayPlayer[0] = (Player *)p_S124->S125_1;
+            p_S124->S125_1 = (S125 *)Game;
           }
           goto LABEL_13;
         }
         v3[1].ArrayPlayer[0] = Game[1].ArrayPlayer[0];
-        Game[1].ArrayPlayer[0] = (struct Player *)p_S124->S125_1;
-        p_S124->S125_1 = (struct S125 *)Game;
+        Game[1].ArrayPlayer[0] = (Player *)p_S124->S125_1;
+        p_S124->S125_1 = (S125 *)Game;
       }
       else
       {
@@ -153,7 +153,7 @@ char gta2::S123_sub_4B98B0(struct S123 *self)
   struct Game *i; // esi
 
   Game = gta2::S124_GetGame(&self->S124_);
-  for ( i = Game; i; i = (struct Game *)i[1].ArrayPlayer[0] )
+  for ( i = Game; i; i = (Game *)i[1].ArrayPlayer[0] )
     LOBYTE(Game) = gta2::Game_sub_4B94B0(i);
   return (char)Game;
 }

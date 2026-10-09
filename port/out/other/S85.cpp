@@ -19,7 +19,7 @@ void gta2::S85_sub_4C0940(undefined4 *param_1)
 // Ghidra: ---
 S85 * gta2::S85_S85(struct S85 *self)
 {
-  struct S85 *result; // eax
+  S85 *result; // eax
   int count; // ecx
   char *v3; // edx
 

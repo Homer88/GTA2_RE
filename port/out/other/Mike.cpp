@@ -32,44 +32,44 @@ int gta2::Mike_sub_474530(struct Mike *self)
   int v11; // edx
   int v12; // ebp
   int v13; // esi
-  struct CarSystemManager **v14; // ebx
+  CarSystemManager **v14; // ebx
   char v15; // cl
   int v16; // edi
-  struct S202 *v17; // eax
+  S202 *v17; // eax
   int v18; // ecx
   int v19; // ecx
-  struct S202 *v20; // edx
+  S202 *v20; // edx
   int v21; // ecx
   int v22; // ecx
-  struct S202 *v23; // ecx
+  S202 *v23; // ecx
   int v24; // ecx
-  struct S202 *v25; // eax
+  S202 *v25; // eax
   int v26; // ecx
   int v27; // ecx
-  struct S202 *v28; // edx
+  S202 *v28; // edx
   int v29; // ecx
   int v30; // ecx
   int v31; // eax
-  struct CarSystemManager *v32; // edx
-  struct S202 *v33; // edx
+  CarSystemManager *v32; // edx
+  S202 *v33; // edx
   int v34; // ecx
   int v35; // ecx
-  struct S202 *v36; // ecx
+  S202 *v36; // ecx
   int v37; // ecx
-  struct S202 *v38; // edx
+  S202 *v38; // edx
   int v39; // ecx
   int v40; // ecx
-  struct S202 *v41; // ecx
+  S202 *v41; // ecx
   int v42; // ecx
-  struct S202 *v43; // edx
+  S202 *v43; // edx
   int v44; // ecx
   int v45; // ecx
-  struct S202 *v46; // ecx
+  S202 *v46; // ecx
   int v47; // ecx
-  struct S202 *v48; // edx
+  S202 *v48; // edx
   int v49; // ecx
   int v50; // ecx
-  struct S202 *v51; // ecx
+  S202 *v51; // ecx
   int v52; // ecx
   _DWORD *v53; // edi
   _DWORD *v54; // ebx
@@ -137,7 +137,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
       if ( v13 >= 140 )
         v15 = v12 - 6;
       v16 = 8 << v15;
-      v70.CarSystemManager = (struct CarSystemManager *)(8 << v15);
+      v70.CarSystemManager = (CarSystemManager *)(8 << v15);
       ShowTextDisplay(&TextWcharT, (char *)off_56E788);
       gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
       LOWORD(v17) = unk_670668;
@@ -167,7 +167,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
       v69 = v24;
       gta2::bitShiftLeft1(&v69, 100);
       gta2::DrawGTATextRawMain(&TextWcharT, v69, v70.field_0, (unsigned __int16)v70.S202, (int)v70.CarSystemManager);
-      v70.CarSystemManager = (struct CarSystemManager *)a5[v12];
+      v70.CarSystemManager = (CarSystemManager *)a5[v12];
       ShowTextDisplay(&TextWcharT, (char *)off_56E788);
       gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
       LOWORD(v25) = unk_670668;
@@ -177,7 +177,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
       v69 = v27;
       gta2::bitShiftLeft1(&v69, 150);
       gta2::DrawGTATextRawMain(&TextWcharT, v69, v70.field_0, (unsigned __int16)v70.S202, (int)v70.CarSystemManager);
-      v70.CarSystemManager = (struct CarSystemManager *)a5[v12 + 12];
+      v70.CarSystemManager = (CarSystemManager *)a5[v12 + 12];
       ShowTextDisplay(&TextWcharT, (char *)off_56E788);
       gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
       LOWORD(v28) = unk_670668;
@@ -191,7 +191,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
       pTotalNumTextures += (int)*v14;
       v13 += 20;
       ++v12;
-      v32 = (struct CarSystemManager *)(*(_DWORD *)&v70.field_1C + 2 * v31);
+      v32 = (CarSystemManager *)(*(_DWORD *)&v70.field_1C + 2 * v31);
       ++v14;
       *(_DWORD *)&v70.field_1C = v32;
     }
@@ -207,7 +207,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
     v69 = v35;
     gta2::bitShiftLeft1(&v69, 0);
     gta2::DrawGTATextRawMain(&TextWcharT, v69, v70.field_0, (unsigned __int16)v70.S202, (int)v70.CarSystemManager);
-    v70.CarSystemManager = (struct CarSystemManager *)v73;
+    v70.CarSystemManager = (CarSystemManager *)v73;
     ShowTextDisplay(&TextWcharT, (char *)off_56E788);
     gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
     LOWORD(v36) = unk_670668;
@@ -226,7 +226,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
     v69 = v40;
     gta2::bitShiftLeft1(&v69, 0);
     gta2::DrawGTATextRawMain(&TextWcharT, v69, v70.field_0, (unsigned __int16)v70.S202, (int)v70.CarSystemManager);
-    v70.CarSystemManager = (struct CarSystemManager *)v72;
+    v70.CarSystemManager = (CarSystemManager *)v72;
     ShowTextDisplay(&TextWcharT, (char *)off_56E788);
     gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
     LOWORD(v41) = unk_670668;
@@ -245,7 +245,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
     v69 = v45;
     gta2::bitShiftLeft1(&v69, 0);
     gta2::DrawGTATextRawMain(&TextWcharT, v69, v70.field_0, (unsigned __int16)v70.S202, (int)v70.CarSystemManager);
-    v70.CarSystemManager = (struct CarSystemManager *)v74;
+    v70.CarSystemManager = (CarSystemManager *)v74;
     ShowTextDisplay(&TextWcharT, (char *)off_56E788);
     gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
     LOWORD(v46) = unk_670668;
@@ -264,7 +264,7 @@ int gta2::Mike_sub_474530(struct Mike *self)
     v69 = v50;
     gta2::bitShiftLeft1(&v69, 0);
     gta2::DrawGTATextRawMain(&TextWcharT, v69, v70.field_0, (unsigned __int16)v70.S202, (int)v70.CarSystemManager);
-    v70.CarSystemManager = (struct CarSystemManager *)v75;
+    v70.CarSystemManager = (CarSystemManager *)v75;
     ShowTextDisplay(&TextWcharT, (char *)off_56E788);
     gta2::bitShiftLeft1(&v70.CarSystemManager, 1);
     LOWORD(v51) = unk_670668;

@@ -7,7 +7,7 @@
 // 0x00403900: GameObject::GetCar
 // IDA: GameObject::GetCar
 // Ghidra: ---
-Car * gta2::GameObject_GetCar(GameObject *self)
+Car * gta2::GameObject_GetCar(struct GameObject *self)
 {
   return self->GetVehicle;
 }

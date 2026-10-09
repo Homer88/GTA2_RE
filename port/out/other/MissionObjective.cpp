@@ -10,7 +10,7 @@
 void gta2::MissionObjective_sub_4C4EA0(int param_1,uint param_2)
 {
   undefined4 *puVar1;
-  struct EventHandler *self;
+  EventHandler *self;
   
   puVar1 = (undefined4 *)(param_1 + (param_2 & 0xff) * 0x18);
   self = *(EventHandler **)(param_1 + 4 + (param_2 & 0xff) * 0x18);
@@ -39,12 +39,12 @@ char gta2::MissionObjective_sub_4C4F30(
         int a9)
 {
   char v10; // bl
-  struct MissionObjective *i; // esi
+  MissionObjective *i; // esi
   int v13; // edx
   int *v14; // eax
 
   v10 = 0;
-  for ( i = self; *(_DWORD *)&i->gap4[4]; i = (struct MissionObjective *)((char *)i + 24) )
+  for ( i = self; *(_DWORD *)&i->gap4[4]; i = (MissionObjective *)((char *)i + 24) )
   {
     if ( (unsigned __int8)++v10 >= 0x16u )
       return -1;
@@ -55,7 +55,7 @@ char gta2::MissionObjective_sub_4C4F30(
   *(_DWORD *)&i->gap4[16] = 1;
   HIWORD(v13) = unk_67289E;
   LOWORD(v13) = unk_672868;
-  v14 = gta2::Object_sub_485290(gObject, (struct S900 *)0xA1, a5, a6, a7, v13, (struct SpriteS1 *)a8, (struct SpriteS3 *)a9, unk_67289C);
+  v14 = gta2::Object_sub_485290(gObject, (S900 *)0xA1, a5, a6, a7, v13, (SpriteS1 *)a8, (SpriteS3 *)a9, unk_67289C);
   *(_DWORD *)i->gap4 = v14;
   gta2::sub_4C4F10(v14, v10);
   ++*(_WORD *)&self->gap133[221];
@@ -69,36 +69,36 @@ char gta2::MissionObjective_sub_4C4F30(
 void gta2::MissionObjective_sub_4C4FE0(struct MissionObjective *self, unsigned __int8 a2, SpriteS1 *a3)
 {
   char *v3; // esi
-  struct SpriteS1 *v4; // edi
+  SpriteS1 *v4; // edi
   struct Car *Car; // edi
-  struct SpriteS1 *v6; // edi
-  struct SpriteS1 *v7; // edi
+  SpriteS1 *v6; // edi
+  SpriteS1 *v7; // edi
   struct GameObject *v8; // eax
-  struct Ped *v9; // ebx
+  Ped *v9; // ebx
   unsigned __int16 *v10; // eax
   __int16 v11; // cx
   MissionManager *v12; // eax
   bool v13; // zf
-  struct SpriteS1 *v14; // edi
+  SpriteS1 *v14; // edi
   struct GameObject *GameObject; // eax
-  struct Ped *Driver; // ebx
+  Ped *Driver; // ebx
   unsigned __int16 *v17; // eax
   MissionManager *started; // ebp
-  struct SpriteS1 *v19; // edi
-  struct SpriteS1 *v20; // edi
+  SpriteS1 *v19; // edi
+  SpriteS1 *v20; // edi
   struct GameObject *v21; // eax
-  struct Ped *v22; // edi
+  Ped *v22; // edi
   MissionManager *v23; // ebx
-  struct Player *v24; // eax
-  struct SpriteS1 *v25; // edi
+  Player *v24; // eax
+  SpriteS1 *v25; // edi
   struct GameObject *v26; // eax
-  struct Player *v27; // eax
-  struct Ped *v28; // ebx
+  Player *v27; // eax
+  Ped *v28; // ebx
   MissionManager *v29; // ebp
-  struct Player *v30; // eax
+  Player *v30; // eax
   bool v31; // zf
-  struct SpriteS1 *v32; // edi
-  struct Player *v33; // eax
+  SpriteS1 *v32; // edi
+  Player *v33; // eax
   unsigned __int16 *v34; // esi
   _BYTE v36[4]; // [esp+8h] [ebp-8h] BYREF
   _BYTE v37[4]; // [esp+Ch] [ebp-4h] BYREF
@@ -197,8 +197,8 @@ LABEL_50:
           if ( v22 )
           {
             v23 = gta2::MissionManager_StartMission(gMissionManager, *(_WORD *)(*(_DWORD *)v3 + 8));
-            v27 = (struct Player *)gta2::Ped_sub_433C20(v22, &a2);
-            if ( gta2::Player_IsCurrentPlayer(v27, (struct Player *)&unk_672900) )
+            v27 = (Player *)gta2::Ped_sub_433C20(v22, &a2);
+            if ( gta2::Player_IsCurrentPlayer(v27, (Player *)&unk_672900) )
             {
 LABEL_31:
               v13 = gta2::Ped_GetID(v22) == *(_DWORD *)(v23->arr_96[1] + 512);
@@ -212,7 +212,7 @@ LABEL_32:
         if ( gta2::SpriteS1_getSpriteType(v25) != 2 )
         {
 LABEL_34:
-          Car = (struct Car *)a3;
+          Car = (Car *)a3;
           goto LABEL_35;
         }
         Car = gta2::SpriteS1_GetCar(v25);
@@ -221,7 +221,7 @@ LABEL_34:
         {
           v29 = gta2::MissionManager_StartMission(gMissionManager, *(_WORD *)(*(_DWORD *)v3 + 8));
           v30 = gta2::Ped_sub_436160(v28, v36);
-          if ( gta2::Player_IsCurrentPlayer(v30, (struct Player *)&unk_672900) )
+          if ( gta2::Player_IsCurrentPlayer(v30, (Player *)&unk_672900) )
           {
             v31 = gta2::Ped_GetID(v28) == *(_DWORD *)(v29->arr_96[1] + 512);
 LABEL_51:
@@ -253,8 +253,8 @@ LABEL_35:
           if ( v22 )
           {
             v23 = gta2::MissionManager_StartMission(gMissionManager, *(_WORD *)(*(_DWORD *)v3 + 8));
-            v24 = (struct Player *)gta2::Ped_sub_433C20(v22, &a3);
-            if ( gta2::Player_IsCurrentPlayer(v24, (struct Player *)&unk_672900) )
+            v24 = (Player *)gta2::Ped_sub_433C20(v22, &a3);
+            if ( gta2::Player_IsCurrentPlayer(v24, (Player *)&unk_672900) )
               goto LABEL_31;
           }
         }
@@ -269,7 +269,7 @@ LABEL_35:
         {
           started = gta2::MissionManager_StartMission(gMissionManager, *(_WORD *)(*(_DWORD *)v3 + 8));
           v33 = gta2::Ped_sub_436160(Driver, v37);
-          if ( gta2::Player_IsCurrentPlayer(v33, (struct Player *)&unk_672900) )
+          if ( gta2::Player_IsCurrentPlayer(v33, (Player *)&unk_672900) )
             goto LABEL_50;
         }
         goto LABEL_35;

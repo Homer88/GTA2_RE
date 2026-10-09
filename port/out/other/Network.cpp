@@ -45,7 +45,7 @@ void gta2::Network_SetCurrentPed(struct Network *self, Player *CurrentPed)
   struct Ped *Ped; // eax
   struct Ped *ManPed; // eax
   struct Ped *pPed; // eax
-  struct HudArrow *pHudArrow; // edi
+  HudArrow *pHudArrow; // edi
   wchar_t *v9; // eax
 
   _CurentPlayer = CurrentPed;
@@ -95,15 +95,15 @@ void gta2::Network_SetSpectateTarget(struct Network *self, Player *X, Player *a3
   struct Player **v10; // eax
   struct Ped *v11; // eax
   struct Player *v12; // eax
-  struct SpriteS1 *v13; // eax
+  SpriteS1 *v13; // eax
   void *v14; // ecx
   struct Ped *v15; // eax
   struct Player *XCoordinate; // eax
-  struct SpriteS1 *v17; // eax
-  struct S202 *v18; // eax
-  struct SpriteS1 *FirstElement; // edi
-  struct PublicTransport *v20; // [esp-10h] [ebp-38h]
-  struct SpriteS1 *v21; // [esp+4h] [ebp-24h] BYREF
+  SpriteS1 *v17; // eax
+  S202 *v18; // eax
+  SpriteS1 *FirstElement; // edi
+  PublicTransport *v20; // [esp-10h] [ebp-38h]
+  SpriteS1 *v21; // [esp+4h] [ebp-24h] BYREF
   int Y; // [esp+8h] [ebp-20h] BYREF
   _BYTE v23[28]; // [esp+Ch] [ebp-1Ch] BYREF
 
@@ -133,13 +133,13 @@ void gta2::Network_SetSpectateTarget(struct Network *self, Player *X, Player *a3
           {
             v11 = gta2::Player_GetPed(v6);
             gta2::Ped_GetYCoordinate(v11, (int *)&v23[4]);
-            v13 = gta2::Player_sub_401B40(v12, (struct S202 *)v23, (int)&X);
-            v20 = (struct PublicTransport *)gta2::sub_403840(v14, (struct Player *)&v23[8], v13);
+            v13 = gta2::Player_sub_401B40(v12, (S202 *)v23, (int)&X);
+            v20 = (PublicTransport *)gta2::sub_403840(v14, (Player *)&v23[8], v13);
             v15 = gta2::Player_GetPed(v6);
-            XCoordinate = (struct Player *)gta2::Ped_GetXCoordinate(v15, (int)&v23[20]);
-            v17 = gta2::Player_sub_401B40(XCoordinate, (struct S202 *)&v23[16], (int)&a3);
-            v18 = (struct S202 *)gta2::sub_403840(&v23[24], (struct Player *)&v23[24], v17);
-            FirstElement = gta2::S202_sub_401B20(v18, (struct SpriteS1 *)&v23[12], v20)->FirstElement;
+            XCoordinate = (Player *)gta2::Ped_GetXCoordinate(v15, (int)&v23[20]);
+            v17 = gta2::Player_sub_401B40(XCoordinate, (S202 *)&v23[16], (int)&a3);
+            v18 = (S202 *)gta2::sub_403840(&v23[24], (Player *)&v23[24], v17);
+            FirstElement = gta2::S202_sub_401B20(v18, (SpriteS1 *)&v23[12], v20)->FirstElement;
             Y = (int)FirstElement;
             if ( gta2::sub_4037E0(&Y) )
             {
@@ -208,7 +208,7 @@ bool gta2::Network_FUN_004c7370(struct Network *self)
 // Ghidra: FUN_00535440
 void gta2::Network_sub_4820C0(void)
 {
-  gta2::Network_sub_4820C0((struct Network *)&gNetwork);
+  gta2::Network_sub_4820C0((Network *)&gNetwork);
   return;
 }
 

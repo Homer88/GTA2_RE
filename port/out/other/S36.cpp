@@ -18,7 +18,7 @@ void gta2::S36_sub_4C3680(struct Radar *self)
 // Ghidra: ---
 Radar * gta2::S36_S36(struct Radar *self)
 {
-  struct Radar *result; // eax
+  Radar *result; // eax
 
   result = self;
   self->field_0 = 0;

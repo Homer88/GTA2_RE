@@ -4,6 +4,7 @@
 #include <string.h>
 #include "DebugLogFile.h"
 #include "cHookTrace.h"
+#include "cClassProbe.h"
 
 // Detour target for retail Gang::SetName @0x0045DB40 (__thiscall). The __fastcall
 // form keeps the __thiscall ABI (this->ECX, Source/Len pushed on the stack, callee
@@ -13,6 +14,7 @@ void __fastcall HookSetName(Gang* pGang, void* _EDX, char* Source, unsigned __in
 {
 	(void)_EDX;
 	TraceCall("Gang::SetName @0x0045DB40", TRACE_CALLER_ADDR);
+	ProbeThis(0x0045DB40u, "Gang::SetName", pGang);
 	if (pGang == NULL) {
 		return;
 	}

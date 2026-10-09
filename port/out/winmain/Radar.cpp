@@ -7,7 +7,7 @@
 // 0x00401b60: Radar::AddBlip
 // IDA: Radar::AddBlip
 // Ghidra: ---
-SpriteS1 * gta2::Radar_AddBlip(Radar *self, SpriteS1 *a2, PublicTransport *a3)
+SpriteS1 * gta2::Radar_AddBlip(struct Radar *self, SpriteS1 *a2, PublicTransport *a3)
 {
   SpriteS1 *v3; // eax
 

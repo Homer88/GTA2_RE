@@ -3,6 +3,7 @@
 
 #include "cWeapon.h"
 #include "cHookTrace.h"
+#include "cClassProbe.h"
 #include "cInspector.h"
 #include "DebugLogFile.h"
 
@@ -29,6 +30,7 @@ void __fastcall SetWeapon(Weapon* pWeapon, void* _EDX, void* TypeWeapon)
 {
     (void)_EDX;
     TraceCall("Weapon::SetWeapon @0x00433810", TRACE_CALLER_ADDR);
+    ProbeThis(0x00433810u, "Weapon::SetWeapon", pWeapon);
     LogWeaponAddr("SetWeapon", "pWeapon", pWeapon);
     writeFileLog((char*)"weapon.txt", (char*)"SetWeapon TypeWeapon", (char*)"", (unsigned int)TypeWeapon);
     if (pWeapon == NULL) {
@@ -41,6 +43,7 @@ void __fastcall SetPed(Weapon* pWeapon, void* _EDX, void* pPed)
 {
     (void)_EDX;
     TraceCall("Weapon::SetPed @0x004CCA10", TRACE_CALLER_ADDR);
+    ProbeThis(0x004CCA10u, "Weapon::SetPed", pWeapon);
     LogWeaponAddr("SetPed", "pWeapon", pWeapon);
     LogWeaponAddr("SetPed", "pPed", pPed);
     if (pWeapon == NULL) {

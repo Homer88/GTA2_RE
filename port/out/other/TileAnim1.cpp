@@ -47,7 +47,7 @@ TileAnim1 * gta2::TileAnim1_TileAnim1(struct TileAnim1 *self)
   count = 49;
   do
   {
-    *p_NextTileAnim2 = (struct TileAnim2 *)(p_NextTileAnim2 + 1);
+    *p_NextTileAnim2 = (TileAnim2 *)(p_NextTileAnim2 + 1);
     p_NextTileAnim2 += 6;
     --count;
   }
