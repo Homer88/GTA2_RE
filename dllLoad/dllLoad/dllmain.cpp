@@ -39,6 +39,7 @@
 #include "cWeapon.h"
 #include "cGame.h"
 #include "cSaveLog.h"
+#include "cHudTrace.h"
 
 
 #pragma comment(lib, "detours.lib")
@@ -132,9 +133,11 @@ static int g_lenBudget  = 256;
 static DWORD WINAPI DrawRingThreadProc(LPVOID)
 {
     extern void DumpDrawRingFile(void);
+    extern void DumpHudRingFile(void);
     for (;;) {
         Sleep(2000);
         DumpDrawRingFile();
+        DumpHudRingFile();
     }
     return 0;
 }
@@ -666,6 +669,35 @@ DetourRestoreAfterWith();
         else {
             extern void VideoTrace(const char* fmt, ...);
             VideoTrace("[dllLoad] GTA2_NOTEXTTRACE set - DrawGTATextRaw detour skipped");
+        }
+        // HUD observer hooks (cHudTrace.cpp): every Hud::* entry point from
+        // AddrToFunc.h. Logs (this,args) into a ring taped to hud_trace.log.
+        // Flip GTA2_NOHUDTRACE=1 to skip the whole set.
+        if (!getenv("GTA2_NOHUDTRACE")) {
+            Error = DetourAttach(&_Hud_4219F0,                 (PVOID)HookHud_4219F0);                 printError(Error, _Hud_4219F0);
+            Error = DetourAttach(&_Hud_45D3A0,                 (PVOID)HookHud_45D3A0);                 printError(Error, _Hud_45D3A0);
+            Error = DetourAttach(&_Hud_Hud_des,                (PVOID)HookHud_Hud_des);                printError(Error, _Hud_Hud_des);
+            Error = DetourAttach(&_Hud_4C6940,                 (PVOID)HookHud_4C6940);                 printError(Error, _Hud_4C6940);
+            Error = DetourAttach(&_Hud_4C6960,                 (PVOID)HookHud_4C6960);                 printError(Error, _Hud_4C6960);
+            Error = DetourAttach(&_Hud_4C69A0,                 (PVOID)HookHud_4C69A0);                 printError(Error, _Hud_4C69A0);
+            Error = DetourAttach(&_Hud_Hud1,                   (PVOID)HookHud_Hud1);                   printError(Error, _Hud_Hud1);
+            Error = DetourAttach(&_Hud_Init_s_Wrapper,         (PVOID)HookHud_Init_s_Wrapper);         printError(Error, _Hud_Init_s_Wrapper);
+            Error = DetourAttach(&_Hud_4C6DA0,                 (PVOID)HookHud_4C6DA0);                 printError(Error, _Hud_4C6DA0);
+            Error = DetourAttach(&_Hud_SetSpeedText,           (PVOID)HookHud_SetSpeedText);           printError(Error, _Hud_SetSpeedText);
+            Error = DetourAttach(&_Hud_4C6DE0,                 (PVOID)HookHud_4C6DE0);                 printError(Error, _Hud_4C6DE0);
+            Error = DetourAttach(&_Hud_HandleKeyboard_Wrapper, (PVOID)HookHud_HandleKeyboard_Wrapper); printError(Error, _Hud_HandleKeyboard_Wrapper);
+            Error = DetourAttach(&_Hud_DrawSprite,             (PVOID)HookHud_DrawSprite);             printError(Error, _Hud_DrawSprite);
+            Error = DetourAttach(&_Hud_DrawSprite_Wrapper,     (PVOID)HookHud_DrawSprite_Wrapper);     printError(Error, _Hud_DrawSprite_Wrapper);
+            Error = DetourAttach(&_Hud_DrawUI,                 (PVOID)HookHud_DrawUI);                 printError(Error, _Hud_DrawUI);
+            Error = DetourAttach(&_Hud_DrawUIWrapper,          (PVOID)HookHud_DrawUIWrapper);          printError(Error, _Hud_DrawUIWrapper);
+            Error = DetourAttach(&_Hud_Update2_Wrapper,        (PVOID)HookHud_Update2_Wrapper);        printError(Error, _Hud_Update2_Wrapper);
+            Error = DetourAttach(&_Hud_4CAB50,                 (PVOID)HookHud_4CAB50);                 printError(Error, _Hud_4CAB50);
+            Error = DetourAttach(&_Hud_SetSpeedText_Wrapper,   (PVOID)HookHud_SetSpeedText_Wrapper);   printError(Error, _Hud_SetSpeedText_Wrapper);
+            Error = DetourAttach(&_Hud_UpdateWrapper,          (PVOID)HookHud_UpdateWrapper);          printError(Error, _Hud_UpdateWrapper);
+        }
+        else {
+            extern void VideoTrace(const char* fmt, ...);
+            VideoTrace("[dllLoad] GTA2_NOHUDTRACE set - Hud::* observer detours skipped");
         }
         if (DetourTransactionCommit() != NO_ERROR)
         {
