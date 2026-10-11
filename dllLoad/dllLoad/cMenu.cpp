@@ -94,7 +94,32 @@ static void DrawTracePush(DWORD caller, DWORD a1, DWORD a2, DWORD a3, DWORD a4,
 void __stdcall HookDrawGTATextRaw(DWORD a1, DWORD a2, DWORD a3, DWORD a4,
                                   DWORD a5, DWORD a6, DWORD a7, DWORD a8, DWORD a9)
 {
-    DrawTracePush((DWORD)_ReturnAddress(), a1, a2, a3, a4, a5, a6, a7, a8, a9);
+    DWORD caller = (DWORD)_ReturnAddress();
+    DrawTracePush(caller, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+
+    if (caller == 0x004C72DB && a5)
+    {
+        const wchar_t* txt = (const wchar_t*)a5;
+        // Only suppress zone/location names (contain underscore or known zone keywords)
+        // Skip hints like "Press the..."
+        bool isZone = false;
+        for (const wchar_t* p = txt; *p && p - txt < 128; ++p)
+        {
+            if (*p == L'_') { isZone = true; break; }
+        }
+        if (!isZone)
+        {
+            if (wcsstr(txt, L"TRAINING") || wcsstr(txt, L"MISSION") ||
+                wcsstr(txt, L"AVALON") || wcsstr(txt, L"MORTON"))
+            {
+                isZone = true;
+            }
+        }
+        if (isZone)
+        {
+            return;
+        }
+    }
     ((void (__stdcall*)(DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD))
         _DrawGTATextRaw)(a1, a2, a3, a4, a5, a6, a7, a8, a9);
 }
