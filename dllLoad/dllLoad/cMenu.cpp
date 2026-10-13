@@ -97,23 +97,32 @@ void __stdcall HookDrawGTATextRaw(DWORD a1, DWORD a2, DWORD a3, DWORD a4,
     DWORD caller = (DWORD)_ReturnAddress();
     DrawTracePush(caller, a1, a2, a3, a4, a5, a6, a7, a8, a9);
 
-    if (caller == 0x004C72DB && a5)
+    // The wide text lives in a1 (first arg); a5 is a small flag (e.g. 0x4000),
+    // so dereferencing it as a string is what used to fault at DLL+0x9D4A.
+    if (caller == 0x004C72DB && a1)
     {
-        const wchar_t* txt = (const wchar_t*)a5;
-        // Only suppress zone/location names (contain underscore or known zone keywords)
-        // Skip hints like "Press the..."
+        const wchar_t* txt = (const wchar_t*)a1;
+        // Only suppress zone/location names (contain underscore or known zone keywords).
+        // Keep hints like "Press the...". Read is guarded in case a1 is not text.
         bool isZone = false;
-        for (const wchar_t* p = txt; *p && p - txt < 128; ++p)
+        __try
         {
-            if (*p == L'_') { isZone = true; break; }
-        }
-        if (!isZone)
-        {
-            if (wcsstr(txt, L"TRAINING") || wcsstr(txt, L"MISSION") ||
-                wcsstr(txt, L"AVALON") || wcsstr(txt, L"MORTON"))
+            for (const wchar_t* p = txt; *p && (p - txt) < 128; ++p)
             {
-                isZone = true;
+                if (*p == L'_') { isZone = true; break; }
             }
+            if (!isZone)
+            {
+                if (wcsstr(txt, L"TRAINING") || wcsstr(txt, L"MISSION") ||
+                    wcsstr(txt, L"AVALON") || wcsstr(txt, L"MORTON"))
+                {
+                    isZone = true;
+                }
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            isZone = false;
         }
         if (isZone)
         {
