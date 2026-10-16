@@ -41,6 +41,9 @@ int PlayerData::LoadPlayerSlot(void){
 int PlayerData::WriteFileNamePlayer(void){
         return 0;
     }
+int PlayerData::WriteFileNamePlayer(int Slot) {
+    return 0;
+}
 int PlayerData::WriteFileNamePlayer(wchar_t* NamePlayer) {
 
     return 0;

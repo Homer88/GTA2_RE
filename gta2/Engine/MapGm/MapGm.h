@@ -20,6 +20,20 @@ typedef enum TYPE_GAME {
 	TAG_GAME = 3
 } TYPE_GAME;
 
+typedef enum STATUS_ROW {
+	
+	 p0 = 0x0,
+	 p1 = 0x1,
+	 p2 = 0x2,
+	 p3 = 0x3,
+	 p4 = 0x4,
+	 VehiclesHijacked = 0x5,
+	 CiviliansRunDown = 0x6,
+	 CiviliansMurdered = 0x7,
+	 LawmenKilled = 0x8,
+	 GangMembersKilled = 0x9,
+  
+}STATUS_ROW;
 struct StatusLastGame {
 	unsigned int value[10];
 	/* unsigned int p0;

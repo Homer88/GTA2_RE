@@ -25,6 +25,7 @@ class PlayerData{
     // 0x004A89E0
     int WriteFileNamePlayer(void);
     int WriteFileNamePlayer(char Slot);
+    int WriteFileNamePlayer(int  Slot);
     int WriteFileNamePlayer(wchar_t Slot);
     int WriteFileNamePlayer(wchar_t* NamePlayer);
     // 0x004A8A90

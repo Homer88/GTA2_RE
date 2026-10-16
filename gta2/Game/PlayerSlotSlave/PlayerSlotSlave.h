@@ -15,6 +15,7 @@ class PlayerSlotSlave{
 		void   SetValue(unsigned int Value);
 		void   SetMultiPlayer(unsigned int Value);
 		unsigned int GetMultiPlayer();
+		void Init() {}
 		
 };	
 

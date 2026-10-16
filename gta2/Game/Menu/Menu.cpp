@@ -392,8 +392,12 @@ int gCodeCash[8] = { 0x33D, 0x2F9, 0x17, 0x281, 0x2B, 0x329, 0x2A5, 0x0BF };
 
 // Инициализация и очистка
 void Menu::InitializeState() {
-    //TODO: Реализовать на основе ассемблерного кода
+  
     // Адрес: 0x00456F80 - Размер: 0x933 байт
+    PlayerSlotSlave* self = this->getPlayerProfileName();
+    self->Init();
+    gPlayerData->WriteFileNamePlayer(this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot);
+    this->UpdateMenuFrame();
 }
 
 void Menu::CleanupResources() {
@@ -515,7 +519,6 @@ void Menu::SetFrontendKeysEnabled(bool enabled) {
 
 // Работа с игроком
 void Menu::SetPlayerName() {
-    //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x00452490 - Размер: 0x2F байт
     wcsncpy(this->PlayerName, gPlayerData->PlayerSlotSave[this->MenuPageArray[1].MenuEntryArray[0].PlayerSlot].PlayerName, 9);
     // TODO: глобал gPlayerData не входит в линковку GTA2
@@ -549,7 +552,6 @@ PlayerSlotSlave* Menu::getPlayerProfileName() {
 }
 
 void Menu::LoadPlayerProfile(int slot) {
-    //TODO: Реализовать на основе ассемблерного кода
     // Адрес: 0x004586DC - Размер: 0x25B байт
     this->CurrentPlayerSlot = slot;
 }

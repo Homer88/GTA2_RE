@@ -40,6 +40,8 @@
 #include "cGame.h"
 #include "cSaveLog.h"
 #include "cHudTrace.h"
+#include "cCharacterTrace.h"
+#include "cS169Trace.h"
 
 
 #pragma comment(lib, "detours.lib")
@@ -134,10 +136,14 @@ static DWORD WINAPI DrawRingThreadProc(LPVOID)
 {
     extern void DumpDrawRingFile(void);
     extern void DumpHudRingFile(void);
+    extern void DumpCharacterRingFile(void);
+    extern void DumpS169RingFile(void);
     for (;;) {
         Sleep(2000);
         DumpDrawRingFile();
         DumpHudRingFile();
+        DumpCharacterRingFile();
+        DumpS169RingFile();
     }
     return 0;
 }
@@ -698,6 +704,74 @@ DetourRestoreAfterWith();
         else {
             extern void VideoTrace(const char* fmt, ...);
             VideoTrace("[dllLoad] GTA2_NOHUDTRACE set - Hud::* observer detours skipped");
+        }
+        // Character observer hooks (cCharacterTrace.cpp): every Character::* entry
+        // point from AddrToFunc.h. Logs (this,args) into a ring taped to
+        // character_trace.log. Flip GTA2_NOCHARTRACE=1 to skip the whole set.
+        if (!getenv("GTA2_NOCHARTRACE")) {
+            Error = DetourAttach(&_Character_420C30, (PVOID)HookCharacter_420C30); printError(Error, _Character_420C30);
+            Error = DetourAttach(&_Character_43AE10, (PVOID)HookCharacter_43AE10); printError(Error, _Character_43AE10);
+            Error = DetourAttach(&_Character_43DB40, (PVOID)HookCharacter_43DB40); printError(Error, _Character_43DB40);
+            Error = DetourAttach(&_Character_43DBD0, (PVOID)HookCharacter_43DBD0); printError(Error, _Character_43DBD0);
+            Error = DetourAttach(&_Character_43DC60, (PVOID)HookCharacter_43DC60); printError(Error, _Character_43DC60);
+            Error = DetourAttach(&_Character_43DD80, (PVOID)HookCharacter_43DD80); printError(Error, _Character_43DD80);
+            Error = DetourAttach(&_Character_43DE10, (PVOID)HookCharacter_43DE10); printError(Error, _Character_43DE10);
+            Error = DetourAttach(&_Character_43DEB0, (PVOID)HookCharacter_43DEB0); printError(Error, _Character_43DEB0);
+            Error = DetourAttach(&_Character_43DF60, (PVOID)HookCharacter_43DF60); printError(Error, _Character_43DF60);
+            Error = DetourAttach(&_Character_43DFB0, (PVOID)HookCharacter_43DFB0); printError(Error, _Character_43DFB0);
+            Error = DetourAttach(&_Character_43E080, (PVOID)HookCharacter_43E080); printError(Error, _Character_43E080);
+            Error = DetourAttach(&_Character_440CC0, (PVOID)HookCharacter_440CC0); printError(Error, _Character_440CC0);
+            Error = DetourAttach(&_Character_4416B0, (PVOID)HookCharacter_4416B0); printError(Error, _Character_4416B0);
+            Error = DetourAttach(&_Character_441960, (PVOID)HookCharacter_441960); printError(Error, _Character_441960);
+            Error = DetourAttach(&_Character_445A20, (PVOID)HookCharacter_445A20); printError(Error, _Character_445A20);
+            Error = DetourAttach(&_Character_45AA30, (PVOID)HookCharacter_45AA30); printError(Error, _Character_45AA30);
+        }
+        else {
+            extern void VideoTrace(const char* fmt, ...);
+            VideoTrace("[dllLoad] GTA2_NOCHARTRACE set - Character::* observer detours skipped");
+        }
+        // S169 observer hooks (cS169Trace.cpp): every S169::* entry point from
+        // AddrToFunc.h (the reconstruction's AIController). Logs into a ring
+        // taped to s169_trace.log. Flip GTA2_NOS169TRACE=1 to skip the whole set.
+        if (!getenv("GTA2_NOS169TRACE")) {
+            Error = DetourAttach(&_S169_4035B0, (PVOID)HookS169_4035B0); printError(Error, _S169_4035B0);
+            Error = DetourAttach(&_S169_403650, (PVOID)HookS169_403650); printError(Error, _S169_403650);
+            Error = DetourAttach(&_S169_4037A0, (PVOID)HookS169_4037A0); printError(Error, _S169_4037A0);
+            Error = DetourAttach(&_S169_4038E0, (PVOID)HookS169_4038E0); printError(Error, _S169_4038E0);
+            Error = DetourAttach(&_S169_4038F0, (PVOID)HookS169_4038F0); printError(Error, _S169_4038F0);
+            Error = DetourAttach(&_S169_403BE0, (PVOID)HookS169_403BE0); printError(Error, _S169_403BE0);
+            Error = DetourAttach(&_S169_403C40, (PVOID)HookS169_403C40); printError(Error, _S169_403C40);
+            Error = DetourAttach(&_S169_403D10, (PVOID)HookS169_403D10); printError(Error, _S169_403D10);
+            Error = DetourAttach(&_S169_403D20, (PVOID)HookS169_403D20); printError(Error, _S169_403D20);
+            Error = DetourAttach(&_S169_403DA0, (PVOID)HookS169_403DA0); printError(Error, _S169_403DA0);
+            Error = DetourAttach(&_S169_403E90, (PVOID)HookS169_403E90); printError(Error, _S169_403E90);
+            Error = DetourAttach(&_S169_403FB0, (PVOID)HookS169_403FB0); printError(Error, _S169_403FB0);
+            Error = DetourAttach(&_S169_404120, (PVOID)HookS169_404120); printError(Error, _S169_404120);
+            Error = DetourAttach(&_S169_404400, (PVOID)HookS169_404400); printError(Error, _S169_404400);
+            Error = DetourAttach(&_S169_404420, (PVOID)HookS169_404420); printError(Error, _S169_404420);
+            Error = DetourAttach(&_S169_404450, (PVOID)HookS169_404450); printError(Error, _S169_404450);
+            Error = DetourAttach(&_S169_404480, (PVOID)HookS169_404480); printError(Error, _S169_404480);
+            Error = DetourAttach(&_S169_404490, (PVOID)HookS169_404490); printError(Error, _S169_404490);
+            Error = DetourAttach(&_S169_4045D0, (PVOID)HookS169_4045D0); printError(Error, _S169_4045D0);
+            Error = DetourAttach(&_S169_4046F0, (PVOID)HookS169_4046F0); printError(Error, _S169_4046F0);
+            Error = DetourAttach(&_S169_404840, (PVOID)HookS169_404840); printError(Error, _S169_404840);
+            Error = DetourAttach(&_S169_4048A0, (PVOID)HookS169_4048A0); printError(Error, _S169_4048A0);
+            Error = DetourAttach(&_S169_404900, (PVOID)HookS169_404900); printError(Error, _S169_404900);
+            Error = DetourAttach(&_S169_4049F0, (PVOID)HookS169_4049F0); printError(Error, _S169_4049F0);
+            Error = DetourAttach(&_S169_404AD0, (PVOID)HookS169_404AD0); printError(Error, _S169_404AD0);
+            Error = DetourAttach(&_S169_404C90, (PVOID)HookS169_404C90); printError(Error, _S169_404C90);
+            Error = DetourAttach(&_S169_404CE0, (PVOID)HookS169_404CE0); printError(Error, _S169_404CE0);
+            Error = DetourAttach(&_S169_404D40, (PVOID)HookS169_404D40); printError(Error, _S169_404D40);
+            Error = DetourAttach(&_S169_404EF0, (PVOID)HookS169_404EF0); printError(Error, _S169_404EF0);
+            Error = DetourAttach(&_S169_405240, (PVOID)HookS169_405240); printError(Error, _S169_405240);
+            Error = DetourAttach(&_S169_405760, (PVOID)HookS169_405760); printError(Error, _S169_405760);
+            Error = DetourAttach(&_S169_433360, (PVOID)HookS169_433360); printError(Error, _S169_433360);
+            Error = DetourAttach(&_S169_433370, (PVOID)HookS169_433370); printError(Error, _S169_433370);
+            Error = DetourAttach(&_S169_439970, (PVOID)HookS169_439970); printError(Error, _S169_439970);
+        }
+        else {
+            extern void VideoTrace(const char* fmt, ...);
+            VideoTrace("[dllLoad] GTA2_NOS169TRACE set - S169::* observer detours skipped");
         }
         if (DetourTransactionCommit() != NO_ERROR)
         {
