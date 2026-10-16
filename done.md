@@ -2005,3 +2005,75 @@
 |1999.|S1999|||||||||||
 |2000.|S2000|||||||||||
 |2001.|вспом.|Map (tile grid)|0x40010|-|2 functions (ctor, sub_42A830)|-|Map/Map.h, Map/Map.cpp|CMakeLists.txt|да|-|
+
+---
+
+## MapGm (S? @0x005EC070, sizeof 0x578) — карта полей (разобрано инспектором + хоткей-кнопками)
+
+### Таблица статистики итогов (непрерывный блок unsigned int от +0x408)
+Индекс = тип события (`HandlePedInteraction(gS127, eventType, ped)`); накопитель в `Player`:
+индексы 1..9 пишет `sub_449FB0(&Player->field_644, eventType)`, индекс 10 пишет
+`sub_44A000` (`Player.field_678 += money`), индекс 11 пишет `sub_44A010` (`Player.field_67C += copstars`).
+В `MapGm` этот блок наполняется `MapGm::LoadFromBuffer` (@0x45EC20) из `Player.field_644`(10 dword) + `field_678` + `field_67C`.
+Отрисовка: `Menu::HandleMenuEvent` (@0x457140) — колонка «best» читает MapGm, колонка «last» — `gPlayerData.arr_0x28[40*arena+i]` и `field_1878`/`field_1884`.
+
+| индекс | адрес | имя в dllLoad | смысл | на экране итогов |
+|---|---|---|---|---|
+| 0  | +0x408 | Arr10i[0]  | не инкрементируется событиями (default в `sub_449FB0`) | нет |
+| 1  | +0x40C | Arr10i[1]  | событие 1 (награда-деньги) | нет |
+| 2  | +0x410 | Arr10i[2]  | событие 2 (взаимодействие с ped, много вызовов) | нет |
+| 3  | +0x414 | Arr10i[3]  | событие 3 = +$100 за машину (`sub_4B8C80`) | нет |
+| 4  | +0x418 | Arr10i[4]  | событие 4 = +$10 за машину (`sub_4B8BD0`) | нет |
+| 5  | +0x41C | Arr10i[5]  | **vehicles hijacked** (event 5, `++carjaka`) | да |
+| 6  | +0x420 | Arr10i[6]  | **civilians run down** (event 6) | да |
+| 7  | +0x424 | Arr10i[7]  | **civilians murdered** (event 7) | да |
+| 8  | +0x428 | Arr10i[8]  | **lawmen killed** (event 8) | да |
+| 9  | +0x42C | Arr10i[9]  | **gang members killed** (event 9) | да |
+| 10 | +0x430 | field_430  | **auto damage cost** ($, рисуется как `$%d`) | да |
+| 11 | +0x434 | field_434  | **fugitive factor** (evsnrtg) | да |
+
+Подтверждено дизасмом (`gta2_full.asm`): `SetPlayerArena` @0x45E570 `mov [ecx+eax*4+0x408],edx`;
+`Get_45E5C0` @0x45E5C0 `mov eax,[ecx+0x430]`; `Get_45E5E0` @0x45E5E0 `mov eax,[ecx+0x434]` — все DWORD, не short.
+
+### Остальные поля — РАЗОБРАНО (дизасм + кнопки)
+Старые имена `field_43E/43F`, `field_464..field_4B3`, `field_490..field_4AF`,
+`gap4D4`, `field_570..573` как отдельные char — **неверны** (IDA-типы ошибочны).
+Корректная раскладка хвоста (подтверждена `sub_45E630`, `sub_45E6C0`, геттерами):
+
+| адрес | имя в dllLoad | тип/размер | семантика / доказательство |
+|---|---|---|---|
+| +0x43B | field_43B | byte | тип условия победы: `get_45E700` switch {1=Frags@0x490, 2=PlayerArena@0x49C, 3=skip, default=_id} |
+| +0x43C | FragLimit | **int** | порог победы (`ShowLimitFrame`); при score>=limit → `g_over` + `SetState(2,5)` (`PlayerStats::sub_4B7770`) |
+| +0x440..0x443 | field_440..443 | byte | сброс в `sub_45E630` (`field_442=6`) |
+| +0x444 | field_444 | **int (DWORD)** | **НЕ wchar_t!** счётчик секунд game-over, clamp 60 (60fps). `Get_field_444` @0x461DC0 `mov eax,[ecx+0x444]`; сеттер `sub_45E6C0` @0x45E6C0 `mov [ecx+0x444],eax` (вызов `4D112C: mov ecx,0x5EC070; call 0x45E6C0`). В `isStatusGameOver` @0x462530 ведёт к "g_over". |
+| +0x448 | KillMatrix | ushort[6][6] | геттер `sub_45E830` (`eax=idx2+idx1*6`, `[ecx+eax*2+0x448]`); запись `sub_45EC70` (из `Ped::sub_43D880`, killer/victim=`Player::GetId`), инкремент killer→victim (self-kill --) |
+| +0x490 | Frags | ushort[6] | `45E810 mov ax,[ecx+eax*2+0x490]`; меняется по убийствам, сравнивается с FragLimit |
+| +0x49C | PlayerArena | int[6] | `45E7F0 mov eax,[ecx+eax*4+0x49c]` (score); `sub_45E7C0` делает `+= a3` |
+| +0x4B4 | string_Arr0x16 | **wchar_t[6][16]** | **Отображаемое имя игрока**, по умолчанию `"you"`. `MapGm::SetString` @0x45E770 `wcsncpy(&string_Arr0x16[16*index], Source, 16)`; геттер `Get_45E7A0` @0x45E7A0. Заполняется из `Player->string_Arr0x16`. **gap4D4 — это слоты имён игроков 1..5 (0x4D4..0x574), НЕ отдельное поле.** |
+| +0x574 | SpecialTokens | int | sizeof == 0x578 |
+
+`sub_45E860` = `MapGm::Init` (обнуляет буферы, `PlayerArena1[10]`, 0x430..0x43A, вызывает `sub_45E630`).
+
+### ГДЕ РЕАЛЬНО ХРАНИТСЯ НИК — ВАЖНО
+**Макс. длина NickName:**
+- **Одиночная игра → 9 элементов** (`Menu::pPlayerName[9]`, wchar_t[9]; капает `ValidatePlayerName` @0x4524C0: `if (result < 9u)`).
+- **Сетевая игра → 16 элементов** (`string_Arr0x16[16]`, wchar_t[16] на игрока; проверено: `"network 1234567"` = 15 символов + `\0` = 16 wchar).
+
+Ник — цепочка из нескольких полей:
+| поле | адрес | тип | роль |
+|---|---|---|---|
+| `Menu::pPlayerName` | Menu+0xC98C | wchar_t[9] | сырой ввод во фронтенде; `ValidatePlayerName` @0x4524C0 капает на **9** wchar (`if (result < 9u)`) — это НЕ сетевой ник |
+| `Player->string_Arr0x16` | Player+0x83C | wchar_t[16] | **источник сетевого ника** (до 15 wchar) |
+| `gNamePlayerASCII` | 0x00671880 | char[80] | ASCII-копия ника, пишет `ConvertWCharToChar` (`cMenu.cpp:197`, MAX_LENGTH=79) |
+| `gMapGm.string_Arr0x16[0]` | MapGm+0x4B4 | wchar_t[16] | отображаемое имя; **заполняется при СТАРТЕ сетевого матча** |
+
+**Почему в лобби `MapGm+0x4B4` = нули:** `MapGm::SetString` (@0x45E770) копирует имена только при старте сетевой игры (.c:85930 `if (gNetworkGame)` … .c:85948-85952):
+```c
+v5 = 0;
+for (i = Game::GetPlayer1(gGame); i; ++v5) {
+    MapGm::SetString(&gMapGm, v5, i->string_Arr0x16);  // Player->имя -> MapGm+0x4B4+32*v5
+    i = Game::GetPlayer(gGame);
+}
+```
+В лобби (до старта матча) `string_Arr0x16` ещё не наполнен → нули. `"you"` — значение по умолчанию для одиночной игры.
+Проверка ника: кнопка инспектора **`NICK@0x671880`** → `SaveDebugDumpNick()` пишет `ascii[80]` в `stats_probe.log`.

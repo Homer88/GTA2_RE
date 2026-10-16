@@ -3,151 +3,69 @@
 
 #include <assert.h>
 
+// Условие окончания игры (MapGm+0x43B, читает get_45E700). Размер 1 байт.
+enum TYPE_GAME : unsigned char {
+	FRAG_GAME  = 1,		// победа по фрагам (PlayerID >= FragLimit)
+	POINT_GAME = 2,		// победа по очкам арены (PlayerArena)
+	TAG_GAME   = 3		// TAG-режим
+};
+
+// Строка матрицы убийств: killPlayer[killerId].KillPlayerN = сколько раз killer убил игрока N.
+// Пример: killPlayer[0].KillPlayer1 = 40 -> игрок 0 убил игрока 1 сорок раз
+//         killPlayer[1].KillPlayer0 = 20 -> игрок 1 убил игрока 0 двадцать раз
+struct KillPlayer {
+	unsigned short KillPlayer0;		// убил игрока с ID 0
+	unsigned short KillPlayer1;		// убил игрока с ID 1
+	unsigned short KillPlayer2;
+	unsigned short KillPlayer3;
+	unsigned short KillPlayer4;
+	unsigned short KillPlayer5;
+};
+
+// Таблица статистики последней игры (MapGm+0x408, 12 int = 0x30).
+struct StatusLastGame {
+	int p0;						// 0x408 [0]  (не отображается)
+	int p1;						// 0x40C [1]
+	int p2;						// 0x410 [2]
+	int p3;						// 0x414 [3]  +$100 за машину
+	int p4;						// 0x418 [4]  +$10 за машину
+	int vehicles_hijacked;		// 0x41C [5]
+	int civilians_run_down;		// 0x420 [6]
+	int civilians_murdered;		// 0x424 [7]
+	int lawmen_killed;			// 0x428 [8]
+	int gang_members_killed;	// 0x42C [9]
+	int auto_damage_cost;		// 0x430 [10] car_cst ($)
+	int fugitive_factor;		// 0x434 [11] evsnrtg
+};
+
 struct MapGm{
-	char gmpFile[256];
-	char styFile[256];
-	char sctiptFile[256];
-	char SaveFile[256];
-	unsigned char playerArena;
-	char bonusStage;
-	char field_0x402;
-	unsigned char  PlayerSlotSave;
-	char Bonus;
-	char field_405;
-	char field_406;
-	char field_407;
-	int Arr10i[10];
-	int field_430;
-	int field_434;
-	short field_438;
-	unsigned char field_43A;
-	unsigned char  field_43B;
-	short FragLimit;
-	char field_43E;
-	char field_43F;
-	char field_440;
-	char field_441;
-	char field_442;
-	char field_443;
-	char field_444;
-	char field_445;
-	char field_446;
-	char field_447;
-	char field_448;
-	char field_449;
-	char field_44A;
-	char field_44B;
-	char field_44C;
-	char field_44D;
-	char field_44E;
-	char field_44F;
-	char field_450;
-	char field_451;
-	char field_452;
-	char field_453;
-	char field_454;
-	char field_455;
-	char field_456;
-	char field_457;
-	char field_458;
-	char field_459;
-	char field_45A;
-	char field_45B;
-	char field_45C;
-	char field_45D;
-	char field_45E;
-	char field_45F;
-	char field_460;
-	char field_461;
-	char field_462;
-	char field_463;
-	char field_464;
-	char field_465;
-	char field_466;
-	char field_467;
-	char field_468;
-	char field_469;
-	char field_46A;
-	char field_46B;
-	char field_46C;
-	char field_46D;
-	char field_46E;
-	char field_46F;
-	char field_470;
-	char field_471;
-	char field_472;
-	char field_473;
-	char field_474;
-	char field_475;
-	char field_476;
-	char field_477;
-	char field_478;
-	char field_479;
-	char field_47A;
-	char field_47B;
-	char field_47C;
-	char field_47D;
-	char field_47E;
-	char field_47F;
-	char field_480;
-	char field_481;
-	char field_482;
-	char field_483;
-	char field_484;
-	char field_485;
-	char field_486;
-	char field_487;
-	char field_488;
-	char field_489;
-	char field_48A;
-	char field_48B;
-	char field_48C;
-	char field_48D;
-	char field_48E;
-	char field_48F;
-	char field_490;
-	char field_491;
-	char field_492;
-	char field_493;
-	char field_494;
-	char field_495;
-	char field_496;
-	char field_497;
-	char field_498;
-	char field_499;
-	char field_49A;
-	char field_49B;
-	char field_49C;
-	char field_49D;
-	char field_49E;
-	char field_49F;
-	char field_4A0;
-	char field_4A1;
-	char field_4A2;
-	char field_4A3;
-	char field_4A4;
-	char field_4A5;
-	char field_4A6;
-	char field_4A7;
-	char field_4A8;
-	char field_4A9;
-	char field_4AA;
-	char field_4AB;
-	char field_4AC;
-	char field_4AD;
-	char field_4AE;
-	char field_4AF;
-	char field_4B0;
-	char field_4B1;
-	char field_4B2;
-	char field_4B3;
-	wchar_t string_Arr0x16[16];
-	char gap4D4[156];
-	char field_570;
-	char field_571;
-	char field_572;
-	char field_573;
-	int SpecialTokens;
+	char gmpFile[256];					// 0x000
+	char styFile[256];					// 0x100
+	char sctiptFile[256];				// 0x200
+	char SaveFile[256];					// 0x300
+	unsigned char playerArena;			// 0x400
+	char bonusStage;					// 0x401
+	char field_0x402;					// 0x402
+	unsigned char  PlayerSlotSave;		// 0x403
+	char Bonus;							// 0x404
+	char field_405;						// 0x405
+	char field_406;						// 0x406
+	char field_407;						// 0x407
+	struct StatusLastGame StatusLastGame;	// 0x408 таблица статистики (12 int)
+	short field_438;					// 0x438
+	unsigned char field_43A;			// 0x43A
+	TYPE_GAME EndGameFlag;				// 0x43B (1 байт) тип победы: get_45E700
+	int FragLimit;						// 0x43C DWORD, ShowLimitFrame = порог победы
+	unsigned char DataLast;				// 0x440
+	unsigned char Best;					// 0x441
+	unsigned char Index;				// 0x442 =6 при сбросе (Set_FUN_0045E630)
+	unsigned char field_443;			// 0x443
+	int Count;							// 0x444 счётчик секунд game-over (0..60), Get_field_444
+	struct KillPlayer killPlayer[6];	// 0x448 матрица 6x6 [killer].KillPlayer[victim]
+	unsigned short PlayerID[6];			// 0x490 фраги (IDA "PlayerID"), сравниваются с FragLimit
+	int PlayerArena[6];					// 0x49C score, GetPlayerArena_0
+	wchar_t NetworkNickName[6][16];		// 0x4B4 ники игроков (макс 16 wchar), SetString/GetPlayerName
+	int SpecialTokens;					// 0x574
 };
 
 static_assert(sizeof(MapGm) == 0x578, "Size MapGm");
@@ -179,4 +97,3 @@ void __stdcall Set_FUN_0045E630(MapGm* pMapGm);
 void __stdcall SetScoresNative(MapGm* pMapGm, void* area);
 
 #endif // !1
-

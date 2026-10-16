@@ -175,6 +175,13 @@ struct Car {
     char gapBC[0x76]; // 0xBC..0x131 (tail beyond IDA, keeps total 0x132)
 #pragma pack(pop)
 };
+#include <stddef.h>
 static_assert(sizeof(Car) == 0x132, "Car size 0x132");
+static_assert(offsetof(Car, ID) == 0x6C, "Car ID");
+static_assert(offsetof(Car, Damage) == 0x74, "Car Damage");
+static_assert(offsetof(Car, CarType) == 0x84, "Car CarType");
+static_assert(offsetof(Car, ID) == 0x6C, "Car ID");
+static_assert(offsetof(Car, Damage) == 0x74, "Car Damage");
+static_assert(offsetof(Car, CarType) == 0x84, "Car CarType");
 
 #endif

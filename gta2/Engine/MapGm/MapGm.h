@@ -4,59 +4,83 @@
 
 #include <string.h>
 
-// –ö–ª–∞—Å—Å MapGm (–º–æ–¥—É–ª—å –∫–∞—Ä—Ç—ã) ‚Äî –≤–æ—Å—Å—Ç–∞–Ω–æ–≤–ª–µ–Ω –ø–æ –¥–∞–º–ø—É GTA2.exe.
-// –°—Ç—Ä—É–∫—Ç—É—Ä–∞ —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É–µ—Ç gta2.exe.h (dump\Ghidra, —Å—Ç—Ä. 56854).
-// –†–∞–∑–º–µ—Ç–∫–∞ –º–∞—Å—Å–∏–≤–æ–≤ 0x490..0x4b4 —É—Ç–æ—á–Ω–µ–Ω–∞ –ø–æ –¥–∏–∑–∞—Å—Å–µ–º–±–ª–µ—Ä—É ResetSettings
+//  Î‡ÒÒ MapGm (ÏÓ‰ÛÎ¸ Í‡Ú˚) ó ‚ÓÒÒÚ‡ÌÓ‚ÎÂÌ ÔÓ ‰‡ÏÔÛ GTA2.exe.
+// —ÚÛÍÚÛ‡ ÒÓÓÚ‚ÂÚÒÚ‚ÛÂÚ gta2.exe.h (dump\Ghidra, ÒÚ. 56854).
+// –‡ÁÏÂÚÍ‡ Ï‡ÒÒË‚Ó‚ 0x490..0x4b4 ÛÚÓ˜ÌÂÌ‡ ÔÓ ‰ËÁ‡ÒÒÂÏ·ÎÂÛ ResetSettings
 // (asm 0045e630): PlayerID (4*short) + PlayerArena (10*int) +
-// string_Arr0x16 (6 * 16 wchar) ‚Äî –Ω–µ –ø–µ—Ä–µ—Å–µ–∫–∞—é—Ç—Å—è.
+// string_Arr0x16 (6 * 16 wchar) ó ÌÂ ÔÂÂÒÂÍ‡˛ÚÒˇ.
 //
-// –í –æ—Ç–ª–∏—á–∏–µ –æ—Ç –∞–≤—Ç–æ–º–∞—Ç–∏—á–µ—Å–∫–æ–π —Ä–∞–∑–º–µ—Ç–∫–∏ Ghidra, –≥–¥–µ —Å–º–µ–∂–Ω—ã–µ –±–∞–π—Ç—ã
-// –Ω–∞–∑–≤–∞–Ω—ã field_XXX, –∑–¥–µ—Å—å –æ–±—ä–µ–¥–∏–Ω–µ–Ω—ã —Ç–æ–ª—å–∫–æ –ø–æ–ª—è, —Ä–µ–∞–ª—å–Ω–æ –∏—Å–ø–æ–ª—å–∑—É–µ–º—ã–µ
-// —Ñ—É–Ω–∫—Ü–∏—è–º–∏ –¥–∞–º–ø–∞; –æ—Å—Ç–∞–ª—å–Ω—ã–µ –±–∞–π—Ç—ã –∑–∞–Ω–∏–º–∞—é—Ç –Ω–µ–∏—Å–ø–æ–ª—å–∑—É–µ–º—ã–µ gap-–º–∞—Å—Å–∏–≤—ã.
+// ¬ ÓÚÎË˜ËÂ ÓÚ ‡‚ÚÓÏ‡ÚË˜ÂÒÍÓÈ ‡ÁÏÂÚÍË Ghidra, „‰Â ÒÏÂÊÌ˚Â ·‡ÈÚ˚
+// Ì‡Á‚‡Ì˚ field_XXX, Á‰ÂÒ¸ Ó·˙Â‰ËÌÂÌ˚ ÚÓÎ¸ÍÓ ÔÓÎˇ, Â‡Î¸ÌÓ ËÒÔÓÎ¸ÁÛÂÏ˚Â
+// ÙÛÌÍˆËˇÏË ‰‡ÏÔ‡; ÓÒÚ‡Î¸Ì˚Â ·‡ÈÚ˚ Á‡ÌËÏ‡˛Ú ÌÂËÒÔÓÎ¸ÁÛÂÏ˚Â gap-Ï‡ÒÒË‚˚.
 
+typedef enum TYPE_GAME {
+	FRAG_GAME = 1,
+	POINT_GAME = 2,
+	TAG_GAME = 3
+} TYPE_GAME;
+
+struct StatusLastGame {
+	unsigned int value[10];
+	/* unsigned int p0;
+	unsigned int p1;
+	unsigned int p2;
+	unsigned int p3;
+	unsigned int p4;
+	unsigned int vehicles_hijacked;
+	unsigned int civilians_run_down;
+	unsigned int civilians_murdered;
+	unsigned int lawmen_killed;
+	unsigned int gang_members_killed;
+  */
+};
+struct KillPlayer {   /* ÒÚÓÍ‡ Ï‡ÚËˆ˚ Û·ËÈÒÚ‚: killPlayer[killer].KillPlayerN = ÒÍÓÎ¸ÍÓ ‡Á killer Û·ËÎ Ë„ÓÍ‡ N */
+	unsigned short KillPlayerRow[6]; /* Û·ËÎ Ë„ÓÍ‡ Ò ID 0 */
+
+};
+extern wchar_t gNetworkNickName[16];
 class MapGm {
 public:
-	// 0x000 .. 0x0ff ‚Äî –ø—É—Ç—å –∫ –∫–∞—Ä—Ç–µ (.gmp)
+	// 0x000 .. 0x0ff ó ÔÛÚ¸ Í Í‡ÚÂ (.gmp)
 	char gmpFile[256];
-	// 0x100 .. 0x1ff ‚Äî –ø—É—Ç—å –∫ —Å—Ç–∏–ª—é (.sty)
+	// 0x100 .. 0x1ff ó ÔÛÚ¸ Í ÒÚËÎ˛ (.sty)
 	char styFile[256];
-	// 0x200 .. 0x2ff ‚Äî –ø—É—Ç—å –∫ —Å–∫—Ä–∏–ø—Ç—É (.scr)
+	// 0x200 .. 0x2ff ó ÔÛÚ¸ Í ÒÍËÔÚÛ (.scr)
 	char sctiptFile[256];
-	// 0x300 .. 0x3ff ‚Äî –ø—É—Ç—å –∫ —Ñ–∞–π–ª—É —Å–æ—Ö—Ä–∞–Ω–µ–Ω–∏—è
+	// 0x300 .. 0x3ff ó ÔÛÚ¸ Í Ù‡ÈÎÛ ÒÓı‡ÌÂÌËˇ
 	char saveFile[256];
-	// 0x400 .. 0x404 ‚Äî –±–∞–π—Ç–æ–≤—ã–µ –Ω–∞—Å—Ç—Ä–æ–π–∫–∏
+	// 0x400 .. 0x404 ó ·‡ÈÚÓ‚˚Â Ì‡ÒÚÓÈÍË
 	unsigned char playerArena;      // 0x400
 	unsigned char BonusStage;      // 0x401
 	unsigned char Gang;            // 0x402
 	unsigned char PlayerSlotSave;  // 0x403
 	unsigned char Bonus;           // 0x404
-	// 0x405 .. 0x407 ‚Äî –Ω–µ –∏—Å–ø–æ–ª—å–∑—É—é—Ç—Å—è
+	// 0x405 .. 0x407 ó ÌÂ ËÒÔÓÎ¸ÁÛ˛ÚÒˇ
 	char gap405[3];
-	// 0x408 .. 0x42f ‚Äî –º–∞—Å—Å–∏–≤ –æ—á–∫–æ–≤/–∞—Ä–µ–Ω
-	int Arr10[10];                 // 0x408
-	// 0x430, 0x434 ‚Äî –¥–≤–∞ –∑–Ω–∞—á–µ–Ω–∏—è (–¥–æ—Å—Ç–∏–∂–µ–Ω–∏—è/—Ñ—Ä–∞–≥–∏)
-	int field_430;                 // 0x430
-	int field_434;                 // 0x434
-	// 0x438 .. 0x443 ‚Äî –Ω–∞—Å—Ç—Ä–æ–π–∫–∏ —Ñ—Ä–∞–≥–æ–≤ –∏ —Ä–µ–∂–∏–º–∞
+	// 0x408 .. 0x42f ó Ï‡ÒÒË‚ Ó˜ÍÓ‚/‡ÂÌ
+	StatusLastGame StatusTable;                 // 0x408
+	unsigned int AutoDamageCost;
+	unsigned int FugitiveFactor;
+
+	// 0x438 .. 0x443 ó Ì‡ÒÚÓÈÍË Ù‡„Ó‚ Ë ÂÊËÏ‡
 	short field_438;               // 0x438  (field15; SetField15/GetField15)
 	unsigned char field_43A;       // 0x43a  (field16)
-	unsigned char field_43B;       // 0x43b  (field17; get_45E700)
+	unsigned char EndGameFlag;       // 0x43b  (field17; get_45E700)
 	int FragLimit;                 // 0x43c  (—Å—á—ë—Ç—á–∏–∫/–ª–∏–º–∏—Ç —Ñ—Ä–∞–≥–æ–≤; ShowLimitFrame)
-	unsigned char field_440;       // 0x440  (field21)
-	unsigned char field_441;       // 0x441  (field22)
-	unsigned char field_442;       // 0x442  (field23; SetField23/Get_45E760)
+	unsigned char DataLast;       // 0x440  (field21)
+	unsigned char Best;       // 0x441  (field22)
+	unsigned char Index;       // 0x442  (field23; SetField23/Get_45E760)  –≤–æ–∑–º–æ–∂–Ω–æ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ –∏–≥—Ä–æ–∫–æ–≤
 	// 0x443 .. 0x447 ‚Äî –≤—ã—Ä–∞–≤–Ω–∏–≤–∞–Ω–∏–µ
-	char gap443[5];
-	int field_444;                 // 0x444  (field25; Get_field_444)
+	char gap443;
+	int Count;                 //  –í—Ä–µ–º—è –¥–æ –æ–∫–Ω—á–∞–Ω–∏–µ –∏–≥—Ä—ã 0x444  (field25; Get_field_444)
 	// 0x448 .. 0x48f ‚Äî —É–∫–∞–∑–∞—Ç–µ–ª—å/–∑–∞—Ä–µ–∑–µ—Ä–≤–∏—Ä–æ–≤–∞–Ω–Ω–∞—è –æ–±–ª–∞—Å—Ç—å
-	void* field26_448;             // 0x448 (–±–∞–∑–∞ –æ–±–ª–∞—Å—Ç–∏ 3*6 dword)
-	char gap44C[0x44];             // 0x44c .. 0x48f
+	KillPlayer killPlayer[6];             // 0x448 (–±–∞–∑–∞ –æ–±–ª–∞—Å—Ç–∏ 3*6 dword)
 	// 0x490 .. 0x497 ‚Äî ID –∏–≥—Ä–æ–∫–æ–≤ (–ø–æ 4)
-	short PlayerID[4];             // 0x490
+	short PlayerID[6];             // 0x490
 	// 0x498 .. 0x4af ‚Äî –∞—Ä–µ–Ω—ã/–æ—á–∫–∏ –∏–≥—Ä–æ–∫–æ–≤ (–ø–æ 4)
-	int PlayerArena[4];            // 0x498
+	int PlayerArena[6];            // 0x49–°
 	// 0x4b0 .. 0x573 ‚Äî 6 —Å—Ç—Ä–æ–∫ –ø–æ 16 wchar (–∏–º–µ–Ω–∞ –∏–≥—Ä–æ–∫–æ–≤)
-	wchar_t string_Arr0x16[6 * 16];// 0x4b0
+	wchar_t NetworkNickName[6][16];// 0x4b4
 	// 0x574 .. 0x578 ‚Äî –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ SpecialTokens
 	int SpecialTokens;             // 0x574
 
@@ -87,15 +111,20 @@ public:
 	unsigned char GetPlayerSlotSave();
 	unsigned char GetBonus();
 
-	// 0x0045e570/0x0045e590 ‚Äî –∑–∞–ø–∏—Å—å/—á—Ç–µ–Ω–∏–µ Arr10[i]
-	void SetPlayerArena(unsigned char index, int value) { Arr10[index & 0xff] = value; }
-	int GetAreaData(unsigned char index) { return Arr10[index]; }
+	// 0x0045e570/ Á‡ÔËÒ¸/˜ÚÂÌËÂ Arr10[i]
+	void SetPlayerArena(unsigned char index, int value);
+	// 0x0045e590
+	unsigned int GetAreaData(unsigned char index);
 
-	// 0x0045e5b0/0x0045e5c0/0x0045e5e0 ‚Äî field_430 / field_434
-	void SetAwardValue1(int value) { field_430 = value; }  // (gm) ÒÚ‡˚È: SetCarCost -> SetAwardValue1
-	int Get_45E5C0() { return field_430; }
-	int Get_45E5E0() { return field_434; }
-
+	// 0x0045e5b0
+	void SetAutoDamageCost(int value);// (gm) ÒÚ‡˚È: SetCarCost -> SetAwardValue1
+	// 0x0045e5c0
+	int GetAutoDamageCost();
+	
+	//045e5d0
+	void SetFugitiveFactor(unsigned int value);
+	// 0x0045e5e0
+	unsigned int  GetFugitiveFactor();
 	// 0x0045e5f0/0x0045e600 ‚Äî field15_0x438
 	void SetField15(short value) { field_438 = value; }
 	short GetField15() { return field_438; }
@@ -107,33 +136,37 @@ public:
 	// 0x0045e630 ‚Äî —Å–±—Ä–æ—Å –Ω–∞—Å—Ç—Ä–æ–µ–∫ –∑–∞–ø–∏—Å–∏ (–∏–º–µ–Ω–∞/—Ñ—Ä–∞–≥–∏/—Å—Ç—Ä–æ–∫–∏)
 	void ResetSettings();
 
-	// 0x0045e700 ‚Äî field17_0x43b
-	char get_45E700() { return (char)field_43B; }
+	// 0x0045e700
+	char GetEndGameFlag();
 
-	// 0x0045e710 ‚Äî ShowLimitFrame (FragLimit, dword)
-	int ShowLimitFrame() { return FragLimit; }
+	// 0x0045e710 
+	int GetLimitFrag();
 
-	// 0x0045e720/0x0045e730 ‚Äî field21/field22
-	unsigned char Get_45E720() { return field_440; }
-	char Get_45E730() { return (char)field_441; }
+	// 0x0045e720
+	unsigned char GetDataLast();
+	// 0x0045e730
+	char GetBest();
 
-	// 0x0045e740/0x0045e760 ‚Äî field23_0x442 (—É—Å—Ç–∞–Ω–∞–≤–ª–∏–≤–∞–µ—Ç—Å—è –æ–¥–∏–Ω —Ä–∞–∑)
-	void SetField23(char value);
-	char Get_45E760() { return (char)field_442; }
+	// 0x0045e740 //Player Max Count
+	void SetIndex(char value);
+	// 0x0045e760
+	char GetIndex();
 
 	// 0x0045e770/0x0045e7a0 ‚Äî —Å—Ç—Ä–æ–∫–∏ –∏–º—ë–Ω
-	void SetString(unsigned short index, wchar_t* Source);
-	wchar_t* Get_45E7A0(unsigned short index);
+	void SetNetworkNickName(unsigned short index, wchar_t* Source);
+	// 0x0045e7a0
+	wchar_t* GetNetworkNickName(unsigned short index);
 
 	// 0x0045e7c0 ‚Äî PlayerArena[i] += delta
-	void AddScore(unsigned char index, int delta) { PlayerArena[index & 0xff] += delta; }
+	void AddScore(unsigned char index, int value);
 
-	// 0x0045e7f0/0x0045e810 ‚Äî PlayerArena[i] / PlayerID[i]
-	int GetPlayerArena_0(unsigned char id) { return PlayerArena[id]; }
-	short GetPlayerID(unsigned char id) { return PlayerID[id]; }
+	// 0x0045e7f0 ‚Äî PlayerArena[i] / PlayerID[i]
+	int GetPlayerArena(unsigned char id);
+	// 0x0045e810
+	short GetPlayerID(unsigned char id);
 
 	// 0x0045e830 ‚Äî field_448[6*a2 + a3] (—Å—Ç–∏–ª–∏–∑–æ–≤–∞–Ω–æ –ø–æ–¥ PlayerID)
-	short GetScoreRow(unsigned char a2, unsigned char a3);
+	unsigned short MapGm::GetScoreRow(unsigned char value, unsigned char row);
 
 	// 0x0045e8d0 ‚Äî –∑–∞–≥—Ä—É–∑–∫–∞ –∏–º—ë–Ω —Ñ–∞–π–ª–æ–≤ –∏–∑ —Ä–µ–µ—Å—Ç—Ä–∞ + —Å–±—Ä–æ—Å –Ω–∞—Å—Ç—Ä–æ–µ–∫
 	int LoadFileResurce();
@@ -158,13 +191,12 @@ public:
 	void DecodeBonusStage(unsigned char bonusStage, unsigned char* playerArenaOut, unsigned char* out4);
 
 	// 0x00461dc0 ‚Äî Get_field_444
-	int Get_field_444() { return field_444; }
+	int GetCount();
 
 
 // ==== –∏–º–ø–æ—Ä—Ç –∏–º—ë–Ω –∏–∑ gm ====
     // 2 —Ñ—É–Ω–∫—Ü–∏–π
     // 0x0045E5D0: MapGm::SetAwardValue2
-    void SetAwardValue2();
     // 0x004C7370: MapGm::IsNotMode3
     void IsNotMode3();
 };

@@ -1,6 +1,7 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <assert.h>
+#include <stddef.h>
 
 // Forward declarations: Player only ever holds pointers to these; the full
 // types live in their own headers (cPed.h, cCar.h, cWeapon.h, cGangs.h,
@@ -248,7 +249,7 @@ struct Player {
 	char           gap6E6[6];             // +0x6E6
 	char           field_6EC;             // +0x6EC
 	__declspec(align(4)) char field_6F0;  // +0x6F0
-	short          PowerUp[18];           // +0x6F2 POWERUP_TYPE : short
+	__declspec(align(4)) short PowerUp[18]; // +0x6F4 POWERUP_TYPE : short (verified 0x434920 [ecx+eax*2+0x6F4])
 	Weapon*        sWeapon[28];           // +0x718
 	short          SelectWeapon;          // +0x788
 	bool           quit1;                 // +0x78A
@@ -263,5 +264,10 @@ struct Player {
 };
 
 static_assert (sizeof(Player) == 0x85C, "ERROR PLAYER");
+static_assert (offsetof(Player, field_6F0) == 0x6F0, "Player field_6F0");
+static_assert (offsetof(Player, PowerUp)   == 0x6F4, "Player PowerUp");
+static_assert (offsetof(Player, sWeapon)   == 0x718, "Player sWeapon");
+static_assert (offsetof(Player, SelectWeapon) == 0x788, "Player SelectWeapon");
+static_assert (offsetof(Player, string_Arr0x16) == 0x83C, "Player string_Arr0x16");
 
 #endif // !__PLAYER_H__

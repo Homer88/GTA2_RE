@@ -42,6 +42,14 @@ int  __fastcall HookSaveLevelRecord(void* thisp, void* _EDX, void* cityBlock);
 unsigned long SaveDebugAddMoney(unsigned long delta);
 unsigned int SaveDebugAddWanted(int delta);
 void SaveDebugWhereAmI(const char* why);
+void SaveDebugWriteStats(void);
+int  SaveDebugAddArr10i(int idx, int delta);
+int  SaveDebugAddArr10iU16(int idx, int delta);
+int  SaveDebugAddArrU32At(int elem, int delta);
+int  SaveDebugAddStatField(int which, int delta);
+void SaveDebugSetCount(int val);
+void SaveDebugWriteNick(int col);
+void SaveDebugDumpNick(void);
 void SaveDebugStartHotkeys(void);
 
 #endif // __CSAVELOG_H__

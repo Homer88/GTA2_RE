@@ -10,6 +10,7 @@
 #include "cClassProbe.h"
 #include "cMapGm.h"
 #include "cPlayerData.h"
+#include "cGlobal.h"
 #include "DebugLogFile.h"
 
 // ============================================================================
@@ -32,6 +33,14 @@
 
 // Только логировать, ничего не подменяя (1 = не трогать память).
 #define SAVE_MONEY_READONLY     0
+
+// --- Эксперимент: таблица статистики MapGm (Arr10i = PlayerArena1, +0x408) ---
+// Итоговый экран статистики (Menu::HandleMenuEvent @0x457140) берёт колонку
+// "best"  из gMapGm.PlayerArena1[5..9] и полей 0x430/0x434,
+// а колонку "last" - из gPlayerData.arr_0x28[40*arena + 20..36] + f1878/f1884.
+// F7 кладёт в массив узнаваемые числа (STATS_PROBE_BASE + индекс), чтобы по
+// экрану статистики понять, какой индекс = какой строке соответствует.
+#define STATS_PROBE_BASE        7000
 
 // --- Кнопки/хоткеи для ручной правки прямо в игре --------------------------
 // F8  - добавить SAVE_HOTKEY_MONEY к кошельку
@@ -274,7 +283,229 @@ void SaveDebugWhereAmI(const char* why)
     fclose(f);
 }
 
-// --- хоткеи: отдельный поток, GetAsyncKeyState, работает где угодно ----------
+// --- Эксперимент: записать узнаваемые числа в таблицу статистики MapGm ------
+// Пишем в gMapGm: Arr10i/PlayerArena1[0..9] (+0x408) и поля 0x430/0x434.
+// Затем читаем колонку "last" из gPlayerData (только чтение), чтобы сравнить.
+void SaveDebugWriteStats(void)
+{
+    MapGm* m = gMapGm;
+    FILE* f;
+    int i;
+    unsigned long pd = *(const unsigned long*)0x0066B404UL; // gPlayerData
+
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [F7] вброс в таблицу статистики MapGm (Arr10i) ==");
+        SaveLogStamp(f);
+    }
+    {
+        int* stats = (int*)&m->StatusLastGame;
+        for (i = 0; i < 10; i++) {
+            int old = stats[i];
+            int nw = STATS_PROBE_BASE + i;
+            stats[i] = nw;
+            if (f != NULL) {
+                fprintf(f, "  +0x%03X StatusLastGame[%d]: %d -> %d\n",
+                        0x408 + i * 4, i, old, nw);
+            }
+        }
+    }
+    {
+        int old = m->StatusLastGame.auto_damage_cost;
+        m->StatusLastGame.auto_damage_cost = STATS_PROBE_BASE + 30;
+        if (f != NULL) {
+            fprintf(f, "  +0x430 auto_damage_cost: %d -> %d\n", old, m->StatusLastGame.auto_damage_cost);
+        }
+        old = m->StatusLastGame.fugitive_factor;
+        m->StatusLastGame.fugitive_factor = STATS_PROBE_BASE + 34;
+        if (f != NULL) {
+            fprintf(f, "  +0x434 fugitive_factor: %d -> %d\n", old, m->StatusLastGame.fugitive_factor);
+        }
+    }
+    if (f != NULL && pd != 0) {
+        // gPlayerData->arr_0x28 сидит на +0x1800 (см. cPlayerData.h).
+        const unsigned char* a = (const unsigned char*)(pd + 0x1800);
+        int arena = m->playerArena & 0x0F;
+        const int* row = (const int*)(a + 40 * arena);
+        fprintf(f, "  -- колонка 'last' gPlayerData, arena=%d (только чтение) --\n",
+                arena);
+        fprintf(f, "     carjack=%d run_ovr=%d murder=%d cop_kl=%d gng_kl=%d\n",
+                row[5], row[6], row[7], row[8], row[9]);
+        fprintf(f, "     f1878(car_cst)=%d f1884(evsnrtg)=%d\n",
+                *(const int*)(pd + 0x1878), *(const int*)(pd + 0x1884));
+    }
+    if (f != NULL) {
+        fclose(f);
+    }
+}
+
+// --- Эксперимент: прибавить delta к одному элементу Arr10i (кнопки в окне) --
+int SaveDebugAddArr10i(int idx, int delta)
+{
+    MapGm* m = gMapGm;
+    int old, nw;
+    FILE* f;
+
+    if (idx < 0 || idx > 9) {
+        return 0;
+    }
+    old = ((int*)&m->StatusLastGame)[idx];
+    nw = old + delta;
+    ((int*)&m->StatusLastGame)[idx] = nw;
+
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [кнопка] StatusLastGame[%d] (+0x%03X) += %d ==",
+                idx, 0x408 + idx * 4, delta);
+        SaveLogStamp(f);
+        fprintf(f, "  %d -> %d\n", old, nw);
+        fclose(f);
+    }
+    return nw;
+}
+
+// --- Эксперимент: прибавить delta к ячейке Arr10i, прочитанной как ushort -----
+// Те же 40 байт (+0x408..0x42F) трактуем как unsigned short[20].
+int SaveDebugAddArr10iU16(int idx, int delta)
+{
+    MapGm* m = gMapGm;
+    unsigned short* cells = (unsigned short*)&m->StatusLastGame;
+    unsigned short old, nw;
+    FILE* f;
+
+    if (idx < 0 || idx > 19) {
+        return 0;
+    }
+    old = cells[idx];
+    nw = (unsigned short)(old + delta);
+    cells[idx] = nw;
+
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [кнопка] StatusLastGame u16[%d] (+0x%03X) += %d ==",
+                idx, 0x408 + idx * 2, delta);
+        SaveLogStamp(f);
+        fprintf(f, "  %u -> %u  (int[%d] теперь %d)\n",
+                old, nw, idx / 2, ((int*)&m->StatusLastGame)[idx / 2]);
+        fclose(f);
+    }
+    return nw;
+}
+
+// --- Эксперимент: field_430 (car_cst, "$") / field_434 (evsnrtg) ------------
+int SaveDebugAddStatField(int which, int delta)
+{
+    MapGm* m = gMapGm;
+    int* cell = (which == 0) ? &m->StatusLastGame.auto_damage_cost
+                             : &m->StatusLastGame.fugitive_factor;
+    int old, nw;
+    FILE* f;
+
+    old = *cell;
+    nw = old + delta;
+    *cell = nw;
+
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [кнопка] field_%s (+0x%03X) += %d ==",
+                which == 0 ? "430 car_cst" : "434 evsnrtg",
+                which == 0 ? 0x430 : 0x434, delta);
+        SaveLogStamp(f);
+        fprintf(f, "  %d -> %d\n", old, nw);
+        fclose(f);
+    }
+    return nw;
+}
+
+// --- Эксперимент: таблица статистики как unsigned int[20] от Arr10i[0] -------
+// Base = (byte*)gMapGm + 0x408. elem 0..19 -> ячейки 0x408..0x454.
+// Отображаются на экране итогов: int[5]=carjack, [6]=run_ovr, [7]=murder,
+// [8]=cop_kl, [9]=gng_kl, [10]=field_430 car_cst ($), [11]=field_434 evsnrtg.
+// Индексы 0..4 на этом экране не видны - их проверяем отдельно.
+int SaveDebugAddArrU32At(int elem, int delta)
+{
+    MapGm* m = gMapGm;
+    unsigned int* base = (unsigned int*)((unsigned char*)m + 0x408);
+    unsigned int old, nw;
+    FILE* f;
+
+    if (elem < 0 || elem > 19) {
+        return 0;
+    }
+    old = base[elem];
+    nw = old + (unsigned int)delta;
+    base[elem] = nw;
+
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [кнопка] uint int[%d] (+0x%03X) += %d ==",
+                elem, 0x408 + elem * 4, delta);
+        SaveLogStamp(f);
+        fprintf(f, "  %u -> %u\n", old, nw);
+        fclose(f);
+    }
+    return (int)nw;
+}
+
+// --- Эксперимент: поля MapGm (Count int, NetworkNickName = ник игрока) -------
+// Count (+0x444) = счётчик секунд game-over (int, 0..60), Get_field_444.
+// NetworkNickName[6][16] (+0x4B4) = ники игроков (UTF-16LE, 6 слотов по 16 wchar),
+// по умолчанию игрок 0 = "you". Кнопки пишут в slot0 ник "ABCDEFGHIJKLMNOP".
+void SaveDebugSetCount(int val)
+{
+    MapGm* m = gMapGm;
+    int old = m->Count;
+    FILE* f;
+
+    m->Count = val;
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [кнопка] Count (+0x444) = %d ==", val);
+        SaveLogStamp(f);
+        fprintf(f, "  %d -> %d\n", old, val);
+        fclose(f);
+    }
+}
+
+void SaveDebugWriteNick(int col)
+{
+    MapGm* m = gMapGm;
+    unsigned short old, nw;
+    FILE* f;
+
+    if (col < 0 || col > 15) {
+        return;
+    }
+    old = (unsigned short)m->NetworkNickName[0][col];
+    nw = (unsigned short)(0x41 + col);
+    m->NetworkNickName[0][col] = (wchar_t)nw;
+
+    f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f != NULL) {
+        fprintf(f, "\n== [кнопка] NetworkNickName[0][%d] (+0x%03X) = 0x%02X ('%c') ==",
+                col, 0x4B4 + col * 2, nw,
+                (nw >= 0x20 && nw < 0x7F) ? (char)nw : '?');
+        SaveLogStamp(f);
+        fprintf(f, "  %04X -> %04X   nick0: \"%.16ls\"\n", old, nw, m->NetworkNickName[0]);
+        fclose(f);
+    }
+}
+
+// --- Эксперимент: реальный ник (gNamePlayerASCII @ 0x671880, char[80]) ------
+// Это то, что вы вводите в лобби (ASCII). MapGm+0x4B4 (NetworkNickName) - другой
+// слот: отображаемое имя игрока (wchar[16] на игрока, по умолчанию "you").
+void SaveDebugDumpNick(void)
+{
+    FILE* f = fopen(GetLogPath("stats_probe.log"), "ab");
+    if (f == NULL) {
+        return;
+    }
+    fprintf(f, "\n== [кнопка] NICK  gNamePlayerASCII @0x671880 ==");
+    SaveLogStamp(f);
+    fprintf(f, "  ascii[80] = \"%.79s\"\n", (const char*)gNamePlayerASCII);
+    fclose(f);
+}
+
 #define SAVE_HOTKEYS_ENABLED    1
 #if SAVE_HOTKEYS_ENABLED
 static DWORD WINAPI HotkeyThreadProc(LPVOID unused)
@@ -300,6 +531,9 @@ static DWORD WINAPI HotkeyThreadProc(LPVOID unused)
             }
             else if (vk == VK_F10) {
                 SaveDebugWhereAmI("F10");
+            }
+            else if (vk == VK_F7) {
+                SaveDebugWriteStats();
             }
         }
     }

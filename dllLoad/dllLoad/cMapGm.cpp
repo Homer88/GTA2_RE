@@ -133,9 +133,9 @@ int __stdcall LoadFileResurce(MapGm* pMapGm) {
 	Set_FUN_0045E4B0(gMapGm, 0);
 	SetPlayerSlotSave(gMapGm, 0);
 	SetBonus(gMapGm, 0);
-	//memset(pMapGm->Arr10i, 0, sizeof(pMapGm->Arr10i));
-	pMapGm->field_430 = 0;
-	pMapGm->field_434 = 0;
+	//memset(&pMapGm->StatusLastGame, 0, sizeof(pMapGm->StatusLastGame));
+	pMapGm->StatusLastGame.auto_damage_cost = 0;
+	pMapGm->StatusLastGame.fugitive_factor = 0;
 	//pMapGm->field_438 = 0;
 	pMapGm->field_43A = 0;
 	Set_FUN_0045E630(gMapGm);
@@ -246,17 +246,18 @@ void __stdcall Set_FUN_0045E630(MapGm* pMapGm) {
 }
 
 // retail 0x0045EC20  MapGm::sub_45EC20(area*), thiscall, ret 4.
-// Цикл: Arr10i[i] = *(area+0x644+i*4) (i=0..9) через сеттер 0x45E570
-// ([this+idx*4+0x408]=val, idx&0xFF), затем +0x678 -> field_430
-// (сеттер 0x45E5B0), +0x67C -> field_434 (tail-jmp сеттеру 0x45E5D0).
+// Цикл: StatusLastGame[i] = *(area+0x644+i*4) (i=0..9) через сеттер 0x45E570
+// ([this+idx*4+0x408]=val, idx&0xFF), затем +0x678 -> auto_damage_cost
+// (сеттер 0x45E5B0), +0x67C -> fugitive_factor (tail-jmp сеттеру 0x45E5D0).
 // area на деле = экземпляр Player (диспетчер передаёт Game+0x38).
 void __stdcall SetScoresNative(MapGm* pMapGm, void* area) {
 	unsigned char* src = (unsigned char*)area;
+	int* stats = (int*)&pMapGm->StatusLastGame;
 	int i;
 
 	for (i = 0; i < 10; i++) {
-		pMapGm->Arr10i[i] = *(int*)(src + 0x644 + i * 4);
+		stats[i] = *(int*)(src + 0x644 + i * 4);
 	}
-	pMapGm->field_430 = *(int*)(src + 0x678);
-	pMapGm->field_434 = *(int*)(src + 0x67C);
+	pMapGm->StatusLastGame.auto_damage_cost = *(int*)(src + 0x678);
+	pMapGm->StatusLastGame.fugitive_factor = *(int*)(src + 0x67C);
 }

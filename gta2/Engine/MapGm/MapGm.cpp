@@ -4,10 +4,16 @@
 // и дизассемблером dump\Ghidra\gta2.exe.asm (ResetSettings).
 //=====================================================================
 #include "../../Engine/ultil/WinApi.h"
+#include "../../Engine/Registry/Registry.h"
 #include "MapGm.h"
 extern WinApi *gWinApi;
 MapGm *gMapGm;
+wchar_t gNetworkNickName[16];
 // TODO: заглушки - реализовать (объявлены в MapGm.h)
+
+
+
+
 MapGm::MapGm()
 {
 	// 0x0045e860: инициализация полей по дампу (sub_45E860, вызывается сразу после меню)
@@ -20,9 +26,6 @@ MapGm::MapGm()
 	Gang          = 0;
 	PlayerSlotSave = 0;
 	Bonus         = 0;
-	memset(Arr10, 0, sizeof(Arr10));
-	field_430     = 0;
-	field_434     = 0;
 	field_438     = 0;
 	field_43A     = 0;
 	ResetSettings();
@@ -90,26 +93,78 @@ unsigned char MapGm::GetPlayerSlotSave() {
 unsigned char MapGm::GetBonus() { 
 	return this->Bonus; 
 }
+int MapGm::GetCount() { 
+	return this->Count; 
+}
+void MapGm::SetAutoDamageCost(int value) { 
+	this->AutoDamageCost = value; 
+}
+int MapGm::GetAutoDamageCost() {
+	return this->AutoDamageCost; 
+}
+void MapGm::SetFugitiveFactor(unsigned int value) {
+	this->FugitiveFactor = value;
+}
+unsigned int  MapGm::GetFugitiveFactor() {
+	return this->FugitiveFactor;
+}
+
+char MapGm::GetEndGameFlag() {
+	return this->EndGameFlag;
+}
+
+int MapGm::GetLimitFrag() { 
+	return this->FragLimit; 
+}
+
+unsigned char MapGm::GetDataLast() {
+	return this->DataLast; 
+}
+char MapGm::GetBest() { 
+	return this->Best; 
+}
+char MapGm::GetIndex() {
+	return this->Index; 
+}
+
+void  MapGm::AddScore(unsigned char index, int value){ 
+	this->PlayerArena[index] += value; 
+}
+
+int MapGm::GetPlayerArena(unsigned char id) {
+	return this->PlayerArena[id]; 
+}
+
+
+short MapGm::GetPlayerID(unsigned char id) {
+	return this->PlayerID[id]; 
+}
+void  MapGm::SetPlayerArena(unsigned char index, int value) {
+		this->StatusTable.value[index] = value; 
+}
+
+unsigned int MapGm::GetAreaData(unsigned char index) {
+	return this->StatusTable.value[index]; }
 //---------------------------------------------------------------------
 // 0x0045e630: MapGm::ResetSettings — сброс настроек записи
 //---------------------------------------------------------------------
 void MapGm::ResetSettings()
 {
-	field_43B = 0;
-	FragLimit = 0;
-	field_440 = 0;
-	field_441 = 0;
-	field_442 = 6;
+	this->EndGameFlag = 0;
+	this->FragLimit = 0;
+	this->DataLast = 0;
+	this->Best = 0;
+	this->Index = 6;
 
 	// Обнуляем массивы строк, арен и области field_448 (6 итераций)
-	wchar_t* dest = string_Arr0x16;
-	int* arena = Arr10;
+	wchar_t* dest = this->NetworkNickName[0];
+	int* arena = this->PlayerArena;
 	short* ids = PlayerID;
-	unsigned int* pp = (unsigned int*)&field26_448;
+	KillPlayer* pp = this->killPlayer;
 	for (int i = 0; i < 6; ++i)
 	{
 		// field_448[6*i .. 6*i+2] — три двойных слова
-		pp[0] = 0; pp[1] = 0; pp[2] = 0;
+		//pp[0] = 0; pp[1] = 0; pp[2] = 0;
 		ids[0] = 0;
 		arena[0] = 0;
 		gWinApi->CopyWideString(dest, L"");
@@ -123,36 +178,36 @@ void MapGm::ResetSettings()
 //---------------------------------------------------------------------
 // 0x0045e740: MapGm::SetField23 — единоразовая установка field23
 //---------------------------------------------------------------------
-void MapGm::SetField23(char value)
+void MapGm::SetIndex(char value)
 {
-	if (field_442 == 6)
-		field_442 = (unsigned char)value;
+	if (this->Index == 6)
+		this->Index = (unsigned char)value;
 }
 
 //---------------------------------------------------------------------
 // 0x0045e770: MapGm::SetString — копирование строки имени игрока
 //---------------------------------------------------------------------
-void MapGm::SetString(unsigned short index, wchar_t* Source)
+void MapGm::SetNetworkNickName(unsigned short index, wchar_t* Source)
 {
-	wcsncpy(&string_Arr0x16[16 * index], Source, 16);
+	wcsncpy(this->NetworkNickName[index], Source, 16);
 }
 
 //---------------------------------------------------------------------
 // 0x0045e7a0: MapGm::Get_45E7A0 — возврат указателя на строку имени
 //---------------------------------------------------------------------
-wchar_t* MapGm::Get_45E7A0(unsigned short index)
+wchar_t* MapGm::GetNetworkNickName(unsigned short index)
 {
-	return &string_Arr0x16[16 * index];
+	return this->NetworkNickName[index];
 }
 
 //---------------------------------------------------------------------
 // 0x0045e830: MapGm::GetScoreRow — элемент массива field_448[6*a2+a3]
 //---------------------------------------------------------------------
-short MapGm::GetScoreRow(unsigned char a2, unsigned char a3)
+unsigned short MapGm::GetScoreRow(unsigned char value, unsigned char row)
 {
 	// В дампе: PlayerID[(a3 & 0xff) + (a2 & 0xff) * 6 - 0x24].
 	// Здесь a3 соответствует индексу строки, a2 — столбцу.
-	return ((short*)&field26_448)[(a3 & 0xff) + (a2 & 0xff) * 6];
+	return this->killPlayer[value].KillPlayerRow[row];
 }
 
 //---------------------------------------------------------------------
@@ -160,7 +215,7 @@ short MapGm::GetScoreRow(unsigned char a2, unsigned char a3)
 //---------------------------------------------------------------------
 int MapGm::LoadFileResurce()
 {
-	/*const int BUFFER_SIZE = 256;
+	const int BUFFER_SIZE = 256;
 	char buff[BUFFER_SIZE];
 	char Data[BUFFER_SIZE];
 
@@ -184,7 +239,7 @@ int MapGm::LoadFileResurce()
 	strncat(buff, Data, BUFFER_SIZE - 1 - (int)strlen(buff));
 	if (strcmp(buff, "data\\") == 0)
 		strcpy(buff, defSty);
-	SetStyleName(buff);
+	this->SetStyleName(buff);
 
 	// --- scriptname ---
 	strcpy(buff, "data\\");
@@ -193,29 +248,28 @@ int MapGm::LoadFileResurce()
 	strncat(buff, Data, BUFFER_SIZE - 1 - (int)strlen(buff));
 	if (strcmp(buff, "data\\") == 0)
 		strcpy(buff, defScr);
-	SetScripName(buff);
+	this->SetScripName(buff);
 
 	// --- savename ---
 	Data[0] = 0;
 	gRegistry->ReadKeyMap("savename", (LPBYTE)Data, 0x100u);
 	// В дампе: если результат равен gPlay, файл сохранения обнуляется
 	if (Data[0] != 0)
-		SetSaveFile(Data);
+		this->SetSaveFile(Data);
 	else
-		SetSaveFile("");
+		this->SetSaveFile("");
 
 	// --- сброс настроек ---
-	SetPlayerArena(0);
-	SetBonusStage(0);
-	SetGang(0);
-	SetPlayerSlotSave(0);
-	SetBonus(0);
-	memset(Arr10, 0, sizeof(Arr10));
-	field_430 = 0;
-	field_434 = 0;
-	field_438 = 0;
-	field_43A = 0;
-	ResetSettings();*/
+	this->SetPlayerArena(0);
+	this->SetBonusStage(0);
+	this->SetGang(0);
+	this->SetPlayerSlotSave(0);
+	this->SetBonus(0);
+
+
+	this->field_438 = 0;
+	this->field_43A = 0;
+	this->ResetSettings();
 	return 0;
 }
 

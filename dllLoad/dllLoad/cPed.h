@@ -333,7 +333,14 @@ char S200[9];            // 0x00 S200[3] (header / anim block prefix)
     int DamageType;          // 0x290
 };
 #pragma pack(pop)
+#include <stddef.h>
 static_assert(sizeof(Ped) == 0x294, "Ped size 0x294");
+static_assert(offsetof(Ped, ID) == 0x200, "Ped ID");
+static_assert(offsetof(Ped, Health) == 0x216, "Ped Health");
+static_assert(offsetof(Ped, SearchType) == 0x238, "Ped SearchType");
+static_assert(offsetof(Ped, ID) == 0x200, "Ped ID");
+static_assert(offsetof(Ped, Health) == 0x216, "Ped Health");
+static_assert(offsetof(Ped, SearchType) == 0x238, "Ped SearchType");
 
 // PedManager (gta2.exe.h:10201), heap pool 0x203AC =
 // 8 header + 200*0x294 + PedsInUse(2) + 2. Global gPedManager ptr @0x005E5BBC.

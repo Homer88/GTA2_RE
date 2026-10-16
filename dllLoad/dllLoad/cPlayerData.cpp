@@ -197,21 +197,22 @@ void __stdcall UpdateBestScoresNative(PlayerData* pPlayerData)
 
 	if (sub == 0) {
 		unsigned char* row = pd + 0x1800 + (size_t)area * 0x28;
+		int* stats = (int*)&gMapGm->StatusLastGame;
 		for (k = 0; k < 10; ++k) {
-			int v = gMapGm->Arr10i[k];
+			int v = stats[k];
 			if ((unsigned int)v > *(unsigned int*)(row + k * 4)) {
 				*(int*)(row + k * 4) = v;
 				flags = 1;
 			}
 		}
-		if ((unsigned int)gMapGm->field_430 >
+		if ((unsigned int)gMapGm->StatusLastGame.auto_damage_cost >
 				*(unsigned int*)(pd + 0x1878 + (size_t)area * 4)) {
-			*(int*)(pd + 0x1878 + (size_t)area * 4) = gMapGm->field_430;
+			*(int*)(pd + 0x1878 + (size_t)area * 4) = gMapGm->StatusLastGame.auto_damage_cost;
 			flags = 1;
 		}
-		if ((unsigned int)gMapGm->field_434 >
+		if ((unsigned int)gMapGm->StatusLastGame.fugitive_factor >
 				*(unsigned int*)(pd + 0x1884 + (size_t)area * 4)) {
-			*(int*)(pd + 0x1884 + (size_t)area * 4) = gMapGm->field_434;
+			*(int*)(pd + 0x1884 + (size_t)area * 4) = gMapGm->StatusLastGame.fugitive_factor;
 			flags = 1;
 		}
 	}

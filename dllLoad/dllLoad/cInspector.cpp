@@ -164,137 +164,31 @@ static const InspField kMapGmFields[] = {
     INSP_FIELD(MapGm, field_405),
     INSP_FIELD(MapGm, field_406),
     INSP_FIELD(MapGm, field_407),
-    INSP_FIELD(MapGm, Arr10i),
-    INSP_FIELD(MapGm, field_430),
-    INSP_FIELD(MapGm, field_434),
+    INSP_FIELD(MapGm, StatusLastGame.p0),
+    INSP_FIELD(MapGm, StatusLastGame.p1),
+    INSP_FIELD(MapGm, StatusLastGame.p2),
+    INSP_FIELD(MapGm, StatusLastGame.p3),
+    INSP_FIELD(MapGm, StatusLastGame.p4),
+    INSP_FIELD(MapGm, StatusLastGame.vehicles_hijacked),
+    INSP_FIELD(MapGm, StatusLastGame.civilians_run_down),
+    INSP_FIELD(MapGm, StatusLastGame.civilians_murdered),
+    INSP_FIELD(MapGm, StatusLastGame.lawmen_killed),
+    INSP_FIELD(MapGm, StatusLastGame.gang_members_killed),
+    INSP_FIELD(MapGm, StatusLastGame.auto_damage_cost),
+    INSP_FIELD(MapGm, StatusLastGame.fugitive_factor),
     INSP_FIELD(MapGm, field_438),
     INSP_FIELD(MapGm, field_43A),
-    INSP_FIELD(MapGm, field_43B),
+    INSP_FIELD(MapGm, EndGameFlag),
     INSP_FIELD(MapGm, FragLimit),
-    INSP_FIELD(MapGm, field_43E),
-    INSP_FIELD(MapGm, field_43F),
-    INSP_FIELD(MapGm, field_440),
-    INSP_FIELD(MapGm, field_441),
-    INSP_FIELD(MapGm, field_442),
+    INSP_FIELD(MapGm, DataLast),
+    INSP_FIELD(MapGm, Best),
+    INSP_FIELD(MapGm, Index),
     INSP_FIELD(MapGm, field_443),
-    INSP_FIELD(MapGm, field_444),
-    INSP_FIELD(MapGm, field_445),
-    INSP_FIELD(MapGm, field_446),
-    INSP_FIELD(MapGm, field_447),
-    INSP_FIELD(MapGm, field_448),
-    INSP_FIELD(MapGm, field_449),
-    INSP_FIELD(MapGm, field_44A),
-    INSP_FIELD(MapGm, field_44B),
-    INSP_FIELD(MapGm, field_44C),
-    INSP_FIELD(MapGm, field_44D),
-    INSP_FIELD(MapGm, field_44E),
-    INSP_FIELD(MapGm, field_44F),
-    INSP_FIELD(MapGm, field_450),
-    INSP_FIELD(MapGm, field_451),
-    INSP_FIELD(MapGm, field_452),
-    INSP_FIELD(MapGm, field_453),
-    INSP_FIELD(MapGm, field_454),
-    INSP_FIELD(MapGm, field_455),
-    INSP_FIELD(MapGm, field_456),
-    INSP_FIELD(MapGm, field_457),
-    INSP_FIELD(MapGm, field_458),
-    INSP_FIELD(MapGm, field_459),
-    INSP_FIELD(MapGm, field_45A),
-    INSP_FIELD(MapGm, field_45B),
-    INSP_FIELD(MapGm, field_45C),
-    INSP_FIELD(MapGm, field_45D),
-    INSP_FIELD(MapGm, field_45E),
-    INSP_FIELD(MapGm, field_45F),
-    INSP_FIELD(MapGm, field_460),
-    INSP_FIELD(MapGm, field_461),
-    INSP_FIELD(MapGm, field_462),
-    INSP_FIELD(MapGm, field_463),
-    INSP_FIELD(MapGm, field_464),
-    INSP_FIELD(MapGm, field_465),
-    INSP_FIELD(MapGm, field_466),
-    INSP_FIELD(MapGm, field_467),
-    INSP_FIELD(MapGm, field_468),
-    INSP_FIELD(MapGm, field_469),
-    INSP_FIELD(MapGm, field_46A),
-    INSP_FIELD(MapGm, field_46B),
-    INSP_FIELD(MapGm, field_46C),
-    INSP_FIELD(MapGm, field_46D),
-    INSP_FIELD(MapGm, field_46E),
-    INSP_FIELD(MapGm, field_46F),
-    INSP_FIELD(MapGm, field_470),
-    INSP_FIELD(MapGm, field_471),
-    INSP_FIELD(MapGm, field_472),
-    INSP_FIELD(MapGm, field_473),
-    INSP_FIELD(MapGm, field_474),
-    INSP_FIELD(MapGm, field_475),
-    INSP_FIELD(MapGm, field_476),
-    INSP_FIELD(MapGm, field_477),
-    INSP_FIELD(MapGm, field_478),
-    INSP_FIELD(MapGm, field_479),
-    INSP_FIELD(MapGm, field_47A),
-    INSP_FIELD(MapGm, field_47B),
-    INSP_FIELD(MapGm, field_47C),
-    INSP_FIELD(MapGm, field_47D),
-    INSP_FIELD(MapGm, field_47E),
-    INSP_FIELD(MapGm, field_47F),
-    INSP_FIELD(MapGm, field_480),
-    INSP_FIELD(MapGm, field_481),
-    INSP_FIELD(MapGm, field_482),
-    INSP_FIELD(MapGm, field_483),
-    INSP_FIELD(MapGm, field_484),
-    INSP_FIELD(MapGm, field_485),
-    INSP_FIELD(MapGm, field_486),
-    INSP_FIELD(MapGm, field_487),
-    INSP_FIELD(MapGm, field_488),
-    INSP_FIELD(MapGm, field_489),
-    INSP_FIELD(MapGm, field_48A),
-    INSP_FIELD(MapGm, field_48B),
-    INSP_FIELD(MapGm, field_48C),
-    INSP_FIELD(MapGm, field_48D),
-    INSP_FIELD(MapGm, field_48E),
-    INSP_FIELD(MapGm, field_48F),
-    INSP_FIELD(MapGm, field_490),
-    INSP_FIELD(MapGm, field_491),
-    INSP_FIELD(MapGm, field_492),
-    INSP_FIELD(MapGm, field_493),
-    INSP_FIELD(MapGm, field_494),
-    INSP_FIELD(MapGm, field_495),
-    INSP_FIELD(MapGm, field_496),
-    INSP_FIELD(MapGm, field_497),
-    INSP_FIELD(MapGm, field_498),
-    INSP_FIELD(MapGm, field_499),
-    INSP_FIELD(MapGm, field_49A),
-    INSP_FIELD(MapGm, field_49B),
-    INSP_FIELD(MapGm, field_49C),
-    INSP_FIELD(MapGm, field_49D),
-    INSP_FIELD(MapGm, field_49E),
-    INSP_FIELD(MapGm, field_49F),
-    INSP_FIELD(MapGm, field_4A0),
-    INSP_FIELD(MapGm, field_4A1),
-    INSP_FIELD(MapGm, field_4A2),
-    INSP_FIELD(MapGm, field_4A3),
-    INSP_FIELD(MapGm, field_4A4),
-    INSP_FIELD(MapGm, field_4A5),
-    INSP_FIELD(MapGm, field_4A6),
-    INSP_FIELD(MapGm, field_4A7),
-    INSP_FIELD(MapGm, field_4A8),
-    INSP_FIELD(MapGm, field_4A9),
-    INSP_FIELD(MapGm, field_4AA),
-    INSP_FIELD(MapGm, field_4AB),
-    INSP_FIELD(MapGm, field_4AC),
-    INSP_FIELD(MapGm, field_4AD),
-    INSP_FIELD(MapGm, field_4AE),
-    INSP_FIELD(MapGm, field_4AF),
-    INSP_FIELD(MapGm, field_4B0),
-    INSP_FIELD(MapGm, field_4B1),
-    INSP_FIELD(MapGm, field_4B2),
-    INSP_FIELD(MapGm, field_4B3),
-    INSP_FIELD(MapGm, string_Arr0x16),
-    INSP_FIELD(MapGm, gap4D4),
-    INSP_FIELD(MapGm, field_570),
-    INSP_FIELD(MapGm, field_571),
-    INSP_FIELD(MapGm, field_572),
-    INSP_FIELD(MapGm, field_573),
+    INSP_FIELD(MapGm, Count),
+    INSP_FIELD(MapGm, killPlayer),
+    INSP_FIELD(MapGm, PlayerID),
+    INSP_FIELD(MapGm, PlayerArena),
+    INSP_FIELD(MapGm, NetworkNickName),
     INSP_FIELD(MapGm, SpecialTokens),
 };
 static const int kMapGmFieldCount = sizeof(kMapGmFields) / sizeof(kMapGmFields[0]);
@@ -623,6 +517,7 @@ static const InspField kPlayerFields[] = {
     INSP_FIELD(Player, field_6D9),
     INSP_FIELD(Player, field_6E5),
     INSP_FIELD(Player, field_6EC),
+    INSP_FIELD(Player, field_6F0),
     INSP_FIELD(Player, PowerUp),
     INSP_FIELD(Player, sWeapon),
     INSP_FIELD(Player, SelectWeapon),
@@ -2960,6 +2855,12 @@ Ped* mped = pp->MainPed;
 #define IDC_INSP_ADDMONEY  108
 #define IDC_INSP_ADDWANTED 109
 #define IDC_INSP_WHEREAMI  110
+#define IDC_INSP_ARR0      111  // .. +19 : Arr10i as ushort[20] += 50
+#define IDC_INSP_CARCOST   131  // StatusLastGame.auto_damage_cost (car_cst, "$") += 50
+#define IDC_INSP_EVSNRTG   132  // StatusLastGame.fugitive_factor (evsnrtg) += 50
+#define IDC_INSP_F444_0    140  // .. +15 : NetworkNickName[0][col] = 0x41+col
+#define IDC_INSP_SET444    156  // Count (int) += 10
+#define IDC_INSP_DUMPNICK  157  // dump gNamePlayerASCII @0x671880 (реальный ник)
 #define WM_INSP_REFRESH  (WM_APP + 1)
 
 static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -3005,6 +2906,46 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         CreateWindowExA(0, "BUTTON", "WHERE AM I",
                         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                         242, 48, 110, 26, hwnd, (HMENU)IDC_INSP_WHEREAMI, hInst, NULL);
+        CreateWindowExA(0, "BUTTON", "CAR$ +50",
+                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                        366, 48, 100, 26, hwnd, (HMENU)IDC_INSP_CARCOST, hInst, NULL);
+        CreateWindowExA(0, "BUTTON", "EVS +50",
+                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                        472, 48, 100, 26, hwnd, (HMENU)IDC_INSP_EVSNRTG, hInst, NULL);
+        {
+            int i;
+            char lbl[32];
+            CreateWindowExA(0, "STATIC", "MapGm stats as uint[20] from +0x408 (int[0..19]) += 50:",
+                            WS_CHILD | WS_VISIBLE,
+                            10, 78, 500, 16, hwnd, NULL, hInst, NULL);
+            for (i = 0; i < 20; i++) {
+                _snprintf(lbl, sizeof(lbl), "v%d +50", i);
+                CreateWindowExA(0, "BUTTON", lbl,
+                                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                                10 + (i % 10) * 98, 96 + (i / 10) * 24, 92, 22,
+                                hwnd, (HMENU)(IDC_INSP_ARR0 + i), hInst, NULL);
+            }
+        }
+        {
+            int i;
+            char lbl[32];
+            CreateWindowExA(0, "STATIC", "nick0 NetworkNickName[0][16] @+0x4B4 -> A,B,...:",
+                            WS_CHILD | WS_VISIBLE,
+                            10, 146, 410, 16, hwnd, NULL, hInst, NULL);
+            CreateWindowExA(0, "BUTTON", "NICK@0x671880",
+                            WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                            424, 142, 110, 22, hwnd, (HMENU)IDC_INSP_DUMPNICK, hInst, NULL);
+            CreateWindowExA(0, "BUTTON", "F444+=10",
+                            WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                            540, 142, 78, 22, hwnd, (HMENU)IDC_INSP_SET444, hInst, NULL);
+            for (i = 0; i < 16; i++) {
+                _snprintf(lbl, sizeof(lbl), "%d:%c", i, (char)(0x41 + i));
+                CreateWindowExA(0, "BUTTON", lbl,
+                                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                                10 + i * 60, 164, 54, 22,
+                                hwnd, (HMENU)(IDC_INSP_F444_0 + i), hInst, NULL);
+            }
+        }
         SetTimer(hwnd, 1, 1000, NULL);
         return 0;
     }
@@ -3012,7 +2953,7 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         RECT rc;
         GetClientRect(hwnd, &rc);
         if (s_hEdit) {
-            MoveWindow(s_hEdit, 0, 80, rc.right, rc.bottom - 80, TRUE);
+            MoveWindow(s_hEdit, 0, 194, rc.right, rc.bottom - 194, TRUE);
         }
         return 0;
     }
@@ -3069,6 +3010,38 @@ static LRESULT CALLBACK InspectorWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
         }
         if (LOWORD(wParam) == IDC_INSP_WHEREAMI && HIWORD(wParam) == BN_CLICKED) {
             SaveDebugWhereAmI("кнопка 'Где я?'");
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) >= IDC_INSP_ARR0 && LOWORD(wParam) <= IDC_INSP_ARR0 + 19
+            && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugAddArrU32At(LOWORD(wParam) - IDC_INSP_ARR0, 50);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_CARCOST && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugAddStatField(0, 50);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_EVSNRTG && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugAddStatField(1, 50);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) >= IDC_INSP_F444_0 && LOWORD(wParam) <= IDC_INSP_F444_0 + 15
+            && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugWriteNick(LOWORD(wParam) - IDC_INSP_F444_0);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_SET444 && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugSetCount(s_pMapGm->Count + 10);
+            BuildDump();
+            return 0;
+        }
+        if (LOWORD(wParam) == IDC_INSP_DUMPNICK && HIWORD(wParam) == BN_CLICKED) {
+            SaveDebugDumpNick();
             BuildDump();
             return 0;
         }
