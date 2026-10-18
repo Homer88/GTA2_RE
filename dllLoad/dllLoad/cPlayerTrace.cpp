@@ -5,11 +5,15 @@
 
 // Retail entry points (imagebase 0x3F0000 in gta2-resurected.exe).
 LPVOID _Player_401B40 = (LPVOID)0x00401B40;
+LPVOID _Player_401B90 = (LPVOID)0x00401B90;
 LPVOID _Player_40CE50 = (LPVOID)0x0040CE50;
 LPVOID _Player_40CE70 = (LPVOID)0x0040CE70;
 LPVOID _Player_40E530 = (LPVOID)0x0040E530;
 LPVOID _Player_40E570 = (LPVOID)0x0040E570;
+LPVOID _Player_40E8D0 = (LPVOID)0x0040E8D0;
 LPVOID _Player_40EC20 = (LPVOID)0x0040EC20;
+LPVOID _Player_40F790 = (LPVOID)0x0040F790;
+LPVOID _Player_40F820 = (LPVOID)0x0040F820;
 LPVOID _Player_40F840 = (LPVOID)0x0040F840;
 LPVOID _Player_411810 = (LPVOID)0x00411810;
 LPVOID _Player_411820 = (LPVOID)0x00411820;
@@ -20,8 +24,13 @@ LPVOID _Player_411860 = (LPVOID)0x00411860;
 LPVOID _Player_41D020 = (LPVOID)0x0041D020;
 LPVOID _Player_41DC40 = (LPVOID)0x0041DC40;
 LPVOID _Player_41DC70 = (LPVOID)0x0041DC70;
+LPVOID _Player_41E1E0 = (LPVOID)0x0041E1E0;
 LPVOID _Player_41E260 = (LPVOID)0x0041E260;
 LPVOID _Player_41E390 = (LPVOID)0x0041E390;
+LPVOID _Player_4202A0 = (LPVOID)0x004202A0;
+LPVOID _Player_4202E0 = (LPVOID)0x004202E0;
+LPVOID _Player_420360 = (LPVOID)0x00420360;
+LPVOID _Player_420390 = (LPVOID)0x00420390;
 LPVOID _Player_421100 = (LPVOID)0x00421100;
 LPVOID _Player_421150 = (LPVOID)0x00421150;
 LPVOID _Player_4211A0 = (LPVOID)0x004211A0;
@@ -52,7 +61,6 @@ LPVOID _Player_4766C0 = (LPVOID)0x004766C0;
 LPVOID _Player_4766D0 = (LPVOID)0x004766D0;
 LPVOID _Player_476700 = (LPVOID)0x00476700;
 LPVOID _Player_476730 = (LPVOID)0x00476730;
-LPVOID _Player_4821C0 = (LPVOID)0x004821C0;
 LPVOID _Player_482CC0 = (LPVOID)0x00482CC0;
 LPVOID _Player_49DD10 = (LPVOID)0x0049DD10;
 LPVOID _Player_49DD20 = (LPVOID)0x0049DD20;
@@ -66,6 +74,8 @@ LPVOID _Player_49E040 = (LPVOID)0x0049E040;
 LPVOID _Player_49E270 = (LPVOID)0x0049E270;
 LPVOID _Player_49E650 = (LPVOID)0x0049E650;
 LPVOID _Player_49E820 = (LPVOID)0x0049E820;
+LPVOID _Player_49E850 = (LPVOID)0x0049E850;
+LPVOID _Player_49E8E0 = (LPVOID)0x0049E8E0;
 LPVOID _Player_49E950 = (LPVOID)0x0049E950;
 LPVOID _Player_49E980 = (LPVOID)0x0049E980;
 LPVOID _Player_49EA60 = (LPVOID)0x0049EA60;
@@ -100,6 +110,7 @@ LPVOID _Player_49FAC0 = (LPVOID)0x0049FAC0;
 LPVOID _Player_49FB00 = (LPVOID)0x0049FB00;
 LPVOID _Player_49FBE0 = (LPVOID)0x0049FBE0;
 LPVOID _Player_49FDC0 = (LPVOID)0x0049FDC0;
+LPVOID _Player_49FF70 = (LPVOID)0x0049FF70;
 LPVOID _Player_49FF80 = (LPVOID)0x0049FF80;
 LPVOID _Player_4A0020 = (LPVOID)0x004A0020;
 LPVOID _Player_4A0080 = (LPVOID)0x004A0080;
@@ -128,11 +139,17 @@ LPVOID _Player_4A2240 = (LPVOID)0x004A2240;
 LPVOID _Player_4A2640 = (LPVOID)0x004A2640;
 LPVOID _Player_4A26C0 = (LPVOID)0x004A26C0;
 LPVOID _Player_4A2980 = (LPVOID)0x004A2980;
+LPVOID _Player_4A2A30 = (LPVOID)0x004A2A30;
+LPVOID _Player_4A2B40 = (LPVOID)0x004A2B40;
 LPVOID _Player_4A2C70 = (LPVOID)0x004A2C70;
 LPVOID _Player_4A2D70 = (LPVOID)0x004A2D70;
 LPVOID _Player_4A2DB0 = (LPVOID)0x004A2DB0;
 LPVOID _Player_4A2E00 = (LPVOID)0x004A2E00;
+LPVOID _Player_4A2E30 = (LPVOID)0x004A2E30;
 LPVOID _Player_4A2F20 = (LPVOID)0x004A2F20;
+LPVOID _Player_4A2F90 = (LPVOID)0x004A2F90;
+LPVOID _Player_4A30A0 = (LPVOID)0x004A30A0;
+LPVOID _Player_4A3120 = (LPVOID)0x004A3120;
 LPVOID _Player_4A3140 = (LPVOID)0x004A3140;
 LPVOID _Player_4A31B0 = (LPVOID)0x004A31B0;
 LPVOID _Player_4A32D0 = (LPVOID)0x004A32D0;
@@ -141,6 +158,8 @@ LPVOID _Player_4A3A40 = (LPVOID)0x004A3A40;
 LPVOID _Player_4A3DF0 = (LPVOID)0x004A3DF0;
 LPVOID _Player_4A3FB0 = (LPVOID)0x004A3FB0;
 LPVOID _Player_4A4170 = (LPVOID)0x004A4170;
+LPVOID _Player_4A4270 = (LPVOID)0x004A4270;
+LPVOID _Player_4A4310 = (LPVOID)0x004A4310;
 LPVOID _Player_4A4490 = (LPVOID)0x004A4490;
 LPVOID _Player_4A4570 = (LPVOID)0x004A4570;
 LPVOID _Player_4A4780 = (LPVOID)0x004A4780;
@@ -267,6 +286,17 @@ DWORD __fastcall HookPlayer_401B40(void* self, DWORD d, DWORD a0, DWORD a1)
     return r;
 }
 
+DWORD __fastcall HookPlayer_401B90(void* self, DWORD d, DWORD a0, DWORD a1)
+{
+    DWORD r = ((Tc2)_Player_401B90)(self, 0, a0, a1);
+    PlayerTracePush("Player::sub_401B90", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
 DWORD __fastcall HookPlayer_40CE50(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_40CE50)(self, 0, a0);
@@ -310,10 +340,10 @@ DWORD __fastcall HookPlayer_40E570(void* self, DWORD d, DWORD a0)
     return r;
 }
 
-DWORD __fastcall HookPlayer_40EC20(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2, DWORD a3)
+DWORD __fastcall HookPlayer_40E8D0(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2)
 {
-    DWORD r = ((Tc4)_Player_40EC20)(self, 0, a0, a1, a2, a3);
-    PlayerTracePush("Player::sub_40EC20", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, a3);
+    DWORD r = ((Tc3)_Player_40E8D0)(self, 0, a0, a1, a2);
+    PlayerTracePush("Player::sub_40E8D0", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
     __asm {
         mov ecx, self
         mov edx, d
@@ -321,10 +351,42 @@ DWORD __fastcall HookPlayer_40EC20(void* self, DWORD d, DWORD a0, DWORD a1, DWOR
     return r;
 }
 
+DWORD __fastcall HookPlayer_40EC20(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2, DWORD a3)
+{
+    DWORD r = ((Tc4)_Player_40EC20)(self, 0, a0, a1, a2, a3);
+    PlayerTracePush("Player::TransformSprite", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, a3);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_40F790(void* self, DWORD d, DWORD a0)
+{
+    DWORD r = ((Tc1)_Player_40F790)(self, 0, a0);
+    PlayerTracePush("Player::sub_40F790", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+void __fastcall HookPlayer_40F820(void* self, DWORD d, DWORD a0)
+{
+    PlayerTracePush("Player::sub_40F820", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
+    ((Tc1v)_Player_40F820)(self, 0, a0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+}
+
 DWORD __fastcall HookPlayer_40F840(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_40F840)(self, 0);
-    PlayerTracePush("Player::sub_40F840", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsOnScreen", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -356,7 +418,7 @@ void __fastcall HookPlayer_411820(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_411830(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_411830)(self, 0);
-    PlayerTracePush("Player::sub_411830", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsAudioEnabled", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -366,7 +428,7 @@ DWORD __fastcall HookPlayer_411830(void* self, DWORD d)
 
 void __fastcall HookPlayer_411840(void* self, DWORD d, DWORD a0)
 {
-    PlayerTracePush("Player::sub_411840", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
+    PlayerTracePush("Player::ReadEngineValue", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
     ((Tc1v)_Player_411840)(self, 0, a0);
     __asm {
         mov ecx, self
@@ -377,7 +439,7 @@ void __fastcall HookPlayer_411840(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_411850(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_411850)(self, 0, a0);
-    PlayerTracePush("Player::sub_411850", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::ReadEngineValue2", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -388,7 +450,7 @@ DWORD __fastcall HookPlayer_411850(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_411860(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_411860)(self, 0);
-    PlayerTracePush("Player::sub_411860", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::GetSoundHandle", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -429,10 +491,21 @@ DWORD __fastcall HookPlayer_41DC70(void* self, DWORD d)
     return r;
 }
 
+DWORD __fastcall HookPlayer_41E1E0(void* self, DWORD d)
+{
+    DWORD r = ((Tc0)_Player_41E1E0)(self, 0);
+    PlayerTracePush("Player::Init", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
 DWORD __fastcall HookPlayer_41E260(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_41E260)(self, 0, a0);
-    PlayerTracePush("Player::sub_41E260", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::WorldToScreen", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -451,10 +524,54 @@ DWORD __fastcall HookPlayer_41E390(void* self, DWORD d)
     return r;
 }
 
+DWORD __fastcall HookPlayer_4202A0(void* self, DWORD d, DWORD a0, DWORD a1)
+{
+    DWORD r = ((Tc2)_Player_4202A0)(self, 0, a0, a1);
+    PlayerTracePush("Player::sub_4202A0", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_4202E0(void* self, DWORD d, DWORD a0, DWORD a1)
+{
+    DWORD r = ((Tc2)_Player_4202E0)(self, 0, a0, a1);
+    PlayerTracePush("Player::sub_4202E0", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_420360(void* self, DWORD d)
+{
+    DWORD r = ((Tc0)_Player_420360)(self, 0);
+    PlayerTracePush("Player::sub_420360", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_420390(void* self, DWORD d, DWORD a0)
+{
+    DWORD r = ((Tc1)_Player_420390)(self, 0, a0);
+    PlayerTracePush("Player::sub_420390", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
 DWORD __fastcall HookPlayer_421100(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_421100)(self, 0);
-    PlayerTracePush("Player::sub_421100", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsStateEightWithCondition", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -474,7 +591,7 @@ void __fastcall HookPlayer_421150(void* self, DWORD d, DWORD a0)
 
 void __fastcall HookPlayer_4211A0(void* self, DWORD d, DWORD a0)
 {
-    PlayerTracePush("Player::sub_4211A0", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
+    PlayerTracePush("Player::GetSpeed", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
     ((Tc1v)_Player_4211A0)(self, 0, a0);
     __asm {
         mov ecx, self
@@ -495,7 +612,7 @@ DWORD __fastcall HookPlayer_4211C0(void* self, DWORD d, DWORD a0)
 
 void __fastcall HookPlayer_421260(void* self, DWORD d)
 {
-    PlayerTracePush("Player::sub_421260", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
+    PlayerTracePush("Player::ClearPlayerFlag", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
     ((Tc0v)_Player_421260)(self, 0);
     __asm {
         mov ecx, self
@@ -773,16 +890,6 @@ DWORD __fastcall HookPlayer_476730(void* self, DWORD d)
     return r;
 }
 
-void __fastcall HookPlayer_4821C0(void* self, DWORD d)
-{
-    PlayerTracePush("Player::sub_4821C0", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
-    ((Tc0v)_Player_4821C0)(self, 0);
-    __asm {
-        mov ecx, self
-        mov edx, d
-    }
-}
-
 DWORD __fastcall HookPlayer_482CC0(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2)
 {
     DWORD r = ((Tc3)_Player_482CC0)(self, 0, a0, a1, a2);
@@ -797,7 +904,7 @@ DWORD __fastcall HookPlayer_482CC0(void* self, DWORD d, DWORD a0, DWORD a1, DWOR
 DWORD __fastcall HookPlayer_49DD10(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49DD10)(self, 0);
-    PlayerTracePush("Player::sub_49DD10", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::GetCarWithTrailer", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -807,7 +914,7 @@ DWORD __fastcall HookPlayer_49DD10(void* self, DWORD d)
 
 void __fastcall HookPlayer_49DD20(void* self, DWORD d, DWORD a0)
 {
-    PlayerTracePush("Player::sub_49DD20", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
+    PlayerTracePush("Player::SetActivePlayer", (DWORD)_ReturnAddress(), (DWORD)self, a0, 0, 0, 0);
     ((Tc1v)_Player_49DD20)(self, 0, a0);
     __asm {
         mov ecx, self
@@ -818,7 +925,7 @@ void __fastcall HookPlayer_49DD20(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49DD30(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49DD30)(self, 0);
-    PlayerTracePush("Player::sub_49DD30", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::ApplyEntryControlState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -829,7 +936,7 @@ DWORD __fastcall HookPlayer_49DD30(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49DD80(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49DD80)(self, 0);
-    PlayerTracePush("Player::sub_49DD80", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsTrailerAttached", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -862,7 +969,7 @@ DWORD __fastcall HookPlayer_49DE40(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49DEF0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49DEF0)(self, 0);
-    PlayerTracePush("Player::sub_49DEF0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::SavePlayerGlobals2", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -884,7 +991,7 @@ DWORD __fastcall HookPlayer_49DF90(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49E040(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49E040)(self, 0);
-    PlayerTracePush("Player::sub_49E040", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::RestorePlayerGlobals", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -895,7 +1002,7 @@ DWORD __fastcall HookPlayer_49E040(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49E270(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49E270)(self, 0);
-    PlayerTracePush("Player::sub_49E270", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsVisible", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -906,7 +1013,7 @@ DWORD __fastcall HookPlayer_49E270(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49E650(void* self, DWORD d, DWORD a0, DWORD a1)
 {
     DWORD r = ((Tc2)_Player_49E650)(self, 0, a0, a1);
-    PlayerTracePush("Player::sub_49E650", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    PlayerTracePush("Player::GetRelativePosition", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -925,10 +1032,32 @@ DWORD __fastcall HookPlayer_49E820(void* self, DWORD d)
     return r;
 }
 
+DWORD __fastcall HookPlayer_49E850(void* self, DWORD d, DWORD a0)
+{
+    DWORD r = ((Tc1)_Player_49E850)(self, 0, a0);
+    PlayerTracePush("Player::sub_49E850", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_49E8E0(void* self, DWORD d, DWORD a0)
+{
+    DWORD r = ((Tc1)_Player_49E8E0)(self, 0, a0);
+    PlayerTracePush("Player::sub_49E8E0", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
 DWORD __fastcall HookPlayer_49E950(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49E950)(self, 0);
-    PlayerTracePush("Player::sub_49E950", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateSoundFlagDispatch", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -939,7 +1068,7 @@ DWORD __fastcall HookPlayer_49E950(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49E980(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49E980)(self, 0);
-    PlayerTracePush("Player::sub_49E980", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateTargetScreenPos", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -949,7 +1078,7 @@ DWORD __fastcall HookPlayer_49E980(void* self, DWORD d)
 
 void __fastcall HookPlayer_49EA60(void* self, DWORD d)
 {
-    PlayerTracePush("Player::sub_49EA60", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
+    PlayerTracePush("Player::UseAmmo", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
     ((Tc0v)_Player_49EA60)(self, 0);
     __asm {
         mov ecx, self
@@ -960,7 +1089,7 @@ void __fastcall HookPlayer_49EA60(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49EA70(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49EA70)(self, 0);
-    PlayerTracePush("Player::sub_49EA70", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::AmmunitionUpdate", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -971,7 +1100,7 @@ DWORD __fastcall HookPlayer_49EA70(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49EC80(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49EC80)(self, 0);
-    PlayerTracePush("Player::sub_49EC80", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::CacheCarEngineValue", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -982,7 +1111,7 @@ DWORD __fastcall HookPlayer_49EC80(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49ECA0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49ECA0)(self, 0);
-    PlayerTracePush("Player::sub_49ECA0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::CacheCarEngineState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -993,7 +1122,7 @@ DWORD __fastcall HookPlayer_49ECA0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49ECC0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49ECC0)(self, 0);
-    PlayerTracePush("Player::sub_49ECC0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::SetActiveEngine", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1004,7 +1133,7 @@ DWORD __fastcall HookPlayer_49ECC0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49ED00(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49ED00)(self, 0);
-    PlayerTracePush("Player::sub_49ED00", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateCarPosition", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1026,7 +1155,7 @@ DWORD __fastcall HookPlayer_49ED60(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49EDC0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49EDC0)(self, 0);
-    PlayerTracePush("Player::sub_49EDC0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::ConvertToScreen", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1048,7 +1177,7 @@ DWORD __fastcall HookPlayer_49EE10(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49EE80(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49EE80)(self, 0);
-    PlayerTracePush("Player::sub_49EE80", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateCarSprite", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1059,7 +1188,7 @@ DWORD __fastcall HookPlayer_49EE80(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49EEB0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49EEB0)(self, 0);
-    PlayerTracePush("Player::sub_49EEB0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateCarSpriteWithTrailer", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1081,7 +1210,7 @@ DWORD __fastcall HookPlayer_49EF50(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49EF80(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49EF80)(self, 0);
-    PlayerTracePush("Player::sub_49EF80", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsSpriteActiveAndCurrent", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1103,7 +1232,7 @@ DWORD __fastcall HookPlayer_49F010(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49F170(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49F170)(self, 0);
-    PlayerTracePush("Player::sub_49F170", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::AreTrailerSpritesActive", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1114,7 +1243,7 @@ DWORD __fastcall HookPlayer_49F170(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49F1B0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49F1B0)(self, 0);
-    PlayerTracePush("Player::sub_49F1B0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::SetupCarBlips", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1125,7 +1254,7 @@ DWORD __fastcall HookPlayer_49F1B0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49F280(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49F280)(self, 0);
-    PlayerTracePush("Player::sub_49F280", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::ApplyAlarmControlState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1147,7 +1276,7 @@ DWORD __fastcall HookPlayer_49F2D0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_49F350(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49F350)(self, 0);
-    PlayerTracePush("Player::sub_49F350", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::HandleCarSurface", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1213,7 +1342,7 @@ DWORD __fastcall HookPlayer_49F570(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49F660(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_49F660)(self, 0, a0);
-    PlayerTracePush("Player::sub_49F660", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::GetCarHudSourcePosition", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1246,7 +1375,7 @@ DWORD __fastcall HookPlayer_49F720(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49F930(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_49F930)(self, 0, a0);
-    PlayerTracePush("Player::sub_49F930", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdateTrackedCar", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1257,7 +1386,7 @@ DWORD __fastcall HookPlayer_49F930(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49FAC0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49FAC0)(self, 0);
-    PlayerTracePush("Player::sub_49FAC0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::ResetWeaponTimers", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1290,7 +1419,18 @@ DWORD __fastcall HookPlayer_49FBE0(void* self, DWORD d, DWORD a0, DWORD a1)
 DWORD __fastcall HookPlayer_49FDC0(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_49FDC0)(self, 0, a0);
-    PlayerTracePush("Player::sub_49FDC0", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::RefreshCarSpriteAndBlip", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_49FF70(void* self, DWORD d, DWORD a0)
+{
+    DWORD r = ((Tc1)_Player_49FF70)(self, 0, a0);
+    PlayerTracePush("Player::sub_49FF70", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1312,7 +1452,7 @@ DWORD __fastcall HookPlayer_49FF80(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A0020(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A0020)(self, 0);
-    PlayerTracePush("Player::sub_4A0020", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::AddCarSpriteToRender", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1345,7 +1485,7 @@ DWORD __fastcall HookPlayer_4A0120(void* self, DWORD d, DWORD a0, DWORD a1, DWOR
 DWORD __fastcall HookPlayer_4A0290(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A0290)(self, 0);
-    PlayerTracePush("Player::sub_4A0290", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdatePlayerCarVisual", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1356,7 +1496,7 @@ DWORD __fastcall HookPlayer_4A0290(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A0560(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A0560)(self, 0);
-    PlayerTracePush("Player::sub_4A0560", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::RenderArrowsTrailer", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1367,7 +1507,7 @@ DWORD __fastcall HookPlayer_4A0560(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A0850(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2)
 {
     DWORD r = ((Tc3)_Player_4A0850)(self, 0, a0, a1, a2);
-    PlayerTracePush("Player::sub_4A0850", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
+    PlayerTracePush("Player::UpdateCarArrows", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1421,7 +1561,7 @@ void __fastcall HookPlayer_4A09B0(void* self, DWORD d, DWORD a0, DWORD a1)
 DWORD __fastcall HookPlayer_4A0C60(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A0C60)(self, 0);
-    PlayerTracePush("Player::sub_4A0C60", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateHudCarPosition", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1432,7 +1572,7 @@ DWORD __fastcall HookPlayer_4A0C60(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A0CC0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A0CC0)(self, 0);
-    PlayerTracePush("Player::sub_4A0CC0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::FinalizeHudCarPosition", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1454,7 +1594,7 @@ DWORD __fastcall HookPlayer_4A0D10(void* self, DWORD d, DWORD a0, DWORD a1)
 DWORD __fastcall HookPlayer_4A0D40(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2, DWORD a3, DWORD a4)
 {
     DWORD r = ((Tc5)_Player_4A0D40)(self, 0, a0, a1, a2, a3, a4);
-    PlayerTracePush("Player::sub_4A0D40", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, a3);
+    PlayerTracePush("Player::UpdateCarWeapon", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, a3);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1465,7 +1605,7 @@ DWORD __fastcall HookPlayer_4A0D40(void* self, DWORD d, DWORD a0, DWORD a1, DWOR
 DWORD __fastcall HookPlayer_4A0F30(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A0F30)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A0F30", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdateCarArrows2", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1520,7 +1660,7 @@ DWORD __fastcall HookPlayer_4A1B20(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A1BA0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A1BA0)(self, 0);
-    PlayerTracePush("Player::sub_4A1BA0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IncCounterTo20", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1531,7 +1671,7 @@ DWORD __fastcall HookPlayer_4A1BA0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A1BE0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A1BE0)(self, 0);
-    PlayerTracePush("Player::sub_4A1BE0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::ResetPlayerState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1585,7 +1725,7 @@ DWORD __fastcall HookPlayer_4A2640(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A26C0(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A26C0)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A26C0", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdatePlayerSpriteFlag", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1596,7 +1736,29 @@ DWORD __fastcall HookPlayer_4A26C0(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A2980(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A2980)(self, 0);
-    PlayerTracePush("Player::sub_4A2980", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::ProcessArrows", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_4A2A30(void* self, DWORD d)
+{
+    DWORD r = ((Tc0)_Player_4A2A30)(self, 0);
+    PlayerTracePush("Player::sub_4A2A30", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_4A2B40(void* self, DWORD d)
+{
+    DWORD r = ((Tc0)_Player_4A2B40)(self, 0);
+    PlayerTracePush("Player::sub_4A2B40", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1629,7 +1791,7 @@ DWORD __fastcall HookPlayer_4A2D70(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A2DB0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A2DB0)(self, 0);
-    PlayerTracePush("Player::sub_4A2DB0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::TryStartRaceMusic", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1648,10 +1810,54 @@ DWORD __fastcall HookPlayer_4A2E00(void* self, DWORD d, DWORD a0, DWORD a1, DWOR
     return r;
 }
 
+DWORD __fastcall HookPlayer_4A2E30(void* self, DWORD d, DWORD a0)
+{
+    DWORD r = ((Tc1)_Player_4A2E30)(self, 0, a0);
+    PlayerTracePush("Player::PlaceCar", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
 DWORD __fastcall HookPlayer_4A2F20(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A2F20)(self, 0);
-    PlayerTracePush("Player::sub_4A2F20", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateHudCarState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_4A2F90(void* self, DWORD d, DWORD a0, DWORD a1)
+{
+    DWORD r = ((Tc2)_Player_4A2F90)(self, 0, a0, a1);
+    PlayerTracePush("Player::sub_4A2F90", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_4A30A0(void* self, DWORD d, DWORD a0, DWORD a1)
+{
+    DWORD r = ((Tc2)_Player_4A30A0)(self, 0, a0, a1);
+    PlayerTracePush("Player::sub_4A30A0", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
+DWORD __fastcall HookPlayer_4A3120(void* self, DWORD d)
+{
+    DWORD r = ((Tc0)_Player_4A3120)(self, 0);
+    PlayerTracePush("Player::Render", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1746,10 +1952,31 @@ void __fastcall HookPlayer_4A4170(void* self, DWORD d, DWORD a0, DWORD a1)
     }
 }
 
+void __fastcall HookPlayer_4A4270(void* self, DWORD d, DWORD a0, DWORD a1)
+{
+    PlayerTracePush("Player::sub_4A4270", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, 0, 0);
+    ((Tc2v)_Player_4A4270)(self, 0, a0, a1);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+}
+
+DWORD __fastcall HookPlayer_4A4310(void* self, DWORD d)
+{
+    DWORD r = ((Tc0)_Player_4A4310)(self, 0);
+    PlayerTracePush("Player::sub_4A4310", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    __asm {
+        mov ecx, self
+        mov edx, d
+    }
+    return r;
+}
+
 DWORD __fastcall HookPlayer_4A4490(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A4490)(self, 0);
-    PlayerTracePush("Player::sub_4A4490", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateHornState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1760,7 +1987,7 @@ DWORD __fastcall HookPlayer_4A4490(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A4570(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A4570)(self, 0);
-    PlayerTracePush("Player::sub_4A4570", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateControlState", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1771,7 +1998,7 @@ DWORD __fastcall HookPlayer_4A4570(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A4780(void* self, DWORD d, DWORD a0, DWORD a1)
 {
     DWORD r = ((Tc2)_Player_4A4780)(self, 0, a0, a1);
-    PlayerTracePush("Player::sub_4A4780", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    PlayerTracePush("Player::UpdateRecentCarList", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1964,7 +2191,7 @@ void __fastcall HookPlayer_4A4EA0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A5100(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A5100)(self, 0);
-    PlayerTracePush("Player::sub_4A5100", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::HasPedInCar", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2071,7 +2298,7 @@ DWORD __fastcall HookPlayer_4A5460(void* self, DWORD d, DWORD a0, DWORD a1)
 DWORD __fastcall HookPlayer_4A5570(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A5570)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A5570", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::GetCarWeapons", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2103,7 +2330,7 @@ DWORD __fastcall HookPlayer_4A5640(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A5690(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A5690)(self, 0);
-    PlayerTracePush("Player::sub_4A5690", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::StoreOnFootWeapons", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2222,7 +2449,7 @@ DWORD __fastcall HookPlayer_4A61F0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A62B0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A62B0)(self, 0);
-    PlayerTracePush("Player::sub_4A62B0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::SetPedOutOfCar", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2288,7 +2515,7 @@ DWORD __fastcall HookPlayer_4A65E0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A6610(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2)
 {
     DWORD r = ((Tc3)_Player_4A6610)(self, 0, a0, a1, a2);
-    PlayerTracePush("Player::sub_4A6610", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
+    PlayerTracePush("Player::GetPosition", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
     __asm {
         mov ecx, self
         mov edx, d

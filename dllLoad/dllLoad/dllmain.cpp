@@ -831,7 +831,6 @@ DetourRestoreAfterWith();
             Error = DetourAttach(&_Player_4766D0, (PVOID)HookPlayer_4766D0); printError(Error, _Player_4766D0);
             Error = DetourAttach(&_Player_476700, (PVOID)HookPlayer_476700); printError(Error, _Player_476700);
             Error = DetourAttach(&_Player_476730, (PVOID)HookPlayer_476730); printError(Error, _Player_476730);
-            Error = DetourAttach(&_Player_4821C0, (PVOID)HookPlayer_4821C0); printError(Error, _Player_4821C0);
             Error = DetourAttach(&_Player_482CC0, (PVOID)HookPlayer_482CC0); printError(Error, _Player_482CC0);
             Error = DetourAttach(&_Player_49DD10, (PVOID)HookPlayer_49DD10); printError(Error, _Player_49DD10);
             Error = DetourAttach(&_Player_49DD20, (PVOID)HookPlayer_49DD20); printError(Error, _Player_49DD20);
