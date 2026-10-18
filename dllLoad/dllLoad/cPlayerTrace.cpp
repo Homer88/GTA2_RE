@@ -709,7 +709,7 @@ DWORD __fastcall HookPlayer_424470(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4348F0(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4348F0)(self, 0, a0);
-    PlayerTracePush("Player::sub_4348F0", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::GetFW", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1024,7 +1024,7 @@ DWORD __fastcall HookPlayer_49E650(void* self, DWORD d, DWORD a0, DWORD a1)
 DWORD __fastcall HookPlayer_49E820(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_49E820)(self, 0);
-    PlayerTracePush("Player::sub_49E820", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::IsFlagAndEngineActive", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1353,7 +1353,7 @@ DWORD __fastcall HookPlayer_49F660(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49F6C0(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_49F6C0)(self, 0, a0);
-    PlayerTracePush("Player::sub_49F6C0", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::GetCarHudTransform", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1364,7 +1364,7 @@ DWORD __fastcall HookPlayer_49F6C0(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_49F720(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_49F720)(self, 0, a0);
-    PlayerTracePush("Player::sub_49F720", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::GetCarBlipTransform", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1616,7 +1616,7 @@ DWORD __fastcall HookPlayer_4A0F30(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A1130(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A1130)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A1130", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdateFirstCarBlip", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1627,7 +1627,7 @@ DWORD __fastcall HookPlayer_4A1130(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A1360(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A1360)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A1360", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdateSecondCarBlip", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1638,7 +1638,7 @@ DWORD __fastcall HookPlayer_4A1360(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A16B0(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A16B0)(self, 0);
-    PlayerTracePush("Player::sub_4A16B0", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateTargetArrowScreenPos", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1649,7 +1649,7 @@ DWORD __fastcall HookPlayer_4A16B0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A1B20(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4A1B20)(self, 0);
-    PlayerTracePush("Player::sub_4A1B20", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::UpdateCarMarkerScreenPos", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1692,7 +1692,7 @@ DWORD __fastcall HookPlayer_4A1DA0(void* self, DWORD d)
 
 void __fastcall HookPlayer_4A20E0(void* self, DWORD d)
 {
-    PlayerTracePush("Player::sub_4A20E0", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
+    PlayerTracePush("Player::UpdateStateBlip", (DWORD)_ReturnAddress(), (DWORD)self, 0, 0, 0, 0);
     ((Tc0v)_Player_4A20E0)(self, 0);
     __asm {
         mov ecx, self
@@ -1703,7 +1703,7 @@ void __fastcall HookPlayer_4A20E0(void* self, DWORD d)
 DWORD __fastcall HookPlayer_4A2240(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A2240)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A2240", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdateCarTransform", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -1714,7 +1714,7 @@ DWORD __fastcall HookPlayer_4A2240(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A2640(void* self, DWORD d, DWORD a0)
 {
     DWORD r = ((Tc1)_Player_4A2640)(self, 0, a0);
-    PlayerTracePush("Player::sub_4A2640", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
+    PlayerTracePush("Player::UpdateTrailerCarTransform", (DWORD)_ReturnAddress(), (DWORD)self, a0, r, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2493,7 +2493,7 @@ DWORD __fastcall HookPlayer_4A6400(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4A6530(void* self, DWORD d, DWORD a0, DWORD a1, DWORD a2)
 {
     DWORD r = ((Tc3)_Player_4A6530)(self, 0, a0, a1, a2);
-    PlayerTracePush("Player::sub_4A6530", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
+    PlayerTracePush("Player::GetPedScreenPosition", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, a2, r);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2707,7 +2707,7 @@ DWORD __fastcall HookPlayer_4A83C0(void* self, DWORD d, DWORD a0)
 DWORD __fastcall HookPlayer_4BA0A0(void* self, DWORD d, DWORD a0, DWORD a1)
 {
     DWORD r = ((Tc2)_Player_4BA0A0)(self, 0, a0, a1);
-    PlayerTracePush("Player::sub_4BA0A0", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
+    PlayerTracePush("Player::GetScreenDimensions", (DWORD)_ReturnAddress(), (DWORD)self, a0, a1, r, 0);
     __asm {
         mov ecx, self
         mov edx, d
@@ -2718,7 +2718,7 @@ DWORD __fastcall HookPlayer_4BA0A0(void* self, DWORD d, DWORD a0, DWORD a1)
 DWORD __fastcall HookPlayer_4C7340(void* self, DWORD d)
 {
     DWORD r = ((Tc0)_Player_4C7340)(self, 0);
-    PlayerTracePush("Player::sub_4C7340", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
+    PlayerTracePush("Player::GetPlayerTangible", (DWORD)_ReturnAddress(), (DWORD)self, r, 0, 0, 0);
     __asm {
         mov ecx, self
         mov edx, d

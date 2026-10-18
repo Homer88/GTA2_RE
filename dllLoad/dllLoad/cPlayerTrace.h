@@ -57,7 +57,7 @@ extern LPVOID _Player_421990;   // Player::DecreaseInMoney          thiscall,2 -
 extern LPVOID _Player_4219A0;   // Player::sub_4219A0               thiscall,2 -> bool
 extern LPVOID _Player_4219D0;   // Player::GetId                    thiscall,1 -> char
 extern LPVOID _Player_424470;   // Player::NotMoney                 thiscall,2 -> char
-extern LPVOID _Player_4348F0;   // Player::sub_4348F0               thiscall,2 -> FW *
+extern LPVOID _Player_4348F0;   // Player::GetFW                    thiscall,2 -> FW *
 extern LPVOID _Player_434900;   // Player::GetMultiPlayerMode       thiscall,1 -> CameraOrPhysics *
 extern LPVOID _Player_434920;   // Player::GetPowerUp               thiscall,2 -> bool
 extern LPVOID _Player_434940;   // Player::DecrPowerUp              thiscall,2 -> void
@@ -86,7 +86,7 @@ extern LPVOID _Player_49DF90;   // Player::sub_49DF90               thiscall,1 -
 extern LPVOID _Player_49E040;   // Player::RestorePlayerGlobals     thiscall,1 -> TrailerCtrl *
 extern LPVOID _Player_49E270;   // Player::IsVisible                thiscall,1 -> char
 extern LPVOID _Player_49E650;   // Player::GetRelativePosition      thiscall,3 -> _DWORD *
-extern LPVOID _Player_49E820;   // Player::sub_49E820               thiscall,1 -> bool
+extern LPVOID _Player_49E820;   // Player::IsFlagAndEngineActive    thiscall,1 -> bool
 extern LPVOID _Player_49E850;   // Player::sub_49E850               thiscall,2 -> SpriteS1 *
 extern LPVOID _Player_49E8E0;   // Player::sub_49E8E0               thiscall,2 -> SpriteS1 *
 extern LPVOID _Player_49E950;   // Player::UpdateSoundFlagDispatch  thiscall,1 -> AudioManager *
@@ -116,8 +116,8 @@ extern LPVOID _Player_49F4F0;   // Player::sub_49F4F0               thiscall,1 -
 extern LPVOID _Player_49F500;   // Player::sub_49F500               thiscall,1 -> ushort
 extern LPVOID _Player_49F570;   // Player::sub_49F570               thiscall,2 -> int *
 extern LPVOID _Player_49F660;   // Player::GetCarHudSourcePosition  thiscall,2 -> SpriteS1 *
-extern LPVOID _Player_49F6C0;   // Player::sub_49F6C0               thiscall,2 -> SpriteS1 *
-extern LPVOID _Player_49F720;   // Player::sub_49F720               thiscall,2 -> SpriteS1 *
+extern LPVOID _Player_49F6C0;   // Player::GetCarHudTransform       thiscall,2 -> SpriteS1 *
+extern LPVOID _Player_49F720;   // Player::GetCarBlipTransform      thiscall,2 -> SpriteS1 *
 extern LPVOID _Player_49F930;   // Player::UpdateTrackedCar         thiscall,2 -> int *
 extern LPVOID _Player_49FAC0;   // Player::ResetWeaponTimers        thiscall,1 -> ushort
 extern LPVOID _Player_49FB00;   // Player::sub_49FB00               thiscall,6 -> char
@@ -140,16 +140,16 @@ extern LPVOID _Player_4A0CC0;   // Player::FinalizeHudCarPosition   thiscall,1 -
 extern LPVOID _Player_4A0D10;   // Player::sub_4A0D10               thiscall,3 -> _DWORD *
 extern LPVOID _Player_4A0D40;   // Player::UpdateCarWeapon          thiscall,6 -> _DWORD *
 extern LPVOID _Player_4A0F30;   // Player::UpdateCarArrows2         thiscall,2 -> SpriteS1 **
-extern LPVOID _Player_4A1130;   // Player::sub_4A1130               thiscall,2 -> _DWORD *
-extern LPVOID _Player_4A1360;   // Player::sub_4A1360               thiscall,2 -> _DWORD *
-extern LPVOID _Player_4A16B0;   // Player::sub_4A16B0               thiscall,1 -> SpriteS1 *
-extern LPVOID _Player_4A1B20;   // Player::sub_4A1B20               thiscall,1 -> char
+extern LPVOID _Player_4A1130;   // Player::UpdateFirstCarBlip       thiscall,2 -> _DWORD *
+extern LPVOID _Player_4A1360;   // Player::UpdateSecondCarBlip      thiscall,2 -> _DWORD *
+extern LPVOID _Player_4A16B0;   // Player::UpdateTargetArrowScreenPos thiscall,1 -> SpriteS1 *
+extern LPVOID _Player_4A1B20;   // Player::UpdateCarMarkerScreenPos thiscall,1 -> char
 extern LPVOID _Player_4A1BA0;   // Player::IncCounterTo20           thiscall,1 -> char
 extern LPVOID _Player_4A1BE0;   // Player::ResetPlayerState         thiscall,1 -> int
 extern LPVOID _Player_4A1DA0;   // Player::sub_4A1DA0               thiscall,1 -> char
-extern LPVOID _Player_4A20E0;   // Player::sub_4A20E0               thiscall,1 -> void
-extern LPVOID _Player_4A2240;   // Player::sub_4A2240               thiscall,2 -> __int16
-extern LPVOID _Player_4A2640;   // Player::sub_4A2640               thiscall,2 -> TrailerCtrl *
+extern LPVOID _Player_4A20E0;   // Player::UpdateStateBlip          thiscall,1 -> void
+extern LPVOID _Player_4A2240;   // Player::UpdateCarTransform       thiscall,2 -> __int16
+extern LPVOID _Player_4A2640;   // Player::UpdateTrailerCarTransform thiscall,2 -> TrailerCtrl *
 extern LPVOID _Player_4A26C0;   // Player::UpdatePlayerSpriteFlag   thiscall,2 -> bool
 extern LPVOID _Player_4A2980;   // Player::ProcessArrows            thiscall,1 -> char
 extern LPVOID _Player_4A2A30;   // Player::sub_4A2A30               thiscall,1 -> void *
@@ -221,7 +221,7 @@ extern LPVOID _Player_4A62B0;   // Player::SetPedOutOfCar           thiscall,1 -
 extern LPVOID _Player_4A6310;   // Player::sub_4A6310               thiscall,1 -> byte
 extern LPVOID _Player_4A6350;   // Player::sub_4A6350               thiscall,2 -> char
 extern LPVOID _Player_4A6400;   // Player::sub_4A6400               thiscall,2 -> char
-extern LPVOID _Player_4A6530;   // Player::sub_4A6530               thiscall,4 -> int
+extern LPVOID _Player_4A6530;   // Player::GetPedScreenPosition     thiscall,4 -> int
 extern LPVOID _Player_4A65E0;   // Player::GetActivePlayerCar       thiscall,1 -> Car *
 extern LPVOID _Player_4A6610;   // Player::GetPosition              thiscall,4 -> GameObject *
 extern LPVOID _Player_4A6900;   // Player::sub_4A6900               thiscall,1 -> int
@@ -241,8 +241,8 @@ extern LPVOID _Player_4A7E80;   // Player::sub_4A7E80               thiscall,1 -
 extern LPVOID _Player_4A81E0;   // Player::sub_4A81E0               thiscall,1 -> __int16
 extern LPVOID _Player_4A8340;   // Player::sub_4A8340               thiscall,1 -> void
 extern LPVOID _Player_4A83C0;   // Player::Player                   thiscall,2 -> Player *
-extern LPVOID _Player_4BA0A0;   // Player::sub_4BA0A0               thiscall,3 -> int
-extern LPVOID _Player_4C7340;   // Player::sub_4C7340               thiscall,1 -> Tango *
+extern LPVOID _Player_4BA0A0;   // Player::GetScreenDimensions      thiscall,3 -> int
+extern LPVOID _Player_4C7340;   // Player::GetPlayerTangible        thiscall,1 -> Tango *
 extern LPVOID _Player_4CCAB0;   // Player::sub_4CCAB0               thiscall,1 -> int
 extern LPVOID _Player_4CCAD0;   // Player::sub_4CCAD0               thiscall,1 -> int
 extern LPVOID _Player_4CCAE0;   // Player::sub_4CCAE0               thiscall,1 -> int
