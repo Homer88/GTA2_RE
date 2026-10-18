@@ -48,7 +48,7 @@ extern LPVOID _S169_433360;   // S169::SetListSize           thiscall,1 (char)
 extern LPVOID _S169_433370;   // S169::sub_433370            thiscall   -> Ped*
 extern LPVOID _S169_439970;   // S169::sub_439970            thiscall
 
-int __fastcall HookS169_4035B0(void* self);
+void HookS169_4035B0(void);   // naked wrapper: preserves EDX (see cS169Trace.cpp)
 unsigned char __fastcall HookS169_403650(void* self);
 unsigned char __fastcall HookS169_4037A0(void* self);
 void __fastcall HookS169_4038E0(void* self);

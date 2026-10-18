@@ -2,8 +2,22 @@
 #ifndef __NETWORK_H_
 #define __NETWORK_H_
 
+// network.cpp
+static const CLSID CLSID_DirectPlay = {
+    /* значения из дампа 0x576a04 */
+};
+
+static const IID IID_IDirectPlay4 = {
+    /* значения из дампа 0x576a44 */
+};
+
+// Параметры подключения (структура, на которую ссылается unk_576984)
+static void* g_ConnectParams = NULL;   // заменить на реальный тип
 
 class Network{
+private:
+  //  IDirectPlay4* pDirectPlay;   // field_5E0
+   // IDirectPlayLobby* pLobby;        // field_5DC (или выходной параметр)
     public:
 
     // 0x00408A90
@@ -128,6 +142,8 @@ class Network{
     int GetPlayerCount(void);
     // 0x00461DD0
     int SetCarSlotUsed(void);
+    // 0x004c7370
+    bool IsNotTagGame();
 };
 
 #endif // !__NETWORK_H_

@@ -34,19 +34,9 @@ typedef enum STATUS_ROW {
 	 GangMembersKilled = 0x9,
   
 }STATUS_ROW;
+
 struct StatusLastGame {
 	unsigned int value[10];
-	/* unsigned int p0;
-	unsigned int p1;
-	unsigned int p2;
-	unsigned int p3;
-	unsigned int p4;
-	unsigned int vehicles_hijacked;
-	unsigned int civilians_run_down;
-	unsigned int civilians_murdered;
-	unsigned int lawmen_killed;
-	unsigned int gang_members_killed;
-  */
 };
 struct KillPlayer {   /* ������ ������� �������: killPlayer[killer].KillPlayerN = ������� ��� killer ���� ������ N */
 	unsigned short KillPlayerRow[6]; /* ���� ������ � ID 0 */
@@ -180,7 +170,7 @@ public:
 	short GetPlayerID(unsigned char id);
 
 	// 0x0045e830 — field_448[6*a2 + a3] (стилизовано под PlayerID)
-	unsigned short MapGm::GetScoreRow(unsigned char value, unsigned char row);
+	unsigned short GetScoreRow(unsigned char value, unsigned char row);
 
 	// 0x0045e8d0 — загрузка имён файлов из реестра + сброс настроек
 	int LoadFileResurce();
@@ -192,12 +182,11 @@ public:
 	void RegisterKill(unsigned char id, unsigned char a3);
 
 	// SpecialTokens
-	void SetSpecialTokensDefault() { this->SpecialTokens = 0; }
-	int GetSpecialTokens() { return SpecialTokens; }
-	void SetSpecialTokens(int value) { SpecialTokens = value; }
-	void IncrementSpecialTokens() { ++SpecialTokens; }
+	void SetSpecialTokensDefault();
+	int GetSpecialTokens();
 	// 0x00476b10 — то же, что SetSpecialTokens (возвращает value)
-	int sub_476B10(int value) { SpecialTokens = value; return value; }
+	void SetSpecialTokens(int value);
+	void IncrementSpecialTokens();
 
 	// 0x00453a40 — кодирование bonus stage: (playerArea << 4) | param2
 	int EncodeBonusStage(unsigned char param2) { return (playerArena << 4) | param2; }
@@ -207,12 +196,7 @@ public:
 	// 0x00461dc0 — Get_field_444
 	int GetCount();
 
-
-// ==== импорт имён из gm ====
-    // 2 функций
-    // 0x0045E5D0: MapGm::SetAwardValue2
-    // 0x004C7370: MapGm::IsNotMode3
-    void IsNotMode3();
+   
 };
 extern MapGm* gMapGm;
 #endif //__MAP_GM_H_

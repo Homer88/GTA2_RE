@@ -74,11 +74,34 @@ typedef void* (__fastcall *Tc1r)(void*, DWORD, DWORD);
 typedef unsigned char (__fastcall *Tc1b)(void*, DWORD, DWORD);
 typedef void  (__fastcall *Tc2)(void*, DWORD, DWORD, DWORD);
 
-int __fastcall HookS169_4035B0(void* self)
+// S169::S169 (0x4035B0) is called from hand-optimised loops that keep the
+// object pointer live in EDX across the call and rely on the real constructor
+// leaving EDX untouched:
+//   sub_403870 @0x403870 : mov edx,0x5d28c8 ; loop { mov ecx,edx; call 0x4035B0; add edx,0x44 }
+//   0x4038C0            : mov edx,ecx       ; call 0x4035B0; mov eax,edx; ret
+// A plain C hook clobbers EDX (ring-index arithmetic), so the caller's loop
+// pointer became 0x45 after the first iteration and the 2nd `mov [ecx+0x40],al`
+// wrote to address 0x85. This naked wrapper is register-transparent: it saves
+// and restores EDX around the C body.
+extern "C" int HookS169_4035B0_impl(void* self, DWORD caller)
 {
     int r = ((Tc0i)_S169_4035B0)(self);
-    S169TracePush("S169::S169", (DWORD)_ReturnAddress(), (DWORD)self, (DWORD)r, 0, 0, 0);
+    S169TracePush("S169::S169", caller, (DWORD)self, (DWORD)r, 0, 0, 0);
     return r;
+}
+
+__declspec(naked) void HookS169_4035B0(void)
+{
+    __asm {
+        push edx                       // save caller's EDX
+        mov  eax, [esp + 4]            // retail return address
+        push eax                       // impl arg: caller
+        push ecx                       // impl arg: self
+        call HookS169_4035B0_impl
+        add  esp, 8
+        pop  edx                       // restore caller's EDX
+        ret
+    }
 }
 
 unsigned char __fastcall HookS169_403650(void* self)

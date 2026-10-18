@@ -144,7 +144,25 @@ void  MapGm::SetPlayerArena(unsigned char index, int value) {
 }
 
 unsigned int MapGm::GetAreaData(unsigned char index) {
-	return this->StatusTable.value[index]; }
+	return this->StatusTable.value[index]; 
+}
+
+// SpecialTokens
+void MapGm::SetSpecialTokensDefault() { 
+	this->SpecialTokens = 0; 
+}
+int MapGm::GetSpecialTokens() { 
+		return this->SpecialTokens; 
+}
+
+void MapGm::SetSpecialTokens(int value) { 
+	this->SpecialTokens = value; 
+}
+void MapGm::IncrementSpecialTokens() { 
+	++this->SpecialTokens; 
+}
+
+
 //---------------------------------------------------------------------
 // 0x0045e630: MapGm::ResetSettings — сброс настроек записи
 //---------------------------------------------------------------------

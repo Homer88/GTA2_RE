@@ -1,6 +1,14 @@
+#include <windows.h>
+#include <objbase.h> // Для CoCreateInstance
+//#include <dplay.h>   // Основной заголовок DirectPlay
+//#include <dplobby.h> // Заголовок для работы с лобби
+#include "../../Engine/MapGm/MapGm.h"
 #include "Network.h"
 
+bool Network::IsNotTagGame() {
+    return gMapGm->GetEndGameFlag() != TAG_GAME;
 
+}
     // 0x00408A90
 
 
@@ -21,7 +29,37 @@ int Network::ReleaseDirectPlay(void){
 
 
 int Network::InitDirectPlay(void){
-        return 0;
+
+    this->ReleaseDirectPlay();
+   /* // 1. Создаём COM-объект DirectPlay
+    HRESULT hr = CoCreateInstance(
+        CLSID_DirectPlay,
+        NULL,
+        CLSCTX_INPROC_SERVER,          // 1
+        IID_IDirectPlay4,
+        (LPVOID*)&this->pDirectPlay    // field_5E0
+    );
+
+    if (FAILED(hr))
+        return false;
+
+    // 2. Создаём объект лобби
+    IDirectPlayLobby* pLobby = NULL;
+    hr = DirectPlayLobbyCreateW(NULL, &pLobby, NULL, NULL, 0);
+    if (FAILED(hr))
+        return false;
+
+    // 3. Вызов vtable[0] у лобби (инициализация)
+    typedef void(__stdcall* LobbyInitFn)(IDirectPlayLobby*, void*, int*);
+    LobbyInitFn pInit = *(LobbyInitFn*)pLobby;
+    pInit(pLobby, g_ConnectParams, &this->field_5DC);
+
+    // 4. Вызов vtable[+8] у лобби (Release)
+    typedef void(__stdcall* LobbyReleaseFn)(IDirectPlayLobby*);
+    LobbyReleaseFn pRelease = *(LobbyReleaseFn*)(*(DWORD*)pLobby + 8);
+    pRelease(pLobby);
+    */
+    return true;
     }
 
 
