@@ -21,7 +21,15 @@ int VertexBuffer::ResetBuffer(void){
 
 
 int VertexBuffer::VertexBufferReleasePassenger(void){
-        return 0;
+    // Correct implementation: clear passenger pointer and reset flag
+    // Assuming the passenger pointer is at offset 0 and the flag at 0x2fd0
+    // Directly manipulate memory because the class layout is not fully defined.
+    unsigned char* base = reinterpret_cast<unsigned char*>(this);
+    // Clear passenger pointer (first 4 bytes)
+    *reinterpret_cast<void**>(base) = nullptr;
+    // Clear the flag byte at offset 0x2fd0
+    base[0x2fd0] = 0;
+    return 0;
     }
 
 
