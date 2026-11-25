@@ -10,3 +10,4 @@ Door::Door() {
 Door::~Door() {
 
 }
+void Door::Update(void){}

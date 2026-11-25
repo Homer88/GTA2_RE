@@ -10,3 +10,5 @@ int TileAnim::UpdateScripts(void){
 
 
 
+
+int TileAnim::Update(void){ UpdateScripts(); return 0; }

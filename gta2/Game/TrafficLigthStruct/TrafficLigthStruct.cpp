@@ -15,3 +15,5 @@ int TrafficLigthStruct::IsPedCrossingPhase(void){
 int TrafficLigthStruct::RegisterCars(void){
         return 0;
     }
+
+void TrafficLigthStruct::Update(void){}

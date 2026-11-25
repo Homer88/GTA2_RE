@@ -12,6 +12,7 @@ public:
     // 1 функций
     // 0x00472F60: Ambulance::FindFreeSlot
     void FindFreeSlot();
+    void Update(void);
 };
 extern Ambulance* gAmbulance;
 #endif // !___Ambulance__H__

@@ -48,6 +48,7 @@ class Police{
     void ReturnStolenCar();
     // 0x004ABD70: Police::ReleaseBlockedCars
     void ReleaseBlockedCars();
+    void Update(void);
 };
 extern Police* gPolice;
 #endif // !__POLICE_H_

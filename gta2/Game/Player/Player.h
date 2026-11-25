@@ -75,11 +75,14 @@ class Player{
 		void SetMultiPlayer(byte Multi);
 		int  AddLives(int Lives);
 		void StartGame();
+    static void RenderPlayers(class Game* game);
 		byte SelectWeapon(int TypeWeapon, int Ammo);
 		void SetActive(Player*);
 		void GetVehicle(Car* Vehicle);
 
 		
+    int AddMoney(int amount);
+    void Process(void);
 };	
 
 extern Player* gPlayer;

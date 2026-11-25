@@ -129,3 +129,6 @@ re_file/IDA/struct_samename_report.txt
 /dllLoad/dllLoad/dllLoad/Debug
 
 /dllLoad/dllLoad/dllLoad/Release
+/build_cmake
+/build_fixed
+/build_ninja

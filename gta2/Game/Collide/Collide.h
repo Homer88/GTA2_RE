@@ -10,6 +10,7 @@ class Collide{
     int CheckSpriteCollisionFiltered(void);
     // 0x004470B0
     int CheckpointFindCollidedObject(void);
+    void SetParam(void);
 };
 extern Collide* gCollide;
 #endif // !__COLLIDE_H_

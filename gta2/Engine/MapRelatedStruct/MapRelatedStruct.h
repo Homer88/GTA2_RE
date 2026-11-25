@@ -81,23 +81,22 @@ struct S202 {
 class MapRelatedStruct {
 public:
     //  переменные 
-    Map* _Map;
-    S16_01 _s16_01;
-    void* Buffer_ZONE, * Buffer_MOBJ, * Buffer_LGHT, * Buffer_ANIM;
-    int count;
-    byte len;
-    // 0x000: S16_01 (804 bytes), Map* overlaps at offset 0
+    Map* _Map;                // 0x000
+    S16_01 _s16_01;           // 0x004 (804 bytes)
+    void* Buffer_ZONE;        // 0x328 - zone record buffer
+    void* count;              // 0x32C - zone index table (IDA this->count)
+    unsigned char* field_330; // 0x330 - zone index map
+    _WORD* field_334;         // 0x334 - zone defaults table
+    void* Buffer_MOBJ;        // 0x338
+    void* Buffer_LGHT;        // 0x33C
+    void* Buffer_ANIM;        // 0x340
+    byte len;                 // 0x344
     //функции
 
-    // Map* accessors (shares offset 0 with S16_01.gap0[0..3])
-    Map*& getMap() { return *(Map**)&_s16_01.gap0[0]; }
+    // Map* accessor - use dedicated field (layout may need IDA verification)
+    Map*& getMap() { return _Map; }
 
-    // 0x32C
-    unsigned char* field_330;
-    // 0x330
-    _WORD* field_334;
-    // 0x334
-    // 0x340
+    // 0x348
     int field_344;
     // 0x344
     int field_348;
@@ -200,6 +199,16 @@ public:
     // Map file I/O
     unsigned char sub_464880();
     unsigned char ParseMapLine(_BYTE* a2, FileMgr* dwBytes);
+    _WORD* InitializeZoneList_00464980();
+    int ProcessRecords(int a2);
+    int BuildIndexTable(unsigned int a2);
+    void ProcessPedStations();
+    int CreateMap(int a2);
+    unsigned char LoadRGEN();
+    unsigned char LoadLGHT(SIZE_T dwBytes);
+    unsigned char LoadANIM(FileMgr* dwBytes);
+    unsigned char LoadMOBJ(SIZE_T dwBytes);
+unsigned char LoadZONE(FileMgr* dwBytes);
     _WORD* LoadMap(LPCSTR lpFileName);
     _WORD* sub_464980();
     
@@ -349,6 +358,9 @@ public:
     // 0x004690B0
     // (gm) ������: Car::IsPointVisibleToAnyPlayer -> MapRelatedStruct::IsPointVisible
     void IsPointVisible() {};
+    void LoadGangs(void);
+    void SpawnMapObjects(void);
+    void UpdateLights(void);
 };
 
 #pragma pack(pop)

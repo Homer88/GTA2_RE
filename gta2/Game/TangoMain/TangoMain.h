@@ -16,6 +16,7 @@ class TangoMain{
     int RunAction(void);
     // 0x00451510
     int CanStartTango(void);
+    void SetInitialState(void);
 };
 extern TangoMain* gTangoMain;
 #endif // !__TANGOMAIN_H_

@@ -14,6 +14,7 @@ class TransmissionInfo{
     int UpdateBrakes(void);
     // 0x004B94B0 void __thiscall
     void ValidateSpawnPoints(void);  // (gm) старый: UpdateTransmission -> ValidateSpawnPoints
+    void UpdateAll(void);
 };
 extern TransmissionInfo* gTransmissionInfo;
 #endif // !__TRANSMISSIONINFO_H_

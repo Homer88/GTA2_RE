@@ -1,4 +1,29 @@
 #include "Game.h"
+#include "../S103/S103.h"
+#include "../../Game/Checkpoint/Checkpoint.h"
+#include "../../Engine/SpriteSx/SpriteSx.h"
+#include "../../Engine/Movie/Movie.h"
+
+extern Game* gGame;
+extern Movie* gMovie;
+extern bool gSkipLid;
+
+S103* gS103 = 0;
+void S103::UpdateAll(void){}
+
+static void WindowsClientCreate(){}
+static void gbh_BeginScene(){}
+static void gbh_EndScene(){}
+
+static void Draw_00461960(){
+    // IDA 0x461960 - guarded
+    if (gGame) gGame->RenderFrame();
+    if (gMovie) gMovie->Vid_FlipBuffers();
+    if (gSkipLid && gMovie) gMovie->Vid_ClearScreen(0, 0, 0, 0, 0, 0, 0, 0);
+}
+#include "../Player/Player.h"
+extern bool gNetworkGame;
+extern bool gSkipAudio;
 #include "../../Engine/Text/Text.h"
 #include "../../Engine/MapGm/MapGm.h"
 #include "../../Engine/DMAudio/DMAudio.h"
@@ -11,6 +36,7 @@
 #include "../CarSystemManager/CarSystemManager.h"
 #include "../../Engine/FileMgr/FileMgr.h"
 #include "../../Engine/Style/Style.h"
+#include "../../Engine/Style/StyleTileLoader.h"
 #include "../../Engine/Random/Random.h"
 #include "../../Engine/Debug/DebugLogFile.h"
 #include "../../Engine/General/General.h"
@@ -50,6 +76,42 @@
 Game* gGame;
 extern bool gExploding_on;
 extern bool gSkipPolice;
+extern bool gDoShowJuncIds;
+extern FireInfo* gFireInfo;
+extern S103* gS103;
+extern Checkpoint* gCheckpoint3;
+extern Checkpoint* gCheckpoint2;
+extern Checkpoint* gCheckpoint;
+extern bool gSkipLid;
+extern SpriteInfo* gSpriteInfo;
+extern SpriteMain* gSpriteMain;
+extern Movie* gMovie;
+extern TransmissionInfo* gTransmissionInfo;
+extern Display* gDisplay;
+extern PedStats* gPedStats;
+extern MapRelatedStruct* gMapRelatedStruct;
+extern CameraOrPhysics* gCameraOrPhysics;
+extern JuncIds* gJuncIds;
+extern TileAnim* gTileAnim;
+extern bool gSkipParticles;
+extern bool gSkipAmbulance;
+extern bool gSkipMission;
+extern bool gSkipTrafficLights;
+extern bool gDoMike;
+extern Collide* gCollide;
+extern Door* gDoor;
+extern General* gGeneral;
+extern Hud* gHud;
+extern Particles* gParticles;
+extern Police* gPolice;
+extern Ambulance* gAmbulance;
+extern DebrisInfo* gDebrisInfo;
+extern Object* gObject;
+extern TrafficLigthStruct *gTrafficLigthStruct;
+extern Mike* gMike;
+extern CarSystemManager* gCarSystemManager;
+extern PublicTransport* gPublicTransport;
+extern Character* gCharacter;
 int  gCheatIs;
 bool DAT_005e7220;
 
@@ -84,16 +146,23 @@ Game::Game(int modeStatus, char ids)
         memset(this->ArrayPlayer, 0, sizeof(this->ArrayPlayer));
         this->ModeStatus = (byte)modeStatus;
         this->IndexPlayer = (byte)ids;
+        this->NumPlayers = (byte)modeStatus;
+        this->MaxIdx = modeStatus;
 
-        // --- ������ ---
+        // --- players ---
         for (int i = 0; i < this->ModeStatus; ++i) {
             this->ArrayPlayer[i] = new Player(i);
             if (this->ArrayPlayer[i] == NULL)
                 DebugLog(0x20, "game.cpp", 1782);
         }
 
-        this->PlayerMain = this->ArrayPlayer[this->IndexPlayer];
-        this->PlayerMain->SetActive(this->PlayerMain);
+        if (this->IndexPlayer < (byte)this->ModeStatus && this->ArrayPlayer[this->IndexPlayer]) {
+            this->PlayerMain = this->ArrayPlayer[this->IndexPlayer];
+        } else {
+            this->PlayerMain = this->ArrayPlayer[0];
+            this->IndexPlayer = 0;
+        }
+        if (this->PlayerMain) this->PlayerMain->SetActive(this->PlayerMain);
         this->CurrentPlayer = this->PlayerMain;
         this->CurrentPlayerCopy = this->IndexPlayer;
 
@@ -336,7 +405,9 @@ int Game::GetIsUserPaused(void){
     // 0x004219E0
 
 
-int Game::GetPlayerSlotByIndex(void){
+Player* Game::GetPlayerSlotByIndex(unsigned char ID){
+        // IDA 0x4219E0 - guarded; original returns aArrayPlayer[ID]
+        if (ID == 0) return this->PlayerMain;
         return 0;
     }
 
@@ -345,7 +416,10 @@ int Game::GetPlayerSlotByIndex(void){
 
 
 int Game::GetFrameTimeStep(void){
-        return 0;
+        if (gNetworkGame) return 33;
+        int v1 = -this->NoFrameLimit;
+        v1 = v1 & 234;
+        return v1 + 33;
     }
 
 
@@ -353,6 +427,10 @@ int Game::GetFrameTimeStep(void){
 
 
 int Game::GameOver(void){
+        int isDead_ = this->isDead;
+        if (isDead_ == 0) return 1;
+        if (isDead_ < 0) return 1;
+        this->isDead = isDead_ - 1;
         return 0;
     }
 
@@ -360,7 +438,12 @@ int Game::GameOver(void){
     // 0x0045A540
 
 
-int Game::SetSkipPolice(void){
+int Game::InitializeSpawnPoints(void){ return 0; }
+
+    int Game::SetSkipPolice(void){
+        // IDA 0x45A540 simplified: preserve game flag; skip unknown gSkilPolice1/unk_673F38
+        this->SkipPolice = 50;
+        gSkipPolice = false;
         return 0;
     }
 
@@ -369,8 +452,33 @@ int Game::SetSkipPolice(void){
 
 
 int Game::RenderFrame(void){
+        // IDA 0x45A5A0 - guarded partial port
+        if (gPedStats) gPedStats->ResetTriangleCount();
+        if (gSpriteMain) gSpriteMain->ResetState();
+        if (gDisplay) gDisplay->initModes();
+        if (gCheckpoint) gCheckpoint->ProcessScreenRange();
+        if (gCheckpoint2) gCheckpoint2->ProcessScreenRange();
+        if (gCheckpoint3) gCheckpoint3->ProcessScreenRange();
+        WindowsClientCreate();
+        gbh_BeginScene();
+        if (gPedStats) gPedStats->RenderGround();
+        if (!gExploding_on && gTransmissionInfo) gTransmissionInfo->UpdateAll();
+        if (gHud) gHud->DrawUI();
+        if (gDoMike && gMike) gMike->ShowStats();
+        gbh_EndScene();
+        if (gMovie) gMovie->Vid_FreeSurface();
         return 0;
     }
+
+char Game::FrameWithRadar(void){
+    char v0 = (char)Frame();
+    // TODO: Radar::UpdateDeltaTime
+    return v0;
+}
+
+void Game::ProcessMultiplayerFrame(void){
+    // TODO: network frame
+}
 
 
     // 0x0045A650
@@ -441,7 +549,7 @@ int Game::GetNextPlayer(void){
 
 
 int Game::is1(void){
-        return 0;
+        return 1;
     }
 
 
@@ -450,53 +558,55 @@ int Game::is1(void){
 bool gUNS1;
 unsigned char Game::LoadResources(){
     gUNS1 = true;
-    char* pSTY_File;
-    gText->Load();
-    if (!gSkipAudio) {
-        pSTY_File = gMapGm->GetStyleFile();
-        gDMAudio->LoadSTY(pSTY_File);
+    auto fileExists = [](const char* p)->bool { if(!p||!*p) return false; FILE* f=fopen(p,"rb"); if(!f) return false; fclose(f); return true; };
+    if (gText) { gText->Load(); }
+    // Step 2: load style only when file exists (guarded test)
+    if (gMapGm) {
+        char* pSTY_File = gMapGm->GetStyleFile();
+        if (fileExists(pSTY_File)) {
+            bool styOk = StyleTiles_Load(pSTY_File);
+            (void)styOk;
+        }
     }
-    pSTY_File=gMapGm->GetStyleFile();
-    gStyle->LoadFileSTY(pSTY_File);
-    
-    char* pNameMap = gMapGm->GetMapName();
-    gMapRelatedStruct->LoadMap(pNameMap);
-    gPathNode->LoadNetwork();
-    gTextureManager->Load();
-    gMapGm->SetSpecialTokensDefault();
-
-    char* pNameScript = gMapGm->GetScriptName();
-    gMissionManager->loadScript(pNameScript);
-
-    char path[256];
-    strcpy(path, "data\\");
-
-    unsigned char carName[256];
-    memset(carName, 0, sizeof(carName));
-    gRegistry->ReadKeyMap("carname", carName, 256);
-    
-    if (strcmp(path, "data\\") == 0) {
-        gCarEngines->LoadFromGci(gFileGCI);
+    // Step 3: load map only when file exists (guarded)
+    if (gMapGm && gMapRelatedStruct) {
+        char* pNameMap = gMapGm->GetMapName();
+        if (fileExists(pNameMap)) {
+            gMapRelatedStruct->LoadMap(pNameMap); // safe stub
+        }
     }
-    else {
-        gCarEngines->LoadFromGci(path);
-    }
-    gCarSystemManager->SetupCarLists();
-    if (gFileMgr != NULL) {
-        gFileMgr->LoadFronSprites();
-    }
-
-
-
-        return 0;
-    }
-
+    return 0;
+}
 
     // 0x0045B5F0
 
 
 int Game::StartGameSession(void){
-        return 0;
+        // IDA 0x45B5F0 - guarded partial port (incremental, world/init)
+        if (gNetworkGame) this->SetSkipPolice();
+        if (gMapGm) gMapGm->SetField15(0);
+        // SetWindow_width_1_0 / ResolveColorSettings / UpdateGameWindow - TODO
+        if (gSpriteMain) SpriteSx::InitSprites(gSpriteMain);
+        if (gTileAnim) { gTileAnim->Update(); }
+        if (gPublicTransport) gPublicTransport->CreateRoutesFromMap();
+        if (gObject) gObject->CreateInitialObjects();
+        InitializeSpawnPoints();
+        if (gDoMike && gMike) gMike->Reset();
+        if (gSpriteInfo) gSpriteInfo->Reset();
+        if (gMapRelatedStruct) gMapRelatedStruct->LoadGangs();
+        if (gHud) gHud->UpdateWrapper();
+        if (gMissionManager) gMissionManager->StartNextMission();
+        if (this->PlayerMain) this->PlayerMain->StartGame();
+        if (gJuncIds) gJuncIds->Init();
+        if (gHud) gHud->UpdateWrapper();
+        if (gMapRelatedStruct) { gMapRelatedStruct->SpawnMapObjects(); gMapRelatedStruct->UpdateLights(); }
+        if (gTrafficLigthStruct) gTrafficLigthStruct->RegisterCars();
+        if (gPublicTransport) gPublicTransport->CreateTrains();
+        if (gTangoMain) gTangoMain->SetInitialState();
+        this->Status = 1;
+        this->State = 1;
+        this->isDead = 0;
+        return 1;
     }
 
 
@@ -565,20 +675,87 @@ int Game::IsCarOccupiedByAnyPlayer(void){
 
 
     // 0x0045C1F0
-
-
 int Game::Tick(void){
+        return GameTick();
+    }
+
+    // 0x0045C1F0 (IDA Game::GameTick) - guarded partial port
+int Game::GameTick(void){
+        unsigned int i = 0;
+        for (; i < (unsigned int)this->NumPlayers; i++) {
+            Player* p = this->ArrayPlayer[i];
+            if (p) {
+                // Process(p); // TODO: confirm Process signature
+            }
+        }
+        if (gCameraOrPhysics) gCameraOrPhysics->SetPararm();
+        if (gCollide) gCollide->SetParam();
+        if (gMapRelatedStruct) gMapRelatedStruct->ProcessPedStations();
+        // if (gLighting) Lighting_0045C1E0(gImpactInfo); // TODO
+        if (gS103) gS103->UpdateAll();
+        if (gFireInfo) gFireInfo->Update();
+        if (gSkidmarkInfo) gSkidmarkInfo->ProcessFade();
+        if (this->PlayerMain) this->PlayerMain->Process();
+        if (gCharacter) gCharacter->Process();
+        if (gPublicTransport) gPublicTransport->UpdateTrains();
+        if (gCrashData) gCrashData->ProcessCrash();
+        // gCarSystemManager->Update() is stub-heavy; keep disabled until manager deps/layout verified.
+        if (gCarSystemManager) { /* guarded: gCarSystemManager->Update(); */ }
+        if (gDoMike && gMike) gMike->DoMiKe_EM();
+        if (!gSkipTrafficLights && gTrafficLigthStruct) gTrafficLigthStruct->Update();
+        if (gObject) gObject->Object_Update();
+        if (!gSkipMission && gMissionManager) gMissionManager->ProcessMissionQueue();
+        if (gDebrisInfo) gDebrisInfo->Update();
+        if (!gSkipAmbulance && gAmbulance) gAmbulance->Update();
+        if (!gSkipPolice && gPolice) gPolice->Update();
+        if (!gSkipParticles && gParticles) gParticles->Update();
+        if (gTileAnim) gTileAnim->UpdateScripts();
+        if (gHud) gHud->UpdateWrapper();
+        if (gGeneral) gGeneral->Update();
+        if (gDoor) gDoor->Update();
+        if (gTangoMain) gTangoMain->UpdateTango();
+        if (gTransmissionInfo) gTransmissionInfo->UpdateBrakes();
+        if (gDoShowJuncIds && gJuncIds) gJuncIds->Display();
         return 0;
     }
 
-
-    // 0x0045C3B0
-
-
+    // 0x0045C3B0 (IDA Frame / GameTick wrapper)
 int Game::Frame(void){
-        return 0;
+        UpdatePlayers();
+        switch ((unsigned char)this->Status)
+        {
+          case 0u:
+            GameTick();
+            if (!gSkipAudio && gDMAudio) gDMAudio->PollAllSamples();
+            this->Status = 2;
+            return GameOver();
+          case 1u:
+            GameTick();
+            break;
+          case 2u:
+            Player::RenderPlayers(this);
+            this->Status = 1;
+            return 1;
+          default:
+            return GameOver();
+        }
+        if (!gSkipAudio && gDMAudio) gDMAudio->PollAllSamples();
+        return GameOver();
     }
 
+
+
+    // 0x00462A30 simplified: original frame pacing + FrameWithRadar.
+    int Game::RunFrame(void){
+        static DWORD nextTick = 0;
+        DWORD now = GetTickCount();
+        if (nextTick == 0) nextTick = now;
+        if (now < nextTick) return 1;
+        char keep = FrameWithRadar();
+        Draw_00461960();
+        nextTick = now + (DWORD)GetFrameTimeStep();
+        return keep;
+    }
 
     // 0x0045D3D0
 
@@ -616,7 +793,7 @@ void* Game::GetPlayerById(int arg0){
 
 
 int Game::GetState(void){
-        return 0;
+        return this->State;
     }
 
 void Game::IsSpriteVisibleToPlayer() {

@@ -1,4 +1,10 @@
 #include "MapRelatedStruct.h"
+#include <stdint.h>
+
+static FILE* g_mapLoadFile = 0;
+static void* MR_CreateBuffer(size_t n){ void* p = malloc(n); if(p) memset(p,0,n); return p; }
+#include "../TileAnim/TileAnim.h"
+#include "../../Game/JuncIds/JuncIds.h"
 #include <cstring>
 #include <new>
 
@@ -12,7 +18,9 @@ MapRelatedStruct::MapRelatedStruct() {
    //16_01::S16_01(this->_s16_01) TODO
     this->len = 0xff;
     this->Buffer_ZONE = NULL;
-    this->count = 0;
+    this->count = NULL;
+    this->field_330 = NULL;
+    this->field_334 = NULL;
     this->Buffer_MOBJ = NULL;
     this->_Map = NULL;
     this->Buffer_ANIM = NULL;
@@ -151,8 +159,8 @@ extern CarSystemManager* glob_a5;  // was ::a5 in dump
 extern int a5;  // global tile coordinate used as boundary in sub_465FE0/466170
 
 // Additional missing extern globals
-extern void* gJuncIds;
-extern void* gTileAnim;
+extern JuncIds* gJuncIds;
+extern TileAnim* gTileAnim;
 extern void* gS115;
 extern unsigned char unk_662B80;
 extern unsigned char unk_662BB4;
@@ -248,7 +256,7 @@ void MapRelatedStruct::sub_464B30(){
 //=============================================================================
 /*short MapRelatedStruct::sub_466D30(AudioSourceParams a2){
   /*int v3;
-  __int16 result;
+  __int16 result = 0;
   int v5;
   int v6;
   bool v7;
@@ -433,7 +441,7 @@ int *MapRelatedStruct::FindMaxZForLocation(int *arg0, int *a2, S202 *pS202)
 //=============================================================================
 int MapRelatedStruct::sub_46A4D0()
 {
-  /*int result;
+  /*int result = 0;
   FILE *Buffer_MOBJ;
   int *FirstElement;
   SpriteS1 *v5;
@@ -1752,7 +1760,10 @@ int MapRelatedStruct::sub_462E20(unsigned short a2, __int16 a3) {
 
 // 0x00462E40
 char* MapRelatedStruct::sub_462E40(unsigned short a2) {
-    return 0;//*(char**)(count + 4 * a2 + 4);
+    if (!this->count) return nullptr;
+    unsigned short n = *(unsigned short*)this->count;
+    if (a2 >= n) return nullptr;
+    return *(char**)((unsigned char*)this->count + 4 * a2 + 4);
 }
 
 // 0x00462E80
@@ -1764,7 +1775,7 @@ char MapRelatedStruct::sub_462E80() {
 
 // 0x00462F50
 char MapRelatedStruct::sub_462F50(int a2, int a3) {
-    //char result;
+    //char result = 0;
     /*switch (a2) {
     case 1:
         result = (*(_BYTE*)(a3 + 10) & 4) != 0;
@@ -1787,7 +1798,7 @@ char MapRelatedStruct::sub_462F50(int a2, int a3) {
 
 // 0x004632E0
 char MapRelatedStruct::sub_4632E0(int a1, int a2, char a3) {
-    char result;
+    char result = 0;
     char a3a;
     /*switch (a2) {
     case 1:
@@ -1842,7 +1853,7 @@ int MapRelatedStruct::sub_463570(int a2, int a3, _DWORD* a4) {
     //int v10 = *v8 - v7 - 1;
     //if (v10 < 0)
         return 0;
-    //int result;
+    //int result = 0;
     //int v11 = Map->field_4000C;
     /*for (unsigned __int8* i = &v8[4 * v10 + 4]; ; i -= 4) {
         result = v11 + 12 * *(_DWORD*)i;
@@ -1876,7 +1887,7 @@ int MapRelatedStruct::sub_4635F0(int a2, int a3, int* a4) {
         v13 = v12 - v9 - 1;
     if (v13 < 0)
         return 0;
-    int result;
+    int result = 0;
     int v14 = Map->field_4000C;
     for (unsigned __int8* i = &v8[4 * v13 + 4]; ; i -= 4) {
         result = v14 + 12 * *(_DWORD*)i;
@@ -2164,7 +2175,7 @@ int MapRelatedStruct::sub_464060(int a2, int a3, int a4, _DWORD* a5) {
     int v9 = *(unsigned __int8*)(v8 + 4 * v7 + 1);
     unsigned int v10 = v8 + 4 * v7;
     unsigned int v11 = *(_DWORD*)(v10 + 4 * (a4 - v9) + 4);
-    int result;
+    int result = 0;
     if (v11 >= field_34C) {
         _DWORD* v13 = (_DWORD*)(getMap()->field_4000C + 12 * v11);
         *v13 = *a5;
@@ -2497,20 +2508,16 @@ unsigned char MapRelatedStruct::sub_464880()
 //=============================================================================
 unsigned char MapRelatedStruct::ParseMapLine(_BYTE *a2, FileMgr *dwBytes)
 {
- //   if (!strncmp((const char*)a2, "DMAP", 4))
- //       return sub_4646A0((int)dwBytes);
- //   if (!strncmp((const char*)a2, "ZONE", 4))
- //       return sub_464640(dwBytes);
- //   if (!strncmp((const char*)a2, "MOBJ", 4))
- //       return sub_464590((SIZE_T)dwBytes);
- //   if (!strncmp((const char*)a2, "ANIM", 4))
- //       return sub_464670(dwBytes);
- //   if (!strncmp((const char*)a2, "LGHT", 4))
- //       return sub_4645F0((SIZE_T)dwBytes);
- //   if (!strncmp((const char*)a2, "RGEN", 4))
- //       return sub_464880();
- //   FileMgr *v5;
- //   return FileMgr::SeekPosition(v5, (int)&dwBytes);
+    // IDA 0x464890 - dispatch by chunk tag; handlers are guarded stubs for now.
+    // LoadMap seeks over payload, so handlers must not consume file data.
+    (void)dwBytes;
+    if (!a2) return 0;
+    if (!strncmp((const char*)a2, "DMAP", 4)) { CreateMap((int)(uintptr_t)dwBytes); return 1; }
+    if (!strncmp((const char*)a2, "ZONE", 4)) { LoadZONE(dwBytes); return 1; }
+    if (!strncmp((const char*)a2, "MOBJ", 4)) { LoadMOBJ((SIZE_T)(uintptr_t)dwBytes); return 1; }
+    if (!strncmp((const char*)a2, "ANIM", 4)) { LoadANIM(dwBytes); return 1; }
+    if (!strncmp((const char*)a2, "LGHT", 4)) { LoadLGHT((SIZE_T)(uintptr_t)dwBytes); return 1; }
+    if (!strncmp((const char*)a2, "RGEN", 4)) { LoadRGEN(); return 1; }
     return 0;
 }
 
@@ -2527,29 +2534,28 @@ _WORD *MapRelatedStruct::sub_464980()
 //=============================================================================
 _WORD *MapRelatedStruct::LoadMap(LPCSTR lpFileName)
 {
-    FILE *pFile= gFileMgr->FileOpen((char*)lpFileName);
-    int size = 6;
-    gFileMgr->ReadFile(pFile, size);
-    //TODO  требуется дописать
-    //FileMgr *v3;
-    //unsigned int size;
-    //FILE v6[2];
-    //char a1[4];
-    //SIZE_T dwBytes;
-    //
-    //FileMgr::FileOpen(this, lpFileName);
-    //size = 6;
-    //FileMgr::Read(v6, &size);
-    //for (size = 8; FileMgr::ReadLine((FileMgr *)a1, a1, (SIZE_T)&size); size = 8)
-    //{
-    //    if (dwBytes)
-    //        sub_464890((_BYTE*)a1, (FileMgr *)dwBytes);
-    //}
-    //FileMgr::CloseFile(v3);
-    //_WORD *result = sub_464980();
-    //if (!getMap())
-    //    return (_WORD *)debug_log(0x84u, "map.cpp", 6329);
-    return 0;//result;
+    // IDA 0x464990 - guarded incremental: parse chunk headers, dispatch only known-safe handlers.
+    FILE* f = fopen(lpFileName, "rb");
+    if (!f) return 0;
+    g_mapLoadFile = f;
+    unsigned char hdr6[6];
+    if (fread(hdr6, 1, 6, f) != 6) { fclose(f); g_mapLoadFile=0; return 0; }
+    unsigned char hdr[8];
+    while (fread(hdr, 1, 8, f) == 8) {
+        unsigned int chunkSize = *(unsigned int*)(hdr + 4);
+        long payloadPos = ftell(f);
+        if (chunkSize > 0x2000000u) break;
+        // Safe dispatch: only DMAP/ZONE/MOBJ/ANIM/LGHT handlers that just buffer/skip.
+        char tag[5]={0,0,0,0,0}; memcpy(tag,hdr,4);
+        if (!strncmp(tag,"DMAP",4) || !strncmp(tag,"ZONE",4) || !strncmp(tag,"ANIM",4) || !strncmp(tag,"LGHT",4) || !strncmp(tag,"MOBJ",4) || !strncmp(tag,"RGEN",4)) {
+            ParseMapLine((_BYTE*)hdr, (FileMgr*)(uintptr_t)chunkSize);
+        }
+        if (fseek(f, payloadPos + (long)chunkSize, SEEK_SET) != 0) break;
+    }
+    _WORD* zones = InitializeZoneList_00464980();
+    fclose(f);
+    g_mapLoadFile = 0;
+    return zones ? zones : (_WORD*)1;
 }
 
 //=============================================================================
@@ -3041,7 +3047,7 @@ char MapRelatedStruct::sub_4656D0(int a2, int a3, int a4, int a5, _DWORD* a6, ch
 //  int v14; 
 //  char v15; // cl
 //  _BYTE *v16; 
-//  char result; // al
+//  char result = 0; // al
 //  int v18; 
 //  S16_02 **v19; 
 //  bool v20; // zf
@@ -3980,7 +3986,7 @@ int MapRelatedStruct::sub_466910(int a2, int a3, _DWORD* a4) {
 //  int v10; 
 //  int v11; 
 //  unsigned __int8 *i; 
-//  int result; 
+//  int result = 0; 
 //  Map = getMap();
 //  v5 = *(_DWORD *)getMap()->sub_42A830( a3, a2);
 //  v6 = Map->field_40008;
@@ -4184,7 +4190,7 @@ char MapRelatedStruct::sub_466B70(int* a2, S202* pS202) {
 //bool MapRelatedStruct::sub_466CF0(int a2, int a3, int a4) {
 //  int v4; 
 //  char v5; // al
-//  bool result; // al
+//  bool result = 0; // al
 //  v4 = sub_4653C0( a2, a3, a4);
 //  result = 0;
 //  if ( v4 )
@@ -4199,7 +4205,7 @@ char MapRelatedStruct::sub_466B70(int* a2, S202* pS202) {
 // 0x466D30
 //short MapRelatedStruct::sub_466D30(AudioSourceParams a2) {
 //  int v3; 
-//  __int16 result; // ax
+//  __int16 result = 0; // ax
 //  int v5; 
 //  int v6; 
 //  bool v7; // zf
@@ -4457,7 +4463,7 @@ char MapRelatedStruct::sub_466B70(int* a2, S202* pS202) {
 //  int v83; 
 //  int v84; 
 //  int v85; 
-//  int result; 
+//  int result = 0; 
 //  S202 v87; // [esp-Ch] [ebp-80h]
 //  unsigned __int16 v88;
 //  unsigned __int16 v89;
@@ -5771,7 +5777,7 @@ LABEL_17:
 
 // 0x4692B0
 unsigned int MapRelatedStruct::sub_4692B0() {
-/*  unsigned int result;
+/*  unsigned int result = 0;
   FILE *Buffer_LGHT; 
   SpriteS1 *FirstElement; 
   SpriteS1 *v4; 
@@ -5831,7 +5837,7 @@ char MapRelatedStruct::ScanZoneStars(_BYTE* a1, _BYTE* a2, _BYTE* a3, char a4) {
   int v10; 
   int v11; 
   int v12; 
-  char result; // al
+  char result = 0; // al
   v5 = (unsigned __int8)*a1;
   unk_662B80 = v5;
   unk_662BB4 = (unsigned __int8)*a2;
@@ -6658,3 +6664,171 @@ LABEL_21:
   SpriteS1::sub_420600((SpriteS1 *)S202, (int)*p_pPlayer, (int)*v11, a3.BaseCar[0].field_C);*/
   return 0;
 }
+
+void MapRelatedStruct::LoadGangs(void){}
+
+void MapRelatedStruct::SpawnMapObjects(void){}
+
+void MapRelatedStruct::UpdateLights(void){}
+
+
+unsigned char MapRelatedStruct::LoadZONE(FileMgr* dwBytes){
+    size_t sz = (size_t)(uintptr_t)dwBytes;
+    if (g_mapLoadFile && sz) {
+        this->Buffer_ZONE = MR_CreateBuffer(sz);
+        if (this->Buffer_ZONE) fread(this->Buffer_ZONE, 1, sz, g_mapLoadFile);
+    }
+    return 1;
+}
+unsigned char MapRelatedStruct::LoadMOBJ(SIZE_T dwBytes){
+    size_t sz = (size_t)(uintptr_t)dwBytes;
+    if (g_mapLoadFile && sz) {
+        this->Buffer_MOBJ = MR_CreateBuffer(sz);
+        if (this->Buffer_MOBJ) fread(this->Buffer_MOBJ, 1, sz, g_mapLoadFile);
+    }
+    this->field_344 = (sz / 6);
+    return 1;
+}
+unsigned char MapRelatedStruct::LoadANIM(FileMgr* dwBytes){
+    size_t sz = (size_t)(uintptr_t)dwBytes;
+    if (g_mapLoadFile && sz) {
+        this->Buffer_ANIM = MR_CreateBuffer(sz);
+        if (this->Buffer_ANIM) fread(this->Buffer_ANIM, 1, sz, g_mapLoadFile);
+    }
+    return 1;
+}
+unsigned char MapRelatedStruct::LoadLGHT(SIZE_T dwBytes){
+    size_t sz = (size_t)(uintptr_t)dwBytes;
+    if (g_mapLoadFile && sz) {
+        this->Buffer_LGHT = MR_CreateBuffer(sz);
+        if (this->Buffer_LGHT) fread(this->Buffer_LGHT, 1, sz, g_mapLoadFile);
+    }
+    this->field_348 = (int)(sz >> 4);
+    return 1;
+}
+unsigned char MapRelatedStruct::LoadRGEN(){
+    // IDA 0x464880 - partial: read JuncIds arrays if layout-compatible pointers exist. Guarded.
+    if (!g_mapLoadFile) return 1;
+    // unknown JuncIds layout in this codebase; skip payload safely by doing nothing (LoadMap seeks).
+    return 1;
+}
+int MapRelatedStruct::CreateMap(int a2){
+    // IDA 0x4646A0 - DMAP loader (guarded). Layout: base[256*256 u32] + columnWords + 4*columnWords + numBlocks + 12*numBlocks.
+    if (!g_mapLoadFile) return 0;
+    if (!getMap()) getMap() = new Map();
+    Map* m = getMap();
+    if (!m) return 0;
+
+    if (fread(m->FileLoad, 1, 0x40000, g_mapLoadFile) != 0x40000) return 0;
+
+    unsigned int columnWords = 0;
+    if (fread(&columnWords, 1, 4, g_mapLoadFile) != 4) return 0;
+    m->File = (int)columnWords;
+    this->field_35C = (int)columnWords;
+    this->field_358 = (int)columnWords;
+    this->field_360 = (int)columnWords;
+
+    // Overprovision like original; read actual size.
+    unsigned int columnAllocWords = columnWords + 0x400u;
+    if (columnAllocWords < columnWords || columnAllocWords > 0x200000u) return 0;
+    if (m->field_40008) { free((void*)m->field_40008); m->field_40008 = 0; }
+    m->field_40008 = (int)(uintptr_t)MR_CreateBuffer((size_t)columnAllocWords * 4u);
+    if (!m->field_40008) return 0;
+    size_t columnBytes = (size_t)columnWords * 4u;
+    if (columnBytes && fread((void*)m->field_40008, 1, columnBytes, g_mapLoadFile) != columnBytes) return 0;
+
+    unsigned int numBlocks = 0;
+    if (fread(&numBlocks, 1, 4, g_mapLoadFile) != 4) return 0;
+    m->field_40004 = (int)numBlocks;
+    this->field_350 = (int)numBlocks + 200;
+    this->field_34C = (int)numBlocks;
+    this->field_354 = (int)numBlocks;
+
+    unsigned int blockAlloc = numBlocks + 200u;
+    if (blockAlloc < numBlocks || blockAlloc > 0x200000u) return 0;
+    if (m->field_4000C) { free((void*)m->field_4000C); m->field_4000C = 0; }
+    m->field_4000C = (int)(uintptr_t)MR_CreateBuffer((size_t)blockAlloc * 12u);
+    if (!m->field_4000C) return 0;
+    size_t blockBytes = (size_t)numBlocks * 12u;
+    if (blockBytes && fread((void*)m->field_4000C, 1, blockBytes, g_mapLoadFile) != blockBytes) return 0;
+
+    // Optional validation: a2 is chunk payload size in IDA call.
+    if (a2 > 0) {
+        unsigned int expected = 0x40008u + columnBytes + 4u + blockBytes;
+        if ((unsigned int)a2 != expected) {
+            // Keep loaded data if readable; mismatch is suspicious but not fatal for debug overlay.
+        }
+    }
+    return 1;
+}
+_WORD* MapRelatedStruct::InitializeZoneList_00464980(){
+    // IDA 0x464980 -> 0x464330: build unique-zone index map and default zone data.
+    if (!this->count) return 0;
+    unsigned short n = *(unsigned short*)this->count;
+    if (!n || n > 4096) return 0;
+
+    this->field_330 = (unsigned char*)MR_CreateBuffer(n);
+    if (!this->field_330) return 0;
+    memset(this->field_330, 0, n);
+
+    unsigned short unique = 0;
+    for (unsigned short i = 0; i < n; ++i) {
+        char* item = this->sub_462E40(i);
+        if (!item) { this->field_330[i] = 0; continue; }
+        unsigned char k = (unsigned char)item[0];
+        if (k != 10 && k != 1 && k != 15) { this->field_330[i] = 0; continue; }
+        unsigned char idx = 0;
+        for (unsigned short j = 0; j < i; ++j) {
+            if (!this->field_330[j]) continue;
+            char* other = this->sub_462E40(j);
+            if (!other) continue;
+            if (other[5] != item[5]) continue;
+            if (!strncmp(item + 6, other + 6, (unsigned char)item[5])) {
+                idx = this->field_330[j];
+                break;
+            }
+        }
+        if (!idx) idx = ++unique;
+        this->field_330[i] = idx;
+    }
+
+    size_t defaultsBytes = 22 * ((size_t)unique + 1);
+    this->field_334 = (_WORD*)MR_CreateBuffer(defaultsBytes);
+    if (!this->field_334) return 0;
+    memset(this->field_334, 0, defaultsBytes);
+    for (size_t i = 0; i <= unique; ++i) {
+        _WORD* dst = (_WORD*)((unsigned char*)this->field_334 + i * 22);
+        dst[0] = 500; dst[1] = 300; dst[2] = 300; dst[3] = 100;
+        dst[4] = 0;   dst[5] = 500; dst[6] = 50;  dst[7] = 40;
+        dst[8] = 10;  dst[9] = 200; dst[10] = 40;
+    }
+    return this->field_334;
+}
+
+int MapRelatedStruct::BuildIndexTable(unsigned int a2){
+    // IDA 0x4644E0 - guarded partial
+    unsigned int v3 = 0; int v4 = 0;
+    unsigned char* i = (unsigned char*)this->Buffer_ZONE;
+    if (!i) { this->count = 0; return 0; }
+    while (v3 < a2) { int v6 = (int)i[5] + 6; v3 += v6; i += v6; ++v4; }
+    int* table = (int*)MR_CreateBuffer(4 * (v4 + 1));
+    this->count = table;
+    if (!table) return 0;
+    *(unsigned short*)table = (unsigned short)v4;
+    unsigned int v8 = 0; int v10 = 0; unsigned char* bz = (unsigned char*)this->Buffer_ZONE;
+    while (v8 < a2) {
+        v10 += 4;
+        *(unsigned char**)((unsigned char*)table + v10) = bz;
+        int step = (int)bz[5] + 6;
+        v8 += step;
+        bz += step;
+    }
+    return (int)(uintptr_t)table;
+}
+int MapRelatedStruct::ProcessRecords(int a2){
+    // IDA 0x464550 - partial: needs ScriptVar/TileAnim setup; skip for safety
+    (void)a2;
+    return 0;
+}
+
+void MapRelatedStruct::ProcessPedStations(){}

@@ -15,3 +15,5 @@ int DebrisInfo::NoOp(void){
 int DebrisInfo::GetFreeSlot(void){
         return 0;
     }
+
+void DebrisInfo::Update(void){}

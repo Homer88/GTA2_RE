@@ -11,7 +11,7 @@ class VertexBuffer{
     // 0x0049C700
     int ResetBuffer(void);
     // 0x0049C740
-    int VertexBufferReleasePassenger(void *param_1);
+    int VertexBufferReleasePassenger(void);
     // 0x0049C760
     int CheckBuffer(void);
     // 0x0049C820

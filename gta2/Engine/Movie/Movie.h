@@ -20,6 +20,7 @@ class Movie
 	void Vid_ClearScreen(int*, int, int, int, int, int, int, int);
 	bool CheckMode(int FullWidth, int FullHeight, int ColorBit);
 	bool SetMode(HWND pHWND, bool pVideoMode);
+	int Vid_FreeSurface();
 };
 
 extern Movie* gMovie;

@@ -2,12 +2,13 @@
 #define __DISPLAY_H__
 #include "../../Game/Viewport/Viewport.h"
 class Display {
-// TODO Надо искать все классы там  в гидре стоит ошибка с классами.
+// TODO пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ  пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 
 
 public:
 	Display();
 	~Display();
+    void initModes(void);
 };
 
 extern Display *gDisplay;

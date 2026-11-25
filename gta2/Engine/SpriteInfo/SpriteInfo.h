@@ -20,6 +20,7 @@ class SpriteInfo{
     // 1 функций
     // 0x004C4EA0: SpriteInfo::InitEventSlot
     void InitEventSlot();
+    void Reset(void);
 };
 extern SpriteInfo* gSpriteInfo;
 #endif // !__SPRITEINFO_H_

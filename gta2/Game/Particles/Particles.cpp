@@ -7,3 +7,5 @@ Particles* gParticles;
 int Particles::RenderGlass(void){
         return 0;
     }
+
+void Particles::Update(void){}

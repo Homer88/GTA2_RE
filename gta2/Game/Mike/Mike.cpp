@@ -18,3 +18,5 @@ int Mike::DoMiKe_EM(void){
 int Mike::ShowStats(void){
         return 0;
     }
+
+void Mike::Reset(void){}

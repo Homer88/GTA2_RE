@@ -23,3 +23,5 @@ int FireInfo::AddFire(void){
 int FireInfo::Destroy(void){
         return 0;
     }
+
+void FireInfo::Update(void){}

@@ -42,6 +42,16 @@
 #include "Game/Menu/Menu.h"         // класс Menu (gMenu), MenuPage, MenuEntry
 #include "Game/Game/Game.h"         // класс Game (gGame)
 #include "Engine/MapGm/MapGm.h"     // класс MapGm (gMapGm)
+#include "Engine/MapRelatedStruct/MapRelatedStruct.h"
+#include "Engine/Map/Map.h"
+#include "Engine/Style/StyleTileLoader.h"
+#include "Game/Player/Player.h"
+#include "Game/Ped/Ped.h"
+#include "Game/PedManager/PedManager.h"
+#include "Game/CarsPrefabs/CarsPrefabs.h"
+#include "Game/Car/Car.h"
+extern PedManager gPedManager;
+extern CarsPrefabs gCarsPrefabs;
 #include "Engine/Registry/Registry.h" // регистр: gRegistry (настройки/язык)
 #include "../MapGm/MapGm.h"
 #include "../PlayerData/PlayerData.h"
@@ -51,6 +61,7 @@ extern Menu *gMenu;                 // меню игры: MenuPageArray, PlayerS
 extern Registry *gRegistry;         // реестр Windows: язык, настройки экрана/звука
 extern WinApi *gWinApi;             // утилиты: CopyWideString, GetVersion и др.
 extern Game *gGame;                 // игра: конструктор создаёт gText, gStyle и др. (Game.cpp)
+extern MapRelatedStruct* gMapRelatedStruct;
 extern bool  gSkipAudio;             // флаг "звук выключен" (определён в DMAudio.cpp)
 extern int gAudioObject;           // тип звукового объекта (определён в Menu/Menu.cpp)
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
@@ -281,7 +292,7 @@ class cApp : public cApplication
     // Конструктор: окно фиксированного размера 640x480, без растягивания.
     cApp() { m_Style = WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
              m_Width = MENU_W; m_Height = MENU_H;
-             m_testIndex = 0; m_testBankLoaded = false; m_testVocals = 0; }
+             m_testIndex = 0; m_testBankLoaded = false; m_testVocals = 0; m_inGame=false; m_debugPedSpawned=false; m_gameFrames=0; m_debugCamX=128; m_debugCamY=128; m_debugCamZ=512; m_debugZoom=16; }
 
     BOOL Init();     // инициализация меню (загрузка данных, текст, фон)
     BOOL Frame();    // один кадр: ввод, навигация, отрисовка
@@ -309,6 +320,13 @@ class cApp : public cApplication
     std::vector<int> m_pageStack;  // стек переходов: куда возвращаться по Esc
     std::wstring     m_charQueue;  // очередь набранных символов (накапливается в MsgProc)
     int              m_playerSlot; // текущий слот игрока (0..7) = Menu::CurrentPlayerSlot
+    bool             m_inGame;
+    bool             m_debugPedSpawned = false;
+    int              m_gameFrames;
+    int              m_debugCamX;
+    int              m_debugCamY;
+    int              m_debugCamZ;
+    int              m_debugZoom;
 
     // ВРЕМЕННО: тест воспроизведения банка (клавиша S) и Vocals (клавиша W).
     // Доступ к голосам gSound и банкам движка - см. Frame().
@@ -840,9 +858,327 @@ BOOL cApp::Frame()
 {
   HWND hwnd = GethWnd();
 
-  // Обновление звука каждый кадр (в оригинале: if (!skip_audio) DMAudio::PollAllSamples).
   if (!gSkipAudio)
     gDMAudio->PollAllSamples();
+
+  if (m_inGame) {
+    if (GetAsyncKeyState(VK_ESCAPE) & 1) {
+      m_inGame = false;
+      SetWindowTextA(hwnd, "GTA2");
+      SwitchPage(0);
+      Sleep(16);
+      return TRUE;
+    }
+    int camStep = (GetAsyncKeyState(VK_SHIFT) & 0x8000) ? 4 : 1;
+    bool moved = false;
+    if (GetAsyncKeyState(VK_LEFT)  & 0x8000) { m_debugCamX -= camStep; moved = true; }
+    if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { m_debugCamX += camStep; moved = true; }
+    if (GetAsyncKeyState(VK_UP)    & 0x8000) { m_debugCamY -= camStep; moved = true; }
+    if (GetAsyncKeyState(VK_DOWN)  & 0x8000) { m_debugCamY += camStep; moved = true; }
+    int zStep = (GetAsyncKeyState(VK_SHIFT) & 0x8000) ? 16 : 1;
+    if (GetAsyncKeyState(VK_PRIOR) & 0x8000) { m_debugCamZ += zStep; if (m_debugCamZ > 1024) m_debugCamZ = 1024; }
+    if (GetAsyncKeyState(VK_NEXT)  & 0x8000) { m_debugCamZ -= zStep; if (m_debugCamZ < 0) m_debugCamZ = 0; }
+    if (GetAsyncKeyState(VK_OEM_PLUS) & 1 || GetAsyncKeyState(VK_ADD) & 1) { if (m_debugZoom < 1024) m_debugZoom *= 2; }
+    if (GetAsyncKeyState(VK_OEM_MINUS) & 1 || GetAsyncKeyState(VK_SUBTRACT) & 1) { if (m_debugZoom > 4) m_debugZoom /= 2; }
+    // Try to follow real player camera when available, unless user manually moved debug camera.
+    // Guarded: only AuxGameCamera (known offset in dllLoad struct); avoid MainPed position until layout verified.
+    if (!moved && gGame && gGame->PlayerMain) {
+      Player* pl = gGame->PlayerMain;
+      int px = pl->AuxGameCameraX;
+      int py = pl->AuxGameCameraY;
+      auto tryCam=[&](int wx,int wy)->bool{
+        if (wx <= 0 || wy <= 0) return false;
+        int tx = wx / 16384;
+        int ty = wy / 16384;
+        if (tx >= 0 && tx < 256 && ty >= 0 && ty < 256 && wx < 256 * 16384 && wy < 256 * 16384) { m_debugCamX=tx; m_debugCamY=ty; return true; }
+        return false;
+      };
+      bool camOk = tryCam(px,py) || tryCam(pl->Camera_X_View, pl->Camera_Y_View);
+      if (!camOk && pl->MainPed) {
+        // DEBUG/local-layout fallback only: our Ped.PositionX/Y are local fields, not IDA-verified.
+        tryCam(pl->MainPed->PositionX, pl->MainPed->PositionY);
+      }
+    }
+    if (m_debugCamX < 0) m_debugCamX = 0; if (m_debugCamX > 255) m_debugCamX = 255;
+    if (m_debugCamY < 0) m_debugCamY = 0; if (m_debugCamY > 255) m_debugCamY = 255;
+    if (gGame) {
+      int keep = gGame->RunFrame();
+      m_gameFrames++;
+      if (!keep) { m_inGame = false; SetWindowTextA(hwnd, "GTA2"); SwitchPage(0); }
+      // DEBUG: guarded one-time spawn to exercise entity overlay/tick pipeline.
+      // Uses our local struct layout only; not IDA-accurate spawn/init.
+      if (!m_debugPedSpawned && gGame->PlayerMain) {
+        m_debugPedSpawned = true;
+        Ped* dp = gPedManager.GetPed();
+        if (dp) {
+          dp->PositionX = m_debugCamX * 16384;
+          dp->PositionY = m_debugCamY * 16384;
+          dp->PositionZ = 0;
+          gGame->PlayerMain->MainPed = dp;
+        }
+      }
+      // In-game visual: top-down map grid from loaded DMAP when available.
+      if (m_RGBA.size() >= (size_t)MENU_W * MENU_H * 4) {
+        for (size_t i = 0; i < (size_t)MENU_W * MENU_H; ++i) {
+          m_RGBA[i*4+0] = 10; m_RGBA[i*4+1] = 14; m_RGBA[i*4+2] = 22; m_RGBA[i*4+3] = 255;
+        }
+        bool drewMap = false;
+        if (gMapRelatedStruct) {
+          Map* m = gMapRelatedStruct->getMap();
+          if (m) {
+            const int tilePx = m_debugZoom > 0 ? m_debugZoom : 16;
+            const int viewW = MENU_W / tilePx;  // 40
+            const int viewH = (MENU_H - 32) / tilePx; // 28
+            const int ox = 0, oy = 32;
+            int camX = m_debugCamX - viewW/2;
+            int camY = m_debugCamY - viewH/2;
+            if (camX < 0) camX = 0; if (camY < 0) camY = 0;
+            if (camX > 256-viewW) camX = 256-viewW;
+            if (camY > 256-viewH) camY = 256-viewH;
+            const unsigned int* base = (const unsigned int*)m->FileLoad;
+            const unsigned char* colBuf = (const unsigned char*)m->field_40008;
+            const unsigned char* blkBuf = (const unsigned char*)m->field_4000C;
+            const unsigned int columnWords = (unsigned int)m->File;
+            const unsigned int numBlocks = (unsigned int)m->field_40004;
+            const bool hasTiles = StyleTiles_Ready();
+            if (colBuf && blkBuf && columnWords > 0) {
+              for (int vy=0; vy<viewH; ++vy) {
+                int my = camY + vy;
+                for (int vx=0; vx<viewW; ++vx) {
+                  int mx = camX + vx;
+                  unsigned int bi = base[my*256+mx];
+                  unsigned char fallbackR=10,fallbackG=14,fallbackB=22;
+                  const unsigned char* tilePix = 0;
+                  const unsigned char* pal = 0;
+                  unsigned short selectedFace = 0;
+                  unsigned char selectedRot = 0;
+                  bool selectedFlip = false;
+                  unsigned char selectedSlope = 0;
+                  bool selectedSideFace = false;
+                  unsigned char selectedArrows = 0;
+                  int selectedZ = 0;
+                  unsigned char selectedHeight = 0;
+                  int selectedTopZ = 0;
+                  if (bi < columnWords) {
+                    const unsigned char* col = colBuf + (size_t)bi * 4u;
+                    unsigned char height = col[0], offset = col[1];
+                    if (offset <= 8 && height <= 8 && height >= offset) {
+                      int zStart = (int)height - 1;
+                      if (zStart > m_debugCamZ) zStart = m_debugCamZ;
+                      for (int z = zStart; z >= (int)offset; --z) {
+                        unsigned int wordIdx = bi + 1u + (unsigned int)(z - offset);
+                        if (wordIdx >= columnWords) break;
+                        unsigned int blockId = *(const unsigned int*)(colBuf + (size_t)wordIdx * 4u);
+                        if (blockId >= numBlocks) continue;
+                        const unsigned char* b = blkBuf + (size_t)blockId * 12u;
+                        unsigned short left = *(const unsigned short*)(b+0);
+                        unsigned short right= *(const unsigned short*)(b+2);
+                        unsigned short top  = *(const unsigned short*)(b+4);
+                        unsigned short bottom=*(const unsigned short*)(b+6);
+                        unsigned short lid  = *(const unsigned short*)(b+8);
+                        unsigned char arrows=b[10], slope=b[11];
+                        if (left|right|top|bottom|lid|arrows|slope) {
+                          unsigned short face = lid;
+                          bool sideFace = false;
+                          if (!face) { face = top; sideFace = face != 0; }
+                          if (!face) { face = left; sideFace = face != 0; }
+                          if (!face) { face = right; sideFace = face != 0; }
+                          if (!face) { face = bottom; sideFace = face != 0; }
+                          selectedFace = face;
+                          selectedSlope = slope;
+                          selectedSideFace = sideFace;
+                          selectedArrows = arrows;
+                          selectedZ = z;
+                          selectedHeight = height;
+                          selectedTopZ = (int)height;
+                          // IDA RenderBlockLid: rot index used as (face>>13) for UV remap tables; (face>>10)&3 selects physical palette/state.
+                          // IDA RenderBlockSlopes: (face&0x2000) flips UV orientation. RenderBlockLid: (face&0x1000) sets flat flag bit.
+                          // Preview keeps MapEditor-style rot>>14 for simplicity; uses 0x2000 as flipX and 0x1000 to skip depth cue.
+                          selectedRot = (unsigned char)((face >> 14) & 3u);
+                          selectedFlip = (face & 0x2000u) != 0;
+                          bool faceFlat = (face & 0x1000u) != 0;
+                          if (sideFace && !faceFlat) { fallbackR = (unsigned char)(fallbackR * 14 / 16); fallbackG = (unsigned char)(fallbackG * 14 / 16); fallbackB = (unsigned char)(fallbackB * 14 / 16); }
+                          if (hasTiles && face) {
+                            unsigned int virt = (unsigned int)(face & 1023u);
+                            unsigned short remap = StyleTiles_GetRemappedTile(virt);
+                            unsigned int tileId = remap ? (unsigned int)remap : virt;
+                            unsigned short phys = StyleTiles_GetPhysPalForTile(tileId);
+                            pal = StyleTiles_GetPhysPalette((unsigned int)phys);
+                            tilePix = StyleTiles_GetTilePixels(tileId);
+                          }
+                          if (!tilePix || !pal) {
+                            bool got=false;
+                            if (hasTiles && face) {
+                              unsigned int virt = (unsigned int)(face & 1023u);
+                              unsigned short remap = StyleTiles_GetRemappedTile(virt);
+                              unsigned int tileId = remap ? (unsigned int)remap : virt;
+                              unsigned short phys = StyleTiles_GetPhysPalForTile(tileId);
+                              const unsigned char* fpal = StyleTiles_GetPhysPalette((unsigned int)phys);
+                              if (fpal) {
+                                unsigned char i0=StyleTiles_SamplePixel(tileId,16,16,selectedFlip,false,selectedRot);
+                                unsigned char i1=StyleTiles_SamplePixel(tileId,48,16,selectedFlip,false,selectedRot);
+                                unsigned char i2=StyleTiles_SamplePixel(tileId,16,48,selectedFlip,false,selectedRot);
+                                unsigned char i3=StyleTiles_SamplePixel(tileId,48,48,selectedFlip,false,selectedRot);
+                                fallbackR=(unsigned char)((fpal[i0*4+0]+fpal[i1*4+0]+fpal[i2*4+0]+fpal[i3*4+0])/4);
+                                fallbackG=(unsigned char)((fpal[i0*4+1]+fpal[i1*4+1]+fpal[i2*4+1]+fpal[i3*4+1])/4);
+                                fallbackB=(unsigned char)((fpal[i0*4+2]+fpal[i1*4+2]+fpal[i2*4+2]+fpal[i3*4+2])/4);
+                                got=true;
+                              }
+                            }
+                            if (!got) {
+                              unsigned char ground = (unsigned char)(slope & 0x03u);
+                              unsigned char v = (unsigned char)(24 + ((face ^ (face>>8) ^ slope ^ (unsigned char)z*13) & 0x3F));
+                              if (ground == 1) { fallbackR=(unsigned char)(40+v/3); fallbackG=(unsigned char)(40+v/3); fallbackB=(unsigned char)(44+v/3); }
+                              else if (ground == 2) { fallbackR=(unsigned char)(52+v/4); fallbackG=(unsigned char)(50+v/4); fallbackB=(unsigned char)(46+v/4); }
+                              else if (ground == 3) { fallbackR=(unsigned char)(20+v/5); fallbackG=(unsigned char)(44+v/3); fallbackB=(unsigned char)(20+v/5); }
+                              else { fallbackR=(unsigned char)(10+v/6); fallbackG=(unsigned char)(14+v/6); fallbackB=(unsigned char)(22+v/5); }
+                            }
+                          }
+                          // IDA RenderBlock dispatches on slope byte & 0xFC: 0xB4/0xB8/0xBC/0xC0 select slope/side/lid variants.
+                          switch (slope & 0xFC) {
+                            case 0xB4: fallbackG = (unsigned char)(fallbackG * 15 / 16); break;
+                            case 0xB8: fallbackR = (unsigned char)(fallbackR * 15 / 16); break;
+                            case 0xBC: fallbackB = (unsigned char)(fallbackB * 15 / 16); break;
+                            case 0xC0: fallbackR = (unsigned char)(fallbackR * 15 / 16); fallbackB = (unsigned char)(fallbackB * 15 / 16); break;
+                            default: if (slope & 0xFC) { fallbackR = (unsigned char)(fallbackR * 14 / 16); fallbackG = (unsigned char)(fallbackG * 14 / 16); fallbackB = (unsigned char)(fallbackB * 15 / 16); } break;
+                          }
+                          // height debug cue
+                          if (z > 1) { int add = z*2; if (add>40) add=40; int rr=fallbackR+add, gg=fallbackG+add; fallbackR=(unsigned char)(rr>255?255:rr); fallbackG=(unsigned char)(gg>255?255:gg); }
+                          (void)arrows;
+                          break;
+                        }
+                      }
+                    }
+                  }
+                  for (int py=0; py<tilePx; ++py) {
+                    for (int px=0; px<tilePx; ++px) {
+                      int sx = ox + vx*tilePx + px;
+                      int sy = oy + vy*tilePx + py;
+                      if ((unsigned)sx >= MENU_W || (unsigned)sy >= MENU_H) continue;
+                      unsigned char r=fallbackR,g=fallbackG,bb=fallbackB;
+                      if (pal && selectedFace) {
+                        int tx = (px * 64) / tilePx;
+                        int ty = (py * 64) / tilePx;
+                        unsigned int virt2 = (unsigned int)(selectedFace & 1023u);
+                        unsigned short remap2 = StyleTiles_GetRemappedTile(virt2);
+                        unsigned int tileId2 = remap2 ? (unsigned int)remap2 : virt2;
+                        unsigned char idx = StyleTiles_SamplePixel(tileId2, tx, ty, selectedFlip, false, selectedRot);
+                        r = pal[idx*4 + 0];
+                        g = pal[idx*4 + 1];
+                        bb= pal[idx*4 + 2];
+                      }
+                      bool faceFlat = (selectedFace & 0x1000u) != 0;
+                      if (selectedSideFace && !faceFlat) {
+                        int wallH = tilePx/3 + (selectedHeight - selectedZ) * (tilePx/10);
+                        if (wallH < tilePx/4) wallH = tilePx/4;
+                        if (wallH > tilePx*2/3) wallH = tilePx*2/3;
+                        if (py > tilePx - wallH) { r=(unsigned char)(r*10/16); g=(unsigned char)(g*10/16); bb=(unsigned char)(bb*10/16); }
+                      } else if (!faceFlat && py > tilePx * 3 / 4) {
+                        r = (unsigned char)(r * 13 / 16); g = (unsigned char)(g * 13 / 16); bb = (unsigned char)(bb * 13 / 16);
+                      }
+                      // Height edge cues: darken bottom/right edges when this column is higher than neighbor.
+                      if (selectedTopZ > 0 && tilePx >= 8) {
+                        if (py >= tilePx-1) {
+                          int nmy = camY + vy + 1;
+                          if (nmy < 256) {
+                            unsigned int nbi = base[nmy*256 + (camX+vx)];
+                            if (nbi < columnWords) {
+                              unsigned char nh = *(colBuf + (size_t)nbi*4u);
+                              if (nh < (unsigned char)selectedTopZ) { r=(unsigned char)(r*11/16); g=(unsigned char)(g*11/16); bb=(unsigned char)(bb*11/16); }
+                            }
+                          }
+                        }
+                        if (px >= tilePx-1) {
+                          int nmx = camX + vx + 1;
+                          if (nmx < 256) {
+                            unsigned int nbi = base[(camY+vy)*256 + nmx];
+                            if (nbi < columnWords) {
+                              unsigned char nh = *(colBuf + (size_t)nbi*4u);
+                              if (nh < (unsigned char)selectedTopZ) { r=(unsigned char)(r*12/16); g=(unsigned char)(g*12/16); bb=(unsigned char)(bb*12/16); }
+                            }
+                          }
+                        }
+                      }
+                      // Slope byte (IDA RenderBlock: slope&0xFC selects lid/side variant). Debug diagonal cue.
+                      unsigned char sfc = (unsigned char)(selectedSlope & 0xFCu);
+                      if (sfc==0xB4 || sfc==0xB8 || sfc==0xBC || sfc==0xC0) {
+                        int diag = (sfc==0xB4) ? (px - (tilePx-1-py))
+                                 : (sfc==0xB8) ? (px - py)
+                                 : (sfc==0xBC) ? ((tilePx-1-px) - py)
+                                 : ((tilePx-1-px) - (tilePx-1-py));
+                        if (diag > 0) { r=(unsigned char)(r*14/16); g=(unsigned char)(g*14/16); bb=(unsigned char)(bb*14/16); }
+                        else if (diag == 0 && tilePx >= 8) { r=235; g=235; bb=235; }
+                      }
+                      // Arrows/debug: block byte 10 often encodes traffic arrows; draw subtle center marker if present.
+                      if (selectedArrows && px >= tilePx/2-1 && px <= tilePx/2 && py >= tilePx/2-1 && py <= tilePx/2) {
+                        r=255; g=240; bb=120;
+                      }
+                      if (tilePx >= 16 && (px==0 || py==0)) { r=(unsigned char)(r*15/16); g=(unsigned char)(g*15/16); bb=(unsigned char)(bb*15/16); }
+                      // simple height cue: higher blocks slightly brighter top edge
+                      if (selectedZ > 0 && py==0 && tilePx>=8) { int a=selectedZ*3; r=(unsigned char)((r+a>255)?255:r+a); g=(unsigned char)((g+a>255)?255:g+a); bb=(unsigned char)((bb+a>255)?255:bb+a); }
+                      size_t pi=((size_t)sy*MENU_W+sx)*4;
+                      m_RGBA[pi+0]=r; m_RGBA[pi+1]=g; m_RGBA[pi+2]=bb; m_RGBA[pi+3]=255;
+                    }
+                  }
+                }
+              }
+              drewMap = true;
+            }
+          }
+        }
+        for (int y=0;y<24 && y<MENU_H;y++) for (int x=0;x<MENU_W;x++){ size_t p=((size_t)y*MENU_W+x)*4; m_RGBA[p+0]=30; m_RGBA[p+1]=40; m_RGBA[p+2]=80; m_RGBA[p+3]=255; }
+        int mxm = (m_gameFrames * 4) % (MENU_W-20);
+        for (int y=40;y<44;y++) for (int x=mxm;x<mxm+20;x++){ if(x<0||x>=MENU_W||y<0||y>=MENU_H) continue; size_t p=((size_t)y*MENU_W+x)*4; m_RGBA[p+0]=220; m_RGBA[p+1]=220; m_RGBA[p+2]=80; m_RGBA[p+3]=255; }
+        // debug camera marker overlay (read-only)
+        {
+          const int tilePx = m_debugZoom > 0 ? m_debugZoom : 16;
+          const int viewW = MENU_W / tilePx;
+          const int viewH = (MENU_H - 32) / tilePx;
+          const int ox=0, oy=32;
+          int camX = m_debugCamX - viewW/2;
+          int camY = m_debugCamY - viewH/2;
+          if (camX < 0) camX = 0; if (camY < 0) camY = 0;
+          if (camX > 256-viewW) camX = 256-viewW;
+          if (camY > 256-viewH) camY = 256-viewH;
+          auto drawDot=[&](int tx,int ty,unsigned char rr,unsigned char gg,unsigned char bb2,int ms){
+            int pxm = ox + (tx - camX) * tilePx + tilePx/2;
+            int pym = oy + (ty - camY) * tilePx + tilePx/2;
+            for (int dy=-ms; dy<=ms; ++dy) for (int dx=-ms; dx<=ms; ++dx) {
+              int x=pxm+dx, y=pym+dy;
+              if ((unsigned)x>=MENU_W||(unsigned)y>=MENU_H) continue;
+              size_t pi=((size_t)y*MENU_W+x)*4;
+              m_RGBA[pi+0]=rr; m_RGBA[pi+1]=gg; m_RGBA[pi+2]=bb2; m_RGBA[pi+3]=255;
+            }
+          };
+          int ms = tilePx/4; if (ms < 2) ms = 2;
+          drawDot(m_debugCamX, m_debugCamY, 255, 80, 80, ms); // camera
+          if (gGame && gGame->PlayerMain && gGame->PlayerMain->MainPed) {
+            Ped* mp = gGame->PlayerMain->MainPed;
+            int wx=mp->PositionX, wy=mp->PositionY; // local layout debug only
+            if (wx > 0 && wy > 0 && wx < 256*16384 && wy < 256*16384) {
+              drawDot(wx/16384, wy/16384, 80, 255, 120, (ms>2?2:1)); // debug ped
+            }
+          }
+        }
+        (void)drewMap;
+      }
+      BlitGDIScaled();
+      wchar_t buf[192];
+      {
+        int rawX=0, rawY=0, pedN=0, pedF=0, carN=0, carN2=0, mobjN=0, hasMP=0;
+        if (gGame && gGame->PlayerMain) { rawX=gGame->PlayerMain->AuxGameCameraX; rawY=gGame->PlayerMain->AuxGameCameraY; hasMP = gGame->PlayerMain->MainPed ? 1 : 0; }
+        if (gMapRelatedStruct) mobjN = gMapRelatedStruct->field_344;
+        for (Ped* pp=gPedManager.NextPed; pp; pp=pp->NextPed) { ++pedN; if (pedN>500) break; }
+        for (Ped* pp=gPedManager.FirstPed; pp; pp=pp->NextPed) { ++pedF; if (pedF>500) break; }
+        for (Car* cc=gCarsPrefabs.Car2; cc; cc=cc->LastCar) { ++carN; if (carN>500) break; }
+        for (Car* cc=gCarsPrefabs.Car3; cc; cc=cc->LastCar) { ++carN2; if (carN2>500) break; }
+        swprintf(buf, 192, L"GTA2 - in game (frame %d)%s zm=%d cam=%d,%d,%d sty=%s p=%d/%d c=%d/%d o=%d mp=%d", m_gameFrames, (gMapRelatedStruct && gMapRelatedStruct->getMap())?L" map":L"", m_debugZoom, m_debugCamX, m_debugCamY, m_debugCamZ, StyleTiles_Ready()?L"on":L"off", pedN, pedF, carN, carN2, mobjN, hasMP);
+      }
+      SetWindowTextW(hwnd, buf);
+    }
+    Sleep(16);
+    return TRUE;
+  }
 
   // ВРЕМЕННО: тест воспроизведения звуков (клавиша S). В оригинальном меню звуков
   // навигации нет, поэтому движок проверяется отдельным хоткеем: первое нажатие
@@ -860,7 +1196,7 @@ BOOL cApp::Frame()
       gSound.GetSampleInfo(idx, size, rate, loopStart, loopEnd);
       gSound.StopAll();
       gSound.PlaySample(idx, false);
-      wchar_t buf[128];
+      wchar_t buf[192];
       swprintf(buf, 128, L"GTA2 viewer - sound %d/%d (%d Hz, %d bytes)",
                idx, n, rate, size);
       SetWindowTextW(hwnd, buf);
@@ -885,7 +1221,7 @@ BOOL cApp::Frame()
       if (Sound::WavToPcm(path, pcm, rate) && !pcm.empty()) {
         gSound.PlayPcm(pcm, rate);
         const char* name = strrchr(path, '\\');
-        wchar_t buf[128];
+        wchar_t buf[192];
         swprintf(buf, 128, L"GTA2 viewer - vocals %d/%d %S (%d smpl, %d Hz)",
                  k, (int)m_vocalFiles.size(),
                  name ? name + 1 : path, (int)pcm.size(), rate);
@@ -977,14 +1313,32 @@ BOOL cApp::Frame()
         // Поле ввода имени: Enter подтверждает и остаёмся на странице.
         RasterizeMenuText();
       } else if (action == MENU_ACTION_CHANGEPAGE || action == MENU_ACTION_NONE) {
-        // Обычный пункт меню: переход на другую страницу по SelectMenu.
-        if (sel == 257) {                   // MENUPAGE_GTA2MANAGER - заглушка
-          // вход в GTAManager (меню миссий): пока ничего не делаем
-        } else if (sel >= 0 && sel < 16) {  // переход на страницу меню
-          m_pageStack.push_back(m_CurrentPage); // запомним, куда возвращаться по Esc
+        if (sel == 264 || action == MENU_ACTION_NEWGAME) {
+          if (gMapGm == NULL) gMapGm = new MapGm();
+          if (gMapGm->GetMapName()[0] == 0) gMapGm->SetMapName((char*)"data\\bil.gmp");
+          if (gMapGm->GetStyleFile()[0] == 0) gMapGm->SetStyleName((char*)"data\\bil.sty");
+          if (gMapGm->GetScriptName()[0] == 0) gMapGm->SetScripName((char*)"data\\bil.scr");
+          if (gGame == NULL) gGame = new Game(1, 0);
+          gGame->LoadResources();
+          gGame->StartGameSession();
+          m_inGame = true; m_gameFrames = 0;
+          SetWindowTextA(GethWnd(), "GTA2 - running");
+        } else if (sel == 257) {
+        } else if (sel >= 0 && sel < 16) {
+          m_pageStack.push_back(m_CurrentPage);
           SwitchPage(sel);
-        } // остальные спец. значения SelectMenu пока игнорируем
-      } // прочие действия (LOADGAME, SAVEGAME и т.п.) пока игнорируем
+        }
+      } else if (action == MENU_ACTION_NEWGAME) {
+        if (gMapGm == NULL) gMapGm = new MapGm();
+        if (gMapGm->GetMapName()[0] == 0) gMapGm->SetMapName((char*)"data\\bil.gmp");
+        if (gMapGm->GetStyleFile()[0] == 0) gMapGm->SetStyleName((char*)"data\\bil.sty");
+        if (gMapGm->GetScriptName()[0] == 0) gMapGm->SetScripName((char*)"data\\bil.scr");
+        if (gGame == NULL) gGame = new Game(1, 0);
+        gGame->LoadResources();
+        gGame->StartGameSession();
+        m_inGame = true; m_gameFrames = 0;
+        SetWindowTextA(GethWnd(), "GTA2 - running");
+      }
     }
   }
 
@@ -1029,8 +1383,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
   // Game(int modeStatus, char ids) - 1 игрок, индекс 0.
   gMapGm = new MapGm();            // проект хранит MapGm как указатель (в дампе - статик &gMapGm)
   gGame = new Game(1, 0);
-  gGame->LoadResources();
-  gGame->StartGameSession();
+  // gGame->LoadResources();
+  // gGame->StartGameSession();
 
   cApp App;
   return App.Run();

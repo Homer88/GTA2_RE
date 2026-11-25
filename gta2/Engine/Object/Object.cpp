@@ -80,3 +80,4 @@ int Object::SpawnObject(int a, int x, int y, int z) {
 int Object::SpawnObject(int Type, int x, int y, int z, short rot) {
     return 0;
 }
+void Object::Object_Update(void){}

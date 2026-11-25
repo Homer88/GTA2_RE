@@ -121,3 +121,4 @@ int Character::Characte(void){
 int Character::IsPedRelatedByGangOrOccupation(void){
         return 0;
     }
+void Character::Process(void){}

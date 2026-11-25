@@ -36,6 +36,7 @@ class Character{
     int Characte(void);
     // 0x004462F0
     int IsPedRelatedByGangOrOccupation(void);
+    void Process(void);
 };
 
 extern Character* gCharacter;

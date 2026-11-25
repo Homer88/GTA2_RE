@@ -22,6 +22,9 @@ public:
 
     class Bus  BusMetrics;
     class Bus  BUS[10];
+    void UpdateTrains(void);
+    void CreateRoutesFromMap(void);
+    void CreateTrains(void);
 };
 extern PublicTransport* gPublicTransport;
 #endif // !1

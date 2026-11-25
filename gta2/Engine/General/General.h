@@ -17,6 +17,7 @@ class General{
     int cPlayer(void);
     // 0x0045F9E0
     int GetRandomNumber(void);
+    void Update(void);
 };
 extern  General* gGeneral;
 extern bool gShowCycle;

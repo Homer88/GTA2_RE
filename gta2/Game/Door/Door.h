@@ -7,6 +7,7 @@ public:
 	bool Status;
 	Door();
 	~Door();
+    void Update(void);
 };
 
 extern Door* gDoor;

@@ -1,5 +1,9 @@
 #include "Checkpoint.h"
 
+Checkpoint* gCheckpoint = 0;
+Checkpoint* gCheckpoint2 = 0;
+Checkpoint* gCheckpoint3 = 0;
+
 
     // 0x00446740
 

@@ -18,3 +18,4 @@ bool Movie::CheckMode(int FullWidth, int FullHeight, int ColorBit) {
 bool Movie::SetMode(HWND pHWND, bool pVideoMode) {
 	return true;
 }
+int Movie::Vid_FreeSurface(){ return 0; }

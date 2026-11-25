@@ -230,7 +230,7 @@ void MissionManager::sub_475A40(char a2)
 //=============================================================================
 int MissionManager::CopyMapDetails()
 {
-   /* int result;
+   /* int result = 0;
     strcpy((char*)unk_664590, (const char*)MapGm_GetMapName(&gMapGm));
     strcpy(byte_6645A9, (const char*)MapGm_GetStyleFile(&gMapGm));
     strcpy(byte_6645C2, (const char*)MapGm_GetScriptName(&gMapGm));
@@ -566,7 +566,7 @@ char MissionManager::sub_4764D0(int a2, char a3)
 {
    /* int v4 = 15;
     int* arr_30 = this->arr_30;
-    char result;
+    char result = 0;
     do
     {
         result = a2;
@@ -1020,7 +1020,7 @@ int MissionManager::ClearMissionLineFlags()
   /*  char v2 = 0;
     char* arr2_15 = this->arr2_15;
     int v6 = 32;
-    int result;
+    int result = 0;
     do
     {
         if ( ((1 << v2) & unk_6646BC) != 0 )

@@ -46,13 +46,14 @@ class Game{
     // 0x00416BC0
     int GetIsUserPaused(void);
     // 0x004219E0
-    int GetPlayerSlotByIndex(void);
+    Player* GetPlayerSlotByIndex(unsigned char ID);
     // 0x0045A460
     int GetFrameTimeStep(void);
     // 0x0045A4D0
     int GameOver(void);
     // 0x0045A540
     int SetSkipPolice(void);
+    int InitializeSpawnPoints(void);
     // 0x0045A5A0
     int RenderFrame(void);
     // 0x0045A650
@@ -97,6 +98,10 @@ class Game{
     int Tick(void);
     // 0x0045C3B0
     int Frame(void);
+    int RunFrame(void);
+    char FrameWithRadar(void);
+    void ProcessMultiplayerFrame(void);
+    int GameTick(void);
     // 0x0045D3D0
     int Destr(void);
     // 0x00476790

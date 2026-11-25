@@ -31,3 +31,4 @@ int TransmissionInfo::UpdateBrakes(void){
 void TransmissionInfo::ValidateSpawnPoints(void){
 
     }
+void TransmissionInfo::UpdateAll(void){}

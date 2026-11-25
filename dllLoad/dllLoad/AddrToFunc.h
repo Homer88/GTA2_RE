@@ -247,7 +247,7 @@ static const AddrFuncEntry kAddrFunc[] = {
     { 0x00409460UL, "sub_409460" },
     { 0x00409620UL, "Network::sub_409620" },
     { 0x00409650UL, "Network::sub_409650" },
-    { 0x00409680UL, "cNetwork::cNetworkFUN_00409680" },
+    { 0x00409680UL, "Network::PacketEncode_00409680" },
     { 0x00409890UL, "Network::sub_409890" },
     { 0x004098E0UL, "Network::sub_4098E0" },
     { 0x004099B0UL, "Network::sub_4099B0" },

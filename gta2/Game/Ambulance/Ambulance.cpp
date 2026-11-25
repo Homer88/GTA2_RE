@@ -8,3 +8,4 @@ Ambulance::Ambulance() {
 Ambulance::~Ambulance() {
 
 }
+void Ambulance::Update(void){}

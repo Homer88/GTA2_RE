@@ -10,6 +10,7 @@ class TrafficLigthStruct{
     int IsPedCrossingPhase(void);
     // 0x004C4B00
     int RegisterCars(void);
+    void Update(void);
 };
 extern TrafficLigthStruct *gTrafficLigthStruct;
 

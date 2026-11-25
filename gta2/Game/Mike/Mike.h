@@ -6,7 +6,7 @@
 class Mike{
 
     public:
-        // переменные 
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
         BuildingModel _BuildingModel[5];
         Mike();
 
@@ -14,6 +14,7 @@ class Mike{
     int DoMiKe_EM(void);
     // 0x00474530
     int ShowStats(void);
+    void Reset(void);
 };
 extern Mike* gMike;
 #endif // !__MIKE_H_

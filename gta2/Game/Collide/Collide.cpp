@@ -15,3 +15,5 @@ int Collide::CheckSpriteCollisionFiltered(void){
 int Collide::CheckpointFindCollidedObject(void){
         return 0;
     }
+
+void Collide::SetParam(void){}

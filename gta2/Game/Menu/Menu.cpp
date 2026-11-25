@@ -450,7 +450,7 @@ int  Menu::UpdateMenuFrame() {
     gMapGm->SetBonusStage(pBonusStage1); // TODO: глобал gMapGm не входит в линковку GTA2
     this->ConfirmExit();
     this->ActivateElement();
-    int result;
+    int result = 0;
     if (this->GetSaveFile(pPlayerSlotSave)) {
         pMenuPage->MenuEntryArray[EntryOptions].Flag[1] = 1;
         pMenuPage->MenuItemArray[MENUPAGE_PLAY].IndexMenuActions = 1;

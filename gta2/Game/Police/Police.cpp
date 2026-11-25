@@ -127,3 +127,4 @@ int Police::UpdateCriminalPosition(void){
 void Police::SpawnPoliceDriver(int arg0){
 
     }
+void Police::Update(void){}

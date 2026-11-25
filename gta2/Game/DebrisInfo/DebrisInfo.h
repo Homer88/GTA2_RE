@@ -10,6 +10,7 @@ class DebrisInfo{
     int NoOp(void);
     // 0x004C5430
     int GetFreeSlot(void);
+    void Update(void);
 };
 extern DebrisInfo* gDebrisInfo;
 #endif // !__DEBRISINFO_H_

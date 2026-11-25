@@ -16,18 +16,20 @@ wchar_t gNetworkNickName[16];
 
 MapGm::MapGm()
 {
-	// 0x0045e860: инициализация полей по дампу (sub_45E860, вызывается сразу после меню)
-	gmpFile[0]    = 0;
-	styFile[0]    = 0;
+	gmpFile[0] = 0;
+	styFile[0] = 0;
 	sctiptFile[0] = 0;
-	saveFile[0]   = 0;
-	playerArena   = 0;
-	BonusStage    = 0;
-	Gang          = 0;
+	saveFile[0] = 0;
+	playerArena = 0;
+	BonusStage = 0;
+	Gang = 0;
 	PlayerSlotSave = 0;
-	Bonus         = 0;
-	field_438     = 0;
-	field_43A     = 0;
+	Bonus = 0;
+	memset(&this->StatusTable, 0, sizeof(this->StatusTable));
+	this->AutoDamageCost = 0;
+	this->FugitiveFactor = 0;
+	this->field_438 = 0;
+	this->field_43A = 0;
 	ResetSettings();
 }
 MapGm::~MapGm()
@@ -36,130 +38,130 @@ MapGm::~MapGm()
 
 
 // --- СЃРµС‚С‚РµСЂС‹ РёРјС‘РЅ С„Р°Р№Р»РѕРІ ---
-char* MapGm::SetMapName(char* Source) { 
-	return strncpy(this->gmpFile, Source, 0xFFu); 
+char* MapGm::SetMapName(char* Source){
+	return strncpy(this->gmpFile, Source, 0xFFu);
 }
-char* MapGm::SetStyleName(char* Source) { 
-	return strncpy(this->styFile, Source, 0xFFu); 
+char* MapGm::SetStyleName(char* Source){
+	return strncpy(this->styFile, Source, 0xFFu);
 }
-char* MapGm::SetScripName(char* Source) {
-	return strncpy(this->sctiptFile, Source, 0xFFu); 
+char* MapGm::SetScripName(char* Source){
+	return strncpy(this->sctiptFile, Source, 0xFFu);
 }
-char* MapGm::SetSaveFile(char* Source) { 
-	return strncpy(this->saveFile, Source, 0xFFu); 
+char* MapGm::SetSaveFile(char* Source){
+	return strncpy(this->saveFile, Source, 0xFFu);
 }
 
-void MapGm::SetPlayerArena(char value) { 
-	this->playerArena = (unsigned char)value; 
+void MapGm::SetPlayerArena(char value){
+	this->playerArena = (unsigned char)value;
 }
-void MapGm::SetBonusStage(char value) { 
-		this->    BonusStage = (unsigned char)value; 
+void MapGm::SetBonusStage(char value){
+	this->BonusStage = (unsigned char)value;
 }
-void MapGm::SetGang(char value) { 
-		this->Gang = (unsigned char)value; 
+void MapGm::SetGang(char value){
+	this->Gang = (unsigned char)value;
 }
-void MapGm::SetPlayerSlotSave(char value) {
-			this->PlayerSlotSave = (unsigned char)value; 
+void MapGm::SetPlayerSlotSave(char value){
+	this->PlayerSlotSave = (unsigned char)value;
 }
-void MapGm::SetBonus(char value) { 
-		this->Bonus = (unsigned char)value;
+void MapGm::SetBonus(char value){
+	this->Bonus = (unsigned char)value;
 }
 // --- РіРµС‚С‚РµСЂС‹ РёРјС‘РЅ С„Р°Р№Р»РѕРІ ---
-char* MapGm::GetMapName() { 
-	return this->gmpFile; 
+char* MapGm::GetMapName(){
+	return this->gmpFile;
 }
-char* MapGm::GetStyleFile() { 
-	return this->styFile; 
+char* MapGm::GetStyleFile(){
+	return this->styFile;
 }
-char* MapGm::GetScriptName() { 
-	return this->sctiptFile; 
+char* MapGm::GetScriptName(){
+	return this->sctiptFile;
 }
-char* MapGm::GetSaveFile() { 
-	return this->saveFile; 
+char* MapGm::GetSaveFile(){
+	return this->saveFile;
 }
 
-unsigned char MapGm::GetPlayerArena() { 
-	return this->playerArena; 
+unsigned char MapGm::GetPlayerArena(){
+	return this->playerArena;
 }
-unsigned char MapGm::GetBonusStage() { 
-	return this->BonusStage; 
+unsigned char MapGm::GetBonusStage(){
+	return this->BonusStage;
 }
-unsigned char MapGm::GetGang() { 
-	return this->Gang; 
+unsigned char MapGm::GetGang(){
+	return this->Gang;
 }
-unsigned char MapGm::GetPlayerSlotSave() { 
-	return this->PlayerSlotSave; 
+unsigned char MapGm::GetPlayerSlotSave(){
+	return this->PlayerSlotSave;
 }
-unsigned char MapGm::GetBonus() { 
-	return this->Bonus; 
+unsigned char MapGm::GetBonus(){
+	return this->Bonus;
 }
-int MapGm::GetCount() { 
-	return this->Count; 
+int MapGm::GetCount(){
+	return this->Count;
 }
-void MapGm::SetAutoDamageCost(int value) { 
-	this->AutoDamageCost = value; 
+void MapGm::SetAutoDamageCost(int value){
+	this->AutoDamageCost = (unsigned int)value;
 }
-int MapGm::GetAutoDamageCost() {
-	return this->AutoDamageCost; 
+int MapGm::GetAutoDamageCost(){
+	return (int)this->AutoDamageCost;
 }
-void MapGm::SetFugitiveFactor(unsigned int value) {
+void MapGm::SetFugitiveFactor(unsigned int value){
 	this->FugitiveFactor = value;
 }
-unsigned int  MapGm::GetFugitiveFactor() {
+unsigned int  MapGm::GetFugitiveFactor(){
 	return this->FugitiveFactor;
 }
 
-char MapGm::GetEndGameFlag() {
-	return this->EndGameFlag;
+char MapGm::GetEndGameFlag(){
+	return (char)this->EndGameFlag;
 }
 
-int MapGm::GetLimitFrag() { 
-	return this->FragLimit; 
+int MapGm::GetLimitFrag(){
+	return this->FragLimit;
 }
 
-unsigned char MapGm::GetDataLast() {
-	return this->DataLast; 
+unsigned char MapGm::GetDataLast(){
+	return this->DataLast;
 }
-char MapGm::GetBest() { 
-	return this->Best; 
+char MapGm::GetBest(){
+	return (char)this->Best;
 }
-char MapGm::GetIndex() {
-	return this->Index; 
-}
-
-void  MapGm::AddScore(unsigned char index, int value){ 
-	this->PlayerArena[index] += value; 
+char MapGm::GetIndex(){
+	return (char)this->Index;
 }
 
-int MapGm::GetPlayerArena(unsigned char id) {
-	return this->PlayerArena[id]; 
+void  MapGm::AddScore(unsigned char index, int value){
+	this->PlayerArena[index] += value;
+}
+
+int MapGm::GetPlayerArena(unsigned char id){
+	return this->PlayerArena[id];
 }
 
 
-short MapGm::GetPlayerID(unsigned char id) {
-	return this->PlayerID[id]; 
+short MapGm::GetPlayerID(unsigned char id){
+	return this->PlayerID[id];
 }
-void  MapGm::SetPlayerArena(unsigned char index, int value) {
-		this->StatusTable.value[index] = value; 
+void  MapGm::SetPlayerArena(unsigned char index, int value){
+	this->StatusTable.value[index] = (unsigned int)value;
 }
 
-unsigned int MapGm::GetAreaData(unsigned char index) {
-	return this->StatusTable.value[index]; 
+unsigned int MapGm::GetAreaData(unsigned char index){
+	return this->StatusTable.value[index];
 }
 
 // SpecialTokens
-void MapGm::SetSpecialTokensDefault() { 
-	this->SpecialTokens = 0; 
+void MapGm::SetSpecialTokensDefault(){
+	this->SpecialTokens = 0;
 }
-int MapGm::GetSpecialTokens() { 
-		return this->SpecialTokens; 
+int MapGm::GetSpecialTokens(){
+	return this->SpecialTokens;
 }
 
-void MapGm::SetSpecialTokens(int value) { 
-	this->SpecialTokens = value; 
+void MapGm::SetSpecialTokens(int value){
+	this->SpecialTokens = value;
 }
-void MapGm::IncrementSpecialTokens() { 
-	++this->SpecialTokens; 
+void MapGm::IncrementSpecialTokens(){
+	++this->SpecialTokens;
 }
 
 
@@ -196,35 +198,28 @@ void MapGm::ResetSettings()
 //---------------------------------------------------------------------
 // 0x0045e740: MapGm::SetField23 — единоразовая установка field23
 //---------------------------------------------------------------------
-void MapGm::SetIndex(char value)
-{
-	if (this->Index == 6)
-		this->Index = (unsigned char)value;
+void MapGm::SetIndex(char value){
+	if (this->Index == 6) this->Index = (unsigned char)value;
 }
 
 //---------------------------------------------------------------------
 // 0x0045e770: MapGm::SetString — копирование строки имени игрока
 //---------------------------------------------------------------------
-void MapGm::SetNetworkNickName(unsigned short index, wchar_t* Source)
-{
-	wcsncpy(this->NetworkNickName[index], Source, 16);
+void MapGm::SetNetworkNickName(unsigned short index, wchar_t* Source){
+	wcsncpy(this->NetworkNickName[index], Source, 16u);
 }
 
 //---------------------------------------------------------------------
 // 0x0045e7a0: MapGm::Get_45E7A0 — возврат указателя на строку имени
 //---------------------------------------------------------------------
-wchar_t* MapGm::GetNetworkNickName(unsigned short index)
-{
+wchar_t* MapGm::GetNetworkNickName(unsigned short index){
 	return this->NetworkNickName[index];
 }
 
 //---------------------------------------------------------------------
 // 0x0045e830: MapGm::GetScoreRow — элемент массива field_448[6*a2+a3]
 //---------------------------------------------------------------------
-unsigned short MapGm::GetScoreRow(unsigned char value, unsigned char row)
-{
-	// В дампе: PlayerID[(a3 & 0xff) + (a2 & 0xff) * 6 - 0x24].
-	// Здесь a3 соответствует индексу строки, a2 — столбцу.
+unsigned short MapGm::GetScoreRow(unsigned char value, unsigned char row){
 	return this->killPlayer[value].KillPlayerRow[row];
 }
 
@@ -309,16 +304,14 @@ void MapGm::LoadFromBuffer(void* player)
 // 0x0045ec70: MapGm::RegisterKill — регистрация фрага игрока
 // Зависит от Game/PlayerStats (не портированы) — заглушка.
 //---------------------------------------------------------------------
-void MapGm::RegisterKill(unsigned char id, unsigned char a3)
-{
-	// TODO: зависит от Game::GetPlayerSlotByIndex и PlayerStats::SetMoney
-	// (ещё не портированы). В дампе:
-	//   ++field_448[6*id + a3];
-	//   result = Game::GetPlayerSlotByIndex(gGame, id);
-	//   if (id == a3) { if (PlayerID[id] > 0) { --PlayerID[id]; -money; } }
-	//   else          { ++PlayerID[id]; +money; }
-	(void)id;
-	(void)a3;
+void MapGm::RegisterKill(unsigned char id, unsigned char a3){
+	// IDA 0x45EC70 - partial: money/PlayerStats calls omitted until Player layout confirmed
+	++this->killPlayer[id].KillPlayerRow[a3];
+	if (id == a3) {
+		if (this->PlayerID[id] > 0) --this->PlayerID[id];
+	} else {
+		++this->PlayerID[id];
+	}
 }
 
 //---------------------------------------------------------------------

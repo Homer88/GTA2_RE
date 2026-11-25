@@ -34,3 +34,5 @@ void SpriteInfo::SetValue(int param_2){
 int SpriteInfo::UseObject(void){
         return 0;
     }
+
+void SpriteInfo::Reset(void){}

@@ -164,3 +164,5 @@ int CarSystemManager::AdvanceIndex(void){
 int CarSystemManager::CycleMode(void){
         return 0;
     }
+
+void CarSystemManager::Update(void){}

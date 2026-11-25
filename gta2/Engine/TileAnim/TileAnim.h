@@ -8,6 +8,7 @@ class TileAnim{
 
     // 0x004C3590
     int UpdateScripts(void);
+    int Update(void);
 };
 
 extern TileAnim* gTileAnim;

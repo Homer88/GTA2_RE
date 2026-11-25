@@ -26,6 +26,7 @@ class Object{
     int SpawnObject(int a, int x, int y, int z);
     // 0x00487ED0
     int RemoveDeadObjects(void);
+    void Object_Update(void);
 };
 extern Object* gObject;
 

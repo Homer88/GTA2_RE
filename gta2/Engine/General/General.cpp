@@ -42,3 +42,5 @@ int General::cPlayer(void){
 int General::GetRandomNumber(void){
         return 0;
     }
+
+void General::Update(void){}

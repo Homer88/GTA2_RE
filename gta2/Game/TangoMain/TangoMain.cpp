@@ -39,3 +39,5 @@ int TangoMain::RunAction(void){
 int TangoMain::CanStartTango(void){
         return 0;
     }
+
+void TangoMain::SetInitialState(void){}

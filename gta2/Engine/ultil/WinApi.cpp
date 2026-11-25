@@ -430,7 +430,7 @@ bool WinApi::ConfigureVideoWindow() {
 
 }
 void WinApi::SetShowCursor() {
-    int result;
+    int result = 0;
     do {
         result = ShowCursor(0);
     } while (result >= 0);
@@ -517,7 +517,7 @@ void WinApi::VideoCheck() {
 int gData_byte = 1;
 int gX, gY;
 char WinApi::VideoCheck1() {
-    char result;
+    char result = 0;
     Movie* v1;
     int v2;
     struct tagRECT v3;
