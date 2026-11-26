@@ -3,40 +3,38 @@
 #define __PATHNODE_H_
 
 
-class PathNode{
-    public:
+#include <cstdint>
 
-    // 0x00488170
+// IDA: PathNode ctor 0x488EB0 (S57::PathNode), size 0x8CA8.
+// Layout: +0 Index, +4 S58[300] (116 bytes each = 0x87F0), +0x87F4 buffer_0x4B0/nodePtrs[300] (1200 bytes), +0x8CA4 field_8CA4.
+class PathNode {
+public:
+    uint16_t Index;           // +0x0000
+    char field_2;
+    char field_3;
+    char S58_blob[300 * 116]; // +0x0004, opaque S58[300]
+    void* nodePtrs[300];      // +0x87F4, IDA: buffer_0x4B0[4*index]
+    int16_t field_8CA4;       // +0x8CA4
+    char field_8CA6;
+    char field_8CA7;
+
+    PathNode();
+    void* GetNode(int index);
     int GetNode(void);
-    // 0x00488420
+    void* AddRouteInfo(int idx);
+    void* AddNode(int a2, int a3, short a4, unsigned char a5);
     int AddNode(void);
-    // 0x00488450
     int LoadFurnitureNodes(void);
-    // 0x004884B0
     int LoadNodeData(void);
-    // 0x00488570
     int CreateDefaultConnections(void);
-    // 0x00488D10
     int LoadPlayerNodeData(void);
-    // 0x00488E50
     int UpdateGlobalNodeIndex(void);
-    // 0x00488F70
     int CreatePhoneNodes(void);
-    // 0x00489530
     int LoadNetwork(void);
-    // 0x004C6E30
     int GetValue(void);
-
-
-// ==== импорт имён из gm ====
-    // 4 функций
-    // 0x00488200: PathNode::SetNodeFlag
     void SetNodeFlag();
-    // 0x004883A0: PathNode::ApplyToSprite
     void ApplyToSprite();
-    // 0x00488E70: PathNode::UpdateNodeSprite
     void UpdateNodeSprite();
-    // 0x00488EF0: PathNode::CreateSprite
     void CreateSprite();
 };
 

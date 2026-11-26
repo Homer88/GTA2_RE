@@ -5,6 +5,13 @@
 
 class Hud{
     public:
+    // RE debug HUD text buffer, rendered by main.cpp software overlay when gbh text path is unavailable.
+    static const int kDebugHudLines = 4;
+    static const int kDebugHudLineLen = 128;
+    char debugLines[kDebugHudLines][kDebugHudLineLen] = {};
+    int debugLineCount = 0;
+    void ClearDebugLines();
+    void AddDebugLine(const char* text);
 
     // 0x004219F0
     int ResetMessage(void);
@@ -52,7 +59,7 @@ class Hud{
     void DrawPlayerNames();
     // 0x004C7B70: Hud::DrawHealth
     void DrawHealth();
-    // 0x004C8710: Hud::DrawQuitConfirm
+    // RE: logic from Hud::DrawUI @ 0x4CA440 quit block; 0x4C8710 symbol/address not confirmed in ida_decompiled.c
     void DrawQuitConfirm();
     // 0x004C8990: Hud::DrawChatMessage
     void DrawChatMessage();

@@ -66,8 +66,7 @@ int gbh_BlitImage(int, int, int, int, int, int, int);
 void ShowTextDisplay(wchar_t*, char*, ...);
 void EncodeCoord16(int*, unsigned __int16);
 void bitShiftLeft1(int*, int);
-void DrawGTATextRawMain(wchar_t*, int, int, int, int);
-void DrawGTATextRaw(wchar_t*, int, int, int, int);
+// Text bridge is declared in Engine/Text/Text.h; avoid conflicting local prototypes.
 unsigned __int16 sub_4566C0(wchar_t*, unsigned __int16, unsigned __int16, unsigned __int16, int, unsigned int, unsigned __int16, int);
 void* gWindows;
 int unk_67067C;

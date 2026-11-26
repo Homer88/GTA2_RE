@@ -27,6 +27,7 @@ extern bool gSkipAudio;
 #include "../../Engine/Text/Text.h"
 #include "../../Engine/MapGm/MapGm.h"
 #include "../../Engine/DMAudio/DMAudio.h"
+#include "../../Engine/Sound/Sound.h"
 #include "../../Engine/MapRelatedStruct/MapRelatedStruct.h"
 #include  "../PathNode/PathNode.h"
 #include "../MissionManager/MissionManager.h"
@@ -49,6 +50,7 @@ extern bool gSkipAudio;
 #include "../../Engine/Timing/Timing.h"
 #include "../Character/Character.h"
 #include  "../../Engine/Object/Object.h"
+#include "../CollisionBox/CollisionBox.h"
 #include "../../Engine/ScriptThread/ScriptThread.h"
 #include "../Collide/Collide.h"
 #include "../../Engine/TileAnim/TileAnim.h"
@@ -219,6 +221,9 @@ Game::Game(int modeStatus, char ids)
 
         gObject = new Object();
         if (gObject == NULL) DebugLog(0x20, "game.cpp", 1845);
+
+        gCollisionBox = new CollisionBox();
+        if (gCollisionBox == NULL) DebugLog(0x20, "game.cpp", 1845);
 
         gScriptThread = new ScriptThread();
         if (gScriptThread == NULL) DebugLog(0x20, "game.cpp", 1847);
@@ -430,6 +435,10 @@ int Game::GameOver(void){
         int isDead_ = this->isDead;
         if (isDead_ == 0) return 1;
         if (isDead_ < 0) return 1;
+        if (isDead_ == 1 && !gSkipAudio && gDMAudio) {
+            // Guarded pragmatic game-over cue; original uses vocal/event routing.
+            gDMAudio->PlayVocal(0);
+        }
         this->isDead = isDead_ - 1;
         return 0;
     }
@@ -517,6 +526,9 @@ int Game::IsInCar(void){
 
 
 int Game::EndGameSession(void){
+        if (!gSkipAudio && gSound.GetSampleCount() > 0) {
+            gSound.StopAll(); // guarded pragmatic: stop gameplay audio on session end
+        }
         return 0;
     }
 
@@ -566,13 +578,25 @@ unsigned char Game::LoadResources(){
         if (fileExists(pSTY_File)) {
             bool styOk = StyleTiles_Load(pSTY_File);
             (void)styOk;
+            if (styOk && gStyle) {
+                gStyle->BindIdaViewFromStyleTilesDebug(); // only when GTA2_STYLE_IDA_VIEW=1
+                gStyle->SetFontStyles(); // debug-only font style state from FONB count
+            }
+            if (!gSkipAudio && gDMAudio) {
+                gDMAudio->LoadSTY(pSTY_File);
+            }
         }
     }
     // Step 3: load map only when file exists (guarded)
     if (gMapGm && gMapRelatedStruct) {
         char* pNameMap = gMapGm->GetMapName();
+        const char* envMap = getenv("GTA2_MAP");
+        if (envMap && *envMap) pNameMap = (char*)envMap;
         if (fileExists(pNameMap)) {
             gMapRelatedStruct->LoadMap(pNameMap); // safe stub
+            if (gPathNode) gPathNode->LoadNetwork(); // IDA: after LoadMap, before texture/script
+            if (gTextureManager) gTextureManager->LoadDebugFromStyleTiles(); // debug-only, GTA2_TEX_DEBUG=1; no real S89/gbh
+            gMapRelatedStruct->SpawnMapObjects(); // guarded dry-run only
         }
     }
     return 0;
@@ -603,6 +627,15 @@ int Game::StartGameSession(void){
         if (gTrafficLigthStruct) gTrafficLigthStruct->RegisterCars();
         if (gPublicTransport) gPublicTransport->CreateTrains();
         if (gTangoMain) gTangoMain->SetInitialState();
+        if (!gSkipAudio && gDMAudio) {
+            // Guarded pragmatic startup cue; real GTA2 uses event-driven SFX/music routing.
+            int n = gSound.GetSampleCount();
+            if (n > 0) {
+                int cue = n > 2 ? 2 : 0;
+                gSound.StopAll();
+                gSound.PlaySample(cue, false);
+            }
+        }
         this->Status = 1;
         this->State = 1;
         this->isDead = 0;

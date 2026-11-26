@@ -40,6 +40,8 @@ class WinApi{
 };
 
 extern WinApi* gWinApi;
+extern int gLighting;
+extern int gTimeDayAndNight;
 
  
 #endif  //___WIN_API___H__

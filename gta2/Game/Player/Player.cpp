@@ -182,5 +182,10 @@ byte Player::SelectWeapon(int TypeWeapon, int Ammo) {
 }
 
 void Player::GetVehicle(Car* Vehicle) {
-   // Vehicle->Vehicle=this->Vehicle; // TODO Vehicle Нету пока поля 
+   // Vehicle->Vehicle=this->Vehicle; // TODO Vehicle пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 
 }
+void Player::RenderPlayers(Game* game){ (void)game; /* TODO: IDA render path */ }
+
+int Player::AddMoney(int amount){ (void)amount; return 0; }
+
+void Player::Process(void){}

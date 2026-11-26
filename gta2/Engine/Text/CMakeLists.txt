@@ -19,3 +19,4 @@ file(GLOB TEXT_HEADERS "*.h")
 
 # Сборка  Утилитов
 add_library(${PROJECT_NAME} STATIC ${TEXT_SOURCE} ${TEXT_HEADERS})
+target_link_libraries(${PROJECT_NAME} PRIVATE gbh)

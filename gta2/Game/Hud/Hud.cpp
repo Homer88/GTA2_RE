@@ -1,5 +1,31 @@
 #include "Hud.h"
+#include "../../Engine/Text/Text.h"
+#include "../../Engine/Font/Font.h"
+#include "../../Engine/Object/Object.h"
+#include "../../Engine/Style/Style.h"
+#include "../../Engine/Style/StyleTileLoader.h"
+#include "../../Engine/TextureManager/TextureManager.h"
+#include "../Game/Game.h"
+#include "../Player/Player.h"
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cwchar>
+
 Hud* gHud;
+
+void Hud::ClearDebugLines() {
+    debugLineCount = 0;
+    for (int i = 0; i < kDebugHudLines; ++i) debugLines[i][0] = 0;
+}
+
+void Hud::AddDebugLine(const char* text) {
+    if (!text) return;
+    if (debugLineCount >= kDebugHudLines) return;
+    std::snprintf(debugLines[debugLineCount], kDebugHudLineLen, "%s", text);
+    debugLines[debugLineCount][kDebugHudLineLen - 1] = 0;
+    ++debugLineCount;
+}
 
     // 0x004219F0
 
@@ -13,6 +39,8 @@ int Hud::ResetMessage(void){
 
 
 int Hud::ComputeTextWidth(void){
+        // IDA 0x4C6940: if message active, width = Font::GetStringWidth(field_2, unk_672F28).
+        // RE has no confirmed HUD message struct fields; keep stubbed.
         return 0;
     }
 
@@ -93,6 +121,71 @@ int Hud::DrawSprite_Wrapper(void){
 
 
 int Hud::DrawUI(void){
+        // IDA 0x4CA440: draws HUD subsystems and, if PlayerMain->quit1, draws quit1/quit2/quit3
+        // via DrawGTATextRaw_7280 @ 0x4C7280 -> DrawGTATextRaw @ 0x4CC100.
+        // RE: gbh/font path not ready; emit minimal text commands for software overlay.
+        ClearDebugLines();
+        ClearDebugTextCmds();
+        char buf[128];
+        const char* mobjEnv = std::getenv("GTA2_SPAWN_MOBJ");
+        const char* traceEnv = std::getenv("GTA2_MOBJ_TRACE");
+        extern Style* gStyle;
+        extern TextureManager* gTextureManager;
+        const char* forceGbh = std::getenv("GTA2_TEXT_GBH");
+        const StyleTileAssets* sta = StyleTiles_Get();
+        extern const char* Text_GetGbhBlockedReason();
+        std::snprintf(buf, sizeof(buf), "HUD txt=%s sty=%s tex=%s idaS=%s idaT=%s gbh=%s %s",
+            gText ? "1" : "0", gStyle ? "1" : "0", gTextureManager ? "1" : "0",
+            (gStyle && gStyle->GetIdaView()) ? "1" : "0",
+            (gTextureManager && gTextureManager->GetIdaView()) ? "1" : "0",
+            (forceGbh && forceGbh[0]=='1') ? "1" : "0",
+            Text_GetGbhBlockedReason());
+        AddDebugLine(buf);
+        std::snprintf(buf, sizeof(buf), "STY tiles=%u phys=%u palx=%u loaded=%s",
+            sta ? sta->tileCount : 0u, sta ? sta->physPalCount : 0u, sta ? sta->palxCount : 0u,
+            (sta && sta->loaded) ? "1" : "0");
+        AddDebugLine(buf);
+        if (gTextureManager) {
+            const auto& td = gTextureManager->GetDebugState();
+            std::snprintf(buf, sizeof(buf), "TEX dbg l=%d p=%u t=%u s=%u", td.loaded?1:0, (unsigned)td.palCount, (unsigned)td.tileCount, (unsigned)td.spriteTexCount);
+            AddDebugLine(buf);
+        }
+        // Debug-only Style IDA-view probe (no gbh). Helps verify adapter before 0x4CC100.
+        // Debug font-style/probe omitted: needs verified font-style globals and bounds-safe glyph lookup.
+        std::snprintf(buf, sizeof(buf), "MOBJ spawn=%s trace=%s", (mobjEnv && mobjEnv[0]=='1')?"1":"0", (traceEnv && traceEnv[0]=='1')?"1":"0");
+        AddDebugLine(buf);
+        extern Object* gObject;
+        if (gObject) {
+            std::snprintf(buf, sizeof(buf), "MOBJ spawned=%d textcmd=%d", gObject->GetDebugSpawnedCount(), gDebugTextCmdCount);
+            AddDebugLine(buf);
+        }
+        // Push a few Bsearch strings through DrawGTATextRaw bridge (overlay-rendered).
+        // IDA 0x4CA440 also draws game HUD elements; here we only probe safe text keys.
+        int probeHits = 0;
+        if (gText) {
+            struct { const char* key; int x; int y; } probes[] = {
+                {"p_exit", 8, 100}, {"wasted", 8, 116}, {"paused", 8, 132},
+                {"are_u_sure", 8, 148},
+            };
+            for (auto& pr : probes) {
+                wchar_t* w = (wchar_t*)gText->Bsearch(pr.key);
+                if (w) { DrawGTATextRaw_7280(w, pr.x, pr.y); ++probeHits; }
+            }
+        }
+        std::snprintf(buf, sizeof(buf), "text probes=%d gxt=%d", probeHits, gText ? gText->NumberOfElements : -1);
+        AddDebugLine(buf);
+        // Direct overlay probe: confirms DrawGTATextRaw bridge independent of Bsearch/gxt.
+        DrawGTATextRaw_7280((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164);
+        // Quit prompt probe (IDA quit strings) - draw only as debug text, no state change.
+        if (gText) {
+            wchar_t* q1 = (wchar_t*)gText->Bsearch("quit1");
+            if (q1) DrawGTATextRaw_7280(q1, 8, 180);
+        }
+
+        extern Game* gGame;
+        if (gGame && gGame->PlayerMain && gGame->PlayerMain->quit1) {
+            DrawQuitConfirm();
+        }
         return 0;
     }
 
@@ -100,8 +193,42 @@ int Hud::DrawUI(void){
     // 0x004CA520
 
 
+void Hud::DrawQuitConfirm() {
+    // IDA 0x4CA440 quit block (DrawQuitConfirm address in headers needs confirmation).
+    // Uses Bsearch quit1/2/3, GetStringWidth/GetNumberLines, centered layout, DrawGTATextRaw_7280.
+    extern Game* gGame;
+    if (!gGame || !gGame->PlayerMain || !gGame->PlayerMain->quit1) return;
+    wchar_t* q1 = (gText ? (wchar_t*)gText->Bsearch("quit1") : nullptr);
+    wchar_t* q2 = (gText ? (wchar_t*)gText->Bsearch("quit2") : nullptr);
+    wchar_t* q3 = (gText ? (wchar_t*)gText->Bsearch("quit3") : nullptr);
+    if (!q1) q1 = (wchar_t*)L"ARE YOU SURE?";
+    if (!q2) q2 = (wchar_t*)L"PRESS Y TO QUIT";
+    if (!q3) q3 = (wchar_t*)L"PRESS N TO CONTINUE";
+
+    extern Font* gFont;
+    Font localFont;
+    Font* f = gFont ? gFont : &localFont;
+    unsigned short style = 0; // TODO: unk_672F24
+    int w1 = f->GetStringWidth(q1, style);
+    int w2 = f->GetStringWidth(q2, style);
+    int w3 = f->GetStringWidth(q3, style);
+    // IDA 0x4CC0C0 GetNumberLines returns pixel height.
+    int h1 = f->GetNumberLines(q1, style);
+    int ch = f->GetCharHeight(style);
+    if (ch <= 0) ch = 8;
+    int nl = (h1 + ch - 1) / ch;
+    if (nl <= 0) nl = 1;
+    int v6 = (3 * (160 - nl)) / 2;
+    int y1 = v6 - nl;
+    int y2 = v6;
+    int y3 = nl + v6;
+    DrawGTATextRaw_7280(q1, (640 - w1) / 2, y1);
+    DrawGTATextRaw_7280(q2, (640 - w2) / 2, y2);
+    DrawGTATextRaw_7280(q3, (640 - w3) / 2, y3);
+}
+
 int Hud::DrawUIWrapper(void){
-        return 0;
+        return DrawUI();
     }
 
 

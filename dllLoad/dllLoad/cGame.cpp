@@ -26,6 +26,13 @@ extern LPVOID _Sub465390;            // MapRelatedStruct::sub_465390 @0x00465390
 extern LPVOID _Sub481890;            // MissionManager::sub_481890    @0x00481890 (loads missions)
 extern LPVOID _StartGames;           // Player::StartGames @0x004A6DA0 (starts player in world)
 extern LPVOID _UpdateWrapper;        // Hud::UpdateWrapper @0x004CAC30 (HUD create/refresh)
+LPVOID _SpawnMapObjects = (LPVOID)0x0046A4D0; // MapRelatedStruct::SpawnMapObjects
+LPVOID _ObjectSpawnObject = (LPVOID)0x004852E0; // Object::SpawnObject(type,x,y,z,rot)
+LPVOID _LoadMOBJ = (LPVOID)0x00464590;
+LPVOID _LoadLGHT = (LPVOID)0x004645F0;
+LPVOID _LoadANIM = (LPVOID)0x00464670;
+LPVOID _RenderBlockLid = (LPVOID)0x0046DFE0;
+
 
 static const char* GameStructTag(Game* g)
 {
@@ -179,6 +186,132 @@ void __stdcall HookInitFrontedLessGame(void)
     writeFileLog((char*)"game.txt", buf, (char*)"InitGame", (char*)"");
 }
 
+int __fastcall HookLoadMOBJ(void* thisp, void* _EDX, unsigned int dwBytes)
+{
+    TraceCall("MapRelatedStruct::LoadMOBJ @0x00464590", TRACE_CALLER_ADDR);
+    char b[128];
+    _snprintf(b, sizeof(b), "LoadMOBJ size=%u this=0x%08X", dwBytes, (unsigned long)(ULONG_PTR)thisp);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"LoadMOBJ", (char*)"");
+    int r = ((int (__fastcall*)(void*, void*, unsigned int))_LoadMOBJ)(thisp, _EDX, dwBytes);
+    _snprintf(b, sizeof(b), "LoadMOBJ ret=%d", r);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"LoadMOBJ", (char*)"");
+    return r;
+}
+
+int __fastcall HookLoadLGHT(void* thisp, void* _EDX, unsigned int dwBytes)
+{
+    TraceCall("MapRelatedStruct::LoadLGHT @0x004645F0", TRACE_CALLER_ADDR);
+    char b[128];
+    _snprintf(b, sizeof(b), "LoadLGHT size=%u this=0x%08X", dwBytes, (unsigned long)(ULONG_PTR)thisp);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"LoadLGHT", (char*)"");
+    int r = ((int (__fastcall*)(void*, void*, unsigned int))_LoadLGHT)(thisp, _EDX, dwBytes);
+    _snprintf(b, sizeof(b), "LoadLGHT ret=%d", r);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"LoadLGHT", (char*)"");
+    return r;
+}
+
+int __fastcall HookLoadANIM(void* thisp, void* _EDX, void* dwBytes)
+{
+    TraceCall("MapRelatedStruct::LoadANIM @0x00464670", TRACE_CALLER_ADDR);
+    char b[128];
+    _snprintf(b, sizeof(b), "LoadANIM arg=0x%08X this=0x%08X", (unsigned long)(ULONG_PTR)dwBytes, (unsigned long)(ULONG_PTR)thisp);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"LoadANIM", (char*)"");
+    int r = ((int (__fastcall*)(void*, void*, void*))_LoadANIM)(thisp, _EDX, dwBytes);
+    _snprintf(b, sizeof(b), "LoadANIM ret=%d", r);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"LoadANIM", (char*)"");
+    return r;
+}
+
+void __fastcall HookSpawnMapObjects(void* thisp, void* _EDX)
+{
+    TraceCall("MapRelatedStruct::SpawnMapObjects @0x0046A4D0", TRACE_CALLER_ADDR);
+    char b[256];
+    __try {
+        unsigned char* p = (unsigned char*)thisp;
+        DWORD buf = *(DWORD*)(p + 0x338);
+        DWORD unk344 = *(DWORD*)(p + 0x344);
+        _snprintf(b, sizeof(b), "SpawnMapObjects enter this=0x%08X mobjBuf=0x%08X f344=%u caller=0x%08X", (unsigned long)(ULONG_PTR)thisp, buf, unk344, (unsigned long)TRACE_CALLER_ADDR);
+        if (buf && unk344) {
+            unsigned char* rec = (unsigned char*)buf;
+            unsigned n = unk344 < 64 ? unk344 : 64;
+            for (unsigned i = 0; i < n; ++i) {
+                unsigned char* r = rec + i * 6;
+                short wx = *(short*)(r + 0);
+                short wy = *(short*)(r + 2);
+                unsigned rotB = r[4];
+                unsigned typeB = r[5];
+                char rb[192];
+                _snprintf(rb, sizeof(rb), "MOBJ_REC i=%u rawX=%d rawY=%d rotB=%u type=%u bytes=%02X %02X %02X %02X %02X %02X", i, (int)wx, (int)wy, rotB, typeB, r[0],r[1],r[2],r[3],r[4],r[5]);
+                writeFileLog((char*)"mapobj.txt", rb, (char*)"MOBJ_REC", (char*)"");
+            }
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER) {
+        _snprintf(b, sizeof(b), "SpawnMapObjects enter this=0x%08X caller=0x%08X", (unsigned long)(ULONG_PTR)thisp, (unsigned long)TRACE_CALLER_ADDR);
+    }
+    writeFileLog((char*)"mapobj.txt", b, (char*)"SpawnMapObjects", (char*)"");
+    ((void (__fastcall*)(void*, void*))_SpawnMapObjects)(thisp, _EDX);
+    writeFileLog((char*)"mapobj.txt", (char*)"SpawnMapObjects EXIT OK", (char*)"SpawnMapObjects", (char*)"");
+}
+
+
+static volatile LONG gTileTraceLidN = 0;
+static volatile LONG gTileTraceBlockN = 0;
+
+void __fastcall HookRenderBlockLid(void* thisp, void* _EDX)
+{
+    LONG n = InterlockedIncrement(&gTileTraceLidN) - 1;
+    if (n < 400) {
+        __try {
+            unsigned short lid = *(unsigned short*)0x006633BC;
+            unsigned char b5930d0 = *(unsigned char*)0x005930D0;
+            unsigned short wA4 = *(unsigned short*)0x006633A4;
+            unsigned short wB0 = *(unsigned short*)0x006633B0;
+            unsigned short wC0 = *(unsigned short*)0x006633C0;
+            unsigned short wC4 = *(unsigned short*)0x006633C4;
+            unsigned char* blk  = *(unsigned char**)0x00663298;
+            unsigned char slope = blk ? blk[11] : 0;
+            unsigned char arrows= blk ? blk[10] : 0;
+            char b[384];
+            _snprintf(b, sizeof(b), "lid=0x%04X virt=%u rot=%u flat=%u b5930D0=%d A4=0x%04X B0=0x%04X C0=0x%04X C4=0x%04X slope=0x%02X arr=0x%02X blk=0x%08X caller=0x%08X",
+                lid, (unsigned)(lid & 1023u), (unsigned)((lid>>13)&7u), (unsigned)((lid>>12)&1u), (int)(signed char)b5930d0,
+                wA4,wB0,wC0,wC4,slope,arrows,(unsigned long)(ULONG_PTR)blk,(unsigned long)TRACE_CALLER_ADDR);
+            writeFileLog((char*)"tile_trace.txt", b, (char*)"RenderBlockLid", (char*)"");
+        } __except (EXCEPTION_EXECUTE_HANDLER) {}
+    }
+    ((void (__fastcall*)(void*, void*))_RenderBlockLid)(thisp, _EDX);
+}
+
+static void logTileCtx(const char* tag, void* thisp) {
+    __try {
+        unsigned short wA4 = *(unsigned short*)0x006633A4;
+        unsigned short wB0 = *(unsigned short*)0x006633B0;
+        unsigned short wBC = *(unsigned short*)0x006633BC;
+        unsigned short wC0 = *(unsigned short*)0x006633C0;
+        unsigned short wC4 = *(unsigned short*)0x006633C4;
+        unsigned char* blk  = *(unsigned char**)0x00663298;
+        unsigned char slope = blk ? blk[11] : 0;
+        unsigned char arrows= blk ? blk[10] : 0;
+        char b[384];
+        _snprintf(b, sizeof(b), "A4=0x%04X B0=0x%04X BC=0x%04X C0=0x%04X C4=0x%04X slope=0x%02X arr=0x%02X blk=0x%08X this=0x%08X caller=0x%08X",
+            wA4,wB0,wBC,wC0,wC4,slope,arrows,(unsigned long)(ULONG_PTR)blk,(unsigned long)(ULONG_PTR)thisp,(unsigned long)TRACE_CALLER_ADDR);
+        writeFileLog((char*)"tile_trace.txt", b, (char*)tag, (char*)"");
+    } __except (EXCEPTION_EXECUTE_HANDLER) {}
+}
+
+int __fastcall HookObjectSpawnObject(void* thisp, void* _EDX, int type, int x, int y, int z, int rot)
+{
+    TraceCall("Object::SpawnObject @0x004852E0", TRACE_CALLER_ADDR);
+    char b[256];
+    _snprintf(b, sizeof(b), "type=%d x=%d y=%d z=%d rot=%d rot16=%u (0x%04X) rot32=0x%08X this=0x%08X caller=0x%08X", type, x, y, z, rot, (unsigned)((unsigned short)rot), (unsigned)((unsigned short)rot), (unsigned)rot, (unsigned long)(ULONG_PTR)thisp, (unsigned long)TRACE_CALLER_ADDR);
+    writeFileLog((char*)"mapobj.txt", b, (char*)"ObjectSpawn", (char*)"");
+    int r = ((int (__fastcall*)(void*, void*, int, int, int, int, int))_ObjectSpawnObject)(thisp, _EDX, type, x, y, z, rot);
+    char b2[128];
+    _snprintf(b2, sizeof(b2), "ret=0x%08X type=%d", r, type);
+    writeFileLog((char*)"mapobj.txt", b2, (char*)"ObjectSpawnRet", (char*)"");
+    return r;
+}
+
 // --- Init-chain crash isolation (__thiscall = __fastcall(this, void* _EDX)) ----
 void __fastcall HookResurs(Game* g, void* _EDX)
 {
@@ -214,10 +347,25 @@ void __fastcall HookSub481890(void* thisp, void* _EDX)
 
 void __fastcall HookStartGames(void* thisp, void* _EDX)
 {
-    char b[96];
+    char b[256];
     _snprintf(b, sizeof(b), "  Player::StartGames enter this=0x%08X gGameCell=0x%08X", (unsigned long)(ULONG_PTR)thisp, *(DWORD*)0x005EB4FC);
     writeFileLog((char*)"game.txt", b, (char*)"InitGame", (char*)"");
     ((void (__fastcall*)(void*, void*))_StartGames)(thisp, _EDX);
+    __try {
+        unsigned char* p = (unsigned char*)thisp;
+        int auxX = *(int*)(p + 0x2A0);
+        int auxY = *(int*)(p + 0x2A4);
+        int auxZ = *(int*)(p + 0x2A8);
+        int camX = *(int*)(p + 0x38);
+        int camY = *(int*)(p + 0x3C);
+        int camZ = *(int*)(p + 0x40);
+        unsigned char* ped = *(unsigned char**)(p + 0x2C4);
+        int pedX=0,pedY=0,pedZ=0;
+        if (ped) { pedX=*(int*)(ped+0x1AC); pedY=*(int*)(ped+0x1B0); pedZ=*(int*)(ped+0x1B4); }
+        _snprintf(b,sizeof(b),"Player cam=%d,%d,%d aux=%d,%d,%d ped=0x%08X pedPos=%d,%d,%d tile=%d,%d",
+            camX,camY,camZ,auxX,auxY,auxZ,(unsigned long)(ULONG_PTR)ped,pedX,pedY,pedZ, (auxX?auxX:camX)/16384,(auxY?auxY:camY)/16384);
+        writeFileLog((char*)"camera.txt", b, (char*)"StartGames", (char*)"");
+    } __except(EXCEPTION_EXECUTE_HANDLER) {}
 }
 
 void __fastcall HookUpdateWrapper(void* thisp, void* _EDX)

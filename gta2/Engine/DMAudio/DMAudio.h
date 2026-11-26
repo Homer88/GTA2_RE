@@ -16,7 +16,9 @@ public:
 	int AddAudioObject(int* pAudioObject);
 	int FreeSample(int SampleRate);
 	int PollAllSamples();
-	void Service() {//TODO
+	void PlayVocal(int vocal); // guarded pragmatic mapping; original routes via AudioManager vocals
+	void Service() {
+		PollAllSamples();
 	};
 
 	DMAudio();

@@ -1,4 +1,6 @@
 #include "MapRelatedStruct.h"
+#include "../Object/Object.h"
+#include "../../Game/PathNode/PathNode.h"
 #include <stdint.h>
 
 static FILE* g_mapLoadFile = 0;
@@ -10,6 +12,14 @@ static void* MR_CreateBuffer(size_t n){ void* p = malloc(n); if(p) memset(p,0,n)
 
 
 MapRelatedStruct *gMapRelatedStruct;
+int gDebugMobjCount = 0;
+int gDebugMobjSpawned = 0;
+int gDebugMobjX[64];
+int gDebugMobjY[64];
+int gDebugMobjType[64];
+int gDebugMobjDrawN = 0;
+int gDebugMobjFirstTileX = -1;
+int gDebugMobjFirstTileY = -1;
 
 //=============================================================================
 // MapRelatedStruct::MapRelatedStruct - Constructor
@@ -395,45 +405,35 @@ char MapRelatedStruct::sub_463850(AudioSourceParams a2)
 
 //=============================================================================
 // MapRelatedStruct::FindMaxZForLocation
+// IDA 0x46A420: decode world x/y to tile, FindMaxZForTile, return encoded z.
+// Normal block: (zTile+1)<<14. Slope/effect block: zTile<<14 + ApplyTileEffectsToSprite (TODO).
 //=============================================================================
 int *MapRelatedStruct::FindMaxZForLocation(int *arg0, int *a2, S202 *pS202)
 {
-  /*int v5;
-  _WORD *MaxZForTile;
-  char v8;
-  int *v9;
-  int *v10;
-  int v11;
-  int a4;
+    if (!arg0) return 0;
+    *arg0 = 0;
+    // IDA: DecoderFloat_0041F9D0 decodes fixed-point world coord to int tile: v >> 14.
+    // In RE callers pass int* world coords (see MOBJ/Car/Train callsites).
+    int wx = a2 ? *a2 : 0;
+    int wy = pS202 ? *(int*)pS202 : 0;
+    int tileX = wx >> 14;
+    int tileY = wy >> 14;
+    if (tileX < 0) tileX = 0; if (tileY < 0) tileY = 0;
+    if (tileX > 255) tileX = 255; if (tileY > 255) tileY = 255;
 
-  v11 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)pS202);
-  v5 = AudioSourceParams::sub_41F9D0((AudioSourceParams *)a2);
-  MaxZForTile = FindMaxZForTile( v5, v11, &a4);
-  dword_662B90 = MaxZForTile;
-  if ( MaxZForTile )
-  {
-    v8 = *((_BYTE *)MaxZForTile + 11);
-    if ( (v8 & 0xFC) != 0 && (v8 & 0xFCu) < 0xB4 && (v8 & 3) != 0 )
-    {
-      S202::sub_41F980((S202 *)&a4, a4);
-      a4 = *v9;
-      sub_466B70( a2, pS202);
-      *arg0 = a4;
-      return arg0;
+    unsigned int zTile = 0;
+    _WORD* blk = FindMaxZForTile(tileX, tileY, (_DWORD*)&zTile);
+    if (!blk) { *arg0 = 0; return arg0; }
+
+    unsigned char v8 = *((unsigned char*)blk + 11);
+    if ((v8 & 0xFC) != 0 && (v8 & 0xFCu) < 0xB4 && (v8 & 3) != 0) {
+        // IDA: EncodePositionValue(&a4, a4); ApplyTileEffectsToSprite(this,a2,pS202); return a4
+        // TODO: ApplyTileEffectsToSprite may modify z.
+        *arg0 = (int)(zTile << 14);
+        return arg0;
     }
-    else
-    {
-      S202::sub_41F980((S202 *)pS202, a4 + 1);
-      *arg0 = *v10;
-      return arg0;
-    }
-  }
-  else
-  {
-    bitShiftLeft1((int)arg0, 0);
+    *arg0 = (int)((zTile + 1) << 14);
     return arg0;
-  }*/
-    return 0;
 }
 
 //=============================================================================
@@ -2534,6 +2534,11 @@ _WORD *MapRelatedStruct::sub_464980()
 //=============================================================================
 _WORD *MapRelatedStruct::LoadMap(LPCSTR lpFileName)
 {
+    gDebugMobjCount = 0;
+    gDebugMobjSpawned = 0;
+    gDebugMobjDrawN = 0;
+    gDebugMobjFirstTileX = -1;
+    gDebugMobjFirstTileY = -1;
     // IDA 0x464990 - guarded incremental: parse chunk headers, dispatch only known-safe handlers.
     FILE* f = fopen(lpFileName, "rb");
     if (!f) return 0;
@@ -4013,40 +4018,34 @@ int MapRelatedStruct::sub_466910(int a2, int a3, _DWORD* a4) {
 }
 
 // 0x466990
-_WORD* MapRelatedStruct::FindMaxZForTile(int a2, int a3, _DWORD* a4) {
- // Map *Map; 
- // int v5; 
- // int v6; 
- // int v7; 
- // unsigned __int8 *v8; 
- // int v9; 
- // int v10; 
- // int v11; 
- // unsigned __int8 *i; 
- // bool v13; // zf
- // _WORD *result; 
- // Map = getMap();
- // v5 = *(_DWORD *)getMap()->sub_42A830( a3, a2);
- // v6 = Map->field_40008;
- // v7 = *(unsigned __int8 *)(v6 + 4 * v5 + 1);
- // v8 = (unsigned __int8 *)(v6 + 4 * v5);
- // v9 = v7;
- // v10 = *v8 - v7 - 1;
- // if ( v10 < 0 )
- //   return 0;
- // v11 = Map->field_4000C;
- // for ( i = &v8[4 * v10 + 4]; ; i -= 4 )
- // {
- //   v13 = (*(_BYTE *)(v11 + 12 * *(_DWORD *)i + 11) & 3) == 0;
- //   result = (_WORD *)(v11 + 12 * *(_DWORD *)i);
- //   dword_662B90 = result;
- //   if ( !v13 )
- //     break;
- //   if ( --v10 < 0 )
- //     return 0;
- // }
- // *a4 = v10 + v9;
-    return 0; //result;
+_WORD* MapRelatedStruct::FindMaxZForTile(int tileX, int tileY, _DWORD* outZ) {
+    // IDA 0x466990: grid cell -> column index in field_40008, walk down from top to find solid block.
+    if (outZ) *outZ = 0;
+    Map* m = getMap();
+    if (!m) return 0;
+    if (tileX < 0) tileX = 0; if (tileY < 0) tileY = 0;
+    if (tileX > 255) tileX = 255; if (tileY > 255) tileY = 255;
+    unsigned char* colBase = (unsigned char*)(uintptr_t)m->field_40008;
+    unsigned char* blockBase = (unsigned char*)(uintptr_t)m->field_4000C;
+    if (!colBase || !blockBase) return 0;
+    unsigned int gridIdx = *(unsigned int*)m->GetMapCellPtr(tileY, tileX); // IDA: *GetTileDataPtr(map,a3,a2)
+    unsigned char* col = colBase + gridIdx * 4u;
+    unsigned int maxH = col[0];       // IDA: *v8
+    unsigned int minH = col[1];       // IDA: *(v8+1)
+    int top = (int)maxH - (int)minH - 1;
+    if (top < 0) return 0;
+    unsigned int numBlocks = (unsigned int)(m->field_40004 > 0 ? m->field_40004 : 0);
+    for (int i = top; i >= 0; --i) {
+        unsigned int blockIdx = *(unsigned int*)(col + 4u + (unsigned)i * 4u);
+        if (numBlocks && blockIdx >= numBlocks) continue;
+        unsigned char* blk = blockBase + (size_t)blockIdx * 12u;
+        unsigned char flags11 = blk[11];
+        if ((flags11 & 3u) != 0) {
+            if (outZ) *outZ = (unsigned int)(i + (int)minH);
+            return (_WORD*)blk;
+        }
+    }
+    return 0;
 }
 
 // 0x466A00
@@ -6667,7 +6666,73 @@ LABEL_21:
 
 void MapRelatedStruct::LoadGangs(void){}
 
-void MapRelatedStruct::SpawnMapObjects(void){}
+static void* g_lastMobjSpawnBuf = nullptr;
+static int g_lastMobjSpawnCount = -1;
+void MapRelatedStruct::SpawnMapObjects(void){
+    // Guarded dry-run by default. Real Object::SpawnObject call only when GTA2_SPAWN_MOBJ=1.
+    // Layout around field_344/348 is not fully IDA-aligned in this header; use sidecar count.
+    int n = gDebugMobjCount;
+    if (n <= 0 || !this->Buffer_MOBJ) { gDebugMobjSpawned=0; gDebugMobjDrawN=0; if (gObject) gObject->ClearDebugSpawned(); g_lastMobjSpawnBuf=nullptr; g_lastMobjSpawnCount=-1; return; }
+    // RE-only guard: avoid duplicate debug spawn/log when called from both LoadResources and StartGameSession.
+    if (g_lastMobjSpawnBuf == this->Buffer_MOBJ && g_lastMobjSpawnCount == n && gDebugMobjSpawned == n) return;
+    unsigned char* p = (unsigned char*)this->Buffer_MOBJ;
+    int ok = 0;
+    gDebugMobjDrawN = 0;
+    const char* doSpawn = getenv("GTA2_SPAWN_MOBJ");
+    bool spawn = doSpawn && doSpawn[0] == '1'; // real/debug-spawn path only when explicitly enabled
+    if (spawn && gObject) gObject->ClearDebugSpawned();
+    if (spawn && getenv("GTA2_MOBJ_TRACE")) { FILE* tf=fopen("gta2_mobj_trace.log","w"); if(tf) fclose(tf); }
+    for (int i = 0; i < n && i < 200000; i++) {
+        unsigned char* r = p + i * 6;
+        short wxRaw = *(short*)(r + 0);
+        short wyRaw = *(short*)(r + 2);
+        unsigned char rotByte = r[4];
+        unsigned char typeByte = r[5];
+        int wx = ((int)wxRaw) << 7; // IDA DecodeMapCoordToWorld
+        int wy = ((int)wyRaw) << 7;
+        int tileX = wxRaw; // raw map coords; confirm: DecodeMapCoordToWorld used <<7 for world
+        int tileY = wyRaw;
+        // IDA 0x46A4D0/0x46A420: z = EncodePositionValue(FindMaxZForTileZ + 1) = (zTile+1)<<14 when block found.
+        int wz = 0;
+        _DWORD wzD = 0;
+        _WORD* zBlk = FindMaxZForTile(wx >> 14, wy >> 14, &wzD);
+        // IDA 0x46A4D0 uses FindMaxZForLocation(a2,pS202)->encoded z. Use same encoding path.
+        this->FindMaxZForLocation(&wz, &wx, (S202*)&wy);
+        // IDA 0x46A4D0: LOWORD(a5)=AddCarToCarSystem(...)->S200[0].A; high16 observed as stack garbage.
+        // For ste.gmp MOBJ rotB=0 original rot16=0.
+        short rot = (short)rotByte; // TODO: replace with confirmed AddCarToCarSystem result (LOWORD)
+        if (gDebugMobjDrawN < 64) { gDebugMobjX[gDebugMobjDrawN]=wx; gDebugMobjY[gDebugMobjDrawN]=wy; gDebugMobjType[gDebugMobjDrawN]=typeByte; gDebugMobjDrawN++; }
+        if (gDebugMobjFirstTileX < 0) { gDebugMobjFirstTileX = wxRaw; gDebugMobjFirstTileY = wyRaw; }
+        if (getenv("GTA2_MOBJ_TRACE")) {
+            unsigned int colMinH=0,colMaxH=0,colZ=0; _WORD* dbgBlk=0;
+            Map* dm=getMap();
+            if (dm) {
+                unsigned int cidx=(unsigned)((wx>>14)&255)+((unsigned)((wy>>14)&255))*256u;
+                unsigned char* cb=(unsigned char*)(uintptr_t)dm->field_40008;
+                if (cb) { unsigned int* cc=(unsigned int*)(cb+cidx*4u); colMaxH=cc[0]&0xFFu; colMinH=(cc[0]>>8)&0xFFu; }
+                dbgBlk=FindMaxZForTile(wx>>14,wy>>14,(_DWORD*)&colZ);
+            }
+            void* node = (gPathNode ? gPathNode->GetNode((int)typeByte) : nullptr);
+            int nodeD92 = -1; unsigned char nodeB97 = 0xFF; int nodeD52 = -1;
+            if (node) {
+                nodeD92 = *(int*)((unsigned char*)node + 92);
+                nodeB97 = *((unsigned char*)node + 97);
+                nodeD52 = *(int*)((unsigned char*)node + 52);
+            }
+            FILE* tf = fopen("gta2_mobj_trace.log", "a");
+            if (tf) { fprintf(tf, "MOBJ_REC i=%d rawX=%d rawY=%d rotB=%u type=%u wx=%d wy=%d wz=%d rot16=%u zBlk=%p spawn=%d colMin=%u colMax=%u colZ=%u node=%p n92=%d n97=%u n52=%d\n", i, (int)wxRaw, (int)wyRaw, (unsigned)rotByte, (unsigned)typeByte, wx, wy, wz, (unsigned)(unsigned short)rot, (void*)zBlk, spawn?1:0, colMinH,colMaxH,colZ,node,nodeD92,(unsigned)nodeB97,nodeD52); fclose(tf); }
+        }
+        if (spawn && gObject) {
+            // Guarded minimal real/debug spawn path. IDA 0x46A4D0 passes type,wx,wy,*FindMaxZForLocation,LOWORD(rotA).
+            // rotA comes from AddCarToCarSystem result in original; ste.gmp ground truth has rot16=0.
+            gObject->SpawnObject((int)typeByte, wx, wy, wz, (int)(unsigned short)rot);
+        }
+        ok++;
+    }
+    gDebugMobjSpawned = ok;
+    g_lastMobjSpawnBuf = this->Buffer_MOBJ;
+    g_lastMobjSpawnCount = n;
+}
 
 void MapRelatedStruct::UpdateLights(void){}
 
@@ -6686,7 +6751,12 @@ unsigned char MapRelatedStruct::LoadMOBJ(SIZE_T dwBytes){
         this->Buffer_MOBJ = MR_CreateBuffer(sz);
         if (this->Buffer_MOBJ) fread(this->Buffer_MOBJ, 1, sz, g_mapLoadFile);
     }
-    this->field_344 = (sz / 6);
+    gDebugMobjCount = (int)(sz / 6);
+    gDebugMobjSpawned = 0;
+    gDebugMobjDrawN = 0;
+    g_lastMobjSpawnBuf = nullptr;
+    g_lastMobjSpawnCount = -1;
+    if (gObject) gObject->ClearDebugSpawned();
     return 1;
 }
 unsigned char MapRelatedStruct::LoadANIM(FileMgr* dwBytes){

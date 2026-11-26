@@ -366,5 +366,13 @@ unsigned char LoadZONE(FileMgr* dwBytes);
 #pragma pack(pop)
 
 extern MapRelatedStruct* gMapRelatedStruct;
+extern int gDebugMobjCount;
+extern int gDebugMobjSpawned;
+extern int gDebugMobjX[64];
+extern int gDebugMobjY[64];
+extern int gDebugMobjType[64];
+extern int gDebugMobjDrawN;
+extern int gDebugMobjFirstTileX;
+extern int gDebugMobjFirstTileY;
 
 #endif // __MAP_RELATED_STRUCT_H__

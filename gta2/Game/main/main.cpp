@@ -38,7 +38,9 @@
 #include "Engine/Res/TGA.h"         // класс cTGA (загрузка .tga)
 #include "Engine/ultil/WinApi.h"    // класс WinApi (глобальный gWinApi)
 #include "Engine/DMAudio/DMAudio.h" // звук: gDMAudio (init/update), skip_audio
-#include "Engine/Sound/Sound.h"     // движок: gSound, WavToPcm, PlaySample
+#include "Engine/Sound/Sound.h"
+#include "Game/Hud/Hud.h"
+#include "Engine/Text/Text.h"     // движок: gSound, WavToPcm, PlaySample
 #include "Game/Menu/Menu.h"         // класс Menu (gMenu), MenuPage, MenuEntry
 #include "Game/Game/Game.h"         // класс Game (gGame)
 #include "Engine/MapGm/MapGm.h"     // класс MapGm (gMapGm)
@@ -50,6 +52,7 @@
 #include "Game/PedManager/PedManager.h"
 #include "Game/CarsPrefabs/CarsPrefabs.h"
 #include "Game/Car/Car.h"
+#include "Engine/Object/Object.h"
 extern PedManager gPedManager;
 extern CarsPrefabs gCarsPrefabs;
 #include "Engine/Registry/Registry.h" // регистр: gRegistry (настройки/язык)
@@ -67,6 +70,8 @@ extern int gAudioObject;           // тип звукового объекта (
 extern int gSampleRate;            // частота созданного аудио-объекта (DMAudio.cpp)
 extern	HINSTANCE ghInstance;
 
+int gDebugTileRot = 0;
+int gDebugTileDump = 0;
 DWORD	gMajor;
 DWORD	gMinor;
 bool    gPlayReplay;
@@ -292,7 +297,8 @@ class cApp : public cApplication
     // Конструктор: окно фиксированного размера 640x480, без растягивания.
     cApp() { m_Style = WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
              m_Width = MENU_W; m_Height = MENU_H;
-             m_testIndex = 0; m_testBankLoaded = false; m_testVocals = 0; m_inGame=false; m_debugPedSpawned=false; m_gameFrames=0; m_debugCamX=128; m_debugCamY=128; m_debugCamZ=512; m_debugZoom=16; }
+             m_testIndex = 0; m_testBankLoaded = false; m_testVocals = 0; m_inGame=false; m_debugPedSpawned=false; m_gameFrames=0; m_fps=0; m_debugCamX=128; m_debugCamY=128; m_debugCamZ=512; m_debugZoom=64;
+              { const char* e=getenv("GTA2_CAM"); if(e){ int tx=128,ty=128,tz=512; if(sscanf(e,"%d,%d,%d",&tx,&ty,&tz)>=2){ m_debugCamX=tx; m_debugCamY=ty; if(tz>=0) m_debugCamZ=tz; } } } }
 
     BOOL Init();     // инициализация меню (загрузка данных, текст, фон)
     BOOL Frame();    // один кадр: ввод, навигация, отрисовка
@@ -323,6 +329,7 @@ class cApp : public cApplication
     bool             m_inGame;
     bool             m_debugPedSpawned = false;
     int              m_gameFrames;
+    int              m_fps;
     int              m_debugCamX;
     int              m_debugCamY;
     int              m_debugCamZ;
@@ -858,31 +865,70 @@ BOOL cApp::Frame()
 {
   HWND hwnd = GethWnd();
 
-  if (!gSkipAudio)
+  if (!gSkipAudio && gDMAudio)
     gDMAudio->PollAllSamples();
 
   if (m_inGame) {
     if (GetAsyncKeyState(VK_ESCAPE) & 1) {
       m_inGame = false;
+      if (!gSkipAudio) gSound.StopAll(); // guarded pragmatic: stop game audio on menu return
       SetWindowTextA(hwnd, "GTA2");
       SwitchPage(0);
       Sleep(16);
       return TRUE;
     }
     int camStep = (GetAsyncKeyState(VK_SHIFT) & 0x8000) ? 4 : 1;
+    static bool s_manualCam = false;
+    if (GetAsyncKeyState('C') & 1) { s_manualCam = !s_manualCam; }
     bool moved = false;
     if (GetAsyncKeyState(VK_LEFT)  & 0x8000) { m_debugCamX -= camStep; moved = true; }
     if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { m_debugCamX += camStep; moved = true; }
     if (GetAsyncKeyState(VK_UP)    & 0x8000) { m_debugCamY -= camStep; moved = true; }
     if (GetAsyncKeyState(VK_DOWN)  & 0x8000) { m_debugCamY += camStep; moved = true; }
+    if (moved) s_manualCam = true;
     int zStep = (GetAsyncKeyState(VK_SHIFT) & 0x8000) ? 16 : 1;
     if (GetAsyncKeyState(VK_PRIOR) & 0x8000) { m_debugCamZ += zStep; if (m_debugCamZ > 1024) m_debugCamZ = 1024; }
     if (GetAsyncKeyState(VK_NEXT)  & 0x8000) { m_debugCamZ -= zStep; if (m_debugCamZ < 0) m_debugCamZ = 0; }
     if (GetAsyncKeyState(VK_OEM_PLUS) & 1 || GetAsyncKeyState(VK_ADD) & 1) { if (m_debugZoom < 1024) m_debugZoom *= 2; }
     if (GetAsyncKeyState(VK_OEM_MINUS) & 1 || GetAsyncKeyState(VK_SUBTRACT) & 1) { if (m_debugZoom > 4) m_debugZoom /= 2; }
+    // Debug audio: B plays next sample from bil/ste bank (guarded).
+    if (GetAsyncKeyState('B') & 1 && !gSkipAudio) {
+      static bool s_audioBankLoaded = false;
+      static int s_audioIdx = 0;
+      if (!s_audioBankLoaded) {
+        if (gSound.LoadBank("bil") <= 0) gSound.LoadBank("ste");
+        s_audioBankLoaded = true;
+      }
+      int n = gSound.GetSampleCount();
+      if (n > 0) { gSound.StopAll(); gSound.PlaySample(s_audioIdx % n, false); s_audioIdx++; }
+    }
+    // Debug audio: N toggles/plays a short ambient-style loop sample (guarded).
+    if (GetAsyncKeyState('N') & 1 && !gSkipAudio) {
+      static bool s_loopOn = false;
+      int n = gSound.GetSampleCount();
+      if (n > 0) {
+        if (s_loopOn) { gSound.StopAll(); s_loopOn = false; }
+        else { gSound.PlaySample(1 % n, true); s_loopOn = true; }
+      }
+    }
+    // Debug tile orientation: R rotates +90deg CW, K confirms/logs selection.
+    extern int gDebugTileRot;
+    extern int gDebugTileDump;
+    if (GetAsyncKeyState('R') & 1) {
+      gDebugTileRot = (gDebugTileRot + 1) & 3;
+      gDebugTileDump = 1;
+      FILE* tf = fopen("gta2_tile_rot.log", "a");
+      if (tf) { fprintf(tf, "ROTATE key=R rot=%d deg=%d cam=%d,%d zm=%d\n", gDebugTileRot, gDebugTileRot*90, m_debugCamX,m_debugCamY,m_debugZoom); fclose(tf); }
+    }
+    if (GetAsyncKeyState('K') & 1) {
+      gDebugTileDump = 1;
+      FILE* tf = fopen("gta2_tile_rot.log", "a");
+      if (tf) { fprintf(tf, "CONFIRM key=K rot=%d deg=%d cam=%d,%d zm=%d\n", gDebugTileRot, gDebugTileRot*90, m_debugCamX,m_debugCamY,m_debugZoom); fclose(tf); }
+      OutputDebugStringA("GTA2_TILE_ROT_CONFIRMED\n");
+    }
     // Try to follow real player camera when available, unless user manually moved debug camera.
     // Guarded: only AuxGameCamera (known offset in dllLoad struct); avoid MainPed position until layout verified.
-    if (!moved && gGame && gGame->PlayerMain) {
+    if (!s_manualCam && gGame && gGame->PlayerMain) {
       Player* pl = gGame->PlayerMain;
       int px = pl->AuxGameCameraX;
       int py = pl->AuxGameCameraY;
@@ -904,6 +950,11 @@ BOOL cApp::Frame()
     if (gGame) {
       int keep = gGame->RunFrame();
       m_gameFrames++;
+      static DWORD s_fpsLast = 0; static int s_fpsFrames = 0;
+      if (s_fpsLast == 0) s_fpsLast = GetTickCount();
+      ++s_fpsFrames;
+      DWORD s_fpsNow = GetTickCount();
+      if (s_fpsNow - s_fpsLast >= 1000) { m_fps = (int)(s_fpsFrames * 1000u / (unsigned)(s_fpsNow - s_fpsLast)); s_fpsFrames = 0; s_fpsLast = s_fpsNow; }
       if (!keep) { m_inGame = false; SetWindowTextA(hwnd, "GTA2"); SwitchPage(0); }
       // DEBUG: guarded one-time spawn to exercise entity overlay/tick pipeline.
       // Uses our local struct layout only; not IDA-accurate spawn/init.
@@ -920,7 +971,7 @@ BOOL cApp::Frame()
       // In-game visual: top-down map grid from loaded DMAP when available.
       if (m_RGBA.size() >= (size_t)MENU_W * MENU_H * 4) {
         for (size_t i = 0; i < (size_t)MENU_W * MENU_H; ++i) {
-          m_RGBA[i*4+0] = 10; m_RGBA[i*4+1] = 14; m_RGBA[i*4+2] = 22; m_RGBA[i*4+3] = 255;
+          m_RGBA[i*4+0] = 22; m_RGBA[i*4+1] = 14; m_RGBA[i*4+2] = 10; m_RGBA[i*4+3] = 255;
         }
         bool drewMap = false;
         if (gMapRelatedStruct) {
@@ -948,24 +999,46 @@ BOOL cApp::Frame()
                   int mx = camX + vx;
                   unsigned int bi = base[my*256+mx];
                   unsigned char fallbackR=10,fallbackG=14,fallbackB=22;
-                  const unsigned char* tilePix = 0;
-                  const unsigned char* pal = 0;
-                  unsigned short selectedFace = 0;
-                  unsigned char selectedRot = 0;
-                  bool selectedFlip = false;
-                  unsigned char selectedSlope = 0;
-                  bool selectedSideFace = false;
-                  unsigned char selectedArrows = 0;
-                  int selectedZ = 0;
-                  unsigned char selectedHeight = 0;
+                  // UV remap tables extracted from GTA2.exe (PE .data). IDA: RenderBlockLid/Left/Right/Slopes use (face>>13)&7.
+                  static const unsigned int kUV_593154[8] = {0,8,32,40,64,72,96,104}; // lid
+                  static const unsigned int kUV_593194[8] = {37,53,69,85,101,117,5,21}; // left
+                  static const unsigned int kUV_5931B4[8] = {101,117,5,21,37,53,69,85}; // right
+                  static const unsigned int kUV_5931D4[8] = {5,13,37,45,69,77,101,109}; // top/center
+                  static const unsigned int kUV_593134[8] = {2,10,34,42,66,74,98,106}; // bottom
+                  static const unsigned int kUV_5930D4[8] = {35,51,67,83,99,115,3,19};
+                  static const unsigned int kUV_5930F4[8] = {100,116,4,20,36,52,68,84};
+                  struct DbgFace { unsigned short face; unsigned char rot; bool flipX; bool flipY; unsigned char slope; bool side; unsigned char arrows; int z; unsigned char height; };
+                  auto uvToOrient=[&](unsigned int uv, unsigned char& rot, bool& fx, bool& fy){
+                    // Decode from original UV/flag tables (593154/593194/5931B4/5931D4/5930D4/5930F4).
+                    // Values encode flip/rot bits used by gbh_DrawTile/DrawTilePart: 0x20/0x40/0x60 rotation,
+                    // 0x08/0x10 flips (0x40 case xors 0x18 in DrawTilePart), 0x80 flat flag added by renderer.
+                    fx=false; fy=false; rot=0;
+                    unsigned int v = uv & 0xFFu;
+                    bool flat = (v & 0x80u) != 0; (void)flat;
+                    unsigned int rbits = v & 0x60u;
+                    if (rbits == 0x20u) { rot = 1; }
+                    else if (rbits == 0x60u) { rot = 3; }
+                    else if (rbits == 0x40u) { rot = 0; fx = true; fy = true; } // DrawTilePart: flags^0x18
+                    else { rot = 0; }
+                    if (v & 0x08u) fx = !fx;
+                    if (v & 0x10u) fy = !fy;
+                    // Remaining low bits (1,2,4) appear in table variants; keep as extra quarter-turn hints.
+                    if (v & 0x04u) rot = (unsigned char)((rot + 1) & 3u);
+                    if (v & 0x01u) rot = (unsigned char)((rot + 3) & 3u);
+                    if (v & 0x02u) fx = !fx;
+                    extern int gDebugTileRot;
+                    rot = (unsigned char)((rot + (gDebugTileRot & 3)) & 3u);
+                  };
+                  DbgFace faces[8]; int faceN = 0;
                   int selectedTopZ = 0;
                   if (bi < columnWords) {
                     const unsigned char* col = colBuf + (size_t)bi * 4u;
                     unsigned char height = col[0], offset = col[1];
+                    selectedTopZ = (int)height;
                     if (offset <= 8 && height <= 8 && height >= offset) {
                       int zStart = (int)height - 1;
                       if (zStart > m_debugCamZ) zStart = m_debugCamZ;
-                      for (int z = zStart; z >= (int)offset; --z) {
+                      for (int z = zStart; z >= (int)offset && faceN < 8; --z) {
                         unsigned int wordIdx = bi + 1u + (unsigned int)(z - offset);
                         if (wordIdx >= columnWords) break;
                         unsigned int blockId = *(const unsigned int*)(colBuf + (size_t)wordIdx * 4u);
@@ -980,73 +1053,69 @@ BOOL cApp::Frame()
                         if (left|right|top|bottom|lid|arrows|slope) {
                           unsigned short face = lid;
                           bool sideFace = false;
-                          if (!face) { face = top; sideFace = face != 0; }
-                          if (!face) { face = left; sideFace = face != 0; }
-                          if (!face) { face = right; sideFace = face != 0; }
-                          if (!face) { face = bottom; sideFace = face != 0; }
-                          selectedFace = face;
-                          selectedSlope = slope;
-                          selectedSideFace = sideFace;
-                          selectedArrows = arrows;
-                          selectedZ = z;
-                          selectedHeight = height;
-                          selectedTopZ = (int)height;
-                          // IDA RenderBlockLid: rot index used as (face>>13) for UV remap tables; (face>>10)&3 selects physical palette/state.
-                          // IDA RenderBlockSlopes: (face&0x2000) flips UV orientation. RenderBlockLid: (face&0x1000) sets flat flag bit.
-                          // Preview keeps MapEditor-style rot>>14 for simplicity; uses 0x2000 as flipX and 0x1000 to skip depth cue.
-                          selectedRot = (unsigned char)((face >> 14) & 3u);
-                          selectedFlip = (face & 0x2000u) != 0;
-                          bool faceFlat = (face & 0x1000u) != 0;
-                          if (sideFace && !faceFlat) { fallbackR = (unsigned char)(fallbackR * 14 / 16); fallbackG = (unsigned char)(fallbackG * 14 / 16); fallbackB = (unsigned char)(fallbackB * 14 / 16); }
-                          if (hasTiles && face) {
-                            unsigned int virt = (unsigned int)(face & 1023u);
-                            unsigned short remap = StyleTiles_GetRemappedTile(virt);
-                            unsigned int tileId = remap ? (unsigned int)remap : virt;
-                            unsigned short phys = StyleTiles_GetPhysPalForTile(tileId);
-                            pal = StyleTiles_GetPhysPalette((unsigned int)phys);
-                            tilePix = StyleTiles_GetTilePixels(tileId);
-                          }
-                          if (!tilePix || !pal) {
-                            bool got=false;
-                            if (hasTiles && face) {
-                              unsigned int virt = (unsigned int)(face & 1023u);
-                              unsigned short remap = StyleTiles_GetRemappedTile(virt);
-                              unsigned int tileId = remap ? (unsigned int)remap : virt;
-                              unsigned short phys = StyleTiles_GetPhysPalForTile(tileId);
-                              const unsigned char* fpal = StyleTiles_GetPhysPalette((unsigned int)phys);
-                              if (fpal) {
-                                unsigned char i0=StyleTiles_SamplePixel(tileId,16,16,selectedFlip,false,selectedRot);
-                                unsigned char i1=StyleTiles_SamplePixel(tileId,48,16,selectedFlip,false,selectedRot);
-                                unsigned char i2=StyleTiles_SamplePixel(tileId,16,48,selectedFlip,false,selectedRot);
-                                unsigned char i3=StyleTiles_SamplePixel(tileId,48,48,selectedFlip,false,selectedRot);
-                                fallbackR=(unsigned char)((fpal[i0*4+0]+fpal[i1*4+0]+fpal[i2*4+0]+fpal[i3*4+0])/4);
-                                fallbackG=(unsigned char)((fpal[i0*4+1]+fpal[i1*4+1]+fpal[i2*4+1]+fpal[i3*4+1])/4);
-                                fallbackB=(unsigned char)((fpal[i0*4+2]+fpal[i1*4+2]+fpal[i2*4+2]+fpal[i3*4+2])/4);
-                                got=true;
-                              }
+                          const unsigned int* uvTab = kUV_593154; // lid default
+                          if (!face) { face = top; sideFace = face != 0; uvTab = kUV_5931D4; }
+                          if (!face) { face = left; sideFace = face != 0; uvTab = kUV_593194; }
+                          if (!face) { face = right; sideFace = face != 0; uvTab = kUV_5931B4; }
+                          if (!face) { face = bottom; sideFace = face != 0; uvTab = kUV_593134; }
+                          unsigned short remapFace = StyleTiles_GetRemappedTile(face & 1023u);
+                          if ((face & 1023u) != 0 && remapFace == 0) continue; // original get_tile_by_id -> 0 means empty
+                          DbgFace df{};
+                          df.face=face; df.slope=slope; df.side=sideFace; df.arrows=arrows; df.z=z; df.height=height;
+                          unsigned int uv = uvTab[(face >> 13) & 7u];
+                          if (face & 0x1000u) uv |= 0x80u; // flat flag bit, as in RenderBlockLid
+                          uvToOrient(uv, df.rot, df.flipX, df.flipY);
+                          if (face & 0x2000u) df.flipX = !df.flipX; // RenderBlockSlopes uses 0x2000 for flip
+                          faces[faceN++] = df;
+                          if (faceN == 1) {
+                            bool faceFlat = (face & 0x1000u) != 0;
+                            if (sideFace && !faceFlat) { fallbackR = (unsigned char)(fallbackR * 14 / 16); fallbackG = (unsigned char)(fallbackG * 14 / 16); fallbackB = (unsigned char)(fallbackB * 14 / 16); }
+                            switch (slope & 0xFC) {
+                              case 0xB4: fallbackG = (unsigned char)(fallbackG * 15 / 16); break;
+                              case 0xB8: fallbackR = (unsigned char)(fallbackR * 15 / 16); break;
+                              case 0xBC: fallbackB = (unsigned char)(fallbackB * 15 / 16); break;
+                              case 0xC0: fallbackR = (unsigned char)(fallbackR * 15 / 16); fallbackB = (unsigned char)(fallbackB * 15 / 16); break;
+                              default: if (slope & 0xFC) { fallbackR = (unsigned char)(fallbackR * 14 / 16); fallbackG = (unsigned char)(fallbackG * 14 / 16); fallbackB = (unsigned char)(fallbackB * 15 / 16); } break;
                             }
-                            if (!got) {
-                              unsigned char ground = (unsigned char)(slope & 0x03u);
-                              unsigned char v = (unsigned char)(24 + ((face ^ (face>>8) ^ slope ^ (unsigned char)z*13) & 0x3F));
-                              if (ground == 1) { fallbackR=(unsigned char)(40+v/3); fallbackG=(unsigned char)(40+v/3); fallbackB=(unsigned char)(44+v/3); }
-                              else if (ground == 2) { fallbackR=(unsigned char)(52+v/4); fallbackG=(unsigned char)(50+v/4); fallbackB=(unsigned char)(46+v/4); }
-                              else if (ground == 3) { fallbackR=(unsigned char)(20+v/5); fallbackG=(unsigned char)(44+v/3); fallbackB=(unsigned char)(20+v/5); }
-                              else { fallbackR=(unsigned char)(10+v/6); fallbackG=(unsigned char)(14+v/6); fallbackB=(unsigned char)(22+v/5); }
-                            }
+                            if (z > 1) { int add = z*2; if (add>40) add=40; int rr=fallbackR+add, gg=fallbackG+add; fallbackR=(unsigned char)(rr>255?255:rr); fallbackG=(unsigned char)(gg>255?255:gg); }
                           }
-                          // IDA RenderBlock dispatches on slope byte & 0xFC: 0xB4/0xB8/0xBC/0xC0 select slope/side/lid variants.
-                          switch (slope & 0xFC) {
-                            case 0xB4: fallbackG = (unsigned char)(fallbackG * 15 / 16); break;
-                            case 0xB8: fallbackR = (unsigned char)(fallbackR * 15 / 16); break;
-                            case 0xBC: fallbackB = (unsigned char)(fallbackB * 15 / 16); break;
-                            case 0xC0: fallbackR = (unsigned char)(fallbackR * 15 / 16); fallbackB = (unsigned char)(fallbackB * 15 / 16); break;
-                            default: if (slope & 0xFC) { fallbackR = (unsigned char)(fallbackR * 14 / 16); fallbackG = (unsigned char)(fallbackG * 14 / 16); fallbackB = (unsigned char)(fallbackB * 15 / 16); } break;
-                          }
-                          // height debug cue
-                          if (z > 1) { int add = z*2; if (add>40) add=40; int rr=fallbackR+add, gg=fallbackG+add; fallbackR=(unsigned char)(rr>255?255:rr); fallbackG=(unsigned char)(gg>255?255:gg); }
-                          (void)arrows;
-                          break;
                         }
+                      }
+                    }
+                  }
+                  static int s_tileTraceN = 0;
+                  extern int gDebugTileDump;
+                  bool doTrace = (getenv("GTA2_TILE_TRACE") && s_tileTraceN < 200) || (gDebugTileDump != 0);
+                  if (doTrace) {
+                    int cdx = vx - viewW/2, cdy = vy - viewH/2;
+                    static int s_loggedMx=-9999, s_loggedMy=-9999, s_loggedZm=-1;
+                    if (gDebugTileDump || (cdx >= -1 && cdx <= 1 && cdy >= -1 && cdy <= 1 && (mx!=s_loggedMx || my!=s_loggedMy || tilePx!=s_loggedZm || s_tileTraceN < 9))) {
+                      FILE* tf = fopen("gta2_tile_trace.log", "a");
+                      if (tf) {
+                        unsigned short lidW=0,topW=0,leftW=0,rightW=0,botW=0; unsigned char arrB=0,slpB=0;
+                        if (bi < columnWords) {
+                          const unsigned char* col = colBuf + (size_t)bi * 4u;
+                          unsigned char heightC=col[0], offsetC=col[1];
+                          if (offsetC<=8 && heightC<=8 && heightC>=offsetC) {
+                            int zz = heightC-1; if (zz>m_debugCamZ) zz=m_debugCamZ;
+                            for (int zf=zz; zf>= (int)offsetC; --zf) {
+                              unsigned int wi = bi + 1u + (unsigned int)(zf-offsetC);
+                              if (wi>=columnWords) break;
+                              unsigned int bid = *(const unsigned int*)(colBuf + (size_t)wi*4u);
+                              if (bid>=numBlocks) continue;
+                              const unsigned char* bb2p = blkBuf + (size_t)bid*12u;
+                              leftW=*(const unsigned short*)(bb2p+0); rightW=*(const unsigned short*)(bb2p+2); topW=*(const unsigned short*)(bb2p+4); botW=*(const unsigned short*)(bb2p+6); lidW=*(const unsigned short*)(bb2p+8); arrB=bb2p[10]; slpB=bb2p[11];
+                              break;
+                            }
+                          }
+                        }
+                        fprintf(tf, "TILE mx=%d my=%d cam=%d,%d,%d zm=%d bi=%u colH=%d colOff=%d blkL=0x%04X R=0x%04X T=0x%04X B=0x%04X Lid=0x%04X arr=0x%02X slp=0x%02X\n", mx,my,m_debugCamX,m_debugCamY,m_debugCamZ,tilePx,bi,(int)(bi<columnWords?colBuf[(size_t)bi*4u]:255),(int)(bi<columnWords?colBuf[(size_t)bi*4u+1]:255),leftW,rightW,topW,botW,lidW,arrB,slpB);
+                        for (int fi=0; fi<faceN; ++fi) {
+                          const DbgFace& df=faces[fi];
+                          unsigned int virt2=df.face&1023u; unsigned short remap2=StyleTiles_GetRemappedTile(virt2);
+                          fprintf(tf, " FACE i=%d face=0x%04X virt=%u remap=%u phys=%u rot=%u fx=%d fy=%d side=%d slope=0x%02X arrows=0x%02X z=%d h=%d\n", fi, (unsigned)df.face, virt2, (unsigned)remap2, (unsigned)StyleTiles_GetPhysPalForTile(remap2?remap2:virt2), (unsigned)df.rot, df.flipX?1:0, df.flipY?1:0, df.side?1:0, (unsigned)df.slope, (unsigned)df.arrows, df.z, (unsigned)df.height);
+                        }
+                        fclose(tf); s_tileTraceN++; s_loggedMx=mx; s_loggedMy=my; s_loggedZm=tilePx;
                       }
                     }
                   }
@@ -1056,26 +1125,50 @@ BOOL cApp::Frame()
                       int sy = oy + vy*tilePx + py;
                       if ((unsigned)sx >= MENU_W || (unsigned)sy >= MENU_H) continue;
                       unsigned char r=fallbackR,g=fallbackG,bb=fallbackB;
-                      if (pal && selectedFace) {
+                      bool drewFace = false;
+                      for (int fi = 0; fi < faceN; ++fi) {
+                        const DbgFace& df = faces[fi];
+                        if (!df.face) continue;
+                        unsigned int virt2 = (unsigned int)(df.face & 1023u);
+                        unsigned short remap2 = StyleTiles_GetRemappedTile(virt2);
+                        if (virt2 != 0 && remap2 == 0) continue; // original get_tile_by_id -> 0 means empty
+                        unsigned int tileId2 = (unsigned int)remap2;
+                        unsigned short phys2 = StyleTiles_GetPhysPalForTile(tileId2);
+                        const unsigned char* pal2 = StyleTiles_GetPhysPalette((unsigned int)phys2);
+                        if (!pal2) continue;
                         int tx = (px * 64) / tilePx;
                         int ty = (py * 64) / tilePx;
-                        unsigned int virt2 = (unsigned int)(selectedFace & 1023u);
-                        unsigned short remap2 = StyleTiles_GetRemappedTile(virt2);
-                        unsigned int tileId2 = remap2 ? (unsigned int)remap2 : virt2;
-                        unsigned char idx = StyleTiles_SamplePixel(tileId2, tx, ty, selectedFlip, false, selectedRot);
-                        r = pal[idx*4 + 0];
-                        g = pal[idx*4 + 1];
-                        bb= pal[idx*4 + 2];
+                        unsigned char idx = StyleTiles_SamplePixel(tileId2, tx, ty, df.flipX, df.flipY, df.rot);
+                        if (idx == 0) continue; // GTA2 style: colour 0 is transparent
+                        unsigned char rr0 = pal2[idx*4 + 0];
+                        unsigned char gg0 = pal2[idx*4 + 1];
+                        unsigned char bb0 = pal2[idx*4 + 2];
+                        bool faceFlat = (df.face & 0x1000u) != 0;
+                        if (df.side && !faceFlat) {
+                          int wallH = tilePx/3 + (df.height - df.z) * (tilePx/10);
+                          if (wallH < tilePx/4) wallH = tilePx/4;
+                          if (wallH > tilePx*2/3) wallH = tilePx*2/3;
+                          if (py > tilePx - wallH) { rr0=(unsigned char)(rr0*10/16); gg0=(unsigned char)(gg0*10/16); bb0=(unsigned char)(bb0*10/16); }
+                        } else if (!faceFlat && py > tilePx * 3 / 4) {
+                          rr0 = (unsigned char)(rr0 * 13 / 16); gg0 = (unsigned char)(gg0 * 13 / 16); bb0 = (unsigned char)(bb0 * 13 / 16);
+                        }
+                        r=rr0; g=gg0; bb=bb0; drewFace = true;
+                        if (fi == 0) {
+                          unsigned char sfc = (unsigned char)(df.slope & 0xFCu);
+                          if (sfc==0xB4 || sfc==0xB8 || sfc==0xBC || sfc==0xC0) {
+                            int diag = (sfc==0xB4) ? (px - (tilePx-1-py))
+                                     : (sfc==0xB8) ? (px - py)
+                                     : (sfc==0xBC) ? ((tilePx-1-px) - py)
+                                     : ((tilePx-1-px) - (tilePx-1-py));
+                            if (diag > 0) { r=(unsigned char)(r*14/16); g=(unsigned char)(g*14/16); bb=(unsigned char)(bb*14/16); }
+                            else if (diag == 0 && tilePx >= 8) { r=235; g=235; bb=235; }
+                          }
+                          if (df.arrows && px >= tilePx/2-1 && px <= tilePx/2 && py >= tilePx/2-1 && py <= tilePx/2) { r=255; g=240; bb=120; }
+                          if (df.z > 0 && py==0 && tilePx>=8) { int a=df.z*3; r=(unsigned char)((r+a>255)?255:r+a); g=(unsigned char)((g+a>255)?255:g+a); bb=(unsigned char)((bb+a>255)?255:bb+a); }
+                        }
+                        break;
                       }
-                      bool faceFlat = (selectedFace & 0x1000u) != 0;
-                      if (selectedSideFace && !faceFlat) {
-                        int wallH = tilePx/3 + (selectedHeight - selectedZ) * (tilePx/10);
-                        if (wallH < tilePx/4) wallH = tilePx/4;
-                        if (wallH > tilePx*2/3) wallH = tilePx*2/3;
-                        if (py > tilePx - wallH) { r=(unsigned char)(r*10/16); g=(unsigned char)(g*10/16); bb=(unsigned char)(bb*10/16); }
-                      } else if (!faceFlat && py > tilePx * 3 / 4) {
-                        r = (unsigned char)(r * 13 / 16); g = (unsigned char)(g * 13 / 16); bb = (unsigned char)(bb * 13 / 16);
-                      }
+                      if (!drewFace && faceN > 0) { /* keep fallback */ }
                       // Height edge cues: darken bottom/right edges when this column is higher than neighbor.
                       if (selectedTopZ > 0 && tilePx >= 8) {
                         if (py >= tilePx-1) {
@@ -1099,25 +1192,9 @@ BOOL cApp::Frame()
                           }
                         }
                       }
-                      // Slope byte (IDA RenderBlock: slope&0xFC selects lid/side variant). Debug diagonal cue.
-                      unsigned char sfc = (unsigned char)(selectedSlope & 0xFCu);
-                      if (sfc==0xB4 || sfc==0xB8 || sfc==0xBC || sfc==0xC0) {
-                        int diag = (sfc==0xB4) ? (px - (tilePx-1-py))
-                                 : (sfc==0xB8) ? (px - py)
-                                 : (sfc==0xBC) ? ((tilePx-1-px) - py)
-                                 : ((tilePx-1-px) - (tilePx-1-py));
-                        if (diag > 0) { r=(unsigned char)(r*14/16); g=(unsigned char)(g*14/16); bb=(unsigned char)(bb*14/16); }
-                        else if (diag == 0 && tilePx >= 8) { r=235; g=235; bb=235; }
-                      }
-                      // Arrows/debug: block byte 10 often encodes traffic arrows; draw subtle center marker if present.
-                      if (selectedArrows && px >= tilePx/2-1 && px <= tilePx/2 && py >= tilePx/2-1 && py <= tilePx/2) {
-                        r=255; g=240; bb=120;
-                      }
                       if (tilePx >= 16 && (px==0 || py==0)) { r=(unsigned char)(r*15/16); g=(unsigned char)(g*15/16); bb=(unsigned char)(bb*15/16); }
-                      // simple height cue: higher blocks slightly brighter top edge
-                      if (selectedZ > 0 && py==0 && tilePx>=8) { int a=selectedZ*3; r=(unsigned char)((r+a>255)?255:r+a); g=(unsigned char)((g+a>255)?255:g+a); bb=(unsigned char)((bb+a>255)?255:bb+a); }
                       size_t pi=((size_t)sy*MENU_W+sx)*4;
-                      m_RGBA[pi+0]=r; m_RGBA[pi+1]=g; m_RGBA[pi+2]=bb; m_RGBA[pi+3]=255;
+                      m_RGBA[pi+0]=bb; m_RGBA[pi+1]=g; m_RGBA[pi+2]=r; m_RGBA[pi+3]=255;
                     }
                   }
                 }
@@ -1126,9 +1203,9 @@ BOOL cApp::Frame()
             }
           }
         }
-        for (int y=0;y<24 && y<MENU_H;y++) for (int x=0;x<MENU_W;x++){ size_t p=((size_t)y*MENU_W+x)*4; m_RGBA[p+0]=30; m_RGBA[p+1]=40; m_RGBA[p+2]=80; m_RGBA[p+3]=255; }
+        for (int y=0;y<24 && y<MENU_H;y++) for (int x=0;x<MENU_W;x++){ size_t p=((size_t)y*MENU_W+x)*4; m_RGBA[p+0]=80; m_RGBA[p+1]=40; m_RGBA[p+2]=30; m_RGBA[p+3]=255; }
         int mxm = (m_gameFrames * 4) % (MENU_W-20);
-        for (int y=40;y<44;y++) for (int x=mxm;x<mxm+20;x++){ if(x<0||x>=MENU_W||y<0||y>=MENU_H) continue; size_t p=((size_t)y*MENU_W+x)*4; m_RGBA[p+0]=220; m_RGBA[p+1]=220; m_RGBA[p+2]=80; m_RGBA[p+3]=255; }
+        for (int y=40;y<44;y++) for (int x=mxm;x<mxm+20;x++){ if(x<0||x>=MENU_W||y<0||y>=MENU_H) continue; size_t p=((size_t)y*MENU_W+x)*4; m_RGBA[p+0]=80; m_RGBA[p+1]=220; m_RGBA[p+2]=220; m_RGBA[p+3]=255; }
         // debug camera marker overlay (read-only)
         {
           const int tilePx = m_debugZoom > 0 ? m_debugZoom : 16;
@@ -1147,10 +1224,38 @@ BOOL cApp::Frame()
               int x=pxm+dx, y=pym+dy;
               if ((unsigned)x>=MENU_W||(unsigned)y>=MENU_H) continue;
               size_t pi=((size_t)y*MENU_W+x)*4;
-              m_RGBA[pi+0]=rr; m_RGBA[pi+1]=gg; m_RGBA[pi+2]=bb2; m_RGBA[pi+3]=255;
+              m_RGBA[pi+0]=bb2; m_RGBA[pi+1]=gg; m_RGBA[pi+2]=rr; m_RGBA[pi+3]=255;
             }
           };
           int ms = tilePx/4; if (ms < 2) ms = 2;
+          // MOBJ markers: raw<<7 world -> tile = world>>14. Green=spawned in RE debug pool, Yellow=dry-run only.
+          {
+              int spawnedN = (gObject ? gObject->GetDebugSpawnedCount() : 0);
+              for (int mi=0; mi<spawnedN; ++mi) {
+                  const DebugSpawnedObject* so = gObject->GetDebugSpawned(mi);
+                  if (!so) continue;
+                  int tx = so->x >> 14;
+                  int ty = so->y >> 14;
+                  if (tx < 0 || ty < 0 || tx >= 256 || ty >= 256) continue;
+                  unsigned char rr=80, gg=255, bb2=140;
+                  if (so->type==21) { rr=120; gg=255; bb2=80; }
+                  drawDot(tx, ty, rr, gg, bb2, (ms>3?3:2));
+              }
+              if (spawnedN == 0) {
+                  int nM = gDebugMobjDrawN;
+                  if (nM < 0) nM = 0;
+                  if (nM > 64) nM = 64;
+                  for (int mi=0; mi<nM; ++mi) {
+                      int tx = gDebugMobjX[mi] >> 14;
+                      int ty = gDebugMobjY[mi] >> 14;
+                      if (tx < 0 || ty < 0 || tx >= 256 || ty >= 256) continue;
+                      unsigned char rr=255, gg=240, bb2=80;
+                      int t=gDebugMobjType[mi];
+                      if (t==21) { rr=255; gg=160; bb2=40; }
+                      drawDot(tx, ty, rr, gg, bb2, (ms>3?3:2));
+                  }
+              }
+          }
           drawDot(m_debugCamX, m_debugCamY, 255, 80, 80, ms); // camera
           if (gGame && gGame->PlayerMain && gGame->PlayerMain->MainPed) {
             Ped* mp = gGame->PlayerMain->MainPed;
@@ -1162,17 +1267,99 @@ BOOL cApp::Frame()
         }
         (void)drewMap;
       }
+      // RE debug HUD/text overlay (minimal). Not IDA Hud::DrawUI path yet; guaranteed visible.
+      {
+        static const unsigned char kFont5x7[96][5] = {
+          {0,0,0,0,0},{0,0,0x5F,0,0},{0,7,0,7,0},{0x14,0x7F,0x14,0x7F,0x14},{0x24,0x2A,0x7F,0x2A,0x12},
+          {0x23,0x13,8,0x64,0x62},{0x36,0x49,0x55,0x22,0x50},{0,5,3,0,0},{0,0x1C,0x22,0x41,0},{0,0x41,0x22,0x1C,0},
+          {0x14,8,0x3E,8,0x14},{8,8,0x3E,8,8},{0,0x50,0x30,0,0},{8,8,8,8,8},{0,0x60,0x60,0,0},{0x20,0x10,8,4,2},
+          {0x3E,0x51,0x49,0x45,0x3E},{0,0x42,0x7F,0x40,0},{0x42,0x61,0x51,0x49,0x46},{0x21,0x41,0x45,0x4B,0x31},
+          {0x18,0x14,0x12,0x7F,0x10},{0x27,0x45,0x45,0x45,0x39},{0x3C,0x4A,0x49,0x49,0x30},{1,0x71,9,5,3},
+          {0x36,0x49,0x49,0x49,0x36},{6,0x49,0x49,0x29,0x1E},{0,0x36,0x36,0,0},{0,0x56,0x36,0,0},{8,0x14,0x22,0x41,0},
+          {0x14,0x14,0x14,0x14,0x14},{0,0x41,0x22,0x14,8},{2,1,0x51,9,6},{0x32,0x49,0x79,0x41,0x3E},
+          {0x7E,0x11,0x11,0x11,0x7E},{0x7F,0x49,0x49,0x49,0x36},{0x3E,0x41,0x41,0x41,0x22},{0x7F,0x41,0x41,0x22,0x1C},
+          {0x7F,0x49,0x49,0x49,0x41},{0x7F,9,9,9,1},{0x3E,0x41,0x49,0x49,0x7A},{0x7F,8,8,8,0x7F},
+          {0,0x41,0x7F,0x41,0},{0x20,0x40,0x41,0x3F,1},{0x7F,8,0x14,0x22,0x41},{0x7F,0x40,0x40,0x40,0x40},
+          {0x7F,2,0x0C,2,0x7F},{0x7F,4,8,0x10,0x7F},{0x3E,0x41,0x41,0x41,0x3E},{0x7F,9,9,9,6},
+          {0x3E,0x41,0x51,0x21,0x5E},{0x7F,9,0x19,0x29,0x46},{0x46,0x49,0x49,0x49,0x31},{1,1,0x7F,1,1},
+          {0x3F,0x40,0x40,0x40,0x3F},{0x1F,0x20,0x40,0x20,0x1F},{0x3F,0x40,0x38,0x40,0x3F},{0x63,0x14,8,0x14,0x63},
+          {7,8,0x70,8,7},{0x61,0x51,0x49,0x45,0x43},{0,0x7F,0x41,0x41,0},{2,4,8,0x10,0x20},{0,0x41,0x41,0x7F,0},
+          {4,2,1,2,4},{0x40,0x40,0x40,0x40,0x40},{0,1,2,4,0},{0x20,0x54,0x54,0x54,0x78},{0x7F,0x48,0x44,0x44,0x38},
+          {0x38,0x44,0x44,0x44,0x20},{0x38,0x44,0x44,0x48,0x7F},{0x38,0x54,0x54,0x54,0x18},{8,0x7E,9,1,2},
+          {0x0C,0x52,0x52,0x52,0x3E},{0x7F,8,4,4,0x78},{0,0x44,0x7D,0x40,0},{0x20,0x40,0x44,0x3D,0},{0x7F,0x10,0x28,0x44,0},
+          {0,0x41,0x7F,0x40,0},{0x7C,4,0x18,4,0x78},{0x7C,8,4,4,0x78},{0x38,0x44,0x44,0x44,0x38},{0x7C,0x14,0x14,0x14,8},
+          {8,0x14,0x14,0x18,0x7C},{0x7C,8,4,4,8},{0x48,0x54,0x54,0x54,0x20},{4,0x3F,0x44,0x40,0x20},
+          {0x3C,0x40,0x40,0x20,0x7C},{0x1C,0x20,0x40,0x20,0x1C},{0x3C,0x40,0x30,0x40,0x3C},{0x44,0x28,0x10,0x28,0x44},
+          {0x0C,0x50,0x50,0x50,0x3C},{0x44,0x64,0x54,0x4C,0x44},{0,8,0x36,0x41,0},{0,0,0x7F,0,0},{0,0x41,0x36,8,0},{0x10,8,8,0x10,8}
+        };
+        auto drawChar=[&](int x,int y,char c,unsigned char r,unsigned char g,unsigned char b,int scale){
+          if (c < 32 || c > 127) c = '?';
+          const unsigned char* glyph = kFont5x7[c - 32];
+          for (int gx=0; gx<5; ++gx) for (int gy=0; gy<7; ++gy) if (glyph[gx] & (1u<<gy))
+            for (int sy=0; sy<scale; ++sy) for (int sx=0; sx<scale; ++sx) {
+              int px=x+gx*scale+sx, py=y+gy*scale+sy;
+              if ((unsigned)px>=MENU_W||(unsigned)py>=MENU_H) continue;
+              size_t pi=((size_t)py*MENU_W+px)*4;
+              m_RGBA[pi+0]=b; m_RGBA[pi+1]=g; m_RGBA[pi+2]=r; m_RGBA[pi+3]=255;
+            }
+        };
+        auto drawText=[&](int x,int y,const char* t,unsigned char r,unsigned char g,unsigned char b,int scale=1){
+          int cx=x; for (const char* p=t; *p; ++p) { if (*p=='\n') { y+=8*scale; cx=x; continue; } drawChar(cx,y,*p,r,g,b,scale); cx+=6*scale; }
+        };
+        char hud1[128], hud2[128], hud3[128];
+        int mobjS = gDebugMobjSpawned;
+        int mobjDbg = (gObject ? gObject->GetDebugSpawnedCount() : 0);
+        int mobjN = gDebugMobjCount;
+        snprintf(hud1,sizeof(hud1),"HUD RE DEBUG  FPS %d  CAM %d,%d Z%d", m_fps, m_debugCamX, m_debugCamY, m_debugCamZ);
+        snprintf(hud2,sizeof(hud2),"MOBJ %d/%d dbg=%d  STYLE %s  MAP %s", mobjN, mobjS, mobjDbg, StyleTiles_Ready()?"ON":"OFF", (gMapRelatedStruct&&gMapRelatedStruct->getMap())?"ON":"OFF");
+        snprintf(hud3,sizeof(hud3),"GTA2_SPAWN_MOBJ=%s  GTA2_MOBJ_TRACE=%s", getenv("GTA2_SPAWN_MOBJ")?"1":"0", getenv("GTA2_MOBJ_TRACE")?"1":"0");
+        for (int i=0;i<2;++i) { // shadow
+          drawText(5+i,5+i,hud1,0,0,0,2);
+          drawText(5+i,22+i,hud2,0,0,0,2);
+          drawText(5+i,39+i,hud3,0,0,0,1);
+        }
+        drawText(5,5,hud1,255,230,120,2);
+        drawText(5,22,hud2,180,255,180,2);
+        drawText(5,39,hud3,180,220,255,1);
+        // Draw Hud::DrawUI() debug lines and queued DrawGTATextRaw commands (RE bridge).
+        if (gHud) {
+          int maxLines = gHud->debugLineCount;
+          if (maxLines > 4) maxLines = 4;
+          for (int li=0; li<maxLines; ++li) {
+            int ly = 56 + li*10;
+            drawText(6,ly+1,gHud->debugLines[li],0,0,0,1);
+            drawText(5,ly,gHud->debugLines[li],255,255,200,1);
+          }
+        }
+        for (int ti=0; ti<gDebugTextCmdCount && ti<kMaxDebugTextCmds; ++ti) {
+          const DebugTextCmd& c = gDebugTextCmds[ti];
+          int tx = c.x, ty = c.y;
+          if (tx < 0) tx = 0; if (ty < 0) ty = 0;
+          if (tx >= MENU_W) tx = MENU_W - 1; if (ty >= MENU_H) ty = MENU_H - 1;
+          unsigned char fr = 255, fg = 240, fb = 200;
+          // Debug color hint from DrawGTATextRaw bridge: nonzero color toggles alternate tint.
+          if (c.color == 0xFFFFu) { fr = 160; fg = 255; fb = 160; }
+          else if (c.color != 0) { fr = 255; fg = 220; fb = 120; }
+          drawText(tx+1, ty+1, c.text, 0,0,0,1);
+          drawText(tx, ty, c.text, fr, fg, fb, 1);
+        }
+      }
       BlitGDIScaled();
-      wchar_t buf[192];
+      wchar_t buf[320];
       {
         int rawX=0, rawY=0, pedN=0, pedF=0, carN=0, carN2=0, mobjN=0, hasMP=0;
         if (gGame && gGame->PlayerMain) { rawX=gGame->PlayerMain->AuxGameCameraX; rawY=gGame->PlayerMain->AuxGameCameraY; hasMP = gGame->PlayerMain->MainPed ? 1 : 0; }
-        if (gMapRelatedStruct) mobjN = gMapRelatedStruct->field_344;
+        int mobjS = gDebugMobjSpawned;
+        int mobjDbg = (gObject ? gObject->GetDebugSpawnedCount() : 0);
+        if (gMapRelatedStruct) { mobjN = gDebugMobjCount; }
         for (Ped* pp=gPedManager.NextPed; pp; pp=pp->NextPed) { ++pedN; if (pedN>500) break; }
         for (Ped* pp=gPedManager.FirstPed; pp; pp=pp->NextPed) { ++pedF; if (pedF>500) break; }
         for (Car* cc=gCarsPrefabs.Car2; cc; cc=cc->LastCar) { ++carN; if (carN>500) break; }
         for (Car* cc=gCarsPrefabs.Car3; cc; cc=cc->LastCar) { ++carN2; if (carN2>500) break; }
-        swprintf(buf, 192, L"GTA2 - in game (frame %d)%s zm=%d cam=%d,%d,%d sty=%s p=%d/%d c=%d/%d o=%d mp=%d", m_gameFrames, (gMapRelatedStruct && gMapRelatedStruct->getMap())?L" map":L"", m_debugZoom, m_debugCamX, m_debugCamY, m_debugCamZ, StyleTiles_Ready()?L"on":L"off", pedN, pedF, carN, carN2, mobjN, hasMP);
+        int sndN = gSound.GetSampleCount();
+        extern int gDebugTileRot;
+        extern int gDebugTileDump; gDebugTileDump = 0;
+        swprintf(buf, 320, L"GTA2 - in game (frame %d) fps=%d%s zm=%d rot=%d cam=%d,%d,%d sty=%s p=%d/%d c=%d/%d o=%d/%d:%d mp=%d au=%d%s", m_gameFrames, m_fps, (gMapRelatedStruct && gMapRelatedStruct->getMap())?L" map":L"", m_debugZoom, gDebugTileRot*90, m_debugCamX, m_debugCamY, m_debugCamZ, StyleTiles_Ready()?L"on":L"off", pedN, pedF, carN, carN2, mobjN, mobjS, mobjDbg, hasMP, sndN, gSkipAudio?L"!":L"");
       }
       SetWindowTextW(hwnd, buf);
     }
@@ -1247,6 +1434,10 @@ BOOL cApp::Frame()
   // Esc: на подстранице возврат на предыдущее меню (по стеку m_pageStack),
   // если стек пуст и мы не на главном - на главное меню, на главном - выход.
   if (GetAsyncKeyState(VK_ESCAPE) & 1) {
+    if (!gSkipAudio) {
+      int n = gSound.GetSampleCount();
+      if (n > 0) { gSound.StopAll(); gSound.PlaySample(1 % n, false); } // guarded pragmatic back/cancel cue
+    }
     if (!m_pageStack.empty()) {
       int back = m_pageStack.back();
       m_pageStack.pop_back();
@@ -1271,6 +1462,16 @@ BOOL cApp::Frame()
   int left = GetAsyncKeyState(VK_LEFT) & 1;
   int right = GetAsyncKeyState(VK_RIGHT) & 1;
 
+  auto playMenuUiSample = [&](int idx, bool loop) {
+    if (gSkipAudio) return;
+    int n = gSound.GetSampleCount();
+    if (n <= 0) return;
+    if (idx < 0) idx = 0;
+    idx = idx % n;
+    gSound.StopAll();
+    gSound.PlaySample(idx, loop);
+  };
+
   // Смена активного пункта (по кругу через ItemCount() элементов страницы).
   if (up || down) {
     int cnt = ItemCount();
@@ -1278,6 +1479,7 @@ BOOL cApp::Frame()
       m_ActiveItem = up ? (m_ActiveItem - 1 + cnt) % cnt
                         : (m_ActiveItem + 1) % cnt;
       gMenu->MenuPageArray[m_CurrentPage].SelectActiveElementDefault = m_ActiveItem;
+      playMenuUiSample(1, false); // guarded pragmatic menu-move cue
       // На страницах 0 и 1 фон зависит от активного пункта - перестроим фон и текст.
       RenderBackground();
       RasterizeMenuText();
@@ -1297,12 +1499,15 @@ BOOL cApp::Frame()
     }
   }
 
+
+
   // Выбор пункта меню (Enter).
   if (GetAsyncKeyState(VK_RETURN) & 1) {
     if (ItemCount() > 0) {
       MenuEntry& e = gMenu->MenuPageArray[m_CurrentPage].MenuEntryArray[m_ActiveItem];
       int action = e.MenuAction; // тип действия (CHANGEPAGE, SETPLAYERNAME, ...)
       int sel = e.SelectMenu;    // куда ведёт пункт (страница или спец.значение)
+      playMenuUiSample(0, false); // guarded pragmatic menu-select cue
 
       // Пункт QUIT главного меню - выход из приложения (титры пока не показываем).
       if (m_CurrentPage == 0 && m_ActiveItem == 2) {
@@ -1357,9 +1562,15 @@ void SetupMenu()
   if (gMapGm == NULL) {
       gMapGm = new MapGm;
   }
+  if (gDMAudio == NULL) {
+    gDMAudio = new DMAudio();
+  }
+  if (gDMAudio && !gSkipAudio) {
+    gDMAudio->InitAudioManager();
+  }
   // Доп. параметры из оригинального FUN_00457830: аудио-объект для меню.
   gAudioObject = 2;            // "2D-звук" (как в оригинальном LoadConfig)
-  if (!gSkipAudio)
+  if (!gSkipAudio && gDMAudio)
     gSampleRate = gDMAudio->AddAudioObject(&gAudioObject);
    //gDMAudio.LoadSTY
 }

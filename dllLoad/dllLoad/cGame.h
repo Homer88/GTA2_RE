@@ -50,6 +50,12 @@ void __fastcall HookSub465390(void* thisp, void* _EDX);
 void __fastcall HookSub481890(void* thisp, void* _EDX);
 void __fastcall HookStartGames(void* thisp, void* _EDX);
 void __fastcall HookUpdateWrapper(void* thisp, void* _EDX);
+int  __fastcall HookLoadMOBJ(void* thisp, void* _EDX, unsigned int dwBytes);
+int  __fastcall HookLoadLGHT(void* thisp, void* _EDX, unsigned int dwBytes);
+int  __fastcall HookLoadANIM(void* thisp, void* _EDX, void* dwBytes);
+void __fastcall HookSpawnMapObjects(void* thisp, void* _EDX);
+void __fastcall HookRenderBlockLid(void* thisp, void* _EDX);
+int  __fastcall HookObjectSpawnObject(void* thisp, void* _EDX, int type, int x, int y, int z, int rot);
 
 #endif // !__GAME_H__
 
