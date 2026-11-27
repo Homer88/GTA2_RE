@@ -42,7 +42,9 @@ bool Style::BindIdaViewFromStyleTilesDebug() {
 
     struct IdaAdapter {
         StyleIdaView view;
-        unsigned short s15[6];
+        unsigned short s15[6];  // SPRB bases (field_14)
+        unsigned short palb[8]; // PALB palette counts (S15_0002)
+        unsigned short pali[8]; // PALB-derived cumulative bases (field_C)
     };
     auto* ad = static_cast<IdaAdapter*>(std::malloc(sizeof(IdaAdapter)));
     if (!ad) return false;
@@ -50,7 +52,16 @@ bool Style::BindIdaViewFromStyleTilesDebug() {
 
     // SPRB: 6 u16 cumulative/base offsets for sprite types 2,3,4/8,5,6,7.
     std::memcpy(ad->s15, sta->sprb, 12);
+    // PALB: 8 u16 palette counts. IDA Style::read_palb_chunk_REAL stores raw into S15_0002
+    // and cumulative bases into field_C.
+    if (sta->palb && sta->palbBytes >= 16) std::memcpy(ad->palb, sta->palb, 16);
+    std::memcpy(ad->pali, ad->palb, 16);
+    unsigned short acc = 0;
+    for (int i = 0; i < 8; ++i) { unsigned short c = ad->pali[i]; ad->pali[i] = acc; acc = (unsigned short)(acc + c); }
+
     ad->view.field_14 = ad->s15;
+    ad->view.S15_0002 = ad->palb;
+    ad->view.field_C = (int)reinterpret_cast<uintptr_t>(ad->pali);
     ad->view.field_20 = (int)reinterpret_cast<uintptr_t>(sta->sprx); // sprx entries: 8 bytes each in IDA usage
     ad->view.Car = sta->fonb;      // FONB starts with count u16, then u16 table
     ad->view.field_4 = (unsigned short)(sta->sprxBytes / 8u);

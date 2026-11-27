@@ -36,7 +36,9 @@ void StyleTiles_Unload() {
     if (gStyleTiles.ppalBase) { free(gStyleTiles.ppalBase); gStyleTiles.ppalBase = 0; }
     if (gStyleTiles.palx) { free(gStyleTiles.palx); gStyleTiles.palx = 0; }
     FreeChunk(gStyleTiles.sprx, gStyleTiles.sprxBytes);
+    FreeChunk(gStyleTiles.sprg, gStyleTiles.sprgBytes);
     FreeChunk(gStyleTiles.sprb, gStyleTiles.sprbBytes);
+    FreeChunk(gStyleTiles.palb, gStyleTiles.palbBytes);
     FreeChunk(gStyleTiles.fonb, gStyleTiles.fonbBytes);
     FreeChunk(gStyleTiles.cari, gStyleTiles.cariBytes);
     FreeChunk(gStyleTiles.obji, gStyleTiles.objiBytes);
@@ -143,7 +145,7 @@ bool StyleTiles_Load(const char* styPath) {
     unsigned short ver = (unsigned short)(hdr[4] | (hdr[5] << 8));
     if (ver != 700) { fclose(f); return false; }
 
-    std::vector<unsigned char> tileTmp, ppalTmp, palxTmp, specTmp, sprxTmp, sprbTmp, fonbTmp, cariTmp, objiTmp;
+    std::vector<unsigned char> tileTmp, ppalTmp, palxTmp, specTmp, sprxTmp, sprgTmp, sprbTmp, palbTmp, fonbTmp, cariTmp, objiTmp;
     for (;;) {
         unsigned char ch[8];
         if (fread(ch, 1, 8, f) != 8) break;
@@ -158,7 +160,9 @@ bool StyleTiles_Load(const char* styPath) {
         else if (memcmp(tag, "PALX", 4) == 0) { if (!readVec(palxTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "SPEC", 4) == 0) { if (!readVec(specTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "SPRX", 4) == 0) { if (!readVec(sprxTmp)) { fclose(f); return false; } }
+        else if (memcmp(tag, "SPRG", 4) == 0) { if (!readVec(sprgTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "SPRB", 4) == 0) { if (!readVec(sprbTmp)) { fclose(f); return false; } }
+        else if (memcmp(tag, "PALB", 4) == 0) { if (!readVec(palbTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "FONB", 4) == 0) { if (!readVec(fonbTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "CARI", 4) == 0) { if (!readVec(cariTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "OBJI", 4) == 0) { if (!readVec(objiTmp)) { fclose(f); return false; } }
@@ -192,10 +196,29 @@ bool StyleTiles_Load(const char* styPath) {
     memcpy(gStyleTiles.ppal, &ppalTmp[0], ppalTmp.size());
     memcpy(gStyleTiles.palx, &palxTmp[0], palxTmp.size());
     copyChunk(gStyleTiles.sprx, gStyleTiles.sprxBytes, sprxTmp);
+    copyChunk(gStyleTiles.sprg, gStyleTiles.sprgBytes, sprgTmp);
     copyChunk(gStyleTiles.sprb, gStyleTiles.sprbBytes, sprbTmp);
+    copyChunk(gStyleTiles.palb, gStyleTiles.palbBytes, palbTmp);
     copyChunk(gStyleTiles.fonb, gStyleTiles.fonbBytes, fonbTmp);
     copyChunk(gStyleTiles.cari, gStyleTiles.cariBytes, cariTmp);
     copyChunk(gStyleTiles.obji, gStyleTiles.objiBytes, objiTmp);
+
+    // IDA Style::StyleFixupSprites: if sprx+sprg loaded, sprx[i].ptr += sprgBase.
+    // SPRX entry is 8 bytes: u32 pixelOffsetInSPRG, u8 w, u8 h, u8 pad, u8 pad.
+    if (gStyleTiles.sprx && gStyleTiles.sprg && gStyleTiles.sprxBytes >= 8) {
+        unsigned int count = gStyleTiles.sprxBytes / 8u;
+        for (unsigned int i = 0; i < count; ++i) {
+            unsigned char* e = gStyleTiles.sprx + i * 8u;
+            unsigned int off = (unsigned int)e[0] | ((unsigned int)e[1] << 8) | ((unsigned int)e[2] << 16) | ((unsigned int)e[3] << 24);
+            if (off < gStyleTiles.sprgBytes) {
+                uintptr_t ptr = (uintptr_t)gStyleTiles.sprg + (uintptr_t)off;
+                memcpy(e, &ptr, sizeof(ptr)); // assumes 32-bit build target for GTA2 RE; debug-only adapter
+            } else {
+                uintptr_t ptr = 0;
+                memcpy(e, &ptr, sizeof(ptr));
+            }
+        }
+    }
 
     gStyleTiles.tileBytes = (unsigned int)tileTmp.size();
     gStyleTiles.ppalBytes = (unsigned int)ppalTmp.size();

@@ -61,7 +61,6 @@ class TextureManager{
     int GetTexture(int sprite_type, short spriteId, int a4, short a5);
     // Debug-only: creates/caches real gbh_Texture* for font bank 7 (a4==7) under GTA2_TEXT_GBH_DRAW=1.
     // Bypasses TM/PacketInfo/S89; NOT IDA-compatible. Returns nullptr when unavailable.
-    void* GetDebugGbhFontTexture(int sprite_type, short spriteId, int a4, short a5);
     // IDA 0x4C2BA0 / 0x4C2BC0 - guarded stubs until RE layout is confirmed.
     void* GetTextureByIdx(unsigned short idx);
     void* GetTextureValue(unsigned short a2, short a3, short a4);
@@ -70,6 +69,36 @@ class TextureManager{
     void* m_idaView = nullptr;
     void SetIdaView(void* v) { m_idaView = v; }
     void* GetIdaView() const { return m_idaView; }
+
+    // Debug-only TM-owned font bank 7 subset (S89[6] shape), gated by GTA2_TEXT_GBH_DRAW=1.
+    // NOT full IDA TextureManager/PacketInfo layout. No default behavior change.
+    // IDA refs: TM::Load 0x4C30A0 Setup(&S89[6],6,7)+LoadPalettedTextures; GetTexture case 7 -> S89[6].
+    struct DebugFontS89Bank7 {
+        bool initAttempted = false;
+        bool ready = false;          // S89_2 allocated and at least init completed
+        bool gbhOk = false;
+        unsigned short spriteCount = 0; // GetGlobalPaletteOffset(gStyle,6)
+        unsigned short field_6 = 0;     // GetPaletteByIndex(gStyle,7)
+        unsigned int count = 0;         // spriteCount*field_6
+        TextureManager_S89 s89{};       // minimal S89 metadata
+        TextureManager_S89_2 s89_2{};   // field_0 -> entries
+        int* entries = nullptr;         // [count] real gbh_Texture* stored as int/ptr-sized value
+        const char* reason = "gbh-font7-off";
+    } m_debugFontS89_7;
+    const DebugFontS89Bank7& GetDebugFontS89Bank7() const { return m_debugFontS89_7; }
+    void* GetDebugGbhFontTexture(int sprite_type, short spriteId, int a4, short a5);
+
+    // EU debug subset: IDA GetTexture a4==2 => PacketInfo::GetStyleTexture(S89[0], sprite_type, spriteId)
+    // => S89_2->field_0[Style::GetBaseIndex(gStyle, sprite_type, spriteId)]. Real TM init not ported.
+    struct DebugBank2Style {
+        bool initAttempted = false;
+        bool ready = false;
+        unsigned int count = 0; // GetPaletteByIndex(gStyle,2) for S89[0] Create(...,1,0,2)
+        int* entries = nullptr; // [count] gbh_Texture* by base index
+        const char* reason = "gbh-bank2-off";
+    } m_debugBank2Style;
+    const DebugBank2Style& GetDebugBank2Style() const { return m_debugBank2Style; }
+    void* GetDebugGbhBank2Texture(int sprite_type, short spriteId);
 
     // Debug-only read-only status for HUD. No real S89/gbh texture pipeline yet.
     struct DebugState {

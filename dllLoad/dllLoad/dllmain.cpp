@@ -507,6 +507,24 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
 case DLL_PROCESS_ATTACH:
        /// MessageBox(0, L"Load Dll!", 0, 0);
+        // Debug-only minimal mode: only install DrawGTATextRaw detour for ABI9 sidechannel publishing.
+        // Avoids heavy dllLoad init that fails/crashes in RE exe context. Gated by env.
+        if (getenv("GTA2_ABI9_PUBLISHER_ONLY") && getenv("GTA2_ABI9_PUBLISHER_ONLY")[0] == '1') {
+            // Minimal ABI9 publisher: create sidechannel mapping without heavy init.
+            // Hardcoded retail detour (0x4CC100) is only safe in retail gta2.exe; in RE builds the address is invalid.
+            // Default: no detour, just ensure mapping can be created on first publish. GTA2_ABI9_PUBLISHER_RETAIL=1 enables detour.
+            DetourRestoreAfterWith();
+            if (getenv("GTA2_ABI9_PUBLISHER_RETAIL") && getenv("GTA2_ABI9_PUBLISHER_RETAIL")[0] == '1') {
+                if (DetourTransactionBegin() == NO_ERROR) {
+                    DetourUpdateThread(GetCurrentThread());
+                    if (!getenv("GTA2_NOTEXTTRACE")) {
+                        DetourAttach(&_DrawGTATextRaw, (PVOID)HookDrawGTATextRaw);
+                    }
+                    DetourTransactionCommit();
+                }
+            }
+            break;
+        }
         SetUnhandledExceptionFilter(&CrashFilter);
         AddVectoredExceptionHandler(1, &CrashPatchVeh);
         {

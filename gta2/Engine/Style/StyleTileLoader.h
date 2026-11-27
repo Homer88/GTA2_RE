@@ -17,7 +17,9 @@ struct StyleTileAssets {
     unsigned int physPalCount; // ppalBytes / 1024
     // Extra raw chunks captured for debug/IDA-view adapter (read-only, optional).
     unsigned char* sprx = nullptr; unsigned int sprxBytes = 0;
+    unsigned char* sprg = nullptr; unsigned int sprgBytes = 0; // sprite pixel data blob
     unsigned char* sprb = nullptr; unsigned int sprbBytes = 0; // expected 12 bytes
+    unsigned char* palb = nullptr; unsigned int palbBytes = 0; // PALB: 8 u16 palette counts (S15_0002)
     unsigned char* fonb = nullptr; unsigned int fonbBytes = 0;
     unsigned char* cari = nullptr; unsigned int cariBytes = 0;
     unsigned char* obji = nullptr; unsigned int objiBytes = 0;

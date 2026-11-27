@@ -59,3 +59,4 @@ struct GbhApi {
 // Debug-only: resolves from an already loaded module (e.g. D3DDLL.dll). No LoadLibrary.
 GbhApi Gbh_TryGetLoadedApi();
 const char* Gbh_GetLastError();
+const char* Gbh_GetModulePath(); // debug: module path/name used by last successful resolve

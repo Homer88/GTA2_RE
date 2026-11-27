@@ -7,10 +7,13 @@
 #include "../../Engine/TextureManager/TextureManager.h"
 #include "../Game/Game.h"
 #include "../Player/Player.h"
+#include "../CameraOrPhysics/CameraOrPhysics.h"
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
 #include <cwchar>
+
+extern CameraOrPhysics* gCameraOrPhysics_5E3CC4;
 
 Hud* gHud;
 
@@ -113,6 +116,16 @@ int Hud::GetSpriteWidth(void){
 
 
 int Hud::DrawSprite_Wrapper(void){
+        // IDA 0x4C94F0: draws HUD sprite/text elements, including sub_4BA2C0 @ 0x4BA2C0 call.
+        // RE original body is stubbed; keep behavior safe: only a debug-only BA2C0 ABI9 probe
+        // under GTA2_TEXT_GBH=1. This is callsite-placement debug, NOT full DrawSprite_Wrapper port
+        // and NOT retail per-callstack proof.
+        if (std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1') {
+            // Debug-only faithful ABI9 tail-shape/callsite placement. Raw BA2C0 port attempt remains
+            // gated in code but is not used by default: RE Radar/CameraOrPhysics layouts are unverified.
+            // NOTE: RE Hud layout starts with debugLines/debugLineCount; incompatible with IDA Hud field_0/2/44/48.
+            DrawGTATextRaw_BA2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
+        }
         return 0;
     }
 
@@ -175,7 +188,19 @@ int Hud::DrawUI(void){
         std::snprintf(buf, sizeof(buf), "text probes=%d gxt=%d", probeHits, gText ? gText->NumberOfElements : -1);
         AddDebugLine(buf);
         // Direct overlay probe: confirms DrawGTATextRaw bridge independent of Bsearch/gxt.
-        DrawGTATextRaw_7280((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164);
+        if (std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1') {
+            // Debug-only faithful tail-shape call via IDA sub_4BA2C0 @ 0x4BA2C0 model:
+            // real stack locals for ABI9 tail and runtime-derived a5 from gCameraOrPhysics+0xA8.
+            // Not a full original callsite port (no Radar world->screen), not retail per-callstack proof.
+            const char* rawProbe = std::getenv("GTA2_TEXT_GBH_PROBE_BA2C0_RAW");
+            if (rawProbe && rawProbe[0] == '1') {
+                DrawGTATextRaw_BA2C0_DebugRaw((wchar_t*)L"HUD TEXT BRIDGE OK", 8, (void*)gCameraOrPhysics_5E3CC4, (unsigned short)0);
+            } else {
+                DrawGTATextRaw_BA2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
+            }
+        } else {
+            DrawGTATextRaw_7280((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164);
+        }
         // Quit prompt probe (IDA quit strings) - draw only as debug text, no state change.
         if (gText) {
             wchar_t* q1 = (wchar_t*)gText->Bsearch("quit1");

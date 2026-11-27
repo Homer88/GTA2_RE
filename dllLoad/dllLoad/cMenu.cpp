@@ -32,6 +32,54 @@ PlayerData* GetPlayerDataInstance(void)
 // (str, str, x, y, &wcharbuf, ..., style, flg) - see 0x4539F0. We only observe.
 extern LPVOID _DrawGTATextRaw;   // trampoline patched by DetourAttach (dllmain.cpp)
 
+// Debug-only ABI9 sidechannel for RE. When GTA2_TEXT_GBH=1, hook publishes latest 9-arg tail
+// to a named mapping so RE can consume it call-accurately (best effort, same desktop session).
+// No behavior change when env is off.
+struct Gta2Abi9Sidechannel {
+    volatile LONG seq;
+    DWORD caller;
+    DWORD a1;
+    DWORD a2;
+    DWORD a3;
+    DWORD a4;
+    DWORD a5;
+    DWORD a5_4;
+    DWORD a5_4_deref;
+    DWORD a5_8;
+    DWORD a5_12_s202;
+    DWORD a5_12_f0;
+    DWORD tick;
+};
+static HANDLE g_abi9Map = NULL;
+static Gta2Abi9Sidechannel* g_abi9View = NULL;
+static void Abi9Publish(DWORD caller, DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5,
+                        DWORD a5_4, DWORD a5_4_deref, DWORD a5_8, DWORD s202, DWORD f0) {
+    if (!g_abi9Map) {
+        g_abi9Map = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0,
+                                       sizeof(Gta2Abi9Sidechannel), "Local\\GTA2_TEXT_ABI9_V1");
+        if (g_abi9Map) {
+            g_abi9View = (Gta2Abi9Sidechannel*)MapViewOfFile(g_abi9Map, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(Gta2Abi9Sidechannel));
+        }
+    }
+    if (!g_abi9View) return;
+    // Seqlock-lite: bump to odd while writing, even when published.
+    LONG seq = InterlockedIncrement((volatile LONG*)&g_abi9View->seq); // odd=in-progress
+    g_abi9View->caller = caller;
+    g_abi9View->a1 = a1;
+    g_abi9View->a2 = a2;
+    g_abi9View->a3 = a3;
+    g_abi9View->a4 = a4;
+    g_abi9View->a5 = a5;
+    g_abi9View->a5_4 = a5_4;
+    g_abi9View->a5_4_deref = a5_4_deref;
+    g_abi9View->a5_8 = a5_8;
+    g_abi9View->a5_12_s202 = s202;
+    g_abi9View->a5_12_f0 = f0;
+    g_abi9View->tick = GetTickCount();
+    InterlockedIncrement((volatile LONG*)&g_abi9View->seq); // even=published
+    (void)seq;
+}
+
 struct DrawTraceRec {
     DWORD caller;
     DWORD a1, a2, a3, a4, a5, a6, a7, a8, a9;
@@ -96,6 +144,58 @@ void __stdcall HookDrawGTATextRaw(DWORD a1, DWORD a2, DWORD a3, DWORD a4,
 {
     DWORD caller = (DWORD)_ReturnAddress();
     DrawTracePush(caller, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+
+    // Debug-only: when GTA2_TEXT_GBH=1, log unique ABI arg tuples for 0x4CC100 (ret 0x24).
+    // Extra stack args: a5_4(ptr), a5_8(int), a5_12.S202, a5_12.field_0.
+    // IDA: a1a toggles between *a5_4 and 8; a5_12.field_0 toggles between a5_8 and 0.
+    static char s_gbhAbiEnv = 0; // 0 unknown, 1 on, 2 off
+    static DWORD s_seen[512];
+    static DWORD s_seenCount = 0;
+    static DWORD s_abiTotal = 0;
+    if (s_gbhAbiEnv == 0) {
+        const char* e = getenv("GTA2_TEXT_GBH");
+        s_gbhAbiEnv = (e && e[0] == '1') ? 1 : 2;
+        if (s_gbhAbiEnv == 1) {
+            FILE* f = fopen("gta2_text_abi.log", "a");
+            if (f) { fprintf(f, "=== ABI9 session ===\n"); fclose(f); }
+        }
+    }
+    if (s_gbhAbiEnv == 1) {
+        DWORD a5_4_val = 0;
+        if (a6) { __try { a5_4_val = *(DWORD*)a6; } __except (EXCEPTION_EXECUTE_HANDLER) { a5_4_val = 0xDEADBEEF; } }
+        Abi9Publish(caller, a1, a2, a3, a4, a5, a6, a5_4_val, a7, a8, a9);
+        DWORD sig = caller ^ (a4 << 16) ^ (a5_4_val * 131u) ^ (a7 * 17u) ^ (a9 * 3u) ^ (a8 * 7u);
+        bool seen = false;
+        for (DWORD i = 0; i < s_seenCount && i < 512; ++i) { if (s_seen[i] == sig) { seen = true; break; } }
+        bool periodic = (s_abiTotal % 512) == 0;
+        if ((!seen || periodic) && s_abiTotal < 8192) {
+            if (!seen && s_seenCount < 512) s_seen[s_seenCount++] = sig;
+            char abuf[65] = {};
+            bool hasHash = false, asciiOnly = true, hasNonAscii = false;
+            if (a1) {
+                __try {
+                    const wchar_t* ws = (const wchar_t*)a1;
+                    for (int i = 0; i < 32; ++i) {
+                        wchar_t c = ws[i]; if (!c) break;
+                        if (c == L'#') hasHash = true;
+                        if (c >= 32 && c < 127) abuf[i] = (char)c;
+                        else { abuf[i] = '?'; hasNonAscii = true; if (c > 127) asciiOnly = false; }
+                    }
+                } __except (EXCEPTION_EXECUTE_HANDLER) { abuf[0] = '!'; abuf[1] = 0; asciiOnly = false; }
+            }
+            FILE* f = fopen("gta2_text_abi.log", "a");
+            if (f) {
+                fprintf(f, "ABI9 n=%lu call=%08lX a1=%08lX x=%ld y=%ld a4=%04lX a5=%08lX a5_4=%08lX *a5_4=%08lX a5_8=%08lX a5_12.S202=%08lX a5_12.f0=%08lX hash=%d ascii=%d txt=\"%s\"\n",
+                        (unsigned long)s_abiTotal, (unsigned long)caller, (unsigned long)a1, (long)a2, (long)a3,
+                        (unsigned long)(a4 & 0xFFFF), (unsigned long)a5,
+                        (unsigned long)a6, (unsigned long)a5_4_val,
+                        (unsigned long)a7, (unsigned long)a8, (unsigned long)a9,
+                        hasHash ? 1 : 0, asciiOnly ? 1 : 0, abuf);
+                fclose(f);
+            }
+        }
+        s_abiTotal++;
+    }
 
     // The wide text lives in a1 (first arg); a5 is a small flag (e.g. 0x4000),
     // so dereferencing it as a string is what used to fault at DLL+0x9D4A.

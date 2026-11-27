@@ -1,4 +1,4 @@
-// GTA2.exe - вьювер экрана меню игры (реконструкция GTA2).
+﻿// GTA2.exe - вьювер экрана меню игры (реконструкция GTA2).
 // Собирается в bin/GTA2.exe через gta2/CMakeLists.txt (библиотеки MENU/Text/Font + ресурсы).
 //
 // Что делает приложение:
@@ -868,6 +868,28 @@ BOOL cApp::Frame()
   if (!gSkipAudio && gDMAudio)
     gDMAudio->PollAllSamples();
 
+  // Debug-only: auto-start game for deterministic smoke. Default off.
+  {
+    static int s_autoPlayFrames = 0;
+    static bool s_autoPlayDone = false;
+    const char* ap = std::getenv("GTA2_AUTO_PLAY");
+    if (!m_inGame && ap && ap[0] == '1' && !s_autoPlayDone) {
+      ++s_autoPlayFrames;
+      if (s_autoPlayFrames == 90) { // wait longer for init/menu stability
+        if (gMapGm == NULL) gMapGm = new MapGm();
+        if (gMapGm->GetMapName()[0] == 0) gMapGm->SetMapName((char*)"data\\bil.gmp");
+        if (gMapGm->GetStyleFile()[0] == 0) gMapGm->SetStyleName((char*)"data\\bil.sty");
+        if (gMapGm->GetScriptName()[0] == 0) gMapGm->SetScripName((char*)"data\\bil.scr");
+        if (gGame == NULL) gGame = new Game(1, 0);
+        gGame->LoadResources();
+        gGame->StartGameSession();
+        m_inGame = true; m_gameFrames = 0; s_autoPlayDone = true;
+        SetWindowTextA(GethWnd(), "GTA2 - in game (auto-play)");
+        return TRUE;
+      }
+    }
+  }
+
   if (m_inGame) {
     if (GetAsyncKeyState(VK_ESCAPE) & 1) {
       m_inGame = false;
@@ -993,6 +1015,34 @@ BOOL cApp::Frame()
             const unsigned int numBlocks = (unsigned int)m->field_40004;
             const bool hasTiles = StyleTiles_Ready();
             if (colBuf && blkBuf && columnWords > 0) {
+              // Debug tile/map trace for future debugging: map name, camera, view, tile IDs.
+              // Enable with GTA2_TILE_TRACE=1 (frame summary + sampled tiles) or GTA2_TILE_TRACE=2 (all visible tiles).
+              // K/R also force a dump for current frame via gDebugTileDump.
+              {
+                static int s_lastTileTraceFrame = -1;
+                const char* tileTraceEnv = getenv("GTA2_TILE_TRACE");
+                const bool tileTraceOn = tileTraceEnv && tileTraceEnv[0] != '0';
+                const bool tileTraceAll = tileTraceEnv && tileTraceEnv[0] == '2';
+                extern int gDebugTileDump;
+                if (tileTraceOn || gDebugTileDump) {
+                  if (gDebugTileDump || m_gameFrames != s_lastTileTraceFrame) {
+                    const char* dbgMap = (gMapGm && gMapGm->GetMapName()[0]) ? gMapGm->GetMapName() : "(none)";
+                    const char* dbgSty = (gMapGm && gMapGm->GetStyleFile()[0]) ? gMapGm->GetStyleFile() : "(none)";
+                    FILE* tf = fopen("gta2_tile_trace.log", "a");
+                    if (tf) {
+                      fprintf(tf,
+                        "FRAME frame=%d map=%s sty=%s cam=%d,%d,%d zm=%d rot=%d view=%d,%d-%d,%d tilePx=%d cols=%u blks=%u styReady=%d traceAll=%d\n",
+                        m_gameFrames, dbgMap, dbgSty,
+                        m_debugCamX, m_debugCamY, m_debugCamZ,
+                        m_debugZoom, gDebugTileRot * 90,
+                        camX, camY, camX + viewW - 1, camY + viewH - 1,
+                        tilePx, columnWords, numBlocks, hasTiles ? 1 : 0, tileTraceAll ? 1 : 0);
+                      fclose(tf);
+                    }
+                    s_lastTileTraceFrame = m_gameFrames;
+                  }
+                }
+              }
               for (int vy=0; vy<viewH; ++vy) {
                 int my = camY + vy;
                 for (int vx=0; vx<viewW; ++vx) {
@@ -1085,14 +1135,22 @@ BOOL cApp::Frame()
                   }
                   static int s_tileTraceN = 0;
                   extern int gDebugTileDump;
-                  bool doTrace = (getenv("GTA2_TILE_TRACE") && s_tileTraceN < 200) || (gDebugTileDump != 0);
+                  const char* tileTraceEnv2 = getenv("GTA2_TILE_TRACE");
+                  const bool tileTraceOn2 = tileTraceEnv2 && tileTraceEnv2[0] != '0';
+                  const bool tileTraceAll2 = tileTraceEnv2 && tileTraceEnv2[0] == '2';
+                  bool doTrace = tileTraceAll2 || gDebugTileDump != 0 || (tileTraceOn2 && s_tileTraceN < 400);
                   if (doTrace) {
                     int cdx = vx - viewW/2, cdy = vy - viewH/2;
-                    static int s_loggedMx=-9999, s_loggedMy=-9999, s_loggedZm=-1;
-                    if (gDebugTileDump || (cdx >= -1 && cdx <= 1 && cdy >= -1 && cdy <= 1 && (mx!=s_loggedMx || my!=s_loggedMy || tilePx!=s_loggedZm || s_tileTraceN < 9))) {
+                    static int s_loggedMx=-9999, s_loggedMy=-9999, s_loggedZm=-1, s_loggedFrame=-1;
+                    const bool center3 = (cdx >= -1 && cdx <= 1 && cdy >= -1 && cdy <= 1);
+                    const bool shouldLog = gDebugTileDump || tileTraceAll2 ||
+                      (tileTraceOn2 && (center3 || s_loggedFrame != m_gameFrames || mx!=s_loggedMx || my!=s_loggedMy || tilePx!=s_loggedZm) && s_tileTraceN < 400);
+                    if (shouldLog) {
                       FILE* tf = fopen("gta2_tile_trace.log", "a");
                       if (tf) {
+                        const char* dbgMap = (gMapGm && gMapGm->GetMapName()[0]) ? gMapGm->GetMapName() : "(none)";
                         unsigned short lidW=0,topW=0,leftW=0,rightW=0,botW=0; unsigned char arrB=0,slpB=0;
+                        unsigned int topBlockId = 0xFFFFFFFFu;
                         if (bi < columnWords) {
                           const unsigned char* col = colBuf + (size_t)bi * 4u;
                           unsigned char heightC=col[0], offsetC=col[1];
@@ -1105,17 +1163,30 @@ BOOL cApp::Frame()
                               if (bid>=numBlocks) continue;
                               const unsigned char* bb2p = blkBuf + (size_t)bid*12u;
                               leftW=*(const unsigned short*)(bb2p+0); rightW=*(const unsigned short*)(bb2p+2); topW=*(const unsigned short*)(bb2p+4); botW=*(const unsigned short*)(bb2p+6); lidW=*(const unsigned short*)(bb2p+8); arrB=bb2p[10]; slpB=bb2p[11];
+                              topBlockId = bid;
                               break;
                             }
                           }
                         }
-                        fprintf(tf, "TILE mx=%d my=%d cam=%d,%d,%d zm=%d bi=%u colH=%d colOff=%d blkL=0x%04X R=0x%04X T=0x%04X B=0x%04X Lid=0x%04X arr=0x%02X slp=0x%02X\n", mx,my,m_debugCamX,m_debugCamY,m_debugCamZ,tilePx,bi,(int)(bi<columnWords?colBuf[(size_t)bi*4u]:255),(int)(bi<columnWords?colBuf[(size_t)bi*4u+1]:255),leftW,rightW,topW,botW,lidW,arrB,slpB);
+                        fprintf(tf,
+                          "TILE frame=%d map=%s mx=%d my=%d cam=%d,%d,%d zm=%d rot=%d bi=%u topBlk=%u colH=%d colOff=%d blkL=0x%04X R=0x%04X T=0x%04X B=0x%04X Lid=0x%04X arr=0x%02X slp=0x%02X\n",
+                          m_gameFrames, dbgMap,
+                          mx,my,m_debugCamX,m_debugCamY,m_debugCamZ,
+                          m_debugZoom, gDebugTileRot*90,
+                          bi, topBlockId,
+                          (int)(bi<columnWords?colBuf[(size_t)bi*4u]:255),(int)(bi<columnWords?colBuf[(size_t)bi*4u+1]:255),
+                          leftW,rightW,topW,botW,lidW,arrB,slpB);
                         for (int fi=0; fi<faceN; ++fi) {
                           const DbgFace& df=faces[fi];
                           unsigned int virt2=df.face&1023u; unsigned short remap2=StyleTiles_GetRemappedTile(virt2);
-                          fprintf(tf, " FACE i=%d face=0x%04X virt=%u remap=%u phys=%u rot=%u fx=%d fy=%d side=%d slope=0x%02X arrows=0x%02X z=%d h=%d\n", fi, (unsigned)df.face, virt2, (unsigned)remap2, (unsigned)StyleTiles_GetPhysPalForTile(remap2?remap2:virt2), (unsigned)df.rot, df.flipX?1:0, df.flipY?1:0, df.side?1:0, (unsigned)df.slope, (unsigned)df.arrows, df.z, (unsigned)df.height);
+                          unsigned short physPal = StyleTiles_GetPhysPalForTile(remap2?remap2:virt2);
+                          fprintf(tf,
+                            " FACE i=%d face=0x%04X virt=%u remap=%u phys=%u rot=%u fx=%d fy=%d side=%d slope=0x%02X arrows=0x%02X z=%d h=%d\n",
+                            fi, (unsigned)df.face, virt2, (unsigned)remap2, (unsigned)physPal,
+                            (unsigned)df.rot, df.flipX?1:0, df.flipY?1:0, df.side?1:0,
+                            (unsigned)df.slope, (unsigned)df.arrows, df.z, (unsigned)df.height);
                         }
-                        fclose(tf); s_tileTraceN++; s_loggedMx=mx; s_loggedMy=my; s_loggedZm=tilePx;
+                        fclose(tf); s_tileTraceN++; s_loggedMx=mx; s_loggedMy=my; s_loggedZm=tilePx; s_loggedFrame=m_gameFrames;
                       }
                     }
                   }
@@ -1359,7 +1430,16 @@ BOOL cApp::Frame()
         int sndN = gSound.GetSampleCount();
         extern int gDebugTileRot;
         extern int gDebugTileDump; gDebugTileDump = 0;
-        swprintf(buf, 320, L"GTA2 - in game (frame %d) fps=%d%s zm=%d rot=%d cam=%d,%d,%d sty=%s p=%d/%d c=%d/%d o=%d/%d:%d mp=%d au=%d%s", m_gameFrames, m_fps, (gMapRelatedStruct && gMapRelatedStruct->getMap())?L" map":L"", m_debugZoom, gDebugTileRot*90, m_debugCamX, m_debugCamY, m_debugCamZ, StyleTiles_Ready()?L"on":L"off", pedN, pedF, carN, carN2, mobjN, mobjS, mobjDbg, hasMP, sndN, gSkipAudio?L"!":L"");
+        extern unsigned int Text_GetGbhDebugFrame();
+        extern unsigned int Text_GetGbhDebugAttempts();
+        extern unsigned int Text_GetGbhDebugDraws();
+        extern unsigned int Text_GetGbhDebugQuads();
+        extern const char* Text_GetGbhBlockedReason();
+        swprintf(buf, 320, L"GTA2 - in game (frame %d) fps=%d%s zm=%d rot=%d cam=%d,%d,%d sty=%s p=%d/%d c=%d/%d o=%d/%d:%d mp=%d au=%d%s gbh=%u/%u/%u %hs",
+                 m_gameFrames, m_fps, (gMapRelatedStruct && gMapRelatedStruct->getMap())?L" map":L"", m_debugZoom, gDebugTileRot*90,
+                 m_debugCamX, m_debugCamY, m_debugCamZ, StyleTiles_Ready()?L"on":L"off",
+                 pedN, pedF, carN, carN2, mobjN, mobjS, mobjDbg, hasMP, sndN, gSkipAudio?L"!":L"",
+                 Text_GetGbhDebugAttempts(), Text_GetGbhDebugDraws(), Text_GetGbhDebugQuads(), Text_GetGbhBlockedReason());
       }
       SetWindowTextW(hwnd, buf);
     }

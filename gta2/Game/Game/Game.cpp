@@ -317,6 +317,18 @@ Game::Game(int modeStatus, char ids)
 
         gCameraOrPhysics = new CameraOrPhysics();
         if (gCameraOrPhysics == NULL) DebugLog(0x20, "game.cpp", 1916);
+        else {
+            // Minimal IDA-faithful init subset: IDA ctor creates object and
+            // later Init/SetWindowDimensions establish camera layout defaults.
+            // RE currently lacks full Player/Camera lifecycle; keep this debug-gated.
+            const char* dbgCam = std::getenv("GTA2_TEXT_GBH");
+            if (dbgCam && dbgCam[0] == '1') {
+                gCameraOrPhysics->Init();
+                // Debug-only: IDA RenderFrame sets gCameraOrPhysics_5E3CC4 to current player camera.
+                // RE has no equivalent camera selection yet; alias main camera for BA2C0-style probes.
+                gCameraOrPhysics_5E3CC4 = gCameraOrPhysics;
+            }
+        }
 
         // --- FileMgr ������ ��� �������� ������ ---
         if (gText->LanguageJapan()) {
@@ -462,6 +474,12 @@ int Game::InitializeSpawnPoints(void){ return 0; }
 
 int Game::RenderFrame(void){
         // IDA 0x45A5A0 - guarded partial port
+        // Debug-only: IDA sets gCameraOrPhysics_5E3CC4 = &CurrentPlayer->CameraOrPhysics.
+        // RE has no verified CurrentPlayer->CameraOrPhysics layout; keep alias debug-gated.
+        const char* dbgCam = std::getenv("GTA2_TEXT_GBH");
+        if (dbgCam && dbgCam[0] == '1' && gCameraOrPhysics) {
+            gCameraOrPhysics_5E3CC4 = gCameraOrPhysics;
+        }
         if (gPedStats) gPedStats->ResetTriangleCount();
         if (gSpriteMain) gSpriteMain->ResetState();
         if (gDisplay) gDisplay->initModes();

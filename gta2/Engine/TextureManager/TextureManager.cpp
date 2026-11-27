@@ -15,6 +15,12 @@ TextureManager::TextureManager(){
 }
 
 TextureManager::~TextureManager(){
+    if (m_debugFontS89_7.entries) {
+        std::free(m_debugFontS89_7.entries);
+        m_debugFontS89_7.entries = nullptr;
+        m_debugFontS89_7.s89_2.field_0 = nullptr;
+        m_debugFontS89_7.s89.S89_2 = nullptr;
+    }
 }
 
 bool TextureManager::LoadDebugFromStyleTiles() {
@@ -49,8 +55,28 @@ int TextureManager::Load() {
 
 }
 
+static bool TM_DebugFont7EnsureInit(TextureManager* tm);
+static bool TM_DebugBank2EnsureInit(TextureManager* tm);
+
 int TextureManager::GetTexture(int sprite_type, short spriteId, int a4, short a5) {
     // IDA 0x4C2AC0 dispatches by a4 into S89 banks.
+    // Debug-only TM-owned subset for font bank 7 (S89[6]) when GTA2_TEXT_GBH_DRAW=1.
+    // Default behavior unchanged: returns 0 unless explicitly enabled and subset ready.
+    if (a4 == 7) {
+        const char* drawEnv = std::getenv("GTA2_TEXT_GBH_DRAW");
+        if (drawEnv && drawEnv[0] == '1') {
+            auto& b7 = m_debugFontS89_7;
+            if (TM_DebugFont7EnsureInit(this) && b7.ready && b7.entries) {
+                unsigned int sid = (unsigned int)(unsigned short)spriteId;
+                unsigned int pal = (unsigned int)(unsigned short)a5;
+                if (sid < b7.spriteCount && pal < (unsigned int)b7.field_6) {
+                    unsigned int idx = pal + sid * (unsigned int)b7.field_6;
+                    if (idx < b7.count && b7.entries[idx]) return b7.entries[idx];
+                }
+            }
+        }
+    }
+
     // Guarded: only when debug IDA view is explicitly bound and a known bank has valid S89_2.
     if (!m_idaView) return 0;
     auto* v = reinterpret_cast<TextureManagerIdaView*>(m_idaView);
@@ -101,11 +127,10 @@ void* TextureManager::GetTextureValue(unsigned short a2, short a3, short a4) {
 }
 
 static int TM_GbhRegisterPhysPaletteDebug(GbhApi& api, unsigned int physIdx) {
-    // Debug-only. Mirrors IDA RegisterPalitre/gbh_RegisterPalette contract.
-    // gbh_RegisterPalette mutates strided PPAL column; pass a copy.
+    // Debug-only. Mirrors gbh_RegisterPalette contract; mutates strided PPAL column so pass a copy.
     static int s_slotByPhys[4096];
     static bool s_slotInit = false;
-    static int s_nextSlot = 700; // reserved debug slots
+    static int s_nextSlot = 700; // reserved debug slots, avoid low game slots
     if (!s_slotInit) { for (int i = 0; i < 4096; ++i) s_slotByPhys[i] = -1; s_slotInit = true; }
     if (physIdx >= 4096u) return -1;
     if (s_slotByPhys[physIdx] >= 0) return s_slotByPhys[physIdx];
@@ -126,47 +151,148 @@ static int TM_GbhRegisterPhysPaletteDebug(GbhApi& api, unsigned int physIdx) {
     return slot;
 }
 
-void* TextureManager::GetDebugGbhFontTexture(int /*sprite_type*/, short spriteId, int a4, short a5) {
-    // Narrow guarded debug path for font bank 7 only. Not IDA TM/PacketInfo/S89 pipeline.
-    // Enabled only by GTA2_TEXT_GBH_DRAW=1. Requires real gbh exports loaded in-process.
+static bool TM_DebugFont7EnsureInit(TextureManager* tm) {
+    if (!tm) return false;
+    auto& b7 = tm->m_debugFontS89_7;
+    if (b7.initAttempted) return b7.ready && b7.entries != nullptr;
+    b7.initAttempted = true;
+    b7.reason = "gbh-font7-init";
     const char* drawEnv = std::getenv("GTA2_TEXT_GBH_DRAW");
-    if (!drawEnv || drawEnv[0] != '1') return nullptr;
-    if (a4 != 7) return nullptr;
-    if (!gStyle) return nullptr;
+    if (!drawEnv || drawEnv[0] != '1') { b7.reason = "gbh-font7-env-off"; return false; }
+    if (!gStyle) { b7.reason = "gbh-font7-no-style"; return false; }
     GbhApi api = Gbh_TryGetLoadedApi();
-    if (!api.loaded || !api.RegisterTexture) return nullptr;
+    if (!api.loaded || !api.RegisterTexture) { b7.reason = "gbh-font7-gbh-miss"; return false; }
+    b7.gbhOk = true;
 
-    // IDA: PacketInfo S89[6] is Setup(6,7), indexed by (spriteId,a5) with field_6 from GetPaletteByIndex(gStyle,7).
-    // We do not have confirmed full S89 state; use a5==0 conservative probe only.
-    if (a5 != 0) return nullptr;
+    // IDA 0x4C30A0: PacketInfo::Setup(&S89[6], 6, 7); PacketInfo::LoadPalettedTextures(&S89[6]);
+    // Setup: field_6=GetPaletteByIndex(gStyle,7), Count=GetGlobalPaletteOffset(gStyle,6)*field_6.
+    b7.spriteCount = (unsigned short)gStyle->GetGlobalPaletteOffset(6);
+    b7.field_6 = (unsigned short)gStyle->GetPaletteByIndex(7);
+    if (b7.spriteCount == 0 || b7.field_6 == 0) { b7.reason = "gbh-font7-count0"; return false; }
+    unsigned int count = (unsigned int)b7.spriteCount * (unsigned int)b7.field_6;
+    if (count > 131072u) { b7.reason = "gbh-font7-count-too-big"; return false; }
 
+    b7.entries = (int*)std::calloc(count, sizeof(int));
+    if (!b7.entries) { b7.reason = "gbh-font7-oom"; return false; }
+
+    b7.count = count;
+    b7.s89 = TextureManager_S89{};
+    b7.s89_2 = TextureManager_S89_2{};
+    b7.s89_2.field_0 = b7.entries;
+    b7.s89.S89_2 = &b7.s89_2;
+    b7.s89.Count = (unsigned short)(count <= 0xFFFFu ? count : 0xFFFFu);
+    b7.s89.field_6 = (short)b7.field_6;
+    b7.s89.sprite_type = 6; // Setup(6,7)
+    b7.s89.field_C = 7;
+    b7.s89.field_10 = 1;
+    b7.ready = (b7.count == (unsigned int)b7.s89.Count); // count overflow guard
+    b7.reason = b7.ready ? "gbh-font7-ready" : "gbh-font7-count16-overflow";
+    return b7.ready;
+}
+
+void* TextureManager::GetDebugGbhFontTexture(int /*sprite_type*/, short spriteId, int a4, short a5) {
+    // Debug-only TM-owned S89[6] font-bank7 subset. NOT full IDA TM/PacketInfo/S89.
+    // Gates: GTA2_TEXT_GBH_DRAW=1, real gbh exports, Style+StyleTiles present.
+    // IDA 0x4CC100 calls GetTexture(gTM,7,SpriteID,a1a,a5_12.field_0) => S89[6] indexed by a5+spriteId*field_6.
+    // We currently support only a5==0 because palette/select semantics for a1a/a5 are not fully confirmed.
+    auto& b7 = m_debugFontS89_7;
+    if (a4 != 7) return nullptr; // debug subset is bank7 only; don't pollute reason for other banks
+    if (a5 != 0) { b7.reason = "gbh-font7-a5-unsupported"; return nullptr; }
+    if (!TM_DebugFont7EnsureInit(this)) return nullptr;
+
+    unsigned int sid = (unsigned int)(unsigned short)spriteId;
+    if (sid >= b7.spriteCount) { b7.reason = "gbh-font7-sid-oob"; return nullptr; }
+    unsigned int pal = (unsigned int)(unsigned short)a5;
+    if (pal >= b7.field_6) { b7.reason = "gbh-font7-pal-oob"; return nullptr; }
+    unsigned int idx = pal + sid * (unsigned int)b7.field_6;
+    if (idx >= b7.count) { b7.reason = "gbh-font7-idx-oob"; return nullptr; }
+
+    if (b7.entries[idx]) {
+        b7.reason = "gbh-font7-ok";
+        return (void*)(uintptr_t)(unsigned int)b7.entries[idx];
+    }
+
+    // IDA 0x4CC100: BaseIndex=GetBaseIndex(gStyle,7,SpriteID); Sprite=GetSprite(BaseIndex).
     unsigned short base = gStyle->GetBaseIndex(7, (unsigned short)spriteId);
-    if (base == 0) return nullptr;
-
-    struct Cache { bool inited; std::map<unsigned int, gbh_Texture*> byBase; GbhApi api; };
-    static Cache c{false, {}, {}};
-    if (!c.inited) { c.inited = true; c.api = api; }
-    auto it = c.byBase.find(base);
-    if (it != c.byBase.end()) return it->second;
-
     int spr = gStyle->GetSprite(base);
-    if (spr == 0) return nullptr;
+    if (spr == 0) { b7.reason = "gbh-font7-sprite-miss"; return nullptr; }
     unsigned char* sp = reinterpret_cast<unsigned char*>(spr);
     unsigned char w = sp[4];
     unsigned char h = sp[5];
     unsigned char* data = reinterpret_cast<unsigned char*>(*reinterpret_cast<unsigned int*>(sp + 0));
-    if (!data || w == 0 || h == 0) return nullptr;
+    if (!data || w == 0 || h == 0) { b7.reason = "gbh-font7-sprite-bad"; return nullptr; }
 
-    // Palette: PacketInfo::LoadPalettedTextures uses get_global_palette_id(field_C==7, a5) then GetPhysPalette.
-    // a5==0 is the only supported debug case.
-    unsigned short globalPal = (unsigned short)gStyle->get_global_palette_id(7, 0);
+    GbhApi api = Gbh_TryGetLoadedApi();
+    if (!api.loaded || !api.RegisterTexture) { b7.reason = "gbh-font7-gbh-miss"; return nullptr; }
+
+    // IDA PacketInfo::LoadPalettedTextures for Setup(sprite_type=6,field_C=7):
+    // global_palette_id = get_global_palette_id(gStyle, field_C==7, v5); phys = GetPhysPalette(global).
+    // For a5==0 this matches first palette column; other a5/palette combos remain guarded.
+    unsigned short globalPal = (unsigned short)gStyle->get_global_palette_id(7, (short)pal);
     short physPal = gStyle->GetPhysPalette(globalPal);
-    int palSlot = TM_GbhRegisterPhysPaletteDebug(c.api, (unsigned int)(unsigned short)physPal);
-    if (palSlot < 0) return nullptr;
+    int palSlot = TM_GbhRegisterPhysPaletteDebug(api, (unsigned int)(unsigned short)physPal);
+    if (palSlot < 0) { b7.reason = "gbh-font7-pal-fail"; return nullptr; }
 
-    gbh_Texture* tex = c.api.RegisterTexture((short)w, (short)h, data, palSlot, 0);
-    if (!tex) return nullptr;
-    c.byBase[base] = tex;
+    // RegisterTexture a5 is 0 in IDA decomp for S89 paletted textures; keep 0 (unconfirmed).
+    gbh_Texture* tex = api.RegisterTexture((short)w, (short)h, data, palSlot, 0);
+    if (!tex) { b7.reason = "gbh-font7-regtex-null"; return nullptr; }
+
+    b7.entries[idx] = (int)(uintptr_t)tex;
+    b7.reason = "gbh-font7-ok";
+    return tex;
+}
+
+static bool TM_DebugBank2EnsureInit(TextureManager* tm) {
+    if (!tm) return false;
+    auto& b2 = tm->m_debugBank2Style;
+    if (b2.initAttempted) return b2.ready && b2.entries != nullptr;
+    b2.initAttempted = true;
+    b2.reason = "gbh-bank2-init";
+    const char* drawEnv = std::getenv("GTA2_TEXT_GBH_DRAW");
+    if (!drawEnv || drawEnv[0] != '1') { b2.reason = "gbh-bank2-env-off"; return false; }
+    if (!gStyle) { b2.reason = "gbh-bank2-no-style"; return false; }
+    GbhApi api = Gbh_TryGetLoadedApi();
+    if (!api.loaded || !api.RegisterTexture) { b2.reason = "gbh-bank2-gbh-miss"; return false; }
+
+    // IDA 0x4C30A0: PaletteByIndex=GetPaletteByIndex(gStyle,2); PacketInfo::Create(S89[0],PaletteByIndex,1,0,2); LoadTextures.
+    // Create sets Count=a3*a2 = 1*PaletteByIndex. LoadTextures iterates i<Count, uses Style::GetSprite(gStyle,i) and
+    // global_palette_id(gStyle,2,i) with gbh_RegisterTexture(w,h,data,palSlot,0).
+    unsigned short count = (unsigned short)gStyle->GetPaletteByIndex(2);
+    if (count == 0) { b2.reason = "gbh-bank2-count0"; return false; }
+    if (count > 65535u) { b2.reason = "gbh-bank2-count-too-big"; return false; }
+    b2.entries = (int*)std::calloc(count, sizeof(int));
+    if (!b2.entries) { b2.reason = "gbh-bank2-oom"; return false; }
+    b2.count = count;
+    b2.ready = true;
+    b2.reason = "gbh-bank2-ready";
+    return true;
+}
+
+void* TextureManager::GetDebugGbhBank2Texture(int sprite_type, short spriteId) {
+    auto& b2 = m_debugBank2Style;
+    if (!TM_DebugBank2EnsureInit(this)) return nullptr;
+    // IDA GetStyleTexture: S89_2->field_0[Style::GetBaseIndex(gStyle, sprite_type, spriteId)]
+    unsigned short base = gStyle->GetBaseIndex(sprite_type, spriteId);
+    if (base >= b2.count) { b2.reason = "gbh-bank2-base-oob"; return nullptr; }
+    if (b2.entries[base]) { b2.reason = "gbh-bank2-ok"; return (void*)(uintptr_t)(unsigned int)b2.entries[base]; }
+
+    // IDA LoadTextures(S89[0]): Sprite = Style::GetSprite(gStyle, i); global_palette_id(gStyle,2,i); physPal; RegisterTexture(w,h,data,palSlot,0)
+    int spr = gStyle->GetSprite(base);
+    if (spr == 0) { b2.reason = "gbh-bank2-sprite-miss"; return nullptr; }
+    unsigned char* sp = reinterpret_cast<unsigned char*>(spr);
+    unsigned char w = sp[4], h = sp[5];
+    unsigned char* data = reinterpret_cast<unsigned char*>(*reinterpret_cast<unsigned int*>(sp + 0));
+    if (!data || w == 0 || h == 0) { b2.reason = "gbh-bank2-sprite-bad"; return nullptr; }
+    GbhApi api = Gbh_TryGetLoadedApi();
+    if (!api.loaded || !api.RegisterTexture) { b2.reason = "gbh-bank2-gbh-miss"; return nullptr; }
+    unsigned short globalPal = (unsigned short)gStyle->get_global_palette_id(2, (short)base);
+    short physPal = gStyle->GetPhysPalette(globalPal);
+    int palSlot = TM_GbhRegisterPhysPaletteDebug(api, (unsigned int)(unsigned short)physPal);
+    if (palSlot < 0) { b2.reason = "gbh-bank2-pal-fail"; return nullptr; }
+    gbh_Texture* tex = api.RegisterTexture((short)w, (short)h, data, palSlot, 0);
+    if (!tex) { b2.reason = "gbh-bank2-regtex-null"; return nullptr; }
+    b2.entries[base] = (int)(uintptr_t)tex;
+    b2.reason = "gbh-bank2-ok";
     return tex;
 }
 
@@ -176,6 +302,10 @@ int GetTexture(TextureManager* tm, int sprite_type, short spriteId, int a4, shor
     int v = tm->GetTexture(sprite_type, spriteId, a4, a5);
     if (v != 0) return v;
     // Debug-only fallback for guarded gbh draw experiments; never fake handles.
+    if (a4 == 2) {
+        void* realTex = tm->GetDebugGbhBank2Texture(sprite_type, spriteId);
+        if (realTex) return (int)(uintptr_t)realTex;
+    }
     void* realTex = tm->GetDebugGbhFontTexture(sprite_type, spriteId, a4, a5);
     return (int)(uintptr_t)realTex;
 }
