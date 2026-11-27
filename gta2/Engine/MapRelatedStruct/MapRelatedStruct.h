@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstdint>
 #include "../../Engine/SpriteMain/SpriteMain.h"
 #include "../../Engine/SpriteS1/SpriteS1.h"
 #include "../../Engine/FileMgr/FileMgr.h"
@@ -74,6 +75,8 @@ struct S202 {
     char field_1E;                  // 0x1E
     char field_1F;                  // 0x1F
 
+    // IDA 0x401AD0: this->field_0 = (int)pSpriteNab
+    void SetToNewVal(void* pSpriteNab) { field_0 = (int)(uintptr_t)pSpriteNab; }
     static void sub_41F980(S202* p, int value);
    // static void* sub_401B20(S202*, SpriteS1*, PublicTransport*);
 };

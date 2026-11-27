@@ -88,13 +88,37 @@ int FileMgr::Seek(int offset) {
 }
 
 size_t FileMgr::Read(void* buffer, size_t* sizePtr) {
-	// IDA 0x402FB0 was not decompiled in export; common usage is Read(buf, &size).
-	if (!g_fileMgrOpen || !g_fileMgrStream || !buffer || !sizePtr) return 0;
+	// IDA 0x402FB0 no-cfunc in export. Guarded RE impl: fread(size,1,stream).
+	if (!buffer || !sizePtr) return 0;
 	size_t size = *sizePtr;
 	if (size == 0) return 0;
-	return fread(buffer, 1, size, g_fileMgrStream);
+	if (!g_fileMgrOpen || !g_fileMgrStream) {
+		DebugLog(0x15u, "File.cpp", 421);
+		return 0;
+	}
+	clearerr(g_fileMgrStream);
+	size_t got = fread(buffer, 1, size, g_fileMgrStream);
+	if (got != size && ferror(g_fileMgrStream)) {
+		DebugLog(0x12u, "File.cpp", 0);
+	}
+	return got;
 }
 
+int FileMgr::ReadLine(void* /*ctx*/, char* buffer, size_t* sizePtr) {
+	// IDA 0x403000 no-cfunc. Guarded behavior for known chunk-header callers:
+	// for(size=8; ReadLine(a1,a1,&size); size=8) if(chunk_size) parse_chunk(a1,chunk_size)
+	if (!buffer || !sizePtr) return 0;
+	*sizePtr = 0;
+	if (!g_fileMgrOpen || !g_fileMgrStream) return 0;
+	unsigned char hdr[8] = {};
+	size_t got = fread(hdr, 1, 8, g_fileMgrStream);
+	if (got != 8) return 0;
+	memcpy(buffer, hdr, 4);
+	unsigned int chunkSize = 0;
+	memcpy(&chunkSize, hdr + 4, 4);
+	*sizePtr = (size_t)chunkSize;
+	return 1;
+}
 size_t FileMgr::ReadSize(void* buffer, size_t size) {
 	return Read(buffer, &size);
 }

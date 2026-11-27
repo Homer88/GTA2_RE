@@ -1,10 +1,17 @@
 #include "Radar.h"
-#include <cstdint>
+#include "../../Engine/MapRelatedStruct/MapRelatedStruct.h"
 
 int Radar::WorldCoordinateToScreenCoord_Formula(int radarField0, int a3BaseCar0Field) {
     // IDA 0x401B60: S202::SetToNewVal(a2, (this->field_0 * (__int64)a3->BaseCar[0].field) >> 14)
     // Guarded/debug formula helper only; no verified RE Radar object layout.
     return (int)(((std::int64_t)radarField0 * (std::int64_t)a3BaseCar0Field) >> 14);
+}
+
+void Radar::WorldCoordinateToScreenCoord_ToS202(struct S202* out, int radarField0, int a3BaseCar0Field) {
+    // IDA 0x401B60 shape: S202::SetToNewVal(a2, result). Not full Radar object/layout port.
+    if (!out) return;
+    int v = WorldCoordinateToScreenCoord_Formula(radarField0, a3BaseCar0Field);
+    out->SetToNewVal((void*)(uintptr_t)(std::uint32_t)v);
 }
 
     // 0x004C3680

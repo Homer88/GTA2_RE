@@ -27,6 +27,7 @@ public:
 	static int Seek(int offset); // IDA: Seek(this,size*) reads *size and fseek(...,1)
 	static int SeekPtr(const void* sizePtr);
 	static size_t Read(void* buffer, size_t* sizePtr);
+	static int ReadLine(void* /*ctx*/, char* buffer, size_t* sizePtr); // IDA 0x403000 no-cfunc; guarded impl for chunk-header loops
 	static size_t ReadSize(void* buffer, size_t size);
 	static bool IsOpen();
 	static FILE* GetStream();

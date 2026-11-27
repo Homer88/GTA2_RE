@@ -164,7 +164,7 @@ class Style{
     // 0x004BFDD0
     int read_fonb_chunk_REAL(unsigned int dwBytes = 0); // IDA 0x4BFDD0
     // 0x004BFCC0
-    int SetFontStyles(void);
+    int SetFontStyles(int fontCount = -1); // IDA shape: count arg; -1 = debug fallback from FONB buffer
     // RE debug-only font style state, modeled after SetFontStyles @ 0x4BFCC0.
     // Not wired to original global addresses.
     struct DebugFontStyles {

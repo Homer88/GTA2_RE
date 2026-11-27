@@ -75,6 +75,7 @@ void Style::ClearIdaViewDebug() {
     m_idaView = nullptr;
     m_idaViewSprxBytes = 0;
     m_idaViewFonbBytes = 0;
+    m_debugFontStyles = DebugFontStyles{};
 }
 
 bool Style::EnsureIdaViewForFileMgrDebug() {
@@ -157,9 +158,9 @@ void Style::Load(char* FileName) {
         if (m_idaView) for (int i = 0; i < 1024; ++i) m_idaView->arr1024[i] = 1;
         FILE* f = FileMgr::FileOpenStatic(FileName, "rb");
         if (f) {
-            unsigned char hdr[8] = {};
-            size_t sz8 = 8;
-            if (FileMgr::Read(hdr, &sz8) == 8) {
+            unsigned char hdr[6] = {};
+            size_t sz6 = 6; // IDA: size = 6; Read(v6, &size); Chunk1("GBST"); Chunk(700)
+            if (FileMgr::Read(hdr, &sz6) == 6) {
                 const bool tagOk = std::memcmp(hdr, "GBST", 4) == 0;
                 unsigned short ver = (unsigned short)(hdr[4] | (hdr[5] << 8));
                 if (!tagOk || ver != 700) {
@@ -172,27 +173,27 @@ void Style::Load(char* FileName) {
                     // fall through to StyleTiles debug fallback
                 } else {
                 // IDA loop: for (size=8; ReadLine(a1,a1,&size); size=8) if (chunk_size) parse_chunk(a1,chunk_size)
-                // ReadLine is not decompiled in export; chunk headers are 8 bytes (4cc+u32 size).
+                // ReadLine @ 0x403000 no-cfunc in IDA export; RE has guarded chunk-header implementation.
                 int styleChunkCount = 0;
-                for (;;) {
-                    char tag[4] = {};
-                    unsigned int chunkSize = 0;
-                    unsigned char ch[8] = {};
-                    size_t chsz = 8;
-                    size_t got = FileMgr::Read(ch, &chsz);
-                    if (got != 8) break;
-                    std::memcpy(tag, ch, 4);
-                    std::memcpy(&chunkSize, ch + 4, 4);
+                size_t chunkSizeSz = 8;
+                char tag[4] = {};
+                while (FileMgr::ReadLine(nullptr, tag, &chunkSizeSz)) {
+                    unsigned int chunkSize = (unsigned int)chunkSizeSz;
                     ++styleChunkCount;
                     if (chunkSize) {
                         // Guarded debug path: avoid absurd allocations on corrupt/misaligned reads.
                         if (chunkSize > 0x04000000u) {
                             int skip = (int)chunkSize;
-                            FileMgr::SeekPtr(&skip);
+                            int sr = FileMgr::SeekPtr(&skip);
+                            if (sr != 0) {
+                                std::FILE* lf = std::fopen("gta2_style_filemgr.log", "a");
+                                if (lf) { std::fprintf(lf, "style-filemgr absurd chunk seek failed size=%u rc=%d\n", chunkSize, sr); std::fclose(lf); }
+                            }
                         } else {
                             (void)parse_chunk(tag, chunkSize);
                         }
                     }
+                    chunkSizeSz = 8; // IDA: size=8 before next ReadLine
                 }
                 if (const char* dbg = std::getenv("GTA2_STYLE_IDA_FILEMGR")) {
                     if (dbg[0] == '1') {
@@ -207,7 +208,8 @@ void Style::Load(char* FileName) {
             }
             if (FileMgr::IsOpen()) FileMgr::CloseFile();
             if (m_idaView) {
-                (void)StyleFixupSprites();
+                int fix = StyleFixupSprites();
+                { std::FILE* lf=std::fopen("gta2_style_filemgr.log","a"); if(lf){ std::fprintf(lf,"style-filemgr StyleFixupSprites ret=%d\n", fix); std::fclose(lf);} }
                 // If GTA2_STYLE_IDA_VIEW requested but no idaView was populated by FileMgr reads,
                 // fall back to StyleTiles debug adapter. Do NOT overwrite FileMgr-populated idaView.
                 if (!m_idaView) (void)BindIdaViewFromStyleTilesDebug();
@@ -740,7 +742,11 @@ int Style::StyleInitSpriteTable(void){
         if (fm && fm[0] == '1' && EnsureIdaViewForFileMgrDebug()) {
             if (!m_idaView->S1501) {
                 void* buf = std::malloc(2048u);
-                if (!buf) return 0;
+                if (!buf) {
+                    std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                    if (f) { std::fprintf(f, "style-filemgr StyleInitSpriteTable alloc failed\n"); std::fclose(f); }
+                    return 0;
+                }
                 TrackFileMgrOwned(buf, 1);
                 m_idaView->S1501 = buf;
             }
@@ -780,7 +786,11 @@ int Style::BuildSpriteBuffer(unsigned int sizeBytes) {
     if (!m_idaView->field_4C || !sizeBytes) return 0;
     bool tracked = false;
     for (int i = 0; i < m_fileMgrOwnedCount; ++i) if (m_fileMgrOwnedPtrs[i] == (void*)(uintptr_t)m_idaView->field_4C) { tracked = true; break; }
-    if (!tracked) return 0;
+    if (!tracked) {
+        std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+        if (f) { std::fprintf(f, "style-filemgr DELX build untracked field_4C\n"); std::fclose(f); }
+        return 0;
+    }
 
     auto* src0 = reinterpret_cast<const unsigned char*>((uintptr_t)m_idaView->field_4C);
     unsigned int srcOff = 0;
@@ -789,12 +799,45 @@ int Style::BuildSpriteBuffer(unsigned int sizeBytes) {
         unsigned char count = src0[srcOff + 2];
         unsigned int inRec = 2u * (unsigned int)count + 4u;
         unsigned int outRec = 8u * (unsigned int)count + 4u;
+        if (inRec < 4u) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr DELX build bad inRec size=%u off=%u count=%u\n", sizeBytes, srcOff, (unsigned)count); std::fclose(f); }
+            return 0;
+        }
+        if (delx3 > 0xFFFFFFFFu - outRec) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr DELX build overflow size=%u off=%u\n", sizeBytes, srcOff); std::fclose(f); }
+            return 0;
+        }
         delx3 += outRec;
         srcOff += inRec;
-        if (inRec < 4u) break;
     }
-    if (!delx3) return 0;
+    if (srcOff != sizeBytes) {
+        std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+        if (f) { std::fprintf(f, "style-filemgr DELX build size mismatch consumed=%u size=%u\n", srcOff, sizeBytes); std::fclose(f); }
+    }
+    if (!delx3) {
+        std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+        if (f) { std::fprintf(f, "style-filemgr DELX build empty delx3 size=%u\n", sizeBytes); std::fclose(f); }
+        return 0;
+    }
 
+    // Guarded debug cleanup: release previous tracked field_50 before rebuild.
+    if (m_idaView->field_50) {
+        void* old50 = (void*)(uintptr_t)m_idaView->field_50;
+        for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
+            if (m_fileMgrOwnedPtrs[i] == old50) {
+                if (m_fileMgrOwnedKind[i] == 1) std::free(old50);
+                m_fileMgrOwnedPtrs[i] = m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1];
+                m_fileMgrOwnedKind[i] = m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1];
+                m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1] = nullptr;
+                m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1] = 0;
+                --m_fileMgrOwnedCount;
+                break;
+            }
+        }
+        m_idaView->field_50 = 0;
+    }
     void* outBuf = CreateBuffer(delx3);
     if (!outBuf) { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr DELX build alloc failed size=%u\n",delx3); std::fclose(f);} return 0; }
     TrackFileMgrOwned(outBuf, 1);
@@ -806,7 +849,23 @@ int Style::BuildSpriteBuffer(unsigned int sizeBytes) {
         unsigned char count = src0[srcPos + 2];
         unsigned int inRec = 2u * (unsigned int)count + 4u;
         unsigned int outRec = 8u * (unsigned int)count + 4u;
-        if (dstPos + outRec > delx3 || srcPos + inRec > sizeBytes) break;
+        if (dstPos + outRec > delx3 || srcPos + inRec > sizeBytes) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr DELX build decode bounds src=%u/%u dst=%u/%u in=%u out=%u\n", srcPos, sizeBytes, dstPos, delx3, inRec, outRec); std::fclose(f); }
+            for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
+                if (m_fileMgrOwnedPtrs[i] == outBuf) {
+                    if (m_fileMgrOwnedKind[i] == 1) std::free(outBuf);
+                    m_fileMgrOwnedPtrs[i] = m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1];
+                    m_fileMgrOwnedKind[i] = m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1];
+                    m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1] = nullptr;
+                    m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1] = 0;
+                    --m_fileMgrOwnedCount;
+                    break;
+                }
+            }
+            if (m_idaView) { m_idaView->field_50 = 0; m_idaView->delx3 = 0; }
+            return 0;
+        }
         unsigned char* j = dst0 + dstPos;
         *(unsigned short*)j = *(const unsigned short*)(src0 + srcPos);
         j[2] = count;
@@ -825,6 +884,23 @@ int Style::BuildSpriteBuffer(unsigned int sizeBytes) {
         dstPos += outRec;
         srcPos += inRec;
     }
+    if (srcPos != sizeBytes || dstPos != delx3) {
+        std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+        if (f) { std::fprintf(f, "style-filemgr DELX build decode mismatch src=%u/%u dst=%u/%u\n", srcPos, sizeBytes, dstPos, delx3); std::fclose(f); }
+        for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
+            if (m_fileMgrOwnedPtrs[i] == outBuf) {
+                if (m_fileMgrOwnedKind[i] == 1) std::free(outBuf);
+                m_fileMgrOwnedPtrs[i] = m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1];
+                m_fileMgrOwnedKind[i] = m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1];
+                m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1] = nullptr;
+                m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1] = 0;
+                --m_fileMgrOwnedCount;
+                break;
+            }
+        }
+        if (m_idaView) { m_idaView->field_50 = 0; m_idaView->delx3 = 0; }
+        return 0;
+    }
     m_idaView->field_50 = (int)reinterpret_cast<uintptr_t>(dst0);
     m_idaView->delx3 = (int)delx3;
     return 1;
@@ -842,22 +918,37 @@ int Style::StyleApplySpriteOffset(void){
         if (!m_idaView->field_50 || m_idaView->delx3 <= 0 || !m_idaView->field_48) return 0;
         bool tracked50 = false;
         for (int i = 0; i < m_fileMgrOwnedCount; ++i) if (m_fileMgrOwnedPtrs[i] == (void*)(uintptr_t)m_idaView->field_50) { tracked50 = true; break; }
-        if (!tracked50) return 0;
+        if (!tracked50) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr StyleApplySpriteOffset untracked field_50\n"); std::fclose(f); }
+            return 0;
+        }
         auto* base = reinterpret_cast<unsigned char*>((uintptr_t)m_idaView->field_50);
         unsigned int delx3 = (unsigned int)m_idaView->delx3;
         unsigned int off = 0;
-        while (off + 4u <= delx3) {
+        int result = (int)delx3;
+        while (off < delx3) {
+            if (off + 4u > delx3) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr StyleApplySpriteOffset truncated header off=%u delx3=%u\n", off, delx3); std::fclose(f); }
+            break;
+        }
             unsigned char count = base[off + 2];
             unsigned int rec = 4u + 8u * (unsigned int)count;
-            if (off + rec > delx3) break;
+            if (off + rec > delx3) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr StyleApplySpriteOffset truncated rec off=%u rec=%u delx3=%u\n", off, rec, delx3); std::fclose(f); }
+            break;
+        }
             for (unsigned char k = 0; k < count; ++k) {
                 unsigned int* p = reinterpret_cast<unsigned int*>(base + off + 4u + 8u * k);
                 *p += (unsigned int)m_idaView->field_48;
             }
             off += rec;
+            result = (int)rec; // IDA: result = 8*count+4 per record; final after loop
             if (rec == 0) break;
         }
-        return (int)off;
+        return result;
     }
 
 
@@ -888,7 +979,11 @@ int Style::BuildSpriteLookup() {
         if (m_fileMgrOwnedPtrs[i] == (void*)(uintptr_t)m_idaView->field_50) { tracked50 = true; break; }
     }
     // If not exact tracked, still allow when delx3 small and field_50 points into heap? No: keep guarded.
-    if (!tracked50) return 0;
+    if (!tracked50) {
+        std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+        if (f) { std::fprintf(f, "style-filemgr DELX lookup untracked field_50\n"); std::fclose(f); }
+        return 0;
+    }
 
     auto* base = reinterpret_cast<unsigned char*>((uintptr_t)m_idaView->field_50);
     unsigned int delx3 = (unsigned int)m_idaView->delx3;
@@ -899,23 +994,59 @@ int Style::BuildSpriteLookup() {
         unsigned char count = *(base + off + 2);
         if (idx > maxIdx) maxIdx = idx;
         unsigned int rec = 4u + 8u * (unsigned int)count;
+        if (rec == 0) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr DELX lookup zero rec off=%u\n", off); std::fclose(f); }
+            break;
+        }
         off += rec;
-        if (rec == 0) break;
     }
-    if (maxIdx == 0 || maxIdx > 4096) return 0;
+    if (maxIdx == 0 || maxIdx > 4096) {
+        std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+        if (f) { std::fprintf(f, "style-filemgr DELX lookup bad maxIdx=%u\n", (unsigned)maxIdx); std::fclose(f); }
+        return 0;
+    }
     size_t tableBytes = (size_t)(maxIdx + 2) * 4u;
     void* tbl = CreateBuffer(tableBytes);
     if (!tbl) { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr DELX lookup alloc failed size=%u\n",(unsigned)tableBytes); std::fclose(f);} return 0; }
+    // Guarded debug cleanup: release previous tracked field_54 to avoid leak on rebuild.
+    if (m_idaView->field_54) {
+        void* old54 = (void*)(uintptr_t)m_idaView->field_54;
+        for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
+            if (m_fileMgrOwnedPtrs[i] == old54) {
+                if (m_fileMgrOwnedKind[i] == 1) std::free(old54);
+                m_fileMgrOwnedPtrs[i] = m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1];
+                m_fileMgrOwnedKind[i] = m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1];
+                m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1] = nullptr;
+                m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1] = 0;
+                --m_fileMgrOwnedCount;
+                break;
+            }
+        }
+        m_idaView->field_54 = 0;
+    }
     TrackFileMgrOwned(tbl, 1);
     std::memset(tbl, 0, tableBytes);
     *(unsigned short*)tbl = (unsigned short)(maxIdx + 1);
     off = 0;
+    bool oobIdxLogged = false;
+    bool dupIdxLogged = false;
     while (off + 4 <= delx3) {
         unsigned short idx = *(unsigned short*)(base + off);
         unsigned char count = *(base + off + 2);
         unsigned int rec = 4u + 8u * (unsigned int)count;
         if (idx + 1u < (unsigned int)(maxIdx + 2u)) {
-            ((unsigned int*)tbl)[idx + 1u] = (unsigned int)((uintptr_t)base + off);
+            unsigned int* slot = &((unsigned int*)tbl)[idx + 1u];
+            if (*slot && !dupIdxLogged) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr DELX lookup duplicate idx=%u off=%u\n", (unsigned)idx, off); std::fclose(f); }
+                dupIdxLogged = true;
+            }
+            *slot = (unsigned int)((uintptr_t)base + off);
+        } else if (!oobIdxLogged) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr DELX lookup oob idx=%u max=%u\n", (unsigned)idx, (unsigned)maxIdx); std::fclose(f); }
+            oobIdxLogged = true;
         }
         off += rec;
         if (rec == 0) break;
@@ -942,11 +1073,48 @@ int Style::read_delx_records_REAL(unsigned int dwBytes){
             TrackFileMgrOwned(buf, 1);
             if (EnsureIdaViewForFileMgrDebug()) m_idaView->field_4C = (int)reinterpret_cast<uintptr_t>(buf);
             size_t sz = dwBytes;
-            FileMgr::Read(buf, &sz);
-            m_idaView->delx3 = (int)dwBytes;
+            unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr DELX short read got=%u want=%u\n", rd, dwBytes); std::fclose(f); }
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            if (m_idaView) m_idaView->delx3 = (int)dwBytes;
             // Guarded debug-only partial build. Exact IDA decode/lookup not fully ported.
-            (void)BuildSpriteBuffer(dwBytes);
-            (void)BuildSpriteLookup();
+            int built = BuildSpriteBuffer(dwBytes);
+            int lookup = 0;
+            if (built) {
+                lookup = BuildSpriteLookup();
+            } else {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr DELX BuildSpriteBuffer failed size=%u\n", dwBytes); std::fclose(f); }
+                if (m_idaView) { m_idaView->delx3 = 0; m_idaView->field_50 = 0; m_idaView->field_54 = 0; }
+            }
+            if (built && !lookup) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr DELX BuildSpriteLookup failed size=%u\n", dwBytes); std::fclose(f); }
+                // Guarded debug cleanup: avoid half-built DELX state; IDA has no failure path here.
+                if (m_idaView) {
+                    void* f50 = (void*)(uintptr_t)m_idaView->field_50;
+                    if (f50) {
+                        for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
+                            if (m_fileMgrOwnedPtrs[i] == f50) {
+                                if (m_fileMgrOwnedKind[i] == 1) std::free(f50);
+                                m_fileMgrOwnedPtrs[i] = m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1];
+                                m_fileMgrOwnedKind[i] = m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1];
+                                m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1] = nullptr;
+                                m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1] = 0;
+                                --m_fileMgrOwnedCount;
+                                break;
+                            }
+                        }
+                    }
+                    m_idaView->field_50 = 0;
+                    m_idaView->delx3 = 0;
+                    m_idaView->field_54 = 0;
+                }
+            }
             // IDA 0x4BFA60 frees field_4C and clears it after build.
             for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
                 if (m_fileMgrOwnedPtrs[i] == buf) {
@@ -960,12 +1128,19 @@ int Style::read_delx_records_REAL(unsigned int dwBytes){
                 }
             }
             if (m_idaView) m_idaView->field_4C = 0;
-            return 1;
+            { std::FILE* f = std::fopen("gta2_style_filemgr.log", "a"); if (f) { std::fprintf(f, "style-filemgr DELX ok size=%u built=%d lookup=%d\n", dwBytes, built, lookup); std::fclose(f); } }
+            // IDA 0x4BFA60 has no return value; guarded debug path reports success after cleanup.
+            return (built && lookup) ? 1 : 0;
         }
         // Debug fallback: raw DELX bind only.
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->delx) return 0;
-        if (m_idaView) m_idaView->field_4C = (int)reinterpret_cast<uintptr_t>(sta->delx);
+        if (m_idaView) {
+            m_idaView->field_4C = (int)reinterpret_cast<uintptr_t>(sta->delx);
+            m_idaView->delx3 = (int)sta->delxBytes;
+            m_idaView->field_50 = 0;
+            m_idaView->field_54 = 0;
+        }
         return 1;
     }
 
@@ -986,8 +1161,15 @@ int Style::read_dels_records_REAL(unsigned int dwBytes){
             TrackFileMgrOwned(buf, 1);
             if (EnsureIdaViewForFileMgrDebug()) m_idaView->field_48 = (int)reinterpret_cast<uintptr_t>(buf);
             size_t sz = dwBytes;
-            FileMgr::Read(buf, &sz);
-            return 1;
+            unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr DELS short read got=%u want=%u\n", rd, dwBytes); std::fclose(f); }
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            { std::FILE* f = std::fopen("gta2_style_filemgr.log", "a"); if (f) { std::fprintf(f, "style-filemgr DELS ok size=%u\n", dwBytes); std::fclose(f); } }
+            return (int)rd; // IDA 0x4BFAB0: return FileMgr::Read(...)
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->dels) return 0;
@@ -1014,8 +1196,22 @@ int Style::read_tile_chunk_REAL(unsigned int dwBytes){
             TrackFileMgrOwned(out, 1);
             if (EnsureIdaViewForFileMgrDebug()) { m_idaView->Tiles = (int)reinterpret_cast<uintptr_t>(buf); m_idaView->field_44 = (int)out; }
             size_t sz = dwBytes;
-            FileMgr::Read(buf, &sz);
-            return StyleInitSpriteTable();
+            unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr TILE short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            int ok = StyleInitSpriteTable();
+            if (!ok) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr TILE StyleInitSpriteTable failed\n"); std::fclose(f); }
+            } else {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr TILE ok size=%u\n", dwBytes); std::fclose(f); }
+            }
+            return ok; // IDA 0x4BFAD0: FileMgr::Read(...); return StyleInitSpriteTable(this)
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->tile) return 0;
@@ -1029,9 +1225,20 @@ int Style::read_tile_chunk_REAL(unsigned int dwBytes){
 
 
 int Style::read_ovly_records_REAL_(unsigned int dwBytes){
-        // IDA 0x4BFB10: FileMgr::Seek over chunk; no data stored.
+        // IDA 0x4BFB00: FileMgr::Seek over chunk; no data stored.
         const char* fm = std::getenv("GTA2_STYLE_IDA_FILEMGR");
-        if (fm && fm[0] == '1' && FileMgr::IsOpen() && dwBytes) { int s = (int)dwBytes; FileMgr::SeekPtr(&s); }
+        if (fm && fm[0] == '1' && FileMgr::IsOpen() && dwBytes) {
+            int s = (int)dwBytes;
+            int sr = FileMgr::SeekPtr(&s);
+            if (sr != 0) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr OVLY seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(f); }
+            } else {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr OVLY ok size=%u\n", dwBytes); std::fclose(f); }
+            }
+            return sr; // IDA: return FileMgr::Seek(...)
+        }
         return 1;
     }
 
@@ -1042,7 +1249,18 @@ int Style::read_ovly_records_REAL_(unsigned int dwBytes){
 int Style::read_psxt_records_REAL(unsigned int dwBytes){
         // IDA 0x4BFB10: FileMgr::Seek over chunk; no data stored.
         const char* fm = std::getenv("GTA2_STYLE_IDA_FILEMGR");
-        if (fm && fm[0] == '1' && FileMgr::IsOpen() && dwBytes) { int s = (int)dwBytes; FileMgr::SeekPtr(&s); }
+        if (fm && fm[0] == '1' && FileMgr::IsOpen() && dwBytes) {
+            int s = (int)dwBytes;
+            int sr = FileMgr::SeekPtr(&s);
+            if (sr != 0) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr PSXT seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(f); }
+            } else {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr PSXT ok size=%u\n", dwBytes); std::fclose(f); }
+            }
+            return sr; // IDA: return FileMgr::Seek(...)
+        }
         return 1;
     }
 
@@ -1063,7 +1281,15 @@ int Style::read_sprg_records_REAL(unsigned int dwBytes){
             }
             TrackFileMgrOwned(out, 1); // NewMemory raw buffer
             if (EnsureIdaViewForFileMgrDebug()) { m_idaView->field_34 = (int)reinterpret_cast<uintptr_t>(buf); m_idaView->field_38 = (int)out; }
-            size_t sz = dwBytes; FileMgr::Read(buf, &sz); return 1;
+            size_t sz = dwBytes; unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr SPRG short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr SPRG ok size=%u\n",dwBytes); std::fclose(f);} }
+            return (int)rd; // IDA 0x4BFB20: return FileMgr::Read(...)
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->sprg) return 0;
@@ -1087,9 +1313,23 @@ int Style::read_ppal_records_REAL(unsigned int dwBytes){
                 return 0;
             }
             TrackFileMgrOwned(out, 1); // NewMemory raw buffer
-            if (EnsureIdaViewForFileMgrDebug()) { m_idaView->field_2C = (int)reinterpret_cast<uintptr_t>(buf); m_idaView->field_30 = (int)out; m_idaView->PalitrePal = (unsigned short)(dwBytes >> 10); }
-            PallitrePal = (unsigned short)(dwBytes >> 10);
-            size_t sz = dwBytes; FileMgr::Read(buf, &sz); return 1;
+            if (EnsureIdaViewForFileMgrDebug()) { m_idaView->field_2C = (int)reinterpret_cast<uintptr_t>(buf); m_idaView->field_30 = (int)out; m_idaView->PalitrePal = 0; }
+            PallitrePal = 0;
+            size_t sz = dwBytes; unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr PPAL short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                PallitrePal = 0;
+                return 0;
+            }
+            else {
+                unsigned short palCount = (unsigned short)(dwBytes >> 10);
+                PallitrePal = palCount;
+                if (m_idaView) m_idaView->PalitrePal = palCount; // IDA 0x4BFB50: PalitrePal = a2>>10 after read
+            }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr PPAL ok size=%u pal=%u\n",dwBytes,(unsigned)PallitrePal); std::fclose(f);} }
+            return (int)PallitrePal; // IDA 0x4BFB50: result = a2>>10; PalitrePal = result; return result
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->ppal) return 0;
@@ -1110,7 +1350,12 @@ int Style::read_palx_records_REAL(unsigned int dwBytes){
             if (dwBytes != 0x8000u) {
                 std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
                 if (f) { std::fprintf(f, "style-filemgr PALX unexpected size=%u\n", dwBytes); std::fclose(f); }
-                int s = (int)dwBytes; FileMgr::SeekPtr(&s);
+                int s = (int)dwBytes;
+                int sr = FileMgr::SeekPtr(&s);
+                if (sr != 0) {
+                    std::FILE* lf = std::fopen("gta2_style_filemgr.log", "a");
+                    if (lf) { std::fprintf(lf, "style-filemgr PALX unexpected-size seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(lf); }
+                }
                 return 0;
             }
             void* buf = std::malloc(0x8000u);
@@ -1122,8 +1367,15 @@ int Style::read_palx_records_REAL(unsigned int dwBytes){
             TrackFileMgrOwned(buf,1);
             if (EnsureIdaViewForFileMgrDebug()) m_idaView->field_28 = buf;
             size_t sz = 0x8000u;
-            FileMgr::Read(buf, &sz);
-            return 1;
+            unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != (unsigned)sz) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr PALX short read got=%u want=%u\n",rd,(unsigned)sz); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr PALX ok size=%u\n",dwBytes); std::fclose(f);} }
+            return (int)rd; // IDA 0x4BFB80: return FileMgr::Read(...)
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->palx) return 0;
@@ -1150,7 +1402,12 @@ int Style::read_obji_records_REAL(unsigned int dwBytes){
                 bad = true;
             }
             if (bad) {
-                int s = (int)dwBytes; FileMgr::SeekPtr(&s);
+                int s = (int)dwBytes;
+                int sr = FileMgr::SeekPtr(&s);
+                if (sr != 0) {
+                    std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                    if (f) { std::fprintf(f, "style-filemgr OBJI bad-size seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(f); }
+                }
                 return 0;
             }
             void* buf = CreateBuffer(dwBytes);
@@ -1161,7 +1418,16 @@ int Style::read_obji_records_REAL(unsigned int dwBytes){
             }
             TrackFileMgrOwned(buf,1);
             if (EnsureIdaViewForFileMgrDebug()) { m_idaView->field_24 = (int)reinterpret_cast<uintptr_t>(buf); m_idaView->field_6 = (unsigned short)(v4 >> 1); }
-            size_t sz = dwBytes; FileMgr::Read(buf, &sz); return 1;
+            size_t sz = dwBytes; unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr OBJI short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr OBJI ok size=%u field6=%u\n",dwBytes,(unsigned)(unsigned short)(v4>>1)); std::fclose(f);} }
+            // IDA 0x4BFBE0: result = 2*(unsigned __int16)(v4>>1); if(result!=v4) DebugLog; return result.
+            return (int)(2u * (unsigned short)(v4 >> 1));
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->obji) return 0;
@@ -1192,7 +1458,15 @@ int Style::read_sprx_records_REAL(unsigned int dwBytes){
             TrackFileMgrOwned(buf,1);
             if (EnsureIdaViewForFileMgrDebug()) { m_idaView->field_20 = (int)reinterpret_cast<uintptr_t>(buf); m_idaView->field_4 = (unsigned short)((v4 >> 3) + 1u); }
             m_idaViewSprxBytes = dwBytes;
-            size_t sz = dwBytes; FileMgr::Read(buf, &sz); return 1;
+            size_t sz = dwBytes; unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr SPRX short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr SPRX ok size=%u field4=%u\n",dwBytes,(unsigned)((v4>>3)+1)); std::fclose(f);} }
+            return (int)(v4 >> 3); // IDA 0x4BFC60: result=size>>3; if overflow DebugLog and v4=a2; field_4=(v4>>3)+1; return result
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->sprx) return 0;
@@ -1209,6 +1483,13 @@ int Style::read_fonb_chunk_REAL(unsigned int dwBytes){
             if (dwBytes < 2) {
                 std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
                 if (f) { std::fprintf(f, "style-filemgr FONB too small size=%u\n", dwBytes); std::fclose(f); }
+                int s = (int)dwBytes;
+                int sr = FileMgr::SeekPtr(&s);
+                if (sr != 0) {
+                    std::FILE* lf = std::fopen("gta2_style_filemgr.log", "a");
+                    if (lf) { std::fprintf(lf, "style-filemgr FONB too-small seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(lf); }
+                }
+                return 0;
             }
             void* buf = CreateBuffer(dwBytes);
             if (!buf) {
@@ -1220,35 +1501,34 @@ int Style::read_fonb_chunk_REAL(unsigned int dwBytes){
             if (EnsureIdaViewForFileMgrDebug()) m_idaView->Car = buf;
             m_idaViewFonbBytes = dwBytes;
             size_t sz = dwBytes;
-            FileMgr::Read(buf, &sz);
+            unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr FONB short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
             unsigned short fonbCount = 0;
             if (buf && dwBytes >= 2) {
                 auto* w = reinterpret_cast<unsigned short*>(buf);
                 fonbCount = w[0];
-                if ((unsigned int)dwBytes != (unsigned int)(2u * fonbCount + 2u)) {
+                unsigned int expected = 2u * (unsigned int)fonbCount + 2u;
+                if ((unsigned int)dwBytes != expected) {
                     std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
                     if (f) { std::fprintf(f, "style-filemgr FONB size mismatch size=%u count=%u\n", dwBytes, (unsigned)fonbCount); std::fclose(f); }
                 }
-                if (dwBytes >= 4) {
+                if (expected <= (unsigned int)dwBytes && dwBytes >= 4) {
                     unsigned short sum = Style_SumShortArrayU16(w + 1, fonbCount);
                     if (EnsureIdaViewForFileMgrDebug()) m_idaView->field_2 = (short)sum;
                     // IDA: BuildCumulativeTable((char*)&Car->Car+2, v9)
                     Style_BuildCumulativeTableU16(w + 1, (int)fonbCount);
+                } else {
+                    std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                    if (f) { std::fprintf(f, "style-filemgr FONB count out of range size=%u count=%u\n", dwBytes, (unsigned)fonbCount); std::fclose(f); }
                 }
             }
-            // Debug-only: mirror SetFontStyles(count) shape without touching original globals.
-            if (fonbCount == 14) {
-                m_debugFontStyles = DebugFontStyles{};
-                m_debugFontStyles.word_67065C = 1; m_debugFontStyles.word_670650 = 2; m_debugFontStyles.word_67066C = 4;
-                m_debugFontStyles.unk_672F28 = 1; m_debugFontStyles.unk_672F24 = 1; m_debugFontStyles.valid = true;
-            } else if (fonbCount == 7) {
-                m_debugFontStyles = DebugFontStyles{};
-                m_debugFontStyles.word_67065C = 3; m_debugFontStyles.word_670650 = 4;
-                m_debugFontStyles.unk_672F28 = 3; m_debugFontStyles.unk_672F24 = 3; m_debugFontStyles.valid = true;
-            } else {
-                UpdateDebugFontStylesFromFonb();
-            }
-            return 1;
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr FONB ok size=%u count=%u\n",dwBytes,(unsigned)fonbCount); std::fclose(f);} }
+            return SetFontStyles((int)fonbCount); // IDA 0x4BFDD0: return SetFontStyles((unsigned short)Car->Car)
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (!sta || !sta->loaded || !sta->fonb || sta->fonbBytes < 2) return 0;
@@ -1262,11 +1542,37 @@ int Style::read_fonb_chunk_REAL(unsigned int dwBytes){
     // 0x004BFCC0
 
 
-int Style::SetFontStyles(void){
+int Style::SetFontStyles(int fontCount){
         // IDA 0x4BFCC0 sets global font style IDs based on FONB count (14 or 7).
         // RE keeps this as debug-only local state to avoid touching unknown globals.
-        UpdateDebugFontStylesFromFonb();
-        return m_debugFontStyles.valid ? 1 : 0;
+        m_debugFontStyles = DebugFontStyles{};
+        unsigned short fonbCount = 0;
+        if (fontCount >= 0) fonbCount = (unsigned short)fontCount;
+        else {
+            if (m_idaView && m_idaView->Car) fonbCount = *(unsigned short*)((uintptr_t)m_idaView->Car);
+            else {
+                const StyleTileAssets* sta = StyleTiles_Get();
+                if (sta && sta->loaded && sta->fonb && sta->fonbBytes >= 2) fonbCount = (unsigned short)(sta->fonb[0] | (sta->fonb[1] << 8));
+            }
+        }
+        if (fonbCount == 14) {
+            m_debugFontStyles.word_67065C = 1;
+            m_debugFontStyles.word_670650 = 2;
+            m_debugFontStyles.word_67066C = 4;
+            m_debugFontStyles.unk_672F28 = 1; // TODO confirm
+            m_debugFontStyles.unk_672F24 = 1; // TODO confirm
+            m_debugFontStyles.valid = true;
+            return 1;
+        }
+        if (fonbCount == 7) {
+            m_debugFontStyles.word_67065C = 3;
+            m_debugFontStyles.word_670650 = 4;
+            m_debugFontStyles.unk_672F28 = 3; // TODO confirm
+            m_debugFontStyles.unk_672F24 = 3; // TODO confirm
+            m_debugFontStyles.valid = true;
+            return 1;
+        }
+        return 0;
     }
 
 void Style::UpdateDebugFontStylesFromFonb() {
@@ -1306,7 +1612,12 @@ int Style::read_sprb_records_REAL(unsigned int dwBytes){
             if (dwBytes != 12u) {
                 std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
                 if (f) { std::fprintf(f, "style-filemgr SPRB unexpected size=%u\n", dwBytes); std::fclose(f); }
-                int s = (int)dwBytes; FileMgr::SeekPtr(&s);
+                int s = (int)dwBytes;
+                int sr = FileMgr::SeekPtr(&s);
+                if (sr != 0) {
+                    std::FILE* lf = std::fopen("gta2_style_filemgr.log", "a");
+                    if (lf) { std::fprintf(lf, "style-filemgr SPRB unexpected-size seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(lf); }
+                }
                 return 0;
             }
             void* buf18 = std::malloc(12u);
@@ -1319,10 +1630,17 @@ int Style::read_sprb_records_REAL(unsigned int dwBytes){
                 return 0;
             }
             TrackFileMgrOwned(buf18,1); TrackFileMgrOwned(buf14,1);
-            size_t sz = dwBytes; FileMgr::Read(buf18, &sz);
+            size_t sz = 12u; unsigned int rd = FileMgr::Read(buf18, &sz);
+            if (rd != 12u) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr SPRB short read got=%u want=12\n",rd); std::fclose(f);}
+                // Keep partially read buffers tracked/visible for guarded debug inspection; do not process them.
+                return 0;
+            }
             std::memcpy(buf14, buf18, 12u);
             Style_BuildCumulativeTableU16(reinterpret_cast<unsigned short*>(buf14), 6);
             if (EnsureIdaViewForFileMgrDebug()) { m_idaView->field_18 = (int)reinterpret_cast<uintptr_t>(buf18); m_idaView->field_14 = (void*)buf14; }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr SPRB ok size=%u\n",dwBytes); std::fclose(f);} }
             return 1;
         }
         const StyleTileAssets* sta = StyleTiles_Get();
@@ -1349,7 +1667,12 @@ int Style::read_palb_chunk_REAL(unsigned int dwBytes){
             if (dwBytes != 16u) {
                 std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
                 if (f) { std::fprintf(f, "style-filemgr PALB unexpected size=%u\n", dwBytes); std::fclose(f); }
-                int s = (int)dwBytes; FileMgr::SeekPtr(&s);
+                int s = (int)dwBytes;
+                int sr = FileMgr::SeekPtr(&s);
+                if (sr != 0) {
+                    std::FILE* lf = std::fopen("gta2_style_filemgr.log", "a");
+                    if (lf) { std::fprintf(lf, "style-filemgr PALB unexpected-size seek failed size=%u rc=%d\n", dwBytes, sr); std::fclose(lf); }
+                }
                 return 0;
             }
             void* buf2 = std::malloc(16u);
@@ -1362,7 +1685,13 @@ int Style::read_palb_chunk_REAL(unsigned int dwBytes){
                 return 0;
             }
             TrackFileMgrOwned(buf2,1); TrackFileMgrOwned(bufc,1);
-            size_t sz = 16u; FileMgr::Read(buf2, &sz);
+            size_t sz = 16u; unsigned int rd = FileMgr::Read(buf2, &sz);
+            if (rd != 16u) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr PALB short read got=%u want=16\n",rd); std::fclose(f);}
+                // Keep partially read buffers tracked/visible for guarded debug inspection; do not process them.
+                return 0;
+            }
             std::memcpy(bufc, buf2, 16u);
             unsigned short palbSum = Style_SumShortArrayU16(reinterpret_cast<unsigned short*>(bufc), 8);
             Style_BuildCumulativeTableU16(reinterpret_cast<unsigned short*>(bufc), 8);
@@ -1371,6 +1700,7 @@ int Style::read_palb_chunk_REAL(unsigned int dwBytes){
                 m_idaView->field_C = (int)reinterpret_cast<uintptr_t>(bufc);
                 m_idaView->field = (short)palbSum; // IDA 0x4BFF20: this->field = SumShortArray(8u, field_C)
             }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr PALB ok size=%u sum=%u\n",dwBytes,(unsigned)palbSum); std::fclose(f);} }
             return 1;
         }
         const StyleTileAssets* sta = StyleTiles_Get();
@@ -1430,7 +1760,15 @@ int Style::read_recy_chunk_REAL_(unsigned int dwBytes){
             }
             TrackFileMgrOwned(buf,1);
             if (EnsureIdaViewForFileMgrDebug()) { m_idaView->recy = reinterpret_cast<char*>(buf); m_idaView->n_recy = (short)dwBytes; }
-            size_t sz = dwBytes; FileMgr::Read(buf, &sz); return 1;
+            size_t sz = dwBytes; unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr RECY short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr RECY ok size=%u\n",dwBytes); std::fclose(f);} }
+            return (int)rd; // IDA 0x4C0010: return FileMgr::Read(...)
         }
         const StyleTileAssets* sta = StyleTiles_Get();
         if (sta && sta->loaded && sta->recy && sta->recyBytes > 0) {
@@ -1450,41 +1788,49 @@ int Style::LoadIndexMap(int a2) {
         if (fm && fm[0] == '1' && FileMgr::IsOpen()) {
             unsigned short idx = 0;
             size_t sz = 2;
-            if (FileMgr::Read(&idx, &sz) != 2) return 0;
+            if (FileMgr::Read(&idx, &sz) != 2) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr LoadIndexMap short read map=%d\n", a2); std::fclose(f); }
+                return 0;
+            }
             while (idx) {
                 if (idx < 1024) {
                     ArrayStyle[idx] = (unsigned int)a2;
                     if (EnsureIdaViewForFileMgrDebug()) m_idaView->arr1024[idx] = a2;
+                } else {
+                    std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                    if (f) { std::fprintf(f, "style-filemgr LoadIndexMap oob idx=%u map=%d\n", (unsigned)idx, a2); std::fclose(f); }
                 }
                 sz = 2;
-                if (FileMgr::Read(&idx, &sz) != 2) break;
+                if (FileMgr::Read(&idx, &sz) != 2) {
+                    std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                    if (f) { std::fprintf(f, "style-filemgr LoadIndexMap short next read map=%d\n", a2); std::fclose(f); }
+                    return 0;
+                }
             }
-            return 1;
+            return 0; // IDA 0x4C0040: returns final index/result (0 on normal completion)
         }
         // Debug fallback: no FileMgr; SPEC handled by read_spec_records_REAL fallback.
         return 0;
     }
 
 int Style::read_spec_records_REAL(unsigned int /*dwBytes*/){
-        // IDA 0x4C00A0: LoadIndexMap(this,2..10). No size arg in original; dwBytes kept for RE parse_chunk compat.
+        // IDA 0x4C00A0: LoadIndexMap(this,2..10); returns result of LoadIndexMap(10).
+        // No size arg in original; dwBytes kept for RE parse_chunk compat.
         const char* fm = std::getenv("GTA2_STYLE_IDA_FILEMGR");
         if (fm && fm[0] == '1' && FileMgr::IsOpen()) {
             if (!EnsureIdaViewForFileMgrDebug()) return 0;
-            int ok = 1;
-            ok &= Style::LoadIndexMap(2);
-            ok &= Style::LoadIndexMap(3);
-            ok &= Style::LoadIndexMap(4);
-            ok &= Style::LoadIndexMap(5);
-            ok &= Style::LoadIndexMap(6);
-            ok &= Style::LoadIndexMap(7);
-            ok &= Style::LoadIndexMap(8);
-            ok &= Style::LoadIndexMap(9);
-            ok &= Style::LoadIndexMap(10);
-            if (!ok) {
-                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
-                if (f) { std::fprintf(f, "style-filemgr SPEC LoadIndexMap incomplete\n"); std::fclose(f); }
-            }
-            return ok ? 1 : 0;
+            Style::LoadIndexMap(2);
+            Style::LoadIndexMap(3);
+            Style::LoadIndexMap(4);
+            Style::LoadIndexMap(5);
+            Style::LoadIndexMap(6);
+            Style::LoadIndexMap(7);
+            Style::LoadIndexMap(8);
+            Style::LoadIndexMap(9);
+            int r = Style::LoadIndexMap(10);
+            { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr SPEC maps=2..10 ret=%d\n",r); std::fclose(f);} }
+            return r;
         }
         // Debug fallback: SPEC table from StyleTiles (already parsed) -> arr1024.
         const StyleTileAssets* sta = StyleTiles_Get();
@@ -1511,19 +1857,38 @@ int Style::StyleFixupSprites(void){
         const StyleTileAssets* sta = StyleTiles_Get();
         const bool sprxIsStyleTiles = sta && sta->loaded && sta->sprx &&
             m_idaView->field_20 == (int)reinterpret_cast<uintptr_t>(sta->sprx);
+        const char* fm = std::getenv("GTA2_STYLE_IDA_FILEMGR");
+        unsigned int result = 0;
+        if (sprxIsStyleTiles && fm && fm[0] == '1') {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr StyleFixupSprites skip sprx fixup: StyleTiles-bound\n"); std::fclose(f); }
+        }
         if (!sprxIsStyleTiles && m_idaView->field_20 && m_idaView->field_34 && m_idaView->field_4 && m_idaView->field_38) {
             auto* sprx = reinterpret_cast<unsigned char*>((uintptr_t)m_idaView->field_20);
             unsigned int count = (unsigned int)m_idaView->field_4;
             unsigned int sprgBase = (unsigned int)m_idaView->field_34;
             unsigned int sprgSize = (unsigned int)m_idaView->field_38;
+            unsigned int fixed = 0;
             for (unsigned int i = 0; i < count; ++i) {
                 unsigned int* p = reinterpret_cast<unsigned int*>(sprx + i * 8u);
                 unsigned int v = *p;
                 // Guard: only fix values that look like raw sprg offsets.
-                if (v < sprgSize) *p = sprgBase + v;
+                if (v < sprgSize) { *p = sprgBase + v; ++fixed; }
+            }
+            result = count; // IDA 0x4C0100: loop returns with result == field_4
+            if (fm && fm[0] == '1') {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr StyleFixupSprites sprx fixup count=%u fixed=%u\n", count, fixed); std::fclose(f); }
+            }
+        } else if (!sprxIsStyleTiles && fm && fm[0] == '1') {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) {
+                std::fprintf(f, "style-filemgr StyleFixupSprites skip sprx fixup: f20=%d f34=%d f4=%u f38=%u\n",
+                    m_idaView->field_20, m_idaView->field_34, (unsigned)m_idaView->field_4, (unsigned)m_idaView->field_38);
+                std::fclose(f);
             }
         }
-        return 0;
+        return (int)result;
     }
 
 
@@ -1577,25 +1942,46 @@ int Style::LoadCariRecords(unsigned int dwBytes) {
         unsigned int count = 0;
         unsigned char v14 = 0, v15 = 0;
         while (pos < dwBytes) {
-            if (pos + 15u > dwBytes) break; // minimum conservative record guard
+            if (pos + 15u > dwBytes) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr CARI truncated tail pos=%u dw=%u\n", pos, dwBytes); std::fclose(f); }
+                break; // minimum conservative record guard
+            }
             unsigned char* r = base58 + pos;
             if (count >= 0x100u) { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr CARI too many records\n"); std::fclose(f);} break; }
             if (r[2] > 0x80u || r[3] > 0x80u || r[4] > 0x40u) { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr CARI field range model=%u\n",(unsigned)r[0]); std::fclose(f);} }
             if (r[1] >= 2u) { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr CARI bad flag model=%u v=%u\n",(unsigned)r[0],(unsigned)r[1]); std::fclose(f);} }
             unsigned char model = r[0];
-            *reinterpret_cast<int*>(reinterpret_cast<unsigned char*>(s284) + ((int)model * 4)) = (int)reinterpret_cast<uintptr_t>(r);
+            {
+                int* slot = reinterpret_cast<int*>(reinterpret_cast<unsigned char*>(s284) + ((int)model * 4));
+                if (*slot) {
+                    std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                    if (f) { std::fprintf(f, "style-filemgr CARI duplicate model=%u\n", (unsigned)model); std::fclose(f); }
+                }
+                *slot = (int)reinterpret_cast<uintptr_t>(r);
+            }
             if (r[1]) { unsigned char v9 = (unsigned char)(v15 + v14); v15 = r[1]; v14 = v9; }
             int v10 = r[4];
             r[1] = v14;
             int v11 = v10 + 14;
-            if ((unsigned int)(pos + v11) >= dwBytes) break;
+            if ((unsigned int)(pos + v11) >= dwBytes) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr CARI truncated v11 model=%u pos=%u v11=%d dw=%u\n", (unsigned)r[0], pos, v11, dwBytes); std::fclose(f); }
+                break;
+            }
             if (r[v11] > 5u) { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){std::fprintf(f,"style-filemgr CARI tail count model=%u v=%u\n",(unsigned)r[0],(unsigned)r[v11]); std::fclose(f);} }
             unsigned int recSize = (unsigned int)(v11 + 2 * r[v11] + 1);
-            if (recSize == 0 || pos + recSize > dwBytes) break;
+            if (recSize < (unsigned int)(v11 + 1) || pos + recSize > dwBytes) {
+                std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+                if (f) { std::fprintf(f, "style-filemgr CARI bad rec size model=%u recSize=%u pos=%u dw=%u\n", (unsigned)r[0], recSize, pos, dwBytes); std::fclose(f); }
+                break;
+            }
             pos += recSize;
             ++count;
         }
-        reinterpret_cast<unsigned char*>(s284)[0x400] = (unsigned char)(count & 0xFFu); // CountModelCar; guarded byte
+        // IDA 0x4C0410: CountModelCar is 32-bit field at S284+0x400.
+        *reinterpret_cast<unsigned int*>(reinterpret_cast<unsigned char*>(s284) + 0x400) = count;
+        { std::FILE* f=std::fopen("gta2_style_filemgr.log","a"); if(f){ std::fprintf(f,"style-filemgr CARI ok count=%u bytes=%u\n", count, dwBytes); std::fclose(f);} }
         return 1;
     }
 
@@ -1614,12 +2000,35 @@ int Style::read_cari_records_REAL(unsigned int dwBytes){
             }
             TrackFileMgrOwned(buf,1);
             if (EnsureIdaViewForFileMgrDebug()) m_idaView->field_58 = (int)reinterpret_cast<uintptr_t>(buf);
-            size_t sz = dwBytes; FileMgr::Read(buf, &sz);
+            size_t sz = dwBytes; unsigned int rd = FileMgr::Read(buf, &sz);
+            if (rd != dwBytes) {
+                std::FILE* f=std::fopen("gta2_style_filemgr.log","a");
+                if(f){std::fprintf(f,"style-filemgr CARI short read got=%u want=%u\n",rd,dwBytes); std::fclose(f);}
+                // Keep partially read buffer tracked/visible for guarded debug inspection; do not process it.
+                return 0;
+            }
             int ok = LoadCariRecords(dwBytes);
             if (!ok) {
                 std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
                 if (f) { std::fprintf(f, "style-filemgr CARI LoadCariRecords failed size=%u\n", dwBytes); std::fclose(f); }
+                void* s284 = (m_idaView ? m_idaView->pCar_5C : nullptr);
+                for (int i = 0; i < m_fileMgrOwnedCount; ++i) {
+                    if (s284 && m_fileMgrOwnedPtrs[i] == s284) {
+                        void* p = m_fileMgrOwnedPtrs[i];
+                        if (m_fileMgrOwnedKind[i] == 1) std::free(p);
+                        m_fileMgrOwnedPtrs[i] = m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1];
+                        m_fileMgrOwnedKind[i] = m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1];
+                        m_fileMgrOwnedPtrs[m_fileMgrOwnedCount - 1] = nullptr;
+                        m_fileMgrOwnedKind[m_fileMgrOwnedCount - 1] = 0;
+                        --m_fileMgrOwnedCount;
+                        --i;
+                    }
+                }
+                if (m_idaView) m_idaView->pCar_5C = nullptr;
+                // Keep field_58 buffer tracked/visible for guarded debug inspection.
+                return 0;
             }
+            { std::FILE* f = std::fopen("gta2_style_filemgr.log", "a"); if (f) { std::fprintf(f, "style-filemgr CARI ok size=%u\n", dwBytes); std::fclose(f); } }
             return 1;
         }
         const StyleTileAssets* sta = StyleTiles_Get();
@@ -1638,25 +2047,40 @@ int Style::parse_chunk(const char* tag, unsigned int size){
         const char* fm = std::getenv("GTA2_STYLE_IDA_FILEMGR");
         if (!fm || fm[0] != '1' || !FileMgr::IsOpen() || !tag) return 0;
         auto is = [&](const char* t) { return std::memcmp(tag, t, 4) == 0; };
-        if (is("TILE")) return read_tile_chunk_REAL(size);
-        if (is("SPRB")) return read_sprb_records_REAL(size);
+        // IDA 0x4C05B0 dispatch order
         if (is("PALB")) return read_palb_chunk_REAL(size);
-        if (is("SPRX")) return read_sprx_records_REAL(size);
-        if (is("SPRG")) return read_sprg_records_REAL(size);
-        if (is("PPAL")) return read_ppal_records_REAL(size);
-        if (is("PALX")) return read_palx_records_REAL(size);
-        if (is("OBJI")) return read_obji_records_REAL(size);
+        if (is("SPRB")) return read_sprb_records_REAL(size);
         if (is("FONB")) return read_fonb_chunk_REAL(size);
-        if (is("DELX")) return read_delx_records_REAL(size);
+        if (is("SPRX")) return read_sprx_records_REAL(size);
+        if (is("OBJI")) return read_obji_records_REAL(size);
+        if (is("PALX")) return read_palx_records_REAL(size);
+        if (is("PPAL")) return read_ppal_records_REAL(size);
+        if (is("SPRG")) return read_sprg_records_REAL(size);
+        if (is("TILE")) return read_tile_chunk_REAL(size);
         if (is("DELS")) return read_dels_records_REAL(size);
+        if (is("DELX")) return read_delx_records_REAL(size);
         if (is("CARI")) return read_cari_records_REAL(size);
-        if (is("RECY")) return read_recy_chunk_REAL_(size);
-        if (is("SPEC")) return read_spec_records_REAL(size);
-        if (is("OVLY")) return read_ovly_records_REAL_(size);
         if (is("PSXT")) return read_psxt_records_REAL(size);
+        if (is("OVLY")) return read_ovly_records_REAL_(size);
+        if (is("SPEC")) return read_spec_records_REAL(size);
+        if (is("RECY")) return read_recy_chunk_REAL_(size);
         // Unknown chunk: seek over.
-        int s = (int)size; FileMgr::SeekPtr(&s);
-        return 1;
+        {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) {
+                char t4[5] = { tag[0], tag[1], tag[2], tag[3], 0 };
+                for (int i = 0; i < 4; ++i) if (t4[i] < 32 || t4[i] > 126) t4[i] = '?';
+                std::fprintf(f, "style-filemgr unknown chunk %.4s size=%u\n", t4, size);
+                std::fclose(f);
+            }
+        }
+        int s = (int)size;
+        int sr = FileMgr::SeekPtr(&s);
+        if (sr != 0) {
+            std::FILE* f = std::fopen("gta2_style_filemgr.log", "a");
+            if (f) { std::fprintf(f, "style-filemgr unknown chunk seek failed size=%u rc=%d\n", size, sr); std::fclose(f); }
+        }
+        return sr;
     }
 
 

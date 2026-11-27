@@ -187,19 +187,12 @@ int Hud::DrawUI(void){
         }
         std::snprintf(buf, sizeof(buf), "text probes=%d gxt=%d", probeHits, gText ? gText->NumberOfElements : -1);
         AddDebugLine(buf);
-        // Direct overlay probe: confirms DrawGTATextRaw bridge independent of Bsearch/gxt.
-        if (std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1') {
-            // Debug-only faithful tail-shape call via IDA sub_4BA2C0 @ 0x4BA2C0 model:
-            // real stack locals for ABI9 tail and runtime-derived a5 from gCameraOrPhysics+0xA8.
-            // Not a full original callsite port (no Radar world->screen), not retail per-callstack proof.
-            const char* rawProbe = std::getenv("GTA2_TEXT_GBH_PROBE_BA2C0_RAW");
-            if (rawProbe && rawProbe[0] == '1') {
-                // No verified Radar object in RE; pass nullptr so probe doesn't mislabel camera as radar.
-                DrawGTATextRaw_BA2C0_DebugRaw((wchar_t*)L"HUD TEXT BRIDGE OK", 8, nullptr, (unsigned short)0);
-            } else {
-                DrawGTATextRaw_BA2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
-            }
-        } else {
+        // IDA 0x4CA440 calls Hud::DrawSprite_Wrapper(this) among HUD subsystem draws.
+        // RE: keep DrawSprite_Wrapper as the debug-only A2C0/ABI9 probe site; call it here
+        // for closer call-flow placement. Not a full DrawUI/DrawSprite_Wrapper port.
+        DrawSprite_Wrapper();
+        if (!(std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1')) {
+            // Non-GBH debug bridge: direct overlay probe independent of Bsearch/gxt.
             DrawGTATextRaw_7280((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164);
         }
         // Quit prompt probe (IDA quit strings) - draw only as debug text, no state change.
