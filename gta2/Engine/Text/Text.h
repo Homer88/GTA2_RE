@@ -92,6 +92,11 @@ void DrawGTATextRaw_BA2C0_Debug(wchar_t* a1, int x, int y, unsigned short a4);
 // Debug-only name-aligned wrapper for IDA sub_4BA2C0/A2C0 tail-shape probe.
 // No verified Radar object arg in RE; NOT original callsite/callstack proof.
 void DrawGTATextRaw_A2C0_Debug(wchar_t* a1, int x, int y, unsigned short a4);
+// IDA 0x4BA2C0 Font::DrawGTATextRaw_A2C0 shape: stdcall (a1,a2,a3,a4), retn 0x10.
+// Guarded RE bridge: reads camera a5 from +0xA4; if a2/a3 look like coord objects, uses
+// Radar::WorldCoordinateToScreenCoord formula; otherwise treats as screen coords. NOT
+// original caller/callsite/callstack proof; debug-only when GTA2_TEXT_GBH=1.
+void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4);
 // Debug-only closer raw port attempt. Gated+SEH; RE layout uncertain. Not proof.
 void DrawGTATextRaw_BA2C0_DebugRaw(wchar_t* a1, int a2, void* a3_radarLike, unsigned short a4);
 

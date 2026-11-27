@@ -12,6 +12,10 @@
 #endif
 #include <windows.h>
 #endif
+#ifdef _MSC_VER
+#include <intrin.h>
+#pragma intrinsic(_ReturnAddress)
+#endif
 #include "../Style/Style.h"
 #include "../../Game/CameraOrPhysics/CameraOrPhysics.h"
 #include "../../Game/Radar/Radar.h"
@@ -1322,6 +1326,140 @@ void DrawGTATextRaw_BA2C0_DebugRaw(wchar_t* a1, int a2, void* a3_radarLike, unsi
     }
     if (!a5_from_runtime) Text_LogGbhReason("abi9-ba2c0-a5-fallback");
     Text_LogGbhReason(radar_ok ? "abi9-ba2c0-raw-radar" : "abi9-ba2c0-raw-screen");
+    Text_DebugCaptureAbi9BA2C0Shape((unsigned int)&var_8_a5_4_case0, abi9_a5_8, abi9_a5_12_s202, abi9_a5_12_f0, (unsigned int)a5_rt);
+    DrawGTATextRaw(a1, sx, sy, a4, a5_rt,
+                   (unsigned int)&var_8_a5_4_case0, abi9_a5_8, abi9_a5_12_s202, abi9_a5_12_f0);
+}
+
+static bool Text_ReadIntSEH(void* p, int& out) {
+    if (!p) return false;
+#ifdef _WIN32
+    __try { out = *(int*)p; return true; }
+    __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
+#else
+    out = *(int*)p; return true;
+#endif
+}
+
+void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4) {
+    // IDA 0x4BA2C0 Font::DrawGTATextRaw_A2C0: stdcall(a1,a2,a3,a4), retn 0x10.
+    // v3=&gCameraOrPhysics_5E3CC4->cameraPosTarget[4].field_4 (+0xA4)
+    // v4=Radar::WorldCoordinateToScreenCoord(&a3,&v6,v3)  -> uses *v4 as Y? IDA: DrawGTATextRaw(a1,*v5,*v4,a4,v3->BaseCar[0].field)
+    // v5=Radar::WorldCoordinateToScreenCoord(&a2,&a3,v3)  -> uses *v5 as X
+    // RE: guarded bridge. No verified Radar/caller objects in normal RE flow; debug-only.
+    if (!Text_GbhDebugEnabled()) {
+        DrawGTATextRaw(a1, a2, (int)(uintptr_t)a3, a4, 0);
+        return;
+    }
+    Text_LogGbhReason("abi9-a2c0-bridge");
+    unsigned int var_8_a5_4_case0 = 2u;
+    unsigned int abi9_a5_8 = 0u;
+    unsigned int abi9_a5_12_s202 = 0u;
+    unsigned int abi9_a5_12_f0 = 0u;
+    int a5_rt = 0x4000;
+    bool a5_from_runtime = false;
+    CameraOrPhysics* camForA5 = gCameraOrPhysics_5E3CC4 ? gCameraOrPhysics_5E3CC4 : gCameraOrPhysics;
+    if (camForA5) {
+        bool camA5ok = false;
+        int camA5raw = camForA5->GetBA2C0A5Value(camA5ok);
+        if (camA5ok && camA5raw != 0) { a5_rt = camA5raw; a5_from_runtime = true; }
+    }
+    if (!a5_from_runtime) Text_LogGbhReason("abi9-a2c0-a5-fallback");
+
+    int sx = a2;
+    int sy = (int)(uintptr_t)a3;
+    bool coords_from_obj = false;
+    int a2Field0 = 0, a3Field0 = 0;
+    bool okA2 = false, okA3 = false;
+    // Guarded RE bridge: original a2/a3 are coord/Radar-like objects; Radar::WorldCoordinateToScreenCoord
+    // returns S202 with screen coord in field_0. If pointers look readable, use field_0 as screen coords.
+    // For EncodePositionValue-shaped (val<<14) values: if camera/radar context is available, try real
+    // Radar::WorldCoordinateToScreenCoord_Formula(radarScale, rawField0) - closer to IDA 0x401B60 shape.
+    // NOT original caller/callsite/callstack proof; debug-only.
+    if ((uintptr_t)a2 > 0x10000 && (uintptr_t)a3 > 0x10000) {
+        okA2 = Text_ReadIntSEH((void*)(uintptr_t)a2, a2Field0);
+        okA3 = Text_ReadIntSEH((void*)(uintptr_t)a3, a3Field0);
+        if (okA2 && okA3) {
+            if (std::getenv("GTA2_TEXT_GBH_A2C0_ENCODED")) {
+                char dbgBuf[128];
+                snprintf(dbgBuf, sizeof(dbgBuf), "abi9-a2c0-in a2=%08X a3=%08X", (unsigned)a2Field0, (unsigned)a3Field0);
+                Text_LogGbhReason(dbgBuf);
+            }
+            auto decode_plain = [](int v, bool& encoded) -> int {
+                if (v >= -4096 && v <= 4096) { encoded = false; return v; }
+                int dec = v >> 14;
+                if (dec >= -4096 && dec <= 4096) { encoded = true; return dec; }
+                encoded = false;
+                return v;
+            };
+            bool enc2 = false, enc3 = false;
+            int d2 = decode_plain(a2Field0, enc2);
+            int d3 = decode_plain(a3Field0, enc3);
+            bool p2 = (d2 >= -4096 && d2 <= 4096);
+            bool p3 = (d3 >= -4096 && d3 <= 4096);
+            if (p2 && p3) {
+                bool usedRadarFormula = false;
+                // Only attempt Radar formula for EncodePositionValue-shaped inputs (large raw field_0),
+                // and only when camera context gives a readable radar scale at +0xA4 (IDA cameraPosTarget[4].field_4).
+                if (enc2 || enc3) {
+                    CameraOrPhysics* camRadar = gCameraOrPhysics_5E3CC4 ? gCameraOrPhysics_5E3CC4 : gCameraOrPhysics;
+                    if (camRadar) {
+                        bool camA5ok = false;
+                        int radarScale = camRadar->GetBA2C0A5Value(camA5ok); // reads +0xA4, SEH-guarded
+                        if (camA5ok && radarScale != 0) {
+                            // IDA 0x401B60: (radarField0 * (__int64)a3->BaseCar[0].field) >> 14
+                            // a2/a3 in 0x4BA2C0 are coord objects; raw field_0 is passed as that int.
+                            sx = Radar::WorldCoordinateToScreenCoord_Formula(radarScale, a2Field0);
+                            sy = Radar::WorldCoordinateToScreenCoord_Formula(radarScale, a3Field0);
+                            usedRadarFormula = true;
+                            Text_LogGbhReason("abi9-a2c0-radar-formula");
+                        }
+                    }
+                }
+                if (!usedRadarFormula) {
+                    sx = d2;
+                    sy = d3;
+                    Text_LogGbhReason((enc2 || enc3) ? "abi9-a2c0-obj-encoded" : "abi9-a2c0-obj-field0");
+                }
+                coords_from_obj = true;
+            }
+        }
+    }
+    if (!coords_from_obj) Text_LogGbhReason("abi9-a2c0-screen-fallback");
+
+    // Debug-only: trace real caller arg shape for A2C0 proof investigation. No behavior change.
+    // Logs a2/a3, raw field_0, selected coord path, and stack offsets for callsite evidence.
+    if (std::getenv("GTA2_TEXT_GBH_A2C0_TRACE")) {
+        void* frames[6] = {};
+        USHORT n = CaptureStackBackTrace(0, 6, frames, NULL);
+        HMODULE mod = GetModuleHandleA(NULL);
+        uintptr_t base = (uintptr_t)mod;
+        char tbuf[320];
+        char* p = tbuf;
+        int left = (int)sizeof(tbuf);
+        int w = snprintf(p, left, "abi9-a2c0-tr a2=%08X a3=%08X f2=%08X f3=%08X obj=%d sx=%d sy=%d stk=",
+                 (unsigned)a2, (unsigned)(uintptr_t)a3,
+                 (unsigned)(okA2 ? a2Field0 : 0), (unsigned)(okA3 ? a3Field0 : 0),
+                 coords_from_obj ? 1 : 0, sx, sy);
+        if (w < 0) w = 0;
+        if (w >= left) w = left - 1;
+        p += w; left -= w;
+        for (USHORT i = 0; i < n && left > 12; ++i) {
+            uintptr_t f = (uintptr_t)frames[i];
+            uintptr_t off = (f >= base) ? (f - base) : f;
+            // If offset looks like module offset (< 0x2000000), log offset; else log raw.
+            if (f >= base && off < 0x2000000u) {
+                w = snprintf(p, left, "%s%08X", (i ? "," : ""), (unsigned)off);
+            } else {
+                w = snprintf(p, left, "%sR%08X", (i ? "," : ""), (unsigned)f);
+            }
+            if (w < 0) break;
+            if (w >= left) { w = left - 1; p[w] = 0; left = 0; break; }
+            p += w; left -= w;
+        }
+        Text_LogGbhReason(tbuf);
+    }
+
     Text_DebugCaptureAbi9BA2C0Shape((unsigned int)&var_8_a5_4_case0, abi9_a5_8, abi9_a5_12_s202, abi9_a5_12_f0, (unsigned int)a5_rt);
     DrawGTATextRaw(a1, sx, sy, a4, a5_rt,
                    (unsigned int)&var_8_a5_4_case0, abi9_a5_8, abi9_a5_12_s202, abi9_a5_12_f0);

@@ -47,9 +47,9 @@ void S16_02::sub_44C840(S16_02* p){
     memset(p, 0, sizeof(S16_02));
 }
 
-// S202::sub_41F980 - write value into field_0
+// S202::sub_41F980 - IDA 0x41F980: *p = value << 14 (EncodePositionValue)
 void S202::sub_41F980(S202* p, int value){
-    p->field_0 = value;
+    if (p) p->EncodePositionValue(value);
 }
 void free_0(void* ptr);
 void* createBuffer(size_t size);

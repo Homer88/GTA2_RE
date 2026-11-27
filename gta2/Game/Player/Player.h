@@ -80,6 +80,14 @@ class Player{
 		void SetActive(Player*);
 		void GetVehicle(Car* Vehicle);
 
+		// IDA 0x41DC70: returns (char)this->CurrentPlayer. Guarded RE helper.
+		char GetCurrentPlayer(void);
+		// IDA 0x4212A0/0x4212B0: set AttackIsChanged to 1/2. Guarded RE helper; original writes DWORD over bool.
+		void SetAttackChanged(void);
+		void SetAttackIsChanged(void);
+		// IDA 0x4A5640: restores on-foot weapons. Guarded stub - full RE weapon state not confirmed.
+		char RestoreOnFootWeapons(void);
+
 		
     int AddMoney(int amount);
     void Process(void);

@@ -172,13 +172,14 @@ void Style::Load(char* FileName) {
                     ClearIdaViewDebug();
                     // fall through to StyleTiles debug fallback
                 } else {
-                // IDA loop: for (size=8; ReadLine(a1,a1,&size); size=8) if (chunk_size) parse_chunk(a1,chunk_size)
-                // ReadLine @ 0x403000 no-cfunc in IDA export; RE has guarded chunk-header implementation.
+                // IDA 0x4C0820: for (size=8; ReadLine(buf,&size); size=8) if (chunk_size) parse_chunk(buf,chunk_size)
+                // BN confirms ReadLine reads *size bytes into buffer and returns bool.
                 int styleChunkCount = 0;
-                size_t chunkSizeSz = 8;
-                char tag[4] = {};
-                while (FileMgr::ReadLine(nullptr, tag, &chunkSizeSz)) {
-                    unsigned int chunkSize = (unsigned int)chunkSizeSz;
+                size_t chunkHdrSize = 8;
+                unsigned char chunkHdr[8] = {};
+                while (FileMgr::ReadLine(chunkHdr, &chunkHdrSize)) {
+                    unsigned int chunkSize = 0;
+                    std::memcpy(&chunkSize, chunkHdr + 4, 4);
                     ++styleChunkCount;
                     if (chunkSize) {
                         // Guarded debug path: avoid absurd allocations on corrupt/misaligned reads.
@@ -190,10 +191,10 @@ void Style::Load(char* FileName) {
                                 if (lf) { std::fprintf(lf, "style-filemgr absurd chunk seek failed size=%u rc=%d\n", chunkSize, sr); std::fclose(lf); }
                             }
                         } else {
-                            (void)parse_chunk(tag, chunkSize);
+                            (void)parse_chunk(reinterpret_cast<const char*>(chunkHdr), chunkSize);
                         }
                     }
-                    chunkSizeSz = 8; // IDA: size=8 before next ReadLine
+                    chunkHdrSize = 8; // IDA: size=8 before next ReadLine
                 }
                 if (const char* dbg = std::getenv("GTA2_STYLE_IDA_FILEMGR")) {
                     if (dbg[0] == '1') {

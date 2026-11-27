@@ -88,36 +88,35 @@ int FileMgr::Seek(int offset) {
 }
 
 size_t FileMgr::Read(void* buffer, size_t* sizePtr) {
-	// IDA 0x402FB0 no-cfunc in export. Guarded RE impl: fread(size,1,stream).
+	// IDA 0x402FB0/BN: stdcall(buffer,size*); DebugLog(0x15,"File.cpp",0x1BB) if not open;
+	// Fread(buffer,gStream,*size,1)==1 else Error(0xF,0,0). RE returns bytes read; callers compare.
 	if (!buffer || !sizePtr) return 0;
 	size_t size = *sizePtr;
 	if (size == 0) return 0;
 	if (!g_fileMgrOpen || !g_fileMgrStream) {
-		DebugLog(0x15u, "File.cpp", 421);
+		DebugLog(0x15u, "File.cpp", 443); // 0x1BB
 		return 0;
 	}
-	clearerr(g_fileMgrStream);
-	size_t got = fread(buffer, 1, size, g_fileMgrStream);
-	if (got != size && ferror(g_fileMgrStream)) {
-		DebugLog(0x12u, "File.cpp", 0);
+	size_t got = fread(buffer, (size_t)size, 1, g_fileMgrStream);
+	if (got != 1) {
+		DebugLog(0xFu, "File.cpp", 0);
+		return 0;
 	}
-	return got;
+	return size;
 }
 
-int FileMgr::ReadLine(void* /*ctx*/, char* buffer, size_t* sizePtr) {
-	// IDA 0x403000 no-cfunc. Guarded behavior for known chunk-header callers:
-	// for(size=8; ReadLine(a1,a1,&size); size=8) if(chunk_size) parse_chunk(a1,chunk_size)
+int FileMgr::ReadLine(void* buffer, size_t* sizePtr) {
+	// IDA/BN 0x403000: stdcall(buffer,size*); DebugLog(0x15,"File.cpp",0x1D1) if not open;
+	// return Fread(buffer,gStream,*size,1)==1. Used by chunk-header loops (size=8).
 	if (!buffer || !sizePtr) return 0;
-	*sizePtr = 0;
-	if (!g_fileMgrOpen || !g_fileMgrStream) return 0;
-	unsigned char hdr[8] = {};
-	size_t got = fread(hdr, 1, 8, g_fileMgrStream);
-	if (got != 8) return 0;
-	memcpy(buffer, hdr, 4);
-	unsigned int chunkSize = 0;
-	memcpy(&chunkSize, hdr + 4, 4);
-	*sizePtr = (size_t)chunkSize;
-	return 1;
+	size_t size = *sizePtr;
+	if (size == 0) return 0;
+	if (!g_fileMgrOpen || !g_fileMgrStream) {
+		DebugLog(0x15u, "File.cpp", 465); // 0x1D1
+		return 0;
+	}
+	size_t got = fread(buffer, (size_t)size, 1, g_fileMgrStream);
+	return got == 1 ? 1 : 0;
 }
 size_t FileMgr::ReadSize(void* buffer, size_t size) {
 	return Read(buffer, &size);

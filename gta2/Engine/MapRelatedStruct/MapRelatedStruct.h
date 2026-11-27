@@ -77,6 +77,8 @@ struct S202 {
 
     // IDA 0x401AD0: this->field_0 = (int)pSpriteNab
     void SetToNewVal(void* pSpriteNab) { field_0 = (int)(uintptr_t)pSpriteNab; }
+    // IDA 0x41F980 SpriteS1::Car::EncodePositionValue: *arg1 = arg2 << 0xE
+    void EncodePositionValue(int value) { field_0 = value << 14; }
     static void sub_41F980(S202* p, int value);
    // static void* sub_401B20(S202*, SpriteS1*, PublicTransport*);
 };

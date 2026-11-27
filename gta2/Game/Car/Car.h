@@ -240,6 +240,10 @@ public:
     void isMask3();
     bool isMask();
     void* GetInfoByTypeCar();
+    // 0x00423590 IDA Car::ShowCarInfo - guarded RE impl using RE field names; RE Car/Ped layout not proven identical to IDA offsets.
+    void ShowCarInfo(class Ped* pPed);
+    // 0x004235D0 IDA Car::OnPlayerExit - guarded partial RE impl; missing SetDriver/Player field deps are no-op guarded.
+    void OnPlayerExit();
     // 0x00411950
     // (gm) old: Car::ClearTurretMuzzle -> Car::ConsumePendingEvent0xac
     void ConsumePendingEvent0xac();

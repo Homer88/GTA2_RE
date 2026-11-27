@@ -189,3 +189,26 @@ void Player::RenderPlayers(Game* game){ (void)game; /* TODO: IDA render path */ 
 int Player::AddMoney(int amount){ (void)amount; return 0; }
 
 void Player::Process(void){}
+
+char Player::GetCurrentPlayer(void) {
+	// IDA 0x41DC70: return (char)this->CurrentPlayer;
+	// RE: CurrentPlayer is first field; semantically "is current active player".
+	return this->CurrentPlayer ? 1 : 0;
+}
+
+void Player::SetAttackChanged(void) {
+	// IDA 0x4212A0: *(_DWORD *)&this->AttackIsChanged = 1;
+	this->AttackIsChanged = true;
+}
+
+void Player::SetAttackIsChanged(void) {
+	// IDA 0x4212B0: *(_DWORD *)&this->AttackIsChanged = 2;
+	// RE bool cannot hold 2; store true and keep semantic note. Guarded.
+	this->AttackIsChanged = true;
+}
+
+char Player::RestoreOnFootWeapons(void) {
+	// IDA 0x4A5640: resets special weapons and restores SelectWeapon/TypeWeapon when >=15.
+	// RE weapon/select state layout not fully confirmed; guarded no-op stub for caller compatibility.
+	return 0;
+}

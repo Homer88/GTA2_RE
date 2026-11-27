@@ -5,6 +5,16 @@
 
 class Hud{
     public:
+    // --- IDA-confirmed fields (partial, for DrawSprite_Wrapper @ 0x4C94F0 / gHud @ 0x672F40) ---
+    // Full Hud size in original is 0x2AF8; RE only models fields needed by guarded debug paths.
+    char field_0 = 0;          // +0x00: visible/active flag
+    char _pad1 = 0;            // +0x01
+    wchar_t field_2[24] = {};  // +0x02: text buffer ptr target in IDA (Hud+2 passed to 0x4BA2C0); size approx
+    unsigned char _pad_ida_32[0x44 - 0x32] = {}; // +0x32..0x43
+    int field_44 = 0;          // +0x44
+    int field_48 = 0;          // +0x48
+    unsigned char _pad_ida_4c[0x60 - 0x4C] = {}; // +0x4C..0x5F, reserve
+
     // RE debug HUD text buffer, rendered by main.cpp software overlay when gbh text path is unavailable.
     static const int kDebugHudLines = 4;
     static const int kDebugHudLineLen = 128;
@@ -13,12 +23,14 @@ class Hud{
     void ClearDebugLines();
     void AddDebugLine(const char* text);
 
+    Hud(); // IDA 0x4CAC60 - RE minimal init
+
     // 0x004219F0
     int ResetMessage(void);
     // 0x004C6940
     int ComputeTextWidth(void);
-    // 0x004C6960
-    int SetMessageText(void);
+    // 0x004C6960 - RE: takes wide string; IDA decompile shows retaddr artifact but semantically copies message text.
+    int SetMessageText(const wchar_t* text);
     // 0x004C69A0
     int TickMessage(void);
     // 0x004C6D90
@@ -45,6 +57,8 @@ class Hud{
     int SetSpeedText_Wrapper(void);
     // 0x004CAC30
     int UpdateWrapper(void);
+    // 0x004CAB50 IDA Hud::UpdateAll (guarded partial)
+    int UpdateAll(void);
 
 
 // ==== импорт имён из gm ====

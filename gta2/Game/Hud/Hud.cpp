@@ -5,6 +5,7 @@
 #include "../../Engine/Style/Style.h"
 #include "../../Engine/Style/StyleTileLoader.h"
 #include "../../Engine/TextureManager/TextureManager.h"
+#include "../../Engine/MapRelatedStruct/MapRelatedStruct.h"
 #include "../Game/Game.h"
 #include "../Player/Player.h"
 #include "../CameraOrPhysics/CameraOrPhysics.h"
@@ -16,6 +17,15 @@
 extern CameraOrPhysics* gCameraOrPhysics_5E3CC4;
 
 Hud* gHud;
+
+Hud::Hud() {
+    // RE minimal subset of IDA Hud::Hud @ 0x4CAC60. Original is 0x2AF8 and initializes many subobjects.
+    // We only zero/init fields needed by guarded debug probes (DrawSprite_Wrapper ABI9 path).
+    field_0 = 0;
+    for (int i = 0; i < 24; ++i) field_2[i] = 0;
+    field_44 = 0;
+    field_48 = 0;
+}
 
 void Hud::ClearDebugLines() {
     debugLineCount = 0;
@@ -34,6 +44,8 @@ void Hud::AddDebugLine(const char* text) {
 
 
 int Hud::ResetMessage(void){
+        // IDA 0x4219F0: this->field_0 = 0;
+        field_0 = 0;
         return 0;
     }
 
@@ -42,16 +54,32 @@ int Hud::ResetMessage(void){
 
 
 int Hud::ComputeTextWidth(void){
-        // IDA 0x4C6940: if message active, width = Font::GetStringWidth(field_2, unk_672F28).
-        // RE has no confirmed HUD message struct fields; keep stubbed.
-        return 0;
+        // IDA 0x4C6940: if (field_0) field_44 = Font::GetStringWidth(field_2, unk_672F28)
+        // RE: unk_672F28 not wired; use style 1 as guarded fallback.
+        if (field_0) {
+            extern Font* gFont;
+            if (gFont) {
+                field_44 = (int)gFont->GetStringWidth(field_2, (unsigned short)1);
+            }
+        }
+        return field_44;
     }
 
 
     // 0x004C6960
 
 
-int Hud::SetMessageText(void){
+int Hud::SetMessageText(const wchar_t* text){
+        // IDA 0x4C6960 (decompile artifact on retaddr): sets field_0=120, copies message into field_2,
+        // ConvertWordsToBig, ComputeTextWidth, field_48=-17. Guarded RE implementation.
+        if (!text) { field_0 = 0; return 0; }
+        field_0 = 120;
+        wcsncpy(field_2, text, 23);
+        field_2[23] = 0;
+        extern Text* gText;
+        if (gText) gText->ConvertWordsToBig(field_2);
+        ComputeTextWidth();
+        field_48 = -17;
         return 0;
     }
 
@@ -60,7 +88,18 @@ int Hud::SetMessageText(void){
 
 
 int Hud::TickMessage(void){
-        return 0;
+        // IDA 0x4C69A0: if active, decrement; >0x50 ++field_48; <0x28 --field_48.
+        unsigned char result = (unsigned char)field_0;
+        if (field_0) {
+            result = (unsigned char)(field_0 - 1);
+            field_0 = (char)result;
+            if (result <= 0x50u) {
+                if (result < 0x28u) --field_48;
+            } else {
+                ++field_48;
+            }
+        }
+        return (int)result;
     }
 
 
@@ -117,14 +156,45 @@ int Hud::GetSpriteWidth(void){
 
 int Hud::DrawSprite_Wrapper(void){
         // IDA 0x4C94F0: draws HUD sprite/text elements, including sub_4BA2C0 @ 0x4BA2C0 call.
-        // RE original body is stubbed; keep behavior safe: only a debug-only BA2C0 ABI9 probe
-        // under GTA2_TEXT_GBH=1. This is callsite-placement debug, NOT full DrawSprite_Wrapper port
-        // and NOT retail per-callstack proof.
+        // RE: minimal guarded probe using real gHud instance/IDA-confirmed fields (field_0/2/44/48).
+        // NOT full DrawSprite_Wrapper port, NOT original Radar world->screen/callsite proof.
         if (std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1') {
-            // Debug-only faithful ABI9 tail-shape/callsite placement modeled on sub_4BA2C0 @ 0x4BA2C0.
-            // NOT original callsite/callstack proof: RE Hud layout incompatible with IDA field_0/2/44/48,
-            // and no verified Radar object/world->screen path at this callsite.
-            DrawGTATextRaw_A2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
+            Hud* hud = gHud ? gHud : this;
+            if (hud && hud->field_0) {
+                // IDA passes this->field_2 (wchar*) and screen coords derived via Radar/EncodePositionValue.
+                // RE does not have original Radar path here; use field_44/48 as debug-only screen hints if sane.
+                int sx = (hud->field_44 > 0 && hud->field_44 < 4096) ? (640 - hud->field_44) / 2 : 8;
+                int sy = (hud->field_48 > 0 && hud->field_48 < 4096) ? hud->field_48 : 164;
+                wchar_t* txt = hud->field_2[0] ? hud->field_2 : (wchar_t*)L"HUD TEXT BRIDGE OK";
+                // IDA 0x4C94F0/0x4BA2C0 shape: pass stack S202 objects with EncodePositionValue (val<<14).
+                // Bridge applies Radar formula (radarScale*field0)>>14 when scale is readable from camera +0xA4.
+                // Debug-only, GTA2_TEXT_GBH=1 gated; NOT original caller/callsite/callstack proof.
+                S202 dbgA2 = {};
+                S202 dbgA3 = {};
+                const char* encEnv = std::getenv("GTA2_TEXT_GBH_A2C0_ENCODED");
+                if (encEnv && encEnv[0] == '1') {
+                    // Debug-only probe: EncodePositionValue-shaped input to exercise radar-formula bridge.
+                    // NOT original callsite/callstack proof; scale semantics not fully confirmed.
+                    dbgA2.EncodePositionValue(sx);
+                    dbgA3.EncodePositionValue(sy);
+                } else {
+                    dbgA2.field_0 = sx;
+                    dbgA3.field_0 = sy;
+                }
+                DrawGTATextRaw_A2C0(txt, (int)(uintptr_t)&dbgA2, (void*)&dbgA3, (unsigned short)0);
+            } else {
+                S202 dbgA2 = {};
+                S202 dbgA3 = {};
+                const char* encEnv = std::getenv("GTA2_TEXT_GBH_A2C0_ENCODED");
+                if (encEnv && encEnv[0] == '1') {
+                    dbgA2.EncodePositionValue(8);
+                    dbgA3.EncodePositionValue(164);
+                } else {
+                    dbgA2.field_0 = 8;
+                    dbgA3.field_0 = 164;
+                }
+                DrawGTATextRaw_A2C0((wchar_t*)L"HUD TEXT BRIDGE OK", (int)(uintptr_t)&dbgA2, (void*)&dbgA3, (unsigned short)0);
+            }
         }
         return 0;
     }
@@ -271,5 +341,16 @@ int Hud::SetSpeedText_Wrapper(void){
 
 
 int Hud::UpdateWrapper(void){
+        return 0;
+    }
+
+    // 0x004CAB50
+int Hud::UpdateAll(void){
+        // IDA 0x4CAB50 Hud::UpdateAll: AnimatePlayerStats, S86_5::Update, DebugInfo::ShowPlayerPosition,
+        // S86_4::Update, TickMessage, HudText::DecrementTimer, S86_8::Update, HudBrief::Tick,
+        // GarageInfo::UpdateCarGenerators, S86_7::RemoveExpired, HudArrow::UpdateAll,
+        // HudMessage::DicrementTimeToShow, HudText2::DecrementTimer.
+        // RE: most HUD subsystems are stubs/unconfirmed; only call safe guarded message tick here.
+        TickMessage();
         return 0;
     }

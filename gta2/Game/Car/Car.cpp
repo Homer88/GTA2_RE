@@ -2,6 +2,7 @@
 //реализация классов с машинами
 #include "../Player/Player.h"
 #include "../Ped/Ped.h" 
+#include "../Hud/Hud.h"
 
 #include "../../Engine/Object/Object.h"
 #include "../../Engine/Text/Text.h"
@@ -275,4 +276,37 @@ void*  Car::GetInfoByTypeCar()
 {
     strcpy(gKeyBuffer, ("car%d%c%c", this->CarType, 0, 0));
     return gText->Bsearch((wchar_t*)gKeyBuffer);
+}
+
+// 0x00423590 - guarded RE impl. IDA: checks pPed->isPlayer (+0x15C), Player::GetCurrentPlayer,
+// Car::GetInfoByTypeCar, Hud::SetMessageText(gHud,...). RE layout differs; use RE field names only.
+void Car::ShowCarInfo(Ped* pPed) {
+    if (!pPed) return;
+    Player* isPlayer = pPed->isPlayer;
+    if (!isPlayer) return;
+    if (!isPlayer->GetCurrentPlayer()) return;
+    wchar_t* info = (wchar_t*)GetInfoByTypeCar();
+    extern Hud* gHud;
+    if (gHud && info) gHud->SetMessageText(info);
+}
+
+// 0x004235D0 - guarded partial RE impl. IDA: Driver->isPlayer, occupation!=EMPTY => ResetMessage+RestoreOnFootWeapons;
+// if this->Player SetAttackChanged; SetDriver(0); SetHornDefault. RE Car has no confirmed Player@+0x58/SetDriver.
+void Car::OnPlayerExit() {
+    Ped* driver = this->Driver;
+    if (!driver) return;
+    Player* isPlayer = driver->isPlayer;
+    if (isPlayer) {
+        if (driver->GetOccupation() != (int)EMPTY) {
+            if (isPlayer->GetCurrentPlayer()) {
+                extern Hud* gHud;
+                if (gHud) gHud->ResetMessage();
+            }
+            isPlayer->RestoreOnFootWeapons();
+        }
+        // IDA: if (this->Player) Player::SetAttackChanged(Player). RE Car has no confirmed Player field; skipped.
+    }
+    // IDA: Car::SetDriver(this,0); SetHornDefault(this)
+    // SetDriver not present in RE; do not null driver blindly without confirmed ownership.
+    SetHornDefault();
 }

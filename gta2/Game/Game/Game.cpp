@@ -761,7 +761,7 @@ int Game::GameTick(void){
         if (!gSkipPolice && gPolice) gPolice->Update();
         if (!gSkipParticles && gParticles) gParticles->Update();
         if (gTileAnim) gTileAnim->UpdateScripts();
-        if (gHud) gHud->UpdateWrapper();
+        if (gHud) gHud->UpdateAll(); // IDA 0x45C34C GameTick -> Hud::UpdateAll
         if (gGeneral) gGeneral->Update();
         if (gDoor) gDoor->Update();
         if (gTangoMain) gTangoMain->UpdateTango();
