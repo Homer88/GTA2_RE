@@ -56,31 +56,35 @@ class Style{
 
         void InitSpecArray();
         void Load(char* FileName);
+    void LoadFileSTY(char* fileName); // RE stub
     // 0x00420200
-    int CarExist(void);
+    bool CarExist(unsigned char id); // IDA 0x420200
     // 0x00420220
-    int getSpriteWidth(void);
+    unsigned char getSpriteWidth(unsigned short a2); // IDA 0x420220
+    bool GetSpriteColors(unsigned short a2, unsigned int* a3, unsigned int* a4); // IDA 0x420230, guarded
     // 0x00432850
-    int GetNumberOfCars(void);
+    unsigned char GetNumberOfCars(); // IDA 0x432850
     // 0x00432860 void __thiscall
-    void SetXY(int arg0,int arg1);  // (gm) старый: SetTwoFields -> SetXY
+    void SetXY(int arg0,int arg1);  // RE stub; IDA 0x432860 is Point2D::SetXY, not Style
     // 0x00462FB0 undefined4 __thiscall
-    int IsMapTileSpecial(int param_1,unsigned int param_2);  // (gm) старый: IsSlotAttrFour -> IsMapTileSpecial
+    bool IsMapTileSpecial(unsigned short a2); // IDA 0x462FB0
+    bool IsPathStateFive(unsigned short a2); // IDA 0x491F80
+    bool is_tile_road_special(unsigned short a2); // IDA 0x42A810
     // 0x00462FD0
-    int StyleGetSlotAttr(void);
+    int StyleGetSlotAttr(unsigned short index); // IDA 0x462FD0
     // 0x00463020 byte __thiscall
-    unsigned char IsPointInRect(unsigned char param_1,unsigned char param_2);  // (gm) : IsInsideBounds -> IsPointInRect
-
+    bool IsPointInRect(unsigned char a2, unsigned char a3); // IDA 0x463020 (layout-dependent, guarded)
+    bool IsTileBlockedPlayer(unsigned short a2); // IDA 0x49E540
+    bool IsTileOneWay(unsigned short a2); // IDA 0x49E570
     // 0x004539D0 byte __thiscall
     // (gm) old: Font::GetRemapColour -> Style::GetRemapColour (wrapper over StyleGetRemapColour)
     unsigned char GetRemapColour(unsigned short param_1, unsigned short param_2);
-    void LoadFileSTY(char* fileName);
     // 0x004B9F20
     int StyleGetSpriteCount(void);
     // 0x004BF1F0
-    int getCarModelById(void);
+    int getCarModelById(unsigned char carType); // IDA 0x4BF1F0
     // 0x004BF210
-    int GetCarModel(void);
+    int GetCarModel(unsigned char a2); // IDA 0x4BF210
     // 0x004BF2A0
     unsigned short GetBaseIndex(int sprite_type, short spriteId); // IDA 0x4BF2A0
     // 0x004BF330
@@ -88,11 +92,11 @@ class Style{
     // 0x004BF3A0
     short GetPaletteByIndex(int a2); // IDA 0x4BF3A0
     // 0x004BF430
-    short get_global_palette_id(int palette_type, short palette_id); // IDA 0x4BF430
+    unsigned short get_global_palette_id(int palette_type, short palette_id); // IDA 0x4BF430
     // 0x004BF4E0
-    int GetColourBank(short a2); // IDA 0x4BF4E0 - returns pointer in IDA; int for now
+    unsigned int GetColourBank(unsigned short a2); // IDA 0x4BF4E0
     // 0x004BF530
-    short GetPhysPalette(unsigned short a2); // IDA 0x4BF530
+    unsigned short GetPhysPalette(unsigned short a2); // IDA 0x4BF530
     // 0x004BF550
     short GetSpriteID(unsigned short a2, short a3); // IDA 0x4BF550
     // 0x004BF570
@@ -115,9 +119,9 @@ class Style{
     // 0x004BF740
     unsigned short GetPallitrePal(); // IDA 0x4BF740
     // 0x004BF750
-    int get_obji_by_idx(void);
+    int get_obji_by_idx(unsigned short a2); // IDA 0x4BF750
     // 0x004BF770
-    int ChangeTileByIdx(void);
+    void ChangeTileByIdx(unsigned short a2, short a3); // IDA 0x4BF770
     // 0x004BF7F0
     int StyleInitSpriteTable(void);
     // 0x004BF840 void __thiscall
@@ -144,6 +148,12 @@ class Style{
     int read_ppal_records_REAL(void);
     // 0x004BFB80
     int read_palx_records_REAL(void);
+    // 0x004BFBE0
+    int read_obji_records_REAL(void); // IDA 0x4BFBE0
+    // 0x004BFC60
+    int read_sprx_records_REAL(void); // IDA 0x4BFC60
+    // 0x004BFDD0
+    int read_fonb_chunk_REAL(void); // IDA 0x4BFDD0
     // 0x004BFCC0
     int SetFontStyles(void);
     // RE debug-only font style state, modeled after SetFontStyles @ 0x4BFCC0.
@@ -163,42 +173,43 @@ class Style{
     // 0x004BFF20
     int read_palb_chunk_REAL(void);
     // 0x004BFFE0
-    int isCarRecyclable(void);
+    bool isCarRecyclable(unsigned char carModel); // IDA 0x4BFFE0
     // 0x004C0010
     int read_recy_chunk_REAL_(void);
     // 0x004C00A0
     int read_spec_records_REAL(void);
     // 0x004C0100
-    int StyleFixupSprites(void);
+    int StyleFixupSprites(void); // IDA 0x4C0100
     // 0x004C0130
-    int Unload(void);
+    void Unload(); // IDA 0x4C0130
     // 0x004C0580
     int read_cari_records_REAL(void);
     // 0x004C05B0
     int parse_chunk(void);
     // 0x004C2EB0
-    int GetTileArray(void);
+    int GetTileArray(unsigned short a2); // IDA 0x4C2EB0
     // 0x004C2EE0
-    int has_tiles(void);
+    bool has_tiles(); // IDA 0x4C2EE0
     // 0x004C6C90
     int GetSprite(unsigned short idx); // IDA 0x4BF280
-    int GetSpriteFlag(void);
+    int GetSpriteData(unsigned short a2, unsigned char a3); // IDA 0x4BF230
+    unsigned char GetSpriteFlag(unsigned short a2); // IDA 0x4C6C90
+    unsigned int GetSpriteCount() const; // IDA 0x4B9F20
 
 
 // ==== импорт имён из gm ====
     // 6 функций
-    // 0x004BF230: Style::GetSpriteData
-    void GetSpriteData();
+    // 0x004BF230: Style::GetSpriteData (declared above)
     // 0x004BF690: Style::IsTileRemapped
-    void IsTileRemapped();
-    // 0x004BF6B0: Style::GetTileById
-    void GetTileById();
+    bool IsTileRemapped(unsigned short a2); // IDA 0x4BF690
+    // 0x004BF6B0: Style::get_tile_by_id
+    unsigned short GetTileById(unsigned short a2); // IDA 0x4BF6B0
     // 0x004BF6D0: Style::FindFreeTileIndex
-    void FindFreeTileIndex();
+    short FindFreeTileIndex(); // IDA 0x4BF6D0
     // 0x004C0380: Style::CopyBlock
-    void CopyBlock();
+    void CopyBlock(); // IDA signature differs; RE keeps stub
     // 0x004C23D0: Style::GetCharData
-    void GetCharData();
+    unsigned short GetCharData(short a1); // IDA 0x4C23D0: returns remap colour16 for char code
 };
 #endif // !__STYLE_H_
 extern Style* gStyle;

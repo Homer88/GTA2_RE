@@ -42,6 +42,9 @@ void StyleTiles_Unload() {
     FreeChunk(gStyleTiles.fonb, gStyleTiles.fonbBytes);
     FreeChunk(gStyleTiles.cari, gStyleTiles.cariBytes);
     FreeChunk(gStyleTiles.obji, gStyleTiles.objiBytes);
+    FreeChunk(gStyleTiles.recy, gStyleTiles.recyBytes);
+    FreeChunk(gStyleTiles.dels, gStyleTiles.delsBytes);
+    FreeChunk(gStyleTiles.delx, gStyleTiles.delxBytes);
     gStyleTiles.tile = 0;
     gStyleTiles.ppal = 0;
     gStyleTiles.tileBytes = 0;
@@ -145,7 +148,7 @@ bool StyleTiles_Load(const char* styPath) {
     unsigned short ver = (unsigned short)(hdr[4] | (hdr[5] << 8));
     if (ver != 700) { fclose(f); return false; }
 
-    std::vector<unsigned char> tileTmp, ppalTmp, palxTmp, specTmp, sprxTmp, sprgTmp, sprbTmp, palbTmp, fonbTmp, cariTmp, objiTmp;
+    std::vector<unsigned char> tileTmp, ppalTmp, palxTmp, specTmp, sprxTmp, sprgTmp, sprbTmp, palbTmp, fonbTmp, cariTmp, objiTmp, recyTmp, delsTmp, delxTmp;
     for (;;) {
         unsigned char ch[8];
         if (fread(ch, 1, 8, f) != 8) break;
@@ -166,6 +169,9 @@ bool StyleTiles_Load(const char* styPath) {
         else if (memcmp(tag, "FONB", 4) == 0) { if (!readVec(fonbTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "CARI", 4) == 0) { if (!readVec(cariTmp)) { fclose(f); return false; } }
         else if (memcmp(tag, "OBJI", 4) == 0) { if (!readVec(objiTmp)) { fclose(f); return false; } }
+        else if (memcmp(tag, "RECY", 4) == 0) { if (!readVec(recyTmp)) { fclose(f); return false; } }
+        else if (memcmp(tag, "DELS", 4) == 0) { if (!readVec(delsTmp)) { fclose(f); return false; } }
+        else if (memcmp(tag, "DELX", 4) == 0) { if (!readVec(delxTmp)) { fclose(f); return false; } }
         else { if (fseek(f, (long)sz, SEEK_CUR) != 0) { fclose(f); return false; } }
         (void)payload;
     }
@@ -202,6 +208,9 @@ bool StyleTiles_Load(const char* styPath) {
     copyChunk(gStyleTiles.fonb, gStyleTiles.fonbBytes, fonbTmp);
     copyChunk(gStyleTiles.cari, gStyleTiles.cariBytes, cariTmp);
     copyChunk(gStyleTiles.obji, gStyleTiles.objiBytes, objiTmp);
+    copyChunk(gStyleTiles.recy, gStyleTiles.recyBytes, recyTmp);
+    copyChunk(gStyleTiles.dels, gStyleTiles.delsBytes, delsTmp);
+    copyChunk(gStyleTiles.delx, gStyleTiles.delxBytes, delxTmp);
 
     // IDA Style::StyleFixupSprites: if sprx+sprg loaded, sprx[i].ptr += sprgBase.
     // SPRX entry is 8 bytes: u32 pixelOffsetInSPRG, u8 w, u8 h, u8 pad, u8 pad.

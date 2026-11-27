@@ -23,6 +23,9 @@ struct StyleTileAssets {
     unsigned char* fonb = nullptr; unsigned int fonbBytes = 0;
     unsigned char* cari = nullptr; unsigned int cariBytes = 0;
     unsigned char* obji = nullptr; unsigned int objiBytes = 0;
+    unsigned char* recy = nullptr; unsigned int recyBytes = 0;
+    unsigned char* dels = nullptr; unsigned int delsBytes = 0;
+    unsigned char* delx = nullptr; unsigned int delxBytes = 0;
     bool loaded;
 };
 

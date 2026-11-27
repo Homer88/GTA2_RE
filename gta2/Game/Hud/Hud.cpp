@@ -194,7 +194,8 @@ int Hud::DrawUI(void){
             // Not a full original callsite port (no Radar world->screen), not retail per-callstack proof.
             const char* rawProbe = std::getenv("GTA2_TEXT_GBH_PROBE_BA2C0_RAW");
             if (rawProbe && rawProbe[0] == '1') {
-                DrawGTATextRaw_BA2C0_DebugRaw((wchar_t*)L"HUD TEXT BRIDGE OK", 8, (void*)gCameraOrPhysics_5E3CC4, (unsigned short)0);
+                // No verified Radar object in RE; pass nullptr so probe doesn't mislabel camera as radar.
+                DrawGTATextRaw_BA2C0_DebugRaw((wchar_t*)L"HUD TEXT BRIDGE OK", 8, nullptr, (unsigned short)0);
             } else {
                 DrawGTATextRaw_BA2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
             }

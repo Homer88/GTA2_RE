@@ -1306,9 +1306,10 @@ void DrawGTATextRaw_BA2C0_DebugRaw(wchar_t* a1, int a2, void* a3_radarLike, unsi
             int camA5raw = camForA5->GetBA2C0A5Value(camA5ok);
             if (camA5ok && camA5raw != 0) { a5_rt = camA5raw; a5_from_runtime = true; }
         }
-        if (a3_radarLike) {
-            // Best-effort raw reads: treat a3_radarLike as Radar-like with field_0 at +0.
-            // Original also uses second coord arg; RE layout uncertain, keep guarded fallback.
+        if (a3_radarLike && a3_radarLike != (void*)camForA5) {
+            // Debug-only best-effort: treat a3_radarLike as Radar-like with field_0 at +0.
+            // Original BA2C0 uses two coord inputs and specific Radar/PublicTransport objects;
+            // RE layout/object identity not verified here. Do not count as call-accurate proof.
             int radarField0 = *(int*)a3_radarLike;
             int base = a5_from_runtime ? a5_rt : a2;
             Radar_WorldCoordinateToScreenCoord_Raw(radarField0, base, &sx);
