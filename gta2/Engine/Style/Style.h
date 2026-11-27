@@ -112,9 +112,16 @@ class Style{
     void* m_idaViewOwned = nullptr; // owned adapter buffer, freed by Style
     unsigned int m_idaViewSprxBytes = 0;
     unsigned int m_idaViewFonbBytes = 0;
+    // Debug-only FileMgr load ownership tracking (guarded path). Not IDA layout.
+    void* m_fileMgrOwnedPtrs[64] = {};
+    unsigned char m_fileMgrOwnedKind[64] = {}; // 0=none,1=malloc/free
+    int m_fileMgrOwnedCount = 0;
+    void TrackFileMgrOwned(void* p, unsigned char kind);
+    void ClearFileMgrOwnedDebug();
     void SetIdaView(StyleIdaView* v) { m_idaView = v; }
     StyleIdaView* GetIdaView() const { return m_idaView; }
     bool BindIdaViewFromStyleTilesDebug(); // guarded, debug-only
+    bool EnsureIdaViewForFileMgrDebug(); // guarded, debug-only; allocates empty idaView for FileMgr path
     void ClearIdaViewDebug();
     // 0x004BF740
     unsigned short GetPallitrePal(); // IDA 0x4BF740
@@ -125,35 +132,37 @@ class Style{
     // 0x004BF7F0
     int StyleInitSpriteTable(void);
     // 0x004BF840 void __thiscall
-    void BuildSpriteBuffer(int param_1,unsigned int param_2);
+    void BuildSpriteBuffer(int param_1,unsigned int param_2); // legacy stub signature
+    int BuildSpriteBuffer(unsigned int sizeBytes); // IDA 0x4BF840 guarded debug helper
     // 0x004BF900
     int StyleApplySpriteOffset(void);
     // 0x004BF950
     int StyleAddSpriteOffset(void);
     // 0x004BF980 void __fastcall
-    void BuildSpriteLookup(int param_1);
+    void BuildSpriteLookup(int param_1); // legacy stub signature
+    int BuildSpriteLookup(); // IDA 0x4BF980 guarded debug helper
     // 0x004BFA60
-    int read_delx_records_REAL(void);
+    int read_delx_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFAB0
-    int read_dels_records_REAL(void);
+    int read_dels_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFAD0
-    int read_tile_chunk_REAL(void);
+    int read_tile_chunk_REAL(unsigned int dwBytes = 0);
     // 0x004BFB00
-    int read_ovly_records_REAL_(void);
+    int read_ovly_records_REAL_(unsigned int dwBytes = 0);
     // 0x004BFB10
-    int read_psxt_records_REAL(void);
+    int read_psxt_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFB20
-    int read_sprg_records_REAL(void);
+    int read_sprg_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFB50
-    int read_ppal_records_REAL(void);
+    int read_ppal_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFB80
-    int read_palx_records_REAL(void);
+    int read_palx_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFBE0
-    int read_obji_records_REAL(void); // IDA 0x4BFBE0
+    int read_obji_records_REAL(unsigned int dwBytes = 0); // IDA 0x4BFBE0
     // 0x004BFC60
-    int read_sprx_records_REAL(void); // IDA 0x4BFC60
+    int read_sprx_records_REAL(unsigned int dwBytes = 0); // IDA 0x4BFC60
     // 0x004BFDD0
-    int read_fonb_chunk_REAL(void); // IDA 0x4BFDD0
+    int read_fonb_chunk_REAL(unsigned int dwBytes = 0); // IDA 0x4BFDD0
     // 0x004BFCC0
     int SetFontStyles(void);
     // RE debug-only font style state, modeled after SetFontStyles @ 0x4BFCC0.
@@ -169,23 +178,29 @@ class Style{
     void UpdateDebugFontStylesFromFonb();
     const DebugFontStyles& GetDebugFontStyles() const { return m_debugFontStyles; }
     // 0x004BFE70
-    int read_sprb_records_REAL(void);
+    int read_sprb_records_REAL(unsigned int dwBytes = 0);
     // 0x004BFF20
-    int read_palb_chunk_REAL(void);
+    int read_palb_chunk_REAL(unsigned int dwBytes = 0);
     // 0x004BFFE0
     bool isCarRecyclable(unsigned char carModel); // IDA 0x4BFFE0
     // 0x004C0010
-    int read_recy_chunk_REAL_(void);
+    int read_recy_chunk_REAL_(unsigned int dwBytes = 0);
+    // 0x004C0040
+    int LoadIndexMap(int a2); // IDA 0x4C0040
     // 0x004C00A0
-    int read_spec_records_REAL(void);
+    int read_spec_records_REAL(unsigned int dwBytes = 0);
     // 0x004C0100
     int StyleFixupSprites(void); // IDA 0x4C0100
     // 0x004C0130
     void Unload(); // IDA 0x4C0130
+    // 0x004C03F0
+    void InitS284Debug(void* p); // IDA S371 shape, guarded debug helper
+    // 0x004C0410
+    int LoadCariRecords(unsigned int dwBytes); // IDA 0x4C0410 guarded debug helper
     // 0x004C0580
-    int read_cari_records_REAL(void);
+    int read_cari_records_REAL(unsigned int dwBytes = 0);
     // 0x004C05B0
-    int parse_chunk(void);
+    int parse_chunk(const char* tag, unsigned int size);
     // 0x004C2EB0
     int GetTileArray(unsigned short a2); // IDA 0x4C2EB0
     // 0x004C2EE0

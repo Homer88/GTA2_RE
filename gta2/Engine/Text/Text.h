@@ -89,6 +89,9 @@ void DrawGTATextRaw_7280_Debug(wchar_t* a1, int x, int y, unsigned short a4);
 // a5_4(var_8==2)/a5_8==0/a5_12==0,0 and runtime-derived a5 from gCameraOrPhysics+0xA8.
 // Not a full original callsite port (no Radar world->screen), not retail per-callstack proof.
 void DrawGTATextRaw_BA2C0_Debug(wchar_t* a1, int x, int y, unsigned short a4);
+// Debug-only name-aligned wrapper for IDA sub_4BA2C0/A2C0 tail-shape probe.
+// No verified Radar object arg in RE; NOT original callsite/callstack proof.
+void DrawGTATextRaw_A2C0_Debug(wchar_t* a1, int x, int y, unsigned short a4);
 // Debug-only closer raw port attempt. Gated+SEH; RE layout uncertain. Not proof.
 void DrawGTATextRaw_BA2C0_DebugRaw(wchar_t* a1, int a2, void* a3_radarLike, unsigned short a4);
 

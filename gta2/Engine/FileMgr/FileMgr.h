@@ -19,6 +19,18 @@ public:
 	FILE* WriteReadFile(const char* filename, const char* mode);
 	void LoadFronSprites();
 	int  ReadToken(FILE* f, WORD* out);
+
+	// IDA-compatible guarded wrappers over a single active FILE* stream.
+	// Original uses global gFileStream/unk_5D25F4; we keep a RE-local static stream.
+	static FILE* FileOpenStatic(const char* filename, const char* mode = "rb");
+	static int CloseFile();
+	static int Seek(int offset); // IDA: Seek(this,size*) reads *size and fseek(...,1)
+	static int SeekPtr(const void* sizePtr);
+	static size_t Read(void* buffer, size_t* sizePtr);
+	static size_t ReadSize(void* buffer, size_t size);
+	static bool IsOpen();
+	static FILE* GetStream();
+	static const char* GetPath();
 };
 
 

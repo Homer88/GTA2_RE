@@ -121,10 +121,10 @@ int Hud::DrawSprite_Wrapper(void){
         // under GTA2_TEXT_GBH=1. This is callsite-placement debug, NOT full DrawSprite_Wrapper port
         // and NOT retail per-callstack proof.
         if (std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1') {
-            // Debug-only faithful ABI9 tail-shape/callsite placement. Raw BA2C0 port attempt remains
-            // gated in code but is not used by default: RE Radar/CameraOrPhysics layouts are unverified.
-            // NOTE: RE Hud layout starts with debugLines/debugLineCount; incompatible with IDA Hud field_0/2/44/48.
-            DrawGTATextRaw_BA2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
+            // Debug-only faithful ABI9 tail-shape/callsite placement modeled on sub_4BA2C0 @ 0x4BA2C0.
+            // NOT original callsite/callstack proof: RE Hud layout incompatible with IDA field_0/2/44/48,
+            // and no verified Radar object/world->screen path at this callsite.
+            DrawGTATextRaw_A2C0_Debug((wchar_t*)L"HUD TEXT BRIDGE OK", 8, 164, (unsigned short)0);
         }
         return 0;
     }

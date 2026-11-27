@@ -14,6 +14,7 @@
 #endif
 #include "../Style/Style.h"
 #include "../../Game/CameraOrPhysics/CameraOrPhysics.h"
+#include "../../Game/Radar/Radar.h"
 extern CameraOrPhysics* gCameraOrPhysics;
 extern CameraOrPhysics* gCameraOrPhysics_5E3CC4;
 #include "../Style/StyleTileLoader.h"
@@ -1228,8 +1229,7 @@ static bool Radar_WorldCoordinateToScreenCoord_Raw(int radarField0, int a3BaseCa
     // IDA 0x401B60 Radar::WorldCoordinateToScreenCoord:
     // result = (this->field_0 * (__int64)a3->BaseCar[0].field) >> 14; S202::SetToNewVal(a2,result)
     if (!out) return false;
-    __int64 v = (__int64)radarField0 * (__int64)a3BaseCar0Field;
-    *out = (int)(v >> 14);
+    *out = Radar::WorldCoordinateToScreenCoord_Formula(radarField0, a3BaseCar0Field);
     return true;
 }
 
@@ -1325,4 +1325,12 @@ void DrawGTATextRaw_BA2C0_DebugRaw(wchar_t* a1, int a2, void* a3_radarLike, unsi
     Text_DebugCaptureAbi9BA2C0Shape((unsigned int)&var_8_a5_4_case0, abi9_a5_8, abi9_a5_12_s202, abi9_a5_12_f0, (unsigned int)a5_rt);
     DrawGTATextRaw(a1, sx, sy, a4, a5_rt,
                    (unsigned int)&var_8_a5_4_case0, abi9_a5_8, abi9_a5_12_s202, abi9_a5_12_f0);
+}
+
+void DrawGTATextRaw_A2C0_Debug(wchar_t* a1, int x, int y, unsigned short a4) {
+    // IDA 0x4BA2C0 signature is (a1,a2,a3=SpriteS1/PublicTransport-like). We don't have a verified
+    // RE Radar object/layout at the Hud callsite, so this wrapper keeps the original 4-arg HUD usage
+    // and routes through BA2C0-shaped debug capture. NOT original callsite/callstack proof.
+    Text_LogGbhReason("abi9-a2c0-debug-shape");
+    DrawGTATextRaw_BA2C0_Debug(a1, x, y, a4);
 }
