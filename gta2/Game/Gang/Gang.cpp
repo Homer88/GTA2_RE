@@ -50,8 +50,9 @@ int Gang::SetName(void){
     // 0x0045DD50
 
 
+// 0x0045DD50 IDA/BN Gang::GetVisibleGang: return Visible != 0. RE field-name impl.
 int Gang::GetVisibleGang(void){
-        return 0;
+        return this->Visible != 0;
     }
 
 

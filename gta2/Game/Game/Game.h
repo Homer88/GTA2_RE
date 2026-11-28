@@ -120,6 +120,9 @@ class Game{
     void IsSpriteVisibleToPlayer();
     // 0x0045BB50: Game::IsSpriteVisibleToAnyPlayer
     void IsSpriteVisibleToAnyPlayer();
+
+    // 0x004B7590 IDA/BN Game::IsDeadPlayer: return isDead != -1. RE field-name impl.
+    bool IsDeadPlayer();
 };
 extern Game* gGame;
 #endif // !__GAME_H_

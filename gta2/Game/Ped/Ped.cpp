@@ -95,16 +95,18 @@ void  Ped::SetHealth(unsigned short Health){
     // 0x004039B0
 
 
-int Ped::SetTargetCarDoorIndex(void){
-        return 0;
+// 0x004039B0 IDA/BN Ped::SetTargetCarDoorIndex: PositionZ1 = a2. RE field-name impl; RE signature kept for now.
+void Ped::SetTargetCarDoorIndex(int a2){
+        this->PositionZ1 = a2;
     }
 
 
     // 0x004039C0
 
 
+// 0x004039C0 IDA/BN Ped::GetFlags1: return PositionZ1. RE field-name impl.
 int Ped::GetFlags1(void){
-        return 0;
+        return this->PositionZ1;
     }
 
 
@@ -249,8 +251,9 @@ void Ped::SetVehicle(Car* car){
     // 0x00403B10
 
 
-int Ped::GetCurrentCar(void){
-        return 0;
+// 0x00403B10 IDA/BN Ped::GetCurrentCar: return VehiclePed. RE field-name impl.
+Car* Ped::GetCurrentCar(void){
+        return this->VehiclePed;
     }
 
 
@@ -283,11 +286,9 @@ int Ped::SetExitAnimationState(void){
     }
 
 
-    // 0x00403B60
-
-
+    // 0x00403B60 IDA/BN Ped::GetDeadPed: return State == 9 (PEDSTATE_DEAD). RE field-name impl uses StatusPed (RE GetCurrentState returns StatusPed).
 int Ped::GetDeadPed(void){
-        return 0;
+        return this->StatusPed == 9;
     }
 
 
@@ -555,8 +556,9 @@ int Ped::SetIdleAction(void){
     // 0x00433B40
 
 
-int Ped::Get_433B40(void){
-        return 0;
+// 0x00433B40 IDA/BN Ped::Get_433B40: return PositionX1 & 1. RE field-name impl.
+char Ped::Get_433B40(void){
+        return this->PositionX1 & 1;
     }
 
 
@@ -1744,8 +1746,9 @@ int Ped::SetupTrace(void){
     // 0x00482080
 
 
-int Ped::SetMoneyValue(void){
-        return 0;
+// 0x00482080 IDA/BN Ped::SetMoneyValue: PositionX1 &= 0xFBFFFFFF. RE field-name impl.
+void Ped::SetMoneyValue(void){
+        this->PositionX1 &= 0xFBFFFFFF;
     }
 
 
@@ -1760,8 +1763,9 @@ int Ped::SetZone(void){
     // 0x004A5040
 
 
-int Ped::IsTargetCarDoor(void){
-        return 0;
+// 0x004A5040 IDA/BN Ped::IsTargetCarDoor: return PositionZ1 != 1. RE field-name impl.
+bool Ped::IsTargetCarDoor(void){
+        return this->PositionZ1 != 1;
     }
 
 
@@ -1776,8 +1780,9 @@ int Ped::SetHealthFullPlayer(void){
     // 0x004A5060
 
 
-int Ped::SetStatusFlag(void){
-        return 0;
+// 0x004A5060 IDA/BN Ped::SetStatusFlag: PositionX1 |= 0x4000000u. RE field-name impl.
+void Ped::SetStatusFlag(void){
+        this->PositionX1 |= 0x4000000u;
     }
 
 

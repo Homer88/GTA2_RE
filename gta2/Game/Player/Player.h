@@ -82,11 +82,25 @@ class Player{
 
 		// IDA 0x41DC70: returns (char)this->CurrentPlayer. Guarded RE helper.
 		char GetCurrentPlayer(void);
+		// 0x0040E570 IDA/BN Player::IsCurrentPlayer: return CurrentPlayer == pPlayer->CurrentPlayer. RE field-name impl.
+		bool IsCurrentPlayer(Player* pPlayer);
 		// IDA 0x4212A0/0x4212B0: set AttackIsChanged to 1/2. Guarded RE helper; original writes DWORD over bool.
 		void SetAttackChanged(void);
 		void SetAttackIsChanged(void);
 		// IDA 0x4A5640: restores on-foot weapons. Guarded stub - full RE weapon state not confirmed.
 		char RestoreOnFootWeapons(void);
+		// IDA/BN 0x4A51C0 Player::AddCar: guarded no-op stub. RE Player car-slot layout not confirmed;
+		// original manages 3 car slots at +0x54/+0x58/+0x5C and may deactivate traffic car. Do not guess.
+		void AddCar(class Car* pCar);
+		// IDA/BN 0x4A5570 Player::GetCarWeapons: guarded no-op stub. RE Player weapon/turret layout not confirmed.
+		void GetCarWeapons(class Car* pCar);
+
+		// 0x0041D020 IDA/BN Player::GetPed: return MainPed. RE field-name impl.
+		class Ped* GetPed();
+		// 0x0045B0C0 IDA/BN Player::IsMainPedSet: return MainPed!=0. RE field-name impl.
+		bool IsMainPedSet();
+		// 0x00411860 IDA/BN Player::GetSoundHandle: return AudioManager/audioManager. RE field-name impl.
+		class AudioManager* GetSoundHandle();
 
 		
     int AddMoney(int amount);

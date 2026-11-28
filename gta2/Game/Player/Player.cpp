@@ -212,3 +212,35 @@ char Player::RestoreOnFootWeapons(void) {
 	// RE weapon/select state layout not fully confirmed; guarded no-op stub for caller compatibility.
 	return 0;
 }
+
+void Player::AddCar(Car* pCar) {
+	// IDA/BN 0x4A51C0: manages player car slots (+0x54/+0x58/+0x5C in IDA layout), may RemoveCar/
+	// DeactivateTrafficCar. RE Player layout not confirmed - guarded no-op to avoid corrupting state.
+	(void)pCar;
+}
+
+void Player::GetCarWeapons(Car* pCar) {
+	// IDA/BN 0x4A5570: scans turret pool (0xF..0x1B), fills weapon slots at +0x754 etc, may CycleWeapon.
+	// RE Player/weapon layout not confirmed - guarded no-op to avoid corrupting state.
+	(void)pCar;
+}
+
+// 0x0041D020 IDA/BN Player::GetPed: return MainPed. RE field-name impl.
+Ped* Player::GetPed() {
+    return this->MainPed;
+}
+
+// 0x0045B0C0 IDA/BN Player::IsMainPedSet: return MainPed!=0. RE field-name impl.
+bool Player::IsMainPedSet() {
+    return this->MainPed != 0;
+}
+
+// 0x00411860 IDA/BN Player::GetSoundHandle: return AudioManager field. RE has audioManager field.
+AudioManager* Player::GetSoundHandle() {
+    return this->audioManager;
+}
+
+// 0x0040E570 IDA/BN Player::IsCurrentPlayer: return CurrentPlayer == pPlayer->CurrentPlayer. RE field-name impl.
+bool Player::IsCurrentPlayer(Player* pPlayer) {
+	return this->CurrentPlayer == pPlayer->CurrentPlayer;
+}

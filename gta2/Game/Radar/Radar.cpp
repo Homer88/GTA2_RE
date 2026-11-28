@@ -48,6 +48,8 @@ S202* Radar::WorldCoordinateToScreenCoord(S202* out, void* a3) {
     // 0x004C3680
 
 
+// 0x004C3680 IDA/BN Radar::UpdateDeltaTime: DeltaTime += timeGetTime() - Time. RE field-name impl.
 int Radar::UpdateDeltaTime(void){
+        this->DeltaTime += (int)timeGetTime() - this->Time;
         return 0;
     }

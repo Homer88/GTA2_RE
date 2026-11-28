@@ -852,3 +852,7 @@ void Game::IsSpriteVisibleToPlayer() {
 }
 // 0x0045BB50: Game::IsSpriteVisibleToAnyPlayer
 void Game::IsSpriteVisibleToAnyPlayer(){}
+// 0x004B7590 IDA/BN Game::IsDeadPlayer: return isDead != -1. RE field-name impl.
+bool Game::IsDeadPlayer() {
+    return this->isDead != -1;
+}

@@ -1675,87 +1675,87 @@ int MapRelatedStruct::sub_462C60() {
         return 0;
 }
 
-// 0x00462CB0
+// 0x00462CB0 IDA/BN MapRelatedStruct::CalcFieldAddress: return field_334 + 22 * *(unsigned char*)(field_330 + a2). RE field-name impl, byte arithmetic.
 int MapRelatedStruct::sub_462CB0(unsigned short a2) {
-   // return (int)(field_334 + 22 * *(unsigned __int8*)(field_330 + a2));
-    return 0;
+    return (int)((uintptr_t)this->field_334 + 22 * (unsigned int)*(unsigned char*)((unsigned char*)this->field_330 + a2));
 }
 
-// 0x00462CE0
+// 0x00462CE0 IDA/BN MapRelatedStruct::SetMapField0: *(_WORD*)CalcFieldAddress(a2)=a3. RE field-name impl.
+// Warning: uses sub_462CB0 byte arithmetic; depends on field_330/field_334 layout.
 _WORD* MapRelatedStruct::sub_462CE0(unsigned short a2, __int16 a3) {
-   // _WORD* result = (_WORD*)sub_462CB0(a2);
-   // *result = a3;
-    return 0;//result;
+    _WORD* result = (_WORD*)this->sub_462CB0(a2);
+    *result = a3;
+    return result;
 }
 
-// 0x00462D00
+// 0x00462D00 IDA/BN MapRelatedStruct::SetMapField1: *(_WORD*)(CalcFieldAddress(a2)+2)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462D00(unsigned short a2, __int16 a3) {
-   // int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 2) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 2) = a3;
+    return result;
 }
 
-// 0x00462D20
+// 0x00462D20 IDA/BN MapRelatedStruct::SetMapField2: *(_WORD*)(CalcFieldAddress(a2)+4)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462D20(unsigned short a2, __int16 a3) {
-    //int result = sub_462CB0(a2);
-   // *(_WORD*)(result + 4) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 4) = a3;
+    return result;
 }
 
-// 0x00462D40
+// 0x00462D40 IDA/BN MapRelatedStruct::SetMapField3: *(_WORD*)(CalcFieldAddress(a2)+6)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462D40(unsigned short a2, __int16 a3) {
-    //int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 6) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 6) = a3;
+    return result;
 }
 
-// 0x00462D60
+// 0x00462D60 IDA/BN MapRelatedStruct::SetMapField4: *(_WORD*)(CalcFieldAddress(a2)+8)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462D60(unsigned short a2, __int16 a3) {
-    //int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 8) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 8) = a3;
+    return result;
 }
 
-// 0x00462D80
+// 0x00462D80 IDA/BN MapRelatedStruct::SetMapField5: *(_WORD*)(CalcFieldAddress(a2)+10)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462D80(unsigned short a2, __int16 a3) {
-   // int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 10) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 10) = a3;
+    return result;
 }
 
-// 0x00462DA0
+// 0x00462DA0 IDA/BN MapRelatedStruct::SetMapField6: *(_WORD*)(CalcFieldAddress(a2)+12)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462DA0(unsigned short a2, __int16 a3) {
-   // int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 12) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 12) = a3;
+    return result;
 }
 
-// 0x00462DC0
+// 0x00462DC0 IDA/BN MapRelatedStruct::SetMapField7: *(_WORD*)(CalcFieldAddress(a2)+14)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462DC0(unsigned short a2, __int16 a3) {
-    //int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 14) = a3;
-    return 0; //result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 14) = a3;
+    return result;
 }
 
-// 0x00462DE0
+// 0x00462DE0 IDA/BN MapRelatedStruct::SetMapField8: *(_WORD*)(CalcFieldAddress(a2)+16)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462DE0(unsigned short a2, __int16 a3) {
-    //int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 16) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 16) = a3;
+    return result;
 }
 
-// 0x00462E00
+// 0x00462E00 IDA/BN MapRelatedStruct::SetMapField9: *(_WORD*)(CalcFieldAddress(a2)+18)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462E00(unsigned short a2, __int16 a3) {
-   // int result = sub_462CB0(a2);
-   // *(_WORD*)(result + 18) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 18) = a3;
+    return result;
 }
 
-// 0x00462E20
+// 0x00462E20 IDA/BN MapRelatedStruct::SetMapField10: *(_WORD*)(CalcFieldAddress(a2)+20)=a3. RE field-name impl.
 int MapRelatedStruct::sub_462E20(unsigned short a2, __int16 a3) {
-    //int result = sub_462CB0(a2);
-    //*(_WORD*)(result + 20) = a3;
-    return 0;//result;
+    int result = this->sub_462CB0(a2);
+    *(_WORD*)(result + 20) = a3;
+    return result;
 }
 
 // 0x00462E40
@@ -1766,11 +1766,11 @@ char* MapRelatedStruct::sub_462E40(unsigned short a2) {
     return *(char**)((unsigned char*)this->count + 4 * a2 + 4);
 }
 
-// 0x00462E80
+// 0x00462E80 IDA/BN MapRelatedStruct::ConsumeFlag/sub_462E80: result=field_36E; field_36E=0; return result. RE field-name impl.
 char MapRelatedStruct::sub_462E80() {
-    //char result = field_36E;
-   // field_36E = 0;
-    return 0;//result;
+    char result = (char)this->field_36E;
+    this->field_36E = 0;
+    return result;
 }
 
 // 0x00462F50

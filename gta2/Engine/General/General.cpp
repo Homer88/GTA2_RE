@@ -7,8 +7,9 @@ General::General(){
     this->RandomNumber = 0;
 }
 
+// 0x0041CFE0 IDA/BN General::GetCycle: return Cycle. RE field-name impl.
 int General::GetCycle(void){
-        return 0;
+        return this->Cycle;
     }
 
 

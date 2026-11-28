@@ -124,6 +124,12 @@ public:
     _WORD* sub_47F230(__int16 a2, unsigned __int16 a3);
     unsigned __int8 loadScript(char* ScriptName);
     char sub_47F340(int a2, int a3);
+    // IDA/BN 0x47F340 MissionManager::CheckMissionTarget - guarded wrapper; sub_47F340 is stub (returns 0).
+    // Real IDA behavior uses FindCachedRef/StartMission/ContinueQueuedMissionLine and mutates mission state;
+    // RE layout/semantics not fully confirmed, so this remains non-faithful no-op for now.
+    char CheckMissionTarget(int a2, int a3);
+    // 0x00475A40 IDA/BN MissionManager::SetMissionStatus: field_C1E2D=a2. RE field-name impl.
+    void SetMissionStatus(char a2);
     char ActivateMissionTarget(int a2, int a3);
     int* UnregisterTarget(int a2);
     int ClearMissionLineFlags();

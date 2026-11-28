@@ -161,14 +161,19 @@ int Hud::DrawSprite_Wrapper(void){
         if (std::getenv("GTA2_TEXT_GBH") && std::getenv("GTA2_TEXT_GBH")[0] == '1') {
             Hud* hud = gHud ? gHud : this;
             if (hud && hud->field_0) {
-                // IDA passes this->field_2 (wchar*) and screen coords derived via Radar/EncodePositionValue.
-                // RE does not have original Radar path here; use field_44/48 as debug-only screen hints if sane.
+                // IDA 0x4C94F0 tail: EncodePositionValue((640-field_44)/2), EncodePositionValue(field_48-CharHeight/2),
+                // then Font::DrawGTATextRaw_A2C0(this->field_2, field_10, pPlayer). RE: debug-only approximation,
+                // guarded by GTA2_TEXT_GBH=1. NOT original caller/callsite/callstack/object proof.
+                int ch = 8;
+                extern Font* gFont;
+                if (gFont) {
+                    int got = gFont->GetCharHeight((unsigned short)0);
+                    if (got > 0) ch = got;
+                }
                 int sx = (hud->field_44 > 0 && hud->field_44 < 4096) ? (640 - hud->field_44) / 2 : 8;
-                int sy = (hud->field_48 > 0 && hud->field_48 < 4096) ? hud->field_48 : 164;
+                int syBase = (hud->field_48 > -4096 && hud->field_48 < 4096) ? hud->field_48 : 164;
+                int sy = syBase - ch / 2;
                 wchar_t* txt = hud->field_2[0] ? hud->field_2 : (wchar_t*)L"HUD TEXT BRIDGE OK";
-                // IDA 0x4C94F0/0x4BA2C0 shape: pass stack S202 objects with EncodePositionValue (val<<14).
-                // Bridge applies Radar formula (radarScale*field0)>>14 when scale is readable from camera +0xA4.
-                // Debug-only, GTA2_TEXT_GBH=1 gated; NOT original caller/callsite/callstack proof.
                 S202 dbgA2 = {};
                 S202 dbgA3 = {};
                 const char* encEnv = std::getenv("GTA2_TEXT_GBH_A2C0_ENCODED");
@@ -181,7 +186,7 @@ int Hud::DrawSprite_Wrapper(void){
                     dbgA2.field_0 = sx;
                     dbgA3.field_0 = sy;
                 }
-                DrawGTATextRaw_A2C0(txt, (int)(uintptr_t)&dbgA2, (void*)&dbgA3, (unsigned short)0);
+                DrawGTATextRaw_A2C0(txt, (int)(uintptr_t)&dbgA2, (void*)&dbgA3, (unsigned short)0, 0x4C94F0u);
             } else {
                 S202 dbgA2 = {};
                 S202 dbgA3 = {};
@@ -193,7 +198,7 @@ int Hud::DrawSprite_Wrapper(void){
                     dbgA2.field_0 = 8;
                     dbgA3.field_0 = 164;
                 }
-                DrawGTATextRaw_A2C0((wchar_t*)L"HUD TEXT BRIDGE OK", (int)(uintptr_t)&dbgA2, (void*)&dbgA3, (unsigned short)0);
+                DrawGTATextRaw_A2C0((wchar_t*)L"HUD TEXT BRIDGE OK", (int)(uintptr_t)&dbgA2, (void*)&dbgA3, (unsigned short)0, 0x4C94F0u);
             }
         }
         return 0;
@@ -354,3 +359,8 @@ int Hud::UpdateAll(void){
         TickMessage();
         return 0;
     }
+
+// 0x004C69C0 IDA Hud::Hud1: field_0=0. RE field-name impl.
+void Hud::Hud1() {
+    this->field_0 = 0;
+}

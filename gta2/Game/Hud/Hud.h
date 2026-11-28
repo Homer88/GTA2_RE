@@ -29,6 +29,8 @@ class Hud{
     int ResetMessage(void);
     // 0x004C6940
     int ComputeTextWidth(void);
+    // 0x004C69C0 IDA Hud::Hud1: field_0=0. RE field-name impl.
+    void Hud1();
     // 0x004C6960 - RE: takes wide string; IDA decompile shows retaddr artifact but semantically copies message text.
     int SetMessageText(const wchar_t* text);
     // 0x004C69A0

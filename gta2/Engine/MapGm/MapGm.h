@@ -129,6 +129,10 @@ public:
 	void SetFugitiveFactor(unsigned int value);
 	// 0x0045e5e0
 	unsigned int  GetFugitiveFactor();
+	// 0x0045E5E0 IDA/BN MapGm::Get_45E5E0: return FugitiveFactor. RE field-name impl.
+	int Get_45E5E0();
+	// 0x0045E490 IDA/BN MapGm::SetPlayerArea: playerArena = arg. RE field-name impl.
+	void SetPlayerArea(char playerArea);
 	// 0x0045e5f0/0x0045e600 — field15_0x438
 	void SetField15(short value) { field_438 = value; }
 	short GetField15() { return field_438; }
@@ -180,6 +184,9 @@ public:
 
 	// 0x0045ec70 — регистрация фрага игрока (зависит от Player/PlayerStats)
 	void RegisterKill(unsigned char id, unsigned char a3);
+
+	// 0x0045B420 IDA/BN MapGm::DefauntSpecialTokens: SpecialTokens=0. RE field-name impl.
+	void DefauntSpecialTokens();
 
 	// SpecialTokens
 	void SetSpecialTokensDefault();

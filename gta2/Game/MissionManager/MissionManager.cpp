@@ -977,6 +977,15 @@ char MissionManager::sub_47F340(int a2, int a3)
     return 0;//result;
 }
 
+char MissionManager::CheckMissionTarget(int a2, int a3)
+{
+    // Guarded no-op: IDA 0x47F340 semantics are mission-state mutating and depend on RE layout/parity.
+    // Callers should treat false as "not confirmed/handled in RE" until faithful impl is verified.
+    (void)a2;
+    (void)a3;
+    return 0;
+}
+
 //=============================================================================
 // ActivateMissionTarget
 //=============================================================================
@@ -1211,4 +1220,8 @@ unsigned char MissionManager::GiveWeaponOpcode(void* self)
     }
     // shared Ped::GiveWeapon / next-line logic deferred
     return 0;
+}
+// 0x00475A40 IDA/BN MissionManager::SetMissionStatus: field_C1E2D=a2. RE field-name impl.
+void MissionManager::SetMissionStatus(char a2) {
+    this->field_C1E2D = a2;
 }

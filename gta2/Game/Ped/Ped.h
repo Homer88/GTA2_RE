@@ -183,8 +183,8 @@ class Ped{
     int GetCurrentState(void);
     // 0x004039A0
     void  SetHealth(unsigned short Health);
-    // 0x004039B0
-    int SetTargetCarDoorIndex(void);
+    // 0x004039B0 IDA/BN: PositionZ1 = a2. RE field-name impl.
+    void SetTargetCarDoorIndex(int a2);
     // 0x004039C0
     int GetFlags1(void);
     // 0x004039D0
@@ -224,8 +224,8 @@ class Ped{
     int SetLinkedPedestrian(void);
     // 0x00403B00
     void  SetVehicle(Car* Vehicle);
-    // 0x00403B10
-    int GetCurrentCar(void);
+    // 0x00403B10 IDA/BN: return VehiclePed. RE field-name impl.
+    Car* GetCurrentCar(void);
     // 0x00403B20
     Car* GetCar(Car* Vehicle);
     // 0x00403B30
@@ -298,8 +298,8 @@ class Ped{
     int ProcessCommand(void);
     // 0x00433650
     int SetIdleAction(void);
-    // 0x00433B40
-    int Get_433B40(void);
+    // 0x00433B40 IDA/BN: return PositionX1 & 1. RE field-name impl.
+    char Get_433B40(void);
     // 0x00433B50
     int DisableGameObject(void);
     // 0x00433B70
@@ -582,16 +582,16 @@ class Ped{
     int IsCarIndexUnassigned(void);
     // 0x00476840
     int SetupTrace(void);
-    // 0x00482080
-    int SetMoneyValue(void);
+    // 0x00482080 IDA/BN: PositionX1 &= 0xFBFFFFFF. RE field-name impl.
+    void SetMoneyValue(void);
     // 0x00493000
     int SetZone(void);
-    // 0x004A5040
-    int IsTargetCarDoor(void);
+    // 0x004A5040 IDA/BN: return PositionZ1 != 1. RE field-name impl.
+    bool IsTargetCarDoor(void);
     // 0x004A5050
     int SetHealthFullPlayer(void);
-    // 0x004A5060
-    int SetStatusFlag(void);
+    // 0x004A5060 IDA/BN: PositionX1 |= 0x4000000u. RE field-name impl.
+    void SetStatusFlag(void);
     // 0x004AF860
     int SetCar(void);
     // 0x004AF880

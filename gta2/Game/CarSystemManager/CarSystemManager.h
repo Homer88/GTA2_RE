@@ -19,14 +19,16 @@ class CarSystemManager{
     int CarPool_Get();
     // 0x00401C80
     int PedPool_Get();
-    // 0x0040E590
-    int SetIndexDefautCarManager();
+    // 0x0040E590 IDA/BN CarSystemManager::SetIndexDefautCarManager: Index=0. RE field-name impl.
+    void SetIndexDefautCarManager();
     // 0x0040E5A0
     int GetCarFromPool();
-    // 0x0040E670
-    int greater_than();
-    // 0x0041E0F0
-    int less_than();
+    // 0x0040E670 IDA/BN CarSystemManager::greater_than: return Index > (unsigned short)*a2. RE field-name impl.
+    bool greater_than(unsigned short* a2);
+    // 0x0040F4C0 IDA/BN CarSystemManager::less_or_equal: return Index <= (unsigned short)*a2. RE field-name impl.
+    bool less_or_equal(short* a2);
+    // 0x0041E0F0 IDA/BN CarSystemManager::less_than: return Index < (unsigned short)*a2. RE field-name impl.
+    bool less_than(unsigned short* a2);
     // 0x00420A10
     int SetupCarLists();
     // 0x00420C00

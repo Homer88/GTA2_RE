@@ -204,6 +204,8 @@ public:
     void AddRoofWaterGun();
     short CollisionOnCar(int Damage);
     bool GetFullDamage();
+    // 0x0040F890 IDA/BN Car::GetFullDamegeCar - same RE-field semantics as GetFullDamage (Damage==32001).
+    bool GetFullDamegeCar();
     void ExplodeCar(int a);
     void DestroyAllTurrets();
     void sub_421460();
@@ -217,23 +219,56 @@ public:
     bool isJeep();
     bool isGunJeep();
     bool isCopCar();
+    // 0x0041F6E0 IDA/BN Car::IsCopCar: COPCAR/SWATVAN/EDSELFBI. RE field-name impl.
+    bool IsCopCar();
+    // 0x00421790 IDA/BN Car::isCopCar_00421790: CarType==COPCAR only. RE field-name impl.
+    bool isCopCar_00421790();
     bool isMask7();
+    // 0x004214D0 IDA/BN Car::GetMask7 - RE field-name impl; Mask is RE field.
+    bool GetMask7();
+    // 0x004214E0 IDA/BN Car::SetMask7 - RE field-name impl.
+    void SetMask7();
+    // 0x004215B0 IDA/BN Car::IsMask5 - RE field-name impl.
+    bool IsMask5();
+    // 0x004215C0 IDA Car::IsPlayerOccupant - RE field-name impl; uses Driver/isPlayer/GetOccupation.
+    bool IsPlayerOccupant();
     bool isMedicCar();
     bool isSWATVAN();
     bool isTaxi();
     bool isTank();
     bool isEDSELFBI();
     bool isGT24640();
+    // 0x004217D0 IDA/BN Car::GetGT24640: CarType==GT24640(0x13). RE field-name impl.
+    bool GetGT24640();
     bool isTVVAN();
+    // 0x00447EC0 IDA/BN Car::is_truck: CarType==TRUKTRNS. RE field-name impl.
+    bool is_truck();
+    // 0x00421XXX? IDA/BN 0x421610 Car::IsTrain: CarType==TRAIN(0x3B). RE field-name impl.
+    bool IsTrain();
+    // 0x00403BA0 IDA/BN Car::IsTrainOrTrainCarriage: TRAIN/TRAINCAB/TRAINFB/BOXCAR. RE field-name impl.
     bool IsTrainOrTrainCarriage();
+    // 0x00403BC0 IDA/BN Car::IsSpecialVehicle: BANKVAN(4) || SWATVAN(0x34). RE field-name impl.
+    bool IsSpecialVehicle();
     void SetPosition(int X, int Y, int Z);
     char UpdateDamageCooldown();
     void SetMask();
+    // 0x00447EA0 IDA/BN Car::SetMask1: Mask=1. RE field-name impl.
+    void SetMask1();
     void SetHornDefault();
+    // 0x00411970 IDA/BN Car::CarIsHornActive - RE field-name impl; horn is RE field.
+    bool CarIsHornActive();
+    // 0x00411990 IDA/BN Car::CarGetHornValue - RE field-name impl; returns horn if <=0xF8 else 0.
+    unsigned char CarGetHornValue();
+    // 0x00420330 IDA/BN Car::DecrementHorn - RE field-name impl; no-op for 0 or 0xF8.
+    void DecrementHorn();
     void Repair() {};
     Player* GetPlayer();
     //class Player* GetPlayer();
+    // 0x004118B0 IDA/BN Car::GetDriver - RE field-name impl.
+    Ped* GetDriver();
     int  GetCarModel();
+    // 0x00411940 IDA/BN Car::GetModelCar: return CarType. RE field-name impl.
+    int GetModelCar();
     void SetSound(int a2);
     char HandleMaskTransition();
     void isMask4();
@@ -242,23 +277,39 @@ public:
     void* GetInfoByTypeCar();
     // 0x00423590 IDA Car::ShowCarInfo - guarded RE impl using RE field names; RE Car/Ped layout not proven identical to IDA offsets.
     void ShowCarInfo(class Ped* pPed);
-    // 0x004235D0 IDA Car::OnPlayerExit - guarded partial RE impl; missing SetDriver/Player field deps are no-op guarded.
+    // 0x004218F0 IDA/BN Car::GetCarFlag - guarded RE impl by field name. BN: *(+0x8D)&1.
+    // Uses RE field_8D; RE layout offset differs from IDA, but field name/semantics are plausible.
+    char GetCarFlag();
+    // 0x004218E0 IDA/BN Car::ClearCarFlag - guarded RE impl by field name. BN: *(+0x8D)&=~1.
+    void ClearCarFlag();
+    // 0x00421560 IDA/BN Car::MakeDriveable1 - guarded partial RE impl by field name. BN: field_76=0, field_7C=arg2.
+    void MakeDriveable1(int arg2);
+    // 0x004A9AD0 IDA/BN Car::getBonusDamage: return field_76. RE field-name impl (RE offset differs from IDA).
+    short getBonusDamage();
+    // 0x004221D0 IDA Car::SetDriver - guarded partial RE impl. IDA also touches Car.Player(+0x58)/Player control flags;
+    // those fields are not confirmed in RE layout, so only Driver pointer update is performed when safe.
+    void SetDriver(class Ped* pPed);
+    // 0x004235D0 IDA Car::OnPlayerExit - guarded partial RE impl; missing Car.Player@+0x58/SetDriver-control deps.
     void OnPlayerExit();
-    // 0x00411950
-    // (gm) old: Car::ClearTurretMuzzle -> Car::ConsumePendingEvent0xac
-    void ConsumePendingEvent0xac();
-    // 0x004119C0
-    // (gm) old: Car::IsField9cFour -> Car::IsCarState4
+    // 0x00411950 IDA/BN GetAndClearFieldAC: result=field_AC(+0xAC); field_AC=0; return result.
+    // RE field-name impl; RE has field_AC. Layout offset differs from IDA but field name matches.
+    int ConsumePendingEvent0xac();
+    // 0x00421900 IDA/BN Car::SetFieldAC: *(+0xAC)=arg. RE field-name impl; field_AC exists in RE Car.
+    void SetFieldAC(int value);
+    // 0x00421200 IDA/BN Car::ClearFieldAD: *(+0xAD)=0. RE field-name impl (field_AD exists in RE Car).
+    void ClearFieldAD();
+    // 0x004119C0 IDA/BN IsEngineState4: return *(+0x9C)==4.
+    // Guarded no-op: RE Car layout has no confirmed engineState/field_9C field; raw IDA offset unsafe.
     int IsCarState4();
-    // 0x004119D0
-    // (gm) old: Car::ClearExitedPassenger -> Car::ConsumePendingEvent0xb4
-    void ConsumePendingEvent0xb4();
-    // 0x0041E460
-    // (gm) old: Car::IsPartOfCarChain -> Car::IsObjectAttached
-    int IsObjectAttached();
-    // 0x0041E480
-    // (gm) old: Car::IsSpritePartOfCar -> Car::IsMySprite
-    int IsMySprite();
+    // 0x004119D0 IDA/BN TakeField0xB4: result=*(+0xB4); *(+0xB4)=0; return result.
+    // Guarded no-op: RE Car layout has no confirmed field_B4; raw IDA offset unsafe.
+    char ConsumePendingEvent0xb4();
+    // 0x0041E460 IDA/BN IsTrailerMaster: TrailerCtrl && TrailerCtrl->Car0==this.
+    // Guarded RE impl by field name; TrailerCtrl struct layout not fully confirmed in RE headers.
+    bool IsObjectAttached();
+    // 0x0041E480 IDA IsSpritePartOfCar(SpriteS1*): checks car sprite/driver/object ownership.
+    // Guarded stub: RE sprite/driver/object ownership graph not fully confirmed; avoid raw IDA offsets.
+    bool IsMySprite(void* sprite);
     // 0x0041F980
     // (gm) old: EncodePositionValue (kept; fp <<14)
     void EncodePositionValue(int param_1);
@@ -304,8 +355,7 @@ public:
     void SetField74();
     // 0x004211E0: Car::GetSpeedPair
     void GetSpeedPair();
-    // 0x00421200: Car::ClearFieldAD
-    void ClearFieldAD();
+    // 0x00421200: Car::ClearFieldAD (gm stub, kept for compatibility; impl above)
     // 0x00421210: Car::SetHazardLights
     void SetHazardLights();
     // 0x00421230: Car::SetIndicatorLeft
@@ -350,9 +400,9 @@ public:
     void GetEngineState();
     // 0x00425D60: Car::CanBeDrivenByPed
     void CanBeDrivenByPed();
-    // 0x0042AB90: Car::SetBrakingOn
+    // 0x0042AB90 IDA/BN Car::SetBrakingOn: field_AD=1. RE field-name impl.
     void SetBrakingOn();
-    // 0x0042ABA0: Car::SetBrakingOff
+    // 0x0042ABA0 IDA/BN Car::SetBrakingOff: field_AD=-1. RE field-name impl.
     void SetBrakingOff();
     // 0x0042ABB0: Car::ResetInput
     void ResetInput();
@@ -362,16 +412,20 @@ public:
     void SetStateTwo();
     // 0x0042AC00: Car::ClearStateFlags
     void ClearStateFlags();
-    // 0x0042AC20: Car::IsFlag1
-    void IsFlag1();
-    // 0x0042AC30: Car::IsFlag2
-    void IsFlag2();
-    // 0x0042AC40: Car::IsFlag4
-    void IsFlag4();
-    // 0x0042AC50: Car::IsFlag8
-    void IsFlag8();
-    // 0x0042AC60: Car::IsFlag32
-    void IsFlag32();
+    // 0x0042AC20 IDA/BN Car::IsFlag1: (field_A6 & 1)==1. RE field-name impl.
+    bool IsFlag1();
+    // 0x0042AC30 IDA/BN Car::IsFlag2: (field_A6 & 2)==2. RE field-name impl.
+    bool IsFlag2();
+    // 0x0042AC40 IDA/BN Car::IsFlag4: (field_A6 & 4)==4. RE field-name impl.
+    bool IsFlag4();
+    // 0x0042AC50 IDA/BN Car::IsFlag8: (field_A6 & 8)==8. RE field-name impl.
+    bool IsFlag8();
+    // 0x0042AC60 IDA/BN Car::IsFlag32: (field_A6 & 0x20)==0x20. RE field-name impl.
+    bool IsFlag32();
+    // 0x00421540 IDA/BN Car::SetLightOn: field_A6 |= 0x20. RE field-name impl.
+    void SetLightOn();
+    // 0x00421550 IDA/BN Car::SetLightOff: field_A6 &= ~0x20. RE field-name impl.
+    void SetLightOff();
     // 0x0042AC70: Car::SetFlag1
     void SetFlag1();
     // 0x0042AC80: Car::SetFlag2
@@ -396,17 +450,31 @@ public:
     void IsValidParkingVehicle();
     // 0x00475AA0: Car::IsSpecialModel
     void IsSpecialModel();
-    // 0x00475C60: Car::SetLocksDoor5
+    // 0x00475C10 IDA/BN Car::SetLocksDoor: if(locksDoor!=4) locksDoor=1. RE field-name impl.
+    void SetLocksDoor();
+    // 0x00475C30 IDA/BN Car::SetLocksDoor_4: locksDoor=4. RE field-name impl.
+    void SetLocksDoor_4();
+    // 0x00475C40 IDA/BN Car::SetLocksDoor2: if(locksDoor!=4) locksDoor=2. RE field-name impl.
+    void SetLocksDoor2();
+    // 0x00475C60 IDA/BN Car::SetLocksDoor5: if(locksDoor!=4) locksDoor=5. RE field-name impl.
     void SetLocksDoor5();
-    // 0x004762C0: Car::SetFlag80
+    // 0x00475C80 IDA/BN Car::SetLocksDoor3: if(locksDoor!=4) locksDoor=3. RE field-name impl.
+    void SetLocksDoor3();
+    // 0x00421890 IDA/BN Car::SetCarFlag: PhysicsBitmask |= arg. RE field-name impl.
+    void SetCarFlag(short flag);
+    // 0x004218A0 IDA/BN Car::SetTankFlag: SetCarFlag(8). RE field-name impl.
+    void SetTankFlag();
+    // 0x004761F0 IDA/BN Car::ClearFlag: PhysicsBitmask &= ~arg. RE field-name impl.
+    void ClearFlag(short flag);
+    // 0x004762C0 IDA/BN Car::SetFlag80: SetCarFlag(0x80). RE field-name impl.
     void SetFlag80();
-    // 0x004762D0: Car::SetFlag200
+    // 0x004762D0 IDA/BN Car::SetFlag200: SetCarFlag(0x200). RE field-name impl.
     void SetFlag200();
-    // 0x004762F0: Car::ClearFlag100
+    // 0x004762F0 IDA/BN Car::ClearFlag100: ClearFlag(0x100). RE field-name impl.
     void ClearFlag100();
-    // 0x00476300: Car::ClearFlag200
+    // 0x00476300 IDA/BN Car::ClearFlag200: ClearFlag(0x200). RE field-name impl.
     void ClearFlag200();
-    // 0x00476310: Car::ClearFlag400
+    // 0x00476310 IDA/BN Car::ClearFlag400: ClearFlag(0x400). RE field-name impl.
     void ClearFlag400();
     // 0x004A51B0: Car::SetLightMode
     void SetLightMode();

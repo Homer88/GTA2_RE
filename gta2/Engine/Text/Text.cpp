@@ -171,8 +171,9 @@ wchar_t Text::ConvertToUpper(wchar_t str) {
 }
 
 
+// 0x00452E60 IDA/BN Text::GetLanguageJapan: return Language == 'j'. RE field-name impl.
 bool  Text::LanguageJapan() {
-    return false;
+    return this->Language == 'j';
 }
 
 DebugTextCmd gDebugTextCmds[kMaxDebugTextCmds];
@@ -258,8 +259,11 @@ static void Text_LogGbhReason(const char* reason) {
     if (!e || e[0] != '1') return;
     if (!reason) reason = "null";
     static char last[160] = "";
-    if (std::strncmp(last, reason, sizeof(last)-1) == 0) return;
-    std::strncpy(last, reason, sizeof(last)-1); last[sizeof(last)-1] = 0;
+    bool force = std::strncmp(reason, "abi9-a2c0-tr ", 13) == 0;
+    if (!force && std::strncmp(last, reason, sizeof(last)-1) == 0) return;
+    if (!force) {
+        std::strncpy(last, reason, sizeof(last)-1); last[sizeof(last)-1] = 0;
+    }
     FILE* f = std::fopen("gta2_text_gbh_reason.log", "a");
     if (f) { std::fprintf(f, "%s\n", reason); std::fclose(f); }
 }
@@ -1341,7 +1345,7 @@ static bool Text_ReadIntSEH(void* p, int& out) {
 #endif
 }
 
-void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4) {
+void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4, unsigned int debugCallerTag) {
     // IDA 0x4BA2C0 Font::DrawGTATextRaw_A2C0: stdcall(a1,a2,a3,a4), retn 0x10.
     // v3=&gCameraOrPhysics_5E3CC4->cameraPosTarget[4].field_4 (+0xA4)
     // v4=Radar::WorldCoordinateToScreenCoord(&a3,&v6,v3)  -> uses *v4 as Y? IDA: DrawGTATextRaw(a1,*v5,*v4,a4,v3->BaseCar[0].field)
@@ -1428,35 +1432,39 @@ void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4) {
     if (!coords_from_obj) Text_LogGbhReason("abi9-a2c0-screen-fallback");
 
     // Debug-only: trace real caller arg shape for A2C0 proof investigation. No behavior change.
-    // Logs a2/a3, raw field_0, selected coord path, and stack offsets for callsite evidence.
+    // Logs a2/a3, raw field_0, selected coord path, caller tag, RA/module offset and short stack.
+    // RE/debug-build evidence only, NOT retail callstack/caller/object proof.
     if (std::getenv("GTA2_TEXT_GBH_A2C0_TRACE")) {
-        void* frames[6] = {};
-        USHORT n = CaptureStackBackTrace(0, 6, frames, NULL);
-        HMODULE mod = GetModuleHandleA(NULL);
-        uintptr_t base = (uintptr_t)mod;
-        char tbuf[320];
-        char* p = tbuf;
-        int left = (int)sizeof(tbuf);
-        int w = snprintf(p, left, "abi9-a2c0-tr a2=%08X a3=%08X f2=%08X f3=%08X obj=%d sx=%d sy=%d stk=",
+        unsigned int ra = 0;
+#ifdef _MSC_VER
+        ra = (unsigned int)(uintptr_t)_ReturnAddress();
+#endif
+        unsigned int modBase = 0;
+        unsigned int modOff = 0;
+#ifdef _WIN32
+        HMODULE hm = GetModuleHandleA(NULL);
+        modBase = (unsigned int)(uintptr_t)hm;
+        if (ra >= modBase) modOff = ra - modBase;
+#endif
+        char tbuf[512];
+        int n = snprintf(tbuf, sizeof(tbuf), "abi9-a2c0-tr tag=%u ra=%08X base=%08X off=%08X a2=%08X a3=%08X f2=%08X f3=%08X obj=%d sx=%d sy=%d",
+                 debugCallerTag,
+                 ra, modBase, modOff,
                  (unsigned)a2, (unsigned)(uintptr_t)a3,
                  (unsigned)(okA2 ? a2Field0 : 0), (unsigned)(okA3 ? a3Field0 : 0),
                  coords_from_obj ? 1 : 0, sx, sy);
-        if (w < 0) w = 0;
-        if (w >= left) w = left - 1;
-        p += w; left -= w;
-        for (USHORT i = 0; i < n && left > 12; ++i) {
-            uintptr_t f = (uintptr_t)frames[i];
-            uintptr_t off = (f >= base) ? (f - base) : f;
-            // If offset looks like module offset (< 0x2000000), log offset; else log raw.
-            if (f >= base && off < 0x2000000u) {
-                w = snprintf(p, left, "%s%08X", (i ? "," : ""), (unsigned)off);
-            } else {
-                w = snprintf(p, left, "%sR%08X", (i ? "," : ""), (unsigned)f);
+#ifdef _WIN32
+        if (n > 0 && n < (int)sizeof(tbuf) - 64) {
+            void* frames[8] = {};
+            USHORT cap = CaptureStackBackTrace(0, 8, frames, NULL);
+            n += snprintf(tbuf + n, sizeof(tbuf) - n, " stk=");
+            for (USHORT i = 0; i < cap && n < (int)sizeof(tbuf) - 12; ++i) {
+                unsigned int fa = (unsigned int)(uintptr_t)frames[i];
+                unsigned int fo = (fa >= modBase && modBase) ? (fa - modBase) : fa;
+                n += snprintf(tbuf + n, sizeof(tbuf) - n, "%s%08X", i ? "," : "", fo);
             }
-            if (w < 0) break;
-            if (w >= left) { w = left - 1; p[w] = 0; left = 0; break; }
-            p += w; left -= w;
         }
+#endif
         Text_LogGbhReason(tbuf);
     }
 

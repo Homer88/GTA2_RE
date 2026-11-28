@@ -176,6 +176,12 @@ int CameraOrPhysics::IsActive(void){
     // 0x00475B60
 
 
-int CameraOrPhysics::ResetAccuracy(void){
-        return 0;
-    }
+// 0x00475B60 IDA/BN CameraOrPhysics::ResetAccuracy: cameraPosTarget[1].CameraOrPhysics=1 (offset +0x3C in cameraPosTarget[1]). RE field-name impl.
+void CameraOrPhysics::ResetAccuracy() {
+    this->cameraPosTarget[1].CameraOrPhysics = 1;
+}
+
+// 0x004A5070 IDA/BN CameraOrPhysics::SetActive: cameraPosTarget[1].field_10 = 2. RE field-name impl.
+void CameraOrPhysics::SetActive() {
+    this->cameraPosTarget[1].field_10 = 2;
+}

@@ -164,6 +164,11 @@ void MapGm::IncrementSpecialTokens(){
 	++this->SpecialTokens;
 }
 
+// 0x0045B420 IDA/BN MapGm::DefauntSpecialTokens: SpecialTokens=0. RE field-name impl.
+void MapGm::DefauntSpecialTokens() {
+	this->SpecialTokens = 0;
+}
+
 
 //---------------------------------------------------------------------
 // 0x0045e630: MapGm::ResetSettings — сброс настроек записи
@@ -337,3 +342,13 @@ void MapGm::DecodeBonusStage(unsigned char bonusStage, unsigned char* playerAren
 //int MapGm_GetSpecialTokens(MapGm* obj)  { return obj->GetSpecialTokens(); }
 //int sub_476B10(MapGm* obj, int value)   { return obj->sub_476B10(value); }
 //int MapGm_sub_45E700(MapGm* obj)        { return obj->get_45E700(); }
+
+// 0x0045E5E0 IDA/BN MapGm::Get_45E5E0: return FugitiveFactor. RE field-name impl.
+int MapGm::Get_45E5E0() {
+	return this->FugitiveFactor;
+}
+
+// 0x0045E490 IDA/BN MapGm::SetPlayerArea: playerArena = arg. RE field-name impl.
+void MapGm::SetPlayerArea(char playerArea) {
+	this->playerArena = playerArea;
+}

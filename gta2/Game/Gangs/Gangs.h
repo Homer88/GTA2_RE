@@ -15,6 +15,9 @@ public:
 	~Gangs();
 	Gang* GetNextGang();
 	Gang* GetFirstUsedGang();
+
+	// 0x0045DC70 IDA/BN Gangs::SetGang: return &Gang[Gang]. RE field-name impl; C++ indexing uses RE Gang stride.
+	Gang* SetGang(GANG gang);
 		  
 };
 

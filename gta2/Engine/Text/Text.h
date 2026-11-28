@@ -96,7 +96,8 @@ void DrawGTATextRaw_A2C0_Debug(wchar_t* a1, int x, int y, unsigned short a4);
 // Guarded RE bridge: reads camera a5 from +0xA4; if a2/a3 look like coord objects, uses
 // Radar::WorldCoordinateToScreenCoord formula; otherwise treats as screen coords. NOT
 // original caller/callsite/callstack proof; debug-only when GTA2_TEXT_GBH=1.
-void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4);
+// debugCallerTag: debug-only RE caller id for traceability (0=unknown). Not ABI/original arg.
+void DrawGTATextRaw_A2C0(wchar_t* a1, int a2, void* a3, unsigned short a4, unsigned int debugCallerTag = 0);
 // Debug-only closer raw port attempt. Gated+SEH; RE layout uncertain. Not proof.
 void DrawGTATextRaw_BA2C0_DebugRaw(wchar_t* a1, int a2, void* a3_radarLike, unsigned short a4);
 

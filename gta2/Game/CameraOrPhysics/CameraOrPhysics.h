@@ -51,8 +51,11 @@ class CameraOrPhysics{
     int FocusOnObject(void);
     // 0x00433E90
     int IsActive(void);
-    // 0x00475B60
-    int ResetAccuracy(void);
+    // 0x00475B60 IDA/BN CameraOrPhysics::ResetAccuracy: cameraPosTarget[1].CameraOrPhysics=1. RE field-name impl.
+    void ResetAccuracy();
+
+    // 0x004A5070 IDA/BN CameraOrPhysics::SetActive: cameraPosTarget[1].field_10 = 2. RE field-name impl.
+    void SetActive();
 
 
 // ==== methods from gm ====

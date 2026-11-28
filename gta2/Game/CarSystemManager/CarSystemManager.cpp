@@ -41,9 +41,10 @@ int CarSystemManager::PedPool_Get(void){
     // 0x0040E590
 
 
-int CarSystemManager::SetIndexDefautCarManager(void){
-        return 0;
-    }
+// 0x0040E590 IDA/BN CarSystemManager::SetIndexDefautCarManager: Index=0. RE field-name impl.
+void CarSystemManager::SetIndexDefautCarManager(void) {
+    this->Index = 0;
+}
 
 
     // 0x0040E5A0
@@ -57,17 +58,19 @@ int CarSystemManager::GetCarFromPool(void){
     // 0x0040E670
 
 
-int CarSystemManager::greater_than(void){
-        return 0;
-    }
+// 0x0040E670 IDA/BN CarSystemManager::greater_than: return Index > (unsigned short)*a2. RE field-name impl.
+bool CarSystemManager::greater_than(unsigned short* a2) {
+    return this->Index > (int)*a2;
+}
 
 
     // 0x0041E0F0
 
 
-int CarSystemManager::less_than(void){
-        return 0;
-    }
+// 0x0041E0F0 IDA/BN CarSystemManager::less_than: return Index < (unsigned short)*a2. RE field-name impl.
+bool CarSystemManager::less_than(unsigned short* a2) {
+    return this->Index < (int)*a2;
+}
 
 
     // 0x00420A10
@@ -153,7 +156,11 @@ int CarSystemManager::PrepareArray(void){
     // 0x00447D30
 
 
+// 0x00447D30 IDA/BN CarSystemManager::AdvanceIndex: if (++Index == 1000) Index = 0. RE field-name impl; keeps int signature.
 int CarSystemManager::AdvanceIndex(void){
+        if (++this->Index == 1000) {
+            this->Index = 0;
+        }
         return 0;
     }
 
@@ -166,3 +173,8 @@ int CarSystemManager::CycleMode(void){
     }
 
 void CarSystemManager::Update(void){}
+
+// 0x0040F4C0 IDA/BN CarSystemManager::less_or_equal: return Index <= (unsigned short)*a2. RE field-name impl.
+bool CarSystemManager::less_or_equal(short* a2) {
+    return this->Index <= (int)(unsigned short)*a2;
+}

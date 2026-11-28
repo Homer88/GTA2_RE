@@ -21,3 +21,7 @@ Gang* Gangs::GetNextGang() {
 Gang* Gangs::GetFirstUsedGang(){
 	return NULL;
 }
+// 0x0045DC70 IDA/BN Gangs::SetGang: return &ArrayGang[Gang]. RE field-name impl; C++ indexing uses RE Gang stride.
+Gang* Gangs::SetGang(GANG gang) {
+	return &this->ArrayGang[gang];
+}
